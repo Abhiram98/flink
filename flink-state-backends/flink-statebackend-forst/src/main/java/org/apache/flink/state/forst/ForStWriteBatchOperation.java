@@ -19,11 +19,13 @@
 package org.apache.flink.state.forst;
 
 import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 import org.rocksdb.WriteBatch;
 import org.rocksdb.WriteOptions;
 
 import javax.annotation.Nullable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -68,9 +70,7 @@ public class ForStWriteBatchOperation<K, V> implements ForStDBOperation<Void> {
                             ForStInnerTable<K, V> table = request.table;
                             if (request.value == null) {
                                 // put(key, null) == delete(key)
-                                writeBatch.delete(
-                                        table.getColumnFamilyHandle(),
-                                        table.serializeKey(request.key));
+                                buildSerializedKey(writeBatch, request, table);
                             } else {
                                 writeBatch.put(
                                         table.getColumnFamilyHandle(),
@@ -84,6 +84,15 @@ public class ForStWriteBatchOperation<K, V> implements ForStDBOperation<Void> {
                     }
                 },
                 executor);
+    }
+
+    private void buildSerializedKey(
+            WriteBatch writeBatch,
+            PutRequest<K, V> request,
+            ForStInnerTable<K, V> table) throws RocksDBException, IOException {
+        writeBatch.delete(
+                table.getColumnFamilyHandle(),
+                table.serializeKey(request.key));
     }
 
     /** The Put access request for ForStDB. */
