@@ -19,6 +19,7 @@
 package org.apache.flink.state.forst;
 
 import org.junit.jupiter.api.Test;
+import org.rocksdb.RocksDBException;
 import org.rocksdb.WriteOptions;
 
 import java.util.ArrayList;
@@ -55,9 +56,16 @@ public class ForStWriteBatchOperationTest extends ForStDBOperationTestBase {
         for (PutRequest<ContextKey<Integer>, String> request : batchPutRequest) {
             ForStInnerTable<ContextKey<Integer>, String> table = request.table;
             byte[] keyBytes = table.serializeKey(request.key);
-            byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
+            byte[] valueBytes = getColumnFamilyHandle(table, keyBytes);
             assertThat(table.deserializeValue(valueBytes)).isEqualTo(request.value);
         }
+    }
+
+    private byte[] getColumnFamilyHandle(
+            ForStInnerTable<ContextKey<Integer>, String> table,
+            byte[] keyBytes) throws RocksDBException {
+        byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
+        return valueBytes;
     }
 
     @Test
@@ -92,7 +100,7 @@ public class ForStWriteBatchOperationTest extends ForStDBOperationTestBase {
         for (PutRequest<ContextKey<Integer>, String> request : batchPutRequest) {
             ForStInnerTable<ContextKey<Integer>, String> table = request.table;
             byte[] keyBytes = table.serializeKey(request.key);
-            byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
+            byte[] valueBytes = getColumnFamilyHandle(table, keyBytes);
             String value = (valueBytes == null) ? null : table.deserializeValue(valueBytes);
             assertThat(value).isEqualTo(request.value);
         }
