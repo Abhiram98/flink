@@ -21,6 +21,7 @@ package org.apache.flink.state.forst;
 import org.junit.jupiter.api.Test;
 import org.rocksdb.WriteOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -54,7 +55,7 @@ public class ForStWriteBatchOperationTest extends ForStDBOperationTestBase {
         // check data correctness
         for (PutRequest<ContextKey<Integer>, String> request : batchPutRequest) {
             ForStInnerTable<ContextKey<Integer>, String> table = request.table;
-            byte[] keyBytes = table.serializeKey(request.key);
+            byte[] keyBytes = buildSerializedKey(request, table);
             byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
             assertThat(table.deserializeValue(valueBytes)).isEqualTo(request.value);
         }
@@ -91,10 +92,17 @@ public class ForStWriteBatchOperationTest extends ForStDBOperationTestBase {
         // 3.  check data correctness
         for (PutRequest<ContextKey<Integer>, String> request : batchPutRequest) {
             ForStInnerTable<ContextKey<Integer>, String> table = request.table;
-            byte[] keyBytes = table.serializeKey(request.key);
+            byte[] keyBytes = buildSerializedKey(request, table);
             byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
             String value = (valueBytes == null) ? null : table.deserializeValue(valueBytes);
             assertThat(value).isEqualTo(request.value);
         }
+    }
+
+    private byte[] buildSerializedKey(
+            PutRequest<ContextKey<Integer>, String> request,
+            ForStInnerTable<ContextKey<Integer>, String> table) throws IOException {
+        byte[] keyBytes = table.serializeKey(request.key);
+        return keyBytes;
     }
 }
