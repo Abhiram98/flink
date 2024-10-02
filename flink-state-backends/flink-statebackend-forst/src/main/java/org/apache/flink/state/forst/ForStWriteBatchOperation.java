@@ -66,7 +66,7 @@ public class ForStWriteBatchOperation<K, V> implements ForStDBOperation<Void> {
                             new WriteBatch(batchRequest.size() * PER_RECORD_ESTIMATE_BYTES)) {
                         for (PutRequest<K, V> request : batchRequest) {
                             ForStInnerTable<K, V> table = request.table;
-                            if (request.value == null) {
+                            if (valueIsNull(request)) {
                                 // put(key, null) == delete(key)
                                 writeBatch.delete(
                                         table.getColumnFamilyHandle(),
@@ -84,6 +84,10 @@ public class ForStWriteBatchOperation<K, V> implements ForStDBOperation<Void> {
                     }
                 },
                 executor);
+    }
+
+    private boolean valueIsNull(PutRequest<K, V> request) {
+        return request.value == null;
     }
 
     /** The Put access request for ForStDB. */
