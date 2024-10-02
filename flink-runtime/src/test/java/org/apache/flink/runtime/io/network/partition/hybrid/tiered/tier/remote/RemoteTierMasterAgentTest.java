@@ -50,8 +50,14 @@ class RemoteTierMasterAgentTest {
                 new RemoteTierMasterAgent(tempFolder.getAbsolutePath(), resourceRegistry);
         masterAgent.addPartition(partitionId);
         assertThat(partitionFile.exists()).isTrue();
-        masterAgent.releasePartition(partitionId);
+        addPartitionAndGetShuffleDescriptor(partitionId, masterAgent);
 
         assertThat(partitionFile.exists()).isFalse();
+    }
+
+    private void addPartitionAndGetShuffleDescriptor(
+            TieredStoragePartitionId partitionId,
+            RemoteTierMasterAgent masterAgent) {
+        masterAgent.releasePartition(partitionId);
     }
 }
