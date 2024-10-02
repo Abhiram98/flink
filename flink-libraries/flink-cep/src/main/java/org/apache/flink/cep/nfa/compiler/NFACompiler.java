@@ -318,9 +318,13 @@ public class NFACompiler {
          */
         private State<T> createEndingState() {
             State<T> endState = createState(ENDING_STATE_NAME, State.StateType.Final);
+            getWindowSize();
+            return endState;
+        }
+
+        private void getWindowSize() {
             windowTime =
                     Optional.ofNullable(currentPattern.getWindowTime()).map(Time::toMilliseconds);
-            return endState;
         }
 
         /**
