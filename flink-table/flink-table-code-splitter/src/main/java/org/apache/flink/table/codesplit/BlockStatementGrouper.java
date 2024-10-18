@@ -146,6 +146,12 @@ public class BlockStatementGrouper {
         visitor.visitStatement(javaParser.statement(), context, rewriter);
 
         visitor.rewrite();
+        Map<String, List<String>> groupStrings = rewrite1(visitor);
+
+        return new RewriteGroupedCode(rewriter.getText(), groupStrings);
+    }
+
+    private Map<String, List<String>> rewrite1(BlockStatementGrouperVisitor visitor) {
         Map<String, Pair<TokenStreamRewriter, List<LocalGroupElement>>> groups = visitor.groups;
 
         Map<String, List<String>> groupStrings =
@@ -159,8 +165,7 @@ public class BlockStatementGrouper {
 
             groupStrings.put(group.getKey(), collectedStringGroups);
         }
-
-        return new RewriteGroupedCode(rewriter.getText(), groupStrings);
+        return groupStrings;
     }
 
     private static class BlockStatementGrouperVisitor {
