@@ -56,15 +56,15 @@ public class ForStWriteBatchOperationTest extends ForStDBOperationTestBase {
         for (PutRequest<ContextKey<Integer>, String> request : batchPutRequest) {
             ForStInnerTable<ContextKey<Integer>, String> table = request.table;
             byte[] keyBytes = table.serializeKey(request.key);
-            byte[] valueBytes = getColumnFamilyHandle(table, keyBytes);
+            byte[] valueBytes = getColumnFamilyHandle(request, keyBytes);
             assertThat(table.deserializeValue(valueBytes)).isEqualTo(request.value);
         }
     }
 
     private byte[] getColumnFamilyHandle(
-            ForStInnerTable<ContextKey<Integer>, String> table,
+            PutRequest<ContextKey<Integer>, String> request,
             byte[] keyBytes) throws RocksDBException {
-        byte[] valueBytes = db.get(table.getColumnFamilyHandle(), keyBytes);
+        byte[] valueBytes = db.get(request.table.getColumnFamilyHandle(), keyBytes);
         return valueBytes;
     }
 
