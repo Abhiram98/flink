@@ -265,8 +265,8 @@ class TieredResultPartitionTest {
                 new TieredStorageResourceRegistry();
         TieredStorageNettyServiceImpl tieredStorageNettyService =
                 new TieredStorageNettyServiceImpl(tieredStorageResourceRegistry);
-        TieredResultPartitionFactory tieredResultPartitionFactory =
-                new TieredResultPartitionFactory(
+        TieredResultSubpartitionFactory tieredResultPartitionFactory =
+                new TieredResultSubpartitionFactory(
                         tieredStorageConfiguration,
                         tieredStorageNettyService,
                         tieredStorageResourceRegistry);

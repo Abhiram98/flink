@@ -194,7 +194,7 @@ class TaskExecutorPartitionLifecycleTest {
                 firstReleasePartitionsCallFuture::complete);
 
         final ResultPartitionDeploymentDescriptor resultPartitionDeploymentDescriptor =
-                PartitionTestUtils.createPartitionDeploymentDescriptor(
+                PartitionTestUtils.createSubpartitionDeploymentDescriptor(
                         ResultPartitionType.BLOCKING);
         final ResultPartitionID resultPartitionId =
                 resultPartitionDeploymentDescriptor.getShuffleDescriptor().getResultPartitionID();
@@ -397,7 +397,7 @@ class TaskExecutorPartitionLifecycleTest {
             throws Exception {
 
         final ResultPartitionDeploymentDescriptor taskResultPartitionDescriptor =
-                PartitionTestUtils.createPartitionDeploymentDescriptor(
+                PartitionTestUtils.createSubpartitionDeploymentDescriptor(
                         ResultPartitionType.BLOCKING);
         final ExecutionAttemptID eid1 =
                 taskResultPartitionDescriptor

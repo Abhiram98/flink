@@ -66,7 +66,7 @@ class SortMergeSubpartitionReaderTest {
         Random random = new Random();
         random.nextBytes(dataBytes);
         partitionedFile =
-                PartitionTestUtils.createPartitionedFile(
+                PartitionTestUtils.createSubpartitionedFile(
                         basePath.toString(),
                         numSubpartitions,
                         numBuffersPerSubpartition,

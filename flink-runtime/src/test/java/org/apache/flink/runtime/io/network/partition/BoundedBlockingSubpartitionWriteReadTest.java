@@ -265,7 +265,7 @@ class BoundedBlockingSubpartitionWriteReadTest {
         return type.create(
                 0,
                 (BoundedBlockingResultPartition)
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 ResultPartitionType.BLOCKING,
                                 fileChannelManager,
                                 compressionEnabled,

@@ -34,7 +34,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateFactory;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStorageConfiguration;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.netty.TieredStorageNettyServiceImpl;
-import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultPartitionFactory;
+import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultSubpartitionFactory;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.storage.TieredStorageResourceRegistry;
 import org.apache.flink.runtime.shuffle.NettyShuffleDescriptor;
 import org.apache.flink.runtime.shuffle.NettyShuffleMaster;
@@ -202,7 +202,7 @@ public class NettyShuffleServiceFactory
 
         registerShuffleMetrics(metricGroup, networkBufferPool);
 
-        Optional<TieredResultPartitionFactory> tieredResultPartitionFactory = Optional.empty();
+        Optional<TieredResultSubpartitionFactory> tieredResultPartitionFactory = Optional.empty();
         TieredStorageConfiguration tieredStorageConfiguration =
                 config.getTieredStorageConfiguration();
         TieredStorageNettyServiceImpl tieredStorageNettyService = null;
@@ -213,7 +213,7 @@ public class NettyShuffleServiceFactory
                     new TieredStorageNettyServiceImpl(tieredStorageResourceRegistry);
             tieredResultPartitionFactory =
                     Optional.of(
-                            new TieredResultPartitionFactory(
+                            new TieredResultSubpartitionFactory(
                                     tieredStorageConfiguration,
                                     tieredStorageNettyService,
                                     tieredStorageResourceRegistry));

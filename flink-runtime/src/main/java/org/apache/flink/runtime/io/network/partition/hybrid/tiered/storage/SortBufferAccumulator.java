@@ -24,7 +24,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferBuilder;
 import org.apache.flink.runtime.io.network.buffer.BufferConsumer;
 import org.apache.flink.runtime.io.network.buffer.BufferRecycler;
 import org.apache.flink.runtime.io.network.buffer.NetworkBuffer;
-import org.apache.flink.runtime.io.network.partition.BufferWithChannel;
+import org.apache.flink.runtime.io.network.partition.BufferWithSubpartition;
 import org.apache.flink.runtime.io.network.partition.DataBuffer;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStorageSubpartitionId;
 
@@ -95,7 +95,7 @@ public class SortBufferAccumulator implements BufferAccumulator {
     private BiConsumer<TieredStorageSubpartitionId, List<Buffer>> accumulatedBufferFlusher;
 
     /** Whether the current {@link DataBuffer} is a broadcast sort buffer. */
-    private boolean isBroadcastDataBuffer;
+    private boolean isBroadcastSubpartitionBuffer;
 
     public SortBufferAccumulator(
             int numSubpartitions,
@@ -120,9 +120,9 @@ public class SortBufferAccumulator implements BufferAccumulator {
             Buffer.DataType dataType,
             boolean isBroadcast)
             throws IOException {
-        int targetSubpartition = subpartitionId.getSubpartitionId();
+        int targetSubpartitionId = subpartitionId.getSubpartitionId();
         switchCurrentDataBufferIfNeeded(isBroadcast);
-        if (!checkNotNull(currentDataBuffer).append(record, targetSubpartition, dataType)) {
+        if (!checkNotNull(currentDataBuffer).append(record, targetSubpartitionId, dataType)) {
             return;
         }
 
@@ -131,7 +131,7 @@ public class SortBufferAccumulator implements BufferAccumulator {
         // buffers directly.
         if (!currentDataBuffer.hasRemaining()) {
             currentDataBuffer.release();
-            writeLargeRecord(record, targetSubpartition, dataType);
+            writeLargeRecord(record, targetSubpartitionId, dataType);
             return;
         }
 
@@ -154,13 +154,13 @@ public class SortBufferAccumulator implements BufferAccumulator {
     // ------------------------------------------------------------------------
 
     private void switchCurrentDataBufferIfNeeded(boolean isBroadcast) {
-        if (isBroadcast == isBroadcastDataBuffer
+        if (isBroadcast == isBroadcastSubpartitionBuffer
                 && currentDataBuffer != null
                 && !currentDataBuffer.isReleased()
                 && !currentDataBuffer.isFinished()) {
             return;
         }
-        isBroadcastDataBuffer = isBroadcast;
+        isBroadcastSubpartitionBuffer = isBroadcast;
         flushCurrentDataBuffer();
         currentDataBuffer = createNewDataBuffer();
     }
@@ -198,11 +198,11 @@ public class SortBufferAccumulator implements BufferAccumulator {
 
         do {
             MemorySegment freeSegment = getFreeSegment();
-            BufferWithChannel bufferWithChannel = currentDataBuffer.getNextBuffer(freeSegment);
-            if (bufferWithChannel == null) {
+            BufferWithSubpartition bufferWithSubpartition = currentDataBuffer.getNextBuffer(freeSegment);
+            if (bufferWithSubpartition == null) {
                 break;
             }
-            flushBuffer(bufferWithChannel);
+            flushBuffer(bufferWithSubpartition);
         } while (true);
 
         releaseFreeBuffers();
@@ -225,7 +225,7 @@ public class SortBufferAccumulator implements BufferAccumulator {
             writeBuffer.put(0, record, toCopy);
 
             flushBuffer(
-                    new BufferWithChannel(
+                    new BufferWithSubpartition(
                             new NetworkBuffer(
                                     writeBuffer, checkNotNull(bufferRecycler), dataType, toCopy),
                             subpartitionId));
@@ -242,11 +242,11 @@ public class SortBufferAccumulator implements BufferAccumulator {
         return freeSegment;
     }
 
-    private void flushBuffer(BufferWithChannel bufferWithChannel) {
+    private void flushBuffer(BufferWithSubpartition bufferWithSubpartition) {
         checkNotNull(accumulatedBufferFlusher)
                 .accept(
-                        new TieredStorageSubpartitionId(bufferWithChannel.getChannelIndex()),
-                        Collections.singletonList(bufferWithChannel.getBuffer()));
+                        new TieredStorageSubpartitionId(bufferWithSubpartition.getSubpartitionIndex()),
+                        Collections.singletonList(bufferWithSubpartition.getBuffer()));
     }
 
     private Buffer requestBuffer() {

@@ -350,7 +350,7 @@ public class PipelinedSubpartitionTest extends SubpartitionTestBase {
     @TestTemplate
     void testProducerFailedException() {
         PipelinedSubpartition subpartition =
-                new FailurePipelinedSubpartition(0, 2, PartitionTestUtils.createPartition());
+                new FailurePipelinedSubpartition(0, 2, PartitionTestUtils.createSubpartition());
 
         ResultSubpartitionView view =
                 subpartition.createReadView(new NoOpBufferAvailablityListener());
@@ -514,7 +514,7 @@ public class PipelinedSubpartitionTest extends SubpartitionTestBase {
     }
 
     public static PipelinedSubpartition createPipelinedSubpartition() {
-        final ResultPartition parent = PartitionTestUtils.createPartition();
+        final ResultPartition parent = PartitionTestUtils.createSubpartition();
 
         return new PipelinedSubpartition(0, 2, parent);
     }

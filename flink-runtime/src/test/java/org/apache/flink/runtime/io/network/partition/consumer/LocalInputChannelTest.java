@@ -513,7 +513,7 @@ class LocalInputChannelTest {
     void testEnqueueAvailableChannelWhenResuming() throws IOException, InterruptedException {
         PipelinedResultPartition parent =
                 (PipelinedResultPartition)
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 ResultPartitionType.PIPELINED, NoOpFileChannelManager.INSTANCE);
         ResultSubpartition subpartition = parent.getAllPartitions()[0];
         ResultSubpartitionView subpartitionView = subpartition.createReadView(() -> {});
@@ -551,7 +551,7 @@ class LocalInputChannelTest {
 
         PipelinedResultPartition parent =
                 (PipelinedResultPartition)
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 ResultPartitionType.PIPELINED, NoOpFileChannelManager.INSTANCE);
         ResultSubpartition subpartition = parent.getAllPartitions()[0];
         ResultSubpartitionView subpartitionView = subpartition.createReadView(() -> {});

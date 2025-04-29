@@ -1001,7 +1001,7 @@ public class MultipleInputStreamTaskTest {
         try {
             for (int i = 0; i < partitionWriters.length; ++i) {
                 partitionWriters[i] =
-                        PartitionTestUtils.createPartition(ResultPartitionType.PIPELINED_BOUNDED);
+                        PartitionTestUtils.createSubpartition(ResultPartitionType.PIPELINED_BOUNDED);
                 partitionWriters[i].setup();
             }
 

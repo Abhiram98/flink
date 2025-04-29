@@ -32,10 +32,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory.Shuff
 import org.apache.flink.runtime.io.disk.FileChannelManager;
 import org.apache.flink.runtime.io.disk.FileChannelManagerImpl;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
-import org.apache.flink.runtime.io.network.partition.ResultPartition;
-import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.io.network.partition.ResultPartitionManager;
-import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
+import org.apache.flink.runtime.io.network.partition.*;
 import org.apache.flink.runtime.io.network.partition.consumer.InputChannel;
 import org.apache.flink.runtime.io.network.partition.consumer.InputChannelBuilder;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
@@ -71,7 +68,7 @@ import java.util.concurrent.Executors;
 
 import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.createExecutionAttemptId;
 import static org.apache.flink.runtime.io.network.partition.InputChannelTestUtils.createDummyConnectionManager;
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
+import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createSubpartition;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.spy;
@@ -266,14 +263,14 @@ class NettyShuffleEnvironmentTest {
         int expectedRp4Buffers = rp4Channels * exclusiveBuffers + floatingBuffers;
 
         // result partitions
-        ResultPartition rp1 = createPartition(network, ResultPartitionType.PIPELINED, channels);
+        ResultPartition rp1 = PartitionTestUtils.createSubpartition(network, ResultPartitionType.PIPELINED, channels);
         ResultPartition rp2 =
-                createPartition(
+                createSubpartition(
                         network, fileChannelManager, ResultPartitionType.BLOCKING, channels);
         ResultPartition rp3 =
-                createPartition(network, ResultPartitionType.PIPELINED_BOUNDED, channels);
+                PartitionTestUtils.createSubpartition(network, ResultPartitionType.PIPELINED_BOUNDED, channels);
         ResultPartition rp4 =
-                createPartition(network, ResultPartitionType.PIPELINED_BOUNDED, rp4Channels);
+                PartitionTestUtils.createSubpartition(network, ResultPartitionType.PIPELINED_BOUNDED, rp4Channels);
 
         final ResultPartition[] resultPartitions = new ResultPartition[] {rp1, rp2, rp3, rp4};
 

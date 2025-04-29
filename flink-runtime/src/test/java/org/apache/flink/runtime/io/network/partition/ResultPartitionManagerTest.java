@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
 import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.verifyCreateSubpartitionViewThrowsException;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +41,7 @@ class ResultPartitionManagerTest {
     @Test
     void testThrowPartitionNotFoundException() {
         final ResultPartitionManager partitionManager = new ResultPartitionManager();
-        final ResultPartition partition = createPartition();
+        final ResultPartition partition = PartitionTestUtils.createSubpartition();
 
         verifyCreateSubpartitionViewThrowsException(partitionManager, partition.getPartitionId());
     }
@@ -54,7 +53,7 @@ class ResultPartitionManagerTest {
     @Test
     void testCreateViewForRegisteredPartition() throws Exception {
         final ResultPartitionManager partitionManager = new ResultPartitionManager();
-        final ResultPartition partition = createPartition();
+        final ResultPartition partition = PartitionTestUtils.createSubpartition();
 
         partitionManager.registerResultPartition(partition);
         partitionManager.createSubpartitionView(
@@ -68,7 +67,7 @@ class ResultPartitionManagerTest {
     @Test
     void testCreateSubpartitionViewAfterRegisteredPartition() throws Exception {
         final ResultPartitionManager partitionManager = new ResultPartitionManager();
-        final ResultPartition partition = createPartition();
+        final ResultPartition partition = PartitionTestUtils.createSubpartition();
 
         assertThat(partitionManager.getListenerManagers().isEmpty()).isTrue();
 
@@ -93,7 +92,7 @@ class ResultPartitionManagerTest {
     @Test
     void testRegisterPartitionListenerBeforeRegisteredPartition() throws Exception {
         final ResultPartitionManager partitionManager = new ResultPartitionManager();
-        final ResultPartition partition = createPartition();
+        final ResultPartition partition = PartitionTestUtils.createSubpartition();
 
         assertThat(partitionManager.getListenerManagers().isEmpty()).isTrue();
 
@@ -147,7 +146,7 @@ class ResultPartitionManagerTest {
     @Test
     void testCreateViewForReleasedPartition() throws Exception {
         final ResultPartitionManager partitionManager = new ResultPartitionManager();
-        final ResultPartition partition = createPartition();
+        final ResultPartition partition = PartitionTestUtils.createSubpartition();
 
         partitionManager.registerResultPartition(partition);
         partitionManager.releasePartition(partition.getPartitionId(), null);
@@ -162,8 +161,8 @@ class ResultPartitionManagerTest {
                 new ManuallyTriggeredScheduledExecutor();
         final ResultPartitionManager partitionManager =
                 new ResultPartitionManager(1000000, scheduledExecutor);
-        final ResultPartition partition1 = createPartition();
-        final ResultPartition partition2 = createPartition();
+        final ResultPartition partition1 = PartitionTestUtils.createSubpartition();
+        final ResultPartition partition2 = PartitionTestUtils.createSubpartition();
 
         CompletableFuture<PartitionRequestListener> timeoutFuture1 = new CompletableFuture<>();
         CompletableFuture<PartitionRequestListener> timeoutFuture2 = new CompletableFuture<>();

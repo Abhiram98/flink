@@ -28,7 +28,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.io.network.buffer.BufferPoolFactory;
 import org.apache.flink.runtime.io.network.partition.hybrid.HsResultPartition;
 import org.apache.flink.runtime.io.network.partition.hybrid.HybridShuffleConfiguration;
-import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultPartitionFactory;
+import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultSubpartitionFactory;
 import org.apache.flink.runtime.shuffle.NettyShuffleUtils;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkRuntimeException;
@@ -85,7 +85,7 @@ public class ResultPartitionFactory {
 
     private final int maxOverdraftBuffersPerGate;
 
-    private final Optional<TieredResultPartitionFactory> tieredStorage;
+    private final Optional<TieredResultSubpartitionFactory> tieredStorage;
 
     public ResultPartitionFactory(
             ResultPartitionManager partitionManager,
@@ -106,7 +106,7 @@ public class ResultPartitionFactory {
             int maxOverdraftBuffersPerGate,
             int hybridShuffleSpilledIndexRegionGroupSize,
             long hybridShuffleNumRetainedInMemoryRegionsMax,
-            Optional<TieredResultPartitionFactory> tieredStorage) {
+            Optional<TieredResultSubpartitionFactory> tieredStorage) {
 
         this.partitionManager = partitionManager;
         this.channelManager = channelManager;

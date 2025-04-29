@@ -232,7 +232,7 @@ public class InputChannelTestUtils {
         int bufferSize = 4096;
         PipelinedResultPartition parent =
                 (PipelinedResultPartition)
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 ResultPartitionType.PIPELINED,
                                 NoOpFileChannelManager.INSTANCE,
                                 true,

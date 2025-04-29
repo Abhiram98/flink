@@ -31,7 +31,7 @@ import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import static org.apache.flink.runtime.io.network.buffer.BufferBuilderTestUtils.assertContent;
 import static org.apache.flink.runtime.io.network.buffer.BufferBuilderTestUtils.toByteBuffer;
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
+import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createSubpartition;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link PipelinedApproximateSubpartition}. */
@@ -201,7 +201,7 @@ class PipelinedApproximateSubpartitionTest extends PipelinedSubpartitionTest {
                         .setBufferSize(BUFFER_SIZE)
                         .build();
         ResultPartition resultPartition =
-                createPartition(
+                PartitionTestUtils.createSubpartition(
                         network,
                         NoOpFileChannelManager.INSTANCE,
                         ResultPartitionType.PIPELINED_APPROXIMATE,

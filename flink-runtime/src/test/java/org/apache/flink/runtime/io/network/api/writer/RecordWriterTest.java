@@ -36,11 +36,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferBuilder;
 import org.apache.flink.runtime.io.network.buffer.BufferBuilderTestUtils;
 import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.io.network.buffer.NetworkBufferPool;
-import org.apache.flink.runtime.io.network.partition.NoOpBufferAvailablityListener;
-import org.apache.flink.runtime.io.network.partition.ResultPartition;
-import org.apache.flink.runtime.io.network.partition.ResultPartitionBuilder;
-import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.io.network.partition.ResultSubpartitionView;
+import org.apache.flink.runtime.io.network.partition.*;
 import org.apache.flink.runtime.io.network.partition.consumer.BufferOrEvent;
 import org.apache.flink.runtime.io.network.util.DeserializationUtils;
 import org.apache.flink.runtime.operators.shipping.OutputEmitter;
@@ -65,7 +61,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for the {@link RecordWriter}. */
@@ -391,7 +386,7 @@ class RecordWriterTest {
         NettyShuffleEnvironment env =
                 new NettyShuffleEnvironmentBuilder().setBufferSize(bufferSize).build();
         ResultPartition partition =
-                createPartition(env, ResultPartitionType.PIPELINED, numSubpartitions);
+                PartitionTestUtils.createSubpartition(env, ResultPartitionType.PIPELINED, numSubpartitions);
         partition.setup();
         return partition;
     }

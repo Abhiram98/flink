@@ -671,7 +671,7 @@ class PipelinedSubpartitionWithReadViewTest {
 
     void setup(ResultPartitionType resultPartitionType) throws IOException {
         resultPartition =
-                PartitionTestUtils.createPartition(
+                PartitionTestUtils.createSubpartition(
                         resultPartitionType,
                         NoOpFileChannelManager.INSTANCE,
                         compressionEnabled,

@@ -59,7 +59,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.apache.flink.runtime.io.network.buffer.BufferBuilderTestUtils.createEventBufferConsumer;
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
+import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createSubpartition;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link PartitionRequestQueue}. */
@@ -579,7 +579,7 @@ class PartitionRequestQueueTest {
                         .setBufferSize(BUFFER_SIZE)
                         .build();
         ResultPartition resultPartition =
-                createPartition(
+                createSubpartition(
                         network, NoOpFileChannelManager.INSTANCE, ResultPartitionType.PIPELINED, 2);
         resultPartition.setup();
         return resultPartition;
@@ -592,7 +592,7 @@ class PartitionRequestQueueTest {
                         .setResultPartitionManager(partitionManager)
                         .build();
         ResultPartition partition =
-                createPartition(environment, fileChannelManager, ResultPartitionType.BLOCKING, 1);
+                createSubpartition(environment, fileChannelManager, ResultPartitionType.BLOCKING, 1);
 
         partition.setup();
         partition.emitRecord(ByteBuffer.allocate(BUFFER_SIZE), 0);

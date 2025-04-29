@@ -66,7 +66,7 @@ class PartitionRequestServerHandlerTest {
         InputChannelID inputChannelID = new InputChannelID();
 
         ResultPartition resultPartition =
-                PartitionTestUtils.createPartition(ResultPartitionType.PIPELINED_BOUNDED);
+                PartitionTestUtils.createSubpartition(ResultPartitionType.PIPELINED_BOUNDED);
 
         // Creates the netty network handler stack.
         PartitionRequestQueue partitionRequestQueue = new PartitionRequestQueue();

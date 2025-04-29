@@ -525,7 +525,7 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
                         .build()) {
             for (int i = 0; i < partitionWriters.length; ++i) {
                 partitionWriters[i] =
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 env, ResultPartitionType.PIPELINED_BOUNDED, 1);
                 partitionWriters[i].setup();
             }
@@ -605,7 +605,7 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
         try (NettyShuffleEnvironment env =
                         new NettyShuffleEnvironmentBuilder().setNumNetworkBuffers(2).build();
                 ResultPartition partitionWriter =
-                        PartitionTestUtils.createPartition(
+                        PartitionTestUtils.createSubpartition(
                                 env, ResultPartitionType.PIPELINED_BOUNDED, 1)) {
             partitionWriter.setup();
             assertTrue(partitionWriter.getBufferPool().getMaxOverdraftBuffersPerGate() > 0);

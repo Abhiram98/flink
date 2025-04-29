@@ -50,14 +50,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
-/** {@link TieredResultPartitionFactory} contains the components to set up tiered storage. */
-public class TieredResultPartitionFactory {
+/** {@link TieredResultSubpartitionFactory} contains the components to set up tiered storage. */
+public class TieredResultSubpartitionFactory {
 
     private final TieredStorageConfiguration tieredStorageConfiguration;
     private final TieredStorageNettyServiceImpl tieredStorageNettyService;
     private final TieredStorageResourceRegistry tieredStorageResourceRegistry;
 
-    public TieredResultPartitionFactory(
+    public TieredResultSubpartitionFactory(
             TieredStorageConfiguration tieredStorageConfiguration,
             TieredStorageNettyServiceImpl tieredStorageNettyService,
             TieredStorageResourceRegistry tieredStorageResourceRegistry) {
@@ -89,7 +89,7 @@ public class TieredResultPartitionFactory {
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
             SupplierWithException<BufferPool, IOException> bufferPoolFactory,
-            FileChannelManager fileChannelManager,
+            FileChannelManager fileSubpartitionManager,
             BatchShuffleReadBufferPool batchShuffleReadBufferPool,
             ScheduledExecutorService batchShuffleReadIOExecutor) {
 
@@ -115,7 +115,7 @@ public class TieredResultPartitionFactory {
                                 memoryManager,
                                 bufferAccumulator,
                                 partitionType == ResultPartitionType.HYBRID_SELECTIVE,
-                                fileChannelManager,
+                                fileSubpartitionManager,
                                 batchShuffleReadBufferPool,
                                 batchShuffleReadIOExecutor);
 
@@ -168,7 +168,7 @@ public class TieredResultPartitionFactory {
                     TieredStorageMemoryManager memoryManager,
                     BufferAccumulator bufferAccumulator,
                     boolean isHybridSelective,
-                    FileChannelManager fileChannelManager,
+                    FileChannelManager fileSubpartitionManager,
                     BatchShuffleReadBufferPool batchShuffleReadBufferPool,
                     ScheduledExecutorService batchShuffleReadIOExecutor) {
 
@@ -199,7 +199,7 @@ public class TieredResultPartitionFactory {
                     tierFactory.createProducerAgent(
                             numberOfSubpartitions,
                             partitionID,
-                            fileChannelManager.createChannel().getPath(),
+                            fileSubpartitionManager.createChannel().getPath(),
                             isBroadcastOnly,
                             memoryManager,
                             tieredStorageNettyService,

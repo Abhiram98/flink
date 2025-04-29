@@ -161,7 +161,7 @@ public abstract class SortBuffer implements DataBuffer {
      * either all data of target record will be written or nothing will be written.
      */
     @Override
-    public boolean append(ByteBuffer source, int targetChannel, Buffer.DataType dataType)
+    public boolean append(ByteBuffer source, int targetSubpartition, Buffer.DataType dataType)
             throws IOException {
         checkArgument(source.hasRemaining(), "Cannot append empty data.");
         checkState(!isFinished, "Sort buffer is already finished.");
@@ -175,7 +175,7 @@ public abstract class SortBuffer implements DataBuffer {
         }
 
         // write the index entry and record or event data
-        writeIndex(targetChannel, totalBytes, dataType);
+        writeIndex(targetSubpartition, totalBytes, dataType);
         writeRecord(source);
 
         ++numTotalRecords;

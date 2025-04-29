@@ -45,7 +45,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 
 import static org.apache.flink.runtime.io.network.buffer.BufferBuilderTestUtils.isInBlockingBufferRequest;
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
+import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createSubpartition;
 import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.verifyCreateSubpartitionViewThrowsException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -250,7 +250,7 @@ class ResultPartitionTest {
                         .setBufferSize(bufferSize)
                         .build();
         final ResultPartition resultPartition =
-                createPartition(network, ResultPartitionType.PIPELINED, 1);
+                PartitionTestUtils.createSubpartition(network, ResultPartitionType.PIPELINED, 1);
         try {
             resultPartition.setup();
 
@@ -284,7 +284,7 @@ class ResultPartitionTest {
                         .setBufferSize(bufferSize)
                         .build();
         final ResultPartition resultPartition =
-                createPartition(network, ResultPartitionType.PIPELINED, 1);
+                PartitionTestUtils.createSubpartition(network, ResultPartitionType.PIPELINED, 1);
 
         try {
             resultPartition.setup();
@@ -356,7 +356,7 @@ class ResultPartitionTest {
                         .setBufferSize(bufferSize)
                         .build();
         ResultPartition resultPartition =
-                createPartition(network, fileChannelManager, partitionType, 2);
+                createSubpartition(network, fileChannelManager, partitionType, 2);
         resultPartition.setup();
         return (BufferWritingResultPartition) resultPartition;
     }

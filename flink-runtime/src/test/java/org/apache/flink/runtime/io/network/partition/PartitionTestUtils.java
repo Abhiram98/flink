@@ -45,15 +45,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public enum PartitionTestUtils {
     ;
 
-    public static ResultPartition createPartition() {
-        return createPartition(ResultPartitionType.PIPELINED_BOUNDED);
+    public static ResultPartition createSubpartition() {
+        return createSubpartition(ResultPartitionType.PIPELINED_BOUNDED);
     }
 
-    public static ResultPartition createPartition(ResultPartitionType type) {
+    public static ResultPartition createSubpartition(ResultPartitionType type) {
         return new ResultPartitionBuilder().setResultPartitionType(type).build();
     }
 
-    public static ResultPartition createPartition(
+    public static ResultPartition createSubpartition(
             ResultPartitionType type, FileChannelManager channelManager) {
         return new ResultPartitionBuilder()
                 .setResultPartitionType(type)
@@ -61,7 +61,7 @@ public enum PartitionTestUtils {
                 .build();
     }
 
-    public static ResultPartition createPartition(
+    public static ResultPartition createSubpartition(
             ResultPartitionType type,
             FileChannelManager channelManager,
             boolean compressionEnabled,
@@ -74,29 +74,29 @@ public enum PartitionTestUtils {
                 .build();
     }
 
-    public static ResultPartition createPartition(
+    public static ResultPartition createSubpartition(
             NettyShuffleEnvironment environment,
             ResultPartitionType partitionType,
-            int numChannels) {
+            int numSubpartitions) {
         return new ResultPartitionBuilder()
                 .setResultPartitionManager(environment.getResultPartitionManager())
                 .setupBufferPoolFactoryFromNettyShuffleEnvironment(environment)
                 .setResultPartitionType(partitionType)
-                .setNumberOfSubpartitions(numChannels)
+                .setNumberOfSubpartitions(numSubpartitions)
                 .build();
     }
 
-    public static ResultPartition createPartition(
+    public static ResultPartition createSubpartition(
             NettyShuffleEnvironment environment,
             FileChannelManager channelManager,
             ResultPartitionType partitionType,
-            int numChannels) {
+            int numSubpartitions) {
         return new ResultPartitionBuilder()
                 .setResultPartitionManager(environment.getResultPartitionManager())
                 .setupBufferPoolFactoryFromNettyShuffleEnvironment(environment)
                 .setFileChannelManager(channelManager)
                 .setResultPartitionType(partitionType)
-                .setNumberOfSubpartitions(numChannels)
+                .setNumberOfSubpartitions(numSubpartitions)
                 .build();
     }
 
@@ -125,7 +125,7 @@ public enum PartitionTestUtils {
                                                         .getPartitionId()));
     }
 
-    public static ResultPartitionDeploymentDescriptor createPartitionDeploymentDescriptor(
+    public static ResultPartitionDeploymentDescriptor createSubpartitionDeploymentDescriptor(
             ResultPartitionType partitionType) {
         ShuffleDescriptor shuffleDescriptor =
                 NettyShuffleDescriptorBuilder.newBuilder().buildLocal();
@@ -137,14 +137,14 @@ public enum PartitionTestUtils {
         return new ResultPartitionDeploymentDescriptor(partitionDescriptor, shuffleDescriptor, 1);
     }
 
-    public static PartitionedFile createPartitionedFile(
+    public static PartitionedFile createSubpartitionedFile(
             String basePath,
             int numSubpartitions,
             int numBuffersPerSubpartition,
             int bufferSize,
             byte[] dataBytes)
             throws Exception {
-        List<BufferWithChannel> buffers = new ArrayList<>();
+        List<BufferWithSubpartition> buffers = new ArrayList<>();
         for (int i = 0; i < numSubpartitions; ++i) {
             for (int j = 0; j < numBuffersPerSubpartition; ++j) {
                 Buffer.DataType dataType =
@@ -157,7 +157,7 @@ public enum PartitionTestUtils {
                 Buffer buffer =
                         new NetworkBuffer(
                                 segment, FreeingBufferRecycler.INSTANCE, dataType, bufferSize);
-                buffers.add(new BufferWithChannel(buffer, i));
+                buffers.add(new BufferWithSubpartition(buffer, i));
             }
         }
 

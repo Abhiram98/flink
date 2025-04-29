@@ -42,7 +42,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.flink.runtime.io.network.partition.PartitionTestUtils.createPartition;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -122,7 +121,7 @@ class BoundedBlockingSubpartitionTest extends SubpartitionTestBase {
     void testRecycleCurrentBufferOnFailure(BoundedBlockingSubpartitionType type, boolean sslEnabled)
             throws Exception {
         final ResultPartition resultPartition =
-                createPartition(ResultPartitionType.BLOCKING, fileChannelManager);
+                PartitionTestUtils.createSubpartition(ResultPartitionType.BLOCKING, fileChannelManager);
         final BoundedBlockingSubpartition subpartition =
                 new BoundedBlockingSubpartition(
                         0,
@@ -155,7 +154,7 @@ class BoundedBlockingSubpartitionTest extends SubpartitionTestBase {
     @Override
     ResultSubpartition createSubpartition() throws Exception {
         final ResultPartition resultPartition =
-                createPartition(ResultPartitionType.BLOCKING, fileChannelManager);
+                PartitionTestUtils.createSubpartition(ResultPartitionType.BLOCKING, fileChannelManager);
         return type.create(
                 0,
                 resultPartition,
@@ -167,7 +166,7 @@ class BoundedBlockingSubpartitionTest extends SubpartitionTestBase {
     @Override
     ResultSubpartition createFailingWritesSubpartition() throws Exception {
         final ResultPartition resultPartition =
-                createPartition(ResultPartitionType.BLOCKING, fileChannelManager);
+                PartitionTestUtils.createSubpartition(ResultPartitionType.BLOCKING, fileChannelManager);
 
         return new BoundedBlockingSubpartition(
                 0,

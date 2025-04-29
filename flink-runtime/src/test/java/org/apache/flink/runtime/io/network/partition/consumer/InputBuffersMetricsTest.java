@@ -283,7 +283,7 @@ class InputBuffersMetricsTest {
         int channelIdx = 0;
         for (int i = 0; i < numberOfRemoteChannels; i++) {
             ResultPartition partition =
-                    PartitionTestUtils.createPartition(
+                    PartitionTestUtils.createSubpartition(
                             network, ResultPartitionType.PIPELINED_BOUNDED, 1);
             closeableRegistry.registerCloseable(partition::close);
             partition.setup();
@@ -297,7 +297,7 @@ class InputBuffersMetricsTest {
 
         for (int i = 0; i < numberOfLocalChannels; i++) {
             ResultPartition partition =
-                    PartitionTestUtils.createPartition(
+                    PartitionTestUtils.createSubpartition(
                             network, ResultPartitionType.PIPELINED_BOUNDED, 1);
             closeableRegistry.registerCloseable(partition::close);
             partition.setup();

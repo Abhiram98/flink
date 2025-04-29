@@ -26,7 +26,7 @@ import org.apache.flink.runtime.io.network.partition.hybrid.HsResultPartition;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStorageConfiguration;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.netty.TieredStorageNettyServiceImpl;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultPartition;
-import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultPartitionFactory;
+import org.apache.flink.runtime.io.network.partition.hybrid.tiered.shuffle.TieredResultSubpartitionFactory;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.storage.TieredStorageResourceRegistry;
 import org.apache.flink.runtime.shuffle.PartitionDescriptorBuilder;
 import org.apache.flink.runtime.util.EnvironmentInformation;
@@ -180,7 +180,7 @@ class ResultPartitionFactoryTest {
     }
 
     private static ResultPartition createResultPartition(
-            ResultPartitionType partitionType, Optional<TieredResultPartitionFactory> tieredStorage)
+            ResultPartitionType partitionType, Optional<TieredResultSubpartitionFactory> tieredStorage)
             throws IOException {
         return createResultPartition(partitionType, Integer.MAX_VALUE, false, tieredStorage);
     }
@@ -195,7 +195,7 @@ class ResultPartitionFactoryTest {
             ResultPartitionType partitionType,
             int sortShuffleMinParallelism,
             boolean isBroadcast,
-            Optional<TieredResultPartitionFactory> tieredStorage)
+            Optional<TieredResultSubpartitionFactory> tieredStorage)
             throws IOException {
         final ResultPartitionManager manager = new ResultPartitionManager();
 
@@ -239,7 +239,7 @@ class ResultPartitionFactoryTest {
         return partition;
     }
 
-    private Optional<TieredResultPartitionFactory> createTieredResultPartitionFactory() {
+    private Optional<TieredResultSubpartitionFactory> createTieredResultPartitionFactory() {
         TieredStorageConfiguration tieredStorageConfiguration =
                 TieredStorageConfiguration.builder(null).build();
         TieredStorageResourceRegistry tieredStorageResourceRegistry =
@@ -247,7 +247,7 @@ class ResultPartitionFactoryTest {
         TieredStorageNettyServiceImpl tieredStorageNettyService =
                 new TieredStorageNettyServiceImpl(tieredStorageResourceRegistry);
         return Optional.of(
-                new TieredResultPartitionFactory(
+                new TieredResultSubpartitionFactory(
                         tieredStorageConfiguration,
                         tieredStorageNettyService,
                         tieredStorageResourceRegistry));
