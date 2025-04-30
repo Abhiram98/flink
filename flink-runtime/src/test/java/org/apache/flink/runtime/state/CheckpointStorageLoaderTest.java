@@ -428,17 +428,7 @@ class CheckpointStorageLoaderTest {
 
         @Override
         public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-                Environment env,
-                JobID jobID,
-                String operatorIdentifier,
-                TypeSerializer<K> keySerializer,
-                int numberOfKeyGroups,
-                KeyGroupRange keyGroupRange,
-                TaskKvStateRegistry kvStateRegistry,
-                TtlTimeProvider ttlTimeProvider,
-                MetricGroup metricGroup,
-                Collection<KeyedStateHandle> stateHandles,
-                CloseableRegistry cancelStreamRegistry)
+                KeyedStateBackendParameters<K> keyedStateBackendParameters)
                 throws Exception {
             return null;
         }
@@ -458,17 +448,7 @@ class CheckpointStorageLoaderTest {
 
         @Override
         public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-                Environment env,
-                JobID jobID,
-                String operatorIdentifier,
-                TypeSerializer<K> keySerializer,
-                int numberOfKeyGroups,
-                KeyGroupRange keyGroupRange,
-                TaskKvStateRegistry kvStateRegistry,
-                TtlTimeProvider ttlTimeProvider,
-                MetricGroup metricGroup,
-                Collection<KeyedStateHandle> stateHandles,
-                CloseableRegistry cancelStreamRegistry)
+                KeyedStateBackendParameters<K> keyedStateBackendParameters)
                 throws Exception {
             return null;
         }

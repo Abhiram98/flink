@@ -336,18 +336,8 @@ public class StreamTaskStateInitializerImpl implements StreamTaskStateInitialize
                                                                 .asClassLoader(),
                                                         stateHandles)
                                                 .createKeyedStateBackend(
-                                                        environment,
-                                                        environment.getJobID(),
-                                                        operatorIdentifierText,
-                                                        keySerializer,
-                                                        taskInfo.getMaxNumberOfParallelSubtasks(),
-                                                        keyGroupRange,
-                                                        environment.getTaskKvStateRegistry(),
-                                                        ttlTimeProvider,
-                                                        metricGroup,
-                                                        stateHandles,
-                                                        cancelStreamRegistryForRestore,
-                                                        managedMemoryFraction),
+                                                        environment
+                                                ),
                                 backendCloseableRegistry,
                                 logDescription);
 

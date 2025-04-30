@@ -76,40 +76,29 @@ public class StateBackendTestUtils {
         }
 
         @Override
-        public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-                Environment env,
-                JobID jobID,
-                String operatorIdentifier,
-                TypeSerializer<K> keySerializer,
-                int numberOfKeyGroups,
-                KeyGroupRange keyGroupRange,
-                TaskKvStateRegistry kvStateRegistry,
-                TtlTimeProvider ttlTimeProvider,
-                MetricGroup metricGroup,
-                @Nonnull Collection<KeyedStateHandle> stateHandles,
-                CloseableRegistry cancelStreamRegistry)
+        public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters)
                 throws IOException {
             AbstractKeyedStateBackend<K> delegatedKeyedStateBackend =
                     delegatedStataBackend.createKeyedStateBackend(
-                            env,
-                            jobID,
-                            operatorIdentifier,
-                            keySerializer,
-                            numberOfKeyGroups,
-                            keyGroupRange,
-                            kvStateRegistry,
-                            ttlTimeProvider,
-                            metricGroup,
-                            stateHandles,
-                            cancelStreamRegistry);
+                            keyedStateBackendParameters.getEnv(),
+                            keyedStateBackendParameters.getJobID(),
+                            keyedStateBackendParameters.getOperatorIdentifier(),
+                            keyedStateBackendParameters.getKeySerializer(),
+                            keyedStateBackendParameters.getNumberOfKeyGroups(),
+                            keyedStateBackendParameters.getKeyGroupRange(),
+                            keyedStateBackendParameters.getKvStateRegistry(),
+                            keyedStateBackendParameters.getTtlTimeProvider(),
+                            keyedStateBackendParameters.getMetricGroup(),
+                            keyedStateBackendParameters.getStateHandles(),
+                            keyedStateBackendParameters.getCancelStreamRegistry());
             return new AbstractKeyedStateBackend<K>(
-                    kvStateRegistry,
-                    keySerializer,
-                    env.getUserCodeClassLoader().asClassLoader(),
-                    env.getExecutionConfig(),
-                    ttlTimeProvider,
+                    keyedStateBackendParameters.getKvStateRegistry(),
+                    keyedStateBackendParameters.getKeySerializer(),
+                    keyedStateBackendParameters.getEnv().getUserCodeClassLoader().asClassLoader(),
+                    keyedStateBackendParameters.getEnv().getExecutionConfig(),
+                    keyedStateBackendParameters.getTtlTimeProvider(),
                     delegatedKeyedStateBackend.getLatencyTrackingStateConfig(),
-                    cancelStreamRegistry,
+                    keyedStateBackendParameters.getCancelStreamRegistry(),
                     delegatedKeyedStateBackend.getKeyContext()) {
                 @Override
                 public void setCurrentKey(K newKey) {

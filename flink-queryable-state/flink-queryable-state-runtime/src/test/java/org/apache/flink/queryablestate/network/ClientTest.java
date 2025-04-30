@@ -41,6 +41,7 @@ import org.apache.flink.runtime.query.KvStateRegistry;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.AbstractStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
@@ -546,17 +547,18 @@ class ClientTest {
 
         AbstractKeyedStateBackend<Integer> backend =
                 abstractBackend.createKeyedStateBackend(
-                        dummyEnv,
-                        new JobID(),
-                        "test_op",
-                        IntSerializer.INSTANCE,
-                        numKeyGroups,
-                        new KeyGroupRange(0, 0),
-                        dummyRegistry.createTaskRegistry(new JobID(), new JobVertexID()),
-                        TtlTimeProvider.DEFAULT,
-                        new UnregisteredMetricsGroup(),
-                        Collections.emptyList(),
-                        new CloseableRegistry());
+                        new KeyedStateBackendParameters<K>(
+                                dummyEnv,
+                                new JobID(),
+                                "test_op",
+                                IntSerializer.INSTANCE,
+                                numKeyGroups,
+                                new KeyGroupRange(0, 0),
+                                dummyRegistry.createTaskRegistry(new JobID(), new JobVertexID()),
+                                TtlTimeProvider.DEFAULT,
+                                new UnregisteredMetricsGroup(),
+                                Collections.emptyList(),
+                                new CloseableRegistry()));
 
         AtomicKvStateRequestStats clientStats = new AtomicKvStateRequestStats();
 

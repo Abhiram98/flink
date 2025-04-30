@@ -19,14 +19,11 @@ package org.apache.flink.contrib.streaming.state;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.query.TaskKvStateRegistry;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.AbstractManagedMemoryStateBackend;
 import org.apache.flink.runtime.state.AbstractStateBackend;
@@ -34,13 +31,11 @@ import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageAccess;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.ConfigurableStateBackend;
-import org.apache.flink.runtime.state.KeyGroupRange;
-import org.apache.flink.runtime.state.KeyedStateHandle;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.state.filesystem.FsStateBackend;
-import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.util.TernaryBoolean;
 
 import org.slf4j.Logger;
@@ -313,61 +308,30 @@ public class RocksDBStateBackend extends AbstractManagedMemoryStateBackend
     // ------------------------------------------------------------------------
 
     @Override
-    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws IOException {
         return rocksDBStateBackend.createKeyedStateBackend(
-                env,
-                jobID,
-                operatorIdentifier,
-                keySerializer,
-                numberOfKeyGroups,
-                keyGroupRange,
-                kvStateRegistry,
-                ttlTimeProvider,
-                metricGroup,
-                stateHandles,
-                cancelStreamRegistry);
+                new KeyedStateBackendParameters<>(
+                        keyedStateBackendParameters.getEnv(),
+                        keyedStateBackendParameters.getJobID(),
+                        keyedStateBackendParameters.getOperatorIdentifier(),
+                        keyedStateBackendParameters.getKeySerializer(),
+                        keyedStateBackendParameters.getNumberOfKeyGroups(),
+                        keyedStateBackendParameters.getKeyGroupRange(),
+                        keyedStateBackendParameters.getKvStateRegistry(),
+                        keyedStateBackendParameters.getTtlTimeProvider(),
+                        keyedStateBackendParameters.getMetricGroup(),
+                        keyedStateBackendParameters.getStateHandles(),
+                        keyedStateBackendParameters.getCancelStreamRegistry()));
     }
 
     @Override
     public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry,
-            double managedMemoryFraction)
+            KeyedStateBackendParameters<K> parameters)
             throws IOException {
         return rocksDBStateBackend.createKeyedStateBackend(
-                env,
-                jobID,
-                operatorIdentifier,
-                keySerializer,
-                numberOfKeyGroups,
-                keyGroupRange,
-                kvStateRegistry,
-                ttlTimeProvider,
-                metricGroup,
-                stateHandles,
-                cancelStreamRegistry,
-                managedMemoryFraction);
+                parameters
+        );
     }
 
     @Override

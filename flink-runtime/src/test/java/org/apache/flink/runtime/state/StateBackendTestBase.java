@@ -207,17 +207,18 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         CheckpointableKeyedStateBackend<K> backend =
                 getStateBackend()
                         .createKeyedStateBackend(
-                                env,
-                                new JobID(),
-                                "test_op",
-                                keySerializer,
-                                numberOfKeyGroups,
-                                keyGroupRange,
-                                env.getTaskKvStateRegistry(),
-                                TtlTimeProvider.DEFAULT,
-                                new UnregisteredMetricsGroup(),
-                                Collections.emptyList(),
-                                new CloseableRegistry());
+                                new KeyedStateBackendParameters<>(
+                                        env,
+                                        new JobID(),
+                                        "test_op",
+                                        keySerializer,
+                                        numberOfKeyGroups,
+                                        keyGroupRange,
+                                        env.getTaskKvStateRegistry(),
+                                        TtlTimeProvider.DEFAULT,
+                                        new UnregisteredMetricsGroup(),
+                                        Collections.emptyList(),
+                                        new CloseableRegistry()));
 
         return backend;
     }
@@ -244,17 +245,18 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
         return getStateBackend()
                 .createKeyedStateBackend(
-                        env,
-                        new JobID(),
-                        "test_op",
-                        keySerializer,
-                        numberOfKeyGroups,
-                        keyGroupRange,
-                        env.getTaskKvStateRegistry(),
-                        TtlTimeProvider.DEFAULT,
-                        new UnregisteredMetricsGroup(),
-                        state,
-                        new CloseableRegistry());
+                        new KeyedStateBackendParameters<>(
+                                env,
+                                new JobID(),
+                                "test_op",
+                                keySerializer,
+                                numberOfKeyGroups,
+                                keyGroupRange,
+                                env.getTaskKvStateRegistry(),
+                                TtlTimeProvider.DEFAULT,
+                                new UnregisteredMetricsGroup(),
+                                state,
+                                new CloseableRegistry()));
     }
 
     @TestTemplate
@@ -267,17 +269,18 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         KeyGroupRange groupRange = new KeyGroupRange(0, 1);
         CheckpointableKeyedStateBackend<Integer> keyedStateBackend =
                 configuredBackend.createKeyedStateBackend(
-                        env,
-                        new JobID(),
-                        "test_op",
-                        IntSerializer.INSTANCE,
-                        groupRange.getNumberOfKeyGroups(),
-                        groupRange,
-                        env.getTaskKvStateRegistry(),
-                        TtlTimeProvider.DEFAULT,
-                        new UnregisteredMetricsGroup(),
-                        Collections.emptyList(),
-                        new CloseableRegistry());
+                        new KeyedStateBackendParameters<>(
+                                env,
+                                new JobID(),
+                                "test_op",
+                                IntSerializer.INSTANCE,
+                                groupRange.getNumberOfKeyGroups(),
+                                groupRange,
+                                env.getTaskKvStateRegistry(),
+                                TtlTimeProvider.DEFAULT,
+                                new UnregisteredMetricsGroup(),
+                                Collections.emptyList(),
+                                new CloseableRegistry()));
         try {
             KeyedStateBackend<Integer> nested =
                     keyedStateBackend instanceof TestableKeyedStateBackend

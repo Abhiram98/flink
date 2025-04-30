@@ -40,6 +40,7 @@ import org.apache.flink.runtime.query.KvStateRegistry;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.AbstractStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 
@@ -111,17 +112,18 @@ class KvStateServerTest {
             final JobID jobId = new JobID();
             AbstractKeyedStateBackend<Integer> backend =
                     abstractBackend.createKeyedStateBackend(
-                            dummyEnv,
-                            jobId,
-                            "test_op",
-                            IntSerializer.INSTANCE,
-                            numKeyGroups,
-                            new KeyGroupRange(0, 0),
-                            registry.createTaskRegistry(jobId, new JobVertexID()),
-                            TtlTimeProvider.DEFAULT,
-                            new UnregisteredMetricsGroup(),
-                            Collections.emptyList(),
-                            new CloseableRegistry());
+                            new KeyedStateBackendParameters<K>(
+                                    dummyEnv,
+                                    jobId,
+                                    "test_op",
+                                    IntSerializer.INSTANCE,
+                                    numKeyGroups,
+                                    new KeyGroupRange(0, 0),
+                                    registry.createTaskRegistry(jobId, new JobVertexID()),
+                                    TtlTimeProvider.DEFAULT,
+                                    new UnregisteredMetricsGroup(),
+                                    Collections.emptyList(),
+                                    new CloseableRegistry()));
 
             final KvStateServerHandlerTest.TestRegistryListener registryListener =
                     new KvStateServerHandlerTest.TestRegistryListener();

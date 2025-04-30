@@ -37,6 +37,7 @@ import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyGroupStatePartitionStreamProvider;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -145,17 +146,7 @@ public class StreamTaskStateInitializerImplTest {
 
                             @Override
                             public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-                                    Environment env,
-                                    JobID jobID,
-                                    String operatorIdentifier,
-                                    TypeSerializer<K> keySerializer,
-                                    int numberOfKeyGroups,
-                                    KeyGroupRange keyGroupRange,
-                                    TaskKvStateRegistry kvStateRegistry,
-                                    TtlTimeProvider ttlTimeProvider,
-                                    MetricGroup metricGroup,
-                                    @Nonnull Collection<KeyedStateHandle> stateHandles,
-                                    CloseableRegistry cancelStreamRegistry)
+                                    KeyedStateBackendParameters<K> keyedStateBackendParameters)
                                     throws Exception {
                                 return mock(AbstractKeyedStateBackend.class);
                             }

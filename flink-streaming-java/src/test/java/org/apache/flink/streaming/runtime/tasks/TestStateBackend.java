@@ -38,6 +38,7 @@ import org.apache.flink.runtime.state.DefaultOperatorStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyGroupedInternalPriorityQueue;
 import org.apache.flink.runtime.state.Keyed;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -69,28 +70,19 @@ public class TestStateBackend extends AbstractStateBackend {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws IOException {
         return new TestKeyedStateBackend<>(
-                kvStateRegistry,
-                keySerializer,
+                keyedStateBackendParameters.getKvStateRegistry(),
+                keyedStateBackendParameters.getKeySerializer(),
                 Thread.currentThread().getContextClassLoader(),
-                env.getExecutionConfig(),
-                ttlTimeProvider,
+                keyedStateBackendParameters.getEnv().getExecutionConfig(),
+                keyedStateBackendParameters.getTtlTimeProvider(),
                 LatencyTrackingStateConfig.newBuilder().build(),
-                cancelStreamRegistry,
-                new InternalKeyContextImpl<>(keyGroupRange, numberOfKeyGroups));
+                keyedStateBackendParameters.getCancelStreamRegistry(),
+                new InternalKeyContextImpl<>(
+                        keyedStateBackendParameters.getKeyGroupRange(),
+                        keyedStateBackendParameters.getNumberOfKeyGroups()));
     }
 
     @Override

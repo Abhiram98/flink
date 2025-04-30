@@ -52,6 +52,7 @@ import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.DefaultKeyedStateStore;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateBackend;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.VoidNamespaceSerializer;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
@@ -369,20 +370,24 @@ public class StreamingRuntimeContextTest {
                                 AbstractKeyedStateBackend<Integer> backend =
                                         new MemoryStateBackend()
                                                 .createKeyedStateBackend(
-                                                        new DummyEnvironment("test_task", 1, 0),
-                                                        new JobID(),
-                                                        "test_op",
-                                                        IntSerializer.INSTANCE,
-                                                        1,
-                                                        new KeyGroupRange(0, 0),
-                                                        new KvStateRegistry()
-                                                                .createTaskRegistry(
-                                                                        new JobID(),
-                                                                        new JobVertexID()),
-                                                        TtlTimeProvider.DEFAULT,
-                                                        new UnregisteredMetricsGroup(),
-                                                        Collections.emptyList(),
-                                                        new CloseableRegistry());
+                                                        new KeyedStateBackendParameters<K>(
+                                                                new DummyEnvironment(
+                                                                        "test_task",
+                                                                        1,
+                                                                        0),
+                                                                new JobID(),
+                                                                "test_op",
+                                                                IntSerializer.INSTANCE,
+                                                                1,
+                                                                new KeyGroupRange(0, 0),
+                                                                new KvStateRegistry()
+                                                                        .createTaskRegistry(
+                                                                                new JobID(),
+                                                                                new JobVertexID()),
+                                                                TtlTimeProvider.DEFAULT,
+                                                                new UnregisteredMetricsGroup(),
+                                                                Collections.emptyList(),
+                                                                new CloseableRegistry()));
                                 backend.setCurrentKey(0);
                                 return backend.getPartitionedState(
                                         VoidNamespace.INSTANCE,
@@ -433,20 +438,24 @@ public class StreamingRuntimeContextTest {
                                 AbstractKeyedStateBackend<Integer> backend =
                                         new MemoryStateBackend()
                                                 .createKeyedStateBackend(
-                                                        new DummyEnvironment("test_task", 1, 0),
-                                                        new JobID(),
-                                                        "test_op",
-                                                        IntSerializer.INSTANCE,
-                                                        1,
-                                                        new KeyGroupRange(0, 0),
-                                                        new KvStateRegistry()
-                                                                .createTaskRegistry(
-                                                                        new JobID(),
-                                                                        new JobVertexID()),
-                                                        TtlTimeProvider.DEFAULT,
-                                                        new UnregisteredMetricsGroup(),
-                                                        Collections.emptyList(),
-                                                        new CloseableRegistry());
+                                                        new KeyedStateBackendParameters<K>(
+                                                                new DummyEnvironment(
+                                                                        "test_task",
+                                                                        1,
+                                                                        0),
+                                                                new JobID(),
+                                                                "test_op",
+                                                                IntSerializer.INSTANCE,
+                                                                1,
+                                                                new KeyGroupRange(0, 0),
+                                                                new KvStateRegistry()
+                                                                        .createTaskRegistry(
+                                                                                new JobID(),
+                                                                                new JobVertexID()),
+                                                                TtlTimeProvider.DEFAULT,
+                                                                new UnregisteredMetricsGroup(),
+                                                                Collections.emptyList(),
+                                                                new CloseableRegistry()));
                                 backend.setCurrentKey(0);
                                 return backend.getPartitionedState(
                                         VoidNamespace.INSTANCE,

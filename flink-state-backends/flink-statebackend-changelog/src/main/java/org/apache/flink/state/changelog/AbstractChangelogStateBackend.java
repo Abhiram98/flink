@@ -19,15 +19,13 @@
 package org.apache.flink.state.changelog;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.query.TaskKvStateRegistry;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -83,58 +81,37 @@ public abstract class AbstractChangelogStateBackend
 
     @Override
     public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+            KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws Exception {
         return restore(
-                env,
-                operatorIdentifier,
-                keyGroupRange,
-                ttlTimeProvider,
-                metricGroup,
-                castHandles(stateHandles),
+                keyedStateBackendParameters.getEnv(),
+                keyedStateBackendParameters.getOperatorIdentifier(),
+                keyedStateBackendParameters.getKeyGroupRange(),
+                keyedStateBackendParameters.getTtlTimeProvider(),
+                keyedStateBackendParameters.getMetricGroup(),
+                castHandles(keyedStateBackendParameters.getStateHandles()),
                 baseHandles ->
                         (AbstractKeyedStateBackend<K>)
                                 delegatedStateBackend.createKeyedStateBackend(
-                                        env,
-                                        jobID,
-                                        operatorIdentifier,
-                                        keySerializer,
-                                        numberOfKeyGroups,
-                                        keyGroupRange,
-                                        kvStateRegistry,
-                                        ttlTimeProvider,
-                                        metricGroup,
+                                        keyedStateBackendParameters.getEnv(),
+                                        keyedStateBackendParameters.getJobID(),
+                                        keyedStateBackendParameters.getOperatorIdentifier(),
+                                        keyedStateBackendParameters.getKeySerializer(),
+                                        keyedStateBackendParameters.getNumberOfKeyGroups(),
+                                        keyedStateBackendParameters.getKeyGroupRange(),
+                                        keyedStateBackendParameters.getKvStateRegistry(),
+                                        keyedStateBackendParameters.getTtlTimeProvider(),
+                                        keyedStateBackendParameters.getMetricGroup(),
                                         baseHandles,
-                                        cancelStreamRegistry));
+                                        keyedStateBackendParameters.getCancelStreamRegistry()));
     }
 
     @Override
     public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry,
-            double managedMemoryFraction)
+            KeyedStateBackendParameters<K> parameters)
             throws Exception {
         return restore(
-                env,
+                parameters,
                 operatorIdentifier,
                 keyGroupRange,
                 ttlTimeProvider,
@@ -143,18 +120,8 @@ public abstract class AbstractChangelogStateBackend
                 baseHandles ->
                         (AbstractKeyedStateBackend<K>)
                                 delegatedStateBackend.createKeyedStateBackend(
-                                        env,
-                                        jobID,
-                                        operatorIdentifier,
-                                        keySerializer,
-                                        numberOfKeyGroups,
-                                        keyGroupRange,
-                                        kvStateRegistry,
-                                        ttlTimeProvider,
-                                        metricGroup,
-                                        baseHandles,
-                                        cancelStreamRegistry,
-                                        managedMemoryFraction));
+                                        parameters
+                                ));
     }
 
     @Override

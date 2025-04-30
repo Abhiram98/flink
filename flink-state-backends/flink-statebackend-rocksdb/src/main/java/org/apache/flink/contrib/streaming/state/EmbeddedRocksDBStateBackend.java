@@ -22,7 +22,6 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.Configuration;
@@ -34,22 +33,18 @@ import org.apache.flink.contrib.streaming.state.RocksDBMemoryControllerUtils.Roc
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.memory.OpaqueMemoryResource;
-import org.apache.flink.runtime.query.TaskKvStateRegistry;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.AbstractManagedMemoryStateBackend;
 import org.apache.flink.runtime.state.ConfigurableStateBackend;
 import org.apache.flink.runtime.state.DefaultOperatorStateBackendBuilder;
-import org.apache.flink.runtime.state.KeyGroupRange;
-import org.apache.flink.runtime.state.KeyedStateHandle;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
-import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.util.AbstractID;
 import org.apache.flink.util.DynamicCodeLoadingException;
 import org.apache.flink.util.FileUtils;
@@ -399,59 +394,27 @@ public class EmbeddedRocksDBStateBackend extends AbstractManagedMemoryStateBacke
     // ------------------------------------------------------------------------
 
     @Override
-    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws IOException {
         return createKeyedStateBackend(
-                env,
-                jobID,
-                operatorIdentifier,
-                keySerializer,
-                numberOfKeyGroups,
-                keyGroupRange,
-                kvStateRegistry,
-                ttlTimeProvider,
-                metricGroup,
-                stateHandles,
-                cancelStreamRegistry,
-                1.0);
+                keyedStateBackendParameters.getEnv()
+        );
     }
 
     @Override
     public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry,
-            double managedMemoryFraction)
+            KeyedStateBackendParameters<K> parameters)
             throws IOException {
 
         // first, make sure that the RocksDB JNI library is loaded
         // we do this explicitly here to have better error handling
-        String tempDir = env.getTaskManagerInfo().getTmpWorkingDirectory().getAbsolutePath();
+        String tempDir = parameters.getTaskManagerInfo().getTmpWorkingDirectory().getAbsolutePath();
         ensureRocksDBIsLoaded(tempDir);
 
         // replace all characters that are not legal for filenames with underscore
         String fileCompatibleIdentifier = operatorIdentifier.replaceAll("[^a-zA-Z0-9\\-]", "_");
 
-        lazyInitializeForJob(env, fileCompatibleIdentifier);
+        lazyInitializeForJob(parameters, fileCompatibleIdentifier);
 
         File instanceBasePath =
                 new File(
@@ -464,11 +427,12 @@ public class EmbeddedRocksDBStateBackend extends AbstractManagedMemoryStateBacke
                                 + UUID.randomUUID());
 
         LocalRecoveryConfig localRecoveryConfig =
-                env.getTaskStateManager().createLocalRecoveryConfig();
+                parameters.getTaskStateManager().createLocalRecoveryConfig();
 
         final OpaqueMemoryResource<RocksDBSharedResources> sharedResources =
                 RocksDBOperationUtils.allocateSharedCachesIfConfigured(
-                        memoryConfiguration, env, managedMemoryFraction, LOG, rocksDBMemoryFactory);
+                        memoryConfiguration,
+                        parameters, managedMemoryFraction, LOG, rocksDBMemoryFactory);
         if (sharedResources != null) {
             LOG.info("Obtained shared RocksDB cache of size {} bytes", sharedResources.getSize());
         }
@@ -478,7 +442,7 @@ public class EmbeddedRocksDBStateBackend extends AbstractManagedMemoryStateBacke
                         instanceBasePath,
                         nativeMetricOptions.isStatisticsEnabled());
 
-        ExecutionConfig executionConfig = env.getExecutionConfig();
+        ExecutionConfig executionConfig = parameters.getExecutionConfig();
         StreamCompressionDecorator keyGroupCompressionDecorator =
                 getCompressionDecorator(executionConfig);
 
@@ -487,7 +451,7 @@ public class EmbeddedRocksDBStateBackend extends AbstractManagedMemoryStateBacke
         RocksDBKeyedStateBackendBuilder<K> builder =
                 new RocksDBKeyedStateBackendBuilder<>(
                                 operatorIdentifier,
-                                env.getUserCodeClassLoader().asClassLoader(),
+                                parameters.getUserCodeClassLoader().asClassLoader(),
                                 instanceBasePath,
                                 resourceContainer,
                                 stateName -> resourceContainer.getColumnOptions(),

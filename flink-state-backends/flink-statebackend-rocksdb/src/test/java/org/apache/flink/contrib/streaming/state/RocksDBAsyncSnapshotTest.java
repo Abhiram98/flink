@@ -45,6 +45,7 @@ import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.SnapshotResult;
 import org.apache.flink.runtime.state.StateBackend;
@@ -416,17 +417,18 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
 
         AbstractKeyedStateBackend<Void> keyedStateBackend =
                 backend.createKeyedStateBackend(
-                        env,
-                        new JobID(),
-                        "test operator",
-                        VoidSerializer.INSTANCE,
-                        1,
-                        new KeyGroupRange(0, 0),
-                        null,
-                        TtlTimeProvider.DEFAULT,
-                        new UnregisteredMetricsGroup(),
-                        Collections.emptyList(),
-                        new CloseableRegistry());
+                        new KeyedStateBackendParameters<K>(
+                                env,
+                                new JobID(),
+                                "test operator",
+                                VoidSerializer.INSTANCE,
+                                1,
+                                new KeyGroupRange(0, 0),
+                                null,
+                                TtlTimeProvider.DEFAULT,
+                                new UnregisteredMetricsGroup(),
+                                Collections.emptyList(),
+                                new CloseableRegistry()));
 
         try {
             // register a state so that the state backend has to checkpoint something

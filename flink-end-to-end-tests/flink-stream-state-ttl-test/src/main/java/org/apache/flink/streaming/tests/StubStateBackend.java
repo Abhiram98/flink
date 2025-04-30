@@ -27,6 +27,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.query.TaskKvStateRegistry;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -58,31 +59,21 @@ final class StubStateBackend implements StateBackend {
 
     @Override
     public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+            KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws Exception {
 
         return backend.createKeyedStateBackend(
-                env,
-                jobID,
-                operatorIdentifier,
-                keySerializer,
-                numberOfKeyGroups,
-                keyGroupRange,
-                kvStateRegistry,
+                keyedStateBackendParameters.getEnv(),
+                keyedStateBackendParameters.getJobID(),
+                keyedStateBackendParameters.getOperatorIdentifier(),
+                keyedStateBackendParameters.getKeySerializer(),
+                keyedStateBackendParameters.getNumberOfKeyGroups(),
+                keyedStateBackendParameters.getKeyGroupRange(),
+                keyedStateBackendParameters.getKvStateRegistry(),
                 this.ttlTimeProvider,
-                metricGroup,
-                stateHandles,
-                cancelStreamRegistry);
+                keyedStateBackendParameters.getMetricGroup(),
+                keyedStateBackendParameters.getStateHandles(),
+                keyedStateBackendParameters.getCancelStreamRegistry());
     }
 
     @Override

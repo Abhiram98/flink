@@ -47,6 +47,7 @@ import org.apache.flink.runtime.state.AbstractStateBackend;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateBackend;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateFunction;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.TestLocalRecoveryConfig;
@@ -121,17 +122,18 @@ public class StateBackendBenchmarkUtils {
             TtlTimeProvider ttlTimeProvider) {
         return new BatchExecutionStateBackend()
                 .createKeyedStateBackend(
-                        MockEnvironment.builder().build(),
-                        new JobID(),
-                        "Test",
-                        new LongSerializer(),
-                        2,
-                        new KeyGroupRange(0, 1),
-                        null,
-                        ttlTimeProvider,
-                        new UnregisteredMetricsGroup(),
-                        Collections.emptyList(),
-                        null);
+                        new KeyedStateBackendParameters<K>(
+                                MockEnvironment.builder().build(),
+                                new JobID(),
+                                "Test",
+                                new LongSerializer(),
+                                2,
+                                new KeyGroupRange(0, 1),
+                                null,
+                                ttlTimeProvider,
+                                new UnregisteredMetricsGroup(),
+                                Collections.emptyList(),
+                                null));
     }
 
     private static ChangelogKeyedStateBackend<Long> createChangelogKeyedStateBackend(

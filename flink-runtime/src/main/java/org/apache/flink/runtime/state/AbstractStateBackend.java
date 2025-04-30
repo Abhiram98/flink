@@ -63,17 +63,7 @@ public abstract class AbstractStateBackend implements StateBackend, java.io.Seri
 
     @Override
     public abstract <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+            KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws IOException;
 
     @Override

@@ -56,6 +56,7 @@ import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.PipelinedRegionSchedulingStrategy;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -1032,17 +1033,7 @@ class OperatorCoordinatorSchedulerTest {
 
         @Override
         public <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-                Environment env,
-                JobID jobID,
-                String operatorIdentifier,
-                TypeSerializer<K> keySerializer,
-                int numberOfKeyGroups,
-                KeyGroupRange keyGroupRange,
-                TaskKvStateRegistry kvStateRegistry,
-                TtlTimeProvider ttlTimeProvider,
-                MetricGroup metricGroup,
-                @Nonnull Collection<KeyedStateHandle> stateHandles,
-                CloseableRegistry cancelStreamRegistry)
+                KeyedStateBackendParameters<K> keyedStateBackendParameters)
                 throws Exception {
             throw new UnsupportedOperationException();
         }

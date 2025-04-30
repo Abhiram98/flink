@@ -19,17 +19,12 @@
 package org.apache.flink.runtime.state;
 
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.CloseableRegistry;
-import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.CheckpointType;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.RestoreMode;
-import org.apache.flink.runtime.query.TaskKvStateRegistry;
-import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 
 import javax.annotation.Nonnull;
 
@@ -94,42 +89,18 @@ public interface StateBackend extends java.io.Serializable {
      *
      * <p><i>Keyed State</i> is state where each value is bound to a key.
      *
-     * @param env The environment of the task.
-     * @param jobID The ID of the job that the task belongs to.
-     * @param operatorIdentifier The identifier text of the operator.
-     * @param keySerializer The key-serializer for the operator.
-     * @param numberOfKeyGroups The number of key-groups aka max parallelism.
-     * @param keyGroupRange Range of key-groups for which the to-be-created backend is responsible.
-     * @param kvStateRegistry KvStateRegistry helper for this task.
-     * @param ttlTimeProvider Provider for TTL logic to judge about state expiration.
-     * @param metricGroup The parent metric group for all state backend metrics.
-     * @param stateHandles The state handles for restore.
-     * @param cancelStreamRegistry The registry to which created closeable objects will be
-     *     registered during restore.
      * @param <K> The type of the keys by which the state is organized.
+     * @param keyedStateBackendParameters
+     *
      * @return The Keyed State Backend for the given job, operator, and key group range.
+     *
      * @throws Exception This method may forward all exceptions that occur while instantiating the
-     *     backend.
+     *         backend.
      */
-    <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry)
+    <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters)
             throws Exception;
 
-    /**
-     * Creates a new {@link CheckpointableKeyedStateBackend} with the given managed memory fraction.
-     * Backends that use managed memory are required to implement this interface.
-     */
-    default <K> CheckpointableKeyedStateBackend<K> createKeyedStateBackend(
+    private <K> KeyedStateBackendParameters<K> createKeyedStateBackendParameters(
             Environment env,
             JobID jobID,
             String operatorIdentifier,
@@ -139,13 +110,11 @@ public interface StateBackend extends java.io.Serializable {
             TaskKvStateRegistry kvStateRegistry,
             TtlTimeProvider ttlTimeProvider,
             MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
+            Collection<KeyedStateHandle> stateHandles,
             CloseableRegistry cancelStreamRegistry,
-            double managedMemoryFraction)
-            throws Exception {
-
-        // ignore managed memory fraction by default
-        return createKeyedStateBackend(
+            double managedMemoryFraction,
+            CustomInitializationMetrics customInitializationMetrics) {
+        return new KeyedStateBackendParameters<>(
                 env,
                 jobID,
                 operatorIdentifier,
@@ -156,7 +125,9 @@ public interface StateBackend extends java.io.Serializable {
                 ttlTimeProvider,
                 metricGroup,
                 stateHandles,
-                cancelStreamRegistry);
+                cancelStreamRegistry,
+                managedMemoryFraction,
+                customInitializationMetrics);
     }
 
     /**

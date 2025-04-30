@@ -1404,17 +1404,18 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
         CheckpointableKeyedStateBackend<K> backend =
                 getStateBackend()
                         .createKeyedStateBackend(
-                                env,
-                                new JobID(),
-                                "test_op",
-                                keySerializer,
-                                numberOfKeyGroups,
-                                keyGroupRange,
-                                env.getTaskKvStateRegistry(),
-                                TtlTimeProvider.DEFAULT,
-                                new UnregisteredMetricsGroup(),
-                                Collections.emptyList(),
-                                new CloseableRegistry());
+                                new KeyedStateBackendParameters<>(
+                                        env,
+                                        new JobID(),
+                                        "test_op",
+                                        keySerializer,
+                                        numberOfKeyGroups,
+                                        keyGroupRange,
+                                        env.getTaskKvStateRegistry(),
+                                        TtlTimeProvider.DEFAULT,
+                                        new UnregisteredMetricsGroup(),
+                                        Collections.emptyList(),
+                                        new CloseableRegistry()));
         return backend;
     }
 
@@ -1440,17 +1441,18 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
         CheckpointableKeyedStateBackend<K> backend =
                 getStateBackend()
                         .createKeyedStateBackend(
-                                env,
-                                new JobID(),
-                                "test_op",
-                                keySerializer,
-                                numberOfKeyGroups,
-                                keyGroupRange,
-                                env.getTaskKvStateRegistry(),
-                                TtlTimeProvider.DEFAULT,
-                                new UnregisteredMetricsGroup(),
-                                state,
-                                new CloseableRegistry());
+                                new KeyedStateBackendParameters<>(
+                                        env,
+                                        new JobID(),
+                                        "test_op",
+                                        keySerializer,
+                                        numberOfKeyGroups,
+                                        keyGroupRange,
+                                        env.getTaskKvStateRegistry(),
+                                        TtlTimeProvider.DEFAULT,
+                                        new UnregisteredMetricsGroup(),
+                                        state,
+                                        new CloseableRegistry()));
         return backend;
     }
 

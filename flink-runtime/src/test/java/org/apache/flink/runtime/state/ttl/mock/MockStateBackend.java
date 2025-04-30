@@ -32,6 +32,7 @@ import org.apache.flink.runtime.state.AbstractStateBackend;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.runtime.state.DefaultOperatorStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -63,30 +64,20 @@ public class MockStateBackend extends AbstractStateBackend {
     }
 
     @Override
-    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-            Environment env,
-            JobID jobID,
-            String operatorIdentifier,
-            TypeSerializer<K> keySerializer,
-            int numberOfKeyGroups,
-            KeyGroupRange keyGroupRange,
-            TaskKvStateRegistry kvStateRegistry,
-            TtlTimeProvider ttlTimeProvider,
-            MetricGroup metricGroup,
-            @Nonnull Collection<KeyedStateHandle> stateHandles,
-            CloseableRegistry cancelStreamRegistry) {
+    public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters) {
         return new MockKeyedStateBackendBuilder<>(
-                        new KvStateRegistry().createTaskRegistry(jobID, new JobVertexID()),
-                        keySerializer,
-                        env.getUserCodeClassLoader().asClassLoader(),
-                        numberOfKeyGroups,
-                        keyGroupRange,
-                        env.getExecutionConfig(),
-                        ttlTimeProvider,
+                        new KvStateRegistry().createTaskRegistry(keyedStateBackendParameters.getJobID(), new JobVertexID()),
+                keyedStateBackendParameters.getKeySerializer(),
+                keyedStateBackendParameters.getEnv().getUserCodeClassLoader().asClassLoader(),
+                keyedStateBackendParameters.getNumberOfKeyGroups(),
+                keyedStateBackendParameters.getKeyGroupRange(),
+                keyedStateBackendParameters.getEnv().getExecutionConfig(),
+                keyedStateBackendParameters.getTtlTimeProvider(),
                         LatencyTrackingStateConfig.disabled(),
-                        stateHandles,
-                        AbstractStateBackend.getCompressionDecorator(env.getExecutionConfig()),
-                        cancelStreamRegistry,
+                keyedStateBackendParameters.getStateHandles(),
+                        AbstractStateBackend.getCompressionDecorator(keyedStateBackendParameters
+                                .getEnv().getExecutionConfig()),
+                keyedStateBackendParameters.getCancelStreamRegistry(),
                         snapshotSupplier)
                 .build();
     }

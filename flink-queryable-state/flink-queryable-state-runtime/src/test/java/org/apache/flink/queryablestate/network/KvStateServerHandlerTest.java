@@ -52,6 +52,7 @@ import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.AbstractStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateBackend;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
@@ -827,16 +828,17 @@ class KvStateServerHandlerTest {
             DummyEnvironment dummyEnv)
             throws java.io.IOException {
         return abstractBackend.createKeyedStateBackend(
-                dummyEnv,
-                dummyEnv.getJobID(),
-                "test_op",
-                IntSerializer.INSTANCE,
-                numKeyGroups,
-                new KeyGroupRange(0, 0),
-                registry.createTaskRegistry(dummyEnv.getJobID(), dummyEnv.getJobVertexId()),
-                TtlTimeProvider.DEFAULT,
-                new UnregisteredMetricsGroup(),
-                Collections.emptyList(),
-                new CloseableRegistry());
+                new KeyedStateBackendParameters<K>(
+                        dummyEnv,
+                        dummyEnv.getJobID(),
+                        "test_op",
+                        IntSerializer.INSTANCE,
+                        numKeyGroups,
+                        new KeyGroupRange(0, 0),
+                        registry.createTaskRegistry(dummyEnv.getJobID(), dummyEnv.getJobVertexId()),
+                        TtlTimeProvider.DEFAULT,
+                        new UnregisteredMetricsGroup(),
+                        Collections.emptyList(),
+                        new CloseableRegistry()));
     }
 }

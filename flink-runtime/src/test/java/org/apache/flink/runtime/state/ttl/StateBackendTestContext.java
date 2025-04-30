@@ -30,6 +30,7 @@ import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
@@ -111,17 +112,18 @@ public abstract class StateBackendTestContext {
             disposeKeyedStateBackend();
             keyedStateBackend =
                     stateBackend.createKeyedStateBackend(
-                            env,
-                            new JobID(),
-                            "test",
-                            StringSerializer.INSTANCE,
-                            numberOfKeyGroups,
-                            new KeyGroupRange(0, numberOfKeyGroups - 1),
-                            env.getTaskKvStateRegistry(),
-                            timeProvider,
-                            new UnregisteredMetricsGroup(),
-                            stateHandles,
-                            new CloseableRegistry());
+                            new KeyedStateBackendParameters<>(
+                                    env,
+                                    new JobID(),
+                                    "test",
+                                    StringSerializer.INSTANCE,
+                                    numberOfKeyGroups,
+                                    new KeyGroupRange(0, numberOfKeyGroups - 1),
+                                    env.getTaskKvStateRegistry(),
+                                    timeProvider,
+                                    new UnregisteredMetricsGroup(),
+                                    stateHandles,
+                                    new CloseableRegistry()));
         } catch (Exception e) {
             throw new RuntimeException("unexpected", e);
         }

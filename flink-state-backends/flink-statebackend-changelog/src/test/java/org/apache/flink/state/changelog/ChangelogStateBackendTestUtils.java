@@ -47,6 +47,7 @@ import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyGroupedInternalPriorityQueue;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
@@ -131,17 +132,18 @@ public class ChangelogStateBackendTestUtils {
             throws Exception {
 
         return stateBackend.createKeyedStateBackend(
-                env,
-                new JobID(),
-                "test_op",
-                keySerializer,
-                numberOfKeyGroups,
-                keyGroupRange,
-                env.getTaskKvStateRegistry(),
-                TtlTimeProvider.DEFAULT,
-                metricGroup,
-                state == null ? Collections.emptyList() : Collections.singletonList(state),
-                new CloseableRegistry());
+                new KeyedStateBackendParameters<>(
+                        env,
+                        new JobID(),
+                        "test_op",
+                        keySerializer,
+                        numberOfKeyGroups,
+                        keyGroupRange,
+                        env.getTaskKvStateRegistry(),
+                        TtlTimeProvider.DEFAULT,
+                        metricGroup,
+                        state == null ? Collections.emptyList() : Collections.singletonList(state),
+                        new CloseableRegistry()));
     }
 
     public static CheckpointableKeyedStateBackend<Integer> createKeyedBackend(

@@ -36,6 +36,7 @@ import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageAccess;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.KeyGroupRange;
+import org.apache.flink.runtime.state.KeyedStateBackendParameters;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -155,18 +156,7 @@ class CheckpointSettingsSerializableTest {
         }
 
         @Override
-        public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
-                Environment env,
-                JobID jobID,
-                String operatorIdentifier,
-                TypeSerializer<K> keySerializer,
-                int numberOfKeyGroups,
-                KeyGroupRange keyGroupRange,
-                TaskKvStateRegistry kvStateRegistry,
-                TtlTimeProvider ttlTimeProvider,
-                MetricGroup metricGroup,
-                @Nonnull Collection<KeyedStateHandle> stateHandles,
-                CloseableRegistry cancelStreamRegistry) {
+        public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(KeyedStateBackendParameters<K> keyedStateBackendParameters) {
             throw new UnsupportedOperationException();
         }
 
