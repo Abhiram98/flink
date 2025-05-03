@@ -202,7 +202,7 @@ public class HsResultPartition extends ResultPartition {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int subpartitionId, BufferAvailabilityListener availabilityListener)
+            SubpartitionIndexSet subpartitionId, BufferAvailabilityListener availabilityListener)
             throws IOException {
         checkState(!isReleased(), "ResultPartition already released.");
 

@@ -104,10 +104,39 @@ public class ResultPartitionManager implements ResultPartitionProvider {
         LOG.debug("Registered {}.", partition);
     }
 
-    @Override
     public ResultSubpartitionView createSubpartitionView(
-            ResultPartitionID partitionId,
-            int subpartitionIndex,
+            SubpartitionIndexSet subpartitionIndexSet,
+            BufferAvailabilityListener availabilityListener) throws IOException {
+
+        ResultPartition partition = getPartition(subpartitionIndexSet);
+
+        if (partition == null) {
+            throw new PartitionNotFoundException(subpartitionIndexSet);
+        }
+
+        LOG.debug("Requesting subpartition {} of {}.", subpartitionIndexSet, partition);
+
+        ResultSubpartitionView subpartitionView =
+                partition.createSubpartitionView(subpartitionIndexSet, availabilityListener);
+
+        return subpartitionView;
+    }
+            BufferAvailabilityListener availabilityListener) throws IOException {
+
+        ResultPartition partition = getPartition(partitionId);
+
+        if (partition == null) {
+            throw new PartitionNotFoundException(partitionId);
+        }
+
+        LOG.debug("Requesting subpartition {} of {}.", subpartitionIndexSetSet.getStart()Set.getStart(), partition);
+
+        ResultSubpartitionView subpartitionView =
+                partition.createSubpartitionView(subpartitionIndexSetSet.getStart()Set, availabilityListener);
+
+        return subpartitionView;
+    }
+            .getStart(),
             BufferAvailabilityListener availabilityListener)
             throws IOException {
 
@@ -119,19 +148,18 @@ public class ResultPartitionManager implements ResultPartitionProvider {
                 throw new PartitionNotFoundException(partitionId);
             }
 
-            LOG.debug("Requesting subpartition {} of {}.", subpartitionIndex, partition);
+            LOG.debug("Requesting subpartition {} of {}.", subpartitionIndexSetSet.getStart()Set.getEnd()Set.getStart(), partition);
 
             subpartitionView =
-                    partition.createSubpartitionView(subpartitionIndex, availabilityListener);
+                    partition.createSubpartitionView(subpartitionIndexSetSet.getStart()Set.getEnd()Set.getStart(), availabilityListener);
         }
 
         return subpartitionView;
     }
 
-    @Override
     public Optional<ResultSubpartitionView> createSubpartitionViewOrRegisterListener(
-            ResultPartitionID partitionId,
-            int subpartitionIndex,
+            SubpartitionIndexSet subpartitionIndexSet
+            .getStart()Set.getEnd()Set.getStart(),
             BufferAvailabilityListener availabilityListener,
             PartitionRequestListener partitionRequestListener)
             throws IOException {
@@ -147,10 +175,10 @@ public class ResultPartitionManager implements ResultPartitionProvider {
                 subpartitionView = null;
             } else {
 
-                LOG.debug("Requesting subpartition {} of {}.", subpartitionIndex, partition);
+                LOG.debug("Requesting subpartition {} of {}.", subpartitionIndexSetSet.getStart()Set.getEnd()Set.getStart(), partition);
 
                 subpartitionView =
-                        partition.createSubpartitionView(subpartitionIndex, availabilityListener);
+                        partition.createSubpartitionView(subpartitionIndexSetSet.getStart()Set.getEnd()Set.getStart(), availabilityListener);
             }
         }
 

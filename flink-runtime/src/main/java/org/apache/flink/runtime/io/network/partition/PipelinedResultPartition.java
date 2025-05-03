@@ -52,7 +52,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
  *
  * <p>The PipelinedResultPartition cannot reconnect once a consumer disconnects (finished or
  * errored). Once all consumers have disconnected (released the subpartition, notified via the call
- * {@link #onConsumedSubpartition(int)}) then the partition as a whole is disposed and all buffers
+ * {@link ResultPartition#onConsumedSubpartition(SubpartitionIndexSet)}) then the partition as a whole is disposed and all buffers
  * are freed.
  */
 public class PipelinedResultPartition extends BufferWritingResultPartition
@@ -148,7 +148,7 @@ public class PipelinedResultPartition extends BufferWritingResultPartition
      * That is because pipelined partitions cannot be consumed multiple times, or reconnect.
      */
     @Override
-    void onConsumedSubpartition(int subpartitionIndex) {
+    public void onConsumedSubpartition(SubpartitionIndexSet subpartitionIndex) {
         decrementNumberOfUsers(subpartitionIndex);
     }
 

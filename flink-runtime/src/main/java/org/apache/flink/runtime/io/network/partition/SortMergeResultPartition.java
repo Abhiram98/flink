@@ -534,7 +534,7 @@ public class SortMergeResultPartition extends ResultPartition {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int subpartitionIndex, BufferAvailabilityListener availabilityListener)
+            SubpartitionIndexSet subpartitionIndex, BufferAvailabilityListener availabilityListener)
             throws IOException {
         synchronized (lock) {
             checkElementIndex(subpartitionIndex, numSubpartitions, "Subpartition not found.");

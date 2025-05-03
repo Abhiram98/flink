@@ -81,7 +81,7 @@ public class MockResultPartitionWriter implements ResultPartitionWriter {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int index, BufferAvailabilityListener availabilityListener) throws IOException {
+            SubpartitionIndexSet indexSet, BufferAvailabilityListener availabilityListener) throws IOException {
         throw new UnsupportedOperationException();
     }
 

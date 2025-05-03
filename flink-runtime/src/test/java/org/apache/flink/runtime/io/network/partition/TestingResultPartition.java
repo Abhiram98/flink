@@ -62,8 +62,8 @@ public class TestingResultPartition extends ResultPartition {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int index, BufferAvailabilityListener availabilityListener) throws IOException {
-        return createSubpartitionViewFunction.createSubpartitionView(index, availabilityListener);
+            SubpartitionIndexSet indexSet, BufferAvailabilityListener availabilityListener) throws IOException {
+        return createSubpartitionViewFunction.createSubpartitionView(indexSet, availabilityListener);
     }
 
     @Override

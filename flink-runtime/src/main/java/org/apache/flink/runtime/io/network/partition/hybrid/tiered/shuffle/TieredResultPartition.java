@@ -33,6 +33,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionManager;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.ResultSubpartitionView;
+import org.apache.flink.runtime.io.network.partition.SubpartitionIndexSet;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStorageIdMappingUtils;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStoragePartitionId;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.common.TieredStorageSubpartitionId;
@@ -100,7 +101,9 @@ public class TieredResultPartition extends ResultPartition {
                 numTargetKeyGroups,
                 partitionManager,
                 bufferCompressor,
-                bufferPoolFactory);
+                bufferPoolFactory,
+                new SubpartitionIndexSet(partitionIndex, partitionIndex)
+                );
 
         this.partitionId = TieredStorageIdMappingUtils.convertId(partitionId);
         this.tieredStorageProducerClient = tieredStorageProducerClient;
@@ -170,11 +173,11 @@ public class TieredResultPartition extends ResultPartition {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int subpartitionId, BufferAvailabilityListener availabilityListener)
+            SubpartitionIndexSet subpartitionId, BufferAvailabilityListener availabilityListener)
             throws IOException {
         checkState(!isReleased(), "ResultPartition already released.");
         return nettyService.createResultSubpartitionView(
-                partitionId, new TieredStorageSubpartitionId(subpartitionId), availabilityListener);
+                partitionId, new TieredStorageSubpartitionId(subpartitionId.getStart()), availabilityListener);
     }
 
     @Override

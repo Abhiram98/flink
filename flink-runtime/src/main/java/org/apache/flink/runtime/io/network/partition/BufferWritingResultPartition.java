@@ -87,7 +87,9 @@ public abstract class BufferWritingResultPartition extends ResultPartition {
                 numTargetKeyGroups,
                 partitionManager,
                 bufferCompressor,
-                bufferPoolFactory);
+                bufferPoolFactory,
+                new SubpartitionIndexSet(partitionIndex, partitionIndex)
+        );
 
         this.subpartitions = checkNotNull(subpartitions);
         this.unicastBufferBuilders = new BufferBuilder[subpartitions.length];
@@ -228,12 +230,12 @@ public abstract class BufferWritingResultPartition extends ResultPartition {
 
     @Override
     public ResultSubpartitionView createSubpartitionView(
-            int subpartitionIndex, BufferAvailabilityListener availabilityListener)
+            SubpartitionIndexSet subpartitionIndex, BufferAvailabilityListener availabilityListener)
             throws IOException {
-        checkElementIndex(subpartitionIndex, numSubpartitions, "Subpartition not found.");
+        checkElementIndex(subpartitionIndex.getStart(), numSubpartitions, "Subpartition not found.");
         checkState(!isReleased(), "Partition released.");
 
-        ResultSubpartition subpartition = subpartitions[subpartitionIndex];
+        ResultSubpartition subpartition = subpartitions[subpartitionIndex.getStart()];
         ResultSubpartitionView readView = subpartition.createReadView(availabilityListener);
 
         LOG.debug("Created {}", readView);

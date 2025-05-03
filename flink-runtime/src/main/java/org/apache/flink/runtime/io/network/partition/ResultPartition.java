@@ -124,7 +124,8 @@ public abstract class ResultPartition implements ResultPartitionWriter {
             int numTargetKeyGroups,
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithException<BufferPool, IOException> bufferPoolFactory,
+            SubpartitionIndexSet subpartitionIndexSet) {
 
         this.owningTaskName = checkNotNull(owningTaskName);
         Preconditions.checkArgument(0 <= partitionIndex, "The partition index must be positive.");
@@ -137,6 +138,9 @@ public abstract class ResultPartition implements ResultPartitionWriter {
         this.bufferCompressor = bufferCompressor;
         this.bufferPoolFactory = bufferPoolFactory;
         this.resultPartitionBytes = new ResultPartitionBytesCounter(numSubpartitions);
+        this.subpartitionIndexSet = new SubpartitionIndexSet(
+                subpartitionIndexSet.getStart(),
+                subpartitionIndexSet.getEnd());
     }
 
     /**
@@ -331,7 +335,7 @@ public abstract class ResultPartition implements ResultPartitionWriter {
     // ------------------------------------------------------------------------
 
     /** Notification when a subpartition is released. */
-    void onConsumedSubpartition(int subpartitionIndex) {
+    public void onConsumedSubpartition(SubpartitionIndexSet subpartitionIndex) {
 
         if (isReleased.get()) {
             return;

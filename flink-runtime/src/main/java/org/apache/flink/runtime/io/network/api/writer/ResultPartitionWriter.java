@@ -25,6 +25,7 @@ import org.apache.flink.runtime.io.network.api.StopMode;
 import org.apache.flink.runtime.io.network.partition.BufferAvailabilityListener;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultSubpartitionView;
+import org.apache.flink.runtime.io.network.partition.SubpartitionIndexSet;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
 
 import javax.annotation.Nullable;
@@ -97,7 +98,7 @@ public interface ResultPartitionWriter extends AutoCloseable, AvailabilityProvid
 
     /** Returns a reader for the subpartition with the given index. */
     ResultSubpartitionView createSubpartitionView(
-            int index, BufferAvailabilityListener availabilityListener) throws IOException;
+            SubpartitionIndexSet indexSet, BufferAvailabilityListener availabilityListener) throws IOException;
 
     /** Manually trigger the consumption of data from all subpartitions. */
     void flushAll();
