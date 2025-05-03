@@ -145,6 +145,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
      * StreamExecutionEnvironment.
      */
     private final Configuration configuration;
+    private final SerializerConfig serializerConfig = new SerializerConfig();
 
     /**
      * @deprecated Should no longer be used because it is subsumed by RestartStrategyConfiguration
@@ -168,22 +169,6 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     // Serializers and types registered with Kryo and the PojoSerializer
     // we store them in linked maps/sets to ensure they are registered in order in all kryo
     // instances.
-
-    private LinkedHashMap<Class<?>, SerializableSerializer<?>> registeredTypesWithKryoSerializers =
-            new LinkedHashMap<>();
-
-    private LinkedHashMap<Class<?>, Class<? extends Serializer<?>>>
-            registeredTypesWithKryoSerializerClasses = new LinkedHashMap<>();
-
-    private LinkedHashMap<Class<?>, SerializableSerializer<?>> defaultKryoSerializers =
-            new LinkedHashMap<>();
-
-    private LinkedHashMap<Class<?>, Class<? extends Serializer<?>>> defaultKryoSerializerClasses =
-            new LinkedHashMap<>();
-
-    private LinkedHashSet<Class<?>> registeredKryoTypes = new LinkedHashSet<>();
-
-    private LinkedHashSet<Class<?>> registeredPojoTypes = new LinkedHashSet<>();
 
     public ExecutionConfig() {
         this.configuration = new Configuration();
@@ -843,7 +828,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
             throw new NullPointerException("Cannot register null class or serializer.");
         }
 
-        defaultKryoSerializers.put(type, new SerializableSerializer<>(serializer));
+        serializerConfig.defaultKryoSerializers.put(type, new SerializableSerializer<>(serializer));
     }
 
     /**
@@ -857,7 +842,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         if (type == null || serializerClass == null) {
             throw new NullPointerException("Cannot register null class or serializer.");
         }
-        defaultKryoSerializerClasses.put(type, serializerClass);
+        serializerConfig.defaultKryoSerializerClasses.put(type, serializerClass);
     }
 
     /**
@@ -876,7 +861,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
             throw new NullPointerException("Cannot register null class or serializer.");
         }
 
-        registeredTypesWithKryoSerializers.put(type, new SerializableSerializer<>(serializer));
+        serializerConfig.registeredTypesWithKryoSerializers.put(type, new SerializableSerializer<>(serializer));
     }
 
     /**
@@ -896,7 +881,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         @SuppressWarnings("unchecked")
         Class<? extends Serializer<?>> castedSerializerClass =
                 (Class<? extends Serializer<?>>) serializerClass;
-        registeredTypesWithKryoSerializerClasses.put(type, castedSerializerClass);
+        serializerConfig.registeredTypesWithKryoSerializerClasses.put(type, castedSerializerClass);
     }
 
     /**
@@ -911,8 +896,8 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         if (type == null) {
             throw new NullPointerException("Cannot register null type class.");
         }
-        if (!registeredPojoTypes.contains(type)) {
-            registeredPojoTypes.add(type);
+        if (!serializerConfig.registeredPojoTypes.contains(type)) {
+            serializerConfig.registeredPojoTypes.add(type);
         }
     }
 
@@ -928,30 +913,30 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         if (type == null) {
             throw new NullPointerException("Cannot register null type class.");
         }
-        registeredKryoTypes.add(type);
+        serializerConfig.registeredKryoTypes.add(type);
     }
 
     /** Returns the registered types with Kryo Serializers. */
     public LinkedHashMap<Class<?>, SerializableSerializer<?>>
             getRegisteredTypesWithKryoSerializers() {
-        return registeredTypesWithKryoSerializers;
+        return serializerConfig.registeredTypesWithKryoSerializers;
     }
 
     /** Returns the registered types with their Kryo Serializer classes. */
     public LinkedHashMap<Class<?>, Class<? extends Serializer<?>>>
             getRegisteredTypesWithKryoSerializerClasses() {
-        return registeredTypesWithKryoSerializerClasses;
+        return serializerConfig.registeredTypesWithKryoSerializerClasses;
     }
 
     /** Returns the registered default Kryo Serializers. */
     public LinkedHashMap<Class<?>, SerializableSerializer<?>> getDefaultKryoSerializers() {
-        return defaultKryoSerializers;
+        return serializerConfig.defaultKryoSerializers;
     }
 
     /** Returns the registered default Kryo Serializer classes. */
     public LinkedHashMap<Class<?>, Class<? extends Serializer<?>>>
             getDefaultKryoSerializerClasses() {
-        return defaultKryoSerializerClasses;
+        return serializerConfig.defaultKryoSerializerClasses;
     }
 
     /** Returns the registered Kryo types. */
@@ -960,21 +945,21 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
             // if we force kryo, we must also return all the types that
             // were previously only registered as POJO
             LinkedHashSet<Class<?>> result = new LinkedHashSet<>();
-            result.addAll(registeredKryoTypes);
-            for (Class<?> t : registeredPojoTypes) {
+            result.addAll(serializerConfig.registeredKryoTypes);
+            for (Class<?> t : serializerConfig.registeredPojoTypes) {
                 if (!result.contains(t)) {
                     result.add(t);
                 }
             }
             return result;
         } else {
-            return registeredKryoTypes;
+            return serializerConfig.registeredKryoTypes;
         }
     }
 
     /** Returns the registered POJO types. */
     public LinkedHashSet<Class<?>> getRegisteredPojoTypes() {
-        return registeredPojoTypes;
+        return serializerConfig.registeredPojoTypes;
     }
 
     /**
@@ -1033,11 +1018,11 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
                             || (null != restartStrategyConfiguration
                                     && restartStrategyConfiguration.equals(
                                             other.restartStrategyConfiguration)))
-                    && registeredTypesWithKryoSerializerClasses.equals(
-                            other.registeredTypesWithKryoSerializerClasses)
-                    && defaultKryoSerializerClasses.equals(other.defaultKryoSerializerClasses)
-                    && registeredKryoTypes.equals(other.registeredKryoTypes)
-                    && registeredPojoTypes.equals(other.registeredPojoTypes);
+                    && serializerConfig.registeredTypesWithKryoSerializerClasses.equals(
+                    other.serializerConfig.registeredTypesWithKryoSerializerClasses)
+                    && serializerConfig.defaultKryoSerializerClasses.equals(other.serializerConfig.defaultKryoSerializerClasses)
+                    && serializerConfig.registeredKryoTypes.equals(other.serializerConfig.registeredKryoTypes)
+                    && serializerConfig.registeredPojoTypes.equals(other.serializerConfig.registeredPojoTypes);
 
         } else {
             return false;
@@ -1049,10 +1034,10 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         return Objects.hash(
                 configuration,
                 restartStrategyConfiguration,
-                registeredTypesWithKryoSerializerClasses,
-                defaultKryoSerializerClasses,
-                registeredKryoTypes,
-                registeredPojoTypes);
+                serializerConfig.registeredTypesWithKryoSerializerClasses,
+                serializerConfig.defaultKryoSerializerClasses,
+                serializerConfig.registeredKryoTypes,
+                serializerConfig.registeredPojoTypes);
     }
 
     @Override
@@ -1065,17 +1050,17 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
                 + ", restartStrategyConfiguration="
                 + restartStrategyConfiguration
                 + ", registeredTypesWithKryoSerializers="
-                + registeredTypesWithKryoSerializers
+                + serializerConfig.registeredTypesWithKryoSerializers
                 + ", registeredTypesWithKryoSerializerClasses="
-                + registeredTypesWithKryoSerializerClasses
+                + serializerConfig.registeredTypesWithKryoSerializerClasses
                 + ", defaultKryoSerializers="
-                + defaultKryoSerializers
+                + serializerConfig.defaultKryoSerializers
                 + ", defaultKryoSerializerClasses="
-                + defaultKryoSerializerClasses
+                + serializerConfig.defaultKryoSerializerClasses
                 + ", registeredKryoTypes="
-                + registeredKryoTypes
+                + serializerConfig.registeredKryoTypes
                 + ", registeredPojoTypes="
-                + registeredPojoTypes
+                + serializerConfig.registeredPojoTypes
                 + '}';
     }
 
@@ -1236,17 +1221,17 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         configuration
                 .getOptional(PipelineOptions.KRYO_DEFAULT_SERIALIZERS)
                 .map(s -> parseKryoSerializersWithExceptionHandling(classLoader, s))
-                .ifPresent(s -> this.defaultKryoSerializerClasses = s);
+                .ifPresent(s -> this.serializerConfig.defaultKryoSerializerClasses = s);
 
         configuration
                 .getOptional(PipelineOptions.POJO_REGISTERED_CLASSES)
                 .map(c -> loadClasses(c, classLoader, "Could not load pojo type to be registered."))
-                .ifPresent(c -> this.registeredPojoTypes = c);
+                .ifPresent(c -> this.serializerConfig.registeredPojoTypes = c);
 
         configuration
                 .getOptional(PipelineOptions.KRYO_REGISTERED_CLASSES)
                 .map(c -> loadClasses(c, classLoader, "Could not load kryo type to be registered."))
-                .ifPresent(c -> this.registeredKryoTypes = c);
+                .ifPresent(c -> this.serializerConfig.registeredKryoTypes = c);
 
         configuration
                 .getOptional(JobManagerOptions.SCHEDULER)
@@ -1267,7 +1252,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     /**
      * @return A copy of internal {@link #configuration}. Note it is missing all options that are
      *     stored as plain java fields in {@link ExecutionConfig}, for example {@link
-     *     #registeredKryoTypes}.
+     *     SerializerConfig#registeredKryoTypes}.
      */
     @Internal
     public Configuration toConfiguration() {
