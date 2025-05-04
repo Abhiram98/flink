@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.apache.flink.runtime.scheduler.exceptionhistory.ArchivedTaskManagerLocationMatcher.isArchivedTaskManagerLocation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /** {@code ExceptionHistoryEntryTest} tests the creation of {@link ExceptionHistoryEntry}. */
 public class ExceptionHistoryEntryTest extends TestLogger {
@@ -56,15 +56,19 @@ public class ExceptionHistoryEntryTest extends TestLogger {
                 ExceptionHistoryEntry.create(
                         execution, taskName, CompletableFuture.completedFuture(failureLabels));
 
-        assertThat(
+        assertThat().as("Checking the deserialized exception").isEqualTo().as().as().as().as(
                 entry.getException().deserializeError(ClassLoader.getSystemClassLoader()),
-                is(failure));
-        assertThat(entry.getTimestamp(), is(timestamp));
-        assertThat(entry.getFailingTaskName(), is(taskName));
+                assertThat(failure));
+        assertThat(entry.getTimestamp(), assertThat(timestamp));
+        assertThat(entry.getFailingTaskName(), assertThat(taskName));
         assertThat(
                 entry.getTaskManagerLocation(), isArchivedTaskManagerLocation(taskManagerLocation));
-        assertThat(entry.isGlobal(), is(false));
-        assertThat(entry.getFailureLabels(), is(failureLabels));
+        assertThat(entry.isGlobal())
+                .as("Checking if the ExceptionHistoryEntry is global")
+                .isFalse();
+        assertThat(entry.getFailureLabels())
+                .as("Checking the failure labels of the ExceptionHistoryEntry")
+                .isEqualTo(failureLabels);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -79,12 +83,21 @@ public class ExceptionHistoryEntryTest extends TestLogger {
 
     @Test(expected = NullPointerException.class)
     public void testNullExecution() {
-        ExceptionHistoryEntry.create(null, "task name", FailureEnricherUtils.EMPTY_FAILURE_LABELS);
+        assertThatThrownBy(() -> ExceptionHistoryEntry.create(
+                null,
+                "task name",
+                FailureEnricherUtils.EMPTY_FAILURE_LABELS))
+                .isInstanceOf(NullPointerException.class)
+                .withMessageContaining("execution cannot be null");
+    }
+    public void testNullExecution() {
+        ExceptionHistoryEntry.create(null, "task name", FailureEnricherUtils.EMPTY_FAILURE_LABELS)
+                .withMessageContaining("execution cannot be null");
     }
 
     @Test(expected = NullPointerException.class)
     public void testNullTaskName() {
-        ExceptionHistoryEntry.create(
+        assertThatThrownBy(() -> ExceptionHistoryEntry.create(
                 TestingAccessExecution.newBuilder()
                         .withErrorInfo(
                                 new ErrorInfo(
@@ -93,7 +106,10 @@ public class ExceptionHistoryEntryTest extends TestLogger {
                         .withTaskManagerLocation(new LocalTaskManagerLocation())
                         .build(),
                 null,
-                FailureEnricherUtils.EMPTY_FAILURE_LABELS);
+                FailureEnricherUtils.EMPTY_FAILURE_LABELS)
+        )
+                .isInstanceOf(NullPointerException.class)
+                .withMessageContaining("task name cannot be null");
     }
 
     @Test
@@ -114,9 +130,17 @@ public class ExceptionHistoryEntryTest extends TestLogger {
         assertThat(
                 entry.getException().deserializeError(ClassLoader.getSystemClassLoader()),
                 is(failure));
-        assertThat(entry.getTimestamp(), is(timestamp));
-        assertThat(entry.getFailingTaskName(), is(taskName));
-        assertThat(entry.getTaskManagerLocation(), is(nullValue()));
-        assertThat(entry.isGlobal(), is(false));
+        assertThat(entry.getTimestamp())
+                .as("Checking the timestamp of the ExceptionHistoryEntry")
+                .isEqualTo(timestamp);
+        assertThat(entry.getFailingTaskName())
+                .as("Checking the failing task name of the ExceptionHistoryEntry")
+                .isEqualTo(taskName);
+        assertThat(entry.getTaskManagerLocation())
+                .as("Checking the task manager location of the ExceptionHistoryEntry")
+                .isEqualTo(null);
+        assertThat(entry.isGlobal())
+                .as("Checking if the ExceptionHistoryEntry is global")
+                .isFalse();
     }
 }
