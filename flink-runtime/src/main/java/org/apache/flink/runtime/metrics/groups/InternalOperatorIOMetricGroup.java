@@ -88,13 +88,13 @@ public class InternalOperatorIOMetricGroup extends ProxyMetricGroup<InternalOper
 
     /** Causes the containing task to use this operators input record counter. */
     public void reuseInputMetricsForTask() {
-        TaskIOMetricGroup taskIO = parentMetricGroup.getTaskIOMetricGroup();
+        TaskIOMetricGroup taskIO = parentMetricGroup.getParentTaskIOMetricGroup();
         taskIO.reuseRecordsInputCounter(this.numRecordsIn);
     }
 
     /** Causes the containing task to use this operators output record counter. */
     public void reuseOutputMetricsForTask() {
-        TaskIOMetricGroup taskIO = parentMetricGroup.getTaskIOMetricGroup();
+        TaskIOMetricGroup taskIO = parentMetricGroup.getParentTaskIOMetricGroup();
         taskIO.reuseRecordsOutputCounter(this.numRecordsOut);
     }
 }

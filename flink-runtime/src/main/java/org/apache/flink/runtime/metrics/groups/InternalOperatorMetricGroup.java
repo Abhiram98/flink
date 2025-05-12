@@ -60,7 +60,7 @@ public class InternalOperatorMetricGroup extends ComponentMetricGroup<TaskMetric
 
     // ------------------------------------------------------------------------
 
-    public final TaskIOMetricGroup getTaskIOMetricGroup() {
+    public final TaskIOMetricGroup getParentTaskIOMetricGroup() {
         return parent.getIOMetricGroup();
     }
 
