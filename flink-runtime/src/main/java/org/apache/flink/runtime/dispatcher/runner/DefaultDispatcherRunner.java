@@ -178,7 +178,7 @@ public final class DefaultDispatcherRunner implements DispatcherRunner, LeaderCo
                         .getLeaderAddressFuture()
                         .thenAccept(
                                 leaderAddress ->
-                                        leaderElection.confirmLeadership(
+                                        leaderElection.confirmLeadershipAsync(
                                                 leaderSessionID, leaderAddress)));
     }
 

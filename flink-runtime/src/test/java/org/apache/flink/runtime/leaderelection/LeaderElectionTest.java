@@ -92,7 +92,7 @@ public class LeaderElectionTest {
             assertThat(leaderElection.hasLeadership(leaderSessionId)).isTrue();
             assertThat(leaderElection.hasLeadership(UUID.randomUUID())).isFalse();
 
-            leaderElection.confirmLeadership(leaderSessionId, "foobar");
+            leaderElection.confirmLeadershipAsync(leaderSessionId, "foobar");
 
             assertThat(leaderElection.hasLeadership(leaderSessionId)).isTrue();
 

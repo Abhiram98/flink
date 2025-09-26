@@ -42,7 +42,7 @@ public interface LeaderElection extends AutoCloseable {
      * @param leaderSessionID The new leader session ID
      * @param leaderAddress The address of the new leader
      */
-    void confirmLeadership(UUID leaderSessionID, String leaderAddress);
+    void confirmLeadershipAsync(UUID leaderSessionID, String leaderAddress);
 
     /**
      * Returns {@code true} if the service's {@link LeaderContender} has the leadership under the
