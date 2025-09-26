@@ -48,7 +48,7 @@ public class SavepointDataStreamScanProvider implements DataStreamScanProvider {
     @Nullable private final String stateBackendType;
     private final String statePath;
     private final OperatorIdentifier operatorIdentifier;
-    private final String keyFormat;
+    private final String keyTypeInfo;
     private final Tuple2<Integer, List<StateValueColumnConfiguration>> keyValueProjections;
     private final RowType rowType;
 
@@ -62,7 +62,7 @@ public class SavepointDataStreamScanProvider implements DataStreamScanProvider {
         this.stateBackendType = stateBackendType;
         this.statePath = statePath;
         this.operatorIdentifier = operatorIdentifier;
-        this.keyFormat = keyFormat;
+        this.keyTypeInfo = keyFormat;
         this.keyValueProjections = keyValueProjections;
         this.rowType = rowType;
     }
@@ -89,7 +89,7 @@ public class SavepointDataStreamScanProvider implements DataStreamScanProvider {
                     SavepointReader.read(execEnv, statePath, stateBackend);
 
             // Get key type information
-            TypeInformation keyTypeInfo = TypeInformation.of(Class.forName(keyFormat));
+            TypeInformation keyTypeInfo = TypeInformation.of(Class.forName(this.keyTypeInfo));
 
             // Get value state descriptors
             for (StateValueColumnConfiguration columnConfig : keyValueProjections.f1) {
