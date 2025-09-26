@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class CapitalizeQueryHintsShuttle extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
+    protected RelNode doVisit(BiRel biRel) {
         Hintable hBiRel = (Hintable) biRel;
         AtomicBoolean changed = new AtomicBoolean(false);
         List<RelHint> hintsWithCapitalJoinHints =
