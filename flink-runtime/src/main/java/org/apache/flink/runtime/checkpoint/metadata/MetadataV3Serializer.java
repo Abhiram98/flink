@@ -223,8 +223,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     }
 
     @VisibleForTesting
-    @Override
-    public StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
+    public StateObjectCollection<InputStateHandle> deserializeInputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return deserializeCollection(
                 dis, context, channelStateHandleSerializer::deserializeInputStateHandle);
@@ -294,7 +293,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @VisibleForTesting
     public static StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
             DataInputStream dis) throws IOException {
-        return INSTANCE.deserializeInputChannelStateHandle(dis, null);
+        return INSTANCE.deserializeInputStateHandle(dis, null);
     }
 
     @VisibleForTesting
