@@ -90,7 +90,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
             assertThat(getRequest.getRequestType()).isEqualTo(StateRequestType.VALUE_GET);
             int key = (Integer) getRequest.getRecordContext().getKey();
             assertThat(getRequest.getRecordContext().getRecord()).isEqualTo(key * 2);
-            assertThat(((TestStateFuture<String>) getRequest.getFuture()).getCompletedResult())
+            assertThat(((TestAsyncFuture<String>) getRequest.getFuture()).getCompletedResult())
                     .isEqualTo("test-" + key);
         }
 
@@ -122,7 +122,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
         for (StateRequest<?, ?, ?, ?> getRequest : checkList) {
             assertThat(getRequest.getRequestType()).isEqualTo(StateRequestType.VALUE_GET);
-            assertThat(((TestStateFuture<String>) getRequest.getFuture()).getCompletedResult())
+            assertThat(((TestAsyncFuture<String>) getRequest.getFuture()).getCompletedResult())
                     .isEqualTo(null);
         }
         forStStateExecutor.shutdown();
@@ -174,7 +174,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         for (int i = 0; i < 50; i++) { // 1 user key per primary key
             StateIterator<String> iter =
                     (StateIterator<String>)
-                            ((TestStateFuture) checkList.get(i).getFuture()).getCompletedResult();
+                            ((TestAsyncFuture) checkList.get(i).getFuture()).getCompletedResult();
             AtomicInteger count = new AtomicInteger(0);
             iter.onNext(
                     k -> {
@@ -187,7 +187,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         for (int i = 50; i < 100; i++) { // 51 user keys per primary key
             StateIterator<String> iter =
                     (StateIterator<String>)
-                            ((TestStateFuture) checkList.get(i).getFuture()).getCompletedResult();
+                            ((TestAsyncFuture) checkList.get(i).getFuture()).getCompletedResult();
             AtomicInteger count = new AtomicInteger(0);
             iter.onNext(
                     k -> {
@@ -218,12 +218,12 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
         for (int i = 0; i < 75; i++) { // not empty
             boolean empty =
-                    (Boolean) ((TestStateFuture) checkList.get(i).getFuture()).getCompletedResult();
+                    (Boolean) ((TestAsyncFuture) checkList.get(i).getFuture()).getCompletedResult();
             assertThat(empty).isFalse();
         }
         for (int i = 75; i < 100; i++) { // empty
             boolean empty =
-                    (Boolean) ((TestStateFuture) checkList.get(i).getFuture()).getCompletedResult();
+                    (Boolean) ((TestAsyncFuture) checkList.get(i).getFuture()).getCompletedResult();
             assertThat(empty).isTrue();
         }
 
@@ -274,7 +274,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
             assertThat(request.getRequestType()).isEqualTo(StateRequestType.AGGREGATING_GET);
             String key = request.getRecordContext().getKey();
             assertThat(request.getRecordContext().getRecord()).isEqualTo("record" + key);
-            assertThat(((TestStateFuture<Integer>) request.getFuture()).getCompletedResult())
+            assertThat(((TestAsyncFuture<Integer>) request.getFuture()).getCompletedResult())
                     .isEqualTo(Integer.parseInt(key));
         }
 
@@ -325,7 +325,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         for (int i = 0; i < 100; i++) {
             StateRequest<String, ?, Integer, Integer> request = requests.get(i);
             assertThat(request.getRequestType()).isEqualTo(StateRequestType.AGGREGATING_GET);
-            assertThat(((TestStateFuture<Integer>) request.getFuture()).getCompletedResult())
+            assertThat(((TestAsyncFuture<Integer>) request.getFuture()).getCompletedResult())
                     .isEqualTo(null);
         }
         for (int i = 100; i < keyNum; i++) {
@@ -333,7 +333,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
             assertThat(request.getRequestType()).isEqualTo(StateRequestType.AGGREGATING_GET);
             String key = request.getRecordContext().getKey();
             assertThat(request.getRecordContext().getRecord()).isEqualTo("record" + key);
-            assertThat(((TestStateFuture<Integer>) request.getFuture()).getCompletedResult())
+            assertThat(((TestAsyncFuture<Integer>) request.getFuture()).getCompletedResult())
                     .isEqualTo(1);
         }
     }
@@ -348,7 +348,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         int keyGroup = KeyGroupRangeAssignment.assignToKeyGroup(key, 128);
         RecordContext<K> recordContext =
                 new RecordContext<>(record, key, t -> {}, keyGroup, new Epoch(0), 0);
-        TestStateFuture stateFuture = new TestStateFuture<>();
+        TestAsyncFuture stateFuture = new TestAsyncFuture<>();
         return new StateRequest<>(
                 innerTable, requestType, false, value, stateFuture, recordContext);
     }
@@ -363,7 +363,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         int keyGroup = KeyGroupRangeAssignment.assignToKeyGroup(key, 128);
         RecordContext<K> recordContext =
                 new RecordContext<>(record, key, t -> {}, keyGroup, new Epoch(0), 0);
-        TestStateFuture stateFuture = new TestStateFuture<>();
+        TestAsyncFuture stateFuture = new TestAsyncFuture<>();
         return new StateRequest<>(
                 innerTable, requestType, false, value, stateFuture, recordContext);
     }

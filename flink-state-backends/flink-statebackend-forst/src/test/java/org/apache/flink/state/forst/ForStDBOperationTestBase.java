@@ -238,7 +238,7 @@ public class ForStDBOperationTestBase {
                 1);
     }
 
-    static class TestStateFuture<T> implements InternalStateFuture<T> {
+    static class TestAsyncFuture<T> implements InternalStateFuture<T> {
 
         public CompletableFuture<T> future = new CompletableFuture<>();
 
