@@ -203,7 +203,7 @@ public class FileSystemOutputFormat<T>
         private String[] partitionColumns;
         private OutputFormatFactory<T> formatFactory;
         private TableMetaStoreFactory metaStoreFactory;
-        private Path tmpPath;
+        private Path stagingPath;
 
         private LinkedHashMap<String, String> staticPartitions = new LinkedHashMap<>();
         private boolean dynamicGrouped = false;
@@ -259,7 +259,7 @@ public class FileSystemOutputFormat<T>
         }
 
         public Builder<T> setTempPath(Path tmpPath) {
-            this.tmpPath = tmpPath;
+            this.stagingPath = tmpPath;
             return this;
         }
 
@@ -288,7 +288,7 @@ public class FileSystemOutputFormat<T>
             checkNotNull(partitionColumns, "partitionColumns should not be null");
             checkNotNull(formatFactory, "formatFactory should not be null");
             checkNotNull(metaStoreFactory, "metaStoreFactory should not be null");
-            checkNotNull(tmpPath, "tmpPath should not be null");
+            checkNotNull(stagingPath, "tmpPath should not be null");
             checkNotNull(computer, "partitionComputer should not be null");
 
             return new FileSystemOutputFormat<>(
@@ -296,7 +296,7 @@ public class FileSystemOutputFormat<T>
                     metaStoreFactory,
                     overwrite,
                     isToLocal,
-                    tmpPath,
+                    stagingPath,
                     partitionColumns,
                     dynamicGrouped,
                     staticPartitions,
