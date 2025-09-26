@@ -119,14 +119,14 @@ class FileSystemOutputFormatTest {
     void testOverrideNonPartition() throws Exception {
         testNonPartition();
 
-        AtomicReference<FileSystemOutputFormat<Row>> ref = new AtomicReference<>();
+        AtomicReference<FileSystemOutputFormat<Row>> outputFormat = new AtomicReference<>();
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(true, false, false, new LinkedHashMap<>(), ref)) {
+                createSink(true, false, false, new LinkedHashMap<>(), outputFormat)) {
             writeUnorderedRecords(testHarness);
             assertThat(getFileContentByPath(tmpPath)).hasSize(1);
         }
 
-        ref.get().finalizeGlobal(finalizationContext);
+        outputFormat.get().finalizeGlobal(finalizationContext);
         Map<File, String> content = getFileContentByPath(outputPath);
         assertThat(content).hasSize(1);
         assertThat(content.values())
