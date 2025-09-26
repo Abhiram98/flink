@@ -529,7 +529,7 @@ public class JobManagerOptions {
         Documentation.Sections.EXPERT_SCHEDULING,
         Documentation.Sections.ALL_JOB_MANAGER
     })
-    public static final ConfigOption<Duration> SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT =
+    public static final ConfigOption<Duration> SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT =
             key("jobmanager.adaptive-scheduler.executing.resource-stabilization-timeout")
                     .durationType()
                     .defaultValue(Duration.ofSeconds(60))
@@ -549,7 +549,7 @@ public class JobManagerOptions {
 
     /**
      * @deprecated Use {@link JobManagerOptions#SCHEDULER_SCALING_INTERVAL_MIN} and {@link
-     *     JobManagerOptions#SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT}.
+     *     JobManagerOptions#SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT}.
      */
     @Deprecated
     @Documentation.ExcludeFromDocumentation("Hidden for deprecated")
@@ -564,7 +564,7 @@ public class JobManagerOptions {
                                                     + "It's not used anymore. Use the configuration option %s and %s to control the sensitivity of a scaling operation.",
                                             code(SCHEDULER_SCALING_INTERVAL_MIN.key()),
                                             code(
-                                                    SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT
+                                                    SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT
                                                             .key()))
                                     .linebreak()
                                     .text(
@@ -575,7 +575,7 @@ public class JobManagerOptions {
                                     .build());
 
     /**
-     * @deprecated Use {@link JobManagerOptions#SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT}.
+     * @deprecated Use {@link JobManagerOptions#SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT}.
      */
     @Deprecated
     @Documentation.ExcludeFromDocumentation("Hidden for deprecated")
