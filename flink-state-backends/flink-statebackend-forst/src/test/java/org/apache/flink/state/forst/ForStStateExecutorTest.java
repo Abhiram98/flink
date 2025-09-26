@@ -54,7 +54,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
                 buildForStValueState("value-state-2");
 
         StateRequestContainer stateRequestContainer =
-                forStStateExecutor.createStateRequestContainer();
+                forStStateExecutor.createRequestContainer();
         assertTrue(stateRequestContainer.isEmpty());
 
         // 1. Update value state: keyRange [0, keyNum)
@@ -68,7 +68,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
 
         List<StateRequest<?, ?, ?, ?>> checkList = new ArrayList<>();
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         // 2. Get value state: keyRange [0, keyNum)
         //    Update value state: keyRange [keyNum, keyNum + 100]
         for (int i = 0; i < keyNum; i++) {
@@ -96,7 +96,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
 
         // 4. Clear value state:  keyRange [keyNum - 100, keyNum)
         //    Update state with null-value : keyRange [keyNum, keyNum + 100]
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         for (int i = keyNum - 100; i < keyNum; i++) {
             ForStValueState<Integer, VoidNamespace, String> state = (i % 2 == 0 ? state1 : state2);
             stateRequestContainer.offer(
@@ -110,7 +110,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
 
         // 5. Check that the deleted value is null :  keyRange [keyNum - 100, keyNum + 100)
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         checkList.clear();
         for (int i = keyNum - 100; i < keyNum + 100; i++) {
             ForStValueState<Integer, VoidNamespace, String> state = (i % 2 == 0 ? state1 : state2);
@@ -135,7 +135,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         ForStMapState<Integer, VoidNamespace, String, String> state =
                 buildForStMapState("map-state");
         StateRequestContainer stateRequestContainer =
-                forStStateExecutor.createStateRequestContainer();
+                forStStateExecutor.createRequestContainer();
         assertTrue(stateRequestContainer.isEmpty());
 
         // 1. prepare put data: keyRange [0, 100)
@@ -158,7 +158,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         }
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
 
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         List<StateRequest<?, ?, ?, ?>> checkList = new ArrayList<>();
 
         // 2. check the number of user key under primary key is correct
@@ -197,7 +197,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
             assertThat(iter.isEmpty()).isFalse();
         }
 
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
 
         // 3. delete primary key [75,100)
         for (int i = 75; i < 100; i++) {
@@ -206,7 +206,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         }
 
         forStStateExecutor.executeBatchRequests(stateRequestContainer).get();
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         checkList.clear();
         // 4. check primary key [75,100) is deleted
         for (int i = 0; i < 100; i++) {
@@ -239,7 +239,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
                 buildForStSumAggregateState("agg-state-1");
 
         StateRequestContainer stateRequestContainer =
-                forStStateExecutor.createStateRequestContainer();
+                forStStateExecutor.createRequestContainer();
         assertTrue(stateRequestContainer.isEmpty());
 
         // 1. init aggregateValue for every 1000 key
@@ -254,7 +254,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
 
         // 2. get all value and verify
         List<StateRequest<String, ?, Integer, Integer>> requests = new ArrayList<>();
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         for (int i = 0; i < keyNum; i++) {
             StateRequest<String, ?, Integer, Integer> r =
                     (StateRequest<String, ?, Integer, Integer>)
@@ -279,7 +279,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
         }
 
         // 3. add more value for the aggregate state
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         int addCnt = 10;
         for (int i = 0; i < keyNum; i++) {
             for (int j = 0; j < addCnt; j++) {
@@ -306,7 +306,7 @@ class ForStStateExecutorTest extends ForStDBOperationTestBase {
 
         // 4. read and verify the updated aggregate state
         requests = new ArrayList<>();
-        stateRequestContainer = forStStateExecutor.createStateRequestContainer();
+        stateRequestContainer = forStStateExecutor.createRequestContainer();
         for (int i = 0; i < keyNum; i++) {
             StateRequest<String, ?, Integer, Integer> r =
                     (StateRequest<String, ?, Integer, Integer>)
