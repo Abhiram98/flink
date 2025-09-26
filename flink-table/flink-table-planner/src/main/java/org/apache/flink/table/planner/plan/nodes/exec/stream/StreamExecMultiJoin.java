@@ -104,7 +104,7 @@ public class StreamExecMultiJoin extends ExecNodeBase<RowData>
     // List of upsert keys for each input, where each inner list corresponds to an input
     // The reason it's a List<List<int[]>> is that SQL allows only one primary key but
     // multiple upsert (unique) keys per input
-    private final List<List<int[]>> inputUpsertKeys;
+    private final List<List<int[]>> inputUniqueKeys;
 
     @JsonProperty(FIELD_NAME_STATE)
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -160,7 +160,7 @@ public class StreamExecMultiJoin extends ExecNodeBase<RowData>
         this.joinConditions = checkNotNull(joinConditions);
         this.multiJoinCondition = multiJoinCondition;
         this.joinAttributeMap = checkNotNull(joinAttributeMap);
-        this.inputUpsertKeys = checkNotNull(inputUpsertKeys);
+        this.inputUniqueKeys = checkNotNull(inputUpsertKeys);
         this.stateMetadataList = stateMetadataList;
     }
 
@@ -219,7 +219,7 @@ public class StreamExecMultiJoin extends ExecNodeBase<RowData>
                             planner.getFlinkContext().getClassLoader(),
                             inputTypeInfos.get(i),
                             keyExtractor.getJoinKeyIndices(i),
-                            inputUpsertKeys.get(i)));
+                            inputUniqueKeys.get(i)));
         }
 
         final GeneratedJoinCondition[] generatedJoinConditions =
