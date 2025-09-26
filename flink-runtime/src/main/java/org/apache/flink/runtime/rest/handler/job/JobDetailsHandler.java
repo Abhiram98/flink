@@ -60,7 +60,7 @@ public class JobDetailsHandler
         extends AbstractAccessExecutionGraphHandler<JobDetailsInfo, JobMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
-    private final MetricFetcher metricFetcher;
+    private final MetricFetcher jobMetrics;
 
     public JobDetailsHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
@@ -78,14 +78,14 @@ public class JobDetailsHandler
                 executionGraphCache,
                 executor);
 
-        this.metricFetcher = Preconditions.checkNotNull(metricFetcher);
+        this.jobMetrics = Preconditions.checkNotNull(metricFetcher);
     }
 
     @Override
     protected JobDetailsInfo handleRequest(
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
-        return createJobDetailsInfo(executionGraph, metricFetcher);
+        return createJobDetailsInfo(executionGraph, jobMetrics);
     }
 
     @Override
