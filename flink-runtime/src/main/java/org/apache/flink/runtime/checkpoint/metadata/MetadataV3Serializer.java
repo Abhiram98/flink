@@ -208,8 +208,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     }
 
     @VisibleForTesting
-    @Override
-    public StateObjectCollection<OutputStateHandle> deserializeResultSubpartitionStateHandle(
+    public StateObjectCollection<OutputStateHandle> deserializeOutputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return deserializeCollection(
                 dis, context, channelStateHandleSerializer::deserializeOutputStateHandle);
@@ -300,7 +299,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @VisibleForTesting
     public StateObjectCollection<OutputStateHandle> deserializeResultSubpartitionStateHandle(
             DataInputStream dis) throws IOException {
-        return INSTANCE.deserializeResultSubpartitionStateHandle(dis, null);
+        return INSTANCE.deserializeOutputStateHandle(dis, null);
     }
 
     static class SubtaskAndFinishedState {
