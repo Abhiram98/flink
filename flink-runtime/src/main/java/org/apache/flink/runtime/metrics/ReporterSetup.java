@@ -20,7 +20,7 @@ package org.apache.flink.runtime.metrics;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.reporter.MetricReporter;
-import org.apache.flink.runtime.metrics.filter.MetricFilter;
+import org.apache.flink.runtime.metrics.filter.ReporterFilter;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
 
 import java.util.Collections;
@@ -36,7 +36,7 @@ public final class ReporterSetup extends AbstractReporterSetup<MetricReporter> {
             final String name,
             final MetricConfig configuration,
             MetricReporter reporter,
-            final MetricFilter filter,
+            final ReporterFilter filter,
             final Map<String, String> additionalVariables) {
         super(name, configuration, reporter, filter, additionalVariables);
     }
