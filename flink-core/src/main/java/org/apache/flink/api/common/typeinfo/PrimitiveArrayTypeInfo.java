@@ -171,7 +171,7 @@ public class PrimitiveArrayTypeInfo<T> extends TypeInformation<T> implements Ato
 
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return this.serializer;
     }
 

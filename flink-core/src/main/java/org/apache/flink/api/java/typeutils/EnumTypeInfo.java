@@ -99,7 +99,7 @@ public class EnumTypeInfo<T extends Enum<T>> extends TypeInformation<T> implemen
 
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return new EnumSerializer<T>(typeClass);
     }
 

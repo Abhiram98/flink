@@ -112,7 +112,7 @@ public class WritableTypeInfo<T extends Writable> extends TypeInformation<T>
 
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return new WritableSerializer<T>(typeClass);
     }
 

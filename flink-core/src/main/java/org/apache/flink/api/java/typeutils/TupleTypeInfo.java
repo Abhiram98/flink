@@ -94,14 +94,14 @@ public final class TupleTypeInfo<T extends Tuple> extends TupleTypeInfoBase<T> {
     @SuppressWarnings("unchecked")
     @Override
     @PublicEvolving
-    public TupleSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TupleSerializer<T> createSerializer(ExecutionConfig config) {
         if (getTypeClass() == Tuple0.class) {
             return (TupleSerializer<T>) Tuple0Serializer.INSTANCE;
         }
 
         TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[getArity()];
         for (int i = 0; i < types.length; i++) {
-            fieldSerializers[i] = types[i].createSerializer(executionConfig);
+            fieldSerializers[i] = types[i].createSerializer(config);
         }
 
         Class<T> tupleClass = getTypeClass();

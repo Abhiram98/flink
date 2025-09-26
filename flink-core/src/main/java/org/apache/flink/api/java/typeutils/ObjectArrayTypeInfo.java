@@ -90,11 +90,11 @@ public class ObjectArrayTypeInfo<T, C> extends TypeInformation<T> {
     @SuppressWarnings("unchecked")
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return (TypeSerializer<T>)
                 new GenericArraySerializer<C>(
                         componentInfo.getTypeClass(),
-                        componentInfo.createSerializer(executionConfig));
+                        componentInfo.createSerializer(config));
     }
 
     @Override

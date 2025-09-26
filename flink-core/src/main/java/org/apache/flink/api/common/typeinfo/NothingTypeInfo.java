@@ -68,7 +68,7 @@ public class NothingTypeInfo extends TypeInformation<Nothing> {
 
     @Override
     @PublicEvolving
-    public TypeSerializer<Nothing> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<Nothing> createSerializer(ExecutionConfig config) {
         throw new RuntimeException("The Nothing type cannot have a serializer.");
     }
 

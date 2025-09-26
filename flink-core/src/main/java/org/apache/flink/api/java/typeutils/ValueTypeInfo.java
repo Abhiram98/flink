@@ -163,7 +163,7 @@ public class ValueTypeInfo<T extends Value> extends TypeInformation<T> implement
     @Override
     @SuppressWarnings("unchecked")
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         if (BooleanValue.class.isAssignableFrom(type)) {
             return (TypeSerializer<T>) BooleanValueSerializer.INSTANCE;
         } else if (ByteValue.class.isAssignableFrom(type)) {
