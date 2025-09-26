@@ -141,7 +141,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private <IN, SV, OUT> IS createAggregatingState() {
         return (IS)
-                new LatencyTrackingAggregatingState<>(
+                new MetricsTrackingAggregatingState<>(
                         stateDescriptor.getName(),
                         (InternalAggregatingState<K, N, IN, SV, OUT>) kvState,
                         latencyTrackingStateConfig);

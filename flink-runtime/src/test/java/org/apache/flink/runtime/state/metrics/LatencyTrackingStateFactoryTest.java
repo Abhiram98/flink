@@ -167,7 +167,7 @@ public class LatencyTrackingStateFactoryTest {
                         aggregatingStateDescriptor,
                         getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingAggregatingState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingAggregatingState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(aggregatingState);
         }
