@@ -34,10 +34,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Utilities for generating {@link JobGraph}. */
-public enum JobGraphUtils {
+public enum ExecutionPlanUtils {
     ;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JobGraphUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExecutionPlanUtils.class);
 
     public static Map<String, DistributedCache.DistributedCacheEntry> prepareUserArtifactEntries(
             Map<String, DistributedCache.DistributedCacheEntry> userArtifacts, JobID jobId) {

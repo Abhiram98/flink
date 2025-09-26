@@ -45,7 +45,7 @@ import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanUtils;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -255,7 +255,7 @@ public class StreamingJobGraphGenerator {
         jobGraph.setSavepointRestoreSettings(streamGraph.getSavepointRestoreSettings());
 
         final Map<String, DistributedCache.DistributedCacheEntry> distributedCacheEntries =
-                JobGraphUtils.prepareUserArtifactEntries(
+                ExecutionPlanUtils.prepareUserArtifactEntries(
                         streamGraph.getUserArtifacts().stream()
                                 .collect(Collectors.toMap(e -> e.f0, e -> e.f1)),
                         jobGraph.getJobID());
