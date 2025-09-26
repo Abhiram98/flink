@@ -160,7 +160,7 @@ class DefaultLeaderElectionTest {
     }
 
     @Test
-    void testHasLeadershipFalse() throws Exception {
+    void testHasLeadershipAsyncFalse() throws Exception {
         testHasLeadership(false);
     }
 
