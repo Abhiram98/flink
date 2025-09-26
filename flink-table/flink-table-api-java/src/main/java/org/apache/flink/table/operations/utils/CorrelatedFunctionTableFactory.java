@@ -44,7 +44,7 @@ import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 
 /** Utility class for creating a valid {@link CalculatedQueryOperation} operation. */
 @Internal
-final class CalculatedTableFactory {
+final class CorrelatedFunctionTableFactory {
 
     /**
      * Creates a valid {@link CalculatedQueryOperation} operation.

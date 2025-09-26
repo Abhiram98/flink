@@ -94,7 +94,7 @@ public final class OperationTreeBuilder {
     private final ProjectionOperationFactory projectionOperationFactory;
 
     private final SortOperationFactory sortOperationFactory;
-    private final CalculatedTableFactory calculatedTableFactory;
+    private final CorrelatedFunctionTableFactory calculatedTableFactory;
     private final SetOperationFactory setOperationFactory;
     private final AggregateOperationFactory aggregateOperationFactory;
     private final JoinOperationFactory joinOperationFactory;
@@ -109,7 +109,7 @@ public final class OperationTreeBuilder {
             SqlExpressionResolver sqlExpressionResolver,
             ProjectionOperationFactory projectionOperationFactory,
             SortOperationFactory sortOperationFactory,
-            CalculatedTableFactory calculatedTableFactory,
+            CorrelatedFunctionTableFactory calculatedTableFactory,
             SetOperationFactory setOperationFactory,
             AggregateOperationFactory aggregateOperationFactory,
             JoinOperationFactory joinOperationFactory,
@@ -147,7 +147,7 @@ public final class OperationTreeBuilder {
                 sqlExpressionResolver,
                 new ProjectionOperationFactory(),
                 new SortOperationFactory(),
-                new CalculatedTableFactory(),
+                new CorrelatedFunctionTableFactory(),
                 new SetOperationFactory(isStreamingMode),
                 new AggregateOperationFactory(isStreamingMode),
                 new JoinOperationFactory(),
