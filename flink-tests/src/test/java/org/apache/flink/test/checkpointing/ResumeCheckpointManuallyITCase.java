@@ -235,14 +235,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     @Test
     public void testExternalizedSwitchRocksDBCheckpointsStandalone() throws Exception {
         final File checkpointDir = temporaryFolder.newFolder();
-        StateBackend previousStateBackend = createRocksDBStateBackend(checkpointDir, false);
+        StateBackend previousStateBackendConfig = createRocksDBStateBackend(checkpointDir, false);
         StateBackend newStateBackend = createRocksDBStateBackend(checkpointDir, true);
         testExternalizedCheckpoints(
                 checkpointDir,
                 null,
-                previousStateBackend,
+                previousStateBackendConfig,
                 newStateBackend,
-                previousStateBackend,
+                previousStateBackendConfig,
                 false,
                 recoveryClaimMode);
     }
