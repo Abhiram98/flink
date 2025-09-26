@@ -20,7 +20,7 @@ package org.apache.flink.runtime.metrics;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.Reporter;
-import org.apache.flink.runtime.metrics.filter.MetricFilter;
+import org.apache.flink.runtime.metrics.filter.ReporterFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +39,14 @@ public abstract class AbstractReporterSetup<REPORTER extends Reporter> {
     protected final String name;
     protected final MetricConfig configuration;
     protected final REPORTER reporter;
-    protected final MetricFilter filter;
+    protected final ReporterFilter filter;
     protected final Map<String, String> additionalVariables;
 
     public AbstractReporterSetup(
             final String name,
             final MetricConfig configuration,
             REPORTER reporter,
-            MetricFilter filter,
+            ReporterFilter filter,
             final Map<String, String> additionalVariables) {
         this.name = name;
         this.configuration = configuration;
@@ -60,7 +60,7 @@ public abstract class AbstractReporterSetup<REPORTER extends Reporter> {
             final MetricConfig configuration,
             REPORTER reporter,
             final Map<String, String> additionalVariables) {
-        this(name, configuration, reporter, MetricFilter.NO_OP_FILTER, additionalVariables);
+        this(name, configuration, reporter, ReporterFilter.NO_OP_FILTER, additionalVariables);
     }
 
     public Map<String, String> getAdditionalVariables() {
@@ -80,7 +80,7 @@ public abstract class AbstractReporterSetup<REPORTER extends Reporter> {
         return reporter;
     }
 
-    public MetricFilter getFilter() {
+    public ReporterFilter getFilter() {
         return filter;
     }
 }
