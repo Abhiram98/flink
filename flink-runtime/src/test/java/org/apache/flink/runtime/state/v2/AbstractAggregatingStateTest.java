@@ -243,7 +243,7 @@ class AbstractAggregatingStateTest extends AbstractKeyedStateTestBase {
         }
 
         @Override
-        public StateRequestContainer createStateRequestContainer() {
+        public StateRequestContainer createRequestContainer() {
             return new MockStateRequestContainer();
         }
 

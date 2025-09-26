@@ -43,7 +43,7 @@ public interface StateExecutor {
      * Create a {@link StateRequestContainer} which is used to hold the batched {@link
      * StateRequest}.
      */
-    StateRequestContainer createStateRequestContainer();
+    StateRequestContainer createRequestContainer();
 
     /**
      * Execute a single state request *synchronously*. This is for synchronous APIs.

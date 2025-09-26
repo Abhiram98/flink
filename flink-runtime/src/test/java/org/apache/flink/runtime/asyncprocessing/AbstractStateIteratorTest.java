@@ -207,7 +207,7 @@ public class AbstractStateIteratorTest {
         }
 
         @Override
-        public StateRequestContainer createStateRequestContainer() {
+        public StateRequestContainer createRequestContainer() {
             return new MockStateRequestContainer();
         }
 

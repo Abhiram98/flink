@@ -248,7 +248,7 @@ public class AbstractKeyedStateTestBase {
         }
 
         @Override
-        public StateRequestContainer createStateRequestContainer() {
+        public StateRequestContainer createRequestContainer() {
             return new TestStateRequestContainer();
         }
 
