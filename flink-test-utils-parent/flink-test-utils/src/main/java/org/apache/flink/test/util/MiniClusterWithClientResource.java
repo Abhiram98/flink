@@ -55,7 +55,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
         return restClusterClient;
     }
 
-    public TestEnvironment getTestEnvironment() {
+    public TestEnvironment getTestStreamEnvironment() {
         return executionEnvironment;
     }
 
