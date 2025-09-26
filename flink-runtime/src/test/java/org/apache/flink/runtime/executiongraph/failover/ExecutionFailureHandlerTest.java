@@ -75,7 +75,7 @@ class ExecutionFailureHandlerTest {
 
     private TestingFailureEnricher testingFailureEnricher;
 
-    private List<Span> spanCollector;
+    private List<Span> eventCollector;
 
     @BeforeEach
     void setUp() {
@@ -88,7 +88,7 @@ class ExecutionFailureHandlerTest {
         isNewAttempt = new AtomicBoolean(true);
         backoffTimeStrategy =
                 new TestRestartBackoffTimeStrategy(true, RESTART_DELAY_MS, isNewAttempt::get);
-        spanCollector = new CopyOnWriteArrayList<>();
+        eventCollector = new CopyOnWriteArrayList<>();
         Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
         executionFailureHandler =
@@ -104,7 +104,7 @@ class ExecutionFailureHandlerTest {
                         new UnregisteredMetricsGroup() {
                             @Override
                             public void addSpan(SpanBuilder spanBuilder) {
-                                spanCollector.add(spanBuilder.build());
+                                eventCollector.add(spanBuilder.build());
                             }
                         });
     }
@@ -136,7 +136,7 @@ class ExecutionFailureHandlerTest {
         assertThat(result.getFailureLabels().get())
                 .isEqualTo(testingFailureEnricher.getFailureLabels());
         assertThat(executionFailureHandler.getNumberOfRestarts()).isOne();
-        checkMetrics(spanCollector, false, true);
+        checkMetrics(eventCollector, false, true);
     }
 
     /** Tests the case that task restarting is suppressed. */
@@ -173,7 +173,7 @@ class ExecutionFailureHandlerTest {
                 .isInstanceOf(IllegalStateException.class);
 
         assertThat(executionFailureHandler.getNumberOfRestarts()).isZero();
-        checkMetrics(spanCollector, false, false);
+        checkMetrics(eventCollector, false, false);
     }
 
     /** Tests the case that the failure is non-recoverable type. */
@@ -215,7 +215,7 @@ class ExecutionFailureHandlerTest {
                 .isInstanceOf(IllegalStateException.class);
 
         assertThat(executionFailureHandler.getNumberOfRestarts()).isZero();
-        checkMetrics(spanCollector, false, false);
+        checkMetrics(eventCollector, false, false);
     }
 
     @Test
@@ -241,7 +241,7 @@ class ExecutionFailureHandlerTest {
         isNewAttempt.set(false);
         testHandlingConcurrentException(execution, error);
         testHandlingConcurrentException(execution, error);
-        checkMetrics(spanCollector, false, true);
+        checkMetrics(eventCollector, false, true);
     }
 
     private void testHandlingRootException(Execution execution, Throwable error) {
@@ -308,7 +308,7 @@ class ExecutionFailureHandlerTest {
         assertThat(testingFailureEnricher.getSeenThrowables()).containsExactly(error);
         assertThat(result.getFailureLabels().get())
                 .isEqualTo(testingFailureEnricher.getFailureLabels());
-        checkMetrics(spanCollector, true, true);
+        checkMetrics(eventCollector, true, true);
     }
 
     // ------------------------------------------------------------------------
