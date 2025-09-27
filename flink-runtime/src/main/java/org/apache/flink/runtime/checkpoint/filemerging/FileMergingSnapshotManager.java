@@ -216,7 +216,7 @@ public interface FileMergingSnapshotManager extends Closeable {
         private static final String MANAGED_DIR_FORMAT = "job_%s_op_%s_%d_%d";
 
         final String jobIDString;
-        final String operatorIDString;
+        final String vertexIDString;
         final int subtaskIndex;
         final int parallelism;
 
@@ -238,7 +238,7 @@ public interface FileMergingSnapshotManager extends Closeable {
         public SubtaskKey(
                 String jobIDString, String operatorIDString, int subtaskIndex, int parallelism) {
             this.jobIDString = jobIDString;
-            this.operatorIDString = operatorIDString;
+            this.vertexIDString = operatorIDString;
             this.subtaskIndex = subtaskIndex;
             this.parallelism = parallelism;
             int hash = jobIDString.hashCode();
@@ -269,7 +269,7 @@ public interface FileMergingSnapshotManager extends Closeable {
             return String.format(
                             MANAGED_DIR_FORMAT,
                             jobIDString,
-                            operatorIDString,
+                            vertexIDString,
                             subtaskIndex,
                             parallelism)
                     .replaceAll("[^a-zA-Z0-9\\-]", "_");
@@ -289,7 +289,7 @@ public interface FileMergingSnapshotManager extends Closeable {
             return hashCode == that.hashCode
                     && subtaskIndex == that.subtaskIndex
                     && parallelism == that.parallelism
-                    && operatorIDString.equals(that.operatorIDString)
+                    && vertexIDString.equals(that.vertexIDString)
                     && jobIDString.equals(that.jobIDString);
         }
 
@@ -301,7 +301,7 @@ public interface FileMergingSnapshotManager extends Closeable {
         @Override
         public String toString() {
             return String.format(
-                    "%s-%s(%d/%d)", jobIDString, operatorIDString, subtaskIndex, parallelism);
+                    "%s-%s(%d/%d)", jobIDString, vertexIDString, subtaskIndex, parallelism);
         }
     }
 
