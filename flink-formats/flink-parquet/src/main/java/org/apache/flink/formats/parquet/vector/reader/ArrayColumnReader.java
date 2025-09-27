@@ -337,9 +337,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case SMALLINT:
-                HeapShortVector shortVector = new HeapShortVector(total);
-                shortVector.reset();
-                lcv.setChild(shortVector);
+                HeapShortVector heapShortVector = new HeapShortVector(total);
+                heapShortVector.reset();
+                lcv.setChild(heapShortVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapShortVector) lcv.getChild()).setNullAt(i);
