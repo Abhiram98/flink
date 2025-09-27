@@ -31,7 +31,7 @@ import org.apache.flink.metrics.Reporter;
 import org.apache.flink.metrics.reporter.MetricReporter;
 import org.apache.flink.metrics.reporter.MetricReporterFactory;
 import org.apache.flink.runtime.metrics.filter.DefaultMetricFilter;
-import org.apache.flink.runtime.metrics.filter.MetricFilter;
+import org.apache.flink.runtime.metrics.filter.ReporterFilter;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
 import org.apache.flink.traces.reporter.TraceReporter;
 import org.apache.flink.traces.reporter.TraceReporterFactory;
@@ -156,7 +156,7 @@ public class ReporterSetupBuilder<
                 String reporterName,
                 MetricConfig metricConfig,
                 REPORTER reporter,
-                MetricFilter metricFilter,
+                ReporterFilter metricFilter,
                 Map<String, String> additionalVariables);
     }
 
@@ -253,7 +253,7 @@ public class ReporterSetupBuilder<
     }
 
     @VisibleForTesting
-    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter metricFilter) {
+    public SETUP forReporter(String reporterName, REPORTER reporter, ReporterFilter metricFilter) {
         return createReporterSetup(
                 reporterName, new MetricConfig(), reporter, metricFilter, Collections.emptyMap());
     }
@@ -264,7 +264,7 @@ public class ReporterSetupBuilder<
                 reporterName,
                 metricConfig,
                 reporter,
-                MetricFilter.NO_OP_FILTER,
+                ReporterFilter.NO_OP_FILTER,
                 Collections.emptyMap());
     }
 
@@ -273,7 +273,7 @@ public class ReporterSetupBuilder<
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter) {
+            ReporterFilter metricFilter) {
         return createReporterSetup(
                 reporterName, metricConfig, reporter, metricFilter, Collections.emptyMap());
     }
@@ -282,7 +282,7 @@ public class ReporterSetupBuilder<
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter,
+            ReporterFilter metricFilter,
             Map<String, String> additionalVariables) {
         reporter.open(metricConfig);
         return reporterSetupInfo.reporterSetupFactory.createReporterSetup(
@@ -380,7 +380,7 @@ public class ReporterSetupBuilder<
                 Optional<REPORTER> metricReporterOptional =
                         loadReporter(reporterName, reporterConfig, reporterFactories);
 
-                final MetricFilter metricFilter =
+                final ReporterFilter metricFilter =
                         DefaultMetricFilter.fromConfiguration(reporterConfig);
 
                 // massage user variables keys into scope format for parity to variable
