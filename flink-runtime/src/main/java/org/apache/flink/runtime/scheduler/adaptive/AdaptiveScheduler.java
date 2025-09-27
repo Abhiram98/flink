@@ -296,7 +296,7 @@ public class AdaptiveScheduler
 
         private final SchedulerExecutionMode executionMode;
         private final Duration initialResourceAllocationTimeout;
-        private final Duration resourceStabilizationTimeout;
+        private final Duration submissionResourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
         private final Duration scalingIntervalMin;
         private final Duration scalingResourceStabilizationTimeout;
@@ -314,7 +314,7 @@ public class AdaptiveScheduler
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
-            this.resourceStabilizationTimeout = resourceStabilizationTimeout;
+            this.submissionResourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
             this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
@@ -331,7 +331,7 @@ public class AdaptiveScheduler
         }
 
         public Duration getResourceStabilizationTimeout() {
-            return resourceStabilizationTimeout;
+            return submissionResourceStabilizationTimeout;
         }
 
         public Duration getSlotIdleTimeout() {
