@@ -193,7 +193,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
     public static class Factory implements RescaleManager.Factory {
 
-        private final Duration scalingIntervalMin;
+        private final Duration cooldownTimeout;
         @Nullable private final Duration scalingIntervalMax;
         private final Duration maximumDelayForTrigger;
 
@@ -214,7 +214,7 @@ public class DefaultRescaleManager implements RescaleManager {
                 Duration scalingIntervalMin,
                 @Nullable Duration scalingIntervalMax,
                 Duration maximumDelayForTrigger) {
-            this.scalingIntervalMin = scalingIntervalMin;
+            this.cooldownTimeout = scalingIntervalMin;
             this.scalingIntervalMax = scalingIntervalMax;
             this.maximumDelayForTrigger = maximumDelayForTrigger;
         }
@@ -224,7 +224,7 @@ public class DefaultRescaleManager implements RescaleManager {
             return new DefaultRescaleManager(
                     lastRescale,
                     rescaleContext,
-                    scalingIntervalMin,
+                    cooldownTimeout,
                     scalingIntervalMax,
                     maximumDelayForTrigger);
         }
