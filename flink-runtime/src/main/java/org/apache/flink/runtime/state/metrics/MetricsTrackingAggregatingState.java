@@ -32,16 +32,16 @@ import java.util.Collection;
  * @param <ACC> The type of the accumulator (intermediate aggregate state).
  * @param <OUT> Type of the value extracted from the state
  */
-class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
+class MetricsTrackingAggregatingState<K, N, IN, ACC, OUT>
         extends AbstractLatencyTrackState<
                 K,
                 N,
                 ACC,
                 InternalAggregatingState<K, N, IN, ACC, OUT>,
-                LatencyTrackingAggregatingState.AggregatingStateLatencyMetrics>
+                MetricsTrackingAggregatingState.AggregatingStateLatencyMetrics>
         implements InternalAggregatingState<K, N, IN, ACC, OUT> {
 
-    LatencyTrackingAggregatingState(
+    MetricsTrackingAggregatingState(
             String stateName,
             InternalAggregatingState<K, N, IN, ACC, OUT> original,
             LatencyTrackingStateConfig latencyTrackingStateConfig) {
