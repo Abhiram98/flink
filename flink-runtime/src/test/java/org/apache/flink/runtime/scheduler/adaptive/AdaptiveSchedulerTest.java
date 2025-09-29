@@ -1363,7 +1363,7 @@ public class AdaptiveSchedulerTest {
                 .set(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT, Duration.ofMillis(1L))
                 .set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, Duration.ofMillis(1L))
                 .set(
-                        JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT,
+                        JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT,
                         Duration.ofMillis(1L))
                 .set(JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, Duration.ZERO);
     }
@@ -2204,7 +2204,7 @@ public class AdaptiveSchedulerTest {
         final Configuration configuration = createConfigurationWithNoTimeouts();
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
         configuration.set(
-                JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT,
+                JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT,
                 scalingStabilizationTimeout);
 
         final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
@@ -2336,7 +2336,7 @@ public class AdaptiveSchedulerTest {
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
         configuration.set(JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maxDelayForTrigger);
         configuration.set(
-                JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT,
+                JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT,
                 scalingResourceStabilizationTimeout);
 
         scheduler =
