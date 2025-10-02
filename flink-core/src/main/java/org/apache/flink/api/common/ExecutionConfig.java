@@ -493,23 +493,23 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
 
     @Experimental
     public int getAsyncStateBufferSize() {
-        return configuration.get(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE);
+        return configuration.get(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_SIZE);
     }
 
     @Experimental
     public ExecutionConfig setAsyncStateBufferSize(int bufferSize) {
-        configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE, bufferSize);
+        configuration.set(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_SIZE, bufferSize);
         return this;
     }
 
     @Experimental
     public long getAsyncStateBufferTimeout() {
-        return configuration.get(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT);
+        return configuration.get(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT);
     }
 
     @Experimental
     public ExecutionConfig setAsyncStateBufferTimeout(long timeout) {
-        configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, timeout);
+        configuration.set(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT, timeout);
         return this;
     }
 
