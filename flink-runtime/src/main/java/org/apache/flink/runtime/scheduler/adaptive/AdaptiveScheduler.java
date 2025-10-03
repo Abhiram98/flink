@@ -296,7 +296,7 @@ public class AdaptiveScheduler
 
         private final SchedulerExecutionMode executionMode;
         private final Duration initialResourceAllocationTimeout;
-        private final Duration resourceStabilizationTimeout;
+        private final Duration submissionResourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
         private final Duration scalingIntervalMin;
         private final Duration scalingResourceStabilizationTimeout;
@@ -306,7 +306,7 @@ public class AdaptiveScheduler
         private Settings(
                 SchedulerExecutionMode executionMode,
                 Duration initialResourceAllocationTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration submissionResourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
                 Duration scalingResourceStabilizationTimeout,
@@ -314,7 +314,7 @@ public class AdaptiveScheduler
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
-            this.resourceStabilizationTimeout = resourceStabilizationTimeout;
+            this.submissionResourceStabilizationTimeout = submissionResourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
             this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
@@ -330,8 +330,8 @@ public class AdaptiveScheduler
             return initialResourceAllocationTimeout;
         }
 
-        public Duration getResourceStabilizationTimeout() {
-            return resourceStabilizationTimeout;
+        public Duration getSubmissionResourceStabilizationTimeout() {
+            return submissionResourceStabilizationTimeout;
         }
 
         public Duration getSlotIdleTimeout() {
@@ -1160,7 +1160,7 @@ public class AdaptiveScheduler
                 ctx,
                 clock,
                 Duration.ZERO, // skip cooldown phase
-                settings.getResourceStabilizationTimeout(),
+                settings.getSubmissionResourceStabilizationTimeout(),
                 Duration.ZERO); // trigger immediately once the stabilization phase is over
     }
 
