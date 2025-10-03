@@ -57,6 +57,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import javax.naming.Context;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,32 +134,32 @@ class SinkV2SinkWriterOperatorTest {
     }
 
     InspectableSink sinkWithCommitter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> writer =
                 new TestSinkV2.DefaultCommittingSinkWriter<>();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(writer)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithTimeBasedWriter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter = new TimeBasedBufferingSinkWriter();
+        TestSinkV2.DefaultSinkWriter<Integer> writer = new TimeBasedBufferingSinkWriter();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(writer)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithState(boolean withState, String stateName) {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> writer =
                 new TestSinkV2.DefaultStatefulSinkWriter<>();
         TestSinkV2.Builder<Integer> builder =
                 TestSinkV2.<Integer>newBuilder()
                         .setDefaultCommitter()
                         .setWithPostCommitTopology(true)
-                        .setWriter(sinkWriter);
+                        .setWriter(writer);
         if (withState) {
             builder.setWriterState(true);
         }
