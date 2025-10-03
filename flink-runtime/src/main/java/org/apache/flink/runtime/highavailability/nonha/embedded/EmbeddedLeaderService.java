@@ -465,7 +465,7 @@ public class EmbeddedLeaderService {
         }
 
         @Override
-        public void confirmLeadership(UUID leaderSessionID, String leaderAddress) {
+        public void confirmLeadershipAsync(UUID leaderSessionID, String leaderAddress) {
             checkNotNull(leaderSessionID);
             checkNotNull(leaderAddress);
             confirmLeader(this, leaderSessionID, leaderAddress);
