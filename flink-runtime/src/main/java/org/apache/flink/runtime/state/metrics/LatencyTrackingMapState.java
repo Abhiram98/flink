@@ -34,12 +34,12 @@ import java.util.Map;
  * @param <UV> Type of the user entry value of state
  */
 class LatencyTrackingMapState<K, N, UK, UV>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                Map<UK, UV>,
-                InternalMapState<K, N, UK, UV>,
-                LatencyTrackingMapState.MapStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        Map<UK, UV>,
+                        InternalMapState<K, N, UK, UV>,
+                        LatencyTrackingMapState.MapStateLatencyMetrics>
         implements InternalMapState<K, N, UK, UV> {
     LatencyTrackingMapState(
             String stateName,

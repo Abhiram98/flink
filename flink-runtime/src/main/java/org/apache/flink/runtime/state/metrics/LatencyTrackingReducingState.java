@@ -31,12 +31,12 @@ import java.util.Collection;
  * @param <T> Type of the user value of state
  */
 class LatencyTrackingReducingState<K, N, T>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                T,
-                InternalReducingState<K, N, T>,
-                LatencyTrackingReducingState.ReducingStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        T,
+                        InternalReducingState<K, N, T>,
+                        LatencyTrackingReducingState.ReducingStateLatencyMetrics>
         implements InternalReducingState<K, N, T> {
 
     LatencyTrackingReducingState(

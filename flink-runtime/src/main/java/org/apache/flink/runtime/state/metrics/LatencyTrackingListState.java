@@ -32,12 +32,12 @@ import java.util.List;
  * @param <T> Type of the user entry value of state
  */
 class LatencyTrackingListState<K, N, T>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                List<T>,
-                InternalListState<K, N, T>,
-                LatencyTrackingListState.ListStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        List<T>,
+                        InternalListState<K, N, T>,
+                        LatencyTrackingListState.ListStateLatencyMetrics>
         implements InternalListState<K, N, T> {
 
     LatencyTrackingListState(
