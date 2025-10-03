@@ -31,10 +31,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Default {@link MetricFilter} implementation that filters metrics based on {@link
+ * Default {@link ReporterFilter} implementation that filters metrics based on {@link
  * MetricOptions#REPORTER_INCLUDES}/{@link MetricOptions#REPORTER_EXCLUDES}.
  */
-public class DefaultMetricFilter implements MetricFilter {
+public class DefaultMetricFilter implements ReporterFilter {
 
     private static final EnumSet<MetricType> ALL_METRIC_TYPES = EnumSet.allOf(MetricType.class);
     @VisibleForTesting static final String LIST_DELIMITER = ",";
@@ -66,7 +66,7 @@ public class DefaultMetricFilter implements MetricFilter {
         return false;
     }
 
-    public static MetricFilter fromConfiguration(Configuration configuration) {
+    public static ReporterFilter fromConfiguration(Configuration configuration) {
         final List<String> includes = configuration.get(MetricOptions.REPORTER_INCLUDES);
         final List<String> excludes = configuration.get(MetricOptions.REPORTER_EXCLUDES);
 
