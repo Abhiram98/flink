@@ -44,23 +44,9 @@ import org.apache.flink.table.functions.TableFunctionDefinition;
 import org.apache.flink.table.legacy.api.TableSchema;
 import org.apache.flink.table.legacy.sources.LookupableTableSource;
 import org.apache.flink.table.legacy.sources.TableSource;
-import org.apache.flink.table.operations.AggregateQueryOperation;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
-import org.apache.flink.table.operations.DataStreamQueryOperation;
-import org.apache.flink.table.operations.DistinctQueryOperation;
-import org.apache.flink.table.operations.ExternalQueryOperation;
-import org.apache.flink.table.operations.FilterQueryOperation;
-import org.apache.flink.table.operations.JoinQueryOperation;
+import org.apache.flink.table.operations.*;
+import org.apache.flink.table.operations.CorrelatedFunctionQueryOperation;
 import org.apache.flink.table.operations.JoinQueryOperation.JoinType;
-import org.apache.flink.table.operations.ProjectQueryOperation;
-import org.apache.flink.table.operations.QueryOperation;
-import org.apache.flink.table.operations.QueryOperationVisitor;
-import org.apache.flink.table.operations.SetQueryOperation;
-import org.apache.flink.table.operations.SortQueryOperation;
-import org.apache.flink.table.operations.SourceQueryOperation;
-import org.apache.flink.table.operations.TableSourceQueryOperation;
-import org.apache.flink.table.operations.ValuesQueryOperation;
-import org.apache.flink.table.operations.WindowAggregateQueryOperation;
 import org.apache.flink.table.operations.WindowAggregateQueryOperation.ResolvedGroupWindow;
 import org.apache.flink.table.operations.utils.QueryOperationDefaultVisitor;
 import org.apache.flink.table.planner.calcite.FlinkContext;
@@ -288,7 +274,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         @Override
-        public RelNode visit(CalculatedQueryOperation calculatedTable) {
+        public RelNode visit(CorrelatedFunctionQueryOperation calculatedTable) {
             final ContextResolvedFunction resolvedFunction = calculatedTable.getResolvedFunction();
             final List<RexNode> parameters = convertToRexNodes(calculatedTable.getArguments());
 
@@ -316,7 +302,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         private RelNode convertLegacyTableFunction(
-                CalculatedQueryOperation calculatedTable,
+                CorrelatedFunctionQueryOperation calculatedTable,
                 TableFunctionDefinition functionDefinition,
                 List<RexNode> parameters,
                 FlinkTypeFactory typeFactory) {

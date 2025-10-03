@@ -19,20 +19,8 @@
 package org.apache.flink.table.operations.utils;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.table.operations.AggregateQueryOperation;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
-import org.apache.flink.table.operations.DistinctQueryOperation;
-import org.apache.flink.table.operations.FilterQueryOperation;
-import org.apache.flink.table.operations.JoinQueryOperation;
-import org.apache.flink.table.operations.ProjectQueryOperation;
-import org.apache.flink.table.operations.QueryOperation;
-import org.apache.flink.table.operations.QueryOperationVisitor;
-import org.apache.flink.table.operations.SetQueryOperation;
-import org.apache.flink.table.operations.SortQueryOperation;
-import org.apache.flink.table.operations.SourceQueryOperation;
-import org.apache.flink.table.operations.TableSourceQueryOperation;
-import org.apache.flink.table.operations.ValuesQueryOperation;
-import org.apache.flink.table.operations.WindowAggregateQueryOperation;
+import org.apache.flink.table.operations.*;
+import org.apache.flink.table.operations.CorrelatedFunctionQueryOperation;
 
 /**
  * A utility {@link QueryOperationVisitor} that calls {@link
@@ -83,7 +71,7 @@ public abstract class QueryOperationDefaultVisitor<T> implements QueryOperationV
     }
 
     @Override
-    public T visit(CalculatedQueryOperation calculatedTable) {
+    public T visit(CorrelatedFunctionQueryOperation calculatedTable) {
         return defaultMethod(calculatedTable);
     }
 
