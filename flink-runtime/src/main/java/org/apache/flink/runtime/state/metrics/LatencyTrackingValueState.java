@@ -31,12 +31,12 @@ import java.io.IOException;
  * @param <T> Type of the user value of state
  */
 class LatencyTrackingValueState<K, N, T>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                T,
-                InternalValueState<K, N, T>,
-                LatencyTrackingValueState.ValueStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        T,
+                        InternalValueState<K, N, T>,
+                        LatencyTrackingValueState.ValueStateLatencyMetrics>
         implements InternalValueState<K, N, T> {
 
     public LatencyTrackingValueState(

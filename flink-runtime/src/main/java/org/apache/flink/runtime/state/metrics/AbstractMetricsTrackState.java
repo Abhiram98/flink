@@ -36,14 +36,14 @@ import java.util.function.Supplier;
  * @param <S> Type of the internal kv state
  * @param <LSM> Type of the latency tracking state metrics
  */
-class AbstractLatencyTrackState<
+class AbstractMetricsTrackState<
                 K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateLatencyMetricBase>
         implements InternalKvState<K, N, V> {
 
     protected S original;
     protected LSM latencyTrackingStateMetric;
 
-    AbstractLatencyTrackState(S original, LSM latencyTrackingStateMetric) {
+    AbstractMetricsTrackState(S original, LSM latencyTrackingStateMetric) {
         this.original = original;
         this.latencyTrackingStateMetric = latencyTrackingStateMetric;
     }

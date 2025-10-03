@@ -91,7 +91,7 @@ abstract class LatencyTrackingStateTestBase<K> {
                     S extends InternalKvState<K, N, V>,
                     S2 extends State,
                     LSM extends StateLatencyMetricBase>
-            AbstractLatencyTrackState<K, N, V, S, LSM> createLatencyTrackingState(
+    AbstractMetricsTrackState<K, N, V, S, LSM> createLatencyTrackingState(
                     AbstractKeyedStateBackend<K> keyedBackend,
                     StateDescriptor<S2, V> stateDescriptor)
                     throws Exception {
@@ -99,8 +99,8 @@ abstract class LatencyTrackingStateTestBase<K> {
         S2 keyedState =
                 keyedBackend.getOrCreateKeyedState(
                         VoidNamespaceSerializer.INSTANCE, stateDescriptor);
-        Preconditions.checkState(keyedState instanceof AbstractLatencyTrackState);
-        return (AbstractLatencyTrackState<K, N, V, S, LSM>) keyedState;
+        Preconditions.checkState(keyedState instanceof AbstractMetricsTrackState);
+        return (AbstractMetricsTrackState<K, N, V, S, LSM>) keyedState;
     }
 
     abstract <V, S extends State> StateDescriptor<S, V> getStateDescriptor();
@@ -114,7 +114,7 @@ abstract class LatencyTrackingStateTestBase<K> {
     void testLatencyTrackingStateClear() throws Exception {
         AbstractKeyedStateBackend<K> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            AbstractLatencyTrackState latencyTrackingState =
+            AbstractMetricsTrackState latencyTrackingState =
                     createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
             StateLatencyMetricBase latencyTrackingStateMetric =

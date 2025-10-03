@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/** Factory to create {@link AbstractLatencyTrackState}. */
+/** Factory to create {@link AbstractMetricsTrackState}. */
 public class LatencyTrackingStateFactory<
         K, N, V, S extends State, IS extends InternalKvState<K, N, ?>> {
 
@@ -141,7 +141,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private <IN, SV, OUT> IS createAggregatingState() {
         return (IS)
-                new LatencyTrackingAggregatingState<>(
+                new MetricsTrackingAggregatingState<>(
                         stateDescriptor.getName(),
                         (InternalAggregatingState<K, N, IN, SV, OUT>) kvState,
                         latencyTrackingStateConfig);
