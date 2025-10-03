@@ -111,7 +111,7 @@ class DefaultLeaderElectionTest {
 
             final UUID expectedLeaderSessionID = UUID.randomUUID();
             final String expectedAddress = "random-address";
-            testInstance.confirmLeadership(expectedLeaderSessionID, expectedAddress);
+            testInstance.confirmLeadershipAsync(expectedLeaderSessionID, expectedAddress);
 
             assertThat(componentIdRef).hasValue(DEFAULT_TEST_COMPONENT_ID);
             assertThat(leaderSessionIDRef).hasValue(expectedLeaderSessionID);
