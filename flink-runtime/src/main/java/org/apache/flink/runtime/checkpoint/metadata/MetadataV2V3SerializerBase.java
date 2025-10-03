@@ -706,7 +706,7 @@ public abstract class MetadataV2V3SerializerBase {
         return StateObjectCollection.empty();
     }
 
-    protected void serializeResultSubpartitionStateHandle(
+    protected void serializeOutputStateHandle(
             OutputStateHandle resultSubpartitionStateHandle, DataOutputStream dos)
             throws IOException {}
 
