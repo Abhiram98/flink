@@ -165,7 +165,7 @@ class JMFailoverITCase {
 
     @Test
     void testRecoverFromJMFailover() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph();
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
@@ -188,7 +188,7 @@ class JMFailoverITCase {
 
     @Test
     void testSourceNotAllFinished() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph();
 
         // blocking source 0
         SourceTail.blockSubTasks(0);
@@ -228,7 +228,7 @@ class JMFailoverITCase {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT, Duration.ZERO);
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(configuration);
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph(configuration);
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
@@ -251,7 +251,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundTwice() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph();
 
         // blocking map 0 and map 1.
         StubMapFunction.blockSubTasks(0, 1);
@@ -286,7 +286,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorNotSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(false);
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph(false);
 
         // blocking all map task
         StubMapFunction2.blockSubTasks(0, 1, 2, 3);
@@ -312,7 +312,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph jobGraph = prepareEnvAndGetStreamGraph();
 
         // blocking map 0.
         StubMapFunction.blockSubTasks(0);
@@ -336,28 +336,28 @@ class JMFailoverITCase {
         checkCountResults();
     }
 
-    private JobGraph prepareEnvAndGetJobGraph() throws Exception {
+    private JobGraph prepareEnvAndGetStreamGraph() throws Exception {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT,
                 previousWorkerRecoveryTimeout);
-        return prepareEnvAndGetJobGraph(configuration, true);
+        return prepareEnvAndGetStreamGraph(configuration, true);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(Configuration config) throws Exception {
-        return prepareEnvAndGetJobGraph(config, true);
+    private JobGraph prepareEnvAndGetStreamGraph(Configuration config) throws Exception {
+        return prepareEnvAndGetStreamGraph(config, true);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(boolean operatorCoordinatorsSupportsBatchSnapshot)
+    private JobGraph prepareEnvAndGetStreamGraph(boolean operatorCoordinatorsSupportsBatchSnapshot)
             throws Exception {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT,
                 previousWorkerRecoveryTimeout);
-        return prepareEnvAndGetJobGraph(configuration, operatorCoordinatorsSupportsBatchSnapshot);
+        return prepareEnvAndGetStreamGraph(configuration, operatorCoordinatorsSupportsBatchSnapshot);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(
+    private JobGraph prepareEnvAndGetStreamGraph(
             Configuration config, boolean operatorCoordinatorsSupportsBatchSnapshot)
             throws Exception {
         flinkCluster =
@@ -371,8 +371,8 @@ class JMFailoverITCase {
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         return operatorCoordinatorsSupportsBatchSnapshot
-                ? createJobGraph(env, methodName)
-                : createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
+                ? createStreamGraph(env, methodName)
+                : createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
     }
 
     private TestingMiniClusterConfiguration getMiniClusterConfiguration(Configuration config)
@@ -446,7 +446,7 @@ class JMFailoverITCase {
                 new File(flinkConfiguration.get(CoreOptions.TMP_DIRS)));
     }
 
-    private JobGraph createJobGraph(StreamExecutionEnvironment env, String jobName) {
+    private JobGraph createStreamGraph(StreamExecutionEnvironment env, String jobName) {
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
                 new TupleTypeInfo<>(BasicTypeInfo.INT_TYPE_INFO, BasicTypeInfo.INT_TYPE_INFO);
 
@@ -471,7 +471,7 @@ class JMFailoverITCase {
         return StreamingJobGraphGenerator.createJobGraph(streamGraph);
     }
 
-    private JobGraph createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
+    private JobGraph createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
             StreamExecutionEnvironment env, String jobName) throws Exception {
 
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
