@@ -61,24 +61,24 @@ public class JobFailureMetricReporter {
             Boolean isGlobal,
             Map<String, String> failureLabels) {
         // Add base attributes
-        SpanBuilder spanBuilder =
+        SpanBuilder eventBuilder =
                 Span.builder(JobFailureMetricReporter.class, "JobFailure")
                         .setStartTsMillis(timestamp)
                         .setEndTsMillis(timestamp);
 
         if (canRestart != null) {
-            spanBuilder.setAttribute("canRestart", String.valueOf(canRestart));
+            eventBuilder.setAttribute("canRestart", String.valueOf(canRestart));
         }
 
         if (isGlobal != null) {
-            spanBuilder.setAttribute("isGlobalFailure", String.valueOf(isGlobal));
+            eventBuilder.setAttribute("isGlobalFailure", String.valueOf(isGlobal));
         }
 
         // Add all failure labels
         for (Map.Entry<String, String> entry : failureLabels.entrySet()) {
-            spanBuilder.setAttribute(
+            eventBuilder.setAttribute(
                     FAILURE_LABEL_ATTRIBUTE_PREFIX + entry.getKey(), entry.getValue());
         }
-        metricGroup.addSpan(spanBuilder);
+        metricGroup.addSpan(eventBuilder);
     }
 }
