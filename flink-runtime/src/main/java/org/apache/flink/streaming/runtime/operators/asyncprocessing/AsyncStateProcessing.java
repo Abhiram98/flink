@@ -53,7 +53,7 @@ public interface AsyncStateProcessing {
      * @return the built record processor that can returned by {@link #getRecordProcessor(int)}.
      */
     static <T> ThrowingConsumer<StreamRecord<T>, Exception> makeRecordProcessor(
-            AsyncStateProcessingOperator asyncOperator,
+            AsyncKeyOrderedProcessingOperator asyncOperator,
             KeySelector<T, ?> keySelector,
             ThrowingConsumer<StreamRecord<T>, Exception> processor) {
         if (keySelector == null) {
