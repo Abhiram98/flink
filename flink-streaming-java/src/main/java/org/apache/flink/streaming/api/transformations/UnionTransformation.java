@@ -67,7 +67,7 @@ public class UnionTransformation<T> extends Transformation<T> {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
         for (Transformation<T> input : inputs) {
-            result.addAll(input.getTransitivePredecessors());
+            result.addAll(input.getTransitivePredecessorsInternal());
         }
         return result;
     }

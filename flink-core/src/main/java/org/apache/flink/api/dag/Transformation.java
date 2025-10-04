@@ -578,7 +578,7 @@ public abstract class Transformation<T> {
      *
      * @return The list of transitive predecessors.
      */
-    public abstract List<Transformation<?>> getTransitivePredecessors();
+    public abstract List<Transformation<?>> getTransitivePredecessorsInternal();
 
     /**
      * Returns the {@link Transformation transformations} that are the immediate predecessors of the

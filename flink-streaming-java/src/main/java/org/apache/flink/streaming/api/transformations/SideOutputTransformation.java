@@ -56,7 +56,7 @@ public class SideOutputTransformation<T> extends Transformation<T> {
     public List<Transformation<?>> getTransitivePredecessors() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
-        result.addAll(input.getTransitivePredecessors());
+        result.addAll(input.getTransitivePredecessorsInternal());
         return result;
     }
 
