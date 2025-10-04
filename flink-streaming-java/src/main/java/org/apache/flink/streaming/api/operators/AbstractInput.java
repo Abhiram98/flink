@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Experimental;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.watermark.Watermark;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessing;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncKeyOrderedProcessing;
 import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessingOperator;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 import org.apache.flink.streaming.runtime.streamrecord.RecordAttributes;
@@ -40,7 +40,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
  */
 @Experimental
 public abstract class AbstractInput<IN, OUT>
-        implements Input<IN>, KeyContextHandler, AsyncStateProcessing {
+        implements Input<IN>, KeyContextHandler, AsyncKeyOrderedProcessing {
     /**
      * {@code KeySelector} for extracting a key from an element being processed. This is used to
      * scope keyed state to a key. This is null if the operator is not a keyed operator.
@@ -102,7 +102,7 @@ public abstract class AbstractInput<IN, OUT>
     @Internal
     @Override
     public final ThrowingConsumer<StreamRecord<IN>, Exception> getRecordProcessor(int inputId) {
-        return AsyncStateProcessing.makeRecordProcessor(
+        return AsyncKeyOrderedProcessing.makeRecordProcessor(
                 (AsyncStateProcessingOperator) owner,
                 (KeySelector) stateKeySelector,
                 this::processElement);

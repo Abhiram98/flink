@@ -45,8 +45,8 @@ import org.apache.flink.streaming.api.operators.Triggerable;
 import org.apache.flink.streaming.api.operators.TwoInputStreamOperator;
 import org.apache.flink.streaming.api.operators.sorted.state.BatchExecutionInternalTimeServiceWithAsyncState;
 import org.apache.flink.streaming.api.watermark.Watermark;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessing;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessingOperator;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncKeyOrderedProcessing;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncKeyOrderedProcessingOperator;
 import org.apache.flink.streaming.runtime.operators.asyncprocessing.ElementOrder;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 import org.apache.flink.streaming.runtime.streamrecord.RecordAttributes;
@@ -69,13 +69,13 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * This operator is an abstract class that give the {@link AbstractStreamOperator} the ability to
- * perform {@link AsyncStateProcessing}. The aim is to make any subclass of {@link
+ * perform {@link AsyncKeyOrderedProcessing}. The aim is to make any subclass of {@link
  * AbstractStreamOperator} could manipulate async state with only a change of base class.
  */
 @Internal
 @SuppressWarnings("rawtypes")
 public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStreamOperator<OUT>
-        implements AsyncStateProcessingOperator {
+        implements AsyncKeyOrderedProcessingOperator {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractAsyncStateStreamOperator.class);
@@ -231,12 +231,12 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         if (this instanceof TwoInputStreamOperator) {
             switch (inputId) {
                 case 1:
-                    return AsyncStateProcessing.<T>makeRecordProcessor(
+                    return AsyncKeyOrderedProcessing.<T>makeRecordProcessor(
                             this,
                             (KeySelector) stateKeySelector1,
                             ((TwoInputStreamOperator) this)::processElement1);
                 case 2:
-                    return AsyncStateProcessing.<T>makeRecordProcessor(
+                    return AsyncKeyOrderedProcessing.<T>makeRecordProcessor(
                             this,
                             (KeySelector) stateKeySelector2,
                             ((TwoInputStreamOperator) this)::processElement2);
@@ -244,7 +244,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
                     break;
             }
         } else if (this instanceof Input && inputId == 1) {
-            return AsyncStateProcessing.<T>makeRecordProcessor(
+            return AsyncKeyOrderedProcessing.<T>makeRecordProcessor(
                     this, (KeySelector) stateKeySelector1, ((Input) this)::processElement);
         }
         throw new IllegalArgumentException(
