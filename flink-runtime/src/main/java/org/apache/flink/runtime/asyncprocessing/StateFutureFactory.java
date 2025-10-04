@@ -41,7 +41,7 @@ public class StateFutureFactory<K> {
     }
 
     public <OUT> InternalStateFuture<OUT> create(RecordContext<K> context) {
-        return new ContextStateFutureImpl<>(
+        return new ContextAsyncFutureImpl<>(
                 (runnable) ->
                         callbackRunner.submit(
                                 () -> {
