@@ -127,9 +127,9 @@ class FileSystemOutputFormatTest {
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        assertThat(content).hasSize(1);
-        assertThat(content.values())
+        Map<File, String> fileToContent = getFileContentByPath(outputPath);
+        assertThat(fileToContent).hasSize(1);
+        assertThat(fileToContent.values())
                 .containsExactly("a1,1,p1\n" + "a2,2,p1\n" + "a2,2,p2\n" + "a3,3,p1\n");
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
@@ -152,10 +152,10 @@ class FileSystemOutputFormatTest {
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        assertThat(content).hasSize(1);
-        assertThat(content.keySet().iterator().next().getParentFile().getName()).isEqualTo("c=p1");
-        assertThat(content.values()).containsExactly("a1,1\n" + "a2,2\n" + "a2,2\n" + "a3,3\n");
+        Map<File, String> fileToContent = getFileContentByPath(outputPath);
+        assertThat(fileToContent).hasSize(1);
+        assertThat(fileToContent.keySet().iterator().next().getParentFile().getName()).isEqualTo("c=p1");
+        assertThat(fileToContent.values()).containsExactly("a1,1\n" + "a2,2\n" + "a2,2\n" + "a3,3\n");
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
 
@@ -169,9 +169,9 @@ class FileSystemOutputFormatTest {
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
+        Map<File, String> fileToContent = getFileContentByPath(outputPath);
         Map<String, String> sortedContent = new TreeMap<>();
-        content.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
+        fileToContent.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
 
         assertThat(sortedContent).hasSize(2);
         assertThat(sortedContent)
@@ -195,9 +195,9 @@ class FileSystemOutputFormatTest {
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
+        Map<File, String> fileToContent = getFileContentByPath(outputPath);
         Map<String, String> sortedContent = new TreeMap<>();
-        content.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
+        fileToContent.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
 
         assertThat(sortedContent).hasSize(2);
         assertThat(sortedContent.get("c=p1")).isEqualTo("a1,1\n" + "a2,2\n" + "a3,3\n");
