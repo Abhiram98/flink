@@ -140,7 +140,7 @@ public class EmbeddedHaServicesTest extends TestLogger {
 
         final UUID leaderId = leaderContender.getLeaderSessionFuture().get();
 
-        leaderElection.confirmLeadership(leaderId, ADDRESS);
+        leaderElection.confirmLeadershipAsync(leaderId, ADDRESS);
 
         final LeaderInformation leaderInformation =
                 leaderRetrievalListener.getLeaderInformationFuture().get();
@@ -182,8 +182,8 @@ public class EmbeddedHaServicesTest extends TestLogger {
 
         assertThat(leaderElection.hasLeadership(newLeaderSessionId), is(true));
 
-        leaderElection.confirmLeadership(oldLeaderSessionId, ADDRESS);
-        leaderElection.confirmLeadership(newLeaderSessionId, ADDRESS);
+        leaderElection.confirmLeadershipAsync(oldLeaderSessionId, ADDRESS);
+        leaderElection.confirmLeadershipAsync(newLeaderSessionId, ADDRESS);
 
         assertThat(leaderElection.hasLeadership(newLeaderSessionId), is(true));
 
