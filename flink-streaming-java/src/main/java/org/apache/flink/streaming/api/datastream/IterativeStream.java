@@ -74,7 +74,7 @@ public class IterativeStream<T> extends SingleOutputStreamOperator<T> {
     public DataStream<T> closeWith(DataStream<T> feedbackStream) {
 
         Collection<Transformation<?>> predecessors =
-                feedbackStream.getTransformation().getTransitivePredecessors();
+                feedbackStream.getTransformation().getTransitivePredecessorsInternal();
 
         if (!predecessors.contains(this.transformation)) {
             throw new UnsupportedOperationException(
@@ -183,7 +183,7 @@ public class IterativeStream<T> extends SingleOutputStreamOperator<T> {
         public DataStream<F> closeWith(DataStream<F> feedbackStream) {
 
             Collection<Transformation<?>> predecessors =
-                    feedbackStream.getTransformation().getTransitivePredecessors();
+                    feedbackStream.getTransformation().getTransitivePredecessorsInternal();
 
             if (!predecessors.contains(this.coFeedbackTransformation)) {
                 throw new UnsupportedOperationException(

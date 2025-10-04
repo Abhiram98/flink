@@ -162,7 +162,7 @@ class TransformationsTest {
         final CompiledPlan memoryPlan = table.insertInto("sink_table").compilePlan();
         final List<String> memoryUids =
                 CompiledPlanUtils.toTransformations(env, memoryPlan).get(0)
-                        .getTransitivePredecessors().stream()
+                        .getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)
                         .collect(Collectors.toList());
         assertThat(memoryUids).hasSize(3);
@@ -177,7 +177,7 @@ class TransformationsTest {
         final List<String> jsonUids =
                 CompiledPlanUtils.toTransformations(
                                 env, env.loadPlan(PlanReference.fromJsonString(jsonPlan)))
-                        .get(0).getTransitivePredecessors().stream()
+                        .get(0).getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)
                         .collect(Collectors.toList());
         assertThat(jsonUids).hasSize(3);
@@ -188,7 +188,7 @@ class TransformationsTest {
         }
 
         final List<String> inlineUids =
-                env.toChangelogStream(table).getTransformation().getTransitivePredecessors()
+                env.toChangelogStream(table).getTransformation().getTransitivePredecessorsInternal()
                         .stream()
                         .map(Transformation::getUid)
                         .collect(Collectors.toList());
@@ -264,7 +264,7 @@ class TransformationsTest {
         final List<String> planUids =
                 CompiledPlanUtils.toTransformations(
                                 env, env.loadPlan(PlanReference.fromJsonString(json.toString())))
-                        .get(0).getTransitivePredecessors().stream()
+                        .get(0).getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)
                         .collect(Collectors.toList());
         assertThat(planUids).hasSize(expectedUidPatterns.length);

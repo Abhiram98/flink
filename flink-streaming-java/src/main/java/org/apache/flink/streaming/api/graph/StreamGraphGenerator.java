@@ -464,7 +464,7 @@ public class StreamGraphGenerator {
                 .anyMatch(
                         transformation ->
                                 isUnboundedSource(transformation)
-                                        || transformation.getTransitivePredecessors().stream()
+                                        || transformation.getTransitivePredecessorsInternal().stream()
                                                 .anyMatch(this::isUnboundedSource));
     }
 
