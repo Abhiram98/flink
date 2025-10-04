@@ -341,7 +341,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                                 runIfStateRunning(
                                         () -> {
                                             LOG.debug("Confirm leadership {}.", leaderSessionId);
-                                            leaderElection.confirmLeadership(
+                                            leaderElection.confirmLeadershipAsync(
                                                     leaderSessionId, address);
                                         },
                                         "confirming leadership")));
