@@ -250,7 +250,7 @@ public final class MiniClusterExtension
         }
     }
 
-    public TestEnvironment getTestEnvironment() {
+    public TestEnvironment getTestStreamEnvironment() {
         return this.executionEnvironment;
     }
 

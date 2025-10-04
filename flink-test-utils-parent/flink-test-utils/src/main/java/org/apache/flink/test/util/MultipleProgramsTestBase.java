@@ -79,14 +79,14 @@ public class MultipleProgramsTestBase extends AbstractTestBase {
             case CLUSTER:
                 // This only works because of the quirks we built in the TestEnvironment.
                 // We should refactor this in the future!!!
-                testEnvironment = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+                testEnvironment = MINI_CLUSTER_EXTENSION.getTestStreamEnvironment();
                 testEnvironment.getConfig().disableObjectReuse();
                 testEnvironment.setAsContext();
                 break;
             case CLUSTER_OBJECT_REUSE:
                 // This only works because of the quirks we built in the TestEnvironment.
                 // We should refactor this in the future!!!
-                testEnvironment = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+                testEnvironment = MINI_CLUSTER_EXTENSION.getTestStreamEnvironment();
                 testEnvironment.getConfig().enableObjectReuse();
                 testEnvironment.setAsContext();
                 break;

@@ -94,7 +94,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        TestEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+        TestEnvironment env = MINI_CLUSTER_EXTENSION.getTestStreamEnvironment();
         env.getConfig().enableObjectReuse();
 
         // Possibly run the test multiple times
@@ -129,7 +129,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+        ExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestStreamEnvironment();
         env.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times
@@ -160,7 +160,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
             e.printStackTrace();
             fail("Error while calling the test program: " + e.getMessage());
         } finally {
-            MINI_CLUSTER_EXTENSION.getTestEnvironment().setAsContext();
+            MINI_CLUSTER_EXTENSION.getTestStreamEnvironment().setAsContext();
         }
 
         assertThat(this.latestExecutionResult)
