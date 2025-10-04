@@ -41,12 +41,12 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testProperConfiguration() throws ConfigurationException {
-        final Duration scalingIntervalMin = Duration.ofMillis(1337);
+        final Duration cooldownTimeout = Duration.ofMillis(1337);
         final Duration scalingIntervalMax = Duration.ofMillis(7331);
         final Duration maximumDelayForRescaleTrigger = Duration.ofMillis(4242);
 
         final Configuration configuration = new Configuration();
-        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
+        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, cooldownTimeout);
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX, scalingIntervalMax);
         configuration.set(
                 JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTrigger);
@@ -55,7 +55,7 @@ class DefaultRescaleManagerTest {
                 DefaultRescaleManager.Factory.fromSettings(
                                 AdaptiveScheduler.Settings.of(configuration))
                         .create(TestingRescaleManagerContext.stableContext(), Instant.now());
-        assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
+        assertThat(testInstance.scalingIntervalMin).isEqualTo(cooldownTimeout);
         assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
     }
