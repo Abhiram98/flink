@@ -185,7 +185,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
                 leaderElection.isLeader(UUID.randomUUID());
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        dispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+        dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
         waitForJobToFinish(confirmedLeaderInformation, dispatcherGateway, jobId);
 
@@ -300,7 +300,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
                 leaderElection.isLeader(UUID.randomUUID());
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        dispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+        dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
         waitForJobToFinish(confirmedLeaderInformation, dispatcherGateway, jobId);
         firstCleanupTriggered.await();

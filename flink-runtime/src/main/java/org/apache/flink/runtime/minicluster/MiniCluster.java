@@ -1079,7 +1079,7 @@ public class MiniCluster implements AutoCloseableAsync {
                         .thenCombine(
                                 dispatcherGatewayFuture,
                                 (Void ack, DispatcherGateway dispatcherGateway) ->
-                                        dispatcherGateway.submitJob(
+                                        dispatcherGateway.submitStream(
                                                 clonedExecutionPlan, rpcTimeout))
                         .thenCompose(Function.identity());
         return acknowledgeCompletableFuture.thenApply(

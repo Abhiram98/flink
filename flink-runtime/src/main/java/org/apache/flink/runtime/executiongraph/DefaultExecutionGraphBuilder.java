@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.blob.BlobWriter;
 import org.apache.flink.runtime.checkpoint.CheckpointIDCounter;
@@ -142,8 +142,8 @@ public class DefaultExecutionGraphBuilder {
             throw new JobException("Could not create the TaskDeploymentDescriptorFactory.", e);
         }
 
-        final List<JobStatusChangedListener> jobStatusChangedListeners =
-                JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+        final List<StreamStatusChangedListener> jobStatusChangedListeners =
+                StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                         classLoader, jobManagerConfig, ioExecutor);
 
         // create a new execution graph, if none exists so far

@@ -26,8 +26,8 @@ import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptionsInternal;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.client.ClientUtils;
@@ -70,35 +70,35 @@ public class EmbeddedExecutor implements PipelineExecutor {
 
     public static final String NAME = "embedded";
 
-    private final Collection<JobID> submittedJobIds;
+    private final Collection<JobID> submittedStreamIds;
 
     private final DispatcherGateway dispatcherGateway;
 
-    private final EmbeddedJobClientCreator jobClientCreator;
+    private final EmbeddedJobClientCreator streamClientCreator;
 
-    private final List<JobStatusChangedListener> jobStatusChangedListeners;
+    private final List<StreamStatusChangedListener> streamStatusChangedListeners;
 
     /**
      * Creates a {@link EmbeddedExecutor}.
      *
-     * @param submittedJobIds a list that is going to be filled with the job ids of the new jobs
+     * @param submittedStreamIds a list that is going to be filled with the job ids of the new jobs
      *     that will be submitted. This is essentially used to return the submitted job ids to the
      *     caller.
      * @param dispatcherGateway the dispatcher of the cluster which is going to be used to submit
      *     jobs.
      * @param configuration the flink application configuration
-     * @param jobClientCreator the job client creator
+     * @param streamClientCreator the job client creator
      */
     public EmbeddedExecutor(
-            final Collection<JobID> submittedJobIds,
+            final Collection<JobID> submittedStreamIds,
             final DispatcherGateway dispatcherGateway,
             final Configuration configuration,
-            final EmbeddedJobClientCreator jobClientCreator) {
-        this.submittedJobIds = checkNotNull(submittedJobIds);
+            final EmbeddedJobClientCreator streamClientCreator) {
+        this.submittedStreamIds = checkNotNull(submittedStreamIds);
         this.dispatcherGateway = checkNotNull(dispatcherGateway);
-        this.jobClientCreator = checkNotNull(jobClientCreator);
-        this.jobStatusChangedListeners =
-                JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+        this.streamClientCreator = checkNotNull(streamClientCreator);
+        this.streamStatusChangedListeners =
+                StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                         Thread.currentThread().getContextClassLoader(),
                         configuration,
                         executorService);
@@ -113,72 +113,72 @@ public class EmbeddedExecutor implements PipelineExecutor {
         checkNotNull(pipeline);
         checkNotNull(configuration);
 
-        final Optional<JobID> optJobId =
+        final Optional<JobID> optStreamId =
                 configuration
                         .getOptional(PipelineOptionsInternal.PIPELINE_FIXED_JOB_ID)
                         .map(JobID::fromHexString);
 
-        if (optJobId.isPresent() && submittedJobIds.contains(optJobId.get())) {
-            return getJobClientFuture(optJobId.get(), userCodeClassloader);
+        if (optStreamId.isPresent() && submittedStreamIds.contains(optStreamId.get())) {
+            return getStreamClientFuture(optStreamId.get(), userCodeClassloader);
         }
 
-        return submitAndGetJobClientFuture(pipeline, configuration, userCodeClassloader);
+        return submitAndGetStreamClientFuture(pipeline, configuration, userCodeClassloader);
     }
 
-    private CompletableFuture<JobClient> getJobClientFuture(
-            final JobID jobId, final ClassLoader userCodeClassloader) {
-        LOG.info("Job {} was recovered successfully.", jobId);
+    private CompletableFuture<JobClient> getStreamClientFuture(
+            final JobID streamId, final ClassLoader userCodeClassloader) {
+        LOG.info("Job {} was recovered successfully.", streamId);
         return CompletableFuture.completedFuture(
-                jobClientCreator.getJobClient(jobId, userCodeClassloader));
+                streamClientCreator.getStreamClient(streamId, userCodeClassloader));
     }
 
-    private CompletableFuture<JobClient> submitAndGetJobClientFuture(
+    private CompletableFuture<JobClient> submitAndGetStreamClientFuture(
             final Pipeline pipeline,
             final Configuration configuration,
             final ClassLoader userCodeClassloader)
             throws MalformedURLException {
         final Duration timeout = configuration.get(ClientOptions.CLIENT_TIMEOUT);
 
-        final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
-        final JobID actualJobId = jobGraph.getJobID();
+        final JobGraph streamGraph =
+                PipelineExecutorUtils.getStreamGraph(pipeline, configuration, userCodeClassloader);
+        final JobID actualStreamId = streamGraph.getJobID();
 
-        this.submittedJobIds.add(actualJobId);
-        LOG.info("Job {} is submitted.", actualJobId);
+        this.submittedStreamIds.add(actualStreamId);
+        LOG.info("Job {} is submitted.", actualStreamId);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Effective Configuration: {}", configuration);
         }
 
-        final CompletableFuture<JobID> jobSubmissionFuture =
-                submitJob(configuration, dispatcherGateway, jobGraph, timeout);
+        final CompletableFuture<JobID> streamSubmissionFuture =
+                submitStream(configuration, dispatcherGateway, streamGraph, timeout);
 
-        return jobSubmissionFuture
+        return streamSubmissionFuture
                 .thenApplyAsync(
                         FunctionUtils.uncheckedFunction(
-                                jobId -> {
+                                streamId -> {
                                     org.apache.flink.client.ClientUtils
                                             .waitUntilJobInitializationFinished(
                                                     () ->
                                                             dispatcherGateway
                                                                     .requestJobStatus(
-                                                                            jobId, timeout)
+                                                                            streamId, timeout)
                                                                     .get(),
                                                     () ->
                                                             dispatcherGateway
                                                                     .requestJobResult(
-                                                                            jobId, timeout)
+                                                                            streamId, timeout)
                                                                     .get(),
                                                     userCodeClassloader);
-                                    return jobId;
+                                    return streamId;
                                 }))
                 .thenApplyAsync(
-                        jobID -> jobClientCreator.getJobClient(actualJobId, userCodeClassloader))
+                        streamId -> streamClientCreator.getStreamClient(actualStreamId, userCodeClassloader))
                 .whenCompleteAsync(
-                        (jobClient, throwable) -> {
+                        (streamClient, throwable) -> {
                             if (throwable == null) {
-                                PipelineExecutorUtils.notifyJobStatusListeners(
-                                        pipeline, jobGraph, jobStatusChangedListeners);
+                                PipelineExecutorUtils.notifyStreamStatusListeners(
+                                        pipeline, streamGraph, streamStatusChangedListeners);
                             } else {
                                 LOG.error(
                                         "Failed to submit job graph to application cluster",
@@ -187,7 +187,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
                         });
     }
 
-    private static CompletableFuture<JobID> submitJob(
+    private static CompletableFuture<JobID> submitStream(
             final Configuration configuration,
             final DispatcherGateway dispatcherGateway,
             final ExecutionPlan executionPlan,
@@ -212,7 +212,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
                                 throw new CompletionException(e);
                             }
 
-                            return dispatcherGateway.submitJob(executionPlan, rpcTimeout);
+                            return dispatcherGateway.submitStream(executionPlan, rpcTimeout);
                         })
                 .thenApply(ack -> executionPlan.getJobID());
     }

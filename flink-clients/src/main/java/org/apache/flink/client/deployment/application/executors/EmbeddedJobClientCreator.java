@@ -33,5 +33,5 @@ public interface EmbeddedJobClientCreator {
      * @param userCodeClassloader the class loader to deserialize user code.
      * @return the job client.
      */
-    JobClient getJobClient(final JobID jobId, final ClassLoader userCodeClassloader);
+    JobClient getStreamClient(final JobID jobId, final ClassLoader userCodeClassloader);
 }

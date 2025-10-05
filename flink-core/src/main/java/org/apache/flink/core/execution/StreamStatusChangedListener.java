@@ -25,7 +25,7 @@ import org.apache.flink.annotation.PublicEvolving;
  * changed listener.
  */
 @PublicEvolving
-public interface JobStatusChangedListener {
+public interface StreamStatusChangedListener {
 
     /* Event will be fired when job status is changed. */
     void onEvent(JobStatusChangedEvent event);

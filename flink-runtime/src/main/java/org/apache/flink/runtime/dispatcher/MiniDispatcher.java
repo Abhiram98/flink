@@ -102,7 +102,7 @@ public class MiniDispatcher extends Dispatcher {
     @Override
     public CompletableFuture<Acknowledge> submitJob(ExecutionPlan executionPlan, Duration timeout) {
         final CompletableFuture<Acknowledge> acknowledgeCompletableFuture =
-                super.submitJob(executionPlan, timeout);
+                super.submitStream(executionPlan, timeout);
 
         acknowledgeCompletableFuture.whenComplete(
                 (Acknowledge ignored, Throwable throwable) -> {

@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
 
 import static org.apache.flink.configuration.DeploymentOptions.JOB_STATUS_CHANGED_LISTENERS;
 
-/** Util class for {@link JobStatusChangedListener}. */
+/** Util class for {@link StreamStatusChangedListener}. */
 @Internal
-public final class JobStatusChangedListenerUtils {
+public final class StreamStatusChangedListenerUtils {
     /**
      * Create job status changed listeners from configuration for job.
      *
      * @param configuration The job configuration.
      * @return the job status changed listeners.
      */
-    public static List<JobStatusChangedListener> createJobStatusChangedListeners(
+    public static List<StreamStatusChangedListener> createStreamStatusChangedListeners(
             ClassLoader userClassLoader, Configuration configuration, Executor ioExecutor) {
         List<String> jobStatusChangedListeners = configuration.get(JOB_STATUS_CHANGED_LISTENERS);
         if (jobStatusChangedListeners == null || jobStatusChangedListeners.isEmpty()) {

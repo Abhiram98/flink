@@ -139,7 +139,7 @@ class DefaultDispatcherRunnerITCase {
             final DispatcherGateway firstDispatcherGateway =
                     electLeaderAndRetrieveGateway(firstLeaderSessionId);
 
-            firstDispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+            firstDispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
             dispatcherLeaderElection.notLeader();
 
