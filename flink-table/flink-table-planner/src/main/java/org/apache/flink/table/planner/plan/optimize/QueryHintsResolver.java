@@ -83,7 +83,7 @@ public class QueryHintsResolver extends QueryHintsRelShuttle {
     }
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
+    protected RelNode doVisit(BiRel biRel) {
         Optional<String> leftName = extractAliasOrTableName(biRel.getLeft());
         Optional<String> rightName = extractAliasOrTableName(biRel.getRight());
 
