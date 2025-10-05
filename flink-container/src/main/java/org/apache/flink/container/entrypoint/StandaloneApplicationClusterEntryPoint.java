@@ -134,7 +134,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
             throws FlinkException {
         final File userLibDir = ClusterEntrypointUtils.tryFindUserLibDirectory().orElse(null);
         File jarFile =
-                clusterConfiguration.getJarFile() == null
+                clusterConfiguration.getJars() == null
                         ? null
                         : fetchJarFileForApplicationMode(flinkConfiguration).get(0);
         final PackagedProgramRetriever programRetriever =
@@ -159,7 +159,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
     private static void setJobJarFile(
             StandaloneApplicationClusterConfiguration clusterConfiguration,
             Configuration configuration) {
-        final String jarFile = clusterConfiguration.getJarFile();
+        final String jarFile = clusterConfiguration.getJars();
         if (jarFile != null) {
             configuration.set(PipelineOptions.JARS, Collections.singletonList(jarFile));
         }
