@@ -34,7 +34,7 @@ public class SavepointDynamicTableSource implements ScanTableSource {
     @Nullable private final String stateBackendType;
     private final String statePath;
     private final OperatorIdentifier operatorIdentifier;
-    private final String keyFormat;
+    private final String keyTypeInfo;
     private final Tuple2<Integer, List<StateValueColumnConfiguration>> keyValueProjections;
     private final RowType rowType;
 
@@ -42,14 +42,14 @@ public class SavepointDynamicTableSource implements ScanTableSource {
             @Nullable final String stateBackendType,
             final String statePath,
             final OperatorIdentifier operatorIdentifier,
-            final String keyFormat,
+            final String keyTypeInfo,
             final Tuple2<Integer, List<StateValueColumnConfiguration>> keyValueProjections,
             RowType rowType) {
         this.stateBackendType = stateBackendType;
         this.statePath = statePath;
         this.operatorIdentifier = operatorIdentifier;
         this.keyValueProjections = keyValueProjections;
-        this.keyFormat = keyFormat;
+        this.keyTypeInfo = keyTypeInfo;
         this.rowType = rowType;
     }
 
@@ -59,7 +59,7 @@ public class SavepointDynamicTableSource implements ScanTableSource {
                 stateBackendType,
                 statePath,
                 operatorIdentifier,
-                keyFormat,
+                keyTypeInfo,
                 keyValueProjections,
                 rowType);
     }
@@ -80,7 +80,7 @@ public class SavepointDynamicTableSource implements ScanTableSource {
                 stateBackendType,
                 statePath,
                 operatorIdentifier,
-                keyFormat,
+                keyTypeInfo,
                 keyValueProjections,
                 rowType);
     }
