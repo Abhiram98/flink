@@ -55,7 +55,7 @@ class DefaultRescaleManagerTest {
                 DefaultRescaleManager.Factory.fromSettings(
                                 AdaptiveScheduler.Settings.of(configuration))
                         .create(TestingRescaleManagerContext.stableContext(), Instant.now());
-        assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
+        assertThat(testInstance.cooldownTimeout).isEqualTo(scalingIntervalMin);
         assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
     }
