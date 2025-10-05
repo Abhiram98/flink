@@ -26,7 +26,7 @@ import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.core.state.InternalStateFuture;
-import org.apache.flink.core.state.StateFutureImpl.AsyncFrameworkExceptionHandler;
+import org.apache.flink.core.state.AsyncFutureImpl.AsyncFrameworkExceptionHandler;
 import org.apache.flink.core.state.StateFutureUtils;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.MetricGroup;

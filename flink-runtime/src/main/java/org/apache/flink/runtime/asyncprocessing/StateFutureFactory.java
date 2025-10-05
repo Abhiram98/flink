@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.asyncprocessing;
 
 import org.apache.flink.core.state.InternalStateFuture;
-import org.apache.flink.core.state.StateFutureImpl.AsyncFrameworkExceptionHandler;
+import org.apache.flink.core.state.AsyncFutureImpl.AsyncFrameworkExceptionHandler;
 
 /**
  * An internal factory for {@link InternalStateFuture} that build future with necessary context
@@ -41,7 +41,7 @@ public class StateFutureFactory<K> {
     }
 
     public <OUT> InternalStateFuture<OUT> create(RecordContext<K> context) {
-        return new ContextStateFutureImpl<>(
+        return new ContextAsyncFutureImpl<>(
                 (runnable) ->
                         callbackRunner.submit(
                                 () -> {

@@ -68,10 +68,10 @@ public class StateFutureUtils {
 
         final T[] results = (T[]) new Object[count];
 
-        StateFutureImpl<? extends T> pendingFuture = null;
+        AsyncFutureImpl<? extends T> pendingFuture = null;
         for (StateFuture<? extends T> future : futures) {
-            if (future instanceof StateFutureImpl) {
-                pendingFuture = (StateFutureImpl<? extends T>) future;
+            if (future instanceof AsyncFutureImpl) {
+                pendingFuture = (AsyncFutureImpl<? extends T>) future;
                 break;
             }
         }
@@ -91,7 +91,7 @@ public class StateFutureUtils {
         } else {
             int i = 0;
             AtomicInteger countDown = new AtomicInteger(count);
-            StateFutureImpl<Collection<T>> ret = pendingFuture.makeNewStateFuture();
+            AsyncFutureImpl<Collection<T>> ret = pendingFuture.makeNewAsyncFuture();
             for (StateFuture<? extends T> future : futures) {
                 final int index = i;
                 ((InternalStateFuture<? extends T>) future)
