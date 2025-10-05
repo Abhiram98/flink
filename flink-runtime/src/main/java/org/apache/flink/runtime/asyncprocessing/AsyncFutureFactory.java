@@ -25,13 +25,13 @@ import org.apache.flink.core.state.StateFutureImpl.AsyncFrameworkExceptionHandle
  * An internal factory for {@link InternalStateFuture} that build future with necessary context
  * switch and wired with mailbox executor.
  */
-public class StateFutureFactory<K> {
+public class AsyncFutureFactory<K> {
 
     private final AsyncExecutionController<K> asyncExecutionController;
     private final CallbackRunnerWrapper callbackRunner;
     private final AsyncFrameworkExceptionHandler exceptionHandler;
 
-    StateFutureFactory(
+    AsyncFutureFactory(
             AsyncExecutionController<K> asyncExecutionController,
             CallbackRunnerWrapper callbackRunner,
             AsyncFrameworkExceptionHandler exceptionHandler) {
@@ -41,7 +41,7 @@ public class StateFutureFactory<K> {
     }
 
     public <OUT> InternalStateFuture<OUT> create(RecordContext<K> context) {
-        return new ContextStateFutureImpl<>(
+        return new ContextAsyncFutureImpl<>(
                 (runnable) ->
                         callbackRunner.submit(
                                 () -> {

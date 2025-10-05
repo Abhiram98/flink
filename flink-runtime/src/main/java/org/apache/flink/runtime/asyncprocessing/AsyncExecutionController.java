@@ -107,7 +107,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
      * A factory to build {@link org.apache.flink.core.state.InternalStateFuture}, this will auto
      * wire the created future with mailbox executor. Also conducting the context switch.
      */
-    private final StateFutureFactory<K> stateFutureFactory;
+    private final AsyncFutureFactory<K> stateFutureFactory;
 
     /** The state executor where the {@link StateRequest} is actually executed. */
     private final StateExecutor stateExecutor;
@@ -119,7 +119,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
     RecordContext<K> currentContext;
 
     /** The buffer to store the state requests to execute in batch. */
-    StateRequestBuffer<K> stateRequestsBuffer;
+    StateRequestBuffer<K> asyncRequestsBuffer;
 
     /**
      * The number of in-flight records. Including the records in active buffer and blocking buffer.
@@ -165,7 +165,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
         this.mailboxExecutor = mailboxExecutor;
         this.exceptionHandler = exceptionHandler;
         this.callbackRunner = new CallbackRunnerWrapper(mailboxExecutor, this::notifyNewMail);
-        this.stateFutureFactory = new StateFutureFactory<>(this, callbackRunner, exceptionHandler);
+        this.stateFutureFactory = new AsyncFutureFactory<>(this, callbackRunner, exceptionHandler);
 
         this.stateExecutor = stateExecutor;
         this.declarationManager = declarationManager;
@@ -174,14 +174,14 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
         this.maxInFlightRecordNum = maxInFlightRecords;
         this.inFlightRecordNum = new AtomicInteger(0);
         this.maxParallelism = maxParallelism;
-        this.stateRequestsBuffer =
+        this.asyncRequestsBuffer =
                 new StateRequestBuffer<>(
                         bufferTimeout,
                         bufferTimeoutCheckInterval,
                         (scheduledSeq) ->
                                 mailboxExecutor.execute(
                                         () -> {
-                                            if (stateRequestsBuffer.checkCurrentSeq(scheduledSeq)) {
+                                            if (asyncRequestsBuffer.checkCurrentSeq(scheduledSeq)) {
                                                 triggerIfNeeded(true);
                                             }
                                         },
@@ -191,9 +191,9 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
         this.switchContextListener = switchContextListener;
         if (metricGroup != null) {
             metricGroup.gauge("numInFlightRecords", this::getInFlightRecordNum);
-            metricGroup.gauge("activeBufferSize", () -> stateRequestsBuffer.activeQueueSize());
-            metricGroup.gauge("blockingBufferSize", () -> stateRequestsBuffer.blockingQueueSize());
-            metricGroup.gauge("numBlockingKeys", () -> stateRequestsBuffer.blockingKeyNum());
+            metricGroup.gauge("activeBufferSize", () -> asyncRequestsBuffer.activeQueueSize());
+            metricGroup.gauge("blockingBufferSize", () -> asyncRequestsBuffer.blockingQueueSize());
+            metricGroup.gauge("numBlockingKeys", () -> asyncRequestsBuffer.blockingKeyNum());
         }
         LOG.info(
                 "Create AsyncExecutionController: batchSize {}, bufferTimeout {}, maxInFlightRecordNum {}, epochParallelMode {}",
@@ -278,7 +278,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
         keyAccountingUnit.release(toDispose.getRecord(), toDispose.getKey());
         inFlightRecordNum.decrementAndGet();
         StateRequest<K, ?, ?, ?> nextRequest =
-                stateRequestsBuffer.unblockOneByKey(toDispose.getKey());
+                asyncRequestsBuffer.unblockOneByKey(toDispose.getKey());
         if (nextRequest != null) {
             Preconditions.checkState(tryOccupyKey(nextRequest.getRecordContext()));
             insertActiveBuffer(nextRequest);
@@ -399,12 +399,12 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
                 stateExecutor.executeRequestSync(request);
             }
         } else {
-            stateRequestsBuffer.enqueueToActive(request);
+            asyncRequestsBuffer.enqueueToActive(request);
         }
     }
 
     <IN, OUT> void insertBlockingBuffer(StateRequest<K, ?, IN, OUT> request) {
-        stateRequestsBuffer.enqueueToBlocking(request);
+        asyncRequestsBuffer.enqueueToBlocking(request);
     }
 
     /**
@@ -413,18 +413,18 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
      * @param force whether to trigger requests in force.
      */
     public boolean triggerIfNeeded(boolean force) {
-        if (!force && stateRequestsBuffer.activeQueueSize() < batchSize) {
+        if (!force && asyncRequestsBuffer.activeQueueSize() < batchSize) {
             return false;
         }
 
         Optional<StateRequestContainer> toRun =
-                stateRequestsBuffer.popActive(
+                asyncRequestsBuffer.popActive(
                         batchSize, () -> stateExecutor.createStateRequestContainer());
         if (!toRun.isPresent() || toRun.get().isEmpty()) {
             return false;
         }
         stateExecutor.executeBatchRequests(toRun.get());
-        stateRequestsBuffer.advanceSeq();
+        asyncRequestsBuffer.advanceSeq();
         return true;
     }
 
@@ -616,7 +616,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
 
     @Override
     public void close() throws IOException {
-        stateRequestsBuffer.close();
+        asyncRequestsBuffer.close();
     }
 
     /** A listener listens the key context switch. */

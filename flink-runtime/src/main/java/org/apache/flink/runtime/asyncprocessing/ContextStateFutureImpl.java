@@ -35,11 +35,11 @@ import org.apache.flink.core.state.StateFutureImpl;
  * <li>Please refer to {@code ContextStateFutureImplTest} where the reference counting is carefully
  *     tested.
  */
-public class ContextStateFutureImpl<T> extends StateFutureImpl<T> {
+public class ContextAsyncFutureImpl<T> extends StateFutureImpl<T> {
 
     private final RecordContext<?> recordContext;
 
-    ContextStateFutureImpl(
+    ContextAsyncFutureImpl(
             CallbackRunner callbackRunner,
             AsyncFrameworkExceptionHandler exceptionHandler,
             RecordContext<?> recordContext) {
@@ -53,7 +53,7 @@ public class ContextStateFutureImpl<T> extends StateFutureImpl<T> {
 
     @Override
     public <A> StateFutureImpl<A> makeNewStateFuture() {
-        return new ContextStateFutureImpl<>(callbackRunner, exceptionHandler, recordContext);
+        return new ContextAsyncFutureImpl<>(callbackRunner, exceptionHandler, recordContext);
     }
 
     @Override
