@@ -243,7 +243,7 @@ public class BasicTypeInfo<T> extends TypeInformation<T> implements AtomicType<T
     @Override
     @PublicEvolving
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         if (comparatorClass != null) {
             return instantiateComparator(comparatorClass, sortOrderAscending);
         } else {

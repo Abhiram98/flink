@@ -113,7 +113,7 @@ public class LocalTimeTypeInfo<T extends Temporal> extends TypeInformation<T>
 
     @Override
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         return instantiateComparator(comparatorClass, sortOrderAscending);
     }
 
