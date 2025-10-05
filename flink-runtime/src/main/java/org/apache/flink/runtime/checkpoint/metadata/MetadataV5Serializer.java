@@ -22,7 +22,7 @@ import org.apache.flink.runtime.checkpoint.FinishedOperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.FullyFinishedOperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.memory.ByteStreamStateHandle;
 
 import javax.annotation.Nullable;
@@ -69,7 +69,7 @@ public class MetadataV5Serializer extends MetadataV4Serializer {
         final String name = dis.readUTF();
         final String uid = dis.readUTF();
 
-        final OperatorID jobVertexId = new OperatorID(dis.readLong(), dis.readLong());
+        final VertexID jobVertexId = new VertexID(dis.readLong(), dis.readLong());
         final int parallelism = dis.readInt();
         final int maxParallelism = dis.readInt();
 

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.jobgraph.tasks;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmaster.JobMasterOperatorEventGateway;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
  * the complete context, which keeps dependencies small and makes testing easier.
  *
  * <pre>
- *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link OperatorID}, and
+ *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link VertexID}, and
  *         forwards it to:</li>
  *     <li>{@link TaskOperatorEventGateway} enriches the event with the {@link ExecutionAttemptID} and
  *         forwards it to the:</li>
@@ -51,12 +51,12 @@ public interface TaskOperatorEventGateway {
      * Sends an event from the operator (identified by the given operator ID) to the operator
      * coordinator (identified by the same ID).
      */
-    void sendOperatorEventToCoordinator(OperatorID operator, SerializedValue<OperatorEvent> event);
+    void sendOperatorEventToCoordinator(VertexID operator, SerializedValue<OperatorEvent> event);
 
     /**
      * Sends a request from current operator to a specified operator coordinator which is identified
      * by the given operator ID and return the response.
      */
     CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operator, SerializedValue<CoordinationRequest> request);
+            VertexID operator, SerializedValue<CoordinationRequest> request);
 }

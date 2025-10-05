@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.taskexecutor.rpc;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterOperatorEventGateway;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -55,7 +55,7 @@ public class RpcTaskOperatorEventGateway implements TaskOperatorEventGateway {
 
     @Override
     public void sendOperatorEventToCoordinator(
-            OperatorID operator, SerializedValue<OperatorEvent> event) {
+            VertexID operator, SerializedValue<OperatorEvent> event) {
         final CompletableFuture<Acknowledge> result =
                 rpcGateway.sendOperatorEventToCoordinator(taskExecutionId, operator, event);
 
@@ -69,7 +69,7 @@ public class RpcTaskOperatorEventGateway implements TaskOperatorEventGateway {
 
     @Override
     public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operator, SerializedValue<CoordinationRequest> request) {
+            VertexID operator, SerializedValue<CoordinationRequest> request) {
         return rpcGateway.sendRequestToCoordinator(operator, request);
     }
 }

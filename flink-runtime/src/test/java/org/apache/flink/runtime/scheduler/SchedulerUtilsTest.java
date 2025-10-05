@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StandaloneCheckpointIDCounter;
 import org.apache.flink.runtime.checkpoint.StandaloneCheckpointRecoveryFactory;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.IncrementalKeyedStateHandle.HandleAndLocalPath;
 import org.apache.flink.runtime.state.IncrementalRemoteKeyedStateHandle;
 import org.apache.flink.runtime.state.KeyGroupRange;
@@ -152,7 +152,7 @@ class SchedulerUtilsTest {
     }
 
     private CompletedCheckpoint buildCheckpoint(KeyedStateHandle incremental) {
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         OperatorState operatorState = new OperatorState(null, null, operatorID, 1, 1);
         operatorState.putState(
                 0, OperatorSubtaskState.builder().setManagedKeyedState(incremental).build());

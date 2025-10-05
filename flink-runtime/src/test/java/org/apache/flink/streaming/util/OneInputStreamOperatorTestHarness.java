@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.util;
 
 import org.apache.flink.api.common.typeutils.TypeSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.streaming.api.operators.BoundedOneInput;
 import org.apache.flink.streaming.api.operators.Input;
@@ -70,7 +70,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             int parallelism,
             int subtaskIndex,
             TypeSerializer<IN> typeSerializerIn,
-            OperatorID operatorID)
+            VertexID operatorID)
             throws Exception {
         this(
                 SimpleOperatorFactory.of(operator),
@@ -118,7 +118,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             int parallelism,
             int subtaskIndex)
             throws Exception {
-        this(operatorFactory, maxParallelism, parallelism, subtaskIndex, new OperatorID());
+        this(operatorFactory, maxParallelism, parallelism, subtaskIndex, new VertexID());
     }
 
     public OneInputStreamOperatorTestHarness(
@@ -126,7 +126,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             int maxParallelism,
             int parallelism,
             int subtaskIndex,
-            OperatorID operatorID)
+            VertexID operatorID)
             throws Exception {
         super(operatorFactory, maxParallelism, parallelism, subtaskIndex, operatorID);
     }
@@ -169,7 +169,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             int parallelism,
             int subtaskIndex)
             throws Exception {
-        this(factory, maxParallelism, parallelism, subtaskIndex, new OperatorID());
+        this(factory, maxParallelism, parallelism, subtaskIndex, new VertexID());
     }
 
     public OneInputStreamOperatorTestHarness(
@@ -177,7 +177,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             int maxParallelism,
             int parallelism,
             int subtaskIndex,
-            OperatorID operatorID)
+            VertexID operatorID)
             throws Exception {
         super(factory, maxParallelism, parallelism, subtaskIndex, operatorID);
     }
@@ -186,7 +186,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
             OneInputStreamOperator<IN, OUT> operator,
             TypeSerializer<IN> typeSerializerIn,
             String taskName,
-            OperatorID operatorID)
+            VertexID operatorID)
             throws Exception {
         super(operator, taskName, operatorID);
 

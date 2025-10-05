@@ -29,7 +29,7 @@ import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetrics;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.checkpoint.channel.SequentialChannelStateReader;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandle;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorageView;
@@ -95,7 +95,7 @@ public interface TaskStateManager extends CheckpointListener, AutoCloseable {
      *     no previous state.
      */
     @Nonnull
-    PrioritizedOperatorSubtaskState prioritizedOperatorState(OperatorID operatorID);
+    PrioritizedOperatorSubtaskState prioritizedOperatorState(VertexID operatorID);
 
     /**
      * Get the restored state from jobManager which belongs to an operator running in the owning
@@ -104,7 +104,7 @@ public interface TaskStateManager extends CheckpointListener, AutoCloseable {
      * @param operatorID the id of the operator for which we request state.
      * @return the subtask restored state from jobManager.
      */
-    Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OperatorID operatorID);
+    Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(VertexID operatorID);
 
     /**
      * Returns the configuration for local recovery, i.e. the base directories for all file-based

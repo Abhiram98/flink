@@ -28,7 +28,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.streaming.api.operators.CoordinatedOperatorFactory;
@@ -419,7 +419,7 @@ public class StreamNode implements Serializable {
     }
 
     public Optional<OperatorCoordinator.Provider> getCoordinatorProvider(
-            String operatorName, OperatorID operatorID) {
+            String operatorName, VertexID operatorID) {
         if (operatorFactory != null && operatorFactory instanceof CoordinatedOperatorFactory) {
             return Optional.of(
                     ((CoordinatedOperatorFactory) operatorFactory)

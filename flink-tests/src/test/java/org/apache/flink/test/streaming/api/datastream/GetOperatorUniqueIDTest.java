@@ -21,6 +21,7 @@ package org.apache.flink.test.streaming.api.datastream;
 import org.apache.flink.api.common.functions.AbstractRichFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.operators.StreamingRuntimeContext;
 import org.apache.flink.util.TestLogger;
@@ -30,7 +31,7 @@ import org.junit.Test;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.junit.Assert.assertEquals;
 
-/** Tests the uid translation to {@link org.apache.flink.runtime.jobgraph.OperatorID}. */
+/** Tests the uid translation to {@link VertexID}. */
 @SuppressWarnings("serial")
 public class GetOperatorUniqueIDTest extends TestLogger {
 

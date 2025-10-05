@@ -35,11 +35,8 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -176,7 +173,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
 
     /**
      * Delivers the given OperatorEvent to the {@link OperatorCoordinator} with the given {@link
-     * OperatorID}.
+     * VertexID}.
      *
      * <p>Failure semantics: If the task manager sends an event for a non-running task or a
      * non-existing operator coordinator, then respond with an exception to the call. If task and
@@ -187,19 +184,19 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
      *     for the given ID.
      */
     void deliverOperatorEventToCoordinator(
-            ExecutionAttemptID taskExecution, OperatorID operator, OperatorEvent evt)
+            ExecutionAttemptID taskExecution, VertexID operator, OperatorEvent evt)
             throws FlinkException;
 
     /**
      * Delivers a coordination request to the {@link OperatorCoordinator} with the given {@link
-     * OperatorID} and returns the coordinator's response.
+     * VertexID} and returns the coordinator's response.
      *
      * @return A future containing the response.
      * @throws FlinkException Thrown, if the task is not running, or no operator/coordinator exists
      *     for the given ID, or the coordinator cannot handle client events.
      */
     CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException;
+            VertexID operator, CoordinationRequest request) throws FlinkException;
 
     /**
      * Notifies that the task has reached the end of data.

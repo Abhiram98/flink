@@ -45,7 +45,7 @@ import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.externalresource.ExternalResourceInfoProvider;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.query.KvStateRegistry;
@@ -432,7 +432,7 @@ class StreamingRuntimeContextTest {
             throws Exception {
 
         StreamConfig streamConfig = new StreamConfig(new Configuration());
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
         AbstractStreamOperator<?> operator =
                 new AbstractStreamOperator<Object>(
                         new StreamOperatorParameters<>(
@@ -575,7 +575,7 @@ class StreamingRuntimeContextTest {
                         any(ListStateDescriptor.class));
 
         when(operatorMock.getKeyedStateStore()).thenReturn(keyedStateStore);
-        when(operatorMock.getOperatorID()).thenReturn(new OperatorID());
+        when(operatorMock.getOperatorID()).thenReturn(new VertexID());
         return operatorMock;
     }
 
@@ -648,7 +648,7 @@ class StreamingRuntimeContextTest {
                         any(MapStateDescriptor.class));
 
         when(operatorMock.getKeyedStateStore()).thenReturn(keyedStateStore);
-        when(operatorMock.getOperatorID()).thenReturn(new OperatorID());
+        when(operatorMock.getOperatorID()).thenReturn(new VertexID());
         when(operatorMock.getProcessingTimeService()).thenReturn(new TestProcessingTimeService());
         return operatorMock;
     }

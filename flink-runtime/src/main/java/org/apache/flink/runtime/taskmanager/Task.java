@@ -64,7 +64,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointableTask;
 import org.apache.flink.runtime.jobgraph.tasks.CoordinatedTask;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
@@ -1531,7 +1531,7 @@ public class Task
      * @throws FlinkException This method throws exceptions indicating the reason why delivery did
      *     not succeed.
      */
-    public void deliverOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> evt)
+    public void deliverOperatorEvent(VertexID operator, SerializedValue<OperatorEvent> evt)
             throws FlinkException {
         final TaskInvokable invokable = this.invokable;
         final ExecutionState currentState = this.executionState;

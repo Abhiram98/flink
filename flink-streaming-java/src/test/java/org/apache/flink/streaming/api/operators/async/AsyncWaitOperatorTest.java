@@ -34,7 +34,7 @@ import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.state.TestTaskStateManager;
@@ -624,7 +624,7 @@ public class AsyncWaitOperatorTest {
                         lazyAsyncFunction, TIMEOUT, 4, AsyncDataStream.OutputMode.ORDERED);
 
         final StreamConfig streamConfig = testHarness.getStreamConfig();
-        OperatorID operatorID = new OperatorID(42L, 4711L);
+        VertexID operatorID = new VertexID(42L, 4711L);
         streamConfig.setStreamOperatorFactory(factory);
         streamConfig.setOperatorID(operatorID);
 

@@ -41,7 +41,7 @@ public class InputOutputFormatVertex extends JobVertex {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<OperatorID, String> formatDescriptions = new HashMap<>();
+    private final Map<VertexID, String> formatDescriptions = new HashMap<>();
 
     public InputOutputFormatVertex(String name) {
         super(name);
@@ -64,13 +64,13 @@ public class InputOutputFormatVertex extends JobVertex {
             Thread.currentThread().setContextClassLoader(loader);
 
             // configure the input format and setup input splits
-            Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+            Map<VertexID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                     formatContainer.getInputFormats();
             if (inputFormats.size() > 1) {
                 throw new UnsupportedOperationException(
                         "Multiple input formats are not supported in a job vertex.");
             }
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> entry :
+            for (Map.Entry<VertexID, UserCodeWrapper<? extends InputFormat<?, ?>>> entry :
                     inputFormats.entrySet()) {
                 final InputFormat<?, ?> inputFormat;
 
@@ -90,9 +90,9 @@ public class InputOutputFormatVertex extends JobVertex {
             }
 
             // configure output formats and invoke initializeGlobal()
-            Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+            Map<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                     formatContainer.getOutputFormats();
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
+            for (Map.Entry<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
                     outputFormats.entrySet()) {
                 final OutputFormat<?> outputFormat;
 
@@ -130,9 +130,9 @@ public class InputOutputFormatVertex extends JobVertex {
             Thread.currentThread().setContextClassLoader(loader);
 
             // configure output formats and invoke finalizeGlobal()
-            Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+            Map<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                     formatContainer.getOutputFormats();
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
+            for (Map.Entry<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
                     outputFormats.entrySet()) {
                 final OutputFormat<?> outputFormat;
 
@@ -171,11 +171,11 @@ public class InputOutputFormatVertex extends JobVertex {
         }
     }
 
-    public String getFormatDescription(OperatorID operatorID) {
+    public String getFormatDescription(VertexID operatorID) {
         return formatDescriptions.get(operatorID);
     }
 
-    public void setFormatDescription(OperatorID operatorID, String formatDescription) {
+    public void setFormatDescription(VertexID operatorID, String formatDescription) {
         formatDescriptions.put(checkNotNull(operatorID), formatDescription);
     }
 

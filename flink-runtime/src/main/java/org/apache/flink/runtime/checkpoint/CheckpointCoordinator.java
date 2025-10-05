@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -228,7 +228,7 @@ public class CheckpointCoordinator {
 
     private final BiFunction<
                     Set<ExecutionJobVertex>,
-                    Map<OperatorID, OperatorState>,
+                    Map<VertexID, OperatorState>,
                     VertexFinishedStateChecker>
             vertexFinishedStateCheckerFactory;
 
@@ -250,7 +250,7 @@ public class CheckpointCoordinator {
 
     /** IDs of the source operators that are currently processing backlog. */
     @GuardedBy("lock")
-    private final Set<OperatorID> backlogOperators = new HashSet<>();
+    private final Set<VertexID> backlogOperators = new HashSet<>();
 
     private boolean baseLocationsForCheckpointInitialized = false;
 
@@ -306,7 +306,7 @@ public class CheckpointCoordinator {
             CheckpointStatsTracker statsTracker,
             BiFunction<
                             Set<ExecutionJobVertex>,
-                            Map<OperatorID, OperatorState>,
+                            Map<VertexID, OperatorState>,
                             VertexFinishedStateChecker>
                     vertexFinishedStateCheckerFactory) {
 
@@ -472,7 +472,7 @@ public class CheckpointCoordinator {
      * @param operatorID the operator ID of the source operator.
      * @param isProcessingBacklog whether the source operator is processing backlog.
      */
-    public void setIsProcessingBacklog(OperatorID operatorID, boolean isProcessingBacklog) {
+    public void setIsProcessingBacklog(VertexID operatorID, boolean isProcessingBacklog) {
         synchronized (lock) {
             if (isProcessingBacklog) {
                 backlogOperators.add(operatorID);
@@ -1806,7 +1806,7 @@ public class CheckpointCoordinator {
             this.forceFullSnapshot = latest.getProperties().isUnclaimed();
 
             // re-assign the task states
-            final Map<OperatorID, OperatorState> operatorStates = extractOperatorStates(latest);
+            final Map<VertexID, OperatorState> operatorStates = extractOperatorStates(latest);
 
             if (checkForPartiallyFinishedOperators) {
                 VertexFinishedStateChecker vertexFinishedStateChecker =
@@ -1840,15 +1840,15 @@ public class CheckpointCoordinator {
         }
     }
 
-    private Map<OperatorID, OperatorState> extractOperatorStates(CompletedCheckpoint checkpoint) {
-        Map<OperatorID, OperatorState> originalOperatorStates = checkpoint.getOperatorStates();
+    private Map<VertexID, OperatorState> extractOperatorStates(CompletedCheckpoint checkpoint) {
+        Map<VertexID, OperatorState> originalOperatorStates = checkpoint.getOperatorStates();
 
         if (checkpoint.getCheckpointID() != checkpointIdOfIgnoredInFlightData) {
             // Don't do any changes if it is not required.
             return originalOperatorStates;
         }
 
-        HashMap<OperatorID, OperatorState> newStates = new HashMap<>();
+        HashMap<VertexID, OperatorState> newStates = new HashMap<>();
         // Create the new operator states without in-flight data.
         for (OperatorState originalOperatorState : originalOperatorStates.values()) {
             newStates.put(
@@ -2123,7 +2123,7 @@ public class CheckpointCoordinator {
     }
 
     private void restoreStateToCoordinators(
-            final long checkpointId, final Map<OperatorID, OperatorState> operatorStates)
+            final long checkpointId, final Map<VertexID, OperatorState> operatorStates)
             throws Exception {
 
         for (OperatorCoordinatorCheckpointContext coordContext : coordinatorsToCheckpoint) {

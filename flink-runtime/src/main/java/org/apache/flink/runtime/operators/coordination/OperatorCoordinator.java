@@ -24,7 +24,7 @@ import org.apache.flink.api.common.state.CheckpointListener;
 import org.apache.flink.metrics.groups.OperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.messages.Acknowledge;
 
 import javax.annotation.Nullable;
@@ -262,7 +262,7 @@ public interface OperatorCoordinator extends CheckpointListener, AutoCloseable {
         JobID getJobID();
 
         /** Gets the ID of the operator to which the coordinator belongs. */
-        OperatorID getOperatorId();
+        VertexID getOperatorId();
 
         /** Gets the metric group of the operator coordinator. */
         OperatorCoordinatorMetricGroup metricGroup();
@@ -344,7 +344,7 @@ public interface OperatorCoordinator extends CheckpointListener, AutoCloseable {
     interface Provider extends Serializable {
 
         /** Gets the ID of the operator to which the coordinator belongs. */
-        OperatorID getOperatorId();
+        VertexID getOperatorId();
 
         /** Creates the {@code OperatorCoordinator}, using the given context. */
         OperatorCoordinator create(Context context) throws Exception;

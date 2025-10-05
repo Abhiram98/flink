@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.OperatorCoordinatorCheckpointContext;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.operators.coordination.util.IncompleteFuturesTracker;
@@ -105,7 +105,7 @@ public class OperatorCoordinatorHolder
     private static final Logger LOG = LoggerFactory.getLogger(OperatorCoordinatorHolder.class);
 
     private final OperatorCoordinator coordinator;
-    private final OperatorID operatorId;
+    private final VertexID operatorId;
     private final LazyInitializedCoordinatorContext context;
     private final SubtaskAccess.SubtaskAccessFactory taskAccesses;
 
@@ -126,7 +126,7 @@ public class OperatorCoordinatorHolder
     private int operatorParallelism;
 
     private OperatorCoordinatorHolder(
-            final OperatorID operatorId,
+            final VertexID operatorId,
             final OperatorCoordinator coordinator,
             final LazyInitializedCoordinatorContext context,
             final SubtaskAccess.SubtaskAccessFactory taskAccesses,
@@ -181,7 +181,7 @@ public class OperatorCoordinatorHolder
     }
 
     @Override
-    public OperatorID operatorId() {
+    public VertexID operatorId() {
         return operatorId;
     }
 
@@ -495,7 +495,7 @@ public class OperatorCoordinatorHolder
         try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(classLoader)) {
             final OperatorCoordinator.Provider provider =
                     serializedProvider.deserializeValue(classLoader);
-            final OperatorID opId = provider.getOperatorId();
+            final VertexID opId = provider.getOperatorId();
 
             final SubtaskAccess.SubtaskAccessFactory taskAccesses =
                     new ExecutionSubtaskAccess.ExecutionJobVertexSubtaskAccess(jobVertex, opId);
@@ -517,7 +517,7 @@ public class OperatorCoordinatorHolder
 
     @VisibleForTesting
     static OperatorCoordinatorHolder create(
-            final OperatorID opId,
+            final VertexID opId,
             final OperatorCoordinator.Provider coordinatorProvider,
             final CoordinatorStore coordinatorStore,
             final String operatorName,
@@ -577,7 +577,7 @@ public class OperatorCoordinatorHolder
                 LoggerFactory.getLogger(LazyInitializedCoordinatorContext.class);
 
         private final JobID jobID;
-        private final OperatorID operatorId;
+        private final VertexID operatorId;
         private final String operatorName;
         private final ClassLoader userCodeClassLoader;
         private final CoordinatorStore coordinatorStore;
@@ -593,7 +593,7 @@ public class OperatorCoordinatorHolder
 
         public LazyInitializedCoordinatorContext(
                 JobID jobID,
-                final OperatorID operatorId,
+                final VertexID operatorId,
                 final String operatorName,
                 final ClassLoader userCodeClassLoader,
                 final int operatorParallelism,
@@ -645,7 +645,7 @@ public class OperatorCoordinatorHolder
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public VertexID getOperatorId() {
             return operatorId;
         }
 

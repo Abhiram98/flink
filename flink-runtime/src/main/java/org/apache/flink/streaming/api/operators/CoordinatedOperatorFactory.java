@@ -19,7 +19,7 @@ limitations under the License.
 package org.apache.flink.streaming.api.operators;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 
 /**
@@ -44,5 +44,5 @@ public interface CoordinatedOperatorFactory<OUT> extends StreamOperatorFactory<O
      * @param operatorID the id of the operator.
      * @return the provider of the {@link OperatorCoordinator} for this operator.
      */
-    OperatorCoordinator.Provider getCoordinatorProvider(String operatorName, OperatorID operatorID);
+    OperatorCoordinator.Provider getCoordinatorProvider(String operatorName, VertexID operatorID);
 }

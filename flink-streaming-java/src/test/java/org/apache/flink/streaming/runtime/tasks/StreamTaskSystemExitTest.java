@@ -40,7 +40,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManagerBuilder;
 import org.apache.flink.runtime.memory.SharedResources;
@@ -156,7 +156,7 @@ class StreamTaskSystemExitTest {
             throws Exception {
         final Configuration taskConfiguration = new Configuration();
         final StreamConfig streamConfig = new StreamConfig(taskConfiguration);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
         streamConfig.setStreamOperator(operator);
         streamConfig.serializeAllConfigs();
 

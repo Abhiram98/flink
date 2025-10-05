@@ -21,7 +21,7 @@ package org.apache.flink.runtime.checkpoint.filemerging;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.TaskInfo;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.IncrementalRemoteKeyedStateHandle;
 import org.apache.flink.runtime.state.KeyGroupsStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
@@ -51,7 +51,7 @@ public class SubtaskFileMergingManagerRestoreOperation {
     private final TaskInfo taskInfo;
 
     /** The id of the operator to which the subtask belongs. */
-    private final OperatorID operatorID;
+    private final VertexID operatorID;
 
     private final FileMergingSnapshotManager fileMergingSnapshotManager;
 
@@ -63,7 +63,7 @@ public class SubtaskFileMergingManagerRestoreOperation {
             FileMergingSnapshotManager fileMergingSnapshotManager,
             JobID jobID,
             TaskInfo taskInfo,
-            OperatorID operatorID,
+            VertexID operatorID,
             OperatorSubtaskState subtaskState) {
         this.checkpointId = checkpointId;
         this.fileMergingSnapshotManager = fileMergingSnapshotManager;

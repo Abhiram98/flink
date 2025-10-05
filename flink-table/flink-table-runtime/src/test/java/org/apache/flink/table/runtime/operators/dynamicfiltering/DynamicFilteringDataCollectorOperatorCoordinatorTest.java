@@ -18,7 +18,7 @@
 
 package org.apache.flink.table.runtime.operators.dynamicfiltering;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.MockOperatorCoordinatorContext;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.operators.coordination.TestingOperatorCoordinator;
@@ -44,7 +44,7 @@ class DynamicFilteringDataCollectorOperatorCoordinatorTest {
     @Test
     void testRedistributeData() throws Exception {
         MockOperatorCoordinatorContext context =
-                new MockOperatorCoordinatorContext(new OperatorID(), 1);
+                new MockOperatorCoordinatorContext(new VertexID(), 1);
         String listenerID1 = "test-listener-1";
         String listenerID2 = "test-listener-2";
 
@@ -70,7 +70,7 @@ class DynamicFilteringDataCollectorOperatorCoordinatorTest {
     @Test
     void testTaskFailover() throws Exception {
         MockOperatorCoordinatorContext context =
-                new MockOperatorCoordinatorContext(new OperatorID(), 1);
+                new MockOperatorCoordinatorContext(new VertexID(), 1);
         String listenerID = "test-listener-1";
 
         TestingOperatorCoordinator listener = new TestingOperatorCoordinator(context);

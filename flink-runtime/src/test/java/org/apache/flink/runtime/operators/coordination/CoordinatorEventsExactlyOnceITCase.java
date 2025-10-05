@@ -33,7 +33,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -182,7 +182,7 @@ public class CoordinatorEventsExactlyOnceITCase {
     private static JobVertex buildJobVertex(String name, int numEvents, int delay)
             throws IOException {
         final JobVertex vertex = new JobVertex(name);
-        final OperatorID opId = OperatorID.fromJobVertexID(vertex.getID());
+        final VertexID opId = VertexID.fromJobVertexID(vertex.getID());
 
         vertex.setParallelism(1);
         vertex.setInvokableClass(EventCollectingTask.class);
@@ -192,7 +192,7 @@ public class CoordinatorEventsExactlyOnceITCase {
                 new OperatorCoordinator.Provider() {
 
                     @Override
-                    public OperatorID getOperatorId() {
+                    public VertexID getOperatorId() {
                         return opId;
                     }
 
@@ -558,7 +558,7 @@ public class CoordinatorEventsExactlyOnceITCase {
      */
     public static final class EventCollectingTask extends AbstractInvokable {
 
-        private final OperatorID operatorID;
+        private final VertexID operatorID;
         private final String accumulatorName;
         private final LinkedBlockingQueue<Object> actions;
 
@@ -566,7 +566,7 @@ public class CoordinatorEventsExactlyOnceITCase {
 
         public EventCollectingTask(Environment environment) {
             super(environment);
-            this.operatorID = OperatorID.fromJobVertexID(environment.getJobVertexId());
+            this.operatorID = VertexID.fromJobVertexID(environment.getJobVertexId());
             this.accumulatorName = environment.getTaskConfiguration().get(ACC_NAME);
             this.actions = new LinkedBlockingQueue<>();
         }
@@ -644,7 +644,7 @@ public class CoordinatorEventsExactlyOnceITCase {
         }
 
         @Override
-        public void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event)
+        public void dispatchOperatorEvent(VertexID operator, SerializedValue<OperatorEvent> event)
                 throws FlinkException {
             try {
                 final OperatorEvent opEvent = event.deserializeValue(getUserCodeClassLoader());
@@ -745,7 +745,7 @@ public class CoordinatorEventsExactlyOnceITCase {
                 byteHandle.getData(), EventCollectingTask.class.getClassLoader());
     }
 
-    static TaskStateSnapshot createSnapshot(StreamStateHandle handle, OperatorID operatorId) {
+    static TaskStateSnapshot createSnapshot(StreamStateHandle handle, VertexID operatorId) {
         final OperatorStateHandle.StateMetaInfo metaInfo =
                 new OperatorStateHandle.StateMetaInfo(
                         new long[] {0}, OperatorStateHandle.Mode.SPLIT_DISTRIBUTE);
@@ -760,7 +760,7 @@ public class CoordinatorEventsExactlyOnceITCase {
     }
 
     @Nullable
-    static StreamStateHandle readSnapshot(TaskStateManager stateManager, OperatorID operatorId) {
+    static StreamStateHandle readSnapshot(TaskStateManager stateManager, VertexID operatorId) {
         final PrioritizedOperatorSubtaskState poss =
                 stateManager.prioritizedOperatorState(operatorId);
         if (!poss.isRestored()) {

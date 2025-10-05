@@ -25,7 +25,7 @@ import org.apache.flink.runtime.checkpoint.FullyFinishedOperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.InputStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -149,7 +149,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @Override
     protected OperatorState deserializeOperatorState(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
-        final OperatorID jobVertexId = new OperatorID(dis.readLong(), dis.readLong());
+        final VertexID jobVertexId = new VertexID(dis.readLong(), dis.readLong());
         final int parallelism = dis.readInt();
         final int maxParallelism = dis.readInt();
 

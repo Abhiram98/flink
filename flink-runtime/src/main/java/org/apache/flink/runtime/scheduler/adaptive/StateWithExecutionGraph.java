@@ -40,7 +40,7 @@ import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
@@ -368,14 +368,14 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     void deliverOperatorEventToCoordinator(
-            ExecutionAttemptID taskExecutionId, OperatorID operatorId, OperatorEvent evt)
+            ExecutionAttemptID taskExecutionId, VertexID operatorId, OperatorEvent evt)
             throws FlinkException {
         operatorCoordinatorHandler.deliverOperatorEventToCoordinator(
                 taskExecutionId, operatorId, evt);
     }
 
     CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operatorId, CoordinationRequest request) throws FlinkException {
+            VertexID operatorId, CoordinationRequest request) throws FlinkException {
         return operatorCoordinatorHandler.deliverCoordinationRequestToCoordinator(
                 operatorId, request);
     }

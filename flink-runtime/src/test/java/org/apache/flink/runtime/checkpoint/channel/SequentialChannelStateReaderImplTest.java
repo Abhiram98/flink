@@ -36,7 +36,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.BufferOrEvent;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateBuilder;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
 import org.apache.flink.runtime.state.memory.ByteStreamStateHandle;
@@ -267,7 +267,7 @@ public class SequentialChannelStateReaderImplTest {
             Tuple2<List<InputChannelStateHandle>, List<ResultSubpartitionStateHandle>> handles) {
         return new TaskStateSnapshot(
                 Collections.singletonMap(
-                        new OperatorID(),
+                        new VertexID(),
                         OperatorSubtaskState.builder()
                                 .setInputChannelState(castToInputStateCollection(handles.f0))
                                 .setResultSubpartitionState(castToOutputStateCollection(handles.f1))

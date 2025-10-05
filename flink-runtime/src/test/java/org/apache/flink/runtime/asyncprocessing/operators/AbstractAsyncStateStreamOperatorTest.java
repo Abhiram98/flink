@@ -25,7 +25,7 @@ import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.runtime.asyncprocessing.AsyncExecutionController;
 import org.apache.flink.runtime.asyncprocessing.StateExecutionController;
 import org.apache.flink.runtime.asyncprocessing.StateRequestType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.VoidNamespaceSerializer;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
@@ -290,7 +290,7 @@ public class AbstractAsyncStateStreamOperatorTest {
             testHarness.processElementInternal(new StreamRecord<>(Tuple2.of(5, "5")));
             CompletableFuture<Void> future =
                     testHarness.processLatencyMarkerInternal(
-                            new LatencyMarker(1234, new OperatorID(), 0));
+                            new LatencyMarker(1234, new VertexID(), 0));
 
             Thread.sleep(1000);
             assertThat(testOperator.getProcessed()).isEqualTo(1);

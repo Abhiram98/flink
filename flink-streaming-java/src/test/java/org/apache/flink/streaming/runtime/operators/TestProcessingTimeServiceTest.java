@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.runtime.operators;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.operators.StreamMap;
 import org.apache.flink.streaming.runtime.tasks.OneInputStreamTask;
@@ -51,7 +51,7 @@ class TestProcessingTimeServiceTest {
         StreamMap<String, String> mapOperator =
                 new StreamMap<>(new StreamTaskTimerITCase.DummyMapFunction<>());
         streamConfig.setStreamOperator(mapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         testHarness.invoke();
         testHarness.waitForTaskRunning();

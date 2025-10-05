@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorInfo;
 import org.apache.flink.runtime.state.CheckpointMetadataOutputStream;
 import org.apache.flink.runtime.state.CheckpointStorageLocation;
@@ -94,13 +94,13 @@ public class PendingCheckpoint implements Checkpoint {
 
     private final long checkpointTimestamp;
 
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<VertexID, OperatorState> operatorStates;
 
     private final CheckpointPlan checkpointPlan;
 
     private final Map<ExecutionAttemptID, ExecutionVertex> notYetAcknowledgedTasks;
 
-    private final Set<OperatorID> notYetAcknowledgedOperatorCoordinators;
+    private final Set<VertexID> notYetAcknowledgedOperatorCoordinators;
 
     private final List<MasterState> masterStates;
 
@@ -142,7 +142,7 @@ public class PendingCheckpoint implements Checkpoint {
             long checkpointId,
             long checkpointTimestamp,
             CheckpointPlan checkpointPlan,
-            Collection<OperatorID> operatorCoordinatorsToConfirm,
+            Collection<VertexID> operatorCoordinatorsToConfirm,
             Collection<String> masterStateIdentifiers,
             CheckpointProperties props,
             CompletableFuture<CompletedCheckpoint> onCompletionPromise,
@@ -227,7 +227,7 @@ public class PendingCheckpoint implements Checkpoint {
         return numAcknowledgedTasks;
     }
 
-    public Map<OperatorID, OperatorState> getOperatorStates() {
+    public Map<VertexID, OperatorState> getOperatorStates() {
         return operatorStates;
     }
 
@@ -499,7 +499,7 @@ public class PendingCheckpoint implements Checkpoint {
                 return TaskAcknowledgeResult.DISCARDED;
             }
 
-            final OperatorID operatorId = coordinatorInfo.operatorId();
+            final VertexID operatorId = coordinatorInfo.operatorId();
             OperatorState operatorState = operatorStates.get(operatorId);
 
             // sanity check for better error reporting

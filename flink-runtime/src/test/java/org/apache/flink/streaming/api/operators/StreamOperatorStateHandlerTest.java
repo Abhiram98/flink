@@ -27,7 +27,7 @@ import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.util.InterceptingOperatorMetricGroup;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.operators.testutils.MockEnvironmentBuilder;
@@ -102,7 +102,7 @@ class StreamOperatorStateHandlerTest {
                             new MockEnvironmentBuilder().build(), new HashMapStateBackend());
             StreamOperatorStateContext stateContext =
                     stateInitializer.streamOperatorStateContext(
-                            new OperatorID(),
+                            new VertexID(),
                             "whatever",
                             new TestProcessingTimeService(),
                             new UnUsedKeyContext(),

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.execution.RecoveryClaimMode;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.StateObject;
@@ -98,7 +98,7 @@ public class CompletedCheckpoint implements Serializable, Checkpoint {
     private final long completionTimestamp;
 
     /** States of the different operator groups belonging to this checkpoint. */
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<VertexID, OperatorState> operatorStates;
 
     /** Properties of this checkpoint. Might change during recovery. */
     private final CheckpointProperties props;
@@ -131,7 +131,7 @@ public class CompletedCheckpoint implements Serializable, Checkpoint {
             long checkpointID,
             long timestamp,
             long completionTimestamp,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<VertexID, OperatorState> operatorStates,
             @Nullable Collection<MasterState> masterHookStates,
             CheckpointProperties props,
             CompletedCheckpointStorageLocation storageLocation,
@@ -154,7 +154,7 @@ public class CompletedCheckpoint implements Serializable, Checkpoint {
             long checkpointID,
             long timestamp,
             long completionTimestamp,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<VertexID, OperatorState> operatorStates,
             @Nullable Collection<MasterState> masterHookStates,
             CheckpointProperties props,
             CompletedCheckpointStorageLocation storageLocation,
@@ -215,7 +215,7 @@ public class CompletedCheckpoint implements Serializable, Checkpoint {
         return Optional.ofNullable(restoredProps);
     }
 
-    public Map<OperatorID, OperatorState> getOperatorStates() {
+    public Map<VertexID, OperatorState> getOperatorStates() {
         return operatorStates;
     }
 

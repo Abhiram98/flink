@@ -28,7 +28,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.TaskManagerRegistrationInformation;
@@ -75,7 +75,7 @@ public class JobMasterTester implements Closeable {
     private static TaskStateSnapshot createNonEmptyStateSnapshot(TaskInformation taskInformation) {
         final TaskStateSnapshot checkpointStateHandles = new TaskStateSnapshot();
         checkpointStateHandles.putSubtaskStateByOperatorID(
-                OperatorID.fromJobVertexID(taskInformation.getJobVertexId()),
+                VertexID.fromJobVertexID(taskInformation.getJobVertexId()),
                 OperatorSubtaskState.builder()
                         .setManagedOperatorState(
                                 new OperatorStreamStateHandle(

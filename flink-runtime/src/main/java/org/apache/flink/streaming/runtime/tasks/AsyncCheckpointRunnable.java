@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetrics;
 import org.apache.flink.runtime.checkpoint.CheckpointMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.taskmanager.AsyncExceptionHandler;
 import org.apache.flink.runtime.taskmanager.AsynchronousException;
 import org.apache.flink.streaming.api.operators.OperatorSnapshotFinalizer;
@@ -72,7 +72,7 @@ final class AsyncCheckpointRunnable implements Runnable, Closeable {
     }
 
     private final AsyncExceptionHandler asyncExceptionHandler;
-    private final Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress;
+    private final Map<VertexID, OperatorSnapshotFutures> operatorSnapshotsInProgress;
     private final CheckpointMetaData checkpointMetaData;
     private final CheckpointMetricsBuilder checkpointMetrics;
     private final long asyncConstructionNanos;
@@ -80,7 +80,7 @@ final class AsyncCheckpointRunnable implements Runnable, Closeable {
             new AtomicReference<>(AsyncCheckpointState.RUNNING);
 
     AsyncCheckpointRunnable(
-            Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
+            Map<VertexID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
             CheckpointMetaData checkpointMetaData,
             CheckpointMetricsBuilder checkpointMetrics,
             long asyncConstructionNanos,
@@ -161,7 +161,7 @@ final class AsyncCheckpointRunnable implements Runnable, Closeable {
     }
 
     private SnapshotsFinalizeResult finalizedFinishedSnapshots() throws Exception {
-        for (Map.Entry<OperatorID, OperatorSnapshotFutures> entry :
+        for (Map.Entry<VertexID, OperatorSnapshotFutures> entry :
                 operatorSnapshotsInProgress.entrySet()) {
             OperatorSnapshotFutures snapshotInProgress = entry.getValue();
             // We should wait for the channels states get completed before continuing,
@@ -181,10 +181,10 @@ final class AsyncCheckpointRunnable implements Runnable, Closeable {
                 new TaskStateSnapshot(operatorSnapshotsInProgress.size(), isTaskFinished);
 
         long bytesPersistedDuringAlignment = 0;
-        for (Map.Entry<OperatorID, OperatorSnapshotFutures> entry :
+        for (Map.Entry<VertexID, OperatorSnapshotFutures> entry :
                 operatorSnapshotsInProgress.entrySet()) {
 
-            OperatorID operatorID = entry.getKey();
+            VertexID operatorID = entry.getKey();
             OperatorSnapshotFutures snapshotInProgress = entry.getValue();
 
             // finalize the async part of all by executing all snapshot runnables

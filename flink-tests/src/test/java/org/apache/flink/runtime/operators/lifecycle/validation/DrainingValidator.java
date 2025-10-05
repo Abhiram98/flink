@@ -19,7 +19,7 @@ package org.apache.flink.runtime.operators.lifecycle.validation;
 
 import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.lifecycle.TestJobWithDescription;
 import org.apache.flink.runtime.operators.lifecycle.command.TestCommand;
 import org.apache.flink.runtime.operators.lifecycle.event.InputEndedEvent;
@@ -127,7 +127,7 @@ public class DrainingValidator implements TestOperatorLifecycleValidator {
         Iterable<JobVertex> vertices = testJob.jobGraph.getVertices();
         for (JobVertex vertex : vertices) {
             for (OperatorIDPair p : vertex.getOperatorIDs()) {
-                OperatorID operatorID =
+                VertexID operatorID =
                         p.getUserDefinedOperatorID().orElse(p.getGeneratedOperatorID());
                 if (operatorID.toString().equals(operator)) {
                     // warn: this returns the number of network inputs

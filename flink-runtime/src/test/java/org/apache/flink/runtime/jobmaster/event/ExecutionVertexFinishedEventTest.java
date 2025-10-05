@@ -23,7 +23,7 @@ import org.apache.flink.api.common.accumulators.IntCounter;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.executiongraph.IOMetrics;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 import org.apache.flink.util.function.BiFunctionWithException;
 
@@ -47,15 +47,15 @@ class ExecutionVertexFinishedEventTest {
                 new TaskManagerLocation(
                         new ResourceID("tm-X"), InetAddress.getLoopbackAddress(), 46);
         // operator coordinator snapshots
-        final Map<OperatorID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
+        final Map<VertexID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
         byte[] bytes = new byte[2000];
         for (int i = 0; i < 3; ++i) {
             new Random(i).nextBytes(bytes);
-            operatorCoordinatorSnapshots.put(new OperatorID(), bytes);
+            operatorCoordinatorSnapshots.put(new VertexID(), bytes);
         }
 
         // operator coordinator snapshot futures
-        final Map<OperatorID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures =
+        final Map<VertexID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures =
                 new HashMap<>();
         operatorCoordinatorSnapshots.forEach(
                 (key, value) ->
@@ -122,8 +122,8 @@ class ExecutionVertexFinishedEventTest {
     }
 
     private static boolean snapshotsEquals(
-            Map<OperatorID, CompletableFuture<byte[]>> snapshotsA,
-            Map<OperatorID, CompletableFuture<byte[]>> snapshotsB)
+            Map<VertexID, CompletableFuture<byte[]>> snapshotsA,
+            Map<VertexID, CompletableFuture<byte[]>> snapshotsB)
             throws Exception {
         return mapEquals(
                 snapshotsA,

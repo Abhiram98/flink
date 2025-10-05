@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPool;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobAllocationsInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.SlotAllocator;
@@ -108,7 +108,7 @@ public class LocalRecoveryTest extends AdaptiveSchedulerTestBase {
         waitForCheckpointInProgress(scheduler);
 
         // Acknowledge the checkpoint for all tasks with the fake state.
-        final Map<OperatorID, OperatorSubtaskState> operatorStates =
+        final Map<VertexID, OperatorSubtaskState> operatorStates =
                 generateFakeKeyedManagedStateForAllOperators(jobGraph);
         runInMainThread(() -> acknowledgePendingCheckpoint(scheduler, 1, operatorStates));
 
@@ -196,10 +196,10 @@ public class LocalRecoveryTest extends AdaptiveSchedulerTestBase {
                         });
     }
 
-    private static Map<OperatorID, OperatorSubtaskState>
+    private static Map<VertexID, OperatorSubtaskState>
             generateFakeKeyedManagedStateForAllOperators(final JobGraph jobGraph)
                     throws IOException {
-        final Map<OperatorID, OperatorSubtaskState> operatorStates = new HashMap<>();
+        final Map<VertexID, OperatorSubtaskState> operatorStates = new HashMap<>();
         for (final JobVertex jobVertex : jobGraph.getVertices()) {
             final KeyedStateHandle keyedStateHandle =
                     generateKeyGroupState(

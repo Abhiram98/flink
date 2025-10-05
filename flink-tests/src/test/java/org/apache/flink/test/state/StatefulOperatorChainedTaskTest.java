@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.JobManagerTaskRestore;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.StateInitializationContext;
 import org.apache.flink.runtime.state.StateSnapshotContext;
@@ -63,7 +63,7 @@ import static org.junit.Assert.assertEquals;
 /** Test for StatefulOperatorChainedTaskTest. */
 public class StatefulOperatorChainedTaskTest {
 
-    private static final Set<OperatorID> RESTORED_OPERATORS = ConcurrentHashMap.newKeySet();
+    private static final Set<VertexID> RESTORED_OPERATORS = ConcurrentHashMap.newKeySet();
     private TemporaryFolder temporaryFolder;
 
     @Before
@@ -76,8 +76,8 @@ public class StatefulOperatorChainedTaskTest {
     @Test
     public void testMultipleStatefulOperatorChainedSnapshotAndRestore() throws Exception {
 
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        VertexID headOperatorID = new VertexID(42L, 42L);
+        VertexID tailOperatorID = new VertexID(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
@@ -103,9 +103,9 @@ public class StatefulOperatorChainedTaskTest {
     }
 
     private JobManagerTaskRestore createRunAndCheckpointOperatorChain(
-            OperatorID headId,
+            VertexID headId,
             OneInputStreamOperator<String, String> headOperator,
-            OperatorID tailId,
+            VertexID tailId,
             OneInputStreamOperator<String, String> tailOperator,
             Optional<JobManagerTaskRestore> restore)
             throws Exception {

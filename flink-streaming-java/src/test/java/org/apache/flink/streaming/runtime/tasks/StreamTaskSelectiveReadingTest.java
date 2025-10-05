@@ -20,7 +20,7 @@ package org.apache.flink.streaming.runtime.tasks;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
 import org.apache.flink.streaming.api.operators.BoundedMultiInput;
@@ -143,7 +143,7 @@ class StreamTaskSelectiveReadingTest {
         testHarness.setupOutputForSingletonOperatorChain();
         StreamConfig streamConfig = testHarness.getStreamConfig();
         streamConfig.setStreamOperator(streamOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         testHarness.invoke();
         testHarness.waitForTaskRunning();

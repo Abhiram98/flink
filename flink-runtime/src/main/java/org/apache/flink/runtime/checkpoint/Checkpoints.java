@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.metadata.MetadataSerializers;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataV6Serializer;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageLoader;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
@@ -151,7 +151,7 @@ public class Checkpoints {
         }
 
         // generate mapping from operator to task
-        Map<OperatorID, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
+        Map<VertexID, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
         for (ExecutionJobVertex task : tasks.values()) {
             for (OperatorIDPair operatorIDPair : task.getOperatorIDs()) {
                 operatorToJobVertexMapping.put(operatorIDPair.getGeneratedOperatorID(), task);
@@ -162,7 +162,7 @@ public class Checkpoints {
         }
 
         // (2) validate it (parallelism, etc)
-        HashMap<OperatorID, OperatorState> operatorStates =
+        HashMap<VertexID, OperatorState> operatorStates =
                 CollectionUtil.newHashMapWithExpectedSize(
                         checkpointMetadata.getOperatorStates().size());
         for (OperatorState operatorState : checkpointMetadata.getOperatorStates()) {
@@ -227,7 +227,7 @@ public class Checkpoints {
     }
 
     private static void throwNonRestoredStateException(
-            String checkpointPointer, OperatorID operatorId) {
+            String checkpointPointer, VertexID operatorId) {
         String msg =
                 String.format(
                         "Failed to rollback to checkpoint/savepoint %s. "

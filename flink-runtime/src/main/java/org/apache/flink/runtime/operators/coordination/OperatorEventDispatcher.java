@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 
 /**
  * The dispatcher through which Operators receive {@link OperatorEvent}s and through which they can
@@ -30,11 +30,11 @@ public interface OperatorEventDispatcher {
      * Register a listener that is notified every time an OperatorEvent is sent from the
      * OperatorCoordinator (of the operator with the given OperatorID) to this subtask.
      */
-    void registerEventHandler(OperatorID operator, OperatorEventHandler handler);
+    void registerEventHandler(VertexID operator, OperatorEventHandler handler);
 
     /**
      * Gets the gateway through which events can be passed to the OperatorCoordinator for the
      * operator identified by the given OperatorID.
      */
-    OperatorEventGateway getOperatorEventGateway(OperatorID operatorId);
+    OperatorEventGateway getOperatorEventGateway(VertexID operatorId);
 }

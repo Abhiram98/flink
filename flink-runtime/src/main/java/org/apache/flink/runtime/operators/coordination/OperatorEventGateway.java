@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.operators.coordination;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterOperatorEventGateway;
 
@@ -32,7 +32,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterOperatorEventGateway;
  * context, which keeps dependencies small and makes testing easier.
  *
  * <pre>
- *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link OperatorID}, and
+ *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link VertexID}, and
  *         forwards it to:</li>
  *     <li>{@link TaskOperatorEventGateway} enriches the event with the {@link ExecutionAttemptID} and
  *         forwards it to the:</li>

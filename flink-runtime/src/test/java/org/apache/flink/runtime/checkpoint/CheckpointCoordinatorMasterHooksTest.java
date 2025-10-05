@@ -24,7 +24,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -296,7 +296,7 @@ class CheckpointCoordinatorMasterHooksTest {
                         checkpointId,
                         123L,
                         125L,
-                        Collections.<OperatorID, OperatorState>emptyMap(),
+                        Collections.<VertexID, OperatorState>emptyMap(),
                         masterHookStates,
                         CheckpointProperties.forCheckpoint(
                                 CheckpointRetentionPolicy.NEVER_RETAIN_AFTER_TERMINATION),
@@ -357,7 +357,7 @@ class CheckpointCoordinatorMasterHooksTest {
                         checkpointId,
                         123L,
                         125L,
-                        Collections.<OperatorID, OperatorState>emptyMap(),
+                        Collections.<VertexID, OperatorState>emptyMap(),
                         masterHookStates,
                         CheckpointProperties.forCheckpoint(
                                 CheckpointRetentionPolicy.NEVER_RETAIN_AFTER_TERMINATION),

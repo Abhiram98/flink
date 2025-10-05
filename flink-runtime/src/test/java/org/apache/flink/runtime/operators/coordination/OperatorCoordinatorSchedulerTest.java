@@ -34,12 +34,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.failover.RestartAllFailoverStrategy;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -92,7 +88,7 @@ import static org.assertj.core.api.Assertions.fail;
 class OperatorCoordinatorSchedulerTest {
 
     private final JobVertexID testVertexId = new JobVertexID();
-    private final OperatorID testOperatorId = new OperatorID();
+    private final VertexID testOperatorId = new VertexID();
 
     @RegisterExtension
     private static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_EXTENSION =
@@ -552,7 +548,7 @@ class OperatorCoordinatorSchedulerTest {
         CommonTestUtils.assertThrows(
                 "does not exist",
                 FlinkException.class,
-                () -> scheduler.deliverCoordinationRequestToCoordinator(new OperatorID(), request));
+                () -> scheduler.deliverCoordinationRequestToCoordinator(new VertexID(), request));
     }
 
     // ------------------------------------------------------------------------
@@ -669,7 +665,7 @@ class OperatorCoordinatorSchedulerTest {
 
         final OperatorIDPair opIds =
                 OperatorIDPair.of(
-                        new OperatorID(), provider.getOperatorId(), "operatorName", "operatorUid");
+                        new VertexID(), provider.getOperatorId(), "operatorName", "operatorUid");
         final JobVertex vertex =
                 new JobVertex(
                         "Vertex with OperatorCoordinator",
@@ -949,13 +945,13 @@ class OperatorCoordinatorSchedulerTest {
         return scheduler.getExecutionVertex(id).getJobVertex();
     }
 
-    private static OperatorState createOperatorState(OperatorID id, byte[] coordinatorState) {
+    private static OperatorState createOperatorState(VertexID id, byte[] coordinatorState) {
         final OperatorState state = new OperatorState(null, null, id, 10, 16384);
         state.setCoordinatorState(new ByteStreamStateHandle("name", coordinatorState));
         return state;
     }
 
-    private static byte[] serializeAsCheckpointMetadata(OperatorID id, byte[] coordinatorState)
+    private static byte[] serializeAsCheckpointMetadata(VertexID id, byte[] coordinatorState)
             throws IOException {
         final OperatorState state = createOperatorState(id, coordinatorState);
         final CheckpointMetadata metadata =
@@ -1013,7 +1009,7 @@ class OperatorCoordinatorSchedulerTest {
 
         @Override
         public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-                ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+                ExecutionAttemptID task, VertexID operator, SerializedValue<OperatorEvent> evt) {
             return FutureUtils.completedExceptionally(new TestException());
         }
     }
@@ -1045,7 +1041,7 @@ class OperatorCoordinatorSchedulerTest {
 
         @Override
         public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-                ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+                ExecutionAttemptID task, VertexID operator, SerializedValue<OperatorEvent> evt) {
             return operatorGateway.sendOperatorEventToTask(task, operator, evt);
         }
     }

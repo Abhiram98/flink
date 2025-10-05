@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
 import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
@@ -41,8 +41,8 @@ class TaskStateSnapshotTest {
     void putGetSubtaskStateByOperatorID() {
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot();
 
-        OperatorID operatorID_1 = new OperatorID();
-        OperatorID operatorID_2 = new OperatorID();
+        VertexID operatorID_1 = new VertexID();
+        VertexID operatorID_2 = new VertexID();
         OperatorSubtaskState operatorSubtaskState_1 = OperatorSubtaskState.builder().build();
         OperatorSubtaskState operatorSubtaskState_2 = OperatorSubtaskState.builder().build();
         OperatorSubtaskState operatorSubtaskState_1_replace =
@@ -72,7 +72,7 @@ class TaskStateSnapshotTest {
 
         OperatorSubtaskState emptyOperatorSubtaskState = OperatorSubtaskState.builder().build();
         assertThat(emptyOperatorSubtaskState.hasState()).isFalse();
-        taskStateSnapshot.putSubtaskStateByOperatorID(new OperatorID(), emptyOperatorSubtaskState);
+        taskStateSnapshot.putSubtaskStateByOperatorID(new VertexID(), emptyOperatorSubtaskState);
         assertThat(taskStateSnapshot.hasState()).isFalse();
 
         OperatorStateHandle stateHandle =
@@ -82,15 +82,15 @@ class TaskStateSnapshotTest {
 
         assertThat(nonEmptyOperatorSubtaskState.hasState()).isTrue();
         taskStateSnapshot.putSubtaskStateByOperatorID(
-                new OperatorID(), nonEmptyOperatorSubtaskState);
+                new VertexID(), nonEmptyOperatorSubtaskState);
         assertThat(taskStateSnapshot.hasState()).isTrue();
     }
 
     @Test
     void discardState() throws Exception {
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot();
-        OperatorID operatorID_1 = new OperatorID();
-        OperatorID operatorID_2 = new OperatorID();
+        VertexID operatorID_1 = new VertexID();
+        VertexID operatorID_2 = new VertexID();
 
         OperatorSubtaskState operatorSubtaskState_1 = mock(OperatorSubtaskState.class);
         OperatorSubtaskState operatorSubtaskState_2 = mock(OperatorSubtaskState.class);
@@ -111,7 +111,7 @@ class TaskStateSnapshotTest {
 
         OperatorSubtaskState emptyOperatorSubtaskState = OperatorSubtaskState.builder().build();
         assertThat(emptyOperatorSubtaskState.hasState()).isFalse();
-        taskStateSnapshot.putSubtaskStateByOperatorID(new OperatorID(), emptyOperatorSubtaskState);
+        taskStateSnapshot.putSubtaskStateByOperatorID(new VertexID(), emptyOperatorSubtaskState);
         assertThat(taskStateSnapshot.getStateSize()).isZero();
 
         OperatorStateHandle stateHandle_1 =
@@ -125,9 +125,9 @@ class TaskStateSnapshotTest {
                 OperatorSubtaskState.builder().setRawOperatorState(stateHandle_2).build();
 
         taskStateSnapshot.putSubtaskStateByOperatorID(
-                new OperatorID(), nonEmptyOperatorSubtaskState_1);
+                new VertexID(), nonEmptyOperatorSubtaskState_1);
         taskStateSnapshot.putSubtaskStateByOperatorID(
-                new OperatorID(), nonEmptyOperatorSubtaskState_2);
+                new VertexID(), nonEmptyOperatorSubtaskState_2);
 
         long totalSize = stateHandle_1.getStateSize() + stateHandle_2.getStateSize();
         assertThat(taskStateSnapshot.getStateSize()).isEqualTo(totalSize);
@@ -143,7 +143,7 @@ class TaskStateSnapshotTest {
         final TaskStateSnapshot taskStateSnapshot =
                 new TaskStateSnapshot(
                         Collections.singletonMap(
-                                new OperatorID(),
+                                new VertexID(),
                                 OperatorSubtaskState.builder()
                                         .setInputChannelState(singleton(inputChannelStateHandle))
                                         .setResultSubpartitionState(

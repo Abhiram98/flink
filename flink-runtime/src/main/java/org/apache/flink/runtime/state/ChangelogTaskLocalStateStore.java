@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateBackendHandle;
 
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class ChangelogTaskLocalStateStore extends TaskLocalStateStoreImpl {
         if (localState == null) {
             localState = NULL_DUMMY;
         }
-        for (Map.Entry<OperatorID, OperatorSubtaskState> subtaskStateEntry :
+        for (Map.Entry<VertexID, OperatorSubtaskState> subtaskStateEntry :
                 localState.getSubtaskStateMappings()) {
             for (KeyedStateHandle keyedStateHandle :
                     subtaskStateEntry.getValue().getManagedKeyedState()) {

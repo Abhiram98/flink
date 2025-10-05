@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeutils.base.LongSerializer;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.core.memory.DataInputDeserializer;
 import org.apache.flink.core.memory.DataOutputSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.watermark.InternalWatermark;
 import org.apache.flink.streaming.api.watermark.Watermark;
 
@@ -98,7 +98,7 @@ class StreamElementSerializerTest {
                 .isEqualTo(internalWatermark);
 
         LatencyMarker latencyMarker =
-                new LatencyMarker(System.currentTimeMillis(), new OperatorID(-1, -1), 1);
+                new LatencyMarker(System.currentTimeMillis(), new VertexID(-1, -1), 1);
         assertThat(serializeAndDeserialize(latencyMarker, serializer)).isEqualTo(latencyMarker);
 
         RecordAttributes recordAttributes =

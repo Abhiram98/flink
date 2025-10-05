@@ -25,7 +25,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointFailureReason;
 import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.DoneFuture;
 import org.apache.flink.runtime.state.SnapshotResult;
@@ -76,9 +76,9 @@ class AsyncCheckpointRunnableTest {
     }
 
     private void testAsyncCheckpointException(boolean isTaskRunning) {
-        final Map<OperatorID, OperatorSnapshotFutures> snapshotsInProgress = new HashMap<>();
+        final Map<VertexID, OperatorSnapshotFutures> snapshotsInProgress = new HashMap<>();
         snapshotsInProgress.put(
-                new OperatorID(),
+                new VertexID(),
                 new OperatorSnapshotFutures(
                         ExceptionallyDoneFuture.of(
                                 new RuntimeException("Async Checkpoint Exception")),
@@ -106,9 +106,9 @@ class AsyncCheckpointRunnableTest {
         CheckpointFailureReason originalReason =
                 CheckpointFailureReason.CHECKPOINT_DECLINED_INPUT_END_OF_STREAM;
 
-        final Map<OperatorID, OperatorSnapshotFutures> snapshotsInProgress = new HashMap<>();
+        final Map<VertexID, OperatorSnapshotFutures> snapshotsInProgress = new HashMap<>();
         snapshotsInProgress.put(
-                new OperatorID(),
+                new VertexID(),
                 new OperatorSnapshotFutures(
                         DoneFuture.of(SnapshotResult.empty()),
                         DoneFuture.of(SnapshotResult.empty()),
@@ -144,7 +144,7 @@ class AsyncCheckpointRunnableTest {
     }
 
     private AsyncCheckpointRunnable createAsyncRunnable(
-            Map<OperatorID, OperatorSnapshotFutures> snapshotsInProgress,
+            Map<VertexID, OperatorSnapshotFutures> snapshotsInProgress,
             TestEnvironment environment,
             boolean isTaskDeployedAsFinished,
             boolean isTaskRunning) {

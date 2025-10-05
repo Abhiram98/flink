@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
 import org.apache.flink.runtime.state.testutils.EmptyStreamStateHandle;
@@ -213,8 +213,8 @@ public class CompletedCheckpointTest {
     @Test
     void testRegisterStatesAtRegistry() {
         OperatorState state = mock(OperatorState.class);
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-        operatorStates.put(new OperatorID(), state);
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
+        operatorStates.put(new VertexID(), state);
 
         CompletedCheckpoint checkpoint =
                 new CompletedCheckpoint(
@@ -239,8 +239,8 @@ public class CompletedCheckpointTest {
     @Test
     void testCleanUpOnSubsume() throws Exception {
         OperatorState state = mock(OperatorState.class);
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-        operatorStates.put(new OperatorID(), state);
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
+        operatorStates.put(new VertexID(), state);
 
         EmptyStreamStateHandle metadata = new EmptyStreamStateHandle();
         TestCompletedCheckpointStorageLocation location =
@@ -286,8 +286,8 @@ public class CompletedCheckpointTest {
         for (JobStatus status : terminalStates) {
 
             OperatorState state = mock(OperatorState.class);
-            Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-            operatorStates.put(new OperatorID(), state);
+            Map<VertexID, OperatorState> operatorStates = new HashMap<>();
+            operatorStates.put(new VertexID(), state);
 
             EmptyStreamStateHandle retainedHandle = new EmptyStreamStateHandle();
             TestCompletedCheckpointStorageLocation retainedLocation =

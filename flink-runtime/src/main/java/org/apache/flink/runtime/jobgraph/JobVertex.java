@@ -184,7 +184,7 @@ public class JobVertex implements java.io.Serializable {
         this.name = name == null ? DEFAULT_NAME : name;
         this.id = id == null ? new JobVertexID() : id;
         OperatorIDPair operatorIDPair =
-                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.id));
+                OperatorIDPair.generatedIDOnly(VertexID.fromJobVertexID(this.id));
         this.operatorIDs = Collections.singletonList(operatorIDPair);
     }
 

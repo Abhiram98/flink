@@ -23,11 +23,8 @@ import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.state.OperatorStreamStateHandle;
@@ -52,7 +49,7 @@ import static org.apache.flink.runtime.checkpoint.StateObjectCollection.singleto
 public class TestUtils {
 
     public static File createSavepointWithOperatorState(
-            File savepointFile, long savepointId, OperatorID... operatorIds) throws IOException {
+            File savepointFile, long savepointId, VertexID... operatorIds) throws IOException {
         final Collection<OperatorState> operatorStates = createOperatorState(operatorIds);
         final CheckpointMetadata savepoint =
                 new CheckpointMetadata(savepointId, operatorStates, Collections.emptyList());
@@ -64,11 +61,11 @@ public class TestUtils {
         return savepointFile;
     }
 
-    private static Collection<OperatorState> createOperatorState(OperatorID... operatorIds) {
+    private static Collection<OperatorState> createOperatorState(VertexID... operatorIds) {
         Random random = new Random();
         Collection<OperatorState> operatorStates = new ArrayList<>(operatorIds.length);
 
-        for (OperatorID operatorId : operatorIds) {
+        for (VertexID operatorId : operatorIds) {
             final OperatorState operatorState = new OperatorState(null, null, operatorId, 1, 42);
             final OperatorSubtaskState subtaskState =
                     OperatorSubtaskState.builder()

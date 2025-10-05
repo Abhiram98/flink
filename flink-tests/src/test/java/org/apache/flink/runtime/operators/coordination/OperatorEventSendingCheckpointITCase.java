@@ -22,7 +22,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
@@ -284,11 +284,11 @@ public class OperatorEventSendingCheckpointITCase extends TestLogger {
 
         CompletableFuture<Acknowledge> filterCall(
                 ExecutionAttemptID task,
-                OperatorID operator,
+                VertexID operator,
                 SerializedValue<OperatorEvent> evt,
                 TriFunction<
                                 ExecutionAttemptID,
-                                OperatorID,
+                        VertexID,
                                 SerializedValue<OperatorEvent>,
                                 CompletableFuture<Acknowledge>>
                         rpcHandler) {
@@ -314,11 +314,11 @@ public class OperatorEventSendingCheckpointITCase extends TestLogger {
 
             CompletableFuture<Acknowledge> handleEvent(
                     ExecutionAttemptID task,
-                    OperatorID operator,
+                    VertexID operator,
                     SerializedValue<OperatorEvent> evt,
                     TriFunction<
                                     ExecutionAttemptID,
-                                    OperatorID,
+                            VertexID,
                                     SerializedValue<OperatorEvent>,
                                     CompletableFuture<Acknowledge>>
                             rpcHandler);
@@ -341,7 +341,7 @@ public class OperatorEventSendingCheckpointITCase extends TestLogger {
 
         @Override
         public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-                ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+                ExecutionAttemptID task, VertexID operator, SerializedValue<OperatorEvent> evt) {
             return currentHandler.filterCall(task, operator, evt, super::sendOperatorEventToTask);
         }
     }

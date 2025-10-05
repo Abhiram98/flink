@@ -25,7 +25,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.io.network.NettyShuffleEnvironment;
 import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.shuffle.PartitionDescriptorBuilder;
 import org.apache.flink.runtime.taskmanager.NoOpTaskManagerActions;
@@ -147,12 +147,12 @@ public class StreamTaskITCase {
         streamConfig.setStreamOperatorFactory(new UnusedOperatorFactory());
 
         StreamConfigChainer cfg =
-                new StreamConfigChainer(new OperatorID(42, 42), streamConfig, this, 1);
+                new StreamConfigChainer(new VertexID(42, 42), streamConfig, this, 1);
         // The OutputFlusher thread is started only if the buffer timeout more than 0(default value
         // is 0).
         cfg.setBufferTimeout(1);
         cfg.chain(
-                new OperatorID(44, 44),
+                new VertexID(44, 44),
                 new UnusedOperatorFactory(),
                 StringSerializer.INSTANCE,
                 StringSerializer.INSTANCE,

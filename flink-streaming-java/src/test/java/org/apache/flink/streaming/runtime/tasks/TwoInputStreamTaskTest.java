@@ -39,7 +39,7 @@ import org.apache.flink.runtime.io.network.api.StopMode;
 import org.apache.flink.runtime.io.network.api.writer.RecordOrEventCollectingResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriterWithAvailabilityHelper;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
@@ -110,7 +110,7 @@ class TwoInputStreamTaskTest {
         CoStreamMap<String, Integer, String> coMapOperator =
                 new CoStreamMap<>(new TestOpenCloseMapFunction());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         long initialTime = 0L;
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
@@ -164,7 +164,7 @@ class TwoInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, Integer, String> coMapOperator = new CoStreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -286,7 +286,7 @@ class TwoInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, Integer, String> coMapOperator = new CoStreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -467,13 +467,13 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new DuplicatingOperator())
+                .setupOperatorChain(new VertexID(), new DuplicatingOperator())
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new OneInputStreamTaskTest.DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new OneInputStreamTaskTest.DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -528,7 +528,7 @@ class TwoInputStreamTaskTest {
 
     @Test
     void testSkipExecutionsIfFinishedOnRestore() throws Exception {
-        OperatorID nonSourceOperatorId = new OperatorID();
+        VertexID nonSourceOperatorId = new VertexID();
 
         try (StreamTaskMailboxTestHarness<String> testHarness =
                 new StreamTaskMailboxTestHarnessBuilder<>(
@@ -584,11 +584,11 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         CoStreamMap<String, Integer, String> headOperator = new CoStreamMap<>(new IdentityMap());
-        final OperatorID headOperatorId = new OperatorID();
+        final VertexID headOperatorId = new VertexID();
 
         OneInputStreamTaskTest.WatermarkMetricOperator chainedOperator =
                 new OneInputStreamTaskTest.WatermarkMetricOperator();
-        OperatorID chainedOperatorId = new OperatorID();
+        VertexID chainedOperatorId = new VertexID();
 
         testHarness
                 .setupOperatorChain(headOperatorId, headOperator)
@@ -606,7 +606,7 @@ class TwoInputStreamTaskTest {
                 new InterceptingTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID id, String name, Map<String, String> additionalVariables) {
+                            VertexID id, String name, Map<String, String> additionalVariables) {
                         if (id.equals(headOperatorId)) {
                             return headOperatorMetricGroup;
                         } else if (id.equals(chainedOperatorId)) {
@@ -702,9 +702,9 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new TestBoundedTwoInputOperator("Operator0"))
+                .setupOperatorChain(new VertexID(), new TestBoundedTwoInputOperator("Operator0"))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -835,7 +835,7 @@ class TwoInputStreamTaskTest {
                         .addInput(BasicTypeInfo.INT_TYPE_INFO)
                         .addInput(BasicTypeInfo.INT_TYPE_INFO)
                         .addAdditionalOutput(partitionWriters)
-                        .setupOperatorChain(new OperatorID(), new PassThroughOperator<>())
+                        .setupOperatorChain(new VertexID(), new PassThroughOperator<>())
                         .chain(
                                 BasicTypeInfo.INT_TYPE_INFO.createSerializer(
                                         new SerializerConfigImpl()))

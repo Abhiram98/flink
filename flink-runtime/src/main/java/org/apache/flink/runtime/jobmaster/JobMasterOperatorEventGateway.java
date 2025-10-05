@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.jobmaster;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -39,7 +39,7 @@ import java.util.concurrent.CompletableFuture;
  * context, which keeps dependencies small and makes testing easier.
  *
  * <pre>
- *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link OperatorID}, and
+ *     <li>{@code OperatorEventGateway} takes the event, enriches the event with the {@link VertexID}, and
  *         forwards it to:</li>
  *     <li>{@link TaskOperatorEventGateway} enriches the event with the {@link ExecutionAttemptID} and
  *         forwards it to the:</li>
@@ -49,8 +49,8 @@ import java.util.concurrent.CompletableFuture;
 public interface JobMasterOperatorEventGateway {
 
     CompletableFuture<Acknowledge> sendOperatorEventToCoordinator(
-            ExecutionAttemptID task, OperatorID operatorID, SerializedValue<OperatorEvent> event);
+            ExecutionAttemptID task, VertexID operatorID, SerializedValue<OperatorEvent> event);
 
     CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operatorID, SerializedValue<CoordinationRequest> request);
+            VertexID operatorID, SerializedValue<CoordinationRequest> request);
 }

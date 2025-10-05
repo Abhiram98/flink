@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.state.changelog.inmemory;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.mailbox.SyncMailboxExecutor;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.SnapshotResult;
@@ -71,7 +71,7 @@ public class StateChangelogStorageTest<T extends ChangelogStateHandle> {
                             StateChangelogWriter<?> writer =
                                     getFactory(compression, temporaryFolder)
                                             .createWriter(
-                                                    new OperatorID().toString(),
+                                                    new VertexID().toString(),
                                                     KeyGroupRange.of(0, 0),
                                                     new SyncMailboxExecutor());
                             writer.close();
@@ -89,7 +89,7 @@ public class StateChangelogStorageTest<T extends ChangelogStateHandle> {
         try (StateChangelogStorage<T> client = getFactory(compression, temporaryFolder);
                 StateChangelogWriter<T> writer =
                         client.createWriter(
-                                new OperatorID().toString(), kgRange, new SyncMailboxExecutor())) {
+                                new VertexID().toString(), kgRange, new SyncMailboxExecutor())) {
             SequenceNumber prev = writer.initialSequenceNumber();
             for (Map.Entry<Integer, List<byte[]>> entry : appendsByKeyGroup.entrySet()) {
                 Integer group = entry.getKey();

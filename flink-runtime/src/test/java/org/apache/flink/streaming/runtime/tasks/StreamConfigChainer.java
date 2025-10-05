@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.graph.NonChainedOutput;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.graph.StreamEdge;
@@ -68,7 +68,7 @@ public class StreamConfigChainer<OWNER> {
     private boolean setTailNonChainedOutputs = true;
 
     StreamConfigChainer(
-            OperatorID headOperatorID,
+            VertexID headOperatorID,
             StreamConfig headConfig,
             OWNER owner,
             int numberOfNonChainedOutputs) {
@@ -80,7 +80,7 @@ public class StreamConfigChainer<OWNER> {
         head(headOperatorID);
     }
 
-    private void head(OperatorID headOperatorID) {
+    private void head(VertexID headOperatorID) {
         headConfig.setOperatorID(headOperatorID);
         headConfig.setChainStart();
         headConfig.setChainIndex(chainIndex);
@@ -92,7 +92,7 @@ public class StreamConfigChainer<OWNER> {
      */
     @Deprecated
     public <T> StreamConfigChainer<OWNER> chain(
-            OperatorID operatorID,
+            VertexID operatorID,
             OneInputStreamOperator<T, T> operator,
             TypeSerializer<T> typeSerializer,
             boolean createKeyedStateBackend) {
@@ -106,7 +106,7 @@ public class StreamConfigChainer<OWNER> {
     @Deprecated
     public <T> StreamConfigChainer<OWNER> chain(
             OneInputStreamOperator<T, T> operator, TypeSerializer<T> typeSerializer) {
-        return chain(new OperatorID(), operator, typeSerializer);
+        return chain(new VertexID(), operator, typeSerializer);
     }
 
     /**
@@ -115,7 +115,7 @@ public class StreamConfigChainer<OWNER> {
      */
     @Deprecated
     public <T> StreamConfigChainer<OWNER> chain(
-            OperatorID operatorID,
+            VertexID operatorID,
             OneInputStreamOperator<T, T> operator,
             TypeSerializer<T> typeSerializer) {
         return chain(operatorID, operator, typeSerializer, typeSerializer, false);
@@ -128,7 +128,7 @@ public class StreamConfigChainer<OWNER> {
     @Deprecated
     public <T> StreamConfigChainer<OWNER> chain(
             OneInputStreamOperatorFactory<T, T> operatorFactory, TypeSerializer<T> typeSerializer) {
-        return chain(new OperatorID(), operatorFactory, typeSerializer);
+        return chain(new VertexID(), operatorFactory, typeSerializer);
     }
 
     /**
@@ -137,7 +137,7 @@ public class StreamConfigChainer<OWNER> {
      */
     @Deprecated
     public <T> StreamConfigChainer<OWNER> chain(
-            OperatorID operatorID,
+            VertexID operatorID,
             OneInputStreamOperatorFactory<T, T> operatorFactory,
             TypeSerializer<T> typeSerializer) {
         return chain(operatorID, operatorFactory, typeSerializer, typeSerializer, false);
@@ -149,7 +149,7 @@ public class StreamConfigChainer<OWNER> {
      */
     @Deprecated
     private <IN, OUT> StreamConfigChainer<OWNER> chain(
-            OperatorID operatorID,
+            VertexID operatorID,
             OneInputStreamOperator<IN, OUT> operator,
             TypeSerializer<IN> inputSerializer,
             TypeSerializer<OUT> outputSerializer,
@@ -168,7 +168,7 @@ public class StreamConfigChainer<OWNER> {
      */
     @Deprecated
     public <IN, OUT> StreamConfigChainer<OWNER> chain(
-            OperatorID operatorID,
+            VertexID operatorID,
             StreamOperatorFactory<OUT> operatorFactory,
             TypeSerializer<IN> inputSerializer,
             TypeSerializer<OUT> outputSerializer,
@@ -322,7 +322,7 @@ public class StreamConfigChainer<OWNER> {
     public static class StreamConfigEdgeChainer<OWNER, IN, OUT> {
         private final OutputTag<Void> placeHolderTag;
         private StreamConfigChainer<OWNER> parent;
-        private OperatorID operatorID;
+        private VertexID operatorID;
 
         private final TypeSerializer<IN> inputSerializer;
         private final TypeSerializer<OUT> outputSerializer;
@@ -346,7 +346,7 @@ public class StreamConfigChainer<OWNER> {
             this.nonChainedOutPuts = new HashMap<>(4);
         }
 
-        public StreamConfigEdgeChainer<OWNER, IN, OUT> setOperatorID(OperatorID operatorID) {
+        public StreamConfigEdgeChainer<OWNER, IN, OUT> setOperatorID(VertexID operatorID) {
             this.operatorID = operatorID;
             return this;
         }
@@ -401,7 +401,7 @@ public class StreamConfigChainer<OWNER> {
             parent.tailConfig.setChainedOutputs(Collections.singletonList(streamEdge));
             parent.tailConfig = new StreamConfig(new Configuration());
             parent.tailConfig.setStreamOperatorFactory(checkNotNull(operatorFactory));
-            parent.tailConfig.setOperatorID(operatorID == null ? new OperatorID() : operatorID);
+            parent.tailConfig.setOperatorID(operatorID == null ? new VertexID() : operatorID);
             parent.tailConfig.setupNetworkInputs(inputSerializer);
             parent.tailConfig.setTypeSerializerOut(outputSerializer);
             if (createKeyedStateBackend) {

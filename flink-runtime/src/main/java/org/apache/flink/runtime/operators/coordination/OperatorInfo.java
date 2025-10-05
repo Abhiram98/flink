@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /** An interface to access basic properties of an operator in the context of its coordinator. */
 public interface OperatorInfo {
 
-    OperatorID operatorId();
+    VertexID operatorId();
 
     int maxParallelism();
 
@@ -36,7 +36,7 @@ public interface OperatorInfo {
     //  utils
     // ------------------------------------------------------------------------
 
-    static Collection<OperatorID> getIds(Collection<? extends OperatorInfo> infos) {
+    static Collection<VertexID> getIds(Collection<? extends OperatorInfo> infos) {
         return infos.stream().map(OperatorInfo::operatorId).collect(Collectors.toList());
     }
 }

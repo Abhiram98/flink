@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestHandler;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHandler {
     private final ExecutionGraph executionGraph;
 
-    private final Map<OperatorID, OperatorCoordinatorHolder> coordinatorMap;
+    private final Map<VertexID, OperatorCoordinatorHolder> coordinatorMap;
 
     private final GlobalFailureHandler globalFailureHandler;
 
@@ -60,7 +60,7 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
         this.globalFailureHandler = globalFailureHandler;
     }
 
-    private static Map<OperatorID, OperatorCoordinatorHolder> createCoordinatorMap(
+    private static Map<VertexID, OperatorCoordinatorHolder> createCoordinatorMap(
             ExecutionGraph executionGraph) {
         return executionGraph.getAllVertices().values().stream()
                 .filter(ExecutionJobVertex::isInitialized)
@@ -93,7 +93,7 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
     @Override
     public void deliverOperatorEventToCoordinator(
             final ExecutionAttemptID taskExecutionId,
-            final OperatorID operatorId,
+            final VertexID operatorId,
             final OperatorEvent evt)
             throws FlinkException {
 
@@ -131,7 +131,7 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException {
+            VertexID operator, CoordinationRequest request) throws FlinkException {
 
         final OperatorCoordinatorHolder coordinatorHolder = coordinatorMap.get(operator);
         if (coordinatorHolder == null) {
@@ -178,7 +178,7 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
     }
 
     @VisibleForTesting
-    Map<OperatorID, OperatorCoordinatorHolder> getCoordinatorMap() {
+    Map<VertexID, OperatorCoordinatorHolder> getCoordinatorMap() {
         return coordinatorMap;
     }
 }

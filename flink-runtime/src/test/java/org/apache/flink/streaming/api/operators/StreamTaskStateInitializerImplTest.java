@@ -30,7 +30,7 @@ import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
@@ -94,7 +94,7 @@ class StreamTaskStateInitializerImplTest {
                                 SystemClock.getInstance().absoluteTimeMillis()),
                         true);
 
-        OperatorID operatorID = new OperatorID(47L, 11L);
+        VertexID operatorID = new VertexID(47L, 11L);
         AbstractStreamOperator<?> streamOperator = mock(AbstractStreamOperator.class);
         when(streamOperator.getOperatorID()).thenReturn(operatorID);
 
@@ -163,7 +163,7 @@ class StreamTaskStateInitializerImplTest {
                             }
                         });
 
-        OperatorID operatorID = new OperatorID(47L, 11L);
+        VertexID operatorID = new VertexID(47L, 11L);
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot();
 
         Random random = new Random(0x42);

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinatorHolder;
@@ -55,14 +55,14 @@ class TestingOperatorCoordinatorHandler implements OperatorCoordinatorHandler {
 
     @Override
     public void deliverOperatorEventToCoordinator(
-            ExecutionAttemptID taskExecutionId, OperatorID operatorId, OperatorEvent evt)
+            ExecutionAttemptID taskExecutionId, VertexID operatorId, OperatorEvent evt)
             throws FlinkException {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException {
+            VertexID operator, CoordinationRequest request) throws FlinkException {
         throw new UnsupportedOperationException();
     }
 

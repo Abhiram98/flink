@@ -23,7 +23,7 @@ import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.api.connector.source.mocks.MockSource;
 import org.apache.flink.api.connector.source.mocks.MockSourceSplit;
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.MockOperatorCoordinatorContext;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.RecreateOnResetOperatorCoordinator;
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /** Unit tests for {@link SourceCoordinatorProvider}. */
 class SourceCoordinatorProviderTest {
 
-    private static final OperatorID OPERATOR_ID = new OperatorID(1234L, 5678L);
+    private static final VertexID OPERATOR_ID = new VertexID(1234L, 5678L);
     private static final int NUM_SPLITS = 10;
 
     private SourceCoordinatorProvider<MockSourceSplit> provider;
@@ -130,7 +130,7 @@ class SourceCoordinatorProviderTest {
                         new SourceCoordinatorProvider.CoordinatorExecutorThreadFactory(
                                 "test_coordinator_thread",
                                 new MockOperatorCoordinatorContext(
-                                        new OperatorID(1234L, 5678L), 3));
+                                        new VertexID(1234L, 5678L), 3));
 
         coordinatorExecutorThreadFactory.newThread(() -> {});
         // coordinatorExecutorThreadFactory cannot create multiple threads.

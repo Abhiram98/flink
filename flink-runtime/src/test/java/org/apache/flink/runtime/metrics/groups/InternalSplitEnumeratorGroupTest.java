@@ -20,7 +20,7 @@ package org.apache.flink.runtime.metrics.groups;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.util.TestingMetricRegistry;
 
@@ -37,7 +37,7 @@ class InternalSplitEnumeratorGroupTest {
     void testGenerateScopeDefault() {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final VertexID operatorId = new VertexID();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")

@@ -20,7 +20,7 @@ package org.apache.flink.table.runtime.operators.over;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironmentBuilder;
 import org.apache.flink.streaming.api.graph.StreamConfig;
@@ -203,7 +203,7 @@ class BufferDataOverWindowOperatorTest {
                         any(Configuration.class),
                         any(ClassLoader.class)))
                 .thenReturn(0.99);
-        when(streamConfig.getOperatorID()).thenReturn(new OperatorID());
+        when(streamConfig.getOperatorID()).thenReturn(new VertexID());
         operator =
                 new BufferDataOverWindowOperator(
                         new StreamOperatorParameters<>(

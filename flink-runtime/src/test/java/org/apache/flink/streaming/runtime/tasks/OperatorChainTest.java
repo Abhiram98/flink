@@ -21,7 +21,7 @@ package org.apache.flink.streaming.runtime.tasks;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.SimpleCounter;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
@@ -80,7 +80,7 @@ class OperatorChainTest {
             final StreamTask<?, ?> containingTask = new MockStreamTaskBuilder(env).build();
 
             final StreamConfig cfg = new StreamConfig(new Configuration());
-            cfg.setOperatorID(new OperatorID());
+            cfg.setOperatorID(new VertexID());
             cfg.setStateKeySerializer(new StringSerializer());
             cfg.serializeAllConfigs();
             final List<StreamOperatorWrapper<?, ?>> operatorWrappers = new ArrayList<>();
@@ -158,8 +158,8 @@ class OperatorChainTest {
         }
 
         @Override
-        public OperatorID getOperatorID() {
-            return new OperatorID();
+        public VertexID getOperatorID() {
+            return new VertexID();
         }
     }
 }

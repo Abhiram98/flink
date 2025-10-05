@@ -37,7 +37,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
@@ -254,7 +254,7 @@ public class CheckpointCoordinatorTestingUtils {
 
             OperatorSubtaskState operatorState =
                     stateSnapshot.getSubtaskStateByOperatorID(
-                            OperatorID.fromJobVertexID(jobVertexID));
+                            VertexID.fromJobVertexID(jobVertexID));
 
             ChainedStateHandle<OperatorStateHandle> expectedOpStateBackend =
                     generateChainedPartitionableStateHandle(jobVertexID, i, 2, 8, false);
@@ -390,7 +390,7 @@ public class CheckpointCoordinatorTestingUtils {
                                 .build());
 
         subtaskStates.putSubtaskStateByOperatorID(
-                OperatorID.fromJobVertexID(jobVertexID), subtaskState);
+                VertexID.fromJobVertexID(jobVertexID), subtaskState);
 
         return subtaskStates;
     }
@@ -482,7 +482,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static TaskStateSnapshot createSnapshotWithUnionListState(
-            File stateFile, OperatorID operatorId, boolean isTaskFinished) throws IOException {
+            File stateFile, VertexID operatorId, boolean isTaskFinished) throws IOException {
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot(1, isTaskFinished);
         taskStateSnapshot.putSubtaskStateByOperatorID(
                 operatorId, createSubtaskStateWithUnionListState(stateFile));
@@ -787,7 +787,7 @@ public class CheckpointCoordinatorTestingUtils {
 
         private BiFunction<
                         Set<ExecutionJobVertex>,
-                        Map<OperatorID, OperatorState>,
+                        Map<VertexID, OperatorState>,
                         VertexFinishedStateChecker>
                 vertexFinishedStateCheckerFactory = VertexFinishedStateChecker::new;
 
@@ -863,7 +863,7 @@ public class CheckpointCoordinatorTestingUtils {
         public CheckpointCoordinatorBuilder setVertexFinishedStateCheckerFactory(
                 BiFunction<
                                 Set<ExecutionJobVertex>,
-                                Map<OperatorID, OperatorState>,
+                                Map<VertexID, OperatorState>,
                                 VertexFinishedStateChecker>
                         vertexFinishedStateCheckerFactory) {
             this.vertexFinishedStateCheckerFactory = vertexFinishedStateCheckerFactory;
@@ -934,7 +934,7 @@ public class CheckpointCoordinatorTestingUtils {
     static final class MockOperatorCheckpointCoordinatorContextBuilder {
         private BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator = null;
         private Runnable onCallingAbortCurrentTriggering = null;
-        private OperatorID operatorID = null;
+        private VertexID operatorID = null;
 
         public MockOperatorCheckpointCoordinatorContextBuilder setOnCallingCheckpointCoordinator(
                 BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator) {
@@ -949,7 +949,7 @@ public class CheckpointCoordinatorTestingUtils {
         }
 
         public MockOperatorCheckpointCoordinatorContextBuilder setOperatorID(
-                OperatorID operatorID) {
+                VertexID operatorID) {
             this.operatorID = operatorID;
             return this;
         }
@@ -970,14 +970,14 @@ public class CheckpointCoordinatorTestingUtils {
             implements OperatorCoordinatorCheckpointContext {
         private final BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator;
         private final Runnable onCallingAbortCurrentTriggering;
-        private final OperatorID operatorID;
+        private final VertexID operatorID;
         private final List<Long> completedCheckpoints;
         private final List<Long> abortedCheckpoints;
 
         private MockOperatorCoordinatorCheckpointContext(
                 BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator,
                 Runnable onCallingAbortCurrentTriggering,
-                OperatorID operatorID) {
+                VertexID operatorID) {
             this.onCallingCheckpointCoordinator = onCallingCheckpointCoordinator;
             this.onCallingAbortCurrentTriggering = onCallingAbortCurrentTriggering;
             this.operatorID = operatorID;
@@ -1018,7 +1018,7 @@ public class CheckpointCoordinatorTestingUtils {
         public void subtaskReset(int subtask, long checkpointId) {}
 
         @Override
-        public OperatorID operatorId() {
+        public VertexID operatorId() {
             return operatorID;
         }
 

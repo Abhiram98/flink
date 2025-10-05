@@ -38,7 +38,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmaster.event.ExecutionJobVertexInitializedEvent;
 import org.apache.flink.runtime.jobmaster.event.ExecutionVertexFinishedEvent;
 import org.apache.flink.runtime.jobmaster.event.ExecutionVertexResetEvent;
@@ -213,10 +213,10 @@ public class DefaultBatchJobRecoveryHandler
     }
 
     private void restoreOperatorCoordinators(
-            Map<OperatorID, byte[]> snapshots, Map<OperatorID, JobVertexID> operatorToJobVertex)
+            Map<VertexID, byte[]> snapshots, Map<VertexID, JobVertexID> operatorToJobVertex)
             throws Exception {
-        for (Map.Entry<OperatorID, byte[]> entry : snapshots.entrySet()) {
-            OperatorID operatorId = entry.getKey();
+        for (Map.Entry<VertexID, byte[]> entry : snapshots.entrySet()) {
+            VertexID operatorId = entry.getKey();
             JobVertexID jobVertexId = checkNotNull(operatorToJobVertex.get(operatorId));
             ExecutionJobVertex jobVertex = getExecutionJobVertex(jobVertexId);
             log.info("Restore operator coordinators of {} from job event.", jobVertex.getName());
@@ -285,7 +285,7 @@ public class DefaultBatchJobRecoveryHandler
         }
 
         // find the last operator coordinator state for each operator coordinator
-        Map<OperatorID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
+        Map<VertexID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
 
         List<ShuffleMasterSnapshot> shuffleMasterSnapshots = new ArrayList<>();
 
@@ -306,7 +306,7 @@ public class DefaultBatchJobRecoveryHandler
                     event.getIOMetrics());
 
             // recover operator coordinator
-            for (Map.Entry<OperatorID, CompletableFuture<byte[]>> entry :
+            for (Map.Entry<VertexID, CompletableFuture<byte[]>> entry :
                     event.getOperatorCoordinatorSnapshotFutures().entrySet()) {
                 checkState(entry.getValue().isDone());
                 operatorCoordinatorSnapshots.put(entry.getKey(), entry.getValue().get());
@@ -327,7 +327,7 @@ public class DefaultBatchJobRecoveryHandler
         }
 
         // restore operator coordinator state if needed.
-        final Map<OperatorID, JobVertexID> operatorToJobVertex = new HashMap<>();
+        final Map<VertexID, JobVertexID> operatorToJobVertex = new HashMap<>();
         for (ExecutionJobVertex jobVertex : context.getExecutionGraph().getAllVertices().values()) {
             if (!jobVertex.isInitialized()) {
                 continue;
@@ -381,7 +381,7 @@ public class DefaultBatchJobRecoveryHandler
 
         // snapshot operator coordinators and shuffle master if needed.
         needToSnapshotJobVertices.add(executionVertexId.getJobVertexId());
-        final Map<OperatorID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures =
+        final Map<VertexID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures =
                 new HashMap<>();
         CompletableFuture<ShuffleMasterSnapshot> shuffleMasterSnapshotFuture = null;
         long currentRelativeTime = clock.relativeTimeMillis();
@@ -408,9 +408,9 @@ public class DefaultBatchJobRecoveryHandler
                 jobVertexFinished);
     }
 
-    private Map<OperatorID, CompletableFuture<byte[]>> snapshotOperatorCoordinators() {
+    private Map<VertexID, CompletableFuture<byte[]>> snapshotOperatorCoordinators() {
 
-        final Map<OperatorID, CompletableFuture<byte[]>> snapshotFutures = new HashMap<>();
+        final Map<VertexID, CompletableFuture<byte[]>> snapshotFutures = new HashMap<>();
 
         for (JobVertexID jobVertexId : needToSnapshotJobVertices) {
             final ExecutionJobVertex jobVertex = checkNotNull(getExecutionJobVertex(jobVertexId));
