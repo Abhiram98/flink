@@ -167,7 +167,7 @@ public class StreamPhysicalMultiJoin extends AbstractRelNode implements StreamPh
     @Override
     public ExecNode<?> translateToExecNode() {
         final RexNode multiJoinCondition = createMultiJoinCondition();
-        final List<List<int[]>> inputUpsertKeys = getUpsertKeysForInputs();
+        final List<List<int[]>> inputUniqueKeys = getUpsertKeysForInputs();
         final List<FlinkJoinType> execJoinTypes = getExecJoinTypes();
         final List<InputProperty> inputProperties = createInputProperties();
 
@@ -177,7 +177,7 @@ public class StreamPhysicalMultiJoin extends AbstractRelNode implements StreamPh
                 joinConditions,
                 multiJoinCondition,
                 joinAttributeMap,
-                inputUpsertKeys,
+                inputUniqueKeys,
                 Collections.emptyMap(), // TODO Enable hint-based state ttl. See ticket
                 // TODO https://issues.apache.org/jira/browse/FLINK-37936
                 inputProperties,
