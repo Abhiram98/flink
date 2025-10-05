@@ -27,7 +27,6 @@ import org.apache.flink.configuration.EventOptions;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.configuration.TraceOptions;
 import org.apache.flink.core.plugin.PluginManager;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.events.reporter.EventReporter;
 import org.apache.flink.events.reporter.EventReporterFactory;
 import org.apache.flink.metrics.Metric;
@@ -37,7 +36,7 @@ import org.apache.flink.metrics.reporter.MetricReporter;
 import org.apache.flink.metrics.reporter.MetricReporterFactory;
 import org.apache.flink.runtime.metrics.filter.ReporterFilter;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.traces.reporter.TraceReporter;
 import org.apache.flink.traces.reporter.TraceReporterFactory;
 import org.apache.flink.util.CollectionUtil;
@@ -115,7 +114,7 @@ public class ReporterSetupBuilder<
 
     /** Builder for span/trace reporter. */
     public static final ReporterSetupBuilder<
-                    SpanBuilder, TraceReporter, TraceReporterSetup, TraceReporterFactory>
+            EventBuilder, TraceReporter, TraceReporterSetup, TraceReporterFactory>
             TRACE_SETUP_BUILDER =
                     new ReporterSetupBuilder<>(
                             new ReporterSetupInfo<>(
@@ -135,7 +134,7 @@ public class ReporterSetupBuilder<
 
     /** Builder for event reporter. */
     public static final ReporterSetupBuilder<
-                    EventBuilder, EventReporter, EventReporterSetup, EventReporterFactory>
+            org.apache.flink.events.EventBuilder, EventReporter, EventReporterSetup, EventReporterFactory>
             EVENT_SETUP_BUILDER =
                     new ReporterSetupBuilder<>(
                             new ReporterSetupInfo<>(

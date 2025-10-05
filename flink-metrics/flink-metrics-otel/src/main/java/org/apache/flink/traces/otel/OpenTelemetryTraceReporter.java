@@ -21,7 +21,7 @@ package org.apache.flink.traces.otel;
 import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.otel.OpenTelemetryReporterBase;
 import org.apache.flink.metrics.otel.VariableNameUtil;
-import org.apache.flink.traces.Span;
+import org.apache.flink.traces.Event;
 import org.apache.flink.traces.reporter.TraceReporter;
 
 import io.opentelemetry.api.trace.SpanBuilder;
@@ -76,7 +76,7 @@ public class OpenTelemetryTraceReporter extends OpenTelemetryReporterBase implem
         spanExporter.close();
     }
 
-    private void notifyOfAddedSpanInternal(Span span, io.opentelemetry.api.trace.Span parent) {
+    private void notifyOfAddedSpanInternal(Event span, io.opentelemetry.api.trace.Span parent) {
 
         Tracer tracer = tracerProvider.get(span.getScope());
         SpanBuilder spanBuilder = tracer.spanBuilder(span.getName());
@@ -121,7 +121,7 @@ public class OpenTelemetryTraceReporter extends OpenTelemetryReporterBase implem
     }
 
     @Override
-    public void notifyOfAddedSpan(org.apache.flink.traces.Span span) {
+    public void notifyOfAddedSpan(Event span) {
         notifyOfAddedSpanInternal(span, null);
     }
 }

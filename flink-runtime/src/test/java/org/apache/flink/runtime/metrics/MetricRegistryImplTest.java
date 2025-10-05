@@ -22,8 +22,6 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.EventOptions;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.configuration.TraceOptions;
-import org.apache.flink.events.Event;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.events.reporter.EventReporter;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.Metric;
@@ -49,8 +47,8 @@ import org.apache.flink.runtime.metrics.util.TestTraceReporter;
 import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.runtime.rpc.TestingRpcService;
 import org.apache.flink.runtime.webmonitor.retriever.MetricQueryServiceGateway;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.traces.reporter.TraceReporter;
 
 import org.apache.flink.shaded.guava33.com.google.common.collect.Iterators;
@@ -258,18 +256,18 @@ class MetricRegistryImplTest {
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "host", new ResourceID("id"));
         root.counter("rootCounter");
-        root.addEvent(Event.builder(getClass(), "TestEvent"));
-        root.addSpan(Span.builder(getClass(), "TestSpan"));
+        root.addEvent(org.apache.flink.events.Event.builder(getClass(), "TestEvent"));
+        root.addEvent(Event.builder(getClass(), "TestSpan"));
 
         assertThat(reporter1.getLastAddedMetric()).containsInstanceOf(Counter.class);
         assertThat(reporter1.getLastAddedMetricName()).hasValue("rootCounter");
-        assertThat(eventReporter1.getLastAddedEvent().map(Event::getName)).hasValue("TestEvent");
-        assertThat(spanReporter1.getLastAddedSpan().map(Span::getName)).hasValue("TestSpan");
+        assertThat(eventReporter1.getLastAddedEvent().map(org.apache.flink.events.Event::getName)).hasValue("TestEvent");
+        assertThat(spanReporter1.getLastAddedSpan().map(Event::getName)).hasValue("TestSpan");
 
         assertThat(reporter2.getLastAddedMetric()).containsInstanceOf(Counter.class);
         assertThat(reporter2.getLastAddedMetricName()).hasValue("rootCounter");
-        assertThat(eventReporter2.getLastAddedEvent().map(Event::getName)).hasValue("TestEvent");
-        assertThat(spanReporter2.getLastAddedSpan().map(Span::getName)).hasValue("TestSpan");
+        assertThat(eventReporter2.getLastAddedEvent().map(org.apache.flink.events.Event::getName)).hasValue("TestEvent");
+        assertThat(spanReporter2.getLastAddedSpan().map(Event::getName)).hasValue("TestSpan");
 
         root.close();
 
@@ -323,27 +321,27 @@ class MetricRegistryImplTest {
     }
 
     private static class NotificationCapturingEventReporter extends TestEventReporter {
-        @Nullable private Event addedEvent;
+        @Nullable private org.apache.flink.events.Event addedEvent;
 
         @Override
-        public void notifyOfAddedEvent(Event event) {
+        public void notifyOfAddedEvent(org.apache.flink.events.Event event) {
             this.addedEvent = event;
         }
 
-        public Optional<Event> getLastAddedEvent() {
+        public Optional<org.apache.flink.events.Event> getLastAddedEvent() {
             return Optional.ofNullable(addedEvent);
         }
     }
 
     private static class NotificationCapturingSpanReporter extends TestTraceReporter {
-        @Nullable private Span addedSpan;
+        @Nullable private Event addedSpan;
 
         @Override
-        public void notifyOfAddedSpan(Span span) {
+        public void notifyOfAddedSpan(Event span) {
             this.addedSpan = span;
         }
 
-        public Optional<Span> getLastAddedSpan() {
+        public Optional<Event> getLastAddedSpan() {
             return Optional.ofNullable(addedSpan);
         }
     }
@@ -447,14 +445,14 @@ class MetricRegistryImplTest {
         assertThat(registry.getDelimiter(3)).isEqualTo(GLOBAL_DEFAULT_DELIMITER);
         assertThat(registry.getDelimiter(-1)).isEqualTo(GLOBAL_DEFAULT_DELIMITER);
 
-        List<MetricRegistryImpl.ReporterAndSettings<TraceReporter, SpanBuilder>> traceReporters =
+        List<MetricRegistryImpl.ReporterAndSettings<TraceReporter, EventBuilder>> traceReporters =
                 registry.getTraceReporters();
         assertThat(traceReporters.get(0).getSettings().getDelimiter()).isEqualTo('_');
         assertThat(traceReporters.get(1).getSettings().getDelimiter()).isEqualTo('-');
         assertThat(traceReporters.get(2).getSettings().getDelimiter())
                 .isEqualTo(GLOBAL_DEFAULT_DELIMITER);
 
-        List<MetricRegistryImpl.ReporterAndSettings<EventReporter, EventBuilder>> eventReporters =
+        List<MetricRegistryImpl.ReporterAndSettings<EventReporter, org.apache.flink.events.EventBuilder>> eventReporters =
                 registry.getEventReporters();
         assertThat(traceReporters.get(0).getSettings().getDelimiter()).isEqualTo('_');
         assertThat(traceReporters.get(1).getSettings().getDelimiter()).isEqualTo('-');
@@ -648,19 +646,19 @@ class MetricRegistryImplTest {
                         Collections.emptyList());
 
         registry.addSpan(
-                Span.builder(getClass(), "testSpan"),
+                Event.builder(getClass(), "testSpan"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, "bar"));
 
         assertThat(reporter.getLastAddedSpan()).isEmpty();
 
         registry.addSpan(
-                Span.builder(getClass(), excludedSpanName),
+                Event.builder(getClass(), excludedSpanName),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, includedGroupName));
 
         assertThat(reporter.getLastAddedSpan()).isEmpty();
 
         registry.addSpan(
-                Span.builder(getClass(), "foo"),
+                Event.builder(getClass(), "foo"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, includedGroupName));
 
         assertThat(reporter.getLastAddedSpan()).isNotEmpty();
@@ -693,19 +691,19 @@ class MetricRegistryImplTest {
                                                 reporterConfig))));
 
         registry.addEvent(
-                Event.builder(getClass(), "testEvent"),
+                org.apache.flink.events.Event.builder(getClass(), "testEvent"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, "bar"));
 
         assertThat(reporter.getLastAddedEvent()).isEmpty();
 
         registry.addEvent(
-                Event.builder(getClass(), excludedSpanName),
+                org.apache.flink.events.Event.builder(getClass(), excludedSpanName),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, includedGroupName));
 
         assertThat(reporter.getLastAddedEvent()).isEmpty();
 
         registry.addEvent(
-                Event.builder(getClass(), "foo"),
+                org.apache.flink.events.Event.builder(getClass(), "foo"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, includedGroupName));
 
         assertThat(reporter.getLastAddedEvent()).isNotEmpty();
@@ -734,10 +732,10 @@ class MetricRegistryImplTest {
                         Collections.emptyList());
 
         registry.addSpan(
-                Span.builder(getClass(), "testEvent"),
+                Event.builder(getClass(), "testEvent"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, "testGroup"));
 
-        Optional<Span> lastAddedSpan = reporter.getLastAddedSpan();
+        Optional<Event> lastAddedSpan = reporter.getLastAddedSpan();
 
         assertThat(lastAddedSpan.get().getName()).isEqualTo("testEvent");
         assertThat(lastAddedSpan.get().getAttributes())
@@ -768,10 +766,10 @@ class MetricRegistryImplTest {
                                         additionalVariables)));
 
         registry.addEvent(
-                Event.builder(getClass(), "testEvent"),
+                org.apache.flink.events.Event.builder(getClass(), "testEvent"),
                 new MetricGroupTest.DummyAbstractMetricGroup(registry, "testGroup"));
 
-        Optional<Event> lastAddedEvent = reporter.getLastAddedEvent();
+        Optional<org.apache.flink.events.Event> lastAddedEvent = reporter.getLastAddedEvent();
 
         assertThat(lastAddedEvent.get().getName()).isEqualTo("testEvent");
         assertThat(lastAddedEvent.get().getAttributes())

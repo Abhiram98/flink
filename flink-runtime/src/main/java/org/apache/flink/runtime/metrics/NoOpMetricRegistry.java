@@ -19,11 +19,10 @@
 package org.apache.flink.runtime.metrics;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.runtime.metrics.groups.AbstractMetricGroup;
 import org.apache.flink.runtime.metrics.scope.ScopeFormats;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 
 /** Metric registry which does nothing. */
 public class NoOpMetricRegistry implements MetricRegistry {
@@ -51,10 +50,10 @@ public class NoOpMetricRegistry implements MetricRegistry {
     public void unregister(Metric metric, String metricName, AbstractMetricGroup<?> group) {}
 
     @Override
-    public void addSpan(SpanBuilder spanBuilder, AbstractMetricGroup<?> group) {}
+    public void addSpan(EventBuilder spanBuilder, AbstractMetricGroup<?> group) {}
 
     @Override
-    public void addEvent(EventBuilder eventBuilder, AbstractMetricGroup<?> group) {}
+    public void addEvent(org.apache.flink.events.EventBuilder eventBuilder, AbstractMetricGroup<?> group) {}
 
     @Override
     public ScopeFormats getScopeFormats() {

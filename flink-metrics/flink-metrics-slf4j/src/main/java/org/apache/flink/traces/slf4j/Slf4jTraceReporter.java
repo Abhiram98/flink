@@ -19,14 +19,14 @@
 package org.apache.flink.traces.slf4j;
 
 import org.apache.flink.metrics.MetricConfig;
-import org.apache.flink.traces.Span;
+import org.apache.flink.traces.Event;
 import org.apache.flink.traces.reporter.TraceReporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link TraceReporter} that exports {@link org.apache.flink.traces.Span Spans} via SLF4J {@link
+ * {@link TraceReporter} that exports {@link Event Spans} via SLF4J {@link
  * Logger}.
  */
 public class Slf4jTraceReporter implements TraceReporter {
@@ -39,7 +39,7 @@ public class Slf4jTraceReporter implements TraceReporter {
     public void close() {}
 
     @Override
-    public void notifyOfAddedSpan(Span span) {
+    public void notifyOfAddedSpan(Event span) {
         LOG.info("Reported span: {}", span);
     }
 }

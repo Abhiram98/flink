@@ -23,9 +23,9 @@ import org.apache.flink.annotation.Internal;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Basic implementation of {@link Span}. */
+/** Basic implementation of {@link Event}. */
 @Internal
-public class SimpleSpan implements Span {
+public class SimpleSpan implements Event {
 
     private final String scope;
     private final String name;

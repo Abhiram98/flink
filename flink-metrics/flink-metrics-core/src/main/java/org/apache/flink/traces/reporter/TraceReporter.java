@@ -20,15 +20,15 @@ package org.apache.flink.traces.reporter;
 
 import org.apache.flink.annotation.Experimental;
 import org.apache.flink.metrics.Reporter;
-import org.apache.flink.traces.Span;
+import org.apache.flink.traces.Event;
 
 /**
- * Trace reporters are used to export {@link Span Spans} to an external backend.
+ * Trace reporters are used to export {@link Event Spans} to an external backend.
  *
  * <p>Reporters are instantiated via a {@link TraceReporterFactory}.
  */
 @Experimental
 public interface TraceReporter extends Reporter {
 
-    void notifyOfAddedSpan(Span span);
+    void notifyOfAddedSpan(Event span);
 }

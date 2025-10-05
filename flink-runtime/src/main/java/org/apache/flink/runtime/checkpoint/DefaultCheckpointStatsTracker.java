@@ -20,7 +20,6 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.AttributeBuilder;
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.events.Events;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.MetricGroup;
@@ -29,8 +28,8 @@ import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointStatistics;
 import org.apache.flink.runtime.rest.util.RestMapperUtils;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -252,19 +251,19 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
 
     private void logCheckpointStatistics(AbstractCheckpointStats checkpointStats) {
         try {
-            EventBuilder eventBuilder =
+            org.apache.flink.events.EventBuilder eventBuilder =
                     Events.CheckpointEvent.builder(CheckpointStatsTracker.class)
                             .setObservedTsMillis(checkpointStats.getLatestAckTimestamp())
                             .setSeverity("INFO");
             addCommonCheckpointStatsAttributes(eventBuilder, checkpointStats);
             metricGroup.addEvent(eventBuilder);
 
-            SpanBuilder spanBuilder =
-                    Span.builder(CheckpointStatsTracker.class, "Checkpoint")
+            EventBuilder spanBuilder =
+                    Event.builder(CheckpointStatsTracker.class, "Checkpoint")
                             .setStartTsMillis(checkpointStats.getTriggerTimestamp())
                             .setEndTsMillis(checkpointStats.getLatestAckTimestamp());
             addCommonCheckpointStatsAttributes(spanBuilder, checkpointStats);
-            metricGroup.addSpan(spanBuilder);
+            metricGroup.addEvent(spanBuilder);
 
             if (LOG.isDebugEnabled()) {
                 StringWriter sw = new StringWriter();
@@ -390,8 +389,8 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     private void traceInitializationMetrics(JobInitializationMetrics jobInitializationMetrics) {
-        SpanBuilder span =
-                Span.builder(CheckpointStatsTracker.class, "JobInitialization")
+        EventBuilder span =
+                Event.builder(CheckpointStatsTracker.class, "JobInitialization")
                         .setStartTsMillis(jobInitializationMetrics.getStartTs())
                         .setEndTsMillis(jobInitializationMetrics.getEndTs())
                         .setAttribute(
@@ -407,11 +406,11 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
         if (jobInitializationMetrics.getStateSize() != JobInitializationMetrics.UNSET) {
             span.setAttribute("fullSize", jobInitializationMetrics.getStateSize());
         }
-        metricGroup.addSpan(span);
+        metricGroup.addEvent(span);
     }
 
     private void setDurationSpanAttribute(
-            SpanBuilder span, JobInitializationMetrics.SumMaxDuration duration) {
+            EventBuilder span, JobInitializationMetrics.SumMaxDuration duration) {
         span.setAttribute("max" + duration.getName(), duration.getMax());
         span.setAttribute("sum" + duration.getName(), duration.getSum());
     }

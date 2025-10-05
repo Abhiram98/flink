@@ -22,19 +22,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Test for {@link SpanBuilder}. */
+/** Test for {@link EventBuilder}. */
 class SpanBuilderTest {
 
     @Test
     void testSpanBuilder() {
-        Span span1 = new SpanBuilder(SpanBuilderTest.class, "testSpanBuilder").build();
+        Event span1 = new EventBuilder(SpanBuilderTest.class, "testSpanBuilder").build();
 
         assertThat(span1.getStartTsMillis()).isGreaterThan(0);
         assertThat(span1.getEndTsMillis()).isGreaterThan(0);
 
         long startTsMillis = System.currentTimeMillis();
-        Span span2 =
-                new SpanBuilder(SpanBuilderTest.class, "testSpanBuilder")
+        Event span2 =
+                new EventBuilder(SpanBuilderTest.class, "testSpanBuilder")
                         .setStartTsMillis(startTsMillis)
                         .build();
 
@@ -42,16 +42,16 @@ class SpanBuilderTest {
         assertThat(span2.getEndTsMillis()).isEqualTo(startTsMillis);
 
         long endTsMillis = System.currentTimeMillis();
-        Span span3 =
-                new SpanBuilder(SpanBuilderTest.class, "testSpanBuilder")
+        Event span3 =
+                new EventBuilder(SpanBuilderTest.class, "testSpanBuilder")
                         .setEndTsMillis(endTsMillis)
                         .build();
 
         assertThat(span3.getStartTsMillis()).isGreaterThan(0);
         assertThat(span3.getEndTsMillis()).isEqualTo(endTsMillis);
 
-        Span span4 =
-                new SpanBuilder(SpanBuilderTest.class, "testSpanBuilder")
+        Event span4 =
+                new EventBuilder(SpanBuilderTest.class, "testSpanBuilder")
                         .setStartTsMillis(startTsMillis)
                         .setEndTsMillis(endTsMillis)
                         .build();

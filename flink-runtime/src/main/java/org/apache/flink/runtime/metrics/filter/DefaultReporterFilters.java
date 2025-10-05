@@ -24,10 +24,9 @@ import org.apache.flink.configuration.ConfigurationUtils;
 import org.apache.flink.configuration.EventOptions;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.configuration.TraceOptions;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.metrics.MetricType;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -82,14 +81,14 @@ public class DefaultReporterFilters {
         }
     }
 
-    static class TraceReporterFilter extends AbstractReporterFilter<SpanBuilder> {
+    static class TraceReporterFilter extends AbstractReporterFilter<EventBuilder> {
 
         TraceReporterFilter(List<FilterSpec> includes, List<FilterSpec> excludes) {
             super(includes, excludes);
         }
 
         @Override
-        public boolean filter(SpanBuilder reported, String name, String logicalScope) {
+        public boolean filter(EventBuilder reported, String name, String logicalScope) {
             for (FilterSpec exclude : excludes) {
                 if (exclude.namePattern.matcher(name).matches()
                         && exclude.scopePattern.matcher(logicalScope).matches()) {
@@ -106,14 +105,14 @@ public class DefaultReporterFilters {
         }
     }
 
-    static class EventReporterFilter extends AbstractReporterFilter<EventBuilder> {
+    static class EventReporterFilter extends AbstractReporterFilter<org.apache.flink.events.EventBuilder> {
 
         EventReporterFilter(List<FilterSpec> includes, List<FilterSpec> excludes) {
             super(includes, excludes);
         }
 
         @Override
-        public boolean filter(EventBuilder reported, String name, String logicalScope) {
+        public boolean filter(org.apache.flink.events.EventBuilder reported, String name, String logicalScope) {
             for (FilterSpec exclude : excludes) {
                 if (exclude.namePattern.matcher(name).matches()
                         && exclude.scopePattern.matcher(logicalScope).matches()) {
@@ -138,7 +137,7 @@ public class DefaultReporterFilters {
                 MetricReporterFilter::new);
     }
 
-    public static ReporterFilter<SpanBuilder> tracesFromConfiguration(Configuration configuration) {
+    public static ReporterFilter<EventBuilder> tracesFromConfiguration(Configuration configuration) {
         return fromConfiguration(
                 configuration,
                 TraceOptions.REPORTER_INCLUDES,
@@ -146,7 +145,7 @@ public class DefaultReporterFilters {
                 TraceReporterFilter::new);
     }
 
-    public static ReporterFilter<EventBuilder> eventsFromConfiguration(
+    public static ReporterFilter<org.apache.flink.events.EventBuilder> eventsFromConfiguration(
             Configuration configuration) {
         return fromConfiguration(
                 configuration,

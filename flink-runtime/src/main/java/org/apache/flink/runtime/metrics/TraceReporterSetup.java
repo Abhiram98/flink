@@ -21,19 +21,19 @@ import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.TraceOptions;
 import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.runtime.metrics.filter.ReporterFilter;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.traces.reporter.TraceReporter;
 
 import java.util.Map;
 
 /** Setup for {@link org.apache.flink.traces.reporter.TraceReporter}. */
-public final class TraceReporterSetup extends AbstractReporterSetup<TraceReporter, SpanBuilder> {
+public final class TraceReporterSetup extends AbstractReporterSetup<TraceReporter, EventBuilder> {
 
     public TraceReporterSetup(
             final String name,
             final MetricConfig configuration,
             TraceReporter reporter,
-            ReporterFilter<SpanBuilder> spanFilter,
+            ReporterFilter<EventBuilder> spanFilter,
             final Map<String, String> additionalVariables) {
         super(name, configuration, reporter, spanFilter, additionalVariables);
     }

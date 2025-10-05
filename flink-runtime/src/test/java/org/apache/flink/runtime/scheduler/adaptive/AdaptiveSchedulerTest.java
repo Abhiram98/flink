@@ -107,8 +107,8 @@ import org.apache.flink.runtime.taskmanager.TaskExecutionState;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.util.ResourceCounter;
 import org.apache.flink.runtime.util.TestingFatalErrorHandler;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.ConfigurationException;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.IterableUtils;
@@ -1464,7 +1464,7 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
     void testHowToHandleFailureRejectedByStrategy() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Event> spanCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
                 createTestMetricGroup(spanCollector);
 
@@ -1494,7 +1494,7 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
     void testHowToHandleFailureAllowedByStrategy() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Event> spanCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
                 createTestMetricGroup(spanCollector);
         final TestRestartBackoffTimeStrategy restartBackoffTimeStrategy =
@@ -1526,7 +1526,7 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
     void testHowToHandleFailureUnrecoverableFailure() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Event> spanCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
                 createTestMetricGroup(spanCollector);
 
@@ -2781,18 +2781,18 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
     }
 
     private static UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup
-            createTestMetricGroup(List<Span> output) {
+            createTestMetricGroup(List<Event> output) {
         return new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
             @Override
-            public void addSpan(SpanBuilder spanBuilder) {
+            public void addSpan(EventBuilder spanBuilder) {
                 output.add(spanBuilder.build());
             }
         };
     }
 
-    private static void checkMetrics(List<Span> results, boolean canRestart) {
+    private static void checkMetrics(List<Event> results, boolean canRestart) {
         assertThat(results).isNotEmpty();
-        for (Span span : results) {
+        for (Event span : results) {
             assertThat(span.getScope())
                     .isEqualTo(JobFailureMetricReporter.class.getCanonicalName());
             assertThat(span.getName()).isEqualTo("JobFailure");

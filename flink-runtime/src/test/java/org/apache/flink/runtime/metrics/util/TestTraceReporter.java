@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.metrics.util;
 
 import org.apache.flink.metrics.MetricConfig;
-import org.apache.flink.traces.Span;
+import org.apache.flink.traces.Event;
 import org.apache.flink.traces.reporter.TraceReporter;
 import org.apache.flink.traces.reporter.TraceReporterFactory;
 
@@ -29,7 +29,7 @@ import java.util.Properties;
 public class TestTraceReporter implements TraceReporter, TraceReporterFactory {
 
     @Override
-    public void notifyOfAddedSpan(Span span) {}
+    public void notifyOfAddedSpan(Event span) {}
 
     @Override
     public void open(MetricConfig config) {}

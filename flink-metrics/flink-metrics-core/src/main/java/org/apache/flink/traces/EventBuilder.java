@@ -25,9 +25,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Builder used to construct {@link Span}. See {@link Span#builder(Class, String)}. */
+/** Builder used to construct {@link Event}. See {@link Event#builder(Class, String)}. */
 @Experimental
-public class SpanBuilder implements AttributeBuilder {
+public class EventBuilder implements AttributeBuilder {
     private final HashMap<String, Object> attributes = new HashMap<>();
     private final Class<?> classScope;
     private final String name;
@@ -35,22 +35,22 @@ public class SpanBuilder implements AttributeBuilder {
     private long endTsMillis;
 
     /**
-     * @param classScope Flink's convention is that the scope of each {@link Span} is defined by the
-     *     class that is creating it. If you are building the {@link Span} in your class {@code
+     * @param classScope Flink's convention is that the scope of each {@link Event} is defined by the
+     *     class that is creating it. If you are building the {@link Event} in your class {@code
      *     MyClass}, as the {@code classScope} you should pass {@code MyClass.class}.
      * @param name Human read-able name of this span, that describes what does the built {@link
-     *     Span} will represent.
+     *     Event} will represent.
      */
-    SpanBuilder(Class<?> classScope, String name) {
+    EventBuilder(Class<?> classScope, String name) {
         this.classScope = classScope;
         this.name = name;
     }
 
-    public Span build() {
+    public Event build() {
         return build(Collections.emptyMap());
     }
 
-    public Span build(Map<String, String> additionalVariables) {
+    public Event build(Map<String, String> additionalVariables) {
         long startTsMillisToBuild = startTsMillis;
         if (startTsMillisToBuild == 0) {
             startTsMillisToBuild = System.currentTimeMillis();
@@ -72,47 +72,47 @@ public class SpanBuilder implements AttributeBuilder {
     }
 
     /**
-     * Optionally you can manually set the {@link Span}'s startTs. If not specified, {@code
+     * Optionally you can manually set the {@link Event}'s startTs. If not specified, {@code
      * System.currentTimeMillis()} will be used.
      */
-    public SpanBuilder setStartTsMillis(long startTsMillis) {
+    public EventBuilder setStartTsMillis(long startTsMillis) {
         this.startTsMillis = startTsMillis;
         return this;
     }
 
     /**
-     * Optionally you can manually set the {@link Span}'s endTs. If not specified, {@code
+     * Optionally you can manually set the {@link Event}'s endTs. If not specified, {@code
      * startTsMillis} will be used (see {@link #setStartTsMillis(long)})..
      */
-    public SpanBuilder setEndTsMillis(long endTsMillis) {
+    public EventBuilder setEndTsMillis(long endTsMillis) {
         this.endTsMillis = endTsMillis;
         return this;
     }
 
-    /** Additional attribute to be attached to this {@link Span}. */
+    /** Additional attribute to be attached to this {@link Event}. */
     @Override
-    public SpanBuilder setAttribute(String key, String value) {
+    public EventBuilder setAttribute(String key, String value) {
         attributes.put(key, value);
         return this;
     }
 
-    /** Additional attribute to be attached to this {@link Span}. */
+    /** Additional attribute to be attached to this {@link Event}. */
     @Override
-    public SpanBuilder setAttribute(String key, long value) {
+    public EventBuilder setAttribute(String key, long value) {
         attributes.put(key, value);
         return this;
     }
 
-    /** Additional attribute to be attached to this {@link Span}. */
+    /** Additional attribute to be attached to this {@link Event}. */
     @Override
-    public SpanBuilder setAttribute(String key, double value) {
+    public EventBuilder setAttribute(String key, double value) {
         attributes.put(key, value);
         return this;
     }
 
-    /** Additional attribute to be attached to this {@link Span}. */
+    /** Additional attribute to be attached to this {@link Event}. */
     @Override
-    public SpanBuilder setAttribute(String key, boolean value) {
+    public EventBuilder setAttribute(String key, boolean value) {
         attributes.put(key, value);
         return this;
     }
