@@ -41,8 +41,8 @@ import org.apache.flink.streaming.api.operators.StreamOperatorParameters;
 import org.apache.flink.streaming.api.operators.Triggerable;
 import org.apache.flink.streaming.api.operators.sorted.state.BatchExecutionInternalTimeServiceWithAsyncState;
 import org.apache.flink.streaming.api.watermark.Watermark;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessing;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessingOperator;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncKeyOrderedProcessingOperator;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.KeyOrderedProcessing;
 import org.apache.flink.streaming.runtime.operators.asyncprocessing.ElementOrder;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 import org.apache.flink.streaming.runtime.streamrecord.RecordAttributes;
@@ -64,13 +64,13 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * This operator is an abstract class that give the {@link AbstractStreamOperatorV2} the ability to
- * perform {@link AsyncStateProcessing}. The aim is to make any subclass of {@link
+ * perform {@link KeyOrderedProcessing}. The aim is to make any subclass of {@link
  * AbstractStreamOperatorV2} could manipulate async state with only a change of base class.
  */
 @Internal
 @SuppressWarnings("rawtypes")
 public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractStreamOperatorV2<OUT>
-        implements AsyncStateProcessingOperator {
+        implements AsyncKeyOrderedProcessingOperator {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractAsyncStateStreamOperatorV2.class);
@@ -105,7 +105,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
         int maxParallelism = getExecutionConfig().getMaxParallelism();
 
         this.declarationManager = new DeclarationManager();
-        if (isAsyncStateProcessingEnabled()) {
+        if (isKeyOrderedProcessingEnabled()) {
             AsyncKeyedStateBackend asyncKeyedStateBackend =
                     stateHandler.getAsyncKeyedStateBackend();
             if (asyncKeyedStateBackend != null) {
@@ -143,7 +143,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
     }
 
     @Override
-    public boolean isAsyncStateProcessingEnabled() {
+    public boolean isKeyOrderedProcessingEnabled() {
         return true;
     }
 
@@ -192,7 +192,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
 
     @Override
     public Object getCurrentKey() {
-        if (isAsyncStateProcessingEnabled()) {
+        if (isKeyOrderedProcessingEnabled()) {
             RecordContext currentContext = asyncExecutionController.getCurrentContext();
             if (currentContext == null) {
                 throw new UnsupportedOperationException(
@@ -263,7 +263,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
 
     @Override
     public void prepareSnapshotPreBarrier(long checkpointId) throws Exception {
-        if (isAsyncStateProcessingEnabled()) {
+        if (isKeyOrderedProcessingEnabled()) {
             asyncExecutionController.drainInflightRecords(0);
         }
     }
@@ -275,7 +275,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
             throw new RuntimeException("The timer service has not been initialized.");
         }
 
-        if (!isAsyncStateProcessingEnabled()) {
+        if (!isKeyOrderedProcessingEnabled()) {
             // If async state processing is disabled, fallback to the super class.
             return super.getInternalTimerService(name, namespaceSerializer, triggerable);
         }
@@ -303,7 +303,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
     // ------------------------------------------------------------------------
     @Override
     protected void reportOrForwardLatencyMarker(LatencyMarker marker) {
-        if (!isAsyncStateProcessingEnabled()) {
+        if (!isKeyOrderedProcessingEnabled()) {
             // If async state processing is disabled, fallback to the super class.
             super.reportOrForwardLatencyMarker(marker);
             return;
@@ -352,7 +352,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
      */
     @Override
     public final void processWatermark(Watermark mark) throws Exception {
-        if (!isAsyncStateProcessingEnabled()) {
+        if (!isKeyOrderedProcessingEnabled()) {
             // If async state processing is disabled, fallback to the super class.
             Watermark watermark = preProcessWatermark(mark);
             if (watermark != null) {
@@ -380,7 +380,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
     @Override
     public void processWatermarkStatus(WatermarkStatus watermarkStatus, int inputId)
             throws Exception {
-        if (!isAsyncStateProcessingEnabled()) {
+        if (!isKeyOrderedProcessingEnabled()) {
             super.processWatermarkStatus(watermarkStatus, inputId);
             return;
         }
@@ -411,7 +411,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
     @Override
     public void processRecordAttributes(RecordAttributes recordAttributes, int inputId)
             throws Exception {
-        if (!isAsyncStateProcessingEnabled()) {
+        if (!isKeyOrderedProcessingEnabled()) {
             super.processRecordAttributes(recordAttributes, inputId);
             return;
         }
@@ -442,7 +442,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
     }
 
     private void closeIfNeeded() {
-        if (isAsyncStateProcessingEnabled()
+        if (isKeyOrderedProcessingEnabled()
                 && !streamTask.isFailing()
                 && !streamTask.isCanceled()) {
             asyncExecutionController.drainInflightRecords(0);
