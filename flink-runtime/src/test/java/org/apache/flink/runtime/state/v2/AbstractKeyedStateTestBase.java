@@ -237,9 +237,9 @@ public class AbstractKeyedStateTestBase {
 
         @Override
         public CompletableFuture<Void> executeBatchRequests(
-                StateRequestContainer stateRequestContainer) {
+                StateRequestContainer requestContainer) {
             for (StateRequest request :
-                    ((TestStateRequestContainer) stateRequestContainer).requests) {
+                    ((TestStateRequestContainer) requestContainer).requests) {
                 executeRequestSync(request);
             }
             CompletableFuture<Void> future = new CompletableFuture<>();

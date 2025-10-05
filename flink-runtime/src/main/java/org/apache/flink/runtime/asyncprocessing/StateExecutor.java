@@ -33,11 +33,11 @@ public interface StateExecutor {
     /**
      * Execute a batch of state requests.
      *
-     * @param stateRequestContainer The StateRequestContainer which holds the given batch of
+     * @param requestContainer The StateRequestContainer which holds the given batch of
      *     processing requests.
      * @return A future can determine whether execution has completed.
      */
-    CompletableFuture<Void> executeBatchRequests(StateRequestContainer stateRequestContainer);
+    CompletableFuture<Void> executeBatchRequests(StateRequestContainer requestContainer);
 
     /**
      * Create a {@link StateRequestContainer} which is used to hold the batched {@link
@@ -48,9 +48,9 @@ public interface StateExecutor {
     /**
      * Execute a single state request *synchronously*. This is for synchronous APIs.
      *
-     * @param stateRequest the request to run.
+     * @param request the request to run.
      */
-    void executeRequestSync(StateRequest<?, ?, ?, ?> stateRequest);
+    void executeRequestSync(StateRequest<?, ?, ?, ?> request);
 
     /**
      * Check if this executor is fully loaded. Will be invoked to determine whether to give more

@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.apache.flink.state.forst.ForStStateRequestClassifier.convertRequests;
+import static org.apache.flink.state.forst.ForStRequestClassifier.convertRequests;
 
 /**
  * The {@link StateExecutor} implementation which executing batch {@link StateRequest}s for
@@ -147,17 +147,17 @@ public class ForStStateExecutor implements StateExecutor {
 
     @Override
     public CompletableFuture<Void> executeBatchRequests(
-            StateRequestContainer stateRequestContainer) {
+            StateRequestContainer requestContainer) {
         checkState();
-        Preconditions.checkArgument(stateRequestContainer instanceof ForStStateRequestClassifier);
-        ForStStateRequestClassifier stateRequestClassifier =
-                (ForStStateRequestClassifier) stateRequestContainer;
+        Preconditions.checkArgument(requestContainer instanceof ForStRequestClassifier);
+        ForStRequestClassifier requestClassifier =
+                (ForStRequestClassifier) requestContainer;
         // Calculate ongoing sub-processes. Only count read ones.
         // The fully loaded only consider read requests for now, since the write ones are quick.
         final List<ForStDBGetRequest<?, ?, ?, ?>> getRequests =
-                stateRequestClassifier.pollDbGetRequests();
+                requestClassifier.pollDbGetRequests();
         final List<ForStDBIterRequest<?, ?, ?, ?, ?>> iterRequests =
-                stateRequestClassifier.pollDbIterRequests();
+                requestClassifier.pollDbIterRequests();
         if (!getRequests.isEmpty()) {
             ongoing.addAndGet(1);
         }
@@ -193,7 +193,7 @@ public class ForStStateExecutor implements StateExecutor {
                     }
 
                     List<ForStDBPutRequest<?, ?, ?>> putRequests =
-                            stateRequestClassifier.pollDbPutRequests();
+                            requestClassifier.pollDbPutRequests();
                     if (!putRequests.isEmpty()) {
                         ForStWriteBatchOperation writeOperations =
                                 new ForStWriteBatchOperation(
@@ -232,16 +232,15 @@ public class ForStStateExecutor implements StateExecutor {
         return resultFuture;
     }
 
-    @Override
-    public StateRequestContainer createStateRequestContainer() {
+    public StateRequestContainer createRequestContainer() {
         checkState();
-        return new ForStStateRequestClassifier();
+        return new ForStRequestClassifier();
     }
 
     @Override
-    public void executeRequestSync(StateRequest<?, ?, ?, ?> stateRequest) {
+    public void executeRequestSync(StateRequest<?, ?, ?, ?> request) {
         checkState();
-        Object forstRequest = convertRequests(stateRequest);
+        Object forstRequest = convertRequests(request);
         try {
             ForStDBOperation operation;
             if (forstRequest instanceof ForStDBGetRequest) {
