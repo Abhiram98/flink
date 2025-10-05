@@ -86,7 +86,7 @@ public class MissingTypeInfo extends TypeInformation<InvalidTypesException> {
     }
 
     @Override
-    public TypeSerializer<InvalidTypesException> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<InvalidTypesException> createSerializer(ExecutionConfig config) {
         throw new UnsupportedOperationException(
                 "The missing type information cannot be used as a type information.");
     }

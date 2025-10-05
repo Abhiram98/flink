@@ -67,7 +67,7 @@ public class TimeIndicatorTypeInfo extends SqlTimeTypeInfo<Timestamp> {
     // be compatible with the corresponding SqlTimestampTypeInfo
     @Override
     @SuppressWarnings("unchecked")
-    public TypeSerializer<Timestamp> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<Timestamp> createSerializer(ExecutionConfig config) {
         return (TypeSerializer) LongSerializer.INSTANCE;
     }
 

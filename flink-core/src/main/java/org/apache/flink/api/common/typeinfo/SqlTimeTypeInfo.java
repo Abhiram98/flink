@@ -107,7 +107,7 @@ public class SqlTimeTypeInfo<T> extends TypeInformation<T> implements AtomicType
     }
 
     @Override
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return serializer;
     }
 
