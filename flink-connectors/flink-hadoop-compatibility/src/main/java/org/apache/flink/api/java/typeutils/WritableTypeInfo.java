@@ -62,7 +62,7 @@ public class WritableTypeInfo<T extends Writable> extends TypeInformation<T>
     @Override
     @PublicEvolving
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         if (Comparable.class.isAssignableFrom(typeClass)) {
             return new WritableComparator(sortOrderAscending, typeClass);
         } else {
@@ -112,7 +112,7 @@ public class WritableTypeInfo<T extends Writable> extends TypeInformation<T>
 
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return new WritableSerializer<T>(typeClass);
     }
 
