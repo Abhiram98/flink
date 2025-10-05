@@ -251,7 +251,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
         final DispatcherGateway dispatcherGateway = getDispatcherGatewayInternal();
 
         return dispatcherGateway
-                .submitJob(executionPlan, RpcUtils.INF_TIMEOUT)
+                .submitStream(executionPlan, RpcUtils.INF_TIMEOUT)
                 .thenApply(FunctionUtils.nullFn())
                 .exceptionally(this::filterOutDuplicateJobSubmissionException);
     }

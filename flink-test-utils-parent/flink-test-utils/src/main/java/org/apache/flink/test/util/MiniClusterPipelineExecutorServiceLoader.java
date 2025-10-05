@@ -25,13 +25,8 @@ import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
-import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
-import org.apache.flink.core.execution.PipelineExecutor;
-import org.apache.flink.core.execution.PipelineExecutorFactory;
-import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
+import org.apache.flink.core.execution.*;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.jobgraph.JobGraph;
@@ -155,12 +150,12 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
                 Executors.newFixedThreadPool(
                         1, new ExecutorThreadFactory("Flink-MiniClusterExecutor-IO"));
         private final MiniCluster miniCluster;
-        private final List<JobStatusChangedListener> jobStatusChangedListeners;
+        private final List<StreamStatusChangedListener> jobStatusChangedListeners;
 
         public MiniClusterExecutor(MiniCluster miniCluster) {
             this.miniCluster = miniCluster;
             this.jobStatusChangedListeners =
-                    JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+                    StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                             Thread.currentThread().getContextClassLoader(),
                             miniCluster.getConfiguration(),
                             executorService);
@@ -171,7 +166,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
                 Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassLoader)
                 throws Exception {
             final JobGraph jobGraph =
-                    PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassLoader);
+                    PipelineExecutorUtils.getStreamGraph(pipeline, configuration, userCodeClassLoader);
             if (jobGraph.getSavepointRestoreSettings() == SavepointRestoreSettings.none()
                     && pipeline instanceof StreamGraph) {
                 jobGraph.setSavepointRestoreSettings(
@@ -182,7 +177,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
                     .whenComplete(
                             (ignored, throwable) -> {
                                 if (throwable == null) {
-                                    PipelineExecutorUtils.notifyJobStatusListeners(
+                                    PipelineExecutorUtils.notifyStreamStatusListeners(
                                             pipeline, jobGraph, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(

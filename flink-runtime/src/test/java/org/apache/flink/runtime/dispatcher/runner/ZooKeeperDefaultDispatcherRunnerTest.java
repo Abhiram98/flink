@@ -210,7 +210,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
 
                 final JobGraph jobGraph = createJobGraphWithBlobs();
                 LOG.info("Initial job submission {}.", jobGraph.getJobID());
-                dispatcherGateway.submitJob(jobGraph, TESTING_TIMEOUT).get();
+                dispatcherGateway.submitStream(jobGraph, TESTING_TIMEOUT).get();
 
                 dispatcherLeaderElection.notLeader();
 

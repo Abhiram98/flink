@@ -247,7 +247,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
     }
 
     private CompletableFuture<Acknowledge> submitJob() {
-        return dispatcherGateway.submitJob(jobGraph, timeout);
+        return dispatcherGateway.submitStream(jobGraph, timeout);
     }
 
     private void submitJobAndWait() {
@@ -432,7 +432,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         testingJobManagerRunner.getCloseAsyncCalledLatch().await();
 
         final CompletableFuture<Acknowledge> submissionFuture =
-                dispatcherGateway.submitJob(jobGraph, timeout);
+                dispatcherGateway.submitStream(jobGraph, timeout);
 
         try {
             submissionFuture.get(10L, TimeUnit.MILLISECONDS);
@@ -458,7 +458,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
                 startDispatcherAndSubmitJob();
 
         final CompletableFuture<Acknowledge> submissionFuture =
-                dispatcherGateway.submitJob(jobGraph, timeout);
+                dispatcherGateway.submitStream(jobGraph, timeout);
 
         try {
             try {
@@ -648,7 +648,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         // submit and fail during job master runner construction
         queue.offer(Optional.of(testException));
         try {
-            dispatcherGateway.submitJob(jobGraph, Duration.ofMinutes(1)).get();
+            dispatcherGateway.submitStream(jobGraph, Duration.ofMinutes(1)).get();
             fail("A FlinkException is expected");
         } catch (Throwable expectedException) {
             assertThat(expectedException, containsCause(FlinkException.class));
@@ -660,7 +660,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         // don't fail this time
         queue.offer(Optional.empty());
         // submit job again
-        dispatcherGateway.submitJob(jobGraph, Duration.ofMinutes(1L)).get();
+        dispatcherGateway.submitStream(jobGraph, Duration.ofMinutes(1L)).get();
         blockingJobManagerRunnerFactory.setJobStatus(JobStatus.RUNNING);
 
         // Ensure job is running

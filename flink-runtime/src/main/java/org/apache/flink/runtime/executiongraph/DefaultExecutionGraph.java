@@ -27,7 +27,7 @@ import org.apache.flink.api.common.accumulators.Accumulator;
 import org.apache.flink.api.common.accumulators.AccumulatorHelper;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.DefaultJobExecutionStatusEvent;
-import org.apache.flink.core.execution.JobStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.SimpleCounter;
@@ -304,7 +304,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     private final TaskDeploymentDescriptorFactory taskDeploymentDescriptorFactory;
 
-    private final List<JobStatusChangedListener> jobStatusChangedListeners;
+    private final List<StreamStatusChangedListener> jobStatusChangedListeners;
 
     // --------------------------------------------------------------------------------------------
     //   Constructors
@@ -332,7 +332,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             List<JobStatusHook> jobStatusHooks,
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             TaskDeploymentDescriptorFactory taskDeploymentDescriptorFactory,
-            List<JobStatusChangedListener> jobStatusChangedListeners) {
+            List<StreamStatusChangedListener> jobStatusChangedListeners) {
 
         this.jobType = jobType;
         this.executionGraphId = new ExecutionGraphID();

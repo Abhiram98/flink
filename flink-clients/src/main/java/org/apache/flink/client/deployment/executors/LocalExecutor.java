@@ -26,8 +26,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -58,7 +58,7 @@ public class LocalExecutor implements PipelineExecutor {
 
     private final Configuration configuration;
     private final Function<MiniClusterConfiguration, MiniCluster> miniClusterFactory;
-    private final List<JobStatusChangedListener> jobStatusChangedListeners;
+    private final List<StreamStatusChangedListener> jobStatusChangedListeners;
 
     public static LocalExecutor create(Configuration configuration) {
         return new LocalExecutor(configuration, MiniCluster::new);
@@ -76,7 +76,7 @@ public class LocalExecutor implements PipelineExecutor {
         this.configuration = configuration;
         this.miniClusterFactory = miniClusterFactory;
         this.jobStatusChangedListeners =
-                JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+                StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                         Thread.currentThread().getContextClassLoader(),
                         configuration,
                         executorService);
@@ -103,7 +103,7 @@ public class LocalExecutor implements PipelineExecutor {
                 .whenComplete(
                         (ignored, throwable) -> {
                             if (throwable == null) {
-                                PipelineExecutorUtils.notifyJobStatusListeners(
+                                PipelineExecutorUtils.notifyStreamStatusListeners(
                                         pipeline, jobGraph, jobStatusChangedListeners);
                             } else {
                                 LOG.error(
@@ -130,6 +130,6 @@ public class LocalExecutor implements PipelineExecutor {
             plan.setDefaultParallelism(slotsPerTaskManager * numTaskManagers);
         }
 
-        return PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        return PipelineExecutorUtils.getStreamGraph(pipeline, configuration, userCodeClassloader);
     }
 }
