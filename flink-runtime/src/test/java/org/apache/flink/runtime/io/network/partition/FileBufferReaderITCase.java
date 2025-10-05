@@ -27,7 +27,7 @@ import org.apache.flink.runtime.io.network.api.reader.RecordReader;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -124,14 +124,14 @@ class FileBufferReaderITCase {
         try (final MiniCluster miniCluster = new MiniCluster(miniClusterConfiguration)) {
             miniCluster.start();
 
-            final JobGraph jobGraph = createJobGraph();
+            final ExecutionPlan jobGraph = createJobGraph();
 
             // the job needs to complete without throwing an exception
             miniCluster.executeJobBlocking(jobGraph);
         }
     }
 
-    private static JobGraph createJobGraph() {
+    private static ExecutionPlan createJobGraph() {
         final SlotSharingGroup group1 = new SlotSharingGroup();
         final SlotSharingGroup group2 = new SlotSharingGroup();
 

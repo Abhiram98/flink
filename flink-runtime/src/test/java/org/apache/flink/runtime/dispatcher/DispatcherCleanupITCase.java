@@ -32,7 +32,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -129,7 +129,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
     @Test
     public void testCleanupThroughRetries() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final JobID jobId = jobGraph.getJobID();
 
         // ExecutionPlanStore
@@ -204,7 +204,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
     @Test
     public void testCleanupNotCancellable() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final JobID jobId = jobGraph.getJobID();
 
         final JobResultStore jobResultStore = new EmbeddedJobResultStore();
@@ -255,7 +255,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
     @Test
     public void testCleanupAfterLeadershipChange() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final JobID jobId = jobGraph.getJobID();
 
         // Construct execution plan store.
@@ -371,7 +371,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
         awaitStatus(dispatcherGateway, jobId, JobStatus.FINISHED);
     }
 
-    private JobGraph createJobGraph() {
+    private ExecutionPlan createJobGraph() {
         final JobVertex firstVertex = new JobVertex("first");
         firstVertex.setInvokableClass(NoOpInvokable.class);
         firstVertex.setParallelism(1);

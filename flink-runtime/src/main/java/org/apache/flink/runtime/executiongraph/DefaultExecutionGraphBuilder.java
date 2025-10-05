@@ -38,7 +38,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
@@ -69,12 +69,12 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
  * Utility class to encapsulate the logic of building an {@link DefaultExecutionGraph} from a {@link
- * JobGraph}.
+ * ExecutionPlan}.
  */
 public class DefaultExecutionGraphBuilder {
 
     public static DefaultExecutionGraph buildGraph(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Configuration jobManagerConfig,
             ScheduledExecutorService futureExecutor,
             Executor ioExecutor,
@@ -356,7 +356,7 @@ public class DefaultExecutionGraphBuilder {
         return executionGraph;
     }
 
-    public static boolean isCheckpointingEnabled(JobGraph jobGraph) {
+    public static boolean isCheckpointingEnabled(ExecutionPlan jobGraph) {
         return jobGraph.getCheckpointingSettings() != null;
     }
 

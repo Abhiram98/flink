@@ -47,13 +47,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-/** Tests for {@link JobGraph}. */
+/** Tests for {@link ExecutionPlan}. */
 public class JobGraphTest extends TestLogger {
 
     @Test
     public void testSerialization() {
         try {
-            JobGraph jg = new JobGraph("The graph");
+            ExecutionPlan jg = new ExecutionPlan("The graph");
 
             // add some configuration values
             {
@@ -77,7 +77,7 @@ public class JobGraphTest extends TestLogger {
             }
 
             // de-/serialize and compare
-            JobGraph copy = CommonTestUtils.createCopySerializable(jg);
+            ExecutionPlan copy = CommonTestUtils.createCopySerializable(jg);
 
             assertEquals(jg.getName(), copy.getName());
             assertEquals(jg.getJobID(), copy.getJobID());
@@ -119,7 +119,7 @@ public class JobGraphTest extends TestLogger {
         intermediate1.connectNewDataSetAsInput(
                 source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        JobGraph graph =
+        ExecutionPlan graph =
                 JobGraphTestUtils.streamingJobGraph(
                         source1, source2, intermediate1, intermediate2, target1, target2);
 
@@ -170,7 +170,7 @@ public class JobGraphTest extends TestLogger {
             l13.connectNewDataSetAsInput(
                     source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph graph =
+            ExecutionPlan graph =
                     JobGraphTestUtils.streamingJobGraph(source1, source2, root, l11, l13, l12, l2);
             List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
@@ -220,7 +220,7 @@ public class JobGraphTest extends TestLogger {
             op3.connectNewDataSetAsInput(
                     op2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph graph = JobGraphTestUtils.streamingJobGraph(source, op1, op2, op3);
+            ExecutionPlan graph = JobGraphTestUtils.streamingJobGraph(source, op1, op2, op3);
             List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
             assertEquals(4, sorted.size());
@@ -252,7 +252,7 @@ public class JobGraphTest extends TestLogger {
             v4.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4);
+            ExecutionPlan jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -288,7 +288,7 @@ public class JobGraphTest extends TestLogger {
             target.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4, source, target);
+            ExecutionPlan jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4, source, target);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -322,7 +322,7 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testSetUserArtifactBlobKey() throws IOException, ClassNotFoundException {
-        JobGraph jb = JobGraphTestUtils.emptyJobGraph();
+        ExecutionPlan jb = JobGraphTestUtils.emptyJobGraph();
 
         final DistributedCache.DistributedCacheEntry[] entries = {
             new DistributedCache.DistributedCacheEntry("p1", true, true),
@@ -354,21 +354,21 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void checkpointingIsDisabledByDefaultForStreamingJobGraph() {
-        final JobGraph jobGraph = JobGraphBuilder.newStreamingJobGraphBuilder().build();
+        final ExecutionPlan jobGraph = JobGraphBuilder.newStreamingJobGraphBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
 
     @Test
     public void checkpointingIsDisabledByDefaultForBatchJobGraph() {
-        final JobGraph jobGraph = JobGraphBuilder.newBatchJobGraphBuilder().build();
+        final ExecutionPlan jobGraph = JobGraphBuilder.newBatchJobGraphBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
 
     @Test
     public void checkpointingIsEnabledIfIntervalIsqAndLegal() {
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(createCheckpointSettingsWithInterval(10))
                         .build();
@@ -378,7 +378,7 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void checkpointingIsDisabledIfIntervalIsMaxValue() {
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(
                                 createCheckpointSettingsWithInterval(Long.MAX_VALUE))
@@ -419,7 +419,7 @@ public class JobGraphTest extends TestLogger {
         v3.setSlotSharingGroup(group2);
         v4.setSlotSharingGroup(group2);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();
@@ -439,7 +439,7 @@ public class JobGraphTest extends TestLogger {
         v2.setSlotSharingGroup(slotSharingGroup);
         v1.setStrictlyCoLocatedWith(v2);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();

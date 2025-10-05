@@ -25,7 +25,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.FixedDelayRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -74,7 +74,7 @@ class ExecutionGraphCoLocationRestartTest {
         groupVertex.setStrictlyCoLocatedWith(groupVertex2);
 
         // initiate and schedule job
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(groupVertex, groupVertex2);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(groupVertex, groupVertex2);
 
         final ManuallyTriggeredScheduledExecutorService delayExecutor =
                 new ManuallyTriggeredScheduledExecutorService();

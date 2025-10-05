@@ -20,7 +20,7 @@ package org.apache.flink.streaming.util;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestartStrategyOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 import java.time.Duration;
@@ -42,7 +42,7 @@ public class RestartStrategyUtils {
      *
      * @param jobGraph the JobGraph to configure
      */
-    public static void configureNoRestartStrategy(JobGraph jobGraph) {
+    public static void configureNoRestartStrategy(ExecutionPlan jobGraph) {
         jobGraph.getJobConfiguration().set(RestartStrategyOptions.RESTART_STRATEGY, "none");
     }
 
@@ -86,7 +86,7 @@ public class RestartStrategyUtils {
      * @param delayBetweenAttempts the delay between restart attempts in milliseconds
      */
     public static void configureFixedDelayRestartStrategy(
-            JobGraph jobGraph, int restartAttempts, long delayBetweenAttempts) {
+            ExecutionPlan jobGraph, int restartAttempts, long delayBetweenAttempts) {
         configureFixedDelayRestartStrategy(
                 jobGraph, restartAttempts, Duration.ofMillis(delayBetweenAttempts));
     }
@@ -99,7 +99,7 @@ public class RestartStrategyUtils {
      * @param delayBetweenAttempts the delay between restart attempts
      */
     public static void configureFixedDelayRestartStrategy(
-            JobGraph jobGraph, int restartAttempts, Duration delayBetweenAttempts) {
+            ExecutionPlan jobGraph, int restartAttempts, Duration delayBetweenAttempts) {
         Configuration configuration = jobGraph.getJobConfiguration();
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         configuration.set(

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionStateUpdateListener;
 import org.apache.flink.runtime.executiongraph.MarkPartitionFinishedStrategy;
 import org.apache.flink.runtime.executiongraph.VertexAttemptNumberStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 
 import org.slf4j.Logger;
 
@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 public interface ExecutionGraphFactory {
 
     /**
-     * Create and restore {@link ExecutionGraph} from the given {@link JobGraph} and services.
+     * Create and restore {@link ExecutionGraph} from the given {@link ExecutionPlan} and services.
      *
      * @param jobGraph jobGraph to initialize the ExecutionGraph with
      * @param completedCheckpointStore completedCheckpointStore to pass to the CheckpointCoordinator
@@ -56,7 +56,7 @@ public interface ExecutionGraphFactory {
      * @throws Exception if the {@link ExecutionGraph} could not be created and restored
      */
     ExecutionGraph createAndRestoreExecutionGraph(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             CompletedCheckpointStore completedCheckpointStore,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointIDCounter checkpointIdCounter,

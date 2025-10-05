@@ -22,14 +22,14 @@ import org.apache.flink.runtime.testtasks.NoOpInvokable;
 
 import java.util.Arrays;
 
-/** Utilities for creating {@link JobGraph JobGraphs} for testing purposes. */
+/** Utilities for creating {@link ExecutionPlan JobGraphs} for testing purposes. */
 public class JobGraphTestUtils {
 
-    public static JobGraph emptyJobGraph() {
+    public static ExecutionPlan emptyJobGraph() {
         return JobGraphBuilder.newStreamingJobGraphBuilder().build();
     }
 
-    public static JobGraph singleNoOpJobGraph() {
+    public static ExecutionPlan singleNoOpJobGraph() {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
@@ -37,13 +37,13 @@ public class JobGraphTestUtils {
         return JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
     }
 
-    public static JobGraph streamingJobGraph(JobVertex... jobVertices) {
+    public static ExecutionPlan streamingJobGraph(JobVertex... jobVertices) {
         return JobGraphBuilder.newStreamingJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    public static JobGraph batchJobGraph(JobVertex... jobVertices) {
+    public static ExecutionPlan batchJobGraph(JobVertex... jobVertices) {
         return JobGraphBuilder.newBatchJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();

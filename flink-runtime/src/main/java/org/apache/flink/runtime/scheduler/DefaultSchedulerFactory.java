@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategyFactoryL
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
@@ -59,7 +59,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             final Logger log,
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final SlotPoolService slotPoolService,

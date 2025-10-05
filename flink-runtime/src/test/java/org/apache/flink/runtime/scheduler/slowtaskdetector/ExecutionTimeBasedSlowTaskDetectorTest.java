@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
@@ -84,7 +84,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     void testAllTasksInCreatedAndNoSlowTasks() throws Exception {
         final int parallelism = 3;
         final JobVertex jobVertex = createNoOpVertex(parallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
 
         // all tasks are in the CREATED state, which is not classified as slow tasks.
         final ExecutionGraph executionGraph =
@@ -412,7 +412,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     }
 
     private ExecutionGraph createExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
 
         final SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
@@ -429,7 +429,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     }
 
     private ExecutionGraph createDynamicExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertices);
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

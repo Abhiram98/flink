@@ -25,7 +25,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -97,7 +97,7 @@ class DefaultSchedulerBatchSchedulingTest {
     void testSchedulingOfJobWithFewerSlotsThanParallelism() throws Exception {
         final int parallelism = 5;
         final Duration batchSlotTimeout = Duration.ofMillis(5L);
-        final JobGraph jobGraph = createBatchJobGraph(parallelism);
+        final ExecutionPlan jobGraph = createBatchJobGraph(parallelism);
 
         try (final SlotPool slotPool = createSlotPool(mainThreadExecutor, batchSlotTimeout)) {
             final ArrayBlockingQueue<ExecutionAttemptID> submittedTasksQueue =
@@ -190,7 +190,7 @@ class DefaultSchedulerBatchSchedulingTest {
                 .buildAndStart();
     }
 
-    private JobGraph createBatchJobGraph(int parallelism) {
+    private ExecutionPlan createBatchJobGraph(int parallelism) {
         final JobVertex jobVertex = new JobVertex("testing task");
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(NoOpInvokable.class);
@@ -198,7 +198,7 @@ class DefaultSchedulerBatchSchedulingTest {
     }
 
     private SchedulerNG createScheduler(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             PhysicalSlotProvider physicalSlotProvider,
             Duration slotRequestTimeout,

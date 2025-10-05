@@ -25,11 +25,8 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
@@ -70,7 +67,7 @@ class ExecutionVertexTest {
         partitionTracker.setStopTrackingAndReleasePartitionsConsumer(
                 releasePartitionsFuture::complete);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphTestUtils.streamingJobGraph(producerJobVertex, consumerJobVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
@@ -114,7 +111,7 @@ class ExecutionVertexTest {
     @Test
     void testFindLatestAllocationIgnoresFailedAttempts() throws Exception {
         final JobVertex source = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(source);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(source);
         final TestingPhysicalSlotProvider withLimitedAmountOfPhysicalSlots =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final Configuration configuration = new Configuration();

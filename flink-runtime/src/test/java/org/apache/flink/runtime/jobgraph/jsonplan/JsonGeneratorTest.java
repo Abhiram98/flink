@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobgraph.jsonplan;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -81,7 +81,7 @@ public class JsonGeneratorTest {
             sink2.connectNewDataSetAsInput(
                     join1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            JobGraph jg =
+            ExecutionPlan jg =
                     JobGraphTestUtils.batchJobGraph(
                             source1,
                             source2,
@@ -128,7 +128,7 @@ public class JsonGeneratorTest {
         }
     }
 
-    private void checkVertexExists(String vertexId, JobGraph graph) {
+    private void checkVertexExists(String vertexId, ExecutionPlan graph) {
         // validate that the vertex has a valid
         JobVertexID id = JobVertexID.fromHexString(vertexId);
         for (JobVertex vertex : graph.getVertices()) {

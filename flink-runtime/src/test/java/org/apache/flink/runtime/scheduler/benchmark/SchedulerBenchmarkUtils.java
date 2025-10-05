@@ -29,11 +29,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -83,14 +80,14 @@ public class SchedulerBenchmarkUtils {
         return jobVertices;
     }
 
-    public static JobGraph createJobGraph(JobConfiguration jobConfiguration) throws IOException {
+    public static ExecutionPlan createJobGraph(JobConfiguration jobConfiguration) throws IOException {
         return createJobGraph(Collections.emptyList(), jobConfiguration);
     }
 
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             List<JobVertex> jobVertices, JobConfiguration jobConfiguration) throws IOException {
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphTestUtils.streamingJobGraph(jobVertices.toArray(new JobVertex[0]));
 
         jobGraph.setJobType(jobConfiguration.getJobType());
@@ -106,7 +103,7 @@ public class SchedulerBenchmarkUtils {
             ScheduledExecutorService scheduledExecutorService)
             throws Exception {
 
-        final JobGraph jobGraph = createJobGraph(jobVertices, jobConfiguration);
+        final ExecutionPlan jobGraph = createJobGraph(jobVertices, jobConfiguration);
 
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();

@@ -24,7 +24,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleServiceFactory;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -107,7 +107,7 @@ class ShuffleMasterTest {
                 .build();
     }
 
-    private JobGraph createJobGraph() throws Exception {
+    private ExecutionPlan createJobGraph() throws Exception {
         JobVertex source = new JobVertex("source");
         source.setParallelism(2);
         source.setInvokableClass(NoOpInvokable.class);
@@ -119,7 +119,7 @@ class ShuffleMasterTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
+        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, Duration.ofSeconds(2));
         return jobGraph;
     }

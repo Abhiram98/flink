@@ -31,7 +31,7 @@ import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.heartbeat.HeartbeatServicesImpl;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
@@ -81,7 +81,7 @@ public class MiniDispatcherTest extends TestLogger {
     public final TestingFatalErrorHandlerResource testingFatalErrorHandlerResource =
             new TestingFatalErrorHandlerResource();
 
-    private static JobGraph jobGraph;
+    private static ExecutionPlan jobGraph;
 
     private static ExecutionGraphInfo executionGraphInfo;
 
@@ -335,7 +335,7 @@ public class MiniDispatcherTest extends TestLogger {
 
     private MiniDispatcher createMiniDispatcher(
             ClusterEntrypoint.ExecutionMode executionMode,
-            @Nullable JobGraph recoveredJobGraph,
+            @Nullable ExecutionPlan recoveredJobGraph,
             @Nullable JobResult recoveredDirtyJob)
             throws Exception {
         final JobManagerRunnerRegistry jobManagerRunnerRegistry =

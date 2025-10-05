@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Builder for the {@link JobGraph}. */
+/** Builder for the {@link ExecutionPlan}. */
 public class JobGraphBuilder {
 
     private final JobType jobType;
@@ -117,9 +117,9 @@ public class JobGraphBuilder {
         return this;
     }
 
-    public JobGraph build() {
-        final JobGraph jobGraph =
-                new JobGraph(jobId, jobName, jobVertices.toArray(new JobVertex[0]));
+    public ExecutionPlan build() {
+        final ExecutionPlan jobGraph =
+                new ExecutionPlan(jobId, jobName, jobVertices.toArray(new JobVertex[0]));
 
         jobGraph.setJobType(jobType);
 

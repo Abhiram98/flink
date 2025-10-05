@@ -24,7 +24,7 @@ import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.client.JobSubmissionException;
 import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -33,7 +33,6 @@ import org.apache.flink.runtime.testutils.TestingExecutionPlanStore;
 import org.apache.flink.runtime.testutils.TestingJobResultStore;
 import org.apache.flink.runtime.util.TestingFatalErrorHandler;
 import org.apache.flink.runtime.webmonitor.TestingDispatcherGateway;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.ExecutorUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.TestLoggerExtension;
@@ -71,7 +70,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ExtendWith(TestLoggerExtension.class)
 class SessionDispatcherLeaderProcessTest {
 
-    private static final JobGraph JOB_GRAPH = JobGraphTestUtils.emptyJobGraph();
+    private static final ExecutionPlan JOB_GRAPH = JobGraphTestUtils.emptyJobGraph();
 
     private static ExecutorService ioExecutor;
 
@@ -174,7 +173,7 @@ class SessionDispatcherLeaderProcessTest {
     void testRecoveryWithMultipleExecutionPlansAndOneMatchingDirtyJobResult() throws Exception {
         final JobResult matchingDirtyJobResult =
                 TestingJobResultStore.createSuccessfulJobResult(JOB_GRAPH.getJobID());
-        final ExecutionPlan otherExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+        final org.apache.flink.streaming.api.graph.ExecutionPlan otherExecutionPlan = JobGraphTestUtils.emptyJobGraph();
 
         testJobRecovery(
                 Arrays.asList(otherExecutionPlan, JOB_GRAPH),
@@ -206,9 +205,9 @@ class SessionDispatcherLeaderProcessTest {
     }
 
     private void testJobRecovery(
-            Collection<ExecutionPlan> executionPlansToRecover,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> executionPlansToRecover,
             Set<JobResult> dirtyJobResults,
-            Consumer<Collection<ExecutionPlan>> recoveredExecutionPlanAssertion,
+            Consumer<Collection<org.apache.flink.streaming.api.graph.ExecutionPlan>> recoveredExecutionPlanAssertion,
             Consumer<Collection<JobResult>> recoveredDirtyJobResultAssertion)
             throws Exception {
         executionPlanStore =
@@ -221,7 +220,7 @@ class SessionDispatcherLeaderProcessTest {
                         .withGetDirtyResultsSupplier(() -> dirtyJobResults)
                         .build();
 
-        final CompletableFuture<Collection<ExecutionPlan>> recoveredExecutionPlansFuture =
+        final CompletableFuture<Collection<org.apache.flink.streaming.api.graph.ExecutionPlan>> recoveredExecutionPlansFuture =
                 new CompletableFuture<>();
         final CompletableFuture<Collection<JobResult>> recoveredDirtyJobResultsFuture =
                 new CompletableFuture<>();
@@ -274,7 +273,7 @@ class SessionDispatcherLeaderProcessTest {
                                 })
                         .build();
 
-        final CompletableFuture<Collection<ExecutionPlan>> recoveredExecutionPlansFuture =
+        final CompletableFuture<Collection<org.apache.flink.streaming.api.graph.ExecutionPlan>> recoveredExecutionPlansFuture =
                 new CompletableFuture<>();
         final CompletableFuture<Collection<JobResult>> recoveredDirtyJobResultsFuture =
                 new CompletableFuture<>();
@@ -547,7 +546,7 @@ class SessionDispatcherLeaderProcessTest {
 
     @Test
     void onAddedExecutionPlan_submitsRecoveredJob() throws Exception {
-        final CompletableFuture<ExecutionPlan> submittedJobFuture = new CompletableFuture<>();
+        final CompletableFuture<org.apache.flink.streaming.api.graph.ExecutionPlan> submittedJobFuture = new CompletableFuture<>();
         final TestingDispatcherGateway testingDispatcherGateway =
                 TestingDispatcherGateway.newBuilder()
                         .setSubmitFunction(
@@ -574,7 +573,7 @@ class SessionDispatcherLeaderProcessTest {
             executionPlanStore.putExecutionPlan(JOB_GRAPH);
             dispatcherLeaderProcess.onAddedExecutionPlan(JOB_GRAPH.getJobID());
 
-            final ExecutionPlan submittedExecutionPlan = submittedJobFuture.get();
+            final org.apache.flink.streaming.api.graph.ExecutionPlan submittedExecutionPlan = submittedJobFuture.get();
 
             assertThat(submittedExecutionPlan.getJobID()).isEqualTo(JOB_GRAPH.getJobID());
         }
@@ -770,7 +769,7 @@ class SessionDispatcherLeaderProcessTest {
     private AbstractDispatcherLeaderProcess.DispatcherGatewayServiceFactory
             createFactoryBasedOnExecutionPlans(
                     Function<
-                                    Collection<ExecutionPlan>,
+                                    Collection<org.apache.flink.streaming.api.graph.ExecutionPlan>,
                                     AbstractDispatcherLeaderProcess.DispatcherGatewayService>
                             createFunction) {
         return (ignoredDispatcherId,

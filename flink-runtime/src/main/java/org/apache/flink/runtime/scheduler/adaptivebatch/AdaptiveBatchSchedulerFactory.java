@@ -41,7 +41,7 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -99,7 +99,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
@@ -195,7 +195,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @VisibleForTesting
     public static AdaptiveBatchScheduler createScheduler(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             ExecutionConfig executionConfig,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
@@ -355,7 +355,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         }
     }
 
-    private static void checkAllExchangesAreSupported(final JobGraph jobGraph) {
+    private static void checkAllExchangesAreSupported(final ExecutionPlan jobGraph) {
         for (JobVertex jobVertex : jobGraph.getVertices()) {
             for (IntermediateDataSet dataSet : jobVertex.getProducedDataSets()) {
                 checkState(

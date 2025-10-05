@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.dispatcher.TestingPartialDispatcherServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.StandaloneExecutionPlanStore;
@@ -54,7 +54,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithoutDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
 
         final JobDispatcherLeaderProcessFactory factory =
                 createDispatcherLeaderProcessFactoryFromTestInstance(
@@ -66,7 +66,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithMatchingDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         final JobResult jobResult =
                 TestingJobResultStore.createSuccessfulJobResult(jobGraph.getJobID());
 
@@ -80,7 +80,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithNotMatchingDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         final JobResult jobResult = TestingJobResultStore.createSuccessfulJobResult(new JobID());
 
         final JobDispatcherLeaderProcessFactory factory =
@@ -105,7 +105,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     private static JobDispatcherLeaderProcessFactory
             createDispatcherLeaderProcessFactoryFromTestInstance(
-                    @Nullable JobGraph jobGraph,
+                    @Nullable ExecutionPlan jobGraph,
                     @Nullable JobResult dirtyJobResult,
                     Path storageDir)
                     throws IOException {

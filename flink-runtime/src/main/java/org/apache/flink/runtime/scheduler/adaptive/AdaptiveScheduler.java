@@ -69,14 +69,8 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.failure.DefaultFailureEnricherContext;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException;
@@ -365,7 +359,7 @@ public class AdaptiveScheduler
     private final Settings settings;
     private final StateTransitionManagerFactory stateTransitionManagerFactory;
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
 
     private final JobInfo jobInfo;
 
@@ -423,7 +417,7 @@ public class AdaptiveScheduler
 
     public AdaptiveScheduler(
             Settings settings,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             @Nullable JobResourceRequirements jobResourceRequirements,
             Configuration configuration,
             DeclarativeSlotPool declarativeSlotPool,
@@ -474,7 +468,7 @@ public class AdaptiveScheduler
             StateTransitionManagerFactory stateTransitionManagerFactory,
             BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             @Nullable JobResourceRequirements jobResourceRequirements,
             Configuration configuration,
             DeclarativeSlotPool declarativeSlotPool,
@@ -571,7 +565,7 @@ public class AdaptiveScheduler
         this.reportEventsAsSpans = configuration.get(TraceOptions.REPORT_EVENTS_AS_SPANS);
     }
 
-    private static void assertPreconditions(JobGraph jobGraph) throws RuntimeException {
+    private static void assertPreconditions(ExecutionPlan jobGraph) throws RuntimeException {
         Preconditions.checkState(
                 jobGraph.getJobType() == JobType.STREAMING,
                 "The adaptive scheduler only supports streaming jobs.");
@@ -651,7 +645,7 @@ public class AdaptiveScheduler
 
     /**
      * Creates the parallelism store that should be used for determining scheduling requirements,
-     * which may choose different parallelisms than set in the {@link JobGraph} depending on the
+     * which may choose different parallelisms than set in the {@link ExecutionPlan} depending on the
      * execution mode.
      *
      * @param jobGraph The job graph for execution.
@@ -659,7 +653,7 @@ public class AdaptiveScheduler
      * @return The parallelism store.
      */
     private static VertexParallelismStore computeVertexParallelismStore(
-            JobGraph jobGraph, SchedulerExecutionMode executionMode) {
+            ExecutionPlan jobGraph, SchedulerExecutionMode executionMode) {
         if (executionMode == SchedulerExecutionMode.REACTIVE) {
             return computeReactiveModeVertexParallelismStore(
                     jobGraph.getVertices(), SchedulerBase::getDefaultMaxParallelism, true);
@@ -669,7 +663,7 @@ public class AdaptiveScheduler
 
     /**
      * Creates the parallelism store that should be used to build the {@link ExecutionGraph}, which
-     * will respect the vertex parallelism of the passed {@link JobGraph} in all execution modes.
+     * will respect the vertex parallelism of the passed {@link ExecutionPlan} in all execution modes.
      *
      * @param jobGraph The job graph for execution.
      * @param executionMode The mode of scheduler execution.
@@ -679,7 +673,7 @@ public class AdaptiveScheduler
      */
     @VisibleForTesting
     static VertexParallelismStore computeVertexParallelismStoreForExecution(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             SchedulerExecutionMode executionMode,
             Function<JobVertex, Integer> defaultMaxParallelismFunc) {
         if (executionMode == SchedulerExecutionMode.REACTIVE) {
@@ -1333,7 +1327,7 @@ public class AdaptiveScheduler
 
         try {
             schedulingPlan = determineParallelism(slotAllocator, previousExecutionGraph);
-            JobGraph adjustedJobGraph = jobInformation.copyJobGraph();
+            ExecutionPlan adjustedJobGraph = jobInformation.copyJobGraph();
 
             for (JobVertex vertex : adjustedJobGraph.getVertices()) {
                 JobVertexID id = vertex.getID();

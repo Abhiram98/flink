@@ -18,6 +18,7 @@
 package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.annotation.Internal;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 
@@ -25,7 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * A plan that describes how to execute {@link org.apache.flink.runtime.jobgraph.JobGraph JobGraph}.
+ * A plan that describes how to execute {@link ExecutionPlan JobGraph}.
  *
  * <ol>
  *   <li>{@link #vertexParallelism} is necessary to create {@link

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.TestingInternalFailuresListener;
@@ -120,7 +120,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
     @Test
     void testVertexTerminationAndJobTermination() throws Exception {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
         eg.transitionToRunning();
 
@@ -201,14 +201,14 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
 
     private SpeculativeExecutionVertex createSpeculativeExecutionVertex() throws Exception {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         ExecutionJobVertex jv = executionGraph.getJobVertex(jobVertex.getID());
         assertThat(jv).isNotNull();
         return (SpeculativeExecutionVertex) jv.getTaskVertices()[0];
     }
 
-    private ExecutionGraph createExecutionGraph(final JobGraph jobGraph) throws Exception {
+    private ExecutionGraph createExecutionGraph(final ExecutionPlan jobGraph) throws Exception {
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

@@ -18,7 +18,7 @@
 package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -32,16 +32,16 @@ import org.apache.flink.shaded.guava32.com.google.common.collect.Iterables;
 
 import java.util.Collection;
 
-/** {@link JobInformation} created from a {@link JobGraph}. */
+/** {@link JobInformation} created from a {@link ExecutionPlan}. */
 public class JobGraphJobInformation implements JobInformation {
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
     private final JobID jobID;
     private final String name;
     private final VertexParallelismStore vertexParallelismStore;
 
     public JobGraphJobInformation(
-            JobGraph jobGraph, VertexParallelismStore vertexParallelismStore) {
+            ExecutionPlan jobGraph, VertexParallelismStore vertexParallelismStore) {
         this.jobGraph = jobGraph;
         this.jobID = jobGraph.getJobID();
         this.name = jobGraph.getName();
@@ -79,7 +79,7 @@ public class JobGraphJobInformation implements JobInformation {
     }
 
     /** Returns a copy of a jobGraph that can be mutated. */
-    public JobGraph copyJobGraph() {
+    public ExecutionPlan copyJobGraph() {
         return InstantiationUtil.cloneUnchecked(jobGraph);
     }
 

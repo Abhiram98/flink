@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.util.IterableUtils;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertEquals;
 /** Unit tests for {@link DefaultLogicalTopology}. */
 public class DefaultLogicalTopologyTest extends TestLogger {
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private DefaultLogicalTopology logicalTopology;
 
@@ -78,7 +78,7 @@ public class DefaultLogicalTopologyTest extends TestLogger {
         assertEquals(2, IterableUtils.toStream(logicalTopology.getAllPipelinedRegions()).count());
     }
 
-    private JobGraph createJobGraph() {
+    private ExecutionPlan createJobGraph() {
         final JobVertex[] jobVertices = new JobVertex[3];
         final int parallelism = 3;
         jobVertices[0] = createNoOpVertex("v1", parallelism);

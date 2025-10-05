@@ -26,7 +26,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
@@ -56,7 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * This class contains test concerning the correct conversion from {@link JobGraph} to {@link
+ * This class contains test concerning the correct conversion from {@link ExecutionPlan} to {@link
  * ExecutionGraph} objects. It also tests that {@link
  * VertexInputInfoComputationUtils#computeVertexInputInfoForAllToAll} builds {@link
  * DistributionPattern#ALL_TO_ALL} connections correctly.

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
@@ -349,7 +349,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
             miniCluster.submitJob(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }

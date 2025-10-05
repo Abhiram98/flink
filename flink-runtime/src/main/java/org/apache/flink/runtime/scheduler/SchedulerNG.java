@@ -35,11 +35,8 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -65,7 +62,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interface for scheduling Flink jobs.
  *
- * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link JobGraph} when
+ * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link ExecutionPlan} when
  * instantiated.
  *
  * <p>Implementations can expect that methods will not be invoked concurrently. In fact, all

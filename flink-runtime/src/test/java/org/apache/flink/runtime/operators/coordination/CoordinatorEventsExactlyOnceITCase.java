@@ -30,7 +30,7 @@ import org.apache.flink.runtime.checkpoint.PrioritizedOperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
@@ -153,7 +153,7 @@ public class CoordinatorEventsExactlyOnceITCase {
         final JobVertex task1 = buildJobVertex(OPERATOR_1_NAME, numEvents1, delay1);
         final JobVertex task2 = buildJobVertex(OPERATOR_2_NAME, numEvents2, delay2);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobName("Coordinator Events Job")
                         .addJobVertices(Arrays.asList(task1, task2))

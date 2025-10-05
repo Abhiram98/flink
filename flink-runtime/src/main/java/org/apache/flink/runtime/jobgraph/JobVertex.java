@@ -602,7 +602,7 @@ public class JobVertex implements java.io.Serializable {
 
         /**
          * The actual parallelism this vertex will be run with. In contrast, the {@link
-         * #getParallelism()} is the original parallelism set when creating the {@link JobGraph} and
+         * #getParallelism()} is the original parallelism set when creating the {@link ExecutionPlan} and
          * might be updated e.g. by the {@link
          * org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler}.
          */
@@ -616,7 +616,7 @@ public class JobVertex implements java.io.Serializable {
 
         /**
          * The actual parallelism this vertex will be run with. In contrast, the {@link
-         * #getParallelism()} is the original parallelism set when creating the {@link JobGraph} and
+         * #getParallelism()} is the original parallelism set when creating the {@link ExecutionPlan} and
          * might be updated e.g. by the {@link
          * org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler}.
          */

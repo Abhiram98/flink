@@ -40,13 +40,8 @@ import org.apache.flink.runtime.executiongraph.ResultPartitionBytes;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
@@ -90,19 +85,19 @@ public class SchedulerTestingUtils {
     private SchedulerTestingUtils() {}
 
     public static DefaultScheduler createScheduler(
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final ScheduledExecutorService executorService)
             throws Exception {
         return new DefaultSchedulerBuilder(jobGraph, mainThreadExecutor, executorService).build();
     }
 
-    public static void enableCheckpointing(final JobGraph jobGraph) {
+    public static void enableCheckpointing(final ExecutionPlan jobGraph) {
         enableCheckpointing(jobGraph, null, null);
     }
 
     public static void enableCheckpointing(
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             @Nullable StateBackend stateBackend,
             @Nullable CheckpointStorage checkpointStorage) {
         enableCheckpointing(
@@ -114,7 +109,7 @@ public class SchedulerTestingUtils {
     }
 
     public static void enableCheckpointing(
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             @Nullable StateBackend stateBackend,
             @Nullable CheckpointStorage checkpointStorage,
             long checkpointInterval,
@@ -423,7 +418,7 @@ public class SchedulerTestingUtils {
             ScheduledExecutorService scheduledExecutor,
             Configuration jobMasterConfiguration)
             throws Exception {
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)

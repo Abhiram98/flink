@@ -64,13 +64,8 @@ import org.apache.flink.runtime.executiongraph.metrics.DownTimeGauge;
 import org.apache.flink.runtime.executiongraph.metrics.UpTimeGauge;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexResourceRequirements;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
@@ -267,7 +262,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testArchivedCheckpointingSettingsNotNullIfCheckpointingIsEnabled() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
@@ -285,7 +280,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testArchivedJobVerticesPresent() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
@@ -408,7 +403,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testExecutionGraphGenerationWithAvailableResources() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -466,7 +461,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testExecutionGraphGenerationSetsInitializationTimestamp() throws Exception {
         final long initializationTimestamp = 42L;
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -604,7 +599,7 @@ public class AdaptiveSchedulerTest {
                                 })
                         .build();
 
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 new DefaultDeclarativeSlotPool(
@@ -691,7 +686,7 @@ public class AdaptiveSchedulerTest {
                                 })
                         .build();
 
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -780,7 +775,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testStartSchedulingSetsResourceRequirementsForDefaultMode() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -801,7 +796,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testStartSchedulingSetsResourceRequirementsForReactiveMode() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -830,7 +825,7 @@ public class AdaptiveSchedulerTest {
     /** Tests that the listener for new slots is properly set up. */
     @Test
     void testResourceAcquisitionTriggersJobExecution() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -926,7 +921,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testJobStatusListenerNotifiedOfJobStatusChanges() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
 
@@ -1010,7 +1005,7 @@ public class AdaptiveSchedulerTest {
                 TestingCheckpointIDCounter.createStoreWithShutdownCheckAndNoStartAction(
                         checkpointIdCounterShutdownFuture);
 
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         // checkpointing components are only created if checkpointing is enabled
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
@@ -1070,7 +1065,7 @@ public class AdaptiveSchedulerTest {
         final int expectedMaxParallelism =
                 KeyGroupRangeAssignment.computeDefaultMaxParallelism(parallelism);
         final JobVertex vertex = createNoOpVertex(parallelism);
-        final JobGraph jobGraph = streamingJobGraph(vertex);
+        final ExecutionPlan jobGraph = streamingJobGraph(vertex);
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1138,7 +1133,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testRequirementIncreaseTriggersScaleUp() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1173,7 +1168,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testRequirementDecreaseTriggersScaleDown() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1199,7 +1194,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testRequirementLowerBoundIncreaseBelowCurrentParallelismDoesNotTriggerRescale()
             throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1235,7 +1230,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testRequirementLowerBoundIncreaseBeyondCurrentParallelismKeepsJobRunning()
             throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1300,7 +1295,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testInitialRequirementLowerBoundBeyondAvailableSlotsCausesImmediateFailure()
             throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1339,7 +1334,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testRequirementLowerBoundDecreaseAfterResourceScarcityBelowAvailableSlots()
             throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1386,7 +1381,7 @@ public class AdaptiveSchedulerTest {
     }
 
     private AdaptiveSchedulerBuilder prepareSchedulerWithNoTimeouts(
-            JobGraph jobGraph, DeclarativeSlotPool declarativeSlotPool) {
+            ExecutionPlan jobGraph, DeclarativeSlotPool declarativeSlotPool) {
         return new AdaptiveSchedulerBuilder(
                         jobGraph, singleThreadMainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
                 .setDeclarativeSlotPool(declarativeSlotPool)
@@ -1394,7 +1389,7 @@ public class AdaptiveSchedulerTest {
     }
 
     private AdaptiveScheduler createSchedulerWithNoTimeouts(
-            JobGraph jobGraph, DeclarativeSlotPool declarativeSlotPool) throws Exception {
+            ExecutionPlan jobGraph, DeclarativeSlotPool declarativeSlotPool) throws Exception {
         return prepareSchedulerWithNoTimeouts(jobGraph, declarativeSlotPool).build();
     }
 
@@ -1696,7 +1691,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testExceptionHistoryWithTaskFailureFromStopWithSavepoint() throws Exception {
         final Exception expectedException = new Exception("Expected Local Exception");
-        Consumer<JobGraph> setupJobGraph =
+        Consumer<ExecutionPlan> setupJobGraph =
                 jobGraph ->
                         jobGraph.setSnapshotSettings(
                                 new JobCheckpointingSettings(
@@ -1916,7 +1911,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testUpdateTaskExecutionStateReturnsFalseInIllegalState() throws Throwable {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         scheduler =
                 new AdaptiveSchedulerBuilder(
                                 jobGraph,
@@ -1994,7 +1989,7 @@ public class AdaptiveSchedulerTest {
     void testComputeVertexParallelismStoreForExecutionInReactiveMode() {
         JobVertex v1 = createNoOpVertex("v1", 1, 50);
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
-        JobGraph graph = streamingJobGraph(v1, v2);
+        ExecutionPlan graph = streamingJobGraph(v1, v2);
 
         VertexParallelismStore parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
@@ -2014,7 +2009,7 @@ public class AdaptiveSchedulerTest {
     void testComputeVertexParallelismStoreForExecutionInDefaultMode() {
         JobVertex v1 = createNoOpVertex("v1", 1, 50);
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
-        JobGraph graph = streamingJobGraph(v1, v2);
+        ExecutionPlan graph = streamingJobGraph(v1, v2);
 
         VertexParallelismStore parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
@@ -2035,7 +2030,7 @@ public class AdaptiveSchedulerTest {
         try {
             DefaultSchedulerTest.doTestCheckpointCleanerIsClosedAfterCheckpointServices(
                     (checkpointRecoveryFactory, checkpointCleaner) -> {
-                        final JobGraph jobGraph = createJobGraph();
+                        final ExecutionPlan jobGraph = createJobGraph();
                         enableCheckpointing(jobGraph);
                         try {
                             return new AdaptiveSchedulerBuilder(
@@ -2060,7 +2055,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testIdleSlotsAreReleasedAfterDownScalingTriggeredByLoweredResourceRequirements()
             throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final Duration slotIdleTimeout = Duration.ofMillis(10);
 
         final Configuration configuration = createConfigurationWithNoTimeouts();
@@ -2144,7 +2139,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testRequestDefaultResourceRequirements() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final Configuration configuration = new Configuration();
         scheduler =
                 new AdaptiveSchedulerBuilder(
@@ -2163,7 +2158,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testRequestDefaultResourceRequirementsInReactiveMode() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final Configuration configuration = new Configuration();
         configuration.set(JobManagerOptions.SCHEDULER_MODE, SchedulerExecutionMode.REACTIVE);
         scheduler =
@@ -2185,7 +2180,7 @@ public class AdaptiveSchedulerTest {
 
     @Test
     void testRequestUpdatedResourceRequirements() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
+        final ExecutionPlan jobGraph = createJobGraph();
         final Configuration configuration = new Configuration();
         scheduler =
                 new AdaptiveSchedulerBuilder(
@@ -2431,7 +2426,7 @@ public class AdaptiveSchedulerTest {
                 JobManagerOptions.SCHEDULER_RESCALE_TRIGGER_MAX_CHECKPOINT_FAILURES,
                 onFailedCheckpointCount);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Collections.singletonList(JOB_VERTEX))
                         .setJobCheckpointingSettings(
@@ -2546,7 +2541,7 @@ public class AdaptiveSchedulerTest {
                 .build();
     }
 
-    private static JobGraph createJobGraph() {
+    private static ExecutionPlan createJobGraph() {
         return streamingJobGraph(JOB_VERTEX);
     }
 
@@ -2706,7 +2701,7 @@ public class AdaptiveSchedulerTest {
         private BiConsumer<AdaptiveScheduler, List<ExecutionAttemptID>> testLogic =
                 (scheduler, attempts) -> {};
         private Consumer<AdaptiveSchedulerBuilder> schedulerModifier = ignored -> {};
-        private Consumer<JobGraph> jobGraphModifier = ignored -> {};
+        private Consumer<ExecutionPlan> jobGraphModifier = ignored -> {};
         private Collection<FailureEnricher> failureEnrichers = Collections.emptySet();
 
         ExceptionHistoryTester(ComponentMainThreadExecutor mainThreadExecutor) {
@@ -2725,7 +2720,7 @@ public class AdaptiveSchedulerTest {
             return this;
         }
 
-        ExceptionHistoryTester withModifiedJobGraph(Consumer<JobGraph> jobGraphModifier) {
+        ExceptionHistoryTester withModifiedJobGraph(Consumer<ExecutionPlan> jobGraphModifier) {
             this.jobGraphModifier = jobGraphModifier;
             return this;
         }
@@ -2736,7 +2731,7 @@ public class AdaptiveSchedulerTest {
         }
 
         Iterable<RootExceptionHistoryEntry> run() throws Exception {
-            final JobGraph jobGraph = createJobGraph();
+            final ExecutionPlan jobGraph = createJobGraph();
             jobGraphModifier.accept(jobGraph);
 
             final CompletedCheckpointStore completedCheckpointStore =

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobmaster;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -65,7 +65,7 @@ class JobRecoveryITCase {
         runTaskFailureRecoveryTest(createjobGraph(true));
     }
 
-    private void runTaskFailureRecoveryTest(final JobGraph jobGraph) throws Exception {
+    private void runTaskFailureRecoveryTest(final ExecutionPlan jobGraph) throws Exception {
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
         miniCluster.submitJob(jobGraph).get();
@@ -76,7 +76,7 @@ class JobRecoveryITCase {
         assertThat(jobResultFuture.get().isSuccess()).isTrue();
     }
 
-    private JobGraph createjobGraph(boolean slotSharingEnabled) throws IOException {
+    private ExecutionPlan createjobGraph(boolean slotSharingEnabled) throws IOException {
         final JobVertex sender = new JobVertex("Sender");
         sender.setParallelism(PARALLELISM);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);
@@ -95,7 +95,7 @@ class JobRecoveryITCase {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(sender, receiver))
                         .setJobName(getClass().getSimpleName())

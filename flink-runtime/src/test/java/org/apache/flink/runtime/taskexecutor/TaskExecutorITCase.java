@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -88,7 +88,7 @@ class TaskExecutorITCase {
      */
     @Test
     void testJobReExecutionAfterTaskExecutorTermination() throws Exception {
-        final JobGraph jobGraph = createJobGraph(PARALLELISM);
+        final ExecutionPlan jobGraph = createJobGraph(PARALLELISM);
 
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
@@ -104,7 +104,7 @@ class TaskExecutorITCase {
 
         miniCluster.startTaskManager();
 
-        final JobGraph newJobGraph = createJobGraph(PARALLELISM);
+        final ExecutionPlan newJobGraph = createJobGraph(PARALLELISM);
         BlockingOperator.unblock();
         miniCluster.submitJob(newJobGraph).get();
 
@@ -114,7 +114,7 @@ class TaskExecutorITCase {
     /** Tests that the job can recover from a failing {@link TaskExecutor}. */
     @Test
     void testJobRecoveryWithFailingTaskExecutor() throws Exception {
-        final JobGraph jobGraph = createJobGraphWithRestartStrategy(PARALLELISM);
+        final ExecutionPlan jobGraph = createJobGraphWithRestartStrategy(PARALLELISM);
 
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
@@ -132,7 +132,7 @@ class TaskExecutorITCase {
     }
 
     private static CompletableFuture<JobResult> submitJobAndWaitUntilRunning(
-            JobGraph jobGraph, MiniCluster miniCluster) throws Exception {
+            ExecutionPlan jobGraph, MiniCluster miniCluster) throws Exception {
         miniCluster.submitJob(jobGraph).get();
 
         final CompletableFuture<JobResult> jobResultFuture =
@@ -162,14 +162,14 @@ class TaskExecutorITCase {
         };
     }
 
-    private JobGraph createJobGraphWithRestartStrategy(int parallelism) throws IOException {
-        final JobGraph jobGraph = createJobGraph(parallelism);
+    private ExecutionPlan createJobGraphWithRestartStrategy(int parallelism) throws IOException {
+        final ExecutionPlan jobGraph = createJobGraph(parallelism);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, 0L);
 
         return jobGraph;
     }
 
-    private JobGraph createJobGraph(int parallelism) {
+    private ExecutionPlan createJobGraph(int parallelism) {
         final JobVertex sender = new JobVertex("Sender");
         sender.setParallelism(parallelism);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);

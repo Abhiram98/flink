@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ import java.util.List;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * {@link JobGraphRetriever} implementation which retrieves the {@link JobGraph} from a file on
+ * {@link JobGraphRetriever} implementation which retrieves the {@link ExecutionPlan} from a file on
  * disk.
  */
 public class FileJobGraphRetriever extends AbstractUserClassPathJobGraphRetriever {
@@ -58,12 +58,12 @@ public class FileJobGraphRetriever extends AbstractUserClassPathJobGraphRetrieve
     }
 
     @Override
-    public JobGraph retrieveJobGraph(Configuration configuration) throws FlinkException {
+    public ExecutionPlan retrieveJobGraph(Configuration configuration) throws FlinkException {
         final File fp = new File(jobGraphFile);
 
         try (FileInputStream input = new FileInputStream(fp);
                 ObjectInputStream obInput = new ObjectInputStream(input)) {
-            final JobGraph jobGraph = (JobGraph) obInput.readObject();
+            final ExecutionPlan jobGraph = (ExecutionPlan) obInput.readObject();
             addUserClassPathsToJobGraph(jobGraph);
             return jobGraph;
         } catch (FileNotFoundException e) {
@@ -73,7 +73,7 @@ public class FileJobGraphRetriever extends AbstractUserClassPathJobGraphRetrieve
         }
     }
 
-    private void addUserClassPathsToJobGraph(JobGraph jobGraph) {
+    private void addUserClassPathsToJobGraph(ExecutionPlan jobGraph) {
         final List<URL> classPaths = new ArrayList<>();
 
         if (jobGraph.getClasspaths() != null) {

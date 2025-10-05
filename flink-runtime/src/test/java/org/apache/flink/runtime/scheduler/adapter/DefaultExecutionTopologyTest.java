@@ -26,8 +26,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -242,7 +242,7 @@ class DefaultExecutionTopologyTest {
 
     private DefaultExecutionGraph createDynamicGraph(JobVertex... jobVertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(new JobGraph(new JobID(), "TestJob", jobVertices))
+                .setJobGraph(new ExecutionPlan(new JobID(), "TestJob", jobVertices))
                 .buildDynamicGraph(EXECUTOR_RESOURCE.getExecutor());
     }
 
