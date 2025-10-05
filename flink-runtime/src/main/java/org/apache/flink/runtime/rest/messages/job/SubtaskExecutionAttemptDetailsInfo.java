@@ -195,7 +195,7 @@ public class SubtaskExecutionAttemptDetailsInfo implements ResponseBody {
 
     public static SubtaskExecutionAttemptDetailsInfo create(
             AccessExecution execution,
-            @Nullable MetricFetcher metricFetcher,
+            @Nullable MetricFetcher jobMetrics,
             JobID jobID,
             JobVertexID jobVertexID,
             @Nullable List<SubtaskExecutionAttemptDetailsInfo> otherConcurrentAttempts) {
@@ -215,7 +215,7 @@ public class SubtaskExecutionAttemptDetailsInfo implements ResponseBody {
         final long duration = startTime > 0 ? ((endTime > 0 ? endTime : now) - startTime) : -1;
 
         final MutableIOMetrics ioMetrics = new MutableIOMetrics();
-        ioMetrics.addIOMetrics(execution, metricFetcher, jobID.toString(), jobVertexID.toString());
+        ioMetrics.addIOMetrics(execution, jobMetrics, jobID.toString(), jobVertexID.toString());
 
         final IOMetricsInfo ioMetricsInfo =
                 new IOMetricsInfo(

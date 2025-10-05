@@ -60,7 +60,7 @@ public class JobDetailsHandler
         extends AbstractAccessExecutionGraphHandler<JobDetailsInfo, JobMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
-    private final MetricFetcher metricFetcher;
+    private final MetricFetcher jobMetrics;
 
     public JobDetailsHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
@@ -78,14 +78,14 @@ public class JobDetailsHandler
                 executionGraphCache,
                 executor);
 
-        this.metricFetcher = Preconditions.checkNotNull(metricFetcher);
+        this.jobMetrics = Preconditions.checkNotNull(metricFetcher);
     }
 
     @Override
     protected JobDetailsInfo handleRequest(
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
-        return createJobDetailsInfo(executionGraph, metricFetcher);
+        return createJobDetailsInfo(executionGraph, jobMetrics);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class JobDetailsHandler
     }
 
     private static JobDetailsInfo createJobDetailsInfo(
-            AccessExecutionGraph executionGraph, @Nullable MetricFetcher metricFetcher) {
+            AccessExecutionGraph executionGraph, @Nullable MetricFetcher jobMetrics) {
         final long now = System.currentTimeMillis();
         final long startTime = executionGraph.getStatusTimestamp(JobStatus.INITIALIZING);
         final long endTime =
@@ -127,7 +127,7 @@ public class JobDetailsHandler
                             accessExecutionJobVertex,
                             now,
                             executionGraph.getJobID(),
-                            metricFetcher);
+                            jobMetrics);
 
             jobVertexInfos.add(vertexDetailsInfo);
             jobVerticesPerState[vertexDetailsInfo.getExecutionState().ordinal()]++;
@@ -166,7 +166,7 @@ public class JobDetailsHandler
     }
 
     private static JobDetailsInfo.JobVertexDetailsInfo createJobVertexDetailsInfo(
-            AccessExecutionJobVertex ejv, long now, JobID jobId, MetricFetcher metricFetcher) {
+            AccessExecutionJobVertex ejv, long now, JobID jobId, MetricFetcher jobMetrics) {
         int[] tasksPerState = new int[ExecutionState.values().length];
         long startTime = Long.MAX_VALUE;
         long endTime = 0;
@@ -217,7 +217,7 @@ public class JobDetailsHandler
             // rather than the aggregation of all attempts.
             counts.addIOMetrics(
                     vertex.getCurrentExecutionAttempt(),
-                    metricFetcher,
+                    jobMetrics,
                     jobId.toString(),
                     ejv.getJobVertexId().toString());
         }

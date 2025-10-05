@@ -130,7 +130,7 @@ public class JobVertexTaskManagersHandler
     private static JobVertexTaskManagersInfo createJobVertexTaskManagersInfo(
             AccessExecutionJobVertex jobVertex,
             JobID jobID,
-            @Nullable MetricFetcher metricFetcher) {
+            @Nullable MetricFetcher jobMetrics) {
         // Build a map that groups task executions by TaskManager
         Map<TaskManagerLocation, List<AccessExecution>> taskManagerExecutions = new HashMap<>();
         Set<AccessExecution> representativeExecutions = new HashSet<>();
@@ -201,13 +201,13 @@ public class JobVertexTaskManagersHandler
 
                 counts.addIOMetrics(
                         execution,
-                        metricFetcher,
+                        jobMetrics,
                         jobID.toString(),
                         jobVertex.getJobVertexId().toString());
                 MutableIOMetrics current = new MutableIOMetrics();
                 current.addIOMetrics(
                         execution,
-                        metricFetcher,
+                        jobMetrics,
                         jobID.toString(),
                         jobVertex.getJobVertexId().toString());
                 ioMetricsInfos.add(
