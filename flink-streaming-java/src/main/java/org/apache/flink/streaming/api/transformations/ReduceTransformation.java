@@ -89,7 +89,7 @@ public final class ReduceTransformation<IN, K> extends PhysicalTransformation<IN
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
         result.addAll(input.getTransitivePredecessorsInternal());
