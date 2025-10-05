@@ -26,7 +26,7 @@ import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.runtime.TupleComparator;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.sort.MergeIterator;
 import org.apache.flink.runtime.operators.testutils.Match;
 import org.apache.flink.runtime.operators.testutils.TestData;
@@ -277,7 +277,7 @@ class RandomSortMergeInnerJoinTest {
         testHarness.memorySize = 36 * 1024 * 1024;
         testHarness.setupOutputForSingletonOperatorChain();
         testHarness.getStreamConfig().setStreamOperator(operator);
-        testHarness.getStreamConfig().setOperatorID(new OperatorID());
+        testHarness.getStreamConfig().setOperatorID(new VertexID());
         testHarness
                 .getStreamConfig()
                 .setManagedMemoryFractionOperatorOfUseCase(ManagedMemoryUseCase.OPERATOR, 0.99);

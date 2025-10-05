@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetrics;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.checkpoint.channel.SequentialChannelStateReader;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.TaskStateManager;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandle;
@@ -83,12 +83,12 @@ final class SavepointTaskStateManager implements TaskStateManager {
 
     @Nonnull
     @Override
-    public PrioritizedOperatorSubtaskState prioritizedOperatorState(OperatorID operatorID) {
+    public PrioritizedOperatorSubtaskState prioritizedOperatorState(VertexID operatorID) {
         return prioritizedOperatorSubtaskState;
     }
 
     @Override
-    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OperatorID operatorID) {
+    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(VertexID operatorID) {
         throw new UnsupportedOperationException(
                 "Unsupported method for SavepointTaskStateManager.");
     }

@@ -30,7 +30,7 @@ import org.apache.flink.core.io.InputSplitAssigner;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
@@ -321,8 +321,8 @@ class InputFormatSourceFunctionTest {
             }
 
             @Override
-            public OperatorID getOperatorID() {
-                return new OperatorID();
+            public VertexID getOperatorID() {
+                return new VertexID();
             }
         }
     }

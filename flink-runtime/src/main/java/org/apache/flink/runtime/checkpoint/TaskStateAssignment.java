@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
@@ -70,12 +70,12 @@ class TaskStateAssignment {
     private static final Logger LOG = LoggerFactory.getLogger(TaskStateAssignment.class);
 
     final ExecutionJobVertex executionJobVertex;
-    final Map<OperatorID, OperatorState> oldState;
+    final Map<VertexID, OperatorState> oldState;
     final boolean hasNonFinishedState;
     final boolean isFullyFinished;
     final int newParallelism;
-    final OperatorID inputOperatorID;
-    final OperatorID outputOperatorID;
+    final VertexID inputOperatorID;
+    final VertexID outputOperatorID;
 
     /** The InputGate set that containing input buffer state. */
     private final Set<Integer> inputStateGates;
@@ -107,7 +107,7 @@ class TaskStateAssignment {
 
     public TaskStateAssignment(
             ExecutionJobVertex executionJobVertex,
-            Map<OperatorID, OperatorState> oldState,
+            Map<VertexID, OperatorState> oldState,
             Map<IntermediateDataSetID, TaskStateAssignment> consumerAssignment,
             Map<ExecutionJobVertex, TaskStateAssignment> vertexAssignments) {
 
@@ -312,7 +312,7 @@ class TaskStateAssignment {
 
     private InflightDataRescalingDescriptor createRescalingDescriptor(
             OperatorInstanceID instanceID,
-            OperatorID expectedOperatorID,
+            VertexID expectedOperatorID,
             TaskStateAssignment[] connectedAssignments,
             BiFunction<TaskStateAssignment, Boolean, SubtasksRescaleMapping> mappingRetriever,
             Map<Integer, SubtasksRescaleMapping> subtaskGateOrPartitionMappings,

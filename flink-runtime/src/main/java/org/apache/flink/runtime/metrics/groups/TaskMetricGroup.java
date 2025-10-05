@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
@@ -146,11 +146,11 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
 
     public InternalOperatorMetricGroup getOrAddOperator(String operatorName) {
         return getOrAddOperator(
-                OperatorID.fromJobVertexID(vertexId), operatorName, Collections.emptyMap());
+                VertexID.fromJobVertexID(vertexId), operatorName, Collections.emptyMap());
     }
 
     public InternalOperatorMetricGroup getOrAddOperator(
-            OperatorID operatorID, String operatorName, Map<String, String> additionalVariables) {
+            VertexID operatorID, String operatorName, Map<String, String> additionalVariables) {
         final String truncatedOperatorName = MetricUtils.truncateOperatorName(operatorName);
 
         // unique OperatorIDs only exist in streaming, so we have to rely on the name for batch

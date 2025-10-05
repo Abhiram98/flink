@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.metrics.scope;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.util.AbstractID;
 
@@ -46,7 +46,7 @@ public class JobManagerOperatorScopeFormat extends ScopeFormat {
             JobManagerJobMetricGroup parent,
             AbstractID vertexId,
             String taskName,
-            OperatorID operatorID,
+            VertexID operatorID,
             String operatorName) {
 
         final String[] template = copyTemplate();

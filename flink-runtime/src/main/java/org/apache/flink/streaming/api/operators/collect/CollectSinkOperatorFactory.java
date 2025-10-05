@@ -21,7 +21,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.MemorySize;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorEventDispatcher;
 import org.apache.flink.streaming.api.operators.CoordinatedOperatorFactory;
@@ -67,7 +67,7 @@ public class CollectSinkOperatorFactory<IN> extends SimpleUdfStreamOperatorFacto
     public <T extends StreamOperator<Object>> T createStreamOperator(
             StreamOperatorParameters<Object> parameters) {
         CollectSinkOperator<IN> operator = super.createStreamOperator(parameters);
-        final OperatorID operatorId = parameters.getStreamConfig().getOperatorID();
+        final VertexID operatorId = parameters.getStreamConfig().getOperatorID();
         final OperatorEventDispatcher eventDispatcher = parameters.getOperatorEventDispatcher();
 
         operator.setOperatorEventGateway(eventDispatcher.getOperatorEventGateway(operatorId));
@@ -78,7 +78,7 @@ public class CollectSinkOperatorFactory<IN> extends SimpleUdfStreamOperatorFacto
 
     @Override
     public OperatorCoordinator.Provider getCoordinatorProvider(
-            String operatorName, OperatorID operatorID) {
+            String operatorName, VertexID operatorID) {
         return new CollectSinkOperatorCoordinator.Provider(operatorID, socketTimeoutMillis);
     }
 

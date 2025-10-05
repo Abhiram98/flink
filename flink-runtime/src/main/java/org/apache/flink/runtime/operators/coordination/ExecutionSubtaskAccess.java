@@ -22,7 +22,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.operators.coordination.util.IncompleteFuturesTracker;
 import org.apache.flink.util.FlinkException;
@@ -42,10 +42,10 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 final class ExecutionSubtaskAccess implements SubtaskAccess {
 
     private final Execution taskExecution;
-    private final OperatorID operator;
+    private final VertexID operator;
     private final IncompleteFuturesTracker futuresTracker;
 
-    ExecutionSubtaskAccess(Execution taskExecution, OperatorID operator) {
+    ExecutionSubtaskAccess(Execution taskExecution, VertexID operator) {
         this.taskExecution = taskExecution;
         this.operator = operator;
         this.futuresTracker = new IncompleteFuturesTracker();
@@ -108,9 +108,9 @@ final class ExecutionSubtaskAccess implements SubtaskAccess {
     static final class ExecutionJobVertexSubtaskAccess implements SubtaskAccessFactory {
 
         private final ExecutionJobVertex ejv;
-        private final OperatorID operator;
+        private final VertexID operator;
 
-        ExecutionJobVertexSubtaskAccess(ExecutionJobVertex ejv, OperatorID operator) {
+        ExecutionJobVertexSubtaskAccess(ExecutionJobVertex ejv, VertexID operator) {
             this.ejv = checkNotNull(ejv);
             this.operator = checkNotNull(operator);
         }

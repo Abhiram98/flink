@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -27,7 +27,7 @@ public class CoordinatorNotExistException extends RestHandlerException {
     private static final long serialVersionUID = 1L;
 
     public CoordinatorNotExistException(
-            OperatorID operator, String otherPossibleCause, boolean logException) {
+            VertexID operator, String otherPossibleCause, boolean logException) {
         super(
                 "Coordinator of operator "
                         + operator
@@ -37,7 +37,7 @@ public class CoordinatorNotExistException extends RestHandlerException {
                 logException ? LoggingBehavior.LOG : LoggingBehavior.IGNORE);
     }
 
-    public CoordinatorNotExistException(OperatorID operator) {
+    public CoordinatorNotExistException(VertexID operator) {
         this(operator, null, true);
     }
 }

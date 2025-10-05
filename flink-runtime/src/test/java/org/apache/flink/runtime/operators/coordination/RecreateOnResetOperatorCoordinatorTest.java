@@ -19,7 +19,7 @@ limitations under the License.
 package org.apache.flink.runtime.operators.coordination;
 
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Unit tests for {@link RecreateOnResetOperatorCoordinator}. */
 class RecreateOnResetOperatorCoordinatorTest {
 
-    private static final OperatorID OPERATOR_ID = new OperatorID(1234L, 5678L);
+    private static final VertexID OPERATOR_ID = new VertexID(1234L, 5678L);
     private static final int NUM_SUBTASKS = 1;
 
     @Test

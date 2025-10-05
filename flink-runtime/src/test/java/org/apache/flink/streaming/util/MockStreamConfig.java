@@ -21,7 +21,7 @@ import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.graph.NonChainedOutput;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.graph.StreamNode;
@@ -55,7 +55,7 @@ public class MockStreamConfig extends StreamConfig {
         setTypeSerializerOut(new StringSerializer());
         setVertexID(0);
         setStreamOperator(new TestSequentialReadingStreamOperator("test operator"));
-        setOperatorID(new OperatorID());
+        setOperatorID(new VertexID());
 
         StreamOperator dummyOperator =
                 new AbstractStreamOperator() {

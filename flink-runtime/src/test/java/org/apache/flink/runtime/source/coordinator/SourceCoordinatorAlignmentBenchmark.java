@@ -22,7 +22,7 @@ import org.apache.flink.api.common.eventtime.WatermarkAlignmentParams;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.api.connector.source.mocks.MockSource;
 import org.apache.flink.api.connector.source.mocks.MockSourceSplit;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.MockOperatorCoordinatorContext;
 import org.apache.flink.runtime.source.event.ReportedWatermarkEvent;
 
@@ -33,7 +33,7 @@ import static org.apache.flink.runtime.source.coordinator.CoordinatorTestUtils.w
 /** The benchmark of watermark alignment. */
 public class SourceCoordinatorAlignmentBenchmark {
 
-    private static final OperatorID OPERATOR_ID = new OperatorID(1234L, 5678L);
+    private static final VertexID OPERATOR_ID = new VertexID(1234L, 5678L);
 
     private SourceCoordinator<?, ?> sourceCoordinator;
 

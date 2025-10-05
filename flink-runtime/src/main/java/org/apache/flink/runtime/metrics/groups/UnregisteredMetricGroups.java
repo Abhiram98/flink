@@ -21,7 +21,7 @@ package org.apache.flink.runtime.metrics.groups;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.util.AbstractID;
 
@@ -144,7 +144,7 @@ public class UnregisteredMetricGroups {
 
         @Override
         public JobManagerOperatorMetricGroup getOrAddOperator(
-                AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
+                AbstractID vertexId, String taskName, VertexID operatorID, String operatorName) {
             return createUnregisteredJobManagerOperatorMetricGroup(this);
         }
     }
@@ -194,14 +194,14 @@ public class UnregisteredMetricGroups {
 
         @Override
         public InternalOperatorMetricGroup getOrAddOperator(
-                OperatorID operatorID, String name, Map<String, String> additionalVariables) {
+                VertexID operatorID, String name, Map<String, String> additionalVariables) {
             return createUnregisteredOperatorMetricGroup(this);
         }
     }
 
     /** A safe drop-in replacement for {@link InternalOperatorMetricGroup}s. */
     public static class UnregisteredOperatorMetricGroup extends InternalOperatorMetricGroup {
-        private static final OperatorID DEFAULT_OPERATOR_ID = new OperatorID(0, 0);
+        private static final VertexID DEFAULT_OPERATOR_ID = new VertexID(0, 0);
         private static final String DEFAULT_OPERATOR_NAME = "UnregisteredOperator";
 
         protected UnregisteredOperatorMetricGroup() {
@@ -223,7 +223,7 @@ public class UnregisteredMetricGroups {
             extends JobManagerOperatorMetricGroup {
         private static final JobVertexID DEFAULT_VERTEX_ID = new JobVertexID();
         private static final String DEFAULT_TASK_NAME = "UnregisteredTask";
-        private static final OperatorID DEFAULT_OPERATOR_ID = new OperatorID(0, 0);
+        private static final VertexID DEFAULT_OPERATOR_ID = new VertexID(0, 0);
         private static final String DEFAULT_OPERATOR_NAME = "UnregisteredOperator";
 
         protected UnregisteredJobMangerOperatorMetricGroup() {

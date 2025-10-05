@@ -21,7 +21,7 @@ package org.apache.flink.streaming.runtime.operators;
 import org.apache.flink.api.common.operators.MailboxExecutor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperatorFactory;
 import org.apache.flink.streaming.api.operators.ChainingStrategy;
@@ -59,8 +59,8 @@ class StreamTaskOperatorTimerTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new TestOperatorFactory())
-                .chain(new OperatorID(), new TestOperatorFactory(), StringSerializer.INSTANCE)
+                .setupOperatorChain(new VertexID(), new TestOperatorFactory())
+                .chain(new VertexID(), new TestOperatorFactory(), StringSerializer.INSTANCE)
                 .finish();
 
         testHarness.invoke();

@@ -22,7 +22,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.state.CheckpointListener;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
@@ -148,7 +148,7 @@ public interface StreamOperator<OUT> extends CheckpointListener, KeyContext, Ser
 
     OperatorMetricGroup getMetricGroup();
 
-    OperatorID getOperatorID();
+    VertexID getOperatorID();
 
     /**
      * Called to get the OperatorAttributes of the operator. If there is no defined attribute, a

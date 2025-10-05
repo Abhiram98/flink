@@ -64,7 +64,7 @@ import org.apache.flink.runtime.io.network.partition.MockResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.TestInputChannel;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
 import org.apache.flink.runtime.metrics.TimerGauge;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
@@ -476,7 +476,7 @@ public class StreamTaskTest {
     @Test
     void testEarlyCanceling() throws Exception {
         final StreamConfig cfg = new StreamConfig(new Configuration());
-        cfg.setOperatorID(new OperatorID(4711L, 42L));
+        cfg.setOperatorID(new VertexID(4711L, 42L));
         cfg.setStreamOperator(new SlowlyDeserializingOperator());
         cfg.serializeAllConfigs();
 
@@ -515,7 +515,7 @@ public class StreamTaskTest {
 
         StreamConfig cfg = new StreamConfig(new Configuration());
         cfg.setStateKeySerializer(mock(TypeSerializer.class));
-        cfg.setOperatorID(new OperatorID(4711L, 42L));
+        cfg.setOperatorID(new VertexID(4711L, 42L));
         TestStreamSource<Long, MockSourceFunction> streamSource =
                 new TestStreamSource<>(new MockSourceFunction());
         cfg.setStreamOperator(streamSource);
@@ -555,7 +555,7 @@ public class StreamTaskTest {
 
         StreamConfig cfg = new StreamConfig(new Configuration());
         cfg.setStateKeySerializer(mock(TypeSerializer.class));
-        cfg.setOperatorID(new OperatorID(4711L, 42L));
+        cfg.setOperatorID(new VertexID(4711L, 42L));
         TestStreamSource<Long, MockSourceFunction> streamSource =
                 new TestStreamSource<>(new MockSourceFunction());
         cfg.setStreamOperator(streamSource);
@@ -1191,7 +1191,7 @@ public class StreamTaskTest {
         Configuration taskConfiguration = new Configuration();
         StreamConfig streamConfig = new StreamConfig(taskConfiguration);
         streamConfig.setStreamOperator(new StreamMap<>(value -> value));
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
         streamConfig.serializeAllConfigs();
         try (MockEnvironment mockEnvironment =
                 new MockEnvironmentBuilder().setTaskConfiguration(taskConfiguration).build()) {
@@ -1525,7 +1525,7 @@ public class StreamTaskTest {
 
         StreamConfig cfg = new StreamConfig(new Configuration());
         cfg.setStateKeySerializer(mock(TypeSerializer.class));
-        cfg.setOperatorID(new OperatorID(4712L, 43L));
+        cfg.setOperatorID(new VertexID(4712L, 43L));
 
         FailedSource failedSource = new FailedSource();
         cfg.setStreamOperator(new TestStreamSource<String, FailedSource>(failedSource));
@@ -1916,7 +1916,7 @@ public class StreamTaskTest {
             OperatorSnapshotFutures operatorSnapshotResult) throws Exception {
         @SuppressWarnings("unchecked")
         OneInputStreamOperator<T, T> operator = mock(OneInputStreamOperator.class);
-        when(operator.getOperatorID()).thenReturn(new OperatorID());
+        when(operator.getOperatorID()).thenReturn(new VertexID());
 
         when(operator.snapshotState(
                         anyLong(),
@@ -1934,7 +1934,7 @@ public class StreamTaskTest {
             Exception exception) throws Exception {
         @SuppressWarnings("unchecked")
         OneInputStreamOperator<T, T> operator = mock(OneInputStreamOperator.class);
-        when(operator.getOperatorID()).thenReturn(new OperatorID());
+        when(operator.getOperatorID()).thenReturn(new VertexID());
 
         when(operator.snapshotState(
                         anyLong(),

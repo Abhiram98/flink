@@ -34,7 +34,7 @@ import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.state.DefaultOperatorStateBackend;
@@ -162,7 +162,7 @@ class StateInitializationContextImplTest {
                         .setRawKeyedState(new StateObjectCollection<>(keyedStateHandles))
                         .build();
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot();
         taskStateSnapshot.putSubtaskStateByOperatorID(operatorID, operatorSubtaskState);
 

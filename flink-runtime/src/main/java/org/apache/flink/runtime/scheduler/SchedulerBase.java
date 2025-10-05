@@ -71,12 +71,8 @@ import org.apache.flink.runtime.executiongraph.metrics.DownTimeGauge;
 import org.apache.flink.runtime.executiongraph.metrics.UpTimeGauge;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -1140,7 +1136,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public void deliverOperatorEventToCoordinator(
             final ExecutionAttemptID taskExecutionId,
-            final OperatorID operatorId,
+            final VertexID operatorId,
             final OperatorEvent evt)
             throws FlinkException {
 
@@ -1150,7 +1146,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException {
+            VertexID operator, CoordinationRequest request) throws FlinkException {
 
         return operatorCoordinatorHandler.deliverCoordinationRequestToCoordinator(
                 operator, request);

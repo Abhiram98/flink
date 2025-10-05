@@ -18,7 +18,7 @@
 
 package org.apache.flink.table.runtime.operators.dynamicfiltering;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestHandler;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -166,7 +166,7 @@ public class DynamicFilteringDataCollectorOperatorCoordinator
     public static class Provider extends RecreateOnResetOperatorCoordinator.Provider {
         private final List<String> dynamicFilteringDataListenerIDs;
 
-        public Provider(OperatorID operatorID, List<String> dynamicFilteringDataListenerIDs) {
+        public Provider(VertexID operatorID, List<String> dynamicFilteringDataListenerIDs) {
             super(operatorID);
             this.dynamicFilteringDataListenerIDs = checkNotNull(dynamicFilteringDataListenerIDs);
         }

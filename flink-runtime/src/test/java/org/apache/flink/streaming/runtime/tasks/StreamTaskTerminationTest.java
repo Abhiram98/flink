@@ -40,7 +40,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManagerBuilder;
 import org.apache.flink.runtime.memory.SharedResources;
@@ -122,7 +122,7 @@ class StreamTaskTerminationTest {
         final StateBackend blockingStateBackend = new BlockingStateBackend();
 
         streamConfig.setStreamOperator(noOpStreamOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
         streamConfig.setStateBackend(blockingStateBackend);
         streamConfig.serializeAllConfigs();
 

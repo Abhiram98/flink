@@ -20,7 +20,7 @@ package org.apache.flink.streaming.runtime.tasks;
 
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.api.operators.TwoInputStreamOperator;
@@ -44,21 +44,21 @@ class StreamTaskTestHarnessTest {
         assertThatThrownBy(harness::setupOutputForSingletonOperatorChain)
                 .isInstanceOf(IllegalStateException.class);
 
-        assertThatThrownBy(() -> harness.setupOperatorChain(new OperatorID(), new TestOperator()))
+        assertThatThrownBy(() -> harness.setupOperatorChain(new VertexID(), new TestOperator()))
                 .isInstanceOf(IllegalStateException.class);
 
         assertThatThrownBy(
                         () ->
                                 harness.setupOperatorChain(
-                                        new OperatorID(), new TwoInputTestOperator()))
+                                        new VertexID(), new TwoInputTestOperator()))
                 .isInstanceOf(IllegalStateException.class);
 
         StreamTaskTestHarness<String> harness1 =
                 new StreamTaskTestHarness<>(
                         OneInputStreamTask::new, BasicTypeInfo.STRING_TYPE_INFO);
-        harness1.setupOperatorChain(new OperatorID(), new TestOperator())
+        harness1.setupOperatorChain(new VertexID(), new TestOperator())
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(
                                 new SerializerConfigImpl()));
@@ -66,21 +66,21 @@ class StreamTaskTestHarnessTest {
         assertThatThrownBy(harness1::setupOutputForSingletonOperatorChain)
                 .isInstanceOf(IllegalStateException.class);
 
-        assertThatThrownBy(() -> harness1.setupOperatorChain(new OperatorID(), new TestOperator()))
+        assertThatThrownBy(() -> harness1.setupOperatorChain(new VertexID(), new TestOperator()))
                 .isInstanceOf(IllegalStateException.class);
 
         assertThatThrownBy(
                         () ->
                                 harness1.setupOperatorChain(
-                                        new OperatorID(), new TwoInputTestOperator()))
+                                        new VertexID(), new TwoInputTestOperator()))
                 .isInstanceOf(IllegalStateException.class);
 
         StreamTaskTestHarness<String> harness2 =
                 new StreamTaskTestHarness<>(
                         TwoInputStreamTask::new, BasicTypeInfo.STRING_TYPE_INFO);
-        harness2.setupOperatorChain(new OperatorID(), new TwoInputTestOperator())
+        harness2.setupOperatorChain(new VertexID(), new TwoInputTestOperator())
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(
                                 new SerializerConfigImpl()));
@@ -88,13 +88,13 @@ class StreamTaskTestHarnessTest {
         assertThatThrownBy(harness2::setupOutputForSingletonOperatorChain)
                 .isInstanceOf(IllegalStateException.class);
 
-        assertThatThrownBy(() -> harness2.setupOperatorChain(new OperatorID(), new TestOperator()))
+        assertThatThrownBy(() -> harness2.setupOperatorChain(new VertexID(), new TestOperator()))
                 .isInstanceOf(IllegalStateException.class);
 
         assertThatThrownBy(
                         () ->
                                 harness2.setupOperatorChain(
-                                        new OperatorID(), new TwoInputTestOperator()))
+                                        new VertexID(), new TwoInputTestOperator()))
                 .isInstanceOf(IllegalStateException.class);
     }
 

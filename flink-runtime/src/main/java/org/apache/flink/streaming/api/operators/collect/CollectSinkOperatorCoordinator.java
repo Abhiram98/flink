@@ -18,7 +18,7 @@
 package org.apache.flink.streaming.api.operators.collect;
 
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestHandler;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -252,16 +252,16 @@ public class CollectSinkOperatorCoordinator
     /** Provider for {@link CollectSinkOperatorCoordinator}. */
     public static class Provider implements OperatorCoordinator.Provider {
 
-        private final OperatorID operatorId;
+        private final VertexID operatorId;
         private final int socketTimeout;
 
-        public Provider(OperatorID operatorId, int socketTimeout) {
+        public Provider(VertexID operatorId, int socketTimeout) {
             this.operatorId = operatorId;
             this.socketTimeout = socketTimeout;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public VertexID getOperatorId() {
             return operatorId;
         }
 

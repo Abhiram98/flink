@@ -26,7 +26,7 @@ import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
@@ -149,7 +149,7 @@ public class CheckpointRestoreWithUidHashITCase {
                         StatefulSourceBehavior.FAIL_AFTER_CHECKPOINT_ON_FIRST_RUN,
                         maxNumber,
                         null,
-                        new OperatorID().toHexString(),
+                        new VertexID().toHexString(),
                         null);
 
         miniClusterResource.getMiniCluster().executeJobBlocking(jobGraph);

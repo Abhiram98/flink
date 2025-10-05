@@ -29,7 +29,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.asyncprocessing.operators.AsyncStreamFlatMap;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
 import org.apache.flink.state.api.functions.KeyedStateReaderFunction;
@@ -73,7 +73,7 @@ class KeyedStateInputFormatTest {
     @ParameterizedTest(name = "Enable async state = {0}")
     @ValueSource(booleans = {false, true})
     void testCreatePartitionedInputSplits(boolean asyncState) throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(createFlatMap(asyncState), asyncState);
@@ -95,7 +95,7 @@ class KeyedStateInputFormatTest {
     @ParameterizedTest(name = "Enable async state = {0}")
     @ValueSource(booleans = {false, true})
     void testMaxParallelismRespected(boolean asyncState) throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(createFlatMap(asyncState), asyncState);
@@ -119,7 +119,7 @@ class KeyedStateInputFormatTest {
     @ParameterizedTest(name = "Enable async state = {0}")
     @ValueSource(booleans = {false, true})
     void testReadState(boolean asyncState) throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(createFlatMap(asyncState), asyncState);
@@ -145,7 +145,7 @@ class KeyedStateInputFormatTest {
     @ParameterizedTest(name = "Enable async state = {0}")
     @ValueSource(booleans = {false, true})
     void testReadMultipleOutputPerKey(boolean asyncState) throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(createFlatMap(asyncState), asyncState);
@@ -172,7 +172,7 @@ class KeyedStateInputFormatTest {
     @ParameterizedTest(name = "Enable async state = {0}")
     @ValueSource(booleans = {false, true})
     void testInvalidProcessReaderFunctionFails(boolean asyncState) throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(createFlatMap(asyncState), asyncState);
@@ -196,7 +196,7 @@ class KeyedStateInputFormatTest {
 
     @Test
     void testReadTime() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        VertexID operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(

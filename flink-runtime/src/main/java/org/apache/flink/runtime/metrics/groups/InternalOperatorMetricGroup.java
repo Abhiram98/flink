@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
@@ -37,14 +37,14 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class InternalOperatorMetricGroup extends ComponentMetricGroup<TaskMetricGroup>
         implements OperatorMetricGroup {
     private final String operatorName;
-    private final OperatorID operatorID;
+    private final VertexID operatorID;
     private final InternalOperatorIOMetricGroup ioMetrics;
     private final Map<String, String> additionalVariables;
 
     InternalOperatorMetricGroup(
             MetricRegistry registry,
             TaskMetricGroup parent,
-            OperatorID operatorID,
+            VertexID operatorID,
             String operatorName,
             Map<String, String> additionalVariables) {
         super(

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.metrics.groups;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.util.MetricUtils;
 import org.apache.flink.util.AbstractID;
@@ -61,7 +61,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
     }
 
     public JobManagerOperatorMetricGroup getOrAddOperator(
-            AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
+            AbstractID vertexId, String taskName, VertexID operatorID, String operatorName) {
         final String truncatedOperatorName = MetricUtils.truncateOperatorName(operatorName);
 
         // unique OperatorIDs only exist in streaming, so we have to rely on the name for batch
@@ -87,7 +87,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
         return operators.size();
     }
 
-    void removeOperatorMetricGroup(OperatorID operatorID, String operatorName) {
+    void removeOperatorMetricGroup(VertexID operatorID, String operatorName) {
         final String truncatedOperatorName = MetricUtils.truncateOperatorName(operatorName);
 
         // unique OperatorIDs only exist in streaming, so we have to rely on the name for batch

@@ -61,7 +61,7 @@ import org.apache.flink.runtime.io.network.partition.ChannelStateHolder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointableTask;
 import org.apache.flink.runtime.jobgraph.tasks.CoordinatedTask;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
@@ -1624,7 +1624,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
     // ------------------------------------------------------------------------
 
     @Override
-    public void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event)
+    public void dispatchOperatorEvent(VertexID operator, SerializedValue<OperatorEvent> event)
             throws FlinkException {
         try {
             mainMailboxExecutor.execute(

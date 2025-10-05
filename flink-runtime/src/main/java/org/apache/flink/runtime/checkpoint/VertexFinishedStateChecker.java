@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobEdge;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.util.FlinkRuntimeException;
 
 import java.util.HashMap;
@@ -55,10 +55,10 @@ public class VertexFinishedStateChecker {
 
     private final Set<ExecutionJobVertex> vertices;
 
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<VertexID, OperatorState> operatorStates;
 
     public VertexFinishedStateChecker(
-            Set<ExecutionJobVertex> vertices, Map<OperatorID, OperatorState> operatorStates) {
+            Set<ExecutionJobVertex> vertices, Map<VertexID, OperatorState> operatorStates) {
         this.vertices = vertices;
         this.operatorStates = operatorStates;
     }
@@ -158,10 +158,10 @@ public class VertexFinishedStateChecker {
     }
 
     private static class VerticesFinishedStatusCache {
-        private final Map<OperatorID, OperatorState> operatorStates;
+        private final Map<VertexID, OperatorState> operatorStates;
         private final Map<JobVertexID, VertexFinishedState> finishedCache = new HashMap<>();
 
-        private VerticesFinishedStatusCache(Map<OperatorID, OperatorState> operatorStates) {
+        private VerticesFinishedStatusCache(Map<VertexID, OperatorState> operatorStates) {
             this.operatorStates = operatorStates;
         }
 
@@ -172,7 +172,7 @@ public class VertexFinishedStateChecker {
         }
 
         private VertexFinishedState calculateFinishedState(
-                ExecutionJobVertex vertex, Map<OperatorID, OperatorState> operatorStates) {
+                ExecutionJobVertex vertex, Map<VertexID, OperatorState> operatorStates) {
             Set<VertexFinishedState> operatorFinishedStates =
                     vertex.getOperatorIDs().stream()
                             .map(idPair -> checkOperatorFinishedStatus(operatorStates, idPair))
@@ -194,8 +194,8 @@ public class VertexFinishedStateChecker {
         }
 
         private VertexFinishedState checkOperatorFinishedStatus(
-                Map<OperatorID, OperatorState> operatorStates, OperatorIDPair idPair) {
-            OperatorID operatorId =
+                Map<VertexID, OperatorState> operatorStates, OperatorIDPair idPair) {
+            VertexID operatorId =
                     idPair.getUserDefinedOperatorID()
                             .filter(operatorStates::containsKey)
                             .orElse(idPair.getGeneratedOperatorID());

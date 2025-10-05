@@ -21,7 +21,7 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
@@ -339,7 +339,7 @@ class RecordProcessorUtilsTest {
         }
 
         @Override
-        public OperatorID getOperatorID() {
+        public VertexID getOperatorID() {
             return null;
         }
 

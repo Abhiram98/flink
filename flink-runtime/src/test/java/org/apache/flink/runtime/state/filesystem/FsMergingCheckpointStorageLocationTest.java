@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManage
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManagerBuilder;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingType;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.filemerging.SegmentFileStateHandle;
@@ -64,7 +64,7 @@ class FsMergingCheckpointStorageLocationTest {
     private final Random random = new Random();
 
     private static final JobID jobId = JobID.generate();
-    private static final OperatorID opId = new OperatorID();
+    private static final VertexID opId = new VertexID();
 
     private static final String SNAPSHOT_MGR_ID = "snapshotMgrId";
     private static final int FILE_STATE_SIZE_THRESHOLD = 1024;

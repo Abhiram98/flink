@@ -22,7 +22,7 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.metrics.groups.OperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.util.MdcUtils;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.function.ThrowingConsumer;
@@ -199,14 +199,14 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
     /** The provider for a private RecreateOnResetOperatorCoordinator. */
     public abstract static class Provider implements OperatorCoordinator.Provider {
         private static final long serialVersionUID = 3002837631612629071L;
-        private final OperatorID operatorID;
+        private final VertexID operatorID;
 
-        public Provider(OperatorID operatorID) {
+        public Provider(VertexID operatorID) {
             this.operatorID = operatorID;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public VertexID getOperatorId() {
             return operatorID;
         }
 
@@ -250,7 +250,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public VertexID getOperatorId() {
             return context.getOperatorId();
         }
 
@@ -327,7 +327,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
      * </ul>
      */
     private static class DeferrableCoordinator {
-        private final OperatorID operatorId;
+        private final VertexID operatorId;
         private final BlockingQueue<NamedCall> pendingCalls;
         private final Map<String, String> mdc;
         private QuiesceableContext internalQuiesceableContext;
@@ -336,7 +336,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
         private boolean closed;
         private volatile boolean failed;
 
-        private DeferrableCoordinator(OperatorID operatorId, JobID jobID) {
+        private DeferrableCoordinator(VertexID operatorId, JobID jobID) {
             this.operatorId = operatorId;
             this.pendingCalls = new LinkedBlockingQueue<>();
             this.hasCaughtUp = false;

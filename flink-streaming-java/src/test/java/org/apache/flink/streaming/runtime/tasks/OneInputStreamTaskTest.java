@@ -45,7 +45,7 @@ import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
 import org.apache.flink.runtime.io.network.api.writer.RecordOrEventCollectingResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriterWithAvailabilityHelper;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
@@ -125,7 +125,7 @@ class OneInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         StreamMap<String, String> mapOperator = new StreamMap<>(new TestOpenCloseMapFunction());
         streamConfig.setStreamOperator(mapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         long initialTime = 0L;
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
@@ -172,7 +172,7 @@ class OneInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         StreamMap<String, String> mapOperator = new StreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(mapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -298,9 +298,9 @@ class OneInputStreamTaskTest {
                 new TriggerableFailOnWatermarkTestOperator();
 
         testHarness
-                .setupOperatorChain(new OperatorID(42L, 42L), headOperator)
-                .chain(new OperatorID(4711L, 42L), watermarkOperator, StringSerializer.INSTANCE)
-                .chain(new OperatorID(123L, 123L), tailOperator, StringSerializer.INSTANCE)
+                .setupOperatorChain(new VertexID(42L, 42L), headOperator)
+                .chain(new VertexID(4711L, 42L), watermarkOperator, StringSerializer.INSTANCE)
+                .chain(new VertexID(123L, 123L), tailOperator, StringSerializer.INSTANCE)
                 .finish();
 
         // --------------------- begin test ---------------------
@@ -420,7 +420,7 @@ class OneInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         StreamMap<String, String> mapOperator = new StreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(mapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -672,7 +672,7 @@ class OneInputStreamTaskTest {
 
         StreamConfig streamConfig = testHarness.getStreamConfig();
         streamConfig.setStreamOperator(new TestOperator());
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         testHarness.invoke();
         testHarness.waitForTaskRunning();
@@ -698,9 +698,9 @@ class OneInputStreamTaskTest {
 
         testHarness
                 .setupOperatorChain(
-                        new OperatorID(), new TestBoundedOneInputStreamOperator("Operator0"))
+                        new VertexID(), new TestBoundedOneInputStreamOperator("Operator0"))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -756,13 +756,13 @@ class OneInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new DuplicatingOperator())
+                .setupOperatorChain(new VertexID(), new DuplicatingOperator())
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -828,10 +828,10 @@ class OneInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         OneInputStreamOperator<String, String> headOperator = new WatermarkMetricOperator();
-        OperatorID headOperatorId = new OperatorID();
+        VertexID headOperatorId = new VertexID();
 
         OneInputStreamOperator<String, String> chainedOperator = new WatermarkMetricOperator();
-        OperatorID chainedOperatorId = new OperatorID();
+        VertexID chainedOperatorId = new VertexID();
 
         testHarness
                 .setupOperatorChain(headOperatorId, headOperator)
@@ -849,7 +849,7 @@ class OneInputStreamTaskTest {
                 new InterceptingTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID id, String name, Map<String, String> additionalVariables) {
+                            VertexID id, String name, Map<String, String> additionalVariables) {
                         if (id.equals(headOperatorId)) {
                             return headOperatorMetricGroup;
                         } else if (id.equals(chainedOperatorId)) {
@@ -1019,7 +1019,7 @@ class OneInputStreamTaskTest {
                                 OneInputStreamTask::new, BasicTypeInfo.INT_TYPE_INFO)
                         .addInput(BasicTypeInfo.INT_TYPE_INFO)
                         .addAdditionalOutput(partitionWriters)
-                        .setupOperatorChain(new OperatorID(), new PassThroughOperator<>())
+                        .setupOperatorChain(new VertexID(), new PassThroughOperator<>())
                         .chain(
                                 BasicTypeInfo.INT_TYPE_INFO.createSerializer(
                                         new SerializerConfigImpl()))
@@ -1124,7 +1124,7 @@ class OneInputStreamTaskTest {
 
         TestingStreamOperator<Integer, Integer> previousOperator = new TestingStreamOperator<>();
         streamConfig.setStreamOperator(previousOperator);
-        streamConfig.setOperatorID(new OperatorID(0L, 0L));
+        streamConfig.setOperatorID(new VertexID(0L, 0L));
 
         // create the chain of operators
         Map<Integer, StreamConfig> chainedTaskConfigs = new HashMap<>(numberChainedTasks - 1);
@@ -1135,7 +1135,7 @@ class OneInputStreamTaskTest {
             StreamConfig chainedConfig = new StreamConfig(new Configuration());
             chainedConfig.setupNetworkInputs(StringSerializer.INSTANCE);
             chainedConfig.setStreamOperator(chainedOperator);
-            chainedConfig.setOperatorID(new OperatorID(0L, chainedIndex));
+            chainedConfig.setOperatorID(new VertexID(0L, chainedIndex));
             chainedTaskConfigs.put(chainedIndex, chainedConfig);
 
             StreamEdge outputEdge =

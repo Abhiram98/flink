@@ -27,7 +27,7 @@ import org.apache.flink.core.fs.FileSystem.WriteMode;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.io.network.partition.consumer.IteratorWrappingTestSingleInputGate;
 import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.operators.Driver;
@@ -125,7 +125,7 @@ public abstract class TaskTestBase {
         outputFormat.setOutputFilePath(new Path(outPath));
         outputFormat.setWriteMode(WriteMode.OVERWRITE);
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader())
                 .addOutputFormat(operatorID, outputFormat)
                 .addParameters(operatorID, formatParams)
@@ -148,7 +148,7 @@ public abstract class TaskTestBase {
         format.setFilePath(inPath);
         format.setDelimiter(delimiter);
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader())
                 .addInputFormat(operatorID, format)
                 .write(new TaskConfig(this.mockEnv.getTaskConfiguration()));

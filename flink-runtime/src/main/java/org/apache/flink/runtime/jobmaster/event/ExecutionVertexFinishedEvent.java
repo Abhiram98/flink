@@ -25,7 +25,7 @@ import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IOMetrics;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.shuffle.ShuffleMasterSnapshot;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
@@ -51,7 +51,7 @@ public class ExecutionVertexFinishedEvent implements JobEvent {
 
     private final TaskManagerLocation taskManagerLocation;
 
-    private transient Map<OperatorID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures;
+    private transient Map<VertexID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures;
 
     @Nullable
     private transient CompletableFuture<ShuffleMasterSnapshot> shuffleMasterSnapshotFuture;
@@ -63,7 +63,7 @@ public class ExecutionVertexFinishedEvent implements JobEvent {
     public ExecutionVertexFinishedEvent(
             ExecutionAttemptID executionAttemptId,
             TaskManagerLocation location,
-            Map<OperatorID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures,
+            Map<VertexID, CompletableFuture<byte[]>> operatorCoordinatorSnapshotFutures,
             @Nullable CompletableFuture<ShuffleMasterSnapshot> shuffleMasterSnapshotFuture,
             IOMetrics ioMetrics,
             @Nullable Map<String, Accumulator<?, ?>> userAccumulators) {
@@ -92,7 +92,7 @@ public class ExecutionVertexFinishedEvent implements JobEvent {
         return taskManagerLocation;
     }
 
-    public Map<OperatorID, CompletableFuture<byte[]>> getOperatorCoordinatorSnapshotFutures() {
+    public Map<VertexID, CompletableFuture<byte[]>> getOperatorCoordinatorSnapshotFutures() {
         return operatorCoordinatorSnapshotFutures;
     }
 
@@ -150,8 +150,8 @@ public class ExecutionVertexFinishedEvent implements JobEvent {
                 out.write(binaryJobEvent);
 
                 // serialize operator coordinator snapshots.
-                Map<OperatorID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
-                for (Map.Entry<OperatorID, CompletableFuture<byte[]>> entry :
+                Map<VertexID, byte[]> operatorCoordinatorSnapshots = new HashMap<>();
+                for (Map.Entry<VertexID, CompletableFuture<byte[]>> entry :
                         event.getOperatorCoordinatorSnapshotFutures().entrySet()) {
                     operatorCoordinatorSnapshots.put(entry.getKey(), entry.getValue().get());
                 }
@@ -196,7 +196,7 @@ public class ExecutionVertexFinishedEvent implements JobEvent {
                 int binaryOperatorCoordinatorSnapshotsSize = in.readInt();
                 byte[] binaryOperatorCoordinatorSnapshots =
                         readBytes(in, binaryOperatorCoordinatorSnapshotsSize);
-                Map<OperatorID, byte[]> operatorCoordinatorSnapshots =
+                Map<VertexID, byte[]> operatorCoordinatorSnapshots =
                         InstantiationUtil.deserializeObject(
                                 binaryOperatorCoordinatorSnapshots,
                                 ClassLoader.getSystemClassLoader());

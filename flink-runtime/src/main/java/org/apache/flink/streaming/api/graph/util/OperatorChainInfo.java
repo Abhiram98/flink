@@ -21,7 +21,7 @@ package org.apache.flink.streaming.api.graph.util;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.streaming.api.graph.StreamEdge;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -87,7 +87,7 @@ public class OperatorChainInfo {
         return chainedSources;
     }
 
-    public OperatorID addNodeToChain(
+    public VertexID addNodeToChain(
             int currentNodeId, String operatorName, JobVertexBuildContext jobVertexBuildContext) {
         StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         StreamNode streamNode = streamGraph.getStreamNode(currentNodeId);
@@ -105,10 +105,10 @@ public class OperatorChainInfo {
         }
 
         streamNode
-                .getCoordinatorProvider(operatorName, new OperatorID(primaryHashBytes))
+                .getCoordinatorProvider(operatorName, new VertexID(primaryHashBytes))
                 .map(coordinatorProviders::add);
 
-        return new OperatorID(primaryHashBytes);
+        return new VertexID(primaryHashBytes);
     }
 
     public void setTransitiveOutEdges(final List<StreamEdge> transitiveOutEdges) {
@@ -188,7 +188,7 @@ public class OperatorChainInfo {
         return chainedOperatorInfos.get(nodeId);
     }
 
-    public OperatorInfo createAndGetOperatorInfo(Integer nodeId, OperatorID operatorId) {
+    public OperatorInfo createAndGetOperatorInfo(Integer nodeId, VertexID operatorId) {
         OperatorInfo operatorInfo = new OperatorInfo(operatorId);
         chainedOperatorInfos.put(nodeId, operatorInfo);
         return operatorInfo;

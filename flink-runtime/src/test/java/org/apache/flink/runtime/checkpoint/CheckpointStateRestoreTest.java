@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
@@ -118,7 +118,7 @@ class CheckpointStateRestoreTest {
             final TaskStateSnapshot subtaskStates = new TaskStateSnapshot();
 
             subtaskStates.putSubtaskStateByOperatorID(
-                    OperatorID.fromJobVertexID(statefulId),
+                    VertexID.fromJobVertexID(statefulId),
                     OperatorSubtaskState.builder()
                             .setManagedKeyedState(serializedKeyGroupStates)
                             .build());
@@ -206,7 +206,7 @@ class CheckpointStateRestoreTest {
         JobVertexID jobVertexId1 = new JobVertexID();
         JobVertexID jobVertexId2 = new JobVertexID();
 
-        OperatorID operatorId1 = OperatorID.fromJobVertexID(jobVertexId1);
+        VertexID operatorId1 = VertexID.fromJobVertexID(jobVertexId1);
 
         // 1st JobVertex
         ExecutionVertex vertex11 = mockExecutionVertex(mockExecution(), jobVertexId1, 0, 3);
@@ -230,7 +230,7 @@ class CheckpointStateRestoreTest {
                 new CheckpointCoordinatorBuilder().build(EXECUTOR_RESOURCE.getExecutor());
 
         // --- (2) Checkpoint misses state for a jobVertex (should work) ---
-        Map<OperatorID, OperatorState> checkpointTaskStates = new HashMap<>();
+        Map<VertexID, OperatorState> checkpointTaskStates = new HashMap<>();
         {
             OperatorState taskState = new OperatorState(null, null, operatorId1, 3, 3);
             taskState.putState(0, OperatorSubtaskState.builder().build());
@@ -260,7 +260,7 @@ class CheckpointStateRestoreTest {
 
         // --- (3) JobVertex missing for task state that is part of the checkpoint ---
         JobVertexID newJobVertexID = new JobVertexID();
-        OperatorID newOperatorID = OperatorID.fromJobVertexID(newJobVertexID);
+        VertexID newOperatorID = VertexID.fromJobVertexID(newJobVertexID);
 
         // There is no task for this
         {
@@ -331,7 +331,7 @@ class CheckpointStateRestoreTest {
         when(vertex.getOperatorIDs())
                 .thenReturn(
                         Collections.singletonList(
-                                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(id))));
+                                OperatorIDPair.generatedIDOnly(VertexID.fromJobVertexID(id))));
         when(vertex.getProducedDataSets()).thenReturn(new IntermediateResult[0]);
 
         for (ExecutionVertex v : vertices) {

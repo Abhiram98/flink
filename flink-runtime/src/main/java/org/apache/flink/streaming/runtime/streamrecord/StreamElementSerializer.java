@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeutils.CompositeTypeSerializerSnapshot;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.core.memory.DataOutputView;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.watermark.InternalWatermark;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.runtime.watermarkstatus.WatermarkStatus;
@@ -214,7 +214,7 @@ public final class StreamElementSerializer<T> extends TypeSerializer<StreamEleme
         } else if (tag == TAG_LATENCY_MARKER) {
             return new LatencyMarker(
                     source.readLong(),
-                    new OperatorID(source.readLong(), source.readLong()),
+                    new VertexID(source.readLong(), source.readLong()),
                     source.readInt());
         } else if (tag == TAG_RECORD_ATTRIBUTES) {
             return new RecordAttributes(source.readBoolean());
@@ -245,7 +245,7 @@ public final class StreamElementSerializer<T> extends TypeSerializer<StreamEleme
         } else if (tag == TAG_LATENCY_MARKER) {
             return new LatencyMarker(
                     source.readLong(),
-                    new OperatorID(source.readLong(), source.readLong()),
+                    new VertexID(source.readLong(), source.readLong()),
                     source.readInt());
         } else if (tag == TAG_RECORD_ATTRIBUTES) {
             return new RecordAttributes(source.readBoolean());

@@ -23,7 +23,7 @@ import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateBackendHandle.ChangelogStateBackendHandleImpl;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.concurrent.Executors;
@@ -193,7 +193,7 @@ class ChangelogTaskLocalStateStoreTest extends TaskLocalStateStoreImplTest {
     private TestingTaskStateSnapshot storeChangelogStates(
             long checkpointID, long materializationID) {
         writeToMaterializedDir(materializationID);
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         TestingTaskStateSnapshot taskStateSnapshot = new TestingTaskStateSnapshot();
         OperatorSubtaskState operatorSubtaskState =
                 OperatorSubtaskState.builder()

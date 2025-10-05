@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.channel.SequentialChannelStateReader;
 import org.apache.flink.runtime.checkpoint.channel.SequentialChannelStateReaderImpl;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandle;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorageView;
@@ -202,7 +202,7 @@ public class TaskStateManagerImpl implements TaskStateManager {
     }
 
     @Override
-    public PrioritizedOperatorSubtaskState prioritizedOperatorState(OperatorID operatorID) {
+    public PrioritizedOperatorSubtaskState prioritizedOperatorState(VertexID operatorID) {
 
         if (jobManagerTaskRestore == null) {
             return PrioritizedOperatorSubtaskState.emptyNotRestored();
@@ -254,7 +254,7 @@ public class TaskStateManagerImpl implements TaskStateManager {
         return builder.build();
     }
 
-    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OperatorID operatorID) {
+    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(VertexID operatorID) {
         if (jobManagerTaskRestore == null) {
             return Optional.empty();
         }

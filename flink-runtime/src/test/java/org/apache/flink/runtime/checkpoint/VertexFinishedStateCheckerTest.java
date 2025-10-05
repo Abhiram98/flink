@@ -25,7 +25,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -72,9 +72,9 @@ class VertexFinishedStateCheckerTest {
         // The op1 has uidHash set.
         OperatorIDPair op1 =
                 OperatorIDPair.of(
-                        new OperatorID(), new OperatorID(), "operatorName", "operatorUid");
-        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        OperatorIDPair op3 = OperatorIDPair.generatedIDOnly(new OperatorID());
+                        new VertexID(), new VertexID(), "operatorName", "operatorUid");
+        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new VertexID());
+        OperatorIDPair op3 = OperatorIDPair.generatedIDOnly(new VertexID());
 
         final ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -82,7 +82,7 @@ class VertexFinishedStateCheckerTest {
                         .addJobVertex(jobVertexID1, 1, 1, Arrays.asList(op1, op2), true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
                 useUidHash ? op1.getUserDefinedOperatorID().get() : op1.getGeneratedOperatorID(),
                 new FullyFinishedOperatorState(null, null, op1.getGeneratedOperatorID(), 1, 1));
@@ -252,8 +252,8 @@ class VertexFinishedStateCheckerTest {
             Class<? extends Throwable> expectedExceptionalClass,
             String expectedMessage)
             throws Exception {
-        OperatorIDPair op1 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new OperatorID());
+        OperatorIDPair op1 = OperatorIDPair.generatedIDOnly(new VertexID());
+        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new VertexID());
         JobVertex vertex1 = new JobVertex(firstVertexName, firstVertexId, singletonList(op1));
         JobVertex vertex2 = new JobVertex(secondVertexName, secondVertexId, singletonList(op2));
         vertex1.setInvokableClass(NoOpInvokable.class);
@@ -272,7 +272,7 @@ class VertexFinishedStateCheckerTest {
                     vertex2, vertex1, distributionPatterns[i], ResultPartitionType.PIPELINED);
         }
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
                 op1.getGeneratedOperatorID(),
                 createOperatorState(op1.getGeneratedOperatorID(), firstOperatorFinishedState));
@@ -292,7 +292,7 @@ class VertexFinishedStateCheckerTest {
     }
 
     private OperatorState createOperatorState(
-            OperatorID operatorId, VertexFinishedStateChecker.VertexFinishedState finishedState) {
+            VertexID operatorId, VertexFinishedStateChecker.VertexFinishedState finishedState) {
         switch (finishedState) {
             case ALL_RUNNING:
                 return new OperatorState(null, null, operatorId, 2, 2);

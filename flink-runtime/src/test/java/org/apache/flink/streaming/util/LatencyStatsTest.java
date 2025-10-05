@@ -22,7 +22,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.metrics.Histogram;
 import org.apache.flink.metrics.MetricGroup;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.AbstractMetricGroup;
 import org.apache.flink.runtime.metrics.groups.GenericMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -40,9 +40,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Tests for the {@link LatencyStats}. */
 class LatencyStatsTest {
 
-    private static final OperatorID OPERATOR_ID = new OperatorID();
-    private static final OperatorID SOURCE_ID_1 = new OperatorID();
-    private static final OperatorID SOURCE_ID_2 = new OperatorID();
+    private static final VertexID OPERATOR_ID = new VertexID();
+    private static final VertexID SOURCE_ID_1 = new VertexID();
+    private static final VertexID SOURCE_ID_2 = new VertexID();
 
     private static final int OPERATOR_SUBTASK_INDEX = 64;
 
@@ -174,7 +174,7 @@ class LatencyStatsTest {
                                 + ".latency");
     }
 
-    private static void assertName(final String registrationName, final OperatorID sourceId) {
+    private static void assertName(final String registrationName, final VertexID sourceId) {
         final String sanitizedName = sanitizeName(registrationName);
         assertThat(sanitizedName)
                 .isEqualTo(
@@ -188,7 +188,7 @@ class LatencyStatsTest {
     }
 
     private static void assertName(
-            final String registrationName, final OperatorID sourceId, final int sourceIndex) {
+            final String registrationName, final VertexID sourceId, final int sourceIndex) {
         final String sanitizedName = sanitizeName(registrationName);
         assertThat(sanitizedName)
                 .isEqualTo(

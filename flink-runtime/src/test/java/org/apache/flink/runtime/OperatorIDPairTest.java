@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,7 @@ class OperatorIDPairTest {
         final IllegalArgumentException exception =
                 assertThrows(
                         IllegalArgumentException.class,
-                        () -> OperatorIDPair.of(new OperatorID(), null, "", null));
+                        () -> OperatorIDPair.of(new VertexID(), null, "", null));
         assertThat(exception.getMessage()).contains("Empty string operator name is not allowed");
     }
 
@@ -40,7 +40,7 @@ class OperatorIDPairTest {
         final IllegalArgumentException exception =
                 assertThrows(
                         IllegalArgumentException.class,
-                        () -> OperatorIDPair.of(new OperatorID(), null, null, ""));
+                        () -> OperatorIDPair.of(new VertexID(), null, null, ""));
         assertThat(exception.getMessage()).contains("Empty string operator uid is not allowed");
     }
 }

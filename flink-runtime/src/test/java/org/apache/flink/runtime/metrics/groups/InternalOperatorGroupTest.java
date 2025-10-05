@@ -24,7 +24,7 @@ import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.MetricRegistryImpl;
 import org.apache.flink.runtime.metrics.MetricRegistryTestUtils;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -69,7 +69,7 @@ class InternalOperatorGroupTest {
         additionalVariables.put("foo", "42");
         additionalVariables.put("bar", "44");
         InternalOperatorMetricGroup opGroup =
-                taskGroup.getOrAddOperator(new OperatorID(), "myOpName", additionalVariables);
+                taskGroup.getOrAddOperator(new VertexID(), "myOpName", additionalVariables);
 
         assertThat(opGroup.getScopeComponents())
                 .containsExactly(
@@ -101,7 +101,7 @@ class InternalOperatorGroupTest {
             String tmID = "test-tm-id";
             JobID jid = new JobID();
             JobVertexID vertexId = new JobVertexID();
-            OperatorID operatorID = new OperatorID();
+            VertexID operatorID = new VertexID();
             String operatorName = "operatorName";
 
             InternalOperatorMetricGroup operatorGroup =
@@ -137,7 +137,7 @@ class InternalOperatorGroupTest {
                 tmGroup.addJob(new JobID(), "myJobName")
                         .addTask(createExecutionAttemptId(new JobVertexID(), 11, 0), "aTaskName");
         InternalOperatorMetricGroup opGroup =
-                taskGroup.getOrAddOperator(new OperatorID(), "myOpName", Collections.emptyMap());
+                taskGroup.getOrAddOperator(new VertexID(), "myOpName", Collections.emptyMap());
 
         assertThat(opGroup.getIOMetricGroup()).isNotNull();
         assertThat(opGroup.getIOMetricGroup().getNumRecordsInCounter()).isNotNull();
@@ -149,7 +149,7 @@ class InternalOperatorGroupTest {
         JobID jid = new JobID();
         JobVertexID tid = new JobVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(tid, 11, 0);
-        OperatorID oid = new OperatorID();
+        VertexID oid = new VertexID();
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
@@ -185,7 +185,7 @@ class InternalOperatorGroupTest {
         JobID jid = new JobID();
         JobVertexID vid = new JobVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(vid, 4, 5);
-        OperatorID oid = new OperatorID();
+        VertexID oid = new VertexID();
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "host", new ResourceID("id"));

@@ -35,7 +35,7 @@ import org.apache.flink.api.connector.source.mocks.MockSplitEnumeratorCheckpoint
 import org.apache.flink.api.connector.source.mocks.MockSplitEnumeratorContext;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.core.memory.DataOutputSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.ComponentClosingUtils;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
@@ -424,7 +424,7 @@ class SourceCoordinatorTest extends SourceCoordinatorTestBase {
     void testUserClassLoaderWhenCreatingNewEnumerator() throws Exception {
         final ClassLoader testClassLoader = new URLClassLoader(new URL[0]);
         final OperatorCoordinator.Context context =
-                new MockOperatorCoordinatorContext(new OperatorID(), testClassLoader);
+                new MockOperatorCoordinatorContext(new VertexID(), testClassLoader);
 
         final EnumeratorCreatingSource<?, ClassLoaderTestEnumerator> source =
                 new EnumeratorCreatingSource<>(ClassLoaderTestEnumerator::new);
@@ -452,7 +452,7 @@ class SourceCoordinatorTest extends SourceCoordinatorTestBase {
     void testUserClassLoaderWhenRestoringEnumerator() throws Exception {
         final ClassLoader testClassLoader = new URLClassLoader(new URL[0]);
         final OperatorCoordinator.Context context =
-                new MockOperatorCoordinatorContext(new OperatorID(), testClassLoader);
+                new MockOperatorCoordinatorContext(new VertexID(), testClassLoader);
 
         final EnumeratorCreatingSource<?, ClassLoaderTestEnumerator> source =
                 new EnumeratorCreatingSource<>(ClassLoaderTestEnumerator::new);

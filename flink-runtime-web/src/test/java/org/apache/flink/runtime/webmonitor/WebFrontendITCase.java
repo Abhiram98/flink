@@ -41,7 +41,7 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
@@ -444,7 +444,7 @@ class WebFrontendITCase {
         sender.setInvokableClass(BlockingInvokable.class);
 
         String operatorUid = "opId";
-        OperatorID opId = StreamingJobGraphGenerator.generateOperatorID(operatorUid);
+        VertexID opId = StreamingJobGraphGenerator.generateOperatorID(operatorUid);
         sender.addOperatorCoordinator(
                 new SerializedValue<>(new CollectSinkOperatorCoordinator.Provider(opId, 10_000)));
 

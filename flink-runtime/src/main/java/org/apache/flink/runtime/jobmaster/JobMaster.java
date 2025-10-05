@@ -58,7 +58,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.factories.JobManagerJobMetricGroupFactory;
@@ -651,7 +651,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToCoordinator(
             final ExecutionAttemptID task,
-            final OperatorID operatorID,
+            final VertexID operatorID,
             final SerializedValue<OperatorEvent> serializedEvent) {
 
         try {
@@ -665,7 +665,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     @Override
     public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operatorID, SerializedValue<CoordinationRequest> serializedRequest) {
+            VertexID operatorID, SerializedValue<CoordinationRequest> serializedRequest) {
         try {
             final CoordinationRequest request = serializedRequest.deserializeValue(userCodeLoader);
             return schedulerNG.deliverCoordinationRequestToCoordinator(operatorID, request);
@@ -1009,7 +1009,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operatorId,
+            VertexID operatorId,
             SerializedValue<CoordinationRequest> serializedRequest,
             Duration timeout) {
         return this.sendRequestToCoordinator(operatorId, serializedRequest);

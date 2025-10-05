@@ -20,7 +20,7 @@ package org.apache.flink.table.runtime.operators.multipleinput.output;
 
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.operators.Output;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
@@ -52,7 +52,7 @@ class OutputTest extends MultipleInputTestBase {
     void setup() {
         element = new StreamRecord<>(GenericRowData.of(StringData.fromString("123")), 456);
         watermark = new Watermark(1223456789);
-        latencyMarker = new LatencyMarker(122345678, new OperatorID(123, 456), 1);
+        latencyMarker = new LatencyMarker(122345678, new VertexID(123, 456), 1);
         serializer =
                 InternalTypeInfo.of(RowType.of(DataTypes.STRING().getLogicalType()))
                         .createSerializer(new SerializerConfigImpl());

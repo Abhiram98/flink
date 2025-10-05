@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.api.graph.util;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.graph.StreamEdge;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @Internal
 public class OperatorInfo {
 
-    private final OperatorID operatorId;
+    private final VertexID operatorId;
 
     private StreamConfig vertexConfig;
 
@@ -38,7 +38,7 @@ public class OperatorInfo {
     // after all job vertices are created.
     private final List<StreamEdge> nonChainableOutputs;
 
-    public OperatorInfo(OperatorID operatorId) {
+    public OperatorInfo(VertexID operatorId) {
         this.operatorId = operatorId;
         this.nonChainableOutputs = new ArrayList<>();
     }
@@ -59,7 +59,7 @@ public class OperatorInfo {
         this.vertexConfig = vertexConfig;
     }
 
-    public OperatorID getOperatorId() {
+    public VertexID getOperatorId() {
         return operatorId;
     }
 }

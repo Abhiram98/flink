@@ -22,7 +22,7 @@ import org.apache.flink.api.common.eventtime.WatermarkAlignmentParams;
 import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.api.connector.source.SourceSplit;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.RecreateOnResetOperatorCoordinator;
 
@@ -60,7 +60,7 @@ public class SourceCoordinatorProvider<SplitT extends SourceSplit>
      */
     public SourceCoordinatorProvider(
             String operatorName,
-            OperatorID operatorID,
+            VertexID operatorID,
             Source<?, SplitT, ?> source,
             int numWorkerThreads,
             WatermarkAlignmentParams alignmentParams,

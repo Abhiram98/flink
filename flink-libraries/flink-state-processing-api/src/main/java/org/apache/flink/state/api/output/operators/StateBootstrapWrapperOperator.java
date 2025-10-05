@@ -25,7 +25,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.event.WatermarkEvent;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.state.api.output.SnapshotUtils;
 import org.apache.flink.state.api.output.TaggedOperatorSubtaskState;
@@ -157,7 +157,7 @@ public final class StateBootstrapWrapperOperator<
     }
 
     @Override
-    public OperatorID getOperatorID() {
+    public VertexID getOperatorID() {
         return operator.getOperatorID();
     }
 

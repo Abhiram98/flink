@@ -34,16 +34,8 @@ import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.forwardgroup.JobVertexForwardGroup;
@@ -275,14 +267,14 @@ public class StreamingJobGraphGenerator {
     }
 
     /**
-     * Creates an instance of {@link OperatorID} based on the provided operator unique identifier
+     * Creates an instance of {@link VertexID} based on the provided operator unique identifier
      * (UID).
      *
      * @param operatorUid the unique identifier of the operator, used to generate the hash
-     * @return a new {@link OperatorID} instance generated from the specified operator UID
+     * @return a new {@link VertexID} instance generated from the specified operator UID
      */
-    public static OperatorID generateOperatorID(String operatorUid) {
-        return new OperatorID(StreamGraphHasherV2.generateUserSpecifiedHash(operatorUid));
+    public static VertexID generateOperatorID(String operatorUid) {
+        return new VertexID(StreamGraphHasherV2.generateUserSpecifiedHash(operatorUid));
     }
 
     private static void waitForSerializationFuturesAndUpdateJobVertices(
@@ -711,7 +703,7 @@ public class StreamingJobGraphGenerator {
                     createChainedPreferredResources(
                             currentNodeId, chainableOutputs, chainInfo, jobVertexBuildContext));
 
-            OperatorID currentOperatorId =
+            VertexID currentOperatorId =
                     chainInfo.addNodeToChain(
                             currentNodeId,
                             streamGraph.getStreamNode(currentNodeId).getOperatorName(),
@@ -937,7 +929,7 @@ public class StreamingJobGraphGenerator {
                 chainEntryPoints.computeIfAbsent(
                         sourceOutEdge.getTargetId(),
                         (k) -> new OperatorChainInfo(sourceOutEdge.getTargetId()));
-        final OperatorID opId = new OperatorID(jobVertexBuildContext.getHash(sourceNodeId));
+        final VertexID opId = new VertexID(jobVertexBuildContext.getHash(sourceNodeId));
         final OperatorInfo operatorInfo = chainInfo.createAndGetOperatorInfo(sourceNodeId, opId);
         final StreamConfig.SourceInputConfig inputConfig =
                 new StreamConfig.SourceInputConfig(sourceOutEdge);
@@ -1073,13 +1065,13 @@ public class StreamingJobGraphGenerator {
         List<OperatorIDPair> operatorIDPairs = new ArrayList<>();
         if (chainedOperators != null) {
             for (ChainedOperatorHashInfo chainedOperator : chainedOperators) {
-                OperatorID userDefinedOperatorID =
+                VertexID userDefinedOperatorID =
                         chainedOperator.getUserDefinedOperatorId() == null
                                 ? null
-                                : new OperatorID(chainedOperator.getUserDefinedOperatorId());
+                                : new VertexID(chainedOperator.getUserDefinedOperatorId());
                 operatorIDPairs.add(
                         OperatorIDPair.of(
-                                new OperatorID(chainedOperator.getGeneratedOperatorId()),
+                                new VertexID(chainedOperator.getGeneratedOperatorId()),
                                 userDefinedOperatorID,
                                 chainedOperator.getStreamNode().getOperatorName(),
                                 chainedOperator.getStreamNode().getTransformationUID()));

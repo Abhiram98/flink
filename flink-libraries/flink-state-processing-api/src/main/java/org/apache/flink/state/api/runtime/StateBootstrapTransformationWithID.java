@@ -19,14 +19,14 @@
 package org.apache.flink.state.api.runtime;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.state.api.OperatorIdentifier;
 import org.apache.flink.state.api.StateBootstrapTransformation;
 import org.apache.flink.util.Preconditions;
 
 /**
  * A simple container class that represents a newly bootstrapped operator state within savepoints.
- * It wraps the target {@link OperatorID} for the bootstrapped operator, as well as the {@link
+ * It wraps the target {@link VertexID} for the bootstrapped operator, as well as the {@link
  * StateBootstrapTransformation} that defines how the state is bootstrapped.
  */
 @Internal

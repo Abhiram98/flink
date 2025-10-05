@@ -26,7 +26,7 @@ import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.SavepointType;
 import org.apache.flink.runtime.checkpoint.SnapshotType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.streaming.api.operators.OperatorSnapshotFutures;
 import org.apache.flink.streaming.api.operators.StreamOperator;
@@ -150,7 +150,7 @@ public class SnapshotUtilsTest {
         }
 
         @Override
-        public OperatorID getOperatorID() {
+        public VertexID getOperatorID() {
             ACTUAL_ORDER_TRACKING.add("getOperatorID");
             return null;
         }

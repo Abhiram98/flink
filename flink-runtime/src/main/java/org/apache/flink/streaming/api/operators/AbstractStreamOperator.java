@@ -40,7 +40,7 @@ import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.event.WatermarkEvent;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
@@ -236,7 +236,7 @@ public abstract class AbstractStreamOperator<OUT>
                                     .addGroup("latency"),
                             1,
                             0,
-                            new OperatorID(),
+                            new VertexID(),
                             LatencyStats.Granularity.SINGLE);
         }
 
@@ -724,7 +724,7 @@ public abstract class AbstractStreamOperator<OUT>
     }
 
     @Override
-    public OperatorID getOperatorID() {
+    public VertexID getOperatorID() {
         return config.getOperatorID();
     }
 

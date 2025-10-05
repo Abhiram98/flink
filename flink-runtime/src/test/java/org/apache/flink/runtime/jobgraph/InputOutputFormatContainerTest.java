@@ -42,15 +42,15 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer formatContainer =
                 new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader());
 
-        OperatorID operatorID1 = new OperatorID();
+        VertexID operatorID1 = new VertexID();
         formatContainer.addInputFormat(operatorID1, new TestInputFormat("test input format"));
         formatContainer.addParameters(operatorID1, "parameter1", "abc123");
 
-        OperatorID operatorID2 = new OperatorID();
+        VertexID operatorID2 = new VertexID();
         formatContainer.addOutputFormat(operatorID2, new TestOutputFormat<>());
         formatContainer.addParameters(operatorID2, "parameter1", "bcd234");
 
-        OperatorID operatorID3 = new OperatorID();
+        VertexID operatorID3 = new VertexID();
         formatContainer.addOutputFormat(operatorID3, new TestOutputFormat());
         formatContainer.addParameters(operatorID3, "parameter1", "cde345");
 
@@ -60,9 +60,9 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer loadedFormatContainer =
                 new InputOutputFormatContainer(taskConfig, getClass().getClassLoader());
 
-        Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+        Map<VertexID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                 loadedFormatContainer.getInputFormats();
-        Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+        Map<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                 loadedFormatContainer.getOutputFormats();
         assertEquals(1, inputFormats.size());
         assertEquals(2, outputFormats.size());
@@ -93,7 +93,7 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer formatContainer =
                 new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader());
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         formatContainer.addInputFormat(operatorID, new TestInputFormat("test input format"));
         formatContainer.addParameters(operatorID, "parameter1", "abc123");
 
@@ -103,7 +103,7 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer loadedFormatContainer =
                 new InputOutputFormatContainer(taskConfig, getClass().getClassLoader());
 
-        Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+        Map<VertexID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                 loadedFormatContainer.getInputFormats();
         assertEquals(1, inputFormats.size());
         assertEquals(0, loadedFormatContainer.getOutputFormats().size());
@@ -122,7 +122,7 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer formatContainer =
                 new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader());
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         formatContainer.addOutputFormat(operatorID, new TestOutputFormat<>());
 
         Configuration parameters = new Configuration();
@@ -135,7 +135,7 @@ public class InputOutputFormatContainerTest {
         InputOutputFormatContainer loadedFormatContainer =
                 new InputOutputFormatContainer(taskConfig, getClass().getClassLoader());
 
-        Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+        Map<VertexID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                 loadedFormatContainer.getOutputFormats();
         assertEquals(1, outputFormats.size());
         assertEquals(0, loadedFormatContainer.getInputFormats().size());

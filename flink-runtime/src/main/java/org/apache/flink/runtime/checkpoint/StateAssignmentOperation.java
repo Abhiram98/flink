@@ -28,11 +28,8 @@ import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.AbstractChannelStateHandle;
 import org.apache.flink.runtime.state.ChannelStateHelper;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
@@ -71,7 +68,7 @@ public class StateAssignmentOperation {
     private static final Logger LOG = LoggerFactory.getLogger(StateAssignmentOperation.class);
 
     private final Set<ExecutionJobVertex> tasks;
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<VertexID, OperatorState> operatorStates;
 
     private final long restoreCheckpointId;
     private final boolean allowNonRestoredState;
@@ -89,7 +86,7 @@ public class StateAssignmentOperation {
     public StateAssignmentOperation(
             long restoreCheckpointId,
             Set<ExecutionJobVertex> tasks,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<VertexID, OperatorState> operatorStates,
             boolean allowNonRestoredState) {
 
         this.restoreCheckpointId = restoreCheckpointId;
@@ -102,16 +99,16 @@ public class StateAssignmentOperation {
     public void assignStates() {
         checkStateMappingCompleteness(allowNonRestoredState, operatorStates, tasks);
 
-        Map<OperatorID, OperatorState> localOperators = new HashMap<>(operatorStates);
+        Map<VertexID, OperatorState> localOperators = new HashMap<>(operatorStates);
 
         // find the states of all operators belonging to this task and compute additional
         // information in first pass
         for (ExecutionJobVertex executionJobVertex : tasks) {
             List<OperatorIDPair> operatorIDPairs = executionJobVertex.getOperatorIDs();
-            Map<OperatorID, OperatorState> operatorStates =
+            Map<VertexID, OperatorState> operatorStates =
                     CollectionUtil.newHashMapWithExpectedSize(operatorIDPairs.size());
             for (OperatorIDPair operatorIDPair : operatorIDPairs) {
-                OperatorID operatorID =
+                VertexID operatorID =
                         operatorIDPair
                                 .getUserDefinedOperatorID()
                                 .filter(localOperators::containsKey)
@@ -337,14 +334,14 @@ public class StateAssignmentOperation {
     }
 
     public static <T extends StateObject> void reDistributePartitionableStates(
-            Map<OperatorID, OperatorState> oldOperatorStates,
+            Map<VertexID, OperatorState> oldOperatorStates,
             int newParallelism,
             Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle,
             OperatorStateRepartitioner<T> stateRepartitioner,
             Map<OperatorInstanceID, List<T>> result) {
 
         // The nested list wraps as the level of operator -> subtask -> state object collection
-        Map<OperatorID, List<List<T>>> oldStates =
+        Map<VertexID, List<List<T>>> oldStates =
                 splitManagedAndRawOperatorStates(oldOperatorStates, extractHandle);
 
         oldOperatorStates.forEach(
@@ -501,10 +498,10 @@ public class StateAssignmentOperation {
     }
 
     private <T extends AbstractChannelStateHandle<?>> void checkForUnsupportedToplogyChanges(
-            Map<OperatorID, OperatorState> oldOperatorStates,
+            Map<VertexID, OperatorState> oldOperatorStates,
             Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle,
-            OperatorID expectedOperatorID) {
-        final List<OperatorID> unexpectedState =
+            VertexID expectedOperatorID) {
+        final List<VertexID> unexpectedState =
                 oldOperatorStates.entrySet().stream()
                         .filter(idAndState -> !idAndState.getKey().equals(expectedOperatorID))
                         .filter(idAndState -> hasChannelState(idAndState.getValue(), extractHandle))
@@ -545,8 +542,8 @@ public class StateAssignmentOperation {
     }
 
     private static <T extends StateObject>
-            Map<OperatorID, List<List<T>>> splitManagedAndRawOperatorStates(
-                    Map<OperatorID, OperatorState> operatorStates,
+            Map<VertexID, List<List<T>>> splitManagedAndRawOperatorStates(
+                    Map<VertexID, OperatorState> operatorStates,
                     Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle) {
         return operatorStates.entrySet().stream()
                 .collect(
@@ -751,17 +748,17 @@ public class StateAssignmentOperation {
      */
     private static void checkStateMappingCompleteness(
             boolean allowNonRestoredState,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<VertexID, OperatorState> operatorStates,
             Set<ExecutionJobVertex> tasks) {
 
-        Set<OperatorID> allOperatorIDs = new HashSet<>();
+        Set<VertexID> allOperatorIDs = new HashSet<>();
         for (ExecutionJobVertex executionJobVertex : tasks) {
             for (OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIDs()) {
                 allOperatorIDs.add(operatorIDPair.getGeneratedOperatorID());
                 operatorIDPair.getUserDefinedOperatorID().ifPresent(allOperatorIDs::add);
             }
         }
-        for (Map.Entry<OperatorID, OperatorState> operatorGroupStateEntry :
+        for (Map.Entry<VertexID, OperatorState> operatorGroupStateEntry :
                 operatorStates.entrySet()) {
             // ----------------------------------------find operator for
             // state---------------------------------------------
@@ -783,7 +780,7 @@ public class StateAssignmentOperation {
     }
 
     public static <T> Map<OperatorInstanceID, List<T>> applyRepartitioner(
-            OperatorID operatorID,
+            VertexID operatorID,
             OperatorStateRepartitioner<T> opStateRepartitioner,
             List<List<T>> chainOpParallelStates,
             int oldParallelism,
@@ -800,7 +797,7 @@ public class StateAssignmentOperation {
     }
 
     private static <T> Map<OperatorInstanceID, List<T>> toInstanceMap(
-            OperatorID operatorID, List<List<T>> states) {
+            VertexID operatorID, List<List<T>> states) {
         Map<OperatorInstanceID, List<T>> result =
                 CollectionUtil.newHashMapWithExpectedSize(states.size());
 

@@ -21,7 +21,7 @@ package org.apache.flink.streaming.runtime.operators;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.runtime.execution.CancelTaskException;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.functions.source.legacy.RichSourceFunction;
 import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 import org.apache.flink.streaming.api.graph.StreamConfig;
@@ -136,7 +136,7 @@ class StreamSourceOperatorWatermarksTest {
 
         StreamConfig streamConfig = testHarness.getStreamConfig();
         streamConfig.setStreamOperator(sourceOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         return testHarness;
     }

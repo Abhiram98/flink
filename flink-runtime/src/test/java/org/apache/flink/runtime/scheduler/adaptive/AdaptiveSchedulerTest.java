@@ -65,12 +65,8 @@ import org.apache.flink.runtime.executiongraph.metrics.DownTimeGauge;
 import org.apache.flink.runtime.executiongraph.metrics.UpTimeGauge;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexResourceRequirements;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
@@ -1878,7 +1874,7 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
                         () ->
                                 scheduler.deliverOperatorEventToCoordinator(
                                         createExecutionAttemptId(),
-                                        new OperatorID(),
+                                        new VertexID(),
                                         new TestOperatorEvent()))
                 .isInstanceOf(TaskNotRunningException.class);
     }
@@ -1894,7 +1890,7 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
 
         assertThatFuture(
                         scheduler.deliverCoordinationRequestToCoordinator(
-                                new OperatorID(), new CoordinationRequest() {}))
+                                new VertexID(), new CoordinationRequest() {}))
                 .eventuallyFailsWith(ExecutionException.class)
                 .withCauseInstanceOf(FlinkException.class);
     }

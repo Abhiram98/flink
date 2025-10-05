@@ -30,7 +30,7 @@ import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
 import org.apache.flink.runtime.state.changelog.inmemory.InMemoryStateChangelogStorage;
 import org.apache.flink.runtime.taskmanager.CheckpointResponder;
@@ -78,9 +78,9 @@ class TaskStateManagerImplTest {
         CheckpointMetrics checkpointMetrics = new CheckpointMetrics();
         TaskStateSnapshot jmTaskStateSnapshot = new TaskStateSnapshot();
 
-        OperatorID operatorID_1 = new OperatorID(1L, 1L);
-        OperatorID operatorID_2 = new OperatorID(2L, 2L);
-        OperatorID operatorID_3 = new OperatorID(3L, 3L);
+        VertexID operatorID_1 = new VertexID(1L, 1L);
+        VertexID operatorID_2 = new VertexID(2L, 2L);
+        VertexID operatorID_3 = new VertexID(3L, 3L);
 
         assertThat(taskStateManager.prioritizedOperatorState(operatorID_1).isRestored()).isFalse();
         assertThat(taskStateManager.prioritizedOperatorState(operatorID_2).isRestored()).isFalse();
@@ -160,7 +160,7 @@ class TaskStateManagerImplTest {
         assertThat(prioritized_1.isRestored()).isTrue();
         assertThat(prioritized_2.isRestored()).isTrue();
         assertThat(prioritized_3.isRestored()).isTrue();
-        assertThat(taskStateManager.prioritizedOperatorState(new OperatorID()).isRestored())
+        assertThat(taskStateManager.prioritizedOperatorState(new VertexID()).isRestored())
                 .isTrue();
 
         // checks for operator 1.

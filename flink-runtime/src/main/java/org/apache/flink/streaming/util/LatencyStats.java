@@ -18,7 +18,7 @@
 package org.apache.flink.streaming.util;
 
 import org.apache.flink.metrics.MetricGroup;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.DescriptiveStatisticsHistogram;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 
@@ -34,14 +34,14 @@ public class LatencyStats {
     private final MetricGroup metricGroup;
     private final int historySize;
     private final int subtaskIndex;
-    private final OperatorID operatorId;
+    private final VertexID operatorId;
     private final Granularity granularity;
 
     public LatencyStats(
             MetricGroup metricGroup,
             int historySize,
             int subtaskIndex,
-            OperatorID operatorID,
+            VertexID operatorID,
             Granularity granularity) {
         this.metricGroup = metricGroup;
         this.historySize = historySize;
@@ -74,7 +74,7 @@ public class LatencyStats {
         SINGLE {
             @Override
             String createUniqueHistogramName(
-                    LatencyMarker marker, OperatorID operatorId, int operatorSubtaskIndex) {
+                    LatencyMarker marker, VertexID operatorId, int operatorSubtaskIndex) {
                 return String.valueOf(operatorId) + operatorSubtaskIndex;
             }
 
@@ -82,7 +82,7 @@ public class LatencyStats {
             MetricGroup createSourceMetricGroups(
                     MetricGroup base,
                     LatencyMarker marker,
-                    OperatorID operatorId,
+                    VertexID operatorId,
                     int operatorSubtaskIndex) {
                 return base;
             }
@@ -90,7 +90,7 @@ public class LatencyStats {
         OPERATOR {
             @Override
             String createUniqueHistogramName(
-                    LatencyMarker marker, OperatorID operatorId, int operatorSubtaskIndex) {
+                    LatencyMarker marker, VertexID operatorId, int operatorSubtaskIndex) {
                 return String.valueOf(marker.getOperatorId()) + operatorId + operatorSubtaskIndex;
             }
 
@@ -98,7 +98,7 @@ public class LatencyStats {
             MetricGroup createSourceMetricGroups(
                     MetricGroup base,
                     LatencyMarker marker,
-                    OperatorID operatorId,
+                    VertexID operatorId,
                     int operatorSubtaskIndex) {
                 return base.addGroup("source_id", String.valueOf(marker.getOperatorId()));
             }
@@ -106,7 +106,7 @@ public class LatencyStats {
         SUBTASK {
             @Override
             String createUniqueHistogramName(
-                    LatencyMarker marker, OperatorID operatorId, int operatorSubtaskIndex) {
+                    LatencyMarker marker, VertexID operatorId, int operatorSubtaskIndex) {
                 return String.valueOf(marker.getOperatorId())
                         + marker.getSubtaskIndex()
                         + operatorId
@@ -117,7 +117,7 @@ public class LatencyStats {
             MetricGroup createSourceMetricGroups(
                     MetricGroup base,
                     LatencyMarker marker,
-                    OperatorID operatorId,
+                    VertexID operatorId,
                     int operatorSubtaskIndex) {
                 return base.addGroup("source_id", String.valueOf(marker.getOperatorId()))
                         .addGroup("source_subtask_index", String.valueOf(marker.getSubtaskIndex()));
@@ -125,12 +125,12 @@ public class LatencyStats {
         };
 
         abstract String createUniqueHistogramName(
-                LatencyMarker marker, OperatorID operatorId, int operatorSubtaskIndex);
+                LatencyMarker marker, VertexID operatorId, int operatorSubtaskIndex);
 
         abstract MetricGroup createSourceMetricGroups(
                 MetricGroup base,
                 LatencyMarker marker,
-                OperatorID operatorId,
+                VertexID operatorId,
                 int operatorSubtaskIndex);
     }
 }

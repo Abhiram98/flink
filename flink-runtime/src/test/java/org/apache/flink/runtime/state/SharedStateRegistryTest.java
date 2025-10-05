@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManage
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManagerBuilder;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingType;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateBackendHandle.ChangelogStateBackendHandleImpl;
 import org.apache.flink.runtime.state.filemerging.EmptyFileMergingOperatorStreamStateHandle;
 import org.apache.flink.runtime.state.filemerging.FileMergingOperatorStreamStateHandle;
@@ -361,7 +361,7 @@ class SharedStateRegistryTest {
                         1024L,
                         new StateHandleID(stateId));
 
-        OperatorID operatorID = new OperatorID();
+        VertexID operatorID = new VertexID();
         OperatorState operatorState = new OperatorState(null, null, operatorID, 1, 1);
         operatorState.putState(
                 0, OperatorSubtaskState.builder().setManagedKeyedState(initialHandle).build());

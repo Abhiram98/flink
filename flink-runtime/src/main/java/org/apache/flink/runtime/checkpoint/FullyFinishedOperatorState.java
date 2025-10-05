@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.memory.ByteStreamStateHandle;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ public class FullyFinishedOperatorState extends OperatorState {
     public FullyFinishedOperatorState(
             @Nullable String operatorName,
             @Nullable String operatorUid,
-            OperatorID operatorID,
+            VertexID operatorID,
             int parallelism,
             int maxParallelism) {
         super(operatorName, operatorUid, operatorID, parallelism, maxParallelism);

@@ -20,7 +20,7 @@ package org.apache.flink.table.runtime.operators.join;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.api.operators.StreamOperator;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.streaming.runtime.tasks.TwoInputStreamTask;
@@ -164,7 +164,7 @@ class String2SortMergeJoinOperatorTest {
         testHarness.memorySize = 36 * 1024 * 1024;
         testHarness.setupOutputForSingletonOperatorChain();
         testHarness.getStreamConfig().setStreamOperator(operator);
-        testHarness.getStreamConfig().setOperatorID(new OperatorID());
+        testHarness.getStreamConfig().setOperatorID(new VertexID());
         testHarness
                 .getStreamConfig()
                 .setManagedMemoryFractionOperatorOfUseCase(ManagedMemoryUseCase.OPERATOR, 0.99);

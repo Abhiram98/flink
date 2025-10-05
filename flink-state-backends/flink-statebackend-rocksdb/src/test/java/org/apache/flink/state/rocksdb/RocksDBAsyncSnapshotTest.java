@@ -37,7 +37,7 @@ import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetrics;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.execution.CancelTaskException;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
@@ -148,7 +148,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
         streamConfig.setCheckpointStorage(new JobManagerCheckpointStorage());
 
         streamConfig.setStreamOperator(new AsyncCheckpointOperator());
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         final OneShotLatch delayCheckpointLatch = new OneShotLatch();
         final OneShotLatch ensureCheckpointLatch = new OneShotLatch();
@@ -172,7 +172,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
                         }
 
                         boolean hasManagedKeyedState = false;
-                        for (Map.Entry<OperatorID, OperatorSubtaskState> entry :
+                        for (Map.Entry<VertexID, OperatorSubtaskState> entry :
                                 subtaskState.getSubtaskStateMappings()) {
                             OperatorSubtaskState state = entry.getValue();
                             if (state != null) {
@@ -337,7 +337,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
                 new BackendForTestStream(new StaticForwardFactory(blockerCheckpointStreamFactory)));
 
         streamConfig.setStreamOperator(new AsyncCheckpointOperator());
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         TestTaskStateManager taskStateManagerTestMock = new TestTaskStateManager();
 

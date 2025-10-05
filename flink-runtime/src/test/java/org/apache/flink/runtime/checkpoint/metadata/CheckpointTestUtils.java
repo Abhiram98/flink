@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.MasterState;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.filemerging.LogicalFile;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.DiscardRecordedStateObject;
 import org.apache.flink.runtime.state.IncrementalKeyedStateHandle.HandleAndLocalPath;
@@ -101,7 +101,7 @@ public class CheckpointTestUtils {
                     new OperatorState(
                             "operatorName-" + stateIdx,
                             "operatorUid-" + stateIdx,
-                            new OperatorID(),
+                            new VertexID(),
                             numSubtasksPerTask,
                             128);
             randomlySetCoordinatorState(taskState, random);
@@ -112,7 +112,7 @@ public class CheckpointTestUtils {
 
         for (int stateIdx = 0; stateIdx < numPartlyFinishedTaskStates; ++stateIdx) {
             OperatorState taskState =
-                    new OperatorState(null, null, new OperatorID(), numSubtasksPerTask, 128);
+                    new OperatorState(null, null, new VertexID(), numSubtasksPerTask, 128);
             randomlySetCoordinatorState(taskState, random);
             randomlySetSubtaskState(
                     taskState,
@@ -130,7 +130,7 @@ public class CheckpointTestUtils {
         for (int stateIdx = 0; stateIdx < numFullyFinishedTaskStates; ++stateIdx) {
             taskStates.add(
                     new FullyFinishedOperatorState(
-                            null, null, new OperatorID(), numSubtasksPerTask, 128));
+                            null, null, new VertexID(), numSubtasksPerTask, 128));
         }
 
         return taskStates;

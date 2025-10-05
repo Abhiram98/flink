@@ -27,7 +27,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.utils.TestingJobMasterGatewayBuilder;
@@ -100,7 +100,7 @@ class TaskExecutorOperatorEventHandlingTest {
             final TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             final CompletableFuture<?> resultFuture =
                     tmGateway.sendOperatorEventToTask(
-                            eid, new OperatorID(), new SerializedValue<>(new TestOperatorEvent()));
+                            eid, new VertexID(), new SerializedValue<>(new TestOperatorEvent()));
 
             assertThat(resultFuture)
                     .failsWithin(Duration.ofSeconds(10))
@@ -228,7 +228,7 @@ class TaskExecutorOperatorEventHandlingTest {
         }
 
         @Override
-        public void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event)
+        public void dispatchOperatorEvent(VertexID operator, SerializedValue<OperatorEvent> event)
                 throws FlinkException {
             throw new FlinkException("test exception");
         }
@@ -246,7 +246,7 @@ class TaskExecutorOperatorEventHandlingTest {
             getEnvironment()
                     .getOperatorCoordinatorEventGateway()
                     .sendOperatorEventToCoordinator(
-                            new OperatorID(), new SerializedValue<>(new TestOperatorEvent()));
+                            new VertexID(), new SerializedValue<>(new TestOperatorEvent()));
 
             waitUntilCancelled();
         }
@@ -264,7 +264,7 @@ class TaskExecutorOperatorEventHandlingTest {
             getEnvironment()
                     .getOperatorCoordinatorEventGateway()
                     .sendRequestToCoordinator(
-                            new OperatorID(),
+                            new VertexID(),
                             new SerializedValue<>(
                                     new TestingCoordinationRequestHandler.Request<>(0L)));
 

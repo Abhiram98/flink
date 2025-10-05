@@ -21,7 +21,7 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.metrics.MetricGroup;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.streaming.runtime.tasks.ProcessingTimeService;
 
 import javax.annotation.Nonnull;
@@ -55,7 +55,7 @@ public interface StreamTaskStateInitializer {
      * @throws Exception when something went wrong while creating the context.
      */
     StreamOperatorStateContext streamOperatorStateContext(
-            @Nonnull OperatorID operatorID,
+            @Nonnull VertexID operatorID,
             @Nonnull String operatorClassName,
             @Nonnull ProcessingTimeService processingTimeService,
             @Nonnull KeyContext keyContext,

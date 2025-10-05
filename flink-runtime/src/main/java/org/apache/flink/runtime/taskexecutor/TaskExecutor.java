@@ -61,7 +61,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.TaskExecutorPartitionInfo;
 import org.apache.flink.runtime.io.network.partition.TaskExecutorPartitionTracker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.jobmaster.AllocatedSlotInfo;
@@ -1422,7 +1422,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToTask(
             ExecutionAttemptID executionAttemptID,
-            OperatorID operatorId,
+            VertexID operatorId,
             SerializedValue<OperatorEvent> evt) {
 
         log.debug("Operator event for {} - {}", executionAttemptID, operatorId);

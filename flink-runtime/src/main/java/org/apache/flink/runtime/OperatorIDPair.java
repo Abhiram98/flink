@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 
 import javax.annotation.Nullable;
 
@@ -30,14 +30,14 @@ public class OperatorIDPair implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final OperatorID generatedOperatorID;
-    @Nullable private final OperatorID userDefinedOperatorID;
+    private final VertexID generatedOperatorID;
+    @Nullable private final VertexID userDefinedOperatorID;
     @Nullable private final String userDefinedOperatorName;
     @Nullable private final String userDefinedOperatorUid;
 
     private OperatorIDPair(
-            OperatorID generatedOperatorID,
-            @Nullable OperatorID userDefinedOperatorID,
+            VertexID generatedOperatorID,
+            @Nullable VertexID userDefinedOperatorID,
             @Nullable String userDefinedOperatorName,
             @Nullable String userDefinedOperatorUid) {
         this.generatedOperatorID = generatedOperatorID;
@@ -53,24 +53,24 @@ public class OperatorIDPair implements Serializable {
     }
 
     public static OperatorIDPair of(
-            OperatorID generatedOperatorID,
-            @Nullable OperatorID userDefinedOperatorID,
+            VertexID generatedOperatorID,
+            @Nullable VertexID userDefinedOperatorID,
             @Nullable String operatorName,
             @Nullable String operatorUid) {
         return new OperatorIDPair(
                 generatedOperatorID, userDefinedOperatorID, operatorName, operatorUid);
     }
 
-    public static OperatorIDPair generatedIDOnly(OperatorID generatedOperatorID) {
+    public static OperatorIDPair generatedIDOnly(VertexID generatedOperatorID) {
         return new OperatorIDPair(generatedOperatorID, null, null, null);
     }
 
-    public OperatorID getGeneratedOperatorID() {
+    public VertexID getGeneratedOperatorID() {
         return generatedOperatorID;
     }
 
     @Nullable
-    public Optional<OperatorID> getUserDefinedOperatorID() {
+    public Optional<VertexID> getUserDefinedOperatorID() {
         return Optional.ofNullable(userDefinedOperatorID);
     }
 

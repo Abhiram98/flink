@@ -24,7 +24,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.TestingStreamStateHandle;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -57,7 +57,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testAbortionIfPartiallyFinishedVertexUsedUnionListState() throws Exception {
         JobVertexID jobVertexId = new JobVertexID();
-        OperatorID operatorId = new OperatorID();
+        VertexID operatorId = new VertexID();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -74,7 +74,7 @@ class DefaultCheckpointPlanTest {
 
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(null, null, operatorId, 2, 2);
         operatorState.putState(
                 0, createSubtaskStateWithUnionListState(TempDirUtils.newFile(temporaryFolder)));
@@ -92,7 +92,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testAbortionIfPartiallyOperatorsFinishedVertexUsedUnionListState() throws Exception {
         JobVertexID jobVertexId = new JobVertexID();
-        OperatorID operatorId = new OperatorID();
+        VertexID operatorId = new VertexID();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -108,7 +108,7 @@ class DefaultCheckpointPlanTest {
 
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(null, null, operatorId, 2, 2);
         operatorState.putState(
                 0, createSubtaskStateWithUnionListState(TempDirUtils.newFile(temporaryFolder)));
@@ -132,9 +132,9 @@ class DefaultCheckpointPlanTest {
         JobVertexID fullyFinishedVertexId = new JobVertexID();
         JobVertexID finishedOnRestoreVertexId = new JobVertexID();
         JobVertexID partiallyFinishedVertexId = new JobVertexID();
-        OperatorID fullyFinishedOperatorId = new OperatorID();
-        OperatorID finishedOnRestoreOperatorId = new OperatorID();
-        OperatorID partiallyFinishedOperatorId = new OperatorID();
+        VertexID fullyFinishedOperatorId = new VertexID();
+        VertexID finishedOnRestoreOperatorId = new VertexID();
+        VertexID partiallyFinishedOperatorId = new VertexID();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -176,7 +176,7 @@ class DefaultCheckpointPlanTest {
         Arrays.stream(finishedOnRestoreVertexTasks)
                 .forEach(checkpointPlan::reportTaskFinishedOnRestore);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         checkpointPlan.fulfillFinishedTaskStatus(operatorStates);
 
         assertThat(operatorStates).hasSize(3);
@@ -190,7 +190,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testFulfillFullyFinishedStatesWithCoordinator() throws Exception {
         JobVertexID finishedJobVertexID = new JobVertexID();
-        OperatorID finishedOperatorID = new OperatorID();
+        VertexID finishedOperatorID = new VertexID();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -209,7 +209,7 @@ class DefaultCheckpointPlanTest {
                 .markFinished();
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<VertexID, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(null, null, finishedOperatorID, 1, 256);
         operatorState.setCoordinatorState(new TestingStreamStateHandle());
         operatorStates.put(finishedOperatorID, operatorState);

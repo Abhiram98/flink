@@ -23,7 +23,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter;
 import org.apache.flink.runtime.io.network.api.StopMode;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterDelegate;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.plugable.SerializationDelegate;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
@@ -62,7 +62,7 @@ public class FinishedOperatorChain<OUT, OP extends StreamOperator<OUT>>
     }
 
     @Override
-    public void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event) {
+    public void dispatchOperatorEvent(VertexID operator, SerializedValue<OperatorEvent> event) {
         throw new UnsupportedOperationException();
     }
 
@@ -96,7 +96,7 @@ public class FinishedOperatorChain<OUT, OP extends StreamOperator<OUT>>
 
     @Override
     public void snapshotState(
-            Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
+            Map<VertexID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
             CheckpointMetaData checkpointMetaData,
             CheckpointOptions checkpointOptions,
             Supplier<Boolean> isRunning,

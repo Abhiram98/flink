@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.JobManagerTaskRestore;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.StateInitializationContext;
 import org.apache.flink.runtime.state.StateSnapshotContext;
@@ -54,7 +54,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class RestoreStreamTaskTest {
 
-    private static final Map<OperatorID, Long> RESTORED_OPERATORS = new ConcurrentHashMap();
+    private static final Map<VertexID, Long> RESTORED_OPERATORS = new ConcurrentHashMap();
 
     @BeforeEach
     void setup() {
@@ -64,8 +64,8 @@ class RestoreStreamTaskTest {
     @Test
     void testRestore() throws Exception {
 
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        VertexID headOperatorID = new VertexID(42L, 42L);
+        VertexID tailOperatorID = new VertexID(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
@@ -94,11 +94,11 @@ class RestoreStreamTaskTest {
     @Test
     void testRestoreHeadWithNewId() throws Exception {
 
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        VertexID tailOperatorID = new VertexID(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
-                        new OperatorID(42L, 42L),
+                        new VertexID(42L, 42L),
                         new CounterOperator(),
                         tailOperatorID,
                         new CounterOperator(),
@@ -109,7 +109,7 @@ class RestoreStreamTaskTest {
         assertThat(stateHandles.getSubtaskStateMappings()).hasSize(2);
 
         createRunAndCheckpointOperatorChain(
-                new OperatorID(4242L, 4242L),
+                new VertexID(4242L, 4242L),
                 new CounterOperator(),
                 tailOperatorID,
                 new CounterOperator(),
@@ -122,13 +122,13 @@ class RestoreStreamTaskTest {
 
     @Test
     void testRestoreTailWithNewId() throws Exception {
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
+        VertexID headOperatorID = new VertexID(42L, 42L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
                         headOperatorID,
                         new CounterOperator(),
-                        new OperatorID(44L, 44L),
+                        new VertexID(44L, 44L),
                         new CounterOperator(),
                         Optional.empty());
 
@@ -138,7 +138,7 @@ class RestoreStreamTaskTest {
         createRunAndCheckpointOperatorChain(
                 headOperatorID,
                 new CounterOperator(),
-                new OperatorID(4444L, 4444L),
+                new VertexID(4444L, 4444L),
                 new CounterOperator(),
                 Optional.of(restore));
 
@@ -149,8 +149,8 @@ class RestoreStreamTaskTest {
 
     @Test
     void testRestoreAfterScaleUp() throws Exception {
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        VertexID headOperatorID = new VertexID(42L, 42L);
+        VertexID tailOperatorID = new VertexID(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
@@ -184,8 +184,8 @@ class RestoreStreamTaskTest {
 
     @Test
     void testRestoreWithoutState() throws Exception {
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        VertexID headOperatorID = new VertexID(42L, 42L);
+        VertexID tailOperatorID = new VertexID(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
@@ -211,9 +211,9 @@ class RestoreStreamTaskTest {
     }
 
     private JobManagerTaskRestore createRunAndCheckpointOperatorChain(
-            OperatorID headId,
+            VertexID headId,
             OneInputStreamOperator<String, String> headOperator,
-            OperatorID tailId,
+            VertexID tailId,
             OneInputStreamOperator<String, String> tailOperator,
             Optional<JobManagerTaskRestore> restore)
             throws Exception {

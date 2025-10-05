@@ -29,7 +29,7 @@ import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManage
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.api.CancelCheckpointMarker;
 import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.CheckpointStateToolset;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
@@ -356,7 +356,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
         // progress of the
         // streaming topology
 
-        Map<OperatorID, OperatorSnapshotFutures> snapshotFutures =
+        Map<VertexID, OperatorSnapshotFutures> snapshotFutures =
                 CollectionUtil.newHashMapWithExpectedSize(operatorChain.getNumberOfOperators());
         try {
             if (takeSnapshotSync(
@@ -644,7 +644,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
     }
 
     private void cleanup(
-            Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
+            Map<VertexID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
             CheckpointMetaData metadata,
             CheckpointMetricsBuilder metrics,
             Exception ex) {
@@ -688,7 +688,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
     }
 
     private void finishAndReportAsync(
-            Map<OperatorID, OperatorSnapshotFutures> snapshotFutures,
+            Map<VertexID, OperatorSnapshotFutures> snapshotFutures,
             CheckpointMetaData metadata,
             CheckpointMetricsBuilder metrics,
             boolean isTaskDeployedAsFinished,
@@ -723,7 +723,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
     }
 
     private boolean takeSnapshotSync(
-            Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
+            Map<VertexID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
             CheckpointMetaData checkpointMetaData,
             CheckpointMetricsBuilder checkpointMetrics,
             CheckpointOptions checkpointOptions,

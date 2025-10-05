@@ -27,7 +27,7 @@ import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.util.config.memory.ManagedMemoryUtils;
@@ -574,13 +574,13 @@ public class StreamConfig implements Serializable {
         return chainedTaskConfigs;
     }
 
-    public void setOperatorID(OperatorID operatorID) {
+    public void setOperatorID(VertexID operatorID) {
         this.config.setBytes(OPERATOR_ID, operatorID.getBytes());
     }
 
-    public OperatorID getOperatorID() {
+    public VertexID getOperatorID() {
         byte[] operatorIDBytes = config.getBytes(OPERATOR_ID, null);
-        return new OperatorID(checkNotNull(operatorIDBytes));
+        return new VertexID(checkNotNull(operatorIDBytes));
     }
 
     public void setOperatorName(String name) {

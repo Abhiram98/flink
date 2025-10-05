@@ -32,7 +32,7 @@ import org.apache.flink.api.connector.source.SupportsIntermediateNoMoreSplits;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.metrics.groups.SplitEnumeratorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.InternalSplitEnumeratorMetricGroup;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
@@ -381,7 +381,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     public void setIsProcessingBacklog(boolean isProcessingBacklog) {
         CheckpointCoordinator checkpointCoordinator =
                 getCoordinatorContext().getCheckpointCoordinator();
-        OperatorID operatorID = getCoordinatorContext().getOperatorId();
+        VertexID operatorID = getCoordinatorContext().getOperatorId();
         if (checkpointCoordinator != null) {
             checkpointCoordinator.setIsProcessingBacklog(operatorID, isProcessingBacklog);
         }

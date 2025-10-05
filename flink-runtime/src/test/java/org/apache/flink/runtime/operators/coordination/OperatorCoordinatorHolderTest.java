@@ -35,7 +35,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.concurrent.ManuallyTriggeredScheduledExecutorService;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -509,11 +509,11 @@ class OperatorCoordinatorHolderTest {
             final ComponentMainThreadExecutor mainThreadExecutor)
             throws Exception {
 
-        final OperatorID opId = new OperatorID();
+        final VertexID opId = new VertexID();
         final OperatorCoordinator.Provider provider =
                 new OperatorCoordinator.Provider() {
                     @Override
-                    public OperatorID getOperatorId() {
+                    public VertexID getOperatorId() {
                         return opId;
                     }
 

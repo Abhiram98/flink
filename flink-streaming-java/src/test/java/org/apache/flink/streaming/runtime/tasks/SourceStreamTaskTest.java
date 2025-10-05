@@ -46,7 +46,7 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.PartitionTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.taskmanager.CheckpointResponder;
@@ -116,7 +116,7 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         StreamSource<String, ?> sourceOperator = new StreamSource<>(new OpenCloseTestSource());
         streamConfig.setStreamOperator(sourceOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new VertexID());
 
         testHarness.invoke();
         testHarness.waitForTaskCompletion();
@@ -179,7 +179,7 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
                     new StreamSource<>(
                             new MockSource(numElements, sourceCheckpointDelay, sourceReadDelay));
             streamConfig.setStreamOperator(sourceOperator);
-            streamConfig.setOperatorID(new OperatorID());
+            streamConfig.setOperatorID(new VertexID());
 
             // prepare the
 
@@ -226,12 +226,12 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
 
         testHarness
                 .setupOperatorChain(
-                        new OperatorID(),
+                        new VertexID(),
                         new OutputRecordInCloseTestSource<>(
                                 "Source0",
                                 new FromElementsFunction<>(StringSerializer.INSTANCE, "Hello")))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -262,14 +262,14 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
 
         testHarness
                 .setupOperatorChain(
-                        new OperatorID(),
+                        new VertexID(),
                         new StreamSource<>(
                                 new CancelTestSource(
                                         STRING_TYPE_INFO.createSerializer(
                                                 new SerializerConfigImpl()),
                                         "Hello")))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -330,10 +330,10 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
         CancelLockingSource.reset();
         testHarness
                 .setupOperatorChain(
-                        new OperatorID(),
+                        new VertexID(),
                         new StreamSource<>(new CancelLockingSource(throwInCancel)))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -443,10 +443,10 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
         CancelLockingSource.reset();
         testHarness
                 .setupOperatorChain(
-                        new OperatorID(),
+                        new VertexID(),
                         new StreamSource<>(new InterruptedSource(exceptionGenerator)))
                 .chain(
-                        new OperatorID(),
+                        new VertexID(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();

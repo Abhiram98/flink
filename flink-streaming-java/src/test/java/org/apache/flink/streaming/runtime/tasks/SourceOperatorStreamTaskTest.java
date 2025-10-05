@@ -46,7 +46,7 @@ import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
 import org.apache.flink.runtime.io.network.api.EndOfData;
 import org.apache.flink.runtime.io.network.api.StopMode;
 import org.apache.flink.runtime.io.network.api.writer.RecordOrEventCollectingResultPartitionWriter;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.source.event.AddSplitEvent;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.taskmanager.CheckpointResponder;
@@ -88,7 +88,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class SourceOperatorStreamTaskTest extends SourceStreamTaskTestBase {
 
-    private static final OperatorID OPERATOR_ID = new OperatorID();
+    private static final VertexID OPERATOR_ID = new VertexID();
     private static final int NUM_RECORDS = 10;
     public static final CheckpointStorageLocationReference SAVEPOINT_LOCATION =
             new CheckpointStorageLocationReference("Savepoint".getBytes());

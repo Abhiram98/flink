@@ -31,7 +31,7 @@ import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager.SpaceStat;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager.SubtaskKey;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.VertexID;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.IncrementalKeyedStateHandle;
@@ -73,7 +73,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
     final JobID jobID = new JobID();
 
-    final OperatorID operatorID = new OperatorID(289347923L, 75893479L);
+    final VertexID operatorID = new VertexID(289347923L, 75893479L);
 
     SubtaskKey subtaskKey1;
     SubtaskKey subtaskKey2;
@@ -495,7 +495,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
             fmsm.notifyCheckpointStart(subtaskKey1, checkpointId);
 
-            Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID = new HashMap<>();
+            Map<VertexID, OperatorSubtaskState> subtaskStatesByOperatorID = new HashMap<>();
             subtaskStatesByOperatorID.put(
                     operatorID, buildOperatorSubtaskState(checkpointId, fmsm, closeableRegistry));
             taskStateSnapshot = new TaskStateSnapshot(subtaskStatesByOperatorID);
@@ -517,7 +517,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
                             subtaskKey1.subtaskIndex,
                             subtaskKey1.parallelism,
                             0);
-            for (Map.Entry<OperatorID, OperatorSubtaskState> entry :
+            for (Map.Entry<VertexID, OperatorSubtaskState> entry :
                     taskStateSnapshot.getSubtaskStateMappings()) {
                 SubtaskFileMergingManagerRestoreOperation restoreOperation =
                         new SubtaskFileMergingManagerRestoreOperation(
