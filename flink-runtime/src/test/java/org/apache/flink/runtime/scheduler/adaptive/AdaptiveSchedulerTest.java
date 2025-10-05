@@ -1464,9 +1464,9 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
     void testHowToHandleFailureRejectedByStrategy() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Span> eventCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
-                createTestMetricGroup(spanCollector);
+                createTestMetricGroup(eventCollector);
 
         final AdaptiveScheduler scheduler =
                 new AdaptiveSchedulerBuilder(
@@ -1485,18 +1485,18 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
                                 .canRestart())
                 .isFalse();
 
-        assertThat(spanCollector).isEmpty();
+        assertThat(eventCollector).isEmpty();
         mainThreadExecutor.trigger();
-        checkMetrics(spanCollector, false);
+        checkMetrics(eventCollector, false);
     }
 
     @Test
     void testHowToHandleFailureAllowedByStrategy() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Span> eventCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
-                createTestMetricGroup(spanCollector);
+                createTestMetricGroup(eventCollector);
         final TestRestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 new TestRestartBackoffTimeStrategy(true, 1234);
 
@@ -1517,18 +1517,18 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
         assertThat(failureResult.getBackoffTime().toMillis())
                 .isEqualTo(restartBackoffTimeStrategy.getBackoffTime());
 
-        assertThat(spanCollector).isEmpty();
+        assertThat(eventCollector).isEmpty();
         mainThreadExecutor.trigger();
-        checkMetrics(spanCollector, true);
+        checkMetrics(eventCollector, true);
     }
 
     @Test
     void testHowToHandleFailureUnrecoverableFailure() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(TraceOptions.REPORT_EVENTS_AS_SPANS, Boolean.TRUE);
-        final List<Span> spanCollector = new ArrayList<>(1);
+        final List<Span> eventCollector = new ArrayList<>(1);
         final UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup testMetricGroup =
-                createTestMetricGroup(spanCollector);
+                createTestMetricGroup(eventCollector);
 
         final AdaptiveScheduler scheduler =
                 new AdaptiveSchedulerBuilder(
@@ -1547,9 +1547,9 @@ public class AdaptiveSchedulerTest extends AdaptiveSchedulerTestBase {
                                 .canRestart())
                 .isFalse();
 
-        assertThat(spanCollector).isEmpty();
+        assertThat(eventCollector).isEmpty();
         mainThreadExecutor.trigger();
-        checkMetrics(spanCollector, false);
+        checkMetrics(eventCollector, false);
     }
 
     @Test
