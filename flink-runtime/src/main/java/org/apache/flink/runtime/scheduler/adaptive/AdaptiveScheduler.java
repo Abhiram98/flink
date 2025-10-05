@@ -327,7 +327,7 @@ public class AdaptiveScheduler
             return slotIdleTimeout;
         }
 
-        public Duration getScalingIntervalMin() {
+        public Duration getCooldownTimeout() {
             return scalingIntervalMin;
         }
 

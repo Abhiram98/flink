@@ -2183,7 +2183,7 @@ public class AdaptiveSchedulerTest {
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX, scalingIntervalMax);
 
         final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
-        assertThat(settings.getScalingIntervalMin()).isEqualTo(scalingIntervalMin);
+        assertThat(settings.getCooldownTimeout()).isEqualTo(scalingIntervalMin);
         assertThat(settings.getScalingIntervalMax()).isEqualTo(scalingIntervalMax);
     }
 

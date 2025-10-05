@@ -61,7 +61,7 @@ public class DefaultRescaleManager implements RescaleManager {
     private final Temporal initializationTime;
     private final Supplier<Temporal> clock;
 
-    @VisibleForTesting final Duration scalingIntervalMin;
+    @VisibleForTesting final Duration cooldownTimeout;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
     private final RescaleManager.Context rescaleContext;
@@ -84,14 +84,14 @@ public class DefaultRescaleManager implements RescaleManager {
     DefaultRescaleManager(
             Temporal initializationTime,
             RescaleManager.Context rescaleContext,
-            Duration scalingIntervalMin,
+            Duration cooldownTimeout,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this(
                 initializationTime,
                 Instant::now,
                 rescaleContext,
-                scalingIntervalMin,
+                cooldownTimeout,
                 scalingIntervalMax,
                 maxTriggerDelay);
     }
@@ -101,7 +101,7 @@ public class DefaultRescaleManager implements RescaleManager {
             Temporal initializationTime,
             Supplier<Temporal> clock,
             RescaleManager.Context rescaleContext,
-            Duration scalingIntervalMin,
+            Duration cooldownTimeout,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this.initializationTime = initializationTime;
@@ -111,9 +111,9 @@ public class DefaultRescaleManager implements RescaleManager {
         this.triggerFuture = FutureUtils.completedVoidFuture();
 
         Preconditions.checkArgument(
-                scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
+                scalingIntervalMax == null || cooldownTimeout.compareTo(scalingIntervalMax) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
-        this.scalingIntervalMin = scalingIntervalMin;
+        this.cooldownTimeout = cooldownTimeout;
         this.scalingIntervalMax = scalingIntervalMax;
 
         this.rescaleContext = rescaleContext;
@@ -139,11 +139,11 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private void evaluateChangeEvent() {
-        if (timeSinceLastRescale().compareTo(scalingIntervalMin) > 0) {
+        if (timeSinceLastRescale().compareTo(cooldownTimeout) > 0) {
             maybeRescale();
         } else if (!rescaleScheduled) {
             rescaleScheduled = true;
-            rescaleContext.scheduleOperation(this::maybeRescale, scalingIntervalMin);
+            rescaleContext.scheduleOperation(this::maybeRescale, cooldownTimeout);
         }
     }
 
@@ -193,7 +193,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
     public static class Factory implements RescaleManager.Factory {
 
-        private final Duration scalingIntervalMin;
+        private final Duration cooldownTimeout;
         @Nullable private final Duration scalingIntervalMax;
         private final Duration maximumDelayForTrigger;
 
@@ -205,16 +205,16 @@ public class DefaultRescaleManager implements RescaleManager {
             // it's not ideal that we use a AdaptiveScheduler internal class here. We might want to
             // change that as part of a more general alignment of the rescaling configuration.
             return new Factory(
-                    settings.getScalingIntervalMin(),
+                    settings.getCooldownTimeout(),
                     settings.getScalingIntervalMax(),
                     settings.getMaximumDelayForTriggeringRescale());
         }
 
         private Factory(
-                Duration scalingIntervalMin,
+                Duration cooldownTimeout,
                 @Nullable Duration scalingIntervalMax,
                 Duration maximumDelayForTrigger) {
-            this.scalingIntervalMin = scalingIntervalMin;
+            this.cooldownTimeout = cooldownTimeout;
             this.scalingIntervalMax = scalingIntervalMax;
             this.maximumDelayForTrigger = maximumDelayForTrigger;
         }
@@ -224,7 +224,7 @@ public class DefaultRescaleManager implements RescaleManager {
             return new DefaultRescaleManager(
                     lastRescale,
                     rescaleContext,
-                    scalingIntervalMin,
+                    cooldownTimeout,
                     scalingIntervalMax,
                     maximumDelayForTrigger);
         }
