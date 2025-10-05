@@ -37,10 +37,9 @@ import org.apache.flink.runtime.client.JobCancellationException;
 import org.apache.flink.runtime.client.JobStatusMessage;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.util.TestStreamEnvironment;
 import org.apache.flink.test.testdata.KMeansData;
 import org.apache.flink.test.util.SuccessException;
-import org.apache.flink.test.util.TestEnvironment;
+import org.apache.flink.test.util.TestStreamEnvironment;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.SerializedThrowable;
 import org.apache.flink.util.TestLogger;
@@ -158,8 +157,8 @@ public class ClassLoaderITCase extends TestLogger {
 
     @After
     public void tearDown() {
+        org.apache.flink.streaming.util.TestStreamEnvironment.unsetAsContext();
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
     }
 
     @Test
@@ -170,7 +169,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(INPUT_SPLITS_PROG_JAR_FILE))
                         .build();
 
-        TestEnvironment.setAsContext(
+        TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(INPUT_SPLITS_PROG_JAR_FILE)),
@@ -187,7 +186,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(STREAMING_INPUT_SPLITS_PROG_JAR_FILE))
                         .build();
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(STREAMING_INPUT_SPLITS_PROG_JAR_FILE)),
@@ -205,7 +204,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(INPUT_SPLITS_PROG_JAR_FILE))
                         .build();
 
-        TestEnvironment.setAsContext(
+        TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.emptyList(),
@@ -221,7 +220,7 @@ public class ClassLoaderITCase extends TestLogger {
         PackagedProgram streamingProg =
                 PackagedProgram.newBuilder().setJarFile(new File(STREAMING_PROG_JAR_FILE)).build();
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(STREAMING_PROG_JAR_FILE)),
@@ -241,7 +240,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(STREAMING_CHECKPOINTED_PROG_JAR_FILE))
                         .build();
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(STREAMING_CHECKPOINTED_PROG_JAR_FILE)),
@@ -275,7 +274,7 @@ public class ClassLoaderITCase extends TestLogger {
                                 })
                         .build();
 
-        TestEnvironment.setAsContext(
+        TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(KMEANS_JAR_PATH)),
@@ -289,7 +288,7 @@ public class ClassLoaderITCase extends TestLogger {
         PackagedProgram userCodeTypeProg =
                 PackagedProgram.newBuilder().setJarFile(new File(USERCODETYPE_JAR_PATH)).build();
 
-        TestEnvironment.setAsContext(
+        TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(USERCODETYPE_JAR_PATH)),
@@ -313,7 +312,7 @@ public class ClassLoaderITCase extends TestLogger {
                                 })
                         .build();
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(CHECKPOINTING_CUSTOM_KV_STATE_JAR_PATH)),
@@ -352,7 +351,7 @@ public class ClassLoaderITCase extends TestLogger {
                                 })
                         .build();
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(CUSTOM_KV_STATE_JAR_PATH)),
@@ -439,7 +438,7 @@ public class ClassLoaderITCase extends TestLogger {
         File childResource = new File(childResourceDir, testResourceName);
         assertTrue(childResource.createNewFile());
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(CLASSLOADING_POLICY_JAR_PATH)),
@@ -478,7 +477,7 @@ public class ClassLoaderITCase extends TestLogger {
         File childResource = new File(childResourceDir, testResourceName);
         assertTrue(childResource.createNewFile());
 
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(CLASSLOADING_POLICY_JAR_PATH)),
