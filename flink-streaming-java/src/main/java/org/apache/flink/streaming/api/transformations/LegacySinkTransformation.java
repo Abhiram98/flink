@@ -136,7 +136,7 @@ public class LegacySinkTransformation<T> extends PhysicalTransformation<T> {
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
         result.addAll(input.getTransitivePredecessorsInternal());
