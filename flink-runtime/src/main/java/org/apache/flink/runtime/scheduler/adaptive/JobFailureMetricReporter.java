@@ -20,8 +20,8 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.executiongraph.failover.FailureHandlingResult;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.Preconditions;
 
 import java.util.Map;
@@ -61,24 +61,24 @@ public class JobFailureMetricReporter {
             Boolean isGlobal,
             Map<String, String> failureLabels) {
         // Add base attributes
-        SpanBuilder spanBuilder =
-                Span.builder(JobFailureMetricReporter.class, "JobFailure")
+        EventBuilder eventBuilder =
+                Event.builder(JobFailureMetricReporter.class, "JobFailure")
                         .setStartTsMillis(timestamp)
                         .setEndTsMillis(timestamp);
 
         if (canRestart != null) {
-            spanBuilder.setAttribute("canRestart", String.valueOf(canRestart));
+            eventBuilder.setAttribute("canRestart", String.valueOf(canRestart));
         }
 
         if (isGlobal != null) {
-            spanBuilder.setAttribute("isGlobalFailure", String.valueOf(isGlobal));
+            eventBuilder.setAttribute("isGlobalFailure", String.valueOf(isGlobal));
         }
 
         // Add all failure labels
         for (Map.Entry<String, String> entry : failureLabels.entrySet()) {
-            spanBuilder.setAttribute(
+            eventBuilder.setAttribute(
                     FAILURE_LABEL_ATTRIBUTE_PREFIX + entry.getKey(), entry.getValue());
         }
-        metricGroup.addSpan(spanBuilder);
+        metricGroup.addEvent(eventBuilder);
     }
 }

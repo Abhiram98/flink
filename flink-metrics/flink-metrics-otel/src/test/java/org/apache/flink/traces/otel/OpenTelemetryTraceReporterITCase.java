@@ -21,8 +21,8 @@ package org.apache.flink.traces.otel;
 import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.otel.OpenTelemetryTestBase;
 import org.apache.flink.metrics.otel.VariableNameUtil;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.TestLoggerExtension;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
@@ -70,8 +70,8 @@ public class OpenTelemetryTraceReporterITCase extends OpenTelemetryTestBase {
 
         reporter.open(metricConfig);
         try {
-            SpanBuilder span =
-                    Span.builder(this.getClass(), name)
+            EventBuilder span =
+                    Event.builder(this.getClass(), name)
                             .setAttribute(attribute1KeyRoot, attribute1ValueRoot)
                             .setAttribute(attribute2KeyRoot, attribute2ValueRoot)
                             .setStartTsMillis(startTs.toMillis())

@@ -18,14 +18,13 @@
 
 package org.apache.flink.runtime.metrics.groups;
 
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.Histogram;
 import org.apache.flink.metrics.Meter;
 import org.apache.flink.metrics.MetricGroup;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 
 import java.util.Map;
 
@@ -45,12 +44,12 @@ public class ProxyMetricGroup<P extends MetricGroup> implements MetricGroup {
     }
 
     @Override
-    public void addSpan(SpanBuilder spanBuilder) {
-        parentMetricGroup.addSpan(spanBuilder);
+    public void addSpan(EventBuilder spanBuilder) {
+        parentMetricGroup.addEvent(spanBuilder);
     }
 
     @Override
-    public void addEvent(EventBuilder eventBuilder) {
+    public void addEvent(org.apache.flink.events.EventBuilder eventBuilder) {
         parentMetricGroup.addEvent(eventBuilder);
     }
 

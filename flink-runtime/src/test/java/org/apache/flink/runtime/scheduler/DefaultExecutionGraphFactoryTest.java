@@ -51,8 +51,8 @@ import org.apache.flink.runtime.shuffle.ShuffleTestUtils;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.clock.SystemClock;
 
@@ -164,11 +164,11 @@ class DefaultExecutionGraphFactoryTest {
         final long savepointId = 42L;
         final JobGraph jobGraphWithParallelism2 = createJobGraphWithSavepoint(true, savepointId, 2);
 
-        List<Span> spans = new ArrayList<>();
+        List<Event> spans = new ArrayList<>();
         final JobManagerJobMetricGroup jobManagerJobMetricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
                     @Override
-                    public void addSpan(SpanBuilder spanBuilder) {
+                    public void addSpan(EventBuilder spanBuilder) {
                         spans.add(spanBuilder.build());
                     }
                 };

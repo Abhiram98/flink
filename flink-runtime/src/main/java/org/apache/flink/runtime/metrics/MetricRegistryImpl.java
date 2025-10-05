@@ -20,7 +20,6 @@ package org.apache.flink.runtime.metrics;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.configuration.MetricOptions;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.events.reporter.EventReporter;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.metrics.Metric;
@@ -36,7 +35,7 @@ import org.apache.flink.runtime.metrics.groups.ReporterScopedSettings;
 import org.apache.flink.runtime.metrics.scope.ScopeFormats;
 import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.runtime.webmonitor.retriever.MetricQueryServiceGateway;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.traces.reporter.TraceReporter;
 import org.apache.flink.util.AutoCloseableAsync;
 import org.apache.flink.util.ExceptionUtils;
@@ -77,8 +76,8 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
     private final Object lock = new Object();
 
     private final List<ReporterAndSettings<MetricReporter, Metric>> reporters;
-    private final List<ReporterAndSettings<TraceReporter, SpanBuilder>> traceReporters;
-    private final List<ReporterAndSettings<EventReporter, EventBuilder>> eventReporters;
+    private final List<ReporterAndSettings<TraceReporter, EventBuilder>> traceReporters;
+    private final List<ReporterAndSettings<EventReporter, org.apache.flink.events.EventBuilder>> eventReporters;
     private final ScheduledExecutorService reporterScheduledExecutor;
     private final ScheduledExecutorService viewUpdaterScheduledExecutor;
 
@@ -401,12 +400,12 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
     }
 
     @VisibleForTesting
-    public List<ReporterAndSettings<TraceReporter, SpanBuilder>> getTraceReporters() {
+    public List<ReporterAndSettings<TraceReporter, EventBuilder>> getTraceReporters() {
         return traceReporters;
     }
 
     @VisibleForTesting
-    public List<ReporterAndSettings<EventReporter, EventBuilder>> getEventReporters() {
+    public List<ReporterAndSettings<EventReporter, org.apache.flink.events.EventBuilder>> getEventReporters() {
         return eventReporters;
     }
 
@@ -503,7 +502,7 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
     // ------------------------------------------------------------------------
 
     @Override
-    public void addSpan(SpanBuilder spanBuilder, AbstractMetricGroup<?> group) {
+    public void addSpan(EventBuilder spanBuilder, AbstractMetricGroup<?> group) {
         synchronized (lock) {
             if (isShutdown()) {
                 LOG.warn("Cannot add span, because the MetricRegistry has already been shut down.");
@@ -525,7 +524,7 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
     // ------------------------------------------------------------------------
 
     @Override
-    public void addEvent(EventBuilder eventBuilder, AbstractMetricGroup<?> group) {
+    public void addEvent(org.apache.flink.events.EventBuilder eventBuilder, AbstractMetricGroup<?> group) {
         synchronized (lock) {
             if (isShutdown()) {
                 LOG.warn(
@@ -627,8 +626,8 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
 
     @GuardedBy("lock")
     private void forAllTraceReporters(
-            QuadConsumer<TraceReporter, SpanBuilder, String, MetricGroup> operation,
-            SpanBuilder spanBuilder,
+            QuadConsumer<TraceReporter, EventBuilder, String, MetricGroup> operation,
+            EventBuilder spanBuilder,
             AbstractMetricGroup<?> group) {
         forAllReportersGeneric(
                 operation, traceReporters, spanBuilder, spanBuilder.getName(), group);
@@ -636,8 +635,8 @@ public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
 
     @GuardedBy("lock")
     private void forAllEventReporters(
-            QuadConsumer<EventReporter, EventBuilder, String, MetricGroup> operation,
-            EventBuilder eventBuilder,
+            QuadConsumer<EventReporter, org.apache.flink.events.EventBuilder, String, MetricGroup> operation,
+            org.apache.flink.events.EventBuilder eventBuilder,
             AbstractMetricGroup<?> group) {
         forAllReportersGeneric(
                 operation, eventReporters, eventBuilder, eventBuilder.getName(), group);

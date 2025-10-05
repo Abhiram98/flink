@@ -33,8 +33,8 @@ import org.apache.flink.runtime.scheduler.strategy.SchedulingTopology;
 import org.apache.flink.runtime.scheduler.strategy.TestingSchedulingTopology;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.IterableUtils;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -75,7 +75,7 @@ class ExecutionFailureHandlerTest {
 
     private TestingFailureEnricher testingFailureEnricher;
 
-    private List<Span> spanCollector;
+    private List<Event> spanCollector;
 
     @BeforeEach
     void setUp() {
@@ -103,7 +103,7 @@ class ExecutionFailureHandlerTest {
                         null,
                         new UnregisteredMetricsGroup() {
                             @Override
-                            public void addSpan(SpanBuilder spanBuilder) {
+                            public void addSpan(EventBuilder spanBuilder) {
                                 spanCollector.add(spanBuilder.build());
                             }
                         });
@@ -337,9 +337,9 @@ class ExecutionFailureHandlerTest {
         }
     }
 
-    private void checkMetrics(List<Span> results, boolean global, boolean canRestart) {
+    private void checkMetrics(List<Event> results, boolean global, boolean canRestart) {
         assertThat(results).isNotEmpty();
-        for (Span span : results) {
+        for (Event span : results) {
             assertThat(span.getScope())
                     .isEqualTo(JobFailureMetricReporter.class.getCanonicalName());
             assertThat(span.getName()).isEqualTo("JobFailure");

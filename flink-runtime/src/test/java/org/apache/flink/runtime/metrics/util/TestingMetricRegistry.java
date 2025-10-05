@@ -19,14 +19,12 @@
 package org.apache.flink.runtime.metrics.util;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.events.Event;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.groups.AbstractMetricGroup;
 import org.apache.flink.runtime.metrics.scope.ScopeFormats;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 import org.apache.flink.util.function.TriConsumer;
 
 import java.util.function.BiConsumer;
@@ -38,8 +36,8 @@ public class TestingMetricRegistry implements MetricRegistry {
     private final int numberReporters;
     private final TriConsumer<Metric, String, AbstractMetricGroup<?>> registerConsumer;
     private final TriConsumer<Metric, String, AbstractMetricGroup<?>> unregisterConsumer;
-    private final BiConsumer<Span, AbstractMetricGroup<?>> spanConsumer;
-    private final BiConsumer<Event, AbstractMetricGroup<?>> eventConsumer;
+    private final BiConsumer<Event, AbstractMetricGroup<?>> spanConsumer;
+    private final BiConsumer<org.apache.flink.events.Event, AbstractMetricGroup<?>> eventConsumer;
     private final ScopeFormats scopeFormats;
 
     private TestingMetricRegistry(
@@ -47,8 +45,8 @@ public class TestingMetricRegistry implements MetricRegistry {
             int numberReporters,
             TriConsumer<Metric, String, AbstractMetricGroup<?>> registerConsumer,
             TriConsumer<Metric, String, AbstractMetricGroup<?>> unregisterConsumer,
-            BiConsumer<Span, AbstractMetricGroup<?>> spanConsumer,
-            BiConsumer<Event, AbstractMetricGroup<?>> eventConsumer,
+            BiConsumer<Event, AbstractMetricGroup<?>> spanConsumer,
+            BiConsumer<org.apache.flink.events.Event, AbstractMetricGroup<?>> eventConsumer,
             ScopeFormats scopeFormats) {
         this.delimiter = delimiter;
         this.numberReporters = numberReporters;
@@ -70,12 +68,12 @@ public class TestingMetricRegistry implements MetricRegistry {
     }
 
     @Override
-    public void addSpan(SpanBuilder spanBuilder, AbstractMetricGroup<?> group) {
+    public void addSpan(EventBuilder spanBuilder, AbstractMetricGroup<?> group) {
         spanConsumer.accept(spanBuilder.build(), group);
     }
 
     @Override
-    public void addEvent(EventBuilder eventBuilder, AbstractMetricGroup<?> group) {
+    public void addEvent(org.apache.flink.events.EventBuilder eventBuilder, AbstractMetricGroup<?> group) {
         eventConsumer.accept(eventBuilder.build(), group);
     }
 
@@ -107,8 +105,8 @@ public class TestingMetricRegistry implements MetricRegistry {
                 (ignoreMetric, ignoreMetricName, ignoreGroup) -> {};
         private TriConsumer<Metric, String, AbstractMetricGroup<?>> unregisterConsumer =
                 (ignoreMetric, ignoreMetricName, ignoreGroup) -> {};
-        private BiConsumer<Span, AbstractMetricGroup<?>> spanConsumer = (span, group) -> {};
-        private BiConsumer<Event, AbstractMetricGroup<?>> eventConsumer = (event, group) -> {};
+        private BiConsumer<Event, AbstractMetricGroup<?>> spanConsumer = (span, group) -> {};
+        private BiConsumer<org.apache.flink.events.Event, AbstractMetricGroup<?>> eventConsumer = (event, group) -> {};
         private ScopeFormats scopeFormats = ScopeFormats.fromConfig(new Configuration());
 
         private TestingMetricRegistryBuilder() {}
@@ -136,13 +134,13 @@ public class TestingMetricRegistry implements MetricRegistry {
         }
 
         public TestingMetricRegistryBuilder setSpanConsumer(
-                BiConsumer<Span, AbstractMetricGroup<?>> spanConsumer) {
+                BiConsumer<Event, AbstractMetricGroup<?>> spanConsumer) {
             this.spanConsumer = spanConsumer;
             return this;
         }
 
         public TestingMetricRegistryBuilder setEventConsumer(
-                BiConsumer<Event, AbstractMetricGroup<?>> eventConsumer) {
+                BiConsumer<org.apache.flink.events.Event, AbstractMetricGroup<?>> eventConsumer) {
             this.eventConsumer = eventConsumer;
             return this;
         }

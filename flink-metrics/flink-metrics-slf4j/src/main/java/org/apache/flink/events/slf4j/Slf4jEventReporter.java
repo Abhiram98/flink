@@ -18,16 +18,15 @@
 
 package org.apache.flink.events.slf4j;
 
-import org.apache.flink.events.Event;
 import org.apache.flink.events.reporter.EventReporter;
 import org.apache.flink.metrics.MetricConfig;
-import org.apache.flink.traces.Span;
+import org.apache.flink.traces.Event;
 import org.apache.flink.traces.reporter.TraceReporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** {@link TraceReporter} that exports {@link Span Spans} via SLF4J {@link Logger}. */
+/** {@link TraceReporter} that exports {@link Event Spans} via SLF4J {@link Logger}. */
 public class Slf4jEventReporter implements EventReporter {
     private static final Logger LOG = LoggerFactory.getLogger(Slf4jEventReporter.class);
 
@@ -38,7 +37,7 @@ public class Slf4jEventReporter implements EventReporter {
     public void close() {}
 
     @Override
-    public void notifyOfAddedEvent(Event event) {
+    public void notifyOfAddedEvent(org.apache.flink.events.Event event) {
         LOG.info("Reported event: {}", event);
     }
 }

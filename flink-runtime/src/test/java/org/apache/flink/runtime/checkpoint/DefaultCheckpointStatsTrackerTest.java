@@ -19,8 +19,6 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.events.Event;
-import org.apache.flink.events.EventBuilder;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
@@ -30,8 +28,8 @@ import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
-import org.apache.flink.traces.Span;
-import org.apache.flink.traces.SpanBuilder;
+import org.apache.flink.traces.Event;
+import org.apache.flink.traces.EventBuilder;
 
 import org.apache.flink.shaded.guava33.com.google.common.collect.Iterables;
 
@@ -359,19 +357,19 @@ class DefaultCheckpointStatsTrackerTest {
     @Test
     public void testSpanAndEventCreation() throws Exception {
         JobVertexID jobVertexID = new JobVertexID();
-        final List<Span> reportedSpans = new ArrayList<>();
-        final List<Event> reportedEvents = new ArrayList<>();
+        final List<Event> reportedSpans = new ArrayList<>();
+        final List<org.apache.flink.events.Event> reportedEvents = new ArrayList<>();
 
         JobManagerJobMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
 
                     @Override
-                    public void addEvent(EventBuilder eventBuilder) {
+                    public void addEvent(org.apache.flink.events.EventBuilder eventBuilder) {
                         reportedEvents.add(eventBuilder.build());
                     }
 
                     @Override
-                    public void addSpan(SpanBuilder spanBuilder) {
+                    public void addSpan(EventBuilder spanBuilder) {
                         reportedSpans.add(spanBuilder.build());
                     }
                 };
@@ -392,9 +390,9 @@ class DefaultCheckpointStatsTrackerTest {
         tracker.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(null, 1984));
 
         assertThat(reportedSpans.size()).isEqualTo(1);
-        Span reportedSpan = Iterables.getOnlyElement(reportedSpans);
+        Event reportedSpan = Iterables.getOnlyElement(reportedSpans);
         assertThat(reportedEvents.size()).isEqualTo(1);
-        Event reportedEvent = Iterables.getOnlyElement(reportedEvents);
+        org.apache.flink.events.Event reportedEvent = Iterables.getOnlyElement(reportedEvents);
 
         assertCheckpointAttributes(reportedSpan.getAttributes(), 42L, "Checkpoint", false);
         assertCheckpointAttributes(reportedEvent.getAttributes(), 42L, "Checkpoint", false);
@@ -436,13 +434,13 @@ class DefaultCheckpointStatsTrackerTest {
 
     @Test
     public void testInitializationSpanCreation() throws Exception {
-        final List<Span> reportedSpans = new ArrayList<>();
+        final List<Event> reportedSpans = new ArrayList<>();
 
         JobManagerJobMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
 
                     @Override
-                    public void addSpan(SpanBuilder spanBuilder) {
+                    public void addSpan(EventBuilder spanBuilder) {
                         reportedSpans.add(spanBuilder.build());
                     }
                 };
@@ -485,7 +483,7 @@ class DefaultCheckpointStatsTrackerTest {
                 executionAttemptId2, subTaskInitializationMetricsBuilder2.build(215));
 
         assertThat(reportedSpans.size()).isEqualTo(1);
-        Span reportedSpan = Iterables.getOnlyElement(reportedSpans);
+        Event reportedSpan = Iterables.getOnlyElement(reportedSpans);
         assertThat(reportedSpan.getStartTsMillis()).isEqualTo(100L);
         assertThat(reportedSpan.getEndTsMillis()).isEqualTo(215L);
         assertThat(reportedSpan.getAttributes().get("checkpointId")).isEqualTo(42L);

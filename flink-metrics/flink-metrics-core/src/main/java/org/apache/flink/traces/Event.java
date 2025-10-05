@@ -30,10 +30,10 @@ import java.util.Map;
  * represents things like a checkpoint or recovery.
  */
 @Experimental
-public interface Span {
+public interface Event {
 
-    static SpanBuilder builder(Class<?> classScope, String name) {
-        return new SpanBuilder(classScope, name);
+    static EventBuilder builder(Class<?> classScope, String name) {
+        return new EventBuilder(classScope, name);
     }
 
     String getScope();
