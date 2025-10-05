@@ -217,7 +217,7 @@ public class TwoInputTransformation<IN1, IN2, OUT> extends PhysicalTransformatio
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
         result.addAll(input1.getTransitivePredecessorsInternal());
