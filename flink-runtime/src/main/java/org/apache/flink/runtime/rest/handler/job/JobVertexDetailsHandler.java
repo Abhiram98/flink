@@ -114,7 +114,7 @@ public class JobVertexDetailsHandler
     private static JobVertexDetailsInfo createJobVertexDetailsInfo(
             AccessExecutionJobVertex jobVertex,
             JobID jobID,
-            @Nullable MetricFetcher metricFetcher) {
+            @Nullable MetricFetcher jobMetrics) {
         List<SubtaskExecutionAttemptDetailsInfo> subtasks = new ArrayList<>();
         final long now = System.currentTimeMillis();
         for (AccessExecutionVertex vertex : jobVertex.getTaskVertices()) {
@@ -130,14 +130,14 @@ public class JobVertexDetailsHandler
                     if (attempt.getAttemptNumber() != execution.getAttemptNumber()) {
                         otherConcurrentAttempts.add(
                                 SubtaskExecutionAttemptDetailsInfo.create(
-                                        attempt, metricFetcher, jobID, jobVertexID, null));
+                                        attempt, jobMetrics, jobID, jobVertexID, null));
                     }
                 }
             }
 
             subtasks.add(
                     SubtaskExecutionAttemptDetailsInfo.create(
-                            execution, metricFetcher, jobID, jobVertexID, otherConcurrentAttempts));
+                            execution, jobMetrics, jobID, jobVertexID, otherConcurrentAttempts));
         }
 
         return new JobVertexDetailsInfo(
