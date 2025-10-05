@@ -103,7 +103,7 @@ public class AbstractBroadcastStateTransformation<IN1, IN2, OUT>
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         final List<Transformation<?>> predecessors = new ArrayList<>();
         predecessors.add(this);
         predecessors.add(regularInput);
