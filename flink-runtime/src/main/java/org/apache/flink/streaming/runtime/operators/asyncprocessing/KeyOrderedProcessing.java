@@ -25,7 +25,7 @@ import org.apache.flink.util.function.ThrowingConsumer;
 
 /** This class defines the basic interfaces to process a state in operator/input layer. */
 @Internal
-public interface AsyncStateProcessing {
+public interface KeyOrderedProcessing {
 
     /**
      * Get if the async state processing is enabled for this input/operator.

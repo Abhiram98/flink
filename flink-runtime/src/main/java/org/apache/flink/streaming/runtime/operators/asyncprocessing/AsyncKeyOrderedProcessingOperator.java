@@ -25,11 +25,11 @@ import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 /**
- * A more detailed interface based on {@link AsyncStateProcessing}, which gives the essential
+ * A more detailed interface based on {@link KeyOrderedProcessing}, which gives the essential
  * methods for an operator to perform async state processing.
  */
 @Internal
-public interface AsyncKeyOrderedProcessingOperator extends AsyncStateProcessing {
+public interface AsyncKeyOrderedProcessingOperator extends KeyOrderedProcessing {
 
     /** Get the {@link ElementOrder} of this operator. */
     ElementOrder getElementOrder();
