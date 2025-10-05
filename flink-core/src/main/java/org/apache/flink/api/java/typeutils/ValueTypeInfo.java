@@ -163,7 +163,7 @@ public class ValueTypeInfo<T extends Value> extends TypeInformation<T> implement
     @Override
     @SuppressWarnings("unchecked")
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         if (BooleanValue.class.isAssignableFrom(type)) {
             return (TypeSerializer<T>) BooleanValueSerializer.INSTANCE;
         } else if (ByteValue.class.isAssignableFrom(type)) {
@@ -196,7 +196,7 @@ public class ValueTypeInfo<T extends Value> extends TypeInformation<T> implement
     @Override
     @PublicEvolving
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         if (!isKeyType()) {
             throw new RuntimeException("The type " + type.getName() + " is not Comparable.");
         }

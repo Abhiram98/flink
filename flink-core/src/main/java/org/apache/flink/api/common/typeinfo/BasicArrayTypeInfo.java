@@ -124,7 +124,7 @@ public final class BasicArrayTypeInfo<T, C> extends TypeInformation<T> {
     @Override
     @SuppressWarnings("unchecked")
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         // special case the string array
         if (componentInfo.getTypeClass().equals(String.class)) {
             return (TypeSerializer<T>) StringArraySerializer.INSTANCE;
@@ -132,7 +132,7 @@ public final class BasicArrayTypeInfo<T, C> extends TypeInformation<T> {
             return (TypeSerializer<T>)
                     new GenericArraySerializer<>(
                             this.componentInfo.getTypeClass(),
-                            this.componentInfo.createSerializer(executionConfig));
+                            this.componentInfo.createSerializer(config));
         }
     }
 

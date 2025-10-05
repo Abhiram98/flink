@@ -95,12 +95,12 @@ public class GenericTypeInfo<T> extends TypeInformation<T> implements AtomicType
     @Override
     @PublicEvolving
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         if (isKeyType()) {
             @SuppressWarnings("rawtypes")
             GenericTypeComparator comparator =
                     new GenericTypeComparator(
-                            sortOrderAscending, createSerializer(executionConfig), this.typeClass);
+                            sortOrderAscending, createSerializer(config), this.typeClass);
             return (TypeComparator<T>) comparator;
         }
 

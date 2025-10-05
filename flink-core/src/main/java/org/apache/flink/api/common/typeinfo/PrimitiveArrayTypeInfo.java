@@ -171,7 +171,7 @@ public class PrimitiveArrayTypeInfo<T> extends TypeInformation<T> implements Ato
 
     @Override
     @PublicEvolving
-    public TypeSerializer<T> createSerializer(ExecutionConfig executionConfig) {
+    public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         return this.serializer;
     }
 
@@ -265,7 +265,7 @@ public class PrimitiveArrayTypeInfo<T> extends TypeInformation<T> implements Ato
     @Override
     @PublicEvolving
     public PrimitiveArrayComparator<T, ?> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         try {
             return comparatorClass.getConstructor(boolean.class).newInstance(sortOrderAscending);
         } catch (Exception e) {
