@@ -56,7 +56,7 @@ public class FileSystemOutputFormat<T>
     private final TableMetaStoreFactory msFactory;
     private final boolean overwrite;
     private final boolean isToLocal;
-    private final Path tmpPath;
+    private final Path stagingPath;
     private final String[] partitionColumns;
     private final boolean dynamicGrouped;
     private final LinkedHashMap<String, String> staticPartitions;
@@ -74,7 +74,7 @@ public class FileSystemOutputFormat<T>
             TableMetaStoreFactory msFactory,
             boolean overwrite,
             boolean isToLocal,
-            Path tmpPath,
+            Path stagingPath,
             String[] partitionColumns,
             boolean dynamicGrouped,
             LinkedHashMap<String, String> staticPartitions,
@@ -87,7 +87,7 @@ public class FileSystemOutputFormat<T>
         this.msFactory = msFactory;
         this.overwrite = overwrite;
         this.isToLocal = isToLocal;
-        this.tmpPath = tmpPath;
+        this.stagingPath = stagingPath;
         this.partitionColumns = partitionColumns;
         this.dynamicGrouped = dynamicGrouped;
         this.staticPartitions = staticPartitions;
@@ -108,7 +108,7 @@ public class FileSystemOutputFormat<T>
                                 Thread.currentThread().getContextClassLoader(),
                                 () -> {
                                     try {
-                                        return fsFactory.create(tmpPath.toUri());
+                                        return fsFactory.create(stagingPath.toUri());
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -120,7 +120,7 @@ public class FileSystemOutputFormat<T>
                             fsFactory,
                             msFactory,
                             overwrite,
-                            tmpPath,
+                            stagingPath,
                             partitionColumns.length,
                             isToLocal,
                             identifier,
@@ -141,7 +141,7 @@ public class FileSystemOutputFormat<T>
             throw new TableException("Exception in finalizeGlobal", e);
         } finally {
             try {
-                fsFactory.create(tmpPath.toUri()).delete(tmpPath, true);
+                fsFactory.create(stagingPath.toUri()).delete(stagingPath, true);
             } catch (IOException ignore) {
             }
         }
@@ -158,7 +158,7 @@ public class FileSystemOutputFormat<T>
             PartitionTempFileManager fileManager =
                     new PartitionTempFileManager(
                             fsFactory,
-                            tmpPath,
+                            stagingPath,
                             context.getTaskNumber(),
                             context.getAttemptNumber(),
                             outputFileConfig);
@@ -203,7 +203,7 @@ public class FileSystemOutputFormat<T>
         private String[] partitionColumns;
         private OutputFormatFactory<T> formatFactory;
         private TableMetaStoreFactory metaStoreFactory;
-        private Path tmpPath;
+        private Path stagingPath;
 
         private LinkedHashMap<String, String> staticPartitions = new LinkedHashMap<>();
         private boolean dynamicGrouped = false;
@@ -258,8 +258,8 @@ public class FileSystemOutputFormat<T>
             return this;
         }
 
-        public Builder<T> setTempPath(Path tmpPath) {
-            this.tmpPath = tmpPath;
+        public Builder<T> setStagingPath(Path stagingPath) {
+            this.stagingPath = stagingPath;
             return this;
         }
 
@@ -288,7 +288,7 @@ public class FileSystemOutputFormat<T>
             checkNotNull(partitionColumns, "partitionColumns should not be null");
             checkNotNull(formatFactory, "formatFactory should not be null");
             checkNotNull(metaStoreFactory, "metaStoreFactory should not be null");
-            checkNotNull(tmpPath, "tmpPath should not be null");
+            checkNotNull(stagingPath, "tmpPath should not be null");
             checkNotNull(computer, "partitionComputer should not be null");
 
             return new FileSystemOutputFormat<>(
@@ -296,7 +296,7 @@ public class FileSystemOutputFormat<T>
                     metaStoreFactory,
                     overwrite,
                     isToLocal,
-                    tmpPath,
+                    stagingPath,
                     partitionColumns,
                     dynamicGrouped,
                     staticPartitions,

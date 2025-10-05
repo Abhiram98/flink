@@ -220,7 +220,7 @@ class FileSystemOutputFormatTest {
         FileSystemOutputFormat<Row> sink =
                 new FileSystemOutputFormat.Builder<Row>()
                         .setMetaStoreFactory(msFactory)
-                        .setTempPath(new Path(tmpPath.toString()))
+                        .setStagingPath(new Path(tmpPath.toString()))
                         .setOverwrite(override)
                         .setPartitionColumns(partitionColumns)
                         .setPartitionComputer(
