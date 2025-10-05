@@ -168,10 +168,10 @@ public class OneInputTransformation<IN, OUT> extends PhysicalTransformation<OUT>
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
-        result.addAll(input.getTransitivePredecessors());
+        result.addAll(input.getTransitivePredecessorsInternal());
         return result;
     }
 

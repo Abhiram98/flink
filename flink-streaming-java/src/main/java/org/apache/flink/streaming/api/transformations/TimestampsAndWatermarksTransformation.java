@@ -77,10 +77,10 @@ public class TimestampsAndWatermarksTransformation<IN> extends PhysicalTransform
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> transformations = Lists.newArrayList();
         transformations.add(this);
-        transformations.addAll(input.getTransitivePredecessors());
+        transformations.addAll(input.getTransitivePredecessorsInternal());
         return transformations;
     }
 

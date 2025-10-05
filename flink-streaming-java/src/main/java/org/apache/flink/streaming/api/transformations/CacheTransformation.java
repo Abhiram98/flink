@@ -57,13 +57,13 @@ public class CacheTransformation<T> extends Transformation<T> {
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
         if (isCached) {
             return result;
         }
-        result.addAll(transformationToCache.getTransitivePredecessors());
+        result.addAll(transformationToCache.getTransitivePredecessorsInternal());
         return result;
     }
 

@@ -92,7 +92,7 @@ public class SourceTransformation<OUT, SplitT extends SourceSplit, EnumChkT>
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         return Collections.singletonList(this);
     }
 
