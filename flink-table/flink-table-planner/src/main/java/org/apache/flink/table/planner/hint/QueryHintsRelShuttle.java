@@ -45,7 +45,7 @@ public abstract class QueryHintsRelShuttle extends RelShuttleImpl {
         return visitBiRel(correlate);
     }
 
-    protected abstract RelNode visitBiRel(BiRel biRel);
+    protected abstract RelNode visitBiRel(BiRel node);
 
     @Override
     public RelNode visit(LogicalFilter filter) {
