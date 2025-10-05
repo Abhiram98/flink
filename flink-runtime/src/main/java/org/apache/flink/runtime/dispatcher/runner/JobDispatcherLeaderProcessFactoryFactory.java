@@ -24,7 +24,7 @@ import org.apache.flink.runtime.dispatcher.JobDispatcherFactory;
 import org.apache.flink.runtime.dispatcher.PartialDispatcherServices;
 import org.apache.flink.runtime.entrypoint.component.JobGraphRetriever;
 import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.JobPersistenceComponentFactory;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
@@ -65,7 +65,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
             PartialDispatcherServices partialDispatcherServices,
             FatalErrorHandler fatalErrorHandler) {
 
-        final JobGraph jobGraph;
+        final ExecutionPlan jobGraph;
 
         try {
             jobGraph =
@@ -81,7 +81,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
 
         final Optional<JobResult> maybeRecoveredDirtyJobResult =
                 extractDirtyJobResult(recoveredDirtyJobResults, jobGraph);
-        final Optional<JobGraph> maybeJobGraph =
+        final Optional<ExecutionPlan> maybeJobGraph =
                 getJobGraphBasedOnDirtyJobResults(jobGraph, recoveredDirtyJobResults);
 
         final DefaultDispatcherGatewayServiceFactory defaultDispatcherServiceFactory =
@@ -112,7 +112,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
     }
 
     private static Optional<JobResult> extractDirtyJobResult(
-            Collection<JobResult> dirtyJobResults, JobGraph jobGraph) {
+            Collection<JobResult> dirtyJobResults, ExecutionPlan jobGraph) {
         Optional<JobResult> actualDirtyJobResult = Optional.empty();
         for (JobResult dirtyJobResult : dirtyJobResults) {
             if (dirtyJobResult.getJobId().equals(jobGraph.getJobID())) {
@@ -127,8 +127,8 @@ public class JobDispatcherLeaderProcessFactoryFactory
         return actualDirtyJobResult;
     }
 
-    private static Optional<JobGraph> getJobGraphBasedOnDirtyJobResults(
-            JobGraph jobGraph, Collection<JobResult> dirtyJobResults) {
+    private static Optional<ExecutionPlan> getJobGraphBasedOnDirtyJobResults(
+            ExecutionPlan jobGraph, Collection<JobResult> dirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
                 dirtyJobResults.stream().map(JobResult::getJobId).collect(Collectors.toSet());
         if (jobIdsOfFinishedJobs.contains(jobGraph.getJobID())) {

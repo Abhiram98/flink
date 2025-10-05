@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.dispatcher.runner;
 
 import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.util.Preconditions;
@@ -34,7 +34,7 @@ public class JobDispatcherLeaderProcessFactory implements DispatcherLeaderProces
     private final AbstractDispatcherLeaderProcess.DispatcherGatewayServiceFactory
             dispatcherGatewayServiceFactory;
 
-    @Nullable private final JobGraph jobGraph;
+    @Nullable private final ExecutionPlan jobGraph;
     @Nullable private final JobResult recoveredDirtyJobResult;
 
     private final JobResultStore jobResultStore;
@@ -44,7 +44,7 @@ public class JobDispatcherLeaderProcessFactory implements DispatcherLeaderProces
     JobDispatcherLeaderProcessFactory(
             AbstractDispatcherLeaderProcess.DispatcherGatewayServiceFactory
                     dispatcherGatewayServiceFactory,
-            @Nullable JobGraph jobGraph,
+            @Nullable ExecutionPlan jobGraph,
             @Nullable JobResult recoveredDirtyJobResult,
             JobResultStore jobResultStore,
             FatalErrorHandler fatalErrorHandler) {
@@ -67,7 +67,7 @@ public class JobDispatcherLeaderProcessFactory implements DispatcherLeaderProces
     }
 
     @Nullable
-    JobGraph getJobGraph() {
+    ExecutionPlan getJobGraph() {
         return this.jobGraph;
     }
 

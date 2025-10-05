@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.operators.coordination.TestingOperatorCoordinator;
@@ -100,7 +100,7 @@ class DefaultOperatorCoordinatorHandlerTest {
 
     private DefaultExecutionGraph createDynamicGraph(JobVertex... jobVertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(new JobGraph(new JobID(), "TestJob", jobVertices))
+                .setJobGraph(new ExecutionPlan(new JobID(), "TestJob", jobVertices))
                 .buildDynamicGraph(EXECUTOR_EXTENSION.getExecutor());
     }
 }

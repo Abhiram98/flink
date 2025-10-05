@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.core.testutils.EachCallbackWrapper;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.persistence.RetrievableStateStorageHelper;
 import org.apache.flink.runtime.rest.util.NoOpFatalErrorHandler;
@@ -79,10 +79,10 @@ class ZooKeeperExecutionPlanStoreWatcherTest {
             final ExecutionPlanStoreWatcher executionPlanStoreWatcher =
                     createAndStartExecutionPlanStoreWatcher(client);
 
-            final ZooKeeperStateHandleStore<JobGraph> stateHandleStore =
+            final ZooKeeperStateHandleStore<ExecutionPlan> stateHandleStore =
                     createStateHandleStore(client);
 
-            final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+            final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
             final JobID jobID = jobGraph.getJobID();
             stateHandleStore.addAndLock("/" + jobID, jobGraph);
 
@@ -111,9 +111,9 @@ class ZooKeeperExecutionPlanStoreWatcherTest {
         return executionPlanStoreWatcher;
     }
 
-    private ZooKeeperStateHandleStore<JobGraph> createStateHandleStore(CuratorFramework client)
+    private ZooKeeperStateHandleStore<ExecutionPlan> createStateHandleStore(CuratorFramework client)
             throws Exception {
-        final RetrievableStateStorageHelper<JobGraph> stateStorage =
+        final RetrievableStateStorageHelper<ExecutionPlan> stateStorage =
                 ZooKeeperUtils.createFileSystemStateStorage(configuration, "test_jobgraph");
         return new ZooKeeperStateHandleStore<>(client, stateStorage);
     }

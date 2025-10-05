@@ -25,6 +25,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.Environment;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.taskmanager.Task;
@@ -144,10 +145,10 @@ public abstract class AbstractInvokable
 
     /**
      * Returns the job configuration object which was attached to the original {@link
-     * org.apache.flink.runtime.jobgraph.JobGraph}.
+     * ExecutionPlan}.
      *
      * @return the job configuration object which was attached to the original {@link
-     *     org.apache.flink.runtime.jobgraph.JobGraph}
+     *     ExecutionPlan}
      */
     public Configuration getJobConfiguration() {
         return this.environment.getJobConfiguration();

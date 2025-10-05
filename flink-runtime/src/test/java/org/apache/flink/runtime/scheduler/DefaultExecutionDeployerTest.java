@@ -30,7 +30,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
@@ -103,7 +103,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testDeployTasks() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final ExecutionPlan jobGraph = singleNonParallelJobVertexJobGraph();
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -115,7 +115,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testDeployTasksOnlyIfAllSlotRequestsAreFulfilled() throws Exception {
-        final JobGraph jobGraph = singleJobVertexJobGraph(4);
+        final ExecutionPlan jobGraph = singleJobVertexJobGraph(4);
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -135,7 +135,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testDeploymentFailures() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final ExecutionPlan jobGraph = singleNonParallelJobVertexJobGraph();
 
         testExecutionOperations.enableFailDeploy();
 
@@ -149,7 +149,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testSlotAllocationTimeout() throws Exception {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final ExecutionPlan jobGraph = singleJobVertexJobGraph(2);
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
@@ -167,7 +167,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testSkipDeploymentIfVertexVersionOutdated() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final ExecutionPlan jobGraph = singleNonParallelJobVertexJobGraph();
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
@@ -185,7 +185,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testReleaseSlotIfVertexVersionOutdated() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final ExecutionPlan jobGraph = singleNonParallelJobVertexJobGraph();
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
@@ -203,7 +203,7 @@ class DefaultExecutionDeployerTest {
 
     @Test
     void testDeployOnlyIfVertexIsCreated() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final ExecutionPlan jobGraph = singleNonParallelJobVertexJobGraph();
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -228,7 +228,7 @@ class DefaultExecutionDeployerTest {
                                         .getShuffleDescriptor()
                                         .getResultPartitionID()));
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final ExecutionPlan jobGraph = nonParallelSourceSinkJobGraph();
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -246,7 +246,7 @@ class DefaultExecutionDeployerTest {
     void testFailedProducedPartitionRegistration() throws Exception {
         shuffleMaster.setAutoCompleteRegistration(false);
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final ExecutionPlan jobGraph = nonParallelSourceSinkJobGraph();
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -262,7 +262,7 @@ class DefaultExecutionDeployerTest {
     void testDirectExceptionOnProducedPartitionRegistration() throws Exception {
         shuffleMaster.setThrowExceptionalOnRegistration(true);
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final ExecutionPlan jobGraph = nonParallelSourceSinkJobGraph();
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -284,7 +284,7 @@ class DefaultExecutionDeployerTest {
 
             shuffleMaster.setAutoCompleteRegistration(false);
 
-            final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+            final ExecutionPlan jobGraph = nonParallelSourceSinkJobGraph();
             final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
             final ExecutionDeployer executionDeployer = createExecutionDeployer();
 
@@ -298,18 +298,18 @@ class DefaultExecutionDeployerTest {
         }
     }
 
-    private static JobGraph singleNonParallelJobVertexJobGraph() {
+    private static ExecutionPlan singleNonParallelJobVertexJobGraph() {
         return singleJobVertexJobGraph(1);
     }
 
-    private static JobGraph singleJobVertexJobGraph(final int parallelism) {
+    private static ExecutionPlan singleJobVertexJobGraph(final int parallelism) {
         final JobVertex vertex = new JobVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
         return JobGraphTestUtils.streamingJobGraph(vertex);
     }
 
-    private static JobGraph nonParallelSourceSinkJobGraph() {
+    private static ExecutionPlan nonParallelSourceSinkJobGraph() {
         final JobVertex source = new JobVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
 
@@ -322,7 +322,7 @@ class DefaultExecutionDeployerTest {
         return JobGraphTestUtils.streamingJobGraph(source, sink);
     }
 
-    private ExecutionGraph createExecutionGraph(final JobGraph jobGraph) throws Exception {
+    private ExecutionGraph createExecutionGraph(final ExecutionPlan jobGraph) throws Exception {
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

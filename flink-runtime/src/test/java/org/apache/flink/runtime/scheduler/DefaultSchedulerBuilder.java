@@ -40,7 +40,7 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
@@ -79,7 +79,7 @@ import static org.apache.flink.runtime.scheduler.SchedulerBase.computeVertexPara
 public class DefaultSchedulerBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultSchedulerBuilder.class);
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
     private final ComponentMainThreadExecutor mainThreadExecutor;
 
     private Executor ioExecutor;
@@ -123,7 +123,7 @@ public class DefaultSchedulerBuilder {
     private BatchJobRecoveryHandler jobRecoveryHandler = new DummyBatchJobRecoveryHandler();
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService generalExecutorService) {
         this(
@@ -135,7 +135,7 @@ public class DefaultSchedulerBuilder {
     }
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             Executor ioExecutor,
             ScheduledExecutorService futureExecutor,

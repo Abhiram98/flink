@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobgraph.jsonplan;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -41,7 +41,7 @@ public class JsonPlanGenerator {
     private static final String NOT_SET = "";
     private static final String EMPTY = "{}";
 
-    public static String generatePlan(JobGraph jg) {
+    public static String generatePlan(ExecutionPlan jg) {
         return generatePlan(
                 jg.getJobID(),
                 jg.getName(),

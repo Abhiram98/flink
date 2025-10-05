@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.PartitionInfo;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -68,7 +68,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
 
     private static final long TIMEOUT = 5000L;
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
     private JobVertex v1;
     private JobVertex v2;
     private JobVertex v3;

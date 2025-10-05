@@ -34,7 +34,7 @@ import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
@@ -50,7 +50,6 @@ import org.apache.flink.runtime.rpc.TestingRpcService;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.testutils.TestingJobResultStore;
 import org.apache.flink.runtime.util.TestingFatalErrorHandlerResource;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.Preconditions;
@@ -110,7 +109,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     private JobID jobId;
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private TestingDispatcher dispatcher;
 
@@ -731,7 +730,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
         @Override
         public TestingJobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -795,7 +794,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -822,7 +821,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,

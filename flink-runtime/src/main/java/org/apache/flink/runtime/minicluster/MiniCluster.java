@@ -63,8 +63,8 @@ import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServic
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
 import org.apache.flink.runtime.highavailability.nonha.embedded.HaLeadershipControl;
 import org.apache.flink.runtime.io.network.partition.ClusterPartitionManager;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -98,7 +98,6 @@ import org.apache.flink.runtime.webmonitor.retriever.LeaderRetriever;
 import org.apache.flink.runtime.webmonitor.retriever.MetricQueryServiceRetriever;
 import org.apache.flink.runtime.webmonitor.retriever.impl.RpcGatewayRetriever;
 import org.apache.flink.runtime.webmonitor.retriever.impl.RpcMetricQueryServiceRetriever;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.AbstractID;
 import org.apache.flink.util.AutoCloseableAsync;
 import org.apache.flink.util.ExceptionUtils;
@@ -1012,7 +1011,7 @@ public class MiniCluster implements AutoCloseableAsync {
      * @throws JobExecutionException Thrown if anything went amiss during initial job launch, or if
      *     the job terminally failed.
      */
-    public void runDetached(JobGraph job) throws JobExecutionException, InterruptedException {
+    public void runDetached(ExecutionPlan job) throws JobExecutionException, InterruptedException {
         checkNotNull(job, "job is null");
 
         final CompletableFuture<JobSubmissionResult> submissionFuture = submitJob(job);
@@ -1034,7 +1033,7 @@ public class MiniCluster implements AutoCloseableAsync {
      * @throws JobExecutionException Thrown if anything went amiss during initial job launch, or if
      *     the job terminally failed.
      */
-    public JobExecutionResult executeJobBlocking(JobGraph job)
+    public JobExecutionResult executeJobBlocking(ExecutionPlan job)
             throws JobExecutionException, InterruptedException {
         checkNotNull(job, "job is null");
 
@@ -1062,11 +1061,11 @@ public class MiniCluster implements AutoCloseableAsync {
         }
     }
 
-    public CompletableFuture<JobSubmissionResult> submitJob(ExecutionPlan executionPlan) {
+    public CompletableFuture<JobSubmissionResult> submitJob(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) {
         // When MiniCluster uses the local RPC, the provided ExecutionPlan is passed directly to the
         // Dispatcher. This means that any mutations to the JG can affect the Dispatcher behaviour,
         // so we rather clone it to guard against this.
-        final ExecutionPlan clonedExecutionPlan = InstantiationUtil.cloneUnchecked(executionPlan);
+        final org.apache.flink.streaming.api.graph.ExecutionPlan clonedExecutionPlan = InstantiationUtil.cloneUnchecked(executionPlan);
         checkRestoreModeForChangelogStateBackend(clonedExecutionPlan);
         final CompletableFuture<DispatcherGateway> dispatcherGatewayFuture =
                 getDispatcherGatewayFuture();
@@ -1089,7 +1088,7 @@ public class MiniCluster implements AutoCloseableAsync {
     // HACK: temporary hack to make the randomized changelog state backend tests work with forced
     // full snapshots. This option should be removed once changelog state backend supports forced
     // full snapshots
-    private void checkRestoreModeForChangelogStateBackend(ExecutionPlan executionPlan) {
+    private void checkRestoreModeForChangelogStateBackend(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) {
         final SavepointRestoreSettings savepointRestoreSettings =
                 executionPlan.getSavepointRestoreSettings();
         if (overrideRestoreModeForChangelogStateBackend
@@ -1131,7 +1130,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
     private CompletableFuture<Void> uploadAndSetJobFiles(
             final CompletableFuture<InetSocketAddress> blobServerAddressFuture,
-            final ExecutionPlan executionPlan) {
+            final org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) {
         return blobServerAddressFuture.thenAccept(
                 blobServerAddress -> {
                     try {

@@ -23,7 +23,7 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -86,7 +86,7 @@ class AdaptiveSchedulerSlotSharingITCase {
 
     private void runJob() throws Exception {
         final MiniCluster miniCluster = INTERNAL_MINI_CLUSTER_EXTENSION.getMiniCluster();
-        final JobGraph jobGraph = createJobGraphWithSlotSharingGroup();
+        final ExecutionPlan jobGraph = createJobGraphWithSlotSharingGroup();
 
         miniCluster.submitJob(jobGraph).join();
 
@@ -102,7 +102,7 @@ class AdaptiveSchedulerSlotSharingITCase {
      * Returns a JobGraph that requires slot sharing to work in order to be able to run with a
      * single slot.
      */
-    private static JobGraph createJobGraphWithSlotSharingGroup() {
+    private static ExecutionPlan createJobGraphWithSlotSharingGroup() {
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 
         final JobVertex source = new JobVertex("Source");

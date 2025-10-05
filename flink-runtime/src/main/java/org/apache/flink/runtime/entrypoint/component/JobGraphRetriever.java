@@ -19,18 +19,18 @@
 package org.apache.flink.runtime.entrypoint.component;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 
-/** Interface which allows to retrieve the {@link JobGraph}. */
+/** Interface which allows to retrieve the {@link ExecutionPlan}. */
 public interface JobGraphRetriever {
 
     /**
-     * Retrieve the {@link JobGraph}.
+     * Retrieve the {@link ExecutionPlan}.
      *
      * @param configuration cluster configuration
-     * @return the retrieved {@link JobGraph}.
-     * @throws FlinkException if the {@link JobGraph} could not be retrieved
+     * @return the retrieved {@link ExecutionPlan}.
+     * @throws FlinkException if the {@link ExecutionPlan} could not be retrieved
      */
-    JobGraph retrieveJobGraph(Configuration configuration) throws FlinkException;
+    ExecutionPlan retrieveJobGraph(Configuration configuration) throws FlinkException;
 }

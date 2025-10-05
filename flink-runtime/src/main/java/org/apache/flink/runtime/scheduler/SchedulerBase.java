@@ -70,12 +70,8 @@ import org.apache.flink.runtime.executiongraph.metrics.DownTimeGauge;
 import org.apache.flink.runtime.executiongraph.metrics.UpTimeGauge;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -139,7 +135,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     private final Logger log;
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
 
     protected final JobInfo jobInfo;
 
@@ -183,7 +179,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     public SchedulerBase(
             final Logger log,
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final CheckpointsCleaner checkpointsCleaner,
@@ -375,7 +371,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
      * @param jobGraph the job graph to retrieve vertices from
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(JobGraph jobGraph) {
+    public static VertexParallelismStore computeVertexParallelismStore(ExecutionPlan jobGraph) {
         return computeVertexParallelismStore(jobGraph.getVertices());
     }
 
@@ -589,7 +585,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
         return executionGraph.getAllVertices().get(jobVertexId);
     }
 
-    protected JobGraph getJobGraph() {
+    protected ExecutionPlan getJobGraph() {
         return jobGraph;
     }
 

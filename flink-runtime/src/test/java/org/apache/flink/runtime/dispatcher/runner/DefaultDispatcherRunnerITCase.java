@@ -38,7 +38,7 @@ import org.apache.flink.runtime.dispatcher.cleanup.CleanupRunnerFactory;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingCleanupRunnerFactory;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.TestingJobPersistenceComponentFactory;
@@ -51,7 +51,6 @@ import org.apache.flink.runtime.rpc.TestingRpcServiceExtension;
 import org.apache.flink.runtime.testutils.TestingExecutionPlanStore;
 import org.apache.flink.runtime.util.BlobServerExtension;
 import org.apache.flink.runtime.util.TestingFatalErrorHandler;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
 
@@ -91,7 +90,7 @@ class DefaultDispatcherRunnerITCase {
     public static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_RESOURCE =
             TestingUtils.defaultExecutorExtension();
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private TestingLeaderElection dispatcherLeaderElection;
 
@@ -251,7 +250,7 @@ class DefaultDispatcherRunnerITCase {
         public Dispatcher createDispatcher(
                 RpcService rpcService,
                 DispatcherId fencingToken,
-                Collection<ExecutionPlan> recoveredJobs,
+                Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
                 Collection<JobResult> recoveredDirtyJobResults,
                 DispatcherBootstrapFactory dispatcherBootstrapFactory,
                 PartialDispatcherServicesWithJobPersistenceComponents
@@ -270,7 +269,7 @@ class DefaultDispatcherRunnerITCase {
         }
     }
 
-    private static JobGraph createJobGraph() {
+    private static ExecutionPlan createJobGraph() {
         return JobGraphTestUtils.singleNoOpJobGraph();
     }
 

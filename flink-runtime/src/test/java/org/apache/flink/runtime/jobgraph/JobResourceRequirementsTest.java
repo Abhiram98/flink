@@ -154,7 +154,7 @@ class JobResourceRequirementsTest {
 
     @Test
     void testWriteToJobGraphAndReadFromExecutionPlan() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         final JobResourceRequirements jobResourceRequirements =
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(firstVertexId, 10, 9)

@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobSubmissionResult;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -65,7 +65,7 @@ class LeaderChangeClusterComponentsTest {
 
     private static EmbeddedHaServicesWithLeadershipControl highAvailabilityServices;
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private JobID jobId;
 
@@ -183,7 +183,7 @@ class LeaderChangeClusterComponentsTest {
                 10L);
     }
 
-    private JobGraph createJobGraph(int parallelism) {
+    private ExecutionPlan createJobGraph(int parallelism) {
         BlockingOperator.isBlocking = true;
         final JobVertex vertex = new JobVertex("blocking operator");
         vertex.setParallelism(parallelism);

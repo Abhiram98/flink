@@ -30,14 +30,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -1192,7 +1186,7 @@ class StateAssignmentOperationTest {
 
     private Map<OperatorID, ExecutionJobVertex> toExecutionVertices(JobVertex... jobVertices)
             throws JobException, JobExecutionException {
-        JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

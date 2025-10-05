@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.net.SSLUtilsTest;
@@ -34,7 +34,6 @@ import org.apache.flink.runtime.rest.messages.EmptyMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobSubmitRequestBody;
 import org.apache.flink.runtime.rpc.RpcUtils;
 import org.apache.flink.runtime.webmonitor.TestingDispatcherGateway;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
@@ -228,7 +227,7 @@ public class JobSubmitHandlerTest {
     void testFileHandling() throws Exception {
         final String dcEntryName = "entry";
 
-        CompletableFuture<ExecutionPlan> submittedExecutionPlanFuture = new CompletableFuture<>();
+        CompletableFuture<org.apache.flink.streaming.api.graph.ExecutionPlan> submittedExecutionPlanFuture = new CompletableFuture<>();
         DispatcherGateway dispatcherGateway =
                 TestingDispatcherGateway.newBuilder()
                         .setBlobServerPort(blobServer.getPort())
@@ -251,7 +250,7 @@ public class JobSubmitHandlerTest {
         final Path jarFile = TempDirUtils.newFile(temporaryFolder).toPath();
         final Path artifactFile = TempDirUtils.newFile(temporaryFolder).toPath();
 
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         // the entry that should be updated
         jobGraph.addUserArtifact(
                 dcEntryName, new DistributedCache.DistributedCacheEntry("random", false));
@@ -282,7 +281,7 @@ public class JobSubmitHandlerTest {
         assertThat(submittedExecutionPlanFuture)
                 .as("No ExecutionPlan was submitted.")
                 .isCompleted();
-        final ExecutionPlan submittedExecutionPlan = submittedExecutionPlanFuture.get();
+        final org.apache.flink.streaming.api.graph.ExecutionPlan submittedExecutionPlan = submittedExecutionPlanFuture.get();
         assertThat(submittedExecutionPlan.getUserJarBlobKeys()).hasSize(1);
         assertThat(submittedExecutionPlan.getUserArtifacts()).hasSize(1);
         assertThat(submittedExecutionPlan.getUserArtifacts().get(dcEntryName).blobKey).isNotNull();
@@ -309,7 +308,7 @@ public class JobSubmitHandlerTest {
 
         final Path jobGraphFile = TempDirUtils.newFile(temporaryFolder).toPath();
 
-        JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         try (ObjectOutputStream objectOut =
                 new ObjectOutputStream(Files.newOutputStream(jobGraphFile))) {
             objectOut.writeObject(jobGraph);

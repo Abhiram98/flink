@@ -29,11 +29,8 @@ import org.apache.flink.runtime.checkpoint.CompletedCheckpointStatsSummarySnapsh
 import org.apache.flink.runtime.checkpoint.StatsSummarySnapshot;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -110,7 +107,7 @@ public class ArchivedExecutionGraphTest {
         JobCheckpointingSettings checkpointingSettings =
                 new JobCheckpointingSettings(chkConfig, null);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(asList(v1, v2))
                         .setJobCheckpointingSettings(checkpointingSettings)

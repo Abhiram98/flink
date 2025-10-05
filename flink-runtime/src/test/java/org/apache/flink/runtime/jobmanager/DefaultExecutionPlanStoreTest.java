@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.testutils.FlinkMatchers;
 import org.apache.flink.runtime.checkpoint.TestingRetrievableStateStorageHelper;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -30,7 +30,6 @@ import org.apache.flink.runtime.persistence.IntegerResourceVersion;
 import org.apache.flink.runtime.persistence.StateHandleStore;
 import org.apache.flink.runtime.persistence.TestingStateHandleStore;
 import org.apache.flink.runtime.state.RetrievableStateHandle;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.AbstractID;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.TestLogger;
@@ -69,11 +68,11 @@ import static org.junit.Assert.fail;
  */
 public class DefaultExecutionPlanStoreTest extends TestLogger {
 
-    private final ExecutionPlan testingExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+    private final org.apache.flink.streaming.api.graph.ExecutionPlan testingExecutionPlan = JobGraphTestUtils.emptyJobGraph();
     private final long timeout = 100L;
 
-    private TestingStateHandleStore.Builder<ExecutionPlan> builder;
-    private TestingRetrievableStateStorageHelper<ExecutionPlan> jobGraphStorageHelper;
+    private TestingStateHandleStore.Builder<org.apache.flink.streaming.api.graph.ExecutionPlan> builder;
+    private TestingRetrievableStateStorageHelper<org.apache.flink.streaming.api.graph.ExecutionPlan> jobGraphStorageHelper;
     private TestingExecutionPlanStoreWatcher testingExecutionPlanStoreWatcher;
     private TestingExecutionPlanListener testingExecutionPlanListener;
 
@@ -94,15 +93,15 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testRecoverExecutionPlan() throws Exception {
-        final RetrievableStateHandle<ExecutionPlan> stateHandle =
+        final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandle =
                 jobGraphStorageHelper.store(testingExecutionPlan);
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(ignore -> stateHandle).build();
 
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
 
-        final ExecutionPlan recoveredExecutionPlan =
+        final org.apache.flink.streaming.api.graph.ExecutionPlan recoveredExecutionPlan =
                 executionPlanStore.recoverExecutionPlan(testingExecutionPlan.getJobID());
         assertThat(recoveredExecutionPlan, is(notNullValue()));
         assertThat(recoveredExecutionPlan.getJobID(), is(testingExecutionPlan.getJobID()));
@@ -110,7 +109,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testRecoverExecutionPlanWhenNotExist() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(
                                 ignore -> {
                                     throw new StateHandleStore.NotExistException(
@@ -121,7 +120,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
 
-        final ExecutionPlan recoveredExecutionPlan =
+        final org.apache.flink.streaming.api.graph.ExecutionPlan recoveredExecutionPlan =
                 executionPlanStore.recoverExecutionPlan(testingExecutionPlan.getJobID());
         assertThat(recoveredExecutionPlan, is(nullValue()));
     }
@@ -130,7 +129,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     public void testRecoverExecutionPlanFailedShouldReleaseHandle() throws Exception {
         final CompletableFuture<String> releaseFuture = new CompletableFuture<>();
         final FlinkException testException = new FlinkException("Test exception.");
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(
                                 ignore -> {
                                     throw testException;
@@ -154,8 +153,8 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testPutExecutionPlanWhenNotExist() throws Exception {
-        final CompletableFuture<ExecutionPlan> addFuture = new CompletableFuture<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final CompletableFuture<org.apache.flink.streaming.api.graph.ExecutionPlan> addFuture = new CompletableFuture<>();
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setExistsFunction(ignore -> IntegerResourceVersion.notExisting())
                         .setAddFunction(
                                 (ignore, state) -> {
@@ -168,17 +167,17 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
                 createAndStartExecutionPlanStore(stateHandleStore);
         executionPlanStore.putExecutionPlan(testingExecutionPlan);
 
-        final ExecutionPlan actual = addFuture.get(timeout, TimeUnit.MILLISECONDS);
+        final org.apache.flink.streaming.api.graph.ExecutionPlan actual = addFuture.get(timeout, TimeUnit.MILLISECONDS);
         assertThat(actual.getJobID(), is(testingExecutionPlan.getJobID()));
     }
 
     @Test
     public void testPutExecutionPlanWhenAlreadyExist() throws Exception {
-        final CompletableFuture<Tuple3<String, IntegerResourceVersion, ExecutionPlan>>
+        final CompletableFuture<Tuple3<String, IntegerResourceVersion, org.apache.flink.streaming.api.graph.ExecutionPlan>>
                 replaceFuture = new CompletableFuture<>();
         final int resourceVersion = 100;
         final AtomicBoolean alreadyExist = new AtomicBoolean(false);
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setExistsFunction(
                                 ignore -> {
                                     if (alreadyExist.get()) {
@@ -198,7 +197,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         // Replace
         executionPlanStore.putExecutionPlan(testingExecutionPlan);
 
-        final Tuple3<String, IntegerResourceVersion, ExecutionPlan> actual =
+        final Tuple3<String, IntegerResourceVersion, org.apache.flink.streaming.api.graph.ExecutionPlan> actual =
                 replaceFuture.get(timeout, TimeUnit.MILLISECONDS);
         assertThat(actual.f0, is(testingExecutionPlan.getJobID().toString()));
         assertThat(actual.f1, is(IntegerResourceVersion.valueOf(resourceVersion)));
@@ -208,7 +207,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testGlobalCleanup() throws Exception {
         final CompletableFuture<JobID> removeFuture = new CompletableFuture<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .setRemoveFunction(name -> removeFuture.complete(JobID.fromHexString(name)))
                         .build();
@@ -227,7 +226,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testGlobalCleanupWithNonExistName() throws Exception {
         final CompletableFuture<JobID> removeFuture = new CompletableFuture<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setRemoveFunction(name -> removeFuture.complete(JobID.fromHexString(name)))
                         .build();
 
@@ -242,7 +241,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testGlobalCleanupFailsIfRemovalReturnsFalse() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setRemoveFunction(name -> false).build();
 
         final ExecutionPlanStore executionPlanStore =
@@ -259,7 +258,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testGetJobIds() throws Exception {
         final List<JobID> existingJobIds = Arrays.asList(new JobID(0, 0), new JobID(0, 1));
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetAllHandlesSupplier(
                                 () ->
                                         existingJobIds.stream()
@@ -275,7 +274,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnAddedExecutionPlanShouldNotProcessKnownExecutionPlans() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
@@ -288,9 +287,9 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnAddedExecutionPlanShouldOnlyProcessUnknownExecutionPlans() throws Exception {
-        final RetrievableStateHandle<ExecutionPlan> stateHandle =
+        final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandle =
                 jobGraphStorageHelper.store(testingExecutionPlan);
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(ignore -> stateHandle)
                         .setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
@@ -309,7 +308,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnRemovedExecutionPlanShouldOnlyProcessKnownExecutionPlans() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
@@ -328,7 +327,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnRemovedExecutionPlanShouldNotProcessUnknownExecutionPlans() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
         createAndStartExecutionPlanStore(stateHandleStore);
@@ -339,7 +338,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnAddedExecutionPlanIsIgnoredAfterBeingStop() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
@@ -352,7 +351,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testOnRemovedExecutionPlanIsIgnoredAfterBeingStop() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
@@ -367,7 +366,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testStoppingExecutionPlanStoreShouldReleaseAllHandles() throws Exception {
         final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setReleaseAllHandlesRunnable(() -> completableFuture.complete(null))
                         .build();
         final ExecutionPlanStore executionPlanStore =
@@ -380,7 +379,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testLocalCleanupShouldReleaseHandle() throws Exception {
         final CompletableFuture<String> releaseFuture = new CompletableFuture<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setReleaseConsumer(releaseFuture::complete).build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -395,18 +394,18 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
     @Test
     public void testRecoverPersistedJobResourceRequirements() throws Exception {
-        final Map<String, RetrievableStateHandle<ExecutionPlan>> handles = new HashMap<>();
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final Map<String, RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan>> handles = new HashMap<>();
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setAddFunction(
                                 (key, state) -> {
-                                    final RetrievableStateHandle<ExecutionPlan> handle =
+                                    final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> handle =
                                             jobGraphStorageHelper.store(state);
                                     handles.put(key, handle);
                                     return handle;
                                 })
                         .setGetFunction(
                                 key -> {
-                                    final RetrievableStateHandle<ExecutionPlan> handle =
+                                    final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> handle =
                                             handles.get(key);
                                     if (handle != null) {
                                         return handle;
@@ -449,13 +448,13 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         final Optional<JobResourceRequirements> maybeRecovered =
                 JobResourceRequirements.readFromExecutionPlan(
                         Objects.requireNonNull(
-                                (JobGraph) executionPlanStore.recoverExecutionPlan(jobId)));
+                                (ExecutionPlan) executionPlanStore.recoverExecutionPlan(jobId)));
         Assertions.assertThat(maybeRecovered).get().isEqualTo(expected);
     }
 
     @Test
     public void testPutJobResourceRequirementsOfNonExistentJob() throws Exception {
-        final TestingStateHandleStore<ExecutionPlan> stateHandleStore =
+        final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(
                                 ignore -> {
                                     throw new StateHandleStore.NotExistException("Does not exist.");
@@ -471,7 +470,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     }
 
     private ExecutionPlanStore createAndStartExecutionPlanStore(
-            TestingStateHandleStore<ExecutionPlan> stateHandleStore) throws Exception {
+            TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore) throws Exception {
         final ExecutionPlanStore executionPlanStore =
                 new DefaultExecutionPlanStore<>(
                         stateHandleStore,

@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.factories.JobMasterServiceProcessFactory;
@@ -81,7 +81,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
     private static final Duration TESTING_TIMEOUT = Duration.ofSeconds(10);
 
-    private static JobGraph jobGraph;
+    private static ExecutionPlan jobGraph;
 
     private TestingLeaderElection leaderElection;
 

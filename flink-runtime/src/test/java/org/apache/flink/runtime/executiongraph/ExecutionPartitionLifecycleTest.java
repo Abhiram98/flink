@@ -31,7 +31,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -271,7 +271,7 @@ class ExecutionPartitionLifecycleTest {
                                                 .withTaskManagerLocation(taskManagerLocation)
                                                 .build()));
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producerVertex, consumerVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(producerVertex, consumerVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

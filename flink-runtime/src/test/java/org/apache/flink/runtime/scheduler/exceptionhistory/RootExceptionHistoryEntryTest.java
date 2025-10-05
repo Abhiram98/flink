@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.taskmanager.TaskExecutionState;
@@ -63,7 +63,7 @@ class RootExceptionHistoryEntryTest {
 
     @BeforeEach
     void setup() throws JobException, JobExecutionException {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
         jobGraph.getVertices().forEach(v -> v.setParallelism(3));
 
         executionGraph =

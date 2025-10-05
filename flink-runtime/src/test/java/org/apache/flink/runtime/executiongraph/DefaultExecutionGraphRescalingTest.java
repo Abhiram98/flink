@@ -22,7 +22,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
- * This class contains tests that verify when rescaling a {@link JobGraph}, constructed {@link
+ * This class contains tests that verify when rescaling a {@link ExecutionPlan}, constructed {@link
  * ExecutionGraph}s are correct.
  */
 class DefaultExecutionGraphRescalingTest {
@@ -55,7 +55,7 @@ class DefaultExecutionGraphRescalingTest {
         final int maxParallelism = 10;
         final JobVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
 
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -105,7 +105,7 @@ class DefaultExecutionGraphRescalingTest {
     }
 
     /**
-     * Verifies that building an {@link ExecutionGraph} from a {@link JobGraph} with parallelism
+     * Verifies that building an {@link ExecutionGraph} from a {@link ExecutionPlan} with parallelism
      * higher than the maximum parallelism fails.
      */
     @Test
@@ -117,7 +117,7 @@ class DefaultExecutionGraphRescalingTest {
         final int maxParallelism = 10;
         final JobVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
 
         for (JobVertex jv : jobVertices) {
             jv.setParallelism(maxParallelism + 1);

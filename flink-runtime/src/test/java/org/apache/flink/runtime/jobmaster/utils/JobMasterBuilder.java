@@ -29,7 +29,7 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.PartitionTrackerFactory;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentReconciler;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
@@ -64,7 +64,7 @@ public class JobMasterBuilder {
 
     private Configuration configuration = new Configuration();
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
     private final RpcService rpcService;
 
     private JobMasterId jobMasterId = JobMasterId.generate();
@@ -96,7 +96,7 @@ public class JobMasterBuilder {
 
     private BlocklistHandler.Factory blocklistHandlerFactory = new NoOpBlocklistHandler.Factory();
 
-    public JobMasterBuilder(JobGraph jobGraph, RpcService rpcService) {
+    public JobMasterBuilder(ExecutionPlan jobGraph, RpcService rpcService) {
         TestingHighAvailabilityServices testingHighAvailabilityServices =
                 new TestingHighAvailabilityServices();
         testingHighAvailabilityServices.setCheckpointRecoveryFactory(

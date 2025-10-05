@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
@@ -55,7 +55,7 @@ public class TestingSchedulerNGFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,

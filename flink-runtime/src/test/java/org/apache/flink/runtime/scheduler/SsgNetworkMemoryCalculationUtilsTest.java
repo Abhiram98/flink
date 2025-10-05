@@ -28,11 +28,8 @@ import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartitionTest;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchScheduler;
 import org.apache.flink.runtime.shuffle.PartitionDescriptor;
@@ -249,7 +246,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
             final List<SlotSharingGroup> slotSharingGroups, int defaultMaxParallelism)
             throws Exception {
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         slotSharingGroups, Arrays.asList(4, -1, -1), ResultPartitionType.BLOCKING);
 
@@ -275,7 +272,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
                 .build(EXECUTOR_EXTENSION.getExecutor());
     }
 
-    private static JobGraph createJobGraph(
+    private static ExecutionPlan createJobGraph(
             final List<SlotSharingGroup> slotSharingGroups,
             List<Integer> parallelisms,
             ResultPartitionType resultPartitionType) {

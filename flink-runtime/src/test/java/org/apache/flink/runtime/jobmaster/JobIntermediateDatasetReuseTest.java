@@ -24,8 +24,8 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
@@ -97,7 +97,7 @@ class JobIntermediateDatasetReuseTest {
             miniCluster.start();
 
             IntermediateDataSetID intermediateDataSetID = new IntermediateDataSetID();
-            final JobGraph firstJobGraph =
+            final ExecutionPlan firstJobGraph =
                     createFirstJobGraph(producerParallelism, intermediateDataSetID);
             miniCluster.submitJob(firstJobGraph).get();
             CompletableFuture<JobResult> jobResultFuture =
@@ -105,7 +105,7 @@ class JobIntermediateDatasetReuseTest {
             JobResult jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isTrue();
 
-            final JobGraph secondJobGraph =
+            final ExecutionPlan secondJobGraph =
                     createSecondJobGraph(consumerParallelism, intermediateDataSetID);
             miniCluster.submitJob(secondJobGraph).get();
             jobResultFuture = miniCluster.requestJobResult(secondJobGraph.getJobID());
@@ -124,7 +124,7 @@ class JobIntermediateDatasetReuseTest {
             miniCluster.start();
 
             IntermediateDataSetID intermediateDataSetID = new IntermediateDataSetID();
-            final JobGraph firstJobGraph = createFirstJobGraph(1, intermediateDataSetID);
+            final ExecutionPlan firstJobGraph = createFirstJobGraph(1, intermediateDataSetID);
             miniCluster.submitJob(firstJobGraph).get();
             CompletableFuture<JobResult> jobResultFuture =
                     miniCluster.requestJobResult(firstJobGraph.getJobID());
@@ -134,7 +134,7 @@ class JobIntermediateDatasetReuseTest {
             miniCluster.terminateTaskManager(0);
             miniCluster.startTaskManager();
 
-            final JobGraph secondJobGraph = createSecondJobGraph(1, intermediateDataSetID);
+            final ExecutionPlan secondJobGraph = createSecondJobGraph(1, intermediateDataSetID);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(secondJobGraph, 1024, 1000L);
             miniCluster.submitJob(secondJobGraph).get();
             jobResultFuture = miniCluster.requestJobResult(secondJobGraph.getJobID());
@@ -177,17 +177,17 @@ class JobIntermediateDatasetReuseTest {
         return null;
     }
 
-    private JobGraph createSecondJobGraph(
+    private ExecutionPlan createSecondJobGraph(
             int parallelism, IntermediateDataSetID intermediateDataSetID) {
         final JobVertex receiver = new JobVertex("Receiver 2", null);
         receiver.setParallelism(parallelism);
         receiver.setInvokableClass(Receiver.class);
         receiver.addIntermediateDataSetIdToConsume(intermediateDataSetID);
 
-        return new JobGraph(null, "Second Job", receiver);
+        return new ExecutionPlan(null, "Second Job", receiver);
     }
 
-    private JobGraph createFirstJobGraph(
+    private ExecutionPlan createFirstJobGraph(
             int parallelism, IntermediateDataSetID intermediateDataSetID) {
         final JobVertex sender = new JobVertex("Sender");
         sender.setParallelism(parallelism);
@@ -204,7 +204,7 @@ class JobIntermediateDatasetReuseTest {
                 intermediateDataSetID,
                 false);
 
-        return new JobGraph(null, "First Job", sender, receiver);
+        return new ExecutionPlan(null, "First Job", sender, receiver);
     }
 
     /**

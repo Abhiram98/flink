@@ -48,13 +48,8 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
@@ -96,7 +91,6 @@ import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.TestingExecutionPlanStore;
 import org.apache.flink.runtime.testutils.TestingJobResultStore;
 import org.apache.flink.runtime.util.TestingFatalErrorHandler;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.InstantiationUtil;
@@ -158,7 +152,7 @@ import static org.junit.Assert.fail;
 /** Test for the {@link Dispatcher} component. */
 public class DispatcherTest extends AbstractDispatcherTest {
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private JobID jobId;
 
@@ -350,7 +344,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         final JobVertex secondVertex = new JobVertex("secondVertex");
         secondVertex.setInvokableClass(NoOpInvokable.class);
 
-        JobGraph jobGraphWithTwoVertices =
+        ExecutionPlan jobGraphWithTwoVertices =
                 JobGraphTestUtils.streamingJobGraph(firstVertex, secondVertex);
 
         dispatcher =
@@ -587,7 +581,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         jobMasterLeaderElection.isLeader(UUID.randomUUID());
         DispatcherGateway dispatcherGateway = dispatcher.getSelfGateway(DispatcherGateway.class);
 
-        final JobGraph emptyJobGraph =
+        final ExecutionPlan emptyJobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder().setJobId(jobId).build();
 
         dispatcherGateway.submitJob(emptyJobGraph, TIMEOUT).get();
@@ -902,7 +896,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testThatDirtilyFinishedJobsNotBeingRetriggered() throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         final JobResult jobResult =
                 TestingJobResultStore.createSuccessfulJobResult(jobGraph.getJobID());
         dispatcher =
@@ -1016,7 +1010,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 createAndStartDispatcher(heartbeatServices, haServices, jobManagerRunnerFactory);
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        final JobGraph blockedJobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan blockedJobGraph = JobGraphTestUtils.singleNoOpJobGraph();
         blockedJobGraph.setJobID(blockingId);
 
         // Submit two jobs, one blocks forever
@@ -1212,7 +1206,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         v2.setParallelism(2);
         JobVertex v3 = new JobVertex("v3");
         v3.setParallelism(3);
-        jobGraph = new JobGraph(jobGraph.getJobID(), "job", v1, v2, v3);
+        jobGraph = new ExecutionPlan(jobGraph.getJobID(), "job", v1, v2, v3);
 
         configuration.set(
                 PipelineOptions.PARALLELISM_OVERRIDES,
@@ -1301,7 +1295,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         dispatcher =
                 createTestingDispatcherBuilder()
-                        .setRecoveredJobs(Collections.singleton(new JobGraph(jobId1, "foobar")))
+                        .setRecoveredJobs(Collections.singleton(new ExecutionPlan(jobId1, "foobar")))
                         .build(rpcService);
 
         Assertions.assertThat(blobServer.getFile(jobId1, blobKey1)).hasBinaryContent(fileContent);
@@ -1497,9 +1491,9 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         // We intentionally perform the test on two jobs to make sure the
         // concurrent modification is only prevented on the per-job level.
-        final JobGraph firstJobGraph = InstantiationUtil.clone(jobGraph);
+        final ExecutionPlan firstJobGraph = InstantiationUtil.clone(jobGraph);
         firstJobGraph.setJobID(JobID.generate());
-        final JobGraph secondJobGraph = InstantiationUtil.clone(jobGraph);
+        final ExecutionPlan secondJobGraph = InstantiationUtil.clone(jobGraph);
         secondJobGraph.setJobID(JobID.generate());
 
         final CompletableFuture<?> firstPendingUpdateFuture =
@@ -1519,7 +1513,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
     private CompletableFuture<?> testConcurrentModificationIsPrevented(
             DispatcherGateway dispatcherGateway,
             JobManagerRunnerWithBlockingJobMasterFactory blockingJobMaster,
-            JobGraph jobGraph)
+            ExecutionPlan jobGraph)
             throws Exception {
         final TestingLeaderElection jobMasterLeaderElection = new TestingLeaderElection();
         haServices.setJobMasterLeaderElection(jobGraph.getJobID(), jobMasterLeaderElection);
@@ -1623,7 +1617,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan graph,
+                org.apache.flink.streaming.api.graph.ExecutionPlan graph,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1729,7 +1723,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1789,7 +1783,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1867,7 +1861,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan graph,
+                org.apache.flink.streaming.api.graph.ExecutionPlan graph,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1893,7 +1887,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public TestingJobManagerRunner createJobManagerRunner(
-                ExecutionPlan executionPlan,
+                org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1932,7 +1926,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan graph,
+                org.apache.flink.streaming.api.graph.ExecutionPlan graph,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1969,7 +1963,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan graph,
+                org.apache.flink.streaming.api.graph.ExecutionPlan graph,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,
@@ -1997,7 +1991,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         @Override
         public JobManagerRunner createJobManagerRunner(
-                ExecutionPlan graph,
+                org.apache.flink.streaming.api.graph.ExecutionPlan graph,
                 Configuration configuration,
                 RpcService rpcService,
                 HighAvailabilityServices highAvailabilityServices,

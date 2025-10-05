@@ -23,11 +23,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroupImpl;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -252,7 +249,7 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
         assertThat(v1.getProducedDataSets()).hasSize(2);
         assertThat(v2.getInputs()).hasSize(2);
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2);
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

@@ -57,7 +57,7 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.JobResultStoreOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -91,7 +91,6 @@ import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.runtime.rpc.RpcServiceUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.streaming.api.graph.StreamingJobGraphGenerator;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.ExceptionUtils;
@@ -166,7 +165,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
     private final OnMainThreadJobManagerRunnerRegistry jobManagerRunnerRegistry;
 
-    private final Collection<ExecutionPlan> recoveredJobs;
+    private final Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs;
 
     private final Collection<JobResult> recoveredDirtyJobs;
 
@@ -219,7 +218,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     public Dispatcher(
             RpcService rpcService,
             DispatcherId fencingToken,
-            Collection<ExecutionPlan> recoveredJobs,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
             Collection<JobResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices)
@@ -237,7 +236,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     private Dispatcher(
             RpcService rpcService,
             DispatcherId fencingToken,
-            Collection<ExecutionPlan> recoveredJobs,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
             Collection<JobResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices,
@@ -258,7 +257,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     protected Dispatcher(
             RpcService rpcService,
             DispatcherId fencingToken,
-            Collection<ExecutionPlan> recoveredJobs,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
             Collection<JobResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices,
@@ -311,7 +310,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         this.recoveredDirtyJobs = new HashSet<>(recoveredDirtyJobs);
 
         this.blobServer.retainJobs(
-                recoveredJobs.stream().map(ExecutionPlan::getJobID).collect(Collectors.toSet()),
+                recoveredJobs.stream().map(org.apache.flink.streaming.api.graph.ExecutionPlan::getJobID).collect(Collectors.toSet()),
                 dispatcherServices.getIoExecutor());
 
         this.dispatcherCachedOperationsHandler =
@@ -375,7 +374,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     private static void assertRecoveredJobsAndDirtyJobResults(
-            Collection<ExecutionPlan> recoveredJobs,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
             Collection<JobResult> recoveredDirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
                 recoveredDirtyJobResults.stream()
@@ -395,13 +394,13 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     private void startRecoveredJobs() {
-        for (ExecutionPlan recoveredJob : recoveredJobs) {
+        for (org.apache.flink.streaming.api.graph.ExecutionPlan recoveredJob : recoveredJobs) {
             runRecoveredJob(recoveredJob);
         }
         recoveredJobs.clear();
     }
 
-    private void runRecoveredJob(final ExecutionPlan recoveredJob) {
+    private void runRecoveredJob(final org.apache.flink.streaming.api.graph.ExecutionPlan recoveredJob) {
         checkNotNull(recoveredJob);
 
         initJobClientExpiredTime(recoveredJob);
@@ -418,7 +417,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         }
     }
 
-    private void initJobClientExpiredTime(ExecutionPlan executionPlan) {
+    private void initJobClientExpiredTime(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) {
         JobID jobID = executionPlan.getJobID();
         long initialClientHeartbeatTimeout = executionPlan.getInitialClientHeartbeatTimeout();
         if (initialClientHeartbeatTimeout > 0) {
@@ -515,7 +514,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     // ------------------------------------------------------
 
     @Override
-    public CompletableFuture<Acknowledge> submitJob(ExecutionPlan executionPlan, Duration timeout) {
+    public CompletableFuture<Acknowledge> submitJob(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan, Duration timeout) {
         final JobID jobID = executionPlan.getJobID();
         try (MdcCloseable ignored = MdcUtils.withContext(MdcUtils.asContextData(jobID))) {
             log.info("Received job submission '{}' ({}).", executionPlan.getName(), jobID);
@@ -584,9 +583,9 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         return jobResultStore.hasJobResultEntryAsync(jobId);
     }
 
-    private CompletableFuture<Acknowledge> internalSubmitJob(ExecutionPlan executionPlan) {
-        if (executionPlan instanceof JobGraph) {
-            applyParallelismOverrides((JobGraph) executionPlan);
+    private CompletableFuture<Acknowledge> internalSubmitJob(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) {
+        if (executionPlan instanceof ExecutionPlan) {
+            applyParallelismOverrides((ExecutionPlan) executionPlan);
         }
 
         log.info("Submitting job '{}' ({}).", executionPlan.getName(), executionPlan.getJobID());
@@ -636,13 +635,13 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         return CompletableFuture.completedFuture(Acknowledge.get());
     }
 
-    private void persistAndRunJob(ExecutionPlan executionPlan) throws Exception {
+    private void persistAndRunJob(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) throws Exception {
         executionPlanWriter.putExecutionPlan(executionPlan);
         initJobClientExpiredTime(executionPlan);
         runJob(createJobMasterRunner(executionPlan), ExecutionType.SUBMISSION);
     }
 
-    private JobManagerRunner createJobMasterRunner(ExecutionPlan executionPlan) throws Exception {
+    private JobManagerRunner createJobMasterRunner(org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan) throws Exception {
         Preconditions.checkState(!jobManagerRunnerRegistry.isRegistered(executionPlan.getJobID()));
         return jobManagerRunnerFactory.createJobManagerRunner(
                 executionPlan,
@@ -1551,7 +1550,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     private CompletableFuture<Void> waitForTerminatingJob(
-            JobID jobId, ExecutionPlan executionPlan, ThrowingConsumer<ExecutionPlan, ?> action) {
+            JobID jobId, org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan, ThrowingConsumer<org.apache.flink.streaming.api.graph.ExecutionPlan, ?> action) {
         final CompletableFuture<Void> jobManagerTerminationFuture =
                 getJobTerminationFuture(jobId)
                         .exceptionally(
@@ -1593,7 +1592,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         return CompletableFuture.runAsync(() -> terminateJob(jobId), getMainThreadExecutor(jobId));
     }
 
-    private void applyParallelismOverrides(JobGraph jobGraph) {
+    private void applyParallelismOverrides(ExecutionPlan jobGraph) {
         Map<String, String> overrides = new HashMap<>();
         overrides.putAll(configuration.get(PipelineOptions.PARALLELISM_OVERRIDES));
         overrides.putAll(jobGraph.getJobConfiguration().get(PipelineOptions.PARALLELISM_OVERRIDES));

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.dispatcher;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -60,7 +60,7 @@ public class MemoryExecutionGraphInfoStoreITCase extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
             miniCluster.submitJob(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }

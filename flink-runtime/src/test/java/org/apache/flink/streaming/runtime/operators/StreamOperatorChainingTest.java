@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterDelegate;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironmentBuilder;
@@ -115,7 +115,7 @@ class StreamOperatorChainingTest {
                         });
 
         // be build our own StreamTask and OperatorChain
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(2);
 
@@ -242,7 +242,7 @@ class StreamOperatorChainingTest {
                         });
 
         // be build our own StreamTask and OperatorChain
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(2);
 

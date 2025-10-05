@@ -35,7 +35,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -68,7 +68,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;
     private JobMasterPartitionTracker partitionTracker = NoOpJobMasterPartitionTracker.INSTANCE;
     private Configuration jobMasterConfig = new Configuration();
-    private JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+    private ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
     private CompletedCheckpointStore completedCheckpointStore =
             new StandaloneCompletedCheckpointStore(1);
     private CheckpointIDCounter checkpointIdCounter = new StandaloneCheckpointIDCounter();
@@ -94,7 +94,7 @@ public class TestingDefaultExecutionGraphBuilder {
         return this;
     }
 
-    public TestingDefaultExecutionGraphBuilder setJobGraph(JobGraph jobGraph) {
+    public TestingDefaultExecutionGraphBuilder setJobGraph(ExecutionPlan jobGraph) {
         this.jobGraph = jobGraph;
         return this;
     }

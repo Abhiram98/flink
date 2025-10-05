@@ -22,7 +22,7 @@ import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.failover.FixedDelayRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlotProvider;
@@ -84,7 +84,7 @@ public class HandleGlobalFailureAndRestartAllTasksBenchmark extends SchedulerEnd
     }
 
     private DefaultScheduler createScheduler(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             PhysicalSlotProvider physicalSlotProvider,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService executorService,

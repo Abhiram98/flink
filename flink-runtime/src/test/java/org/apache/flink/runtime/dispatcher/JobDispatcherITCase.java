@@ -30,7 +30,7 @@ import org.apache.flink.runtime.entrypoint.component.DispatcherResourceManagerCo
 import org.apache.flink.runtime.entrypoint.component.FileJobGraphRetriever;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -162,7 +162,7 @@ public class JobDispatcherITCase {
                         .build();
         final JobCheckpointingSettings checkpointingSettings =
                 new JobCheckpointingSettings(checkpointCoordinatorConfiguration, null);
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertex(jobVertex)
                         .setJobCheckpointingSettings(checkpointingSettings)

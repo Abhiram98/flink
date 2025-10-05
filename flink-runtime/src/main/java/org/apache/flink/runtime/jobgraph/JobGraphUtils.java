@@ -33,7 +33,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Utilities for generating {@link JobGraph}. */
+/** Utilities for generating {@link ExecutionPlan}. */
 public enum JobGraphUtils {
     ;
 

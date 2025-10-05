@@ -39,7 +39,7 @@ import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
@@ -208,7 +208,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 // initial run
                 DispatcherGateway dispatcherGateway = grantLeadership(dispatcherLeaderElection);
 
-                final JobGraph jobGraph = createJobGraphWithBlobs();
+                final ExecutionPlan jobGraph = createJobGraphWithBlobs();
                 LOG.info("Initial job submission {}.", jobGraph.getJobID());
                 dispatcherGateway.submitJob(jobGraph, TESTING_TIMEOUT).get();
 
@@ -287,12 +287,12 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 .get();
     }
 
-    private JobGraph createJobGraphWithBlobs() throws IOException {
+    private ExecutionPlan createJobGraphWithBlobs() throws IOException {
         final JobVertex vertex = new JobVertex("test vertex");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
         final PermanentBlobKey permanentBlobKey =
                 blobServer.putPermanent(jobGraph.getJobID(), new byte[256]);
         jobGraph.addUserJarBlobKey(permanentBlobKey);

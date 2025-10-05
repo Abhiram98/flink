@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobmaster;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -46,7 +46,7 @@ class JobExecutionITCase {
         final int numSlotsPerTaskExecutor = 1;
         final int numTaskExecutors = 3;
         final int parallelism = numTaskExecutors * numSlotsPerTaskExecutor;
-        final JobGraph jobGraph = createJobGraph(parallelism);
+        final ExecutionPlan jobGraph = createJobGraph(parallelism);
 
         final TestingMiniClusterConfiguration miniClusterConfiguration =
                 TestingMiniClusterConfiguration.newBuilder()
@@ -68,7 +68,7 @@ class JobExecutionITCase {
         }
     }
 
-    private JobGraph createJobGraph(int parallelism) {
+    private ExecutionPlan createJobGraph(int parallelism) {
         final JobVertex sender = new JobVertex("Sender");
         sender.setParallelism(parallelism);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);

@@ -39,7 +39,7 @@ import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
@@ -929,14 +929,14 @@ public class StreamGraph implements Pipeline {
         streamNodes.remove(toRemove.getId());
     }
 
-    /** Gets the assembled {@link JobGraph} with a random {@link JobID}. */
+    /** Gets the assembled {@link ExecutionPlan} with a random {@link JobID}. */
     @VisibleForTesting
-    public JobGraph getJobGraph() {
+    public ExecutionPlan getJobGraph() {
         return getJobGraph(Thread.currentThread().getContextClassLoader(), null);
     }
 
-    /** Gets the assembled {@link JobGraph} with a specified {@link JobID}. */
-    public JobGraph getJobGraph(ClassLoader userClassLoader, @Nullable JobID jobID) {
+    /** Gets the assembled {@link ExecutionPlan} with a specified {@link JobID}. */
+    public ExecutionPlan getJobGraph(ClassLoader userClassLoader, @Nullable JobID jobID) {
         return StreamingJobGraphGenerator.createJobGraph(userClassLoader, this, jobID);
     }
 

@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolBridgeServiceFactory;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolFactory;
@@ -104,7 +104,7 @@ public final class DefaultSlotPoolServiceSchedulerFactory
     @Override
     public SchedulerNG createScheduler(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Executor ioExecutor,
             Configuration configuration,
             SlotPoolService slotPoolService,
