@@ -113,7 +113,7 @@ public class SqlTimeTypeInfo<T> extends TypeInformation<T> implements AtomicType
 
     @Override
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         return instantiateComparator(comparatorClass, sortOrderAscending);
     }
 

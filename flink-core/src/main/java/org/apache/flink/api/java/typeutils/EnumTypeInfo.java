@@ -57,7 +57,7 @@ public class EnumTypeInfo<T extends Enum<T>> extends TypeInformation<T> implemen
     @Override
     @PublicEvolving
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         return new EnumComparator<T>(sortOrderAscending);
     }
 

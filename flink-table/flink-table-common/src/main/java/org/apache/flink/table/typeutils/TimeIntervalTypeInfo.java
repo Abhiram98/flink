@@ -118,7 +118,7 @@ public final class TimeIntervalTypeInfo<T> extends TypeInformation<T>
 
     @Override
     public TypeComparator<T> createComparator(
-            boolean sortOrderAscending, ExecutionConfig executionConfig) {
+            boolean sortOrderAscending, ExecutionConfig config) {
         try {
             Constructor<? extends TypeComparator<T>> constructor =
                     comparatorClass.getConstructor(Boolean.TYPE);
