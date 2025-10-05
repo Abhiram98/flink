@@ -73,7 +73,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
     final JobID jobID = new JobID();
 
-    final OperatorID operatorID = new OperatorID(289347923L, 75893479L);
+    final OperatorID vertexID = new OperatorID(289347923L, 75893479L);
 
     SubtaskKey subtaskKey1;
     SubtaskKey subtaskKey2;
@@ -89,9 +89,9 @@ public abstract class FileMergingSnapshotManagerTestBase {
     @BeforeEach
     public void setup(@TempDir java.nio.file.Path tempFolder) {
         subtaskKey1 =
-                new SubtaskKey(jobID, operatorID, new TaskInfoImpl("TestingTask", 128, 0, 128, 3));
+                new SubtaskKey(jobID, vertexID, new TaskInfoImpl("TestingTask", 128, 0, 128, 3));
         subtaskKey2 =
-                new SubtaskKey(jobID, operatorID, new TaskInfoImpl("TestingTask", 128, 1, 128, 3));
+                new SubtaskKey(jobID, vertexID, new TaskInfoImpl("TestingTask", 128, 1, 128, 3));
 
         checkpointBaseDir = new Path(tempFolder.toString(), jobID.toHexString());
         sharedStateDir = new Path(checkpointBaseDir, CHECKPOINT_SHARED_STATE_DIR);
@@ -497,7 +497,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
             Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID = new HashMap<>();
             subtaskStatesByOperatorID.put(
-                    operatorID, buildOperatorSubtaskState(checkpointId, fmsm, closeableRegistry));
+                    vertexID, buildOperatorSubtaskState(checkpointId, fmsm, closeableRegistry));
             taskStateSnapshot = new TaskStateSnapshot(subtaskStatesByOperatorID);
             oldSpaceStat = fmsm.spaceStat;
 
