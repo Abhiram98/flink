@@ -1024,7 +1024,7 @@ class StreamGraphGeneratorTest {
         }
 
         @Override
-        public List<Transformation<?>> getTransitivePredecessors() {
+        public List<Transformation<?>> getTransitivePredecessorsInternal() {
             return Collections.emptyList();
         }
 
