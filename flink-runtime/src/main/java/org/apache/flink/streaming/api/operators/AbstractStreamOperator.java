@@ -358,7 +358,7 @@ public abstract class AbstractStreamOperator<OUT>
     }
 
     @Internal
-    private boolean areSplittableTimersConfigured() {
+    private boolean areInterruptibleTimersConfigured() {
         return CheckpointingOptions.isUnalignedCheckpointInterruptibleTimersEnabled(
                 getContainingTask().getJobConfiguration());
     }
@@ -374,7 +374,7 @@ public abstract class AbstractStreamOperator<OUT>
     @Override
     public void open() throws Exception {
         if (useSplittableTimers()
-                && areSplittableTimersConfigured()
+                && areInterruptibleTimersConfigured()
                 && getTimeServiceManager().isPresent()) {
             this.watermarkProcessor =
                     new MailboxWatermarkProcessor(
