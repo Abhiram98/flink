@@ -107,7 +107,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
      * A factory to build {@link org.apache.flink.core.state.InternalStateFuture}, this will auto
      * wire the created future with mailbox executor. Also conducting the context switch.
      */
-    private final StateFutureFactory<K> stateFutureFactory;
+    private final AsyncFutureFactory<K> stateFutureFactory;
 
     /** The state executor where the {@link StateRequest} is actually executed. */
     private final StateExecutor stateExecutor;
@@ -165,7 +165,7 @@ public class AsyncExecutionController<K> implements StateRequestHandler, Closeab
         this.mailboxExecutor = mailboxExecutor;
         this.exceptionHandler = exceptionHandler;
         this.callbackRunner = new CallbackRunnerWrapper(mailboxExecutor, this::notifyNewMail);
-        this.stateFutureFactory = new StateFutureFactory<>(this, callbackRunner, exceptionHandler);
+        this.stateFutureFactory = new AsyncFutureFactory<>(this, callbackRunner, exceptionHandler);
 
         this.stateExecutor = stateExecutor;
         this.declarationManager = declarationManager;
