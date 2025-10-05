@@ -106,7 +106,7 @@ public class CoFeedbackTransformation<F> extends Transformation<F> {
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         return Collections.singletonList(this);
     }
 
