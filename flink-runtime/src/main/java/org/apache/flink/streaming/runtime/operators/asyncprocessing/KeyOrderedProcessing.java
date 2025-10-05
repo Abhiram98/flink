@@ -32,7 +32,7 @@ public interface KeyOrderedProcessing {
      *
      * @return ture if async state processing is enabled.
      */
-    boolean isAsyncStateProcessingEnabled();
+    boolean isKeyOrderedProcessingEnabled();
 
     /**
      * Get the record processor that could process record from input, which is the only entry for

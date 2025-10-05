@@ -56,7 +56,7 @@ public class RecordProcessorUtils {
         if (canOmitSetKeyContext) {
             return input::processElement;
         } else if (input instanceof KeyOrderedProcessing
-                && ((KeyOrderedProcessing) input).isAsyncStateProcessingEnabled()) {
+                && ((KeyOrderedProcessing) input).isKeyOrderedProcessingEnabled()) {
             return ((KeyOrderedProcessing) input).getRecordProcessor(1);
         } else {
             return record -> {
@@ -87,7 +87,7 @@ public class RecordProcessorUtils {
         if (canOmitSetKeyContext) {
             return operator::processElement1;
         } else if (operator instanceof KeyOrderedProcessing
-                && ((KeyOrderedProcessing) operator).isAsyncStateProcessingEnabled()) {
+                && ((KeyOrderedProcessing) operator).isKeyOrderedProcessingEnabled()) {
             return ((KeyOrderedProcessing) operator).getRecordProcessor(1);
         } else {
             return record -> {
@@ -118,7 +118,7 @@ public class RecordProcessorUtils {
         if (canOmitSetKeyContext) {
             return operator::processElement2;
         } else if (operator instanceof KeyOrderedProcessing
-                && ((KeyOrderedProcessing) operator).isAsyncStateProcessingEnabled()) {
+                && ((KeyOrderedProcessing) operator).isKeyOrderedProcessingEnabled()) {
             return ((KeyOrderedProcessing) operator).getRecordProcessor(2);
         } else {
             return record -> {
