@@ -29,7 +29,7 @@ import org.apache.flink.util.function.ThrowingRunnable;
  * methods for an operator to perform async state processing.
  */
 @Internal
-public interface AsyncStateProcessingOperator extends AsyncStateProcessing {
+public interface AsyncKeyOrderedProcessingOperator extends AsyncStateProcessing {
 
     /** Get the {@link ElementOrder} of this operator. */
     ElementOrder getElementOrder();
