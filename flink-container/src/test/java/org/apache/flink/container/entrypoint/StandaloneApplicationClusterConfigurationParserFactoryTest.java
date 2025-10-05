@@ -244,7 +244,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         final String jobClassName = JOB_CLASS_NAME;
         final JobID jobId = new JobID();
         final String savepointRestorePath = "s3://foo/bar";
-        final String jobJarFile = JOB_JAR_FILE;
+        final String jars = JOB_JAR_FILE;
         final String[] args = {
             "-c",
             confDirPath,
@@ -255,7 +255,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
             "-s",
             savepointRestorePath,
             "-jarfile",
-            jobJarFile,
+                jars,
             "-n"
         };
 
