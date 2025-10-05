@@ -50,15 +50,15 @@ import java.util.stream.Collectors;
 public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
-        List<RelHint> hints = ((Hintable) biRel).getHints();
+    protected RelNode visitBiRel(BiRel node) {
+        List<RelHint> hints = ((Hintable) node).getHints();
 
         Set<String> allHintNames =
                 hints.stream().map(hint -> hint.hintName).collect(Collectors.toSet());
 
         // there are no query hints on this Join/Correlate node
         if (allHintNames.stream().noneMatch(FlinkHints::isQueryHint)) {
-            return super.visit(biRel);
+            return super.visit(node);
         }
 
         Optional<RelHint> firstAliasHint =
@@ -68,7 +68,7 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
 
         // there are no alias hints on this Join/Correlate node
         if (!firstAliasHint.isPresent()) {
-            return super.visit(biRel);
+            return super.visit(node);
         }
 
         List<RelHint> queryHintsFromOuterQueryBlock =
@@ -84,10 +84,10 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
                         .collect(Collectors.toList());
 
         if (queryHintsFromOuterQueryBlock.isEmpty()) {
-            return super.visit(biRel);
+            return super.visit(node);
         }
 
-        RelNode newRelNode = biRel;
+        RelNode newRelNode = node;
         ClearOuterQueryHintShuttle clearOuterQueryHintShuttle;
 
         for (RelHint outerQueryHint : queryHintsFromOuterQueryBlock) {
@@ -136,8 +136,8 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
             return visitBiRel(join);
         }
 
-        private RelNode visitBiRel(BiRel biRel) {
-            Hintable hBiRel = (Hintable) biRel;
+        private RelNode visitBiRel(BiRel node) {
+            Hintable hBiRel = (Hintable) node;
             List<RelHint> hints = new ArrayList<>(hBiRel.getHints());
             Optional<RelHint> invalidQueryHint = getInvalidQueryHint(hints);
 
@@ -147,7 +147,7 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
                 return super.visit(hBiRel.withHints(hints));
             }
 
-            return super.visit(biRel);
+            return super.visit(node);
         }
 
         /**
