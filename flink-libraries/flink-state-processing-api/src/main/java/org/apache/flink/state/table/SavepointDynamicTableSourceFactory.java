@@ -91,7 +91,7 @@ public class SavepointDynamicTableSourceFactory implements DynamicTableSourceFac
                         .stringType()
                         .noDefaultValue();
         optionalOptions.add(keyFormatOption);
-        final String keyFormat =
+        final String keyTypeInfo =
                 options.getOptional(keyFormatOption)
                         .orElseGet(
                                 () ->
@@ -190,7 +190,7 @@ public class SavepointDynamicTableSourceFactory implements DynamicTableSourceFac
                 stateBackendType,
                 statePath,
                 operatorIdentifier,
-                keyFormat,
+                keyTypeInfo,
                 keyValueConfigProjections,
                 rowType);
     }
