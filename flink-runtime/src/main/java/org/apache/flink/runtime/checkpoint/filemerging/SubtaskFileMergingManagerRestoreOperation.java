@@ -51,7 +51,7 @@ public class SubtaskFileMergingManagerRestoreOperation {
     private final TaskInfo taskInfo;
 
     /** The id of the operator to which the subtask belongs. */
-    private final OperatorID operatorID;
+    private final OperatorID vertexID;
 
     private final FileMergingSnapshotManager fileMergingSnapshotManager;
 
@@ -63,19 +63,19 @@ public class SubtaskFileMergingManagerRestoreOperation {
             FileMergingSnapshotManager fileMergingSnapshotManager,
             JobID jobID,
             TaskInfo taskInfo,
-            OperatorID operatorID,
+            OperatorID vertexID,
             OperatorSubtaskState subtaskState) {
         this.checkpointId = checkpointId;
         this.fileMergingSnapshotManager = fileMergingSnapshotManager;
         this.jobID = jobID;
         this.taskInfo = Preconditions.checkNotNull(taskInfo);
-        this.operatorID = Preconditions.checkNotNull(operatorID);
+        this.vertexID = Preconditions.checkNotNull(vertexID);
         this.subtaskState = Preconditions.checkNotNull(subtaskState);
     }
 
     public void restore() {
         FileMergingSnapshotManager.SubtaskKey subtaskKey =
-                new FileMergingSnapshotManager.SubtaskKey(jobID, operatorID, taskInfo);
+                new FileMergingSnapshotManager.SubtaskKey(jobID, vertexID, taskInfo);
 
         Stream<? extends StateObject> keyedStateHandles =
                 Stream.concat(
