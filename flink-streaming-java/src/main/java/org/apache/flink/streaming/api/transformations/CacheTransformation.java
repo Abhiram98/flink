@@ -63,7 +63,7 @@ public class CacheTransformation<T> extends Transformation<T> {
         if (isCached) {
             return result;
         }
-        result.addAll(transformationToCache.getTransitivePredecessors());
+        result.addAll(transformationToCache.getTransitivePredecessorsInternal());
         return result;
     }
 

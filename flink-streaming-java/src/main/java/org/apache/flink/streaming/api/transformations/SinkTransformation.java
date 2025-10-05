@@ -76,7 +76,7 @@ public class SinkTransformation<InputT, OutputT> extends PhysicalTransformation<
     public List<Transformation<?>> getTransitivePredecessors() {
         final List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
-        result.addAll(input.getTransitivePredecessors());
+        result.addAll(input.getTransitivePredecessorsInternal());
         return result;
     }
 

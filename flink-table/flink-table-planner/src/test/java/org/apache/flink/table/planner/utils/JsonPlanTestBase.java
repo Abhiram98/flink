@@ -103,7 +103,7 @@ public abstract class JsonPlanTestBase {
                 CompiledPlanUtils.toTransformations(tableEnv, compiledPlan);
 
         transformations.stream()
-                .flatMap(t -> t.getTransitivePredecessors().stream())
+                .flatMap(t -> t.getTransitivePredecessorsInternal().stream())
                 // UnionTransformations don't need an uid
                 .filter(t -> !(t instanceof UnionTransformation))
                 .forEach(
