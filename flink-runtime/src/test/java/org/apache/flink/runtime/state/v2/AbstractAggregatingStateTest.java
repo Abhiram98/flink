@@ -232,9 +232,9 @@ class AbstractAggregatingStateTest extends AbstractKeyedStateTestBase {
         @SuppressWarnings({"unchecked", "rawtypes"})
         @Override
         public CompletableFuture<Void> executeBatchRequests(
-                StateRequestContainer stateRequestContainer) {
+                StateRequestContainer requestContainer) {
             for (StateRequest stateRequest :
-                    ((MockStateRequestContainer) stateRequestContainer).getStateRequestList()) {
+                    ((MockStateRequestContainer) requestContainer).getStateRequestList()) {
                 executeRequestSync(stateRequest);
             }
             CompletableFuture<Void> future = new CompletableFuture<>();
@@ -248,20 +248,20 @@ class AbstractAggregatingStateTest extends AbstractKeyedStateTestBase {
         }
 
         @Override
-        public void executeRequestSync(StateRequest<?, ?, ?, ?> stateRequest) {
-            String key = (String) stateRequest.getRecordContext().getKey();
-            String namespace = (String) stateRequest.getNamespace();
-            if (stateRequest.getRequestType() == StateRequestType.AGGREGATING_ADD) {
-                if (stateRequest.getPayload() == null) {
+        public void executeRequestSync(StateRequest<?, ?, ?, ?> request) {
+            String key = (String) request.getRecordContext().getKey();
+            String namespace = (String) request.getNamespace();
+            if (request.getRequestType() == StateRequestType.AGGREGATING_ADD) {
+                if (request.getPayload() == null) {
                     hashMap.remove(Tuple2.of(key, namespace));
-                    stateRequest.getFuture().complete(null);
+                    request.getFuture().complete(null);
                 } else {
-                    hashMap.put(Tuple2.of(key, namespace), (Integer) stateRequest.getPayload());
-                    stateRequest.getFuture().complete(null);
+                    hashMap.put(Tuple2.of(key, namespace), (Integer) request.getPayload());
+                    request.getFuture().complete(null);
                 }
-            } else if (stateRequest.getRequestType() == StateRequestType.AGGREGATING_GET) {
+            } else if (request.getRequestType() == StateRequestType.AGGREGATING_GET) {
                 Integer val = hashMap.get(Tuple2.of(key, namespace));
-                ((InternalStateFuture<Integer>) stateRequest.getFuture()).complete(val);
+                ((InternalStateFuture<Integer>) request.getFuture()).complete(val);
             } else {
                 throw new UnsupportedOperationException("Unsupported type");
             }

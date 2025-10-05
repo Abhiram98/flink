@@ -195,11 +195,11 @@ public class AbstractStateIteratorTest {
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
         public CompletableFuture<Void> executeBatchRequests(
-                StateRequestContainer stateRequestContainer) {
-            Preconditions.checkArgument(stateRequestContainer instanceof MockStateRequestContainer);
+                StateRequestContainer requestContainer) {
+            Preconditions.checkArgument(requestContainer instanceof MockStateRequestContainer);
             CompletableFuture<Void> future = new CompletableFuture<>();
             for (StateRequest request :
-                    ((MockStateRequestContainer) stateRequestContainer).getStateRequestList()) {
+                    ((MockStateRequestContainer) requestContainer).getStateRequestList()) {
                 executeRequestSync(request);
             }
             future.complete(null);

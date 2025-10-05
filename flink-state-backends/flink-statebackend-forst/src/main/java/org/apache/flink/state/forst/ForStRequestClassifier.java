@@ -30,7 +30,7 @@ import java.util.List;
  * The ForSt {@link StateRequestContainer} which can classify the state requests by ForStDB
  * requestType (Get、Put or Iterator).
  */
-public class ForStStateRequestClassifier implements StateRequestContainer {
+public class ForStRequestClassifier implements StateRequestContainer {
 
     private final List<ForStDBGetRequest<?, ?, ?, ?>> dbGetRequests;
 
@@ -38,7 +38,7 @@ public class ForStStateRequestClassifier implements StateRequestContainer {
 
     private final List<ForStDBIterRequest<?, ?, ?, ?, ?>> dbIterRequests;
 
-    public ForStStateRequestClassifier() {
+    public ForStRequestClassifier() {
         this.dbGetRequests = new ArrayList<>();
         this.dbPutRequests = new ArrayList<>();
         this.dbIterRequests = new ArrayList<>();

@@ -159,11 +159,11 @@ public class AbstractReducingStateTest extends AbstractKeyedStateTestBase {
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
         public CompletableFuture<Void> executeBatchRequests(
-                StateRequestContainer stateRequestContainer) {
-            Preconditions.checkArgument(stateRequestContainer instanceof MockStateRequestContainer);
+                StateRequestContainer requestContainer) {
+            Preconditions.checkArgument(requestContainer instanceof MockStateRequestContainer);
             CompletableFuture<Void> future = new CompletableFuture<>();
             for (StateRequest request :
-                    ((MockStateRequestContainer) stateRequestContainer).getStateRequestList()) {
+                    ((MockStateRequestContainer) requestContainer).getStateRequestList()) {
                 if (request.getRequestType() == StateRequestType.REDUCING_GET) {
                     String key = (String) request.getRecordContext().getKey();
                     String namespace = (String) request.getNamespace();
@@ -193,7 +193,7 @@ public class AbstractReducingStateTest extends AbstractKeyedStateTestBase {
         }
 
         @Override
-        public void executeRequestSync(StateRequest<?, ?, ?, ?> stateRequest) {
+        public void executeRequestSync(StateRequest<?, ?, ?, ?> request) {
             throw new UnsupportedOperationException("Unsupported synchronous execution");
         }
 
