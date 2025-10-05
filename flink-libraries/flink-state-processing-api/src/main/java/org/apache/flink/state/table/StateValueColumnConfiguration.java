@@ -60,11 +60,11 @@ public class StateValueColumnConfiguration implements Serializable {
     }
 
     @Nullable
-    public String getMapKeyFormat() {
+    public String getMapKeyTypeInfo() {
         return mapKeyFormat;
     }
 
-    public String getValueFormat() {
+    public String getValueTypeInfo() {
         return valueFormat;
     }
 
