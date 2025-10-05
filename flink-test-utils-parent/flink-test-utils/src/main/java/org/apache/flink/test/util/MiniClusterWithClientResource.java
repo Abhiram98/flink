@@ -23,7 +23,6 @@ import org.apache.flink.client.program.MiniClusterClient;
 import org.apache.flink.client.program.rest.RestClusterClient;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.util.TestStreamEnvironment;
 import org.apache.flink.util.ExceptionUtils;
 
 /**
@@ -35,7 +34,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
     private ClusterClient<?> clusterClient;
     private RestClusterClient<MiniClusterClient.MiniClusterId> restClusterClient;
 
-    private TestEnvironment executionEnvironment;
+    private TestStreamEnvironment executionStreamEnvironment;
 
     public MiniClusterWithClientResource(
             final MiniClusterResourceConfiguration miniClusterResourceConfiguration) {
@@ -55,8 +54,8 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
         return restClusterClient;
     }
 
-    public TestEnvironment getTestEnvironment() {
-        return executionEnvironment;
+    public TestStreamEnvironment getTestStreamEnvironment() {
+        return executionStreamEnvironment;
     }
 
     @Override
@@ -66,16 +65,16 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
         clusterClient = createMiniClusterClient();
         restClusterClient = createRestClusterClient();
 
-        executionEnvironment = new TestEnvironment(getMiniCluster(), getNumberSlots(), false);
-        executionEnvironment.setAsContext();
-        TestStreamEnvironment.setAsContext(getMiniCluster(), getNumberSlots());
+        executionStreamEnvironment = new TestStreamEnvironment(getMiniCluster(), getNumberSlots(), false);
+        executionStreamEnvironment.setAsContext();
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(getMiniCluster(), getNumberSlots());
     }
 
     @Override
     public void after() {
         log.info("Finalization triggered: Cluster shutdown is going to be initiated.");
+        org.apache.flink.streaming.util.TestStreamEnvironment.unsetAsContext();
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
 
         Exception exception = null;
 

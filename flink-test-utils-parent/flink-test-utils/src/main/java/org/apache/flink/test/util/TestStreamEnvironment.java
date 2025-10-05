@@ -33,13 +33,13 @@ import java.util.Collections;
 /**
  * A {@link ExecutionEnvironment} implementation which executes its jobs on a {@link MiniCluster}.
  */
-public class TestEnvironment extends ExecutionEnvironment {
+public class TestStreamEnvironment extends ExecutionEnvironment {
 
     private final MiniCluster miniCluster;
 
-    private TestEnvironment lastEnv;
+    private TestStreamEnvironment lastEnv;
 
-    public TestEnvironment(
+    public TestStreamEnvironment(
             MiniCluster miniCluster,
             int parallelism,
             boolean isObjectReuseEnabled,
@@ -64,7 +64,7 @@ public class TestEnvironment extends ExecutionEnvironment {
         lastEnv = null;
     }
 
-    public TestEnvironment(MiniCluster executor, int parallelism, boolean isObjectReuseEnabled) {
+    public TestStreamEnvironment(MiniCluster executor, int parallelism, boolean isObjectReuseEnabled) {
         this(
                 executor,
                 parallelism,
@@ -86,7 +86,7 @@ public class TestEnvironment extends ExecutionEnvironment {
         ExecutionEnvironmentFactory factory =
                 () -> {
                     lastEnv =
-                            new TestEnvironment(
+                            new TestStreamEnvironment(
                                     miniCluster,
                                     getParallelism(),
                                     getConfig().isObjectReuseEnabled());
@@ -99,7 +99,7 @@ public class TestEnvironment extends ExecutionEnvironment {
     // ---------------------------------------------------------------------------------------------
 
     /**
-     * Sets the current {@link ExecutionEnvironment} to be a {@link TestEnvironment}. The test
+     * Sets the current {@link ExecutionEnvironment} to be a {@link TestStreamEnvironment}. The test
      * environment executes the given jobs on a Flink mini cluster with the given default
      * parallelism and the additional jar files and class paths.
      *
@@ -115,13 +115,13 @@ public class TestEnvironment extends ExecutionEnvironment {
             final Collection<URL> classPaths) {
 
         ExecutionEnvironmentFactory factory =
-                () -> new TestEnvironment(miniCluster, parallelism, false, jarFiles, classPaths);
+                () -> new TestStreamEnvironment(miniCluster, parallelism, false, jarFiles, classPaths);
 
         initializeContextEnvironment(factory);
     }
 
     /**
-     * Sets the current {@link ExecutionEnvironment} to be a {@link TestEnvironment}. The test
+     * Sets the current {@link ExecutionEnvironment} to be a {@link TestStreamEnvironment}. The test
      * environment executes the given jobs on a Flink mini cluster with the given default
      * parallelism and the additional jar files and class paths.
      *

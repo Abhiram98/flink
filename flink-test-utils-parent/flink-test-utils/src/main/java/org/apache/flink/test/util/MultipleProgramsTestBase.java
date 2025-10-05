@@ -74,7 +74,7 @@ public class MultipleProgramsTestBase extends AbstractTestBase {
 
     @BeforeEach
     public void setupEnvironment() {
-        TestEnvironment testEnvironment;
+        TestStreamEnvironment testEnvironment;
         switch (mode) {
             case CLUSTER:
                 // This only works because of the quirks we built in the TestEnvironment.
@@ -101,7 +101,7 @@ public class MultipleProgramsTestBase extends AbstractTestBase {
         switch (mode) {
             case CLUSTER:
             case CLUSTER_OBJECT_REUSE:
-                TestEnvironment.unsetAsContext();
+                TestStreamEnvironment.unsetAsContext();
                 break;
             case COLLECTION:
                 CollectionTestEnvironment.unsetAsContext();

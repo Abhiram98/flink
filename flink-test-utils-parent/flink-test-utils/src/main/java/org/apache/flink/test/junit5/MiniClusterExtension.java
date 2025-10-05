@@ -29,8 +29,7 @@ import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.util.TestStreamEnvironment;
-import org.apache.flink.test.util.TestEnvironment;
+import org.apache.flink.test.util.TestStreamEnvironment;
 
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -145,7 +144,7 @@ public final class MiniClusterExtension
 
     private InternalMiniClusterExtension internalMiniClusterExtension;
 
-    private TestEnvironment executionEnvironment;
+    private TestStreamEnvironment executionEnvironment;
 
     public MiniClusterExtension() {
         this(
@@ -250,7 +249,7 @@ public final class MiniClusterExtension
         }
     }
 
-    public TestEnvironment getTestEnvironment() {
+    public TestStreamEnvironment getTestEnvironment() {
         return this.executionEnvironment;
     }
 
@@ -265,23 +264,23 @@ public final class MiniClusterExtension
                         .getOptional(CoreOptions.DEFAULT_PARALLELISM)
                         .orElse(internalMiniClusterExtension.getNumberSlots());
 
-        TestEnvironment executionEnvironment =
-                new TestEnvironment(
+        TestStreamEnvironment executionEnvironment =
+                new TestStreamEnvironment(
                         internalMiniClusterExtension.getMiniCluster(), defaultParallelism, false);
         executionEnvironment.setAsContext();
         this.executionEnvironment =
-                new TestEnvironment(
+                new TestStreamEnvironment(
                         internalMiniClusterExtension.getMiniCluster(),
                         internalMiniClusterExtension.getNumberSlots(),
                         false);
         this.executionEnvironment.setAsContext();
-        TestStreamEnvironment.setAsContext(
+        org.apache.flink.streaming.util.TestStreamEnvironment.setAsContext(
                 internalMiniClusterExtension.getMiniCluster(), defaultParallelism);
     }
 
     private void unregisterEnv(InternalMiniClusterExtension internalMiniClusterExtension) {
+        org.apache.flink.streaming.util.TestStreamEnvironment.unsetAsContext();
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
     }
 
     private MiniClusterClient createMiniClusterClient(

@@ -49,7 +49,7 @@ import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.runtime.rest.messages.job.SubtaskExecutionAttemptDetailsInfo;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.test.util.TestEnvironment;
+import org.apache.flink.test.util.TestStreamEnvironment;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.ConfigurationException;
 import org.apache.flink.util.ExceptionUtils;
@@ -264,7 +264,7 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
 
     private static ExecutionEnvironment createExecutionEnvironment() {
         @SuppressWarnings("StaticVariableUsedBeforeInitialization")
-        ExecutionEnvironment env = new TestEnvironment(miniCluster, 1, true);
+        ExecutionEnvironment env = new TestStreamEnvironment(miniCluster, 1, true);
 
         env.getConfig()
                 .setExecutionMode(
