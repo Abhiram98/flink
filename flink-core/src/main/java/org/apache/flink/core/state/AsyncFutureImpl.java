@@ -39,7 +39,7 @@ import java.util.concurrent.CompletableFuture;
  * running thread of each block when you decide to touch it.
  */
 @Internal
-public class StateFutureImpl<T> implements InternalStateFuture<T> {
+public class AsyncFutureImpl<T> implements InternalStateFuture<T> {
 
     /** The future holds the result. This may complete in async threads. */
     private final CompletableFuture<T> completableFuture;
@@ -50,7 +50,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
     /** The exception handler that handles callback framework's error. */
     protected final AsyncFrameworkExceptionHandler exceptionHandler;
 
-    public StateFutureImpl(
+    public AsyncFutureImpl(
             CallbackRunner callbackRunner, AsyncFrameworkExceptionHandler exceptionHandler) {
         this.completableFuture = new CompletableFuture<>();
         this.callbackRunner = callbackRunner;
@@ -75,7 +75,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return StateFutureUtils.completedFuture(r);
         } else {
-            StateFutureImpl<U> ret = makeNewStateFuture();
+            AsyncFutureImpl<U> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -113,7 +113,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return StateFutureUtils.completedVoidFuture();
         } else {
-            StateFutureImpl<Void> ret = makeNewStateFuture();
+            AsyncFutureImpl<Void> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -153,7 +153,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return FunctionWithException.unchecked(action).apply(t);
         } else {
-            StateFutureImpl<U> ret = makeNewStateFuture();
+            AsyncFutureImpl<U> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -198,7 +198,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
                         return StateFutureUtils.completedFuture(v);
                     });
         } else {
-            StateFutureImpl<V> ret = makeNewStateFuture();
+            AsyncFutureImpl<V> ret = makeNewAsyncFuture();
             ((InternalStateFuture<? extends U>) other)
                     .thenSyncAccept(
                             (u) -> {
@@ -249,7 +249,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return StateFutureUtils.completedFuture(Tuple2.of(test, r));
         } else {
-            StateFutureImpl<Tuple2<Boolean, Object>> ret = makeNewStateFuture();
+            AsyncFutureImpl<Tuple2<Boolean, Object>> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -296,7 +296,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return StateFutureUtils.completedFuture(Tuple2.of(test, r));
         } else {
-            StateFutureImpl<Tuple2<Boolean, U>> ret = makeNewStateFuture();
+            AsyncFutureImpl<Tuple2<Boolean, U>> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -344,7 +344,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return StateFutureUtils.completedFuture(test);
         } else {
-            StateFutureImpl<Boolean> ret = makeNewStateFuture();
+            AsyncFutureImpl<Boolean> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -403,7 +403,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             } else {
                 actionResult = FunctionWithException.unchecked(actionIfFalse).apply(t);
             }
-            StateFutureImpl<Tuple2<Boolean, Object>> ret = makeNewStateFuture();
+            AsyncFutureImpl<Tuple2<Boolean, Object>> ret = makeNewAsyncFuture();
             actionResult.thenAccept(
                     (e) -> {
                         ret.completeInCallbackRunner(Tuple2.of(test, e));
@@ -411,7 +411,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             callbackFinished();
             return ret;
         } else {
-            StateFutureImpl<Tuple2<Boolean, Object>> ret = makeNewStateFuture();
+            AsyncFutureImpl<Tuple2<Boolean, Object>> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -464,7 +464,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
             if (test) {
                 StateFuture<U> actionResult =
                         FunctionWithException.unchecked(actionIfTrue).apply(t);
-                StateFutureImpl<Tuple2<Boolean, U>> ret = makeNewStateFuture();
+                AsyncFutureImpl<Tuple2<Boolean, U>> ret = makeNewAsyncFuture();
                 actionResult.thenAccept(
                         (e) -> {
                             ret.completeInCallbackRunner(Tuple2.of(true, e));
@@ -476,7 +476,7 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
                 return StateFutureUtils.completedFuture(Tuple2.of(false, null));
             }
         } else {
-            StateFutureImpl<Tuple2<Boolean, U>> ret = makeNewStateFuture();
+            AsyncFutureImpl<Tuple2<Boolean, U>> ret = makeNewAsyncFuture();
             completableFuture
                     .thenAccept(
                             (t) -> {
@@ -514,8 +514,8 @@ public class StateFutureImpl<T> implements InternalStateFuture<T> {
      *
      * @return the new created future.
      */
-    public <A> StateFutureImpl<A> makeNewStateFuture() {
-        return new StateFutureImpl<>(callbackRunner, exceptionHandler);
+    public <A> AsyncFutureImpl<A> makeNewAsyncFuture() {
+        return new AsyncFutureImpl<>(callbackRunner, exceptionHandler);
     }
 
     @Override

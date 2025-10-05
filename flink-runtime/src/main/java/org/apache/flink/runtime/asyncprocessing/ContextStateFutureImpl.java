@@ -18,13 +18,13 @@
 
 package org.apache.flink.runtime.asyncprocessing;
 
-import org.apache.flink.core.state.StateFutureImpl;
+import org.apache.flink.core.state.AsyncFutureImpl;
 
 /**
  * A state future that holds the {@link RecordContext} and maintains the reference count of it. The
  * reason why we maintain the reference here is that the ContextStateFutureImpl can be created
  * multiple times since user may chain their code wildly, some of which are only for internal usage
- * (See {@link StateFutureImpl}). So maintaining reference counting by the lifecycle of state future
+ * (See {@link AsyncFutureImpl}). So maintaining reference counting by the lifecycle of state future
  * is relatively simple and less error-prone.
  *
  * <p>Reference counting added on {@link RecordContext} follows:
@@ -35,7 +35,7 @@ import org.apache.flink.core.state.StateFutureImpl;
  * <li>Please refer to {@code ContextStateFutureImplTest} where the reference counting is carefully
  *     tested.
  */
-public class ContextStateFutureImpl<T> extends StateFutureImpl<T> {
+public class ContextStateFutureImpl<T> extends AsyncFutureImpl<T> {
 
     private final RecordContext<?> recordContext;
 
@@ -52,7 +52,7 @@ public class ContextStateFutureImpl<T> extends StateFutureImpl<T> {
     }
 
     @Override
-    public <A> StateFutureImpl<A> makeNewStateFuture() {
+    public <A> AsyncFutureImpl<A> makeNewAsyncFuture() {
         return new ContextStateFutureImpl<>(callbackRunner, exceptionHandler, recordContext);
     }
 

@@ -28,7 +28,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.common.typeutils.base.LongSerializer;
 import org.apache.flink.core.fs.CloseableRegistry;
-import org.apache.flink.core.state.StateFutureImpl;
+import org.apache.flink.core.state.AsyncFutureImpl;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 import org.apache.flink.runtime.asyncprocessing.AsyncExecutionController;
@@ -685,7 +685,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
     }
 
     static class TestAsyncFrameworkExceptionHandler
-            implements StateFutureImpl.AsyncFrameworkExceptionHandler {
+            implements AsyncFutureImpl.AsyncFrameworkExceptionHandler {
         String message = null;
         Throwable exception = null;
 

@@ -23,7 +23,7 @@ import org.apache.flink.api.common.operators.MailboxExecutor;
 import org.apache.flink.api.common.state.v2.State;
 import org.apache.flink.api.common.state.v2.StateFuture;
 import org.apache.flink.core.state.InternalStateFuture;
-import org.apache.flink.core.state.StateFutureImpl.AsyncFrameworkExceptionHandler;
+import org.apache.flink.core.state.AsyncFutureImpl.AsyncFrameworkExceptionHandler;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.asyncprocessing.EpochManager.ParallelMode;
 import org.apache.flink.runtime.asyncprocessing.declare.DeclarationManager;
