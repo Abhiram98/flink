@@ -80,35 +80,35 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
             Arrays.asList(new CurrencyRate("USD", 1.0), new CurrencyRate("EUR", 1.3));
 
     @Test
-    public void testDefaultStateBackend() throws Exception {
+    public void testDefaultStateConfiguration() throws Exception {
         testStateBootstrapAndModification(null);
     }
 
     @Test
-    public void testHashMapStateBackend() throws Exception {
+    public void testHashMapStateConfiguration() throws Exception {
         testStateBootstrapAndModification(new HashMapStateBackend());
     }
 
     @Test
-    public void testEmbeddedRocksDBStateBackend() throws Exception {
+    public void testEmbeddedRocksDBStateConfiguration() throws Exception {
         testStateBootstrapAndModification(new EmbeddedRocksDBStateBackend());
     }
 
-    public void testStateBootstrapAndModification(StateBackend backend) throws Exception {
+    public void testStateBootstrapAndModification(StateBackend configuration) throws Exception {
         final String savepointPath = getTempDirPath(new AbstractID().toHexString());
 
-        bootstrapState(backend, savepointPath);
+        bootstrapState(configuration, savepointPath);
 
-        validateBootstrap(backend, savepointPath);
+        validateBootstrap(configuration, savepointPath);
 
         final String modifyPath = getTempDirPath(new AbstractID().toHexString());
 
-        modifySavepoint(backend, savepointPath, modifyPath);
+        modifySavepoint(configuration, savepointPath, modifyPath);
 
-        validateModification(backend, modifyPath);
+        validateModification(configuration, modifyPath);
     }
 
-    private void bootstrapState(StateBackend backend, String savepointPath) throws Exception {
+    private void bootstrapState(StateBackend configuration, String savepointPath) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
@@ -122,9 +122,9 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
                         .transform(new CurrencyBootstrapFunction());
 
         SavepointWriter writer =
-                backend == null
+                configuration == null
                         ? SavepointWriter.newSavepoint(env, 128)
-                        : SavepointWriter.newSavepoint(env, backend, 128);
+                        : SavepointWriter.newSavepoint(env, configuration, 128);
 
         writer.withOperator(OperatorIdentifier.forUid(ACCOUNT_UID), transformation)
                 .withOperator(getUidHashFromUid(CURRENCY_UID), broadcastTransformation)
@@ -133,11 +133,11 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         env.execute("Bootstrap");
     }
 
-    private void validateBootstrap(StateBackend backend, String savepointPath) throws Exception {
+    private void validateBootstrap(StateBackend configuration, String savepointPath) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        if (backend != null) {
-            env.setStateBackend(backend);
+        if (configuration != null) {
+            env.setStateBackend(configuration);
         }
 
         DataStream<Account> stream =
@@ -164,7 +164,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         results.close();
     }
 
-    private void modifySavepoint(StateBackend backend, String savepointPath, String modifyPath)
+    private void modifySavepoint(StateBackend configuration, String savepointPath, String modifyPath)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
@@ -174,9 +174,9 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
                         .transform(new ModifyProcessFunction());
 
         SavepointWriter writer =
-                backend == null
+                configuration == null
                         ? SavepointWriter.fromExistingSavepoint(env, savepointPath)
-                        : SavepointWriter.fromExistingSavepoint(env, savepointPath, backend);
+                        : SavepointWriter.fromExistingSavepoint(env, savepointPath, configuration);
 
         writer.removeOperator(OperatorIdentifier.forUid(CURRENCY_UID))
                 .withOperator(getUidHashFromUid(MODIFY_UID), transformation)
@@ -185,10 +185,10 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         env.execute("Modifying");
     }
 
-    private void validateModification(StateBackend backend, String savepointPath) throws Exception {
+    private void validateModification(StateBackend configuration, String savepointPath) throws Exception {
         StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getExecutionEnvironment();
-        if (backend != null) {
-            sEnv.setStateBackend(backend);
+        if (configuration != null) {
+            sEnv.setStateBackend(configuration);
         }
 
         DataStream<Account> stream =
