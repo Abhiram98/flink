@@ -169,7 +169,7 @@ class AsyncExecutionControllerTest {
 
         // Single-step run.
         // Firstly, the user code generates value get in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         assertThat(registeredGauges.get("asyncStateProcessing.numInFlightRecords").getValue())
@@ -183,11 +183,11 @@ class AsyncExecutionControllerTest {
 
         aec.triggerIfNeeded(true);
         // After running, the value update is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Value update finishes.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(1);
         assertThat(recordContext1.getReferenceCount()).isEqualTo(0);
@@ -211,14 +211,14 @@ class AsyncExecutionControllerTest {
         // Single-step run.
         // Firstly, the user code for record2 generates value get in active buffer,
         // while user code for record3 generates value get in blocking buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(2);
         aec.triggerIfNeeded(true);
         // After running, the value update for record2 is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(2);
         assertThat(registeredGauges.get("asyncStateProcessing.numInFlightRecords").getValue())
@@ -232,22 +232,22 @@ class AsyncExecutionControllerTest {
         aec.triggerIfNeeded(true);
         // Value update for record2 finishes. The value get for record3 is migrated from blocking
         // buffer to active buffer actively.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         assertThat(output.get()).isEqualTo(2);
         assertThat(recordContext2.getReferenceCount()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
 
         // Let value get for record3 to run.
         aec.triggerIfNeeded(true);
         // After running, the value update for record3 is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Value update for record3 finishes.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(3);
@@ -263,17 +263,17 @@ class AsyncExecutionControllerTest {
 
         // Single-step run for another key.
         // Firstly, the user code generates value get in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // After running, the value update is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Value update finishes.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(1);
@@ -321,16 +321,16 @@ class AsyncExecutionControllerTest {
 
         // Single-step run.
         // Firstly, the user code generates value get in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // After running, the value update is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Value update finishes.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(1);
         assertThat(recordContext1.getReferenceCount()).isEqualTo(0);
@@ -354,35 +354,35 @@ class AsyncExecutionControllerTest {
         // Single-step run.
         // Firstly, the user code for record2 generates value get in active buffer,
         // while user code for record3 generates value get in blocking buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(2);
         aec.triggerIfNeeded(true);
         // After running, the value update for record2 is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(2);
         aec.triggerIfNeeded(true);
         // Value update for record2 finishes. The value get for record3 is migrated from blocking
         // buffer to active buffer actively.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         assertThat(output.get()).isEqualTo(1);
         assertThat(recordContext2.getReferenceCount()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
 
         // Let value get for record3 to run.
         aec.triggerIfNeeded(true);
         // After running, the value update for record3 is in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Value update for record3 finishes.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(2);
@@ -426,31 +426,31 @@ class AsyncExecutionControllerTest {
         userCode.run();
 
         // Record1's value get and record2's value get are in active buffer
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(2);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(2);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(2);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(3);
         // Record3's value get is in blocking buffer
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // After running, record1's value update and record2's value update are in active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(2);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(2);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(2);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(3);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         // Record1's value update and record2's value update finish, record3's value get migrates to
         // active buffer when record1's refCount reach 0.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         assertThat(output.get()).isEqualTo(1);
         assertThat(recordContext1.getReferenceCount()).isEqualTo(0);
         assertThat(recordContext2.getReferenceCount()).isEqualTo(0);
         aec.triggerIfNeeded(true);
         //  After running, record3's value update is added to active buffer.
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         aec.triggerIfNeeded(true);
         assertThat(output.get()).isEqualTo(2);
         assertThat(recordContext3.getReferenceCount()).isEqualTo(0);
@@ -482,8 +482,8 @@ class AsyncExecutionControllerTest {
                 userCode.run();
             }
             assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
-            assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-            assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+            assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+            assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         }
         // For records with the same key, the in-flight records is controlled by max in-flight
         // records number.
@@ -495,8 +495,8 @@ class AsyncExecutionControllerTest {
             userCode.run();
         }
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(maxInFlight);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(maxInFlight - 1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(maxInFlight - 1);
         // In the following example, the batch size will degrade to 1, meaning that
         // each batch only have 1 state request.
         for (int i = maxInFlight; i < 10 * maxInFlight; i++) {
@@ -506,8 +506,8 @@ class AsyncExecutionControllerTest {
             aec.setCurrentContext(recordContext);
             userCode.run();
             assertThat(aec.inFlightRecordNum.get()).isEqualTo(maxInFlight + 1);
-            assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-            assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(maxInFlight);
+            assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+            assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(maxInFlight);
         }
 
         resourceRegistry.close();
@@ -532,8 +532,8 @@ class AsyncExecutionControllerTest {
         aec.syncPointRequestWithCallback(counter::incrementAndGet, false);
         assertThat(counter.get()).isEqualTo(1);
         assertThat(recordContext.getReferenceCount()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(1);
         recordContext.release();
         assertThat(aec.keyAccountingUnit.occupiedCount()).isEqualTo(0);
@@ -550,18 +550,18 @@ class AsyncExecutionControllerTest {
         recordContext2.retain();
         assertThat(counter.get()).isEqualTo(0);
         assertThat(recordContext2.getReferenceCount()).isGreaterThan(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         assertThat(counter.get()).isEqualTo(0);
         assertThat(recordContext2.getReferenceCount()).isGreaterThan(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         aec.triggerIfNeeded(true);
         assertThat(counter.get()).isEqualTo(1);
         assertThat(recordContext2.getReferenceCount()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         recordContext2.release();
 
         resourceRegistry.close();
@@ -592,13 +592,13 @@ class AsyncExecutionControllerTest {
         recordContext2.retain();
         assertThat(counter.get()).isEqualTo(0);
         assertThat(recordContext2.getReferenceCount()).isGreaterThan(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(1);
         recordContext1.release();
         assertThat(counter.get()).isEqualTo(1);
         assertThat(recordContext2.getReferenceCount()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         recordContext2.release();
 
         resourceRegistry.close();
@@ -619,8 +619,8 @@ class AsyncExecutionControllerTest {
 
         Runnable userCode = () -> valueState.asyncValue();
 
-        assertThat(aec.stateRequestsBuffer.currentSeq.get()).isEqualTo(0L);
-        assertThat(aec.stateRequestsBuffer.seqAndTimeout).isNull();
+        assertThat(aec.asyncRequestsBuffer.currentSeq.get()).isEqualTo(0L);
+        assertThat(aec.asyncRequestsBuffer.seqAndTimeout).isNull();
         // ------------ basic timeout -------------------
         for (int i = 0; i < batchSize - 1; i++) {
             String record = String.format("key%d-r%d", i, i);
@@ -629,20 +629,20 @@ class AsyncExecutionControllerTest {
             aec.setCurrentContext(recordContext);
             userCode.run();
         }
-        assertThat(aec.stateRequestsBuffer.currentSeq.get()).isEqualTo(0L);
-        assertThat(aec.stateRequestsBuffer.seqAndTimeout.f0).isEqualTo(0L);
-        assertThat(aec.stateRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
+        assertThat(aec.asyncRequestsBuffer.currentSeq.get()).isEqualTo(0L);
+        assertThat(aec.asyncRequestsBuffer.seqAndTimeout.f0).isEqualTo(0L);
+        assertThat(aec.asyncRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(batchSize - 1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(batchSize - 1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(batchSize - 1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
 
         // buffer timeout, trigger
         Thread.sleep(2000);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.currentSeq.get()).isEqualTo(1L);
-        assertThat(aec.stateRequestsBuffer.seqAndTimeout).isNull();
+        assertThat(aec.asyncRequestsBuffer.currentSeq.get()).isEqualTo(1L);
+        assertThat(aec.asyncRequestsBuffer.seqAndTimeout).isNull();
 
         // ---------- buffer full before timeout ------------------
         for (int i = 0; i < batchSize - 1; i++) {
@@ -652,12 +652,12 @@ class AsyncExecutionControllerTest {
             aec.setCurrentContext(recordContext);
             userCode.run();
         }
-        assertThat(aec.stateRequestsBuffer.currentSeq.get()).isEqualTo(1L);
-        assertThat(aec.stateRequestsBuffer.seqAndTimeout.f0).isEqualTo(1L);
-        assertThat(aec.stateRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
+        assertThat(aec.asyncRequestsBuffer.currentSeq.get()).isEqualTo(1L);
+        assertThat(aec.asyncRequestsBuffer.seqAndTimeout.f0).isEqualTo(1L);
+        assertThat(aec.asyncRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(batchSize - 1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(batchSize - 1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(batchSize - 1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         for (int i = batchSize - 1; i < batchSize; i++) {
             String record = String.format("key%d-r%d", i, i);
             String key = String.format("key%d", batchSize + i);
@@ -665,11 +665,11 @@ class AsyncExecutionControllerTest {
             aec.setCurrentContext(recordContext);
             userCode.run();
         }
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.currentScheduledFuture.isDone()).isFalse();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(0);
-        assertThat(aec.stateRequestsBuffer.currentSeq.get()).isEqualTo(2L);
-        assertThat(aec.stateRequestsBuffer.seqAndTimeout).isNull();
+        assertThat(aec.asyncRequestsBuffer.currentSeq.get()).isEqualTo(2L);
+        assertThat(aec.asyncRequestsBuffer.seqAndTimeout).isNull();
 
         resourceRegistry.close();
     }
@@ -697,13 +697,13 @@ class AsyncExecutionControllerTest {
         aec.setCurrentContext(recordContext);
         userCode.run();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         assertThat(exceptionHandler.exception).isNull();
         assertThat(exceptionHandler.message).isNull();
         aec.triggerIfNeeded(true);
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(0);
         assertThat(testMailboxExecutor.lastException).isInstanceOf(FlinkRuntimeException.class);
         assertThat(testMailboxExecutor.lastException.getMessage())
                 .isEqualTo("Artificial exception in user code");
@@ -727,8 +727,8 @@ class AsyncExecutionControllerTest {
         aec.setCurrentContext(recordContext);
         userCode.run();
         assertThat(aec.inFlightRecordNum.get()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.activeQueueSize()).isEqualTo(1);
-        assertThat(aec.stateRequestsBuffer.blockingQueueSize()).isEqualTo(0);
+        assertThat(aec.asyncRequestsBuffer.activeQueueSize()).isEqualTo(1);
+        assertThat(aec.asyncRequestsBuffer.blockingQueueSize()).isEqualTo(0);
         assertThat(exceptionHandler.exception).isNull();
         assertThat(exceptionHandler.message).isNull();
         aec.triggerIfNeeded(true);
