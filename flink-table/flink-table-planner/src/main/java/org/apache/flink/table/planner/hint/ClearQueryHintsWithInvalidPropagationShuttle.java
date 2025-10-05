@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
 public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
+    protected RelNode visitNode(BiRel biRel) {
         List<RelHint> hints = ((Hintable) biRel).getHints();
 
         Set<String> allHintNames =
