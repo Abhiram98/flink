@@ -184,7 +184,7 @@ public class FileSystemTableSink extends AbstractFileSystemTable
                 .setMetaStoreFactory(new EmptyMetaStoreFactory(path))
                 .setOverwrite(overwrite)
                 .setStaticPartitions(staticPartitions)
-                .setTempPath(toStagingPath())
+                .setStagingPath(toStagingPath())
                 .setOutputFileConfig(
                         OutputFileConfig.builder()
                                 .withPartPrefix("part-" + UUID.randomUUID())
