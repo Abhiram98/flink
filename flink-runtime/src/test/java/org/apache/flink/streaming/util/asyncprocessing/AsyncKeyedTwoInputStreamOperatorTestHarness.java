@@ -30,7 +30,7 @@ import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.api.operators.TwoInputStreamOperator;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.runtime.io.RecordProcessorUtils;
-import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncStateProcessingOperator;
+import org.apache.flink.streaming.runtime.operators.asyncprocessing.AsyncKeyOrderedProcessingOperator;
 import org.apache.flink.streaming.runtime.streamrecord.RecordAttributes;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.streaming.runtime.watermarkstatus.WatermarkStatus;
@@ -151,7 +151,7 @@ public class AsyncKeyedTwoInputStreamOperatorTestHarness<K, IN1, IN2, OUT>
                 subtaskIndex);
 
         Preconditions.checkState(
-                operator instanceof AsyncStateProcessingOperator,
+                operator instanceof AsyncKeyOrderedProcessingOperator,
                 "Operator is not an AsyncStateProcessingOperator");
         this.twoInputOperator = operator;
         this.executor = executor;

@@ -25,7 +25,7 @@ import org.apache.flink.util.function.ThrowingConsumer;
 
 /** This class defines the basic interfaces to process a state in operator/input layer. */
 @Internal
-public interface AsyncStateProcessing {
+public interface AsyncKeyOrderedProcessing {
 
     /**
      * Get if the async state processing is enabled for this input/operator.
@@ -53,7 +53,7 @@ public interface AsyncStateProcessing {
      * @return the built record processor that can returned by {@link #getRecordProcessor(int)}.
      */
     static <T> ThrowingConsumer<StreamRecord<T>, Exception> makeRecordProcessor(
-            AsyncStateProcessingOperator asyncOperator,
+            AsyncKeyOrderedProcessingOperator asyncOperator,
             KeySelector<T, ?> keySelector,
             ThrowingConsumer<StreamRecord<T>, Exception> processor) {
         if (keySelector == null) {
