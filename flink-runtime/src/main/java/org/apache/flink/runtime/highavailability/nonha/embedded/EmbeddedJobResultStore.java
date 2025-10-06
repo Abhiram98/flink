@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.highavailability.AbstractThreadsafeJobResultStore;
 import org.apache.flink.runtime.highavailability.StreamResultEntry;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.concurrent.Executors;
 
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class EmbeddedJobResultStore extends AbstractThreadsafeJobResultStore {
     }
 
     @Override
-    public Set<JobResult> getDirtyResultsInternal() {
+    public Set<StreamResult> getDirtyResultsInternal() {
         return dirtyJobResults.values().stream()
                 .map(StreamResultEntry::getJobResult)
                 .collect(Collectors.toSet());

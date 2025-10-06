@@ -27,9 +27,9 @@ import org.apache.flink.runtime.executiongraph.PartitionInfo;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -68,11 +68,11 @@ public class UpdatePartitionConsumersTest extends TestLogger {
 
     private static final long TIMEOUT = 5000L;
 
-    private JobGraph jobGraph;
-    private JobVertex v1;
-    private JobVertex v2;
-    private JobVertex v3;
-    private JobVertex v4;
+    private StreamGraph jobGraph;
+    private StreamVertex v1;
+    private StreamVertex v2;
+    private StreamVertex v3;
+    private StreamVertex v4;
 
     @Before
     public void setUp() {
@@ -94,19 +94,19 @@ public class UpdatePartitionConsumersTest extends TestLogger {
      * </pre>
      */
     private void buildJobGraphWithBlockingEdgeWithinRegion() {
-        v1 = new JobVertex("v1");
+        v1 = new StreamVertex("v1");
         v1.setInvokableClass(AbstractInvokable.class);
         v1.setParallelism(1);
 
-        v2 = new JobVertex("v2");
+        v2 = new StreamVertex("v2");
         v2.setInvokableClass(AbstractInvokable.class);
         v2.setParallelism(1);
 
-        v3 = new JobVertex("v3");
+        v3 = new StreamVertex("v3");
         v3.setInvokableClass(AbstractInvokable.class);
         v3.setParallelism(1);
 
-        v4 = new JobVertex("v4");
+        v4 = new StreamVertex("v4");
         v4.setInvokableClass(AbstractInvokable.class);
         v4.setParallelism(1);
 
@@ -119,7 +119,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
         v4.connectNewDataSetAsInput(
                 v3, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
+        jobGraph = StreamGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
     }
 
     /**

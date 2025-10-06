@@ -25,7 +25,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.core.fs.FileStatus;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rest.messages.json.JobResultDeserializer;
 import org.apache.flink.runtime.rest.messages.json.JobResultSerializer;
 import org.apache.flink.runtime.util.NonClosingOutputStreamDecorator;
@@ -195,7 +195,7 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
     }
 
     @Override
-    public Set<JobResult> getDirtyResultsInternal() throws IOException {
+    public Set<StreamResult> getDirtyResultsInternal() throws IOException {
         createBasePathIfNeeded();
 
         final FileStatus[] statuses = fileSystem.listStatus(this.basePath);
@@ -204,7 +204,7 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
                 statuses != null,
                 "The base directory of the JobResultStore isn't accessible. No dirty JobResults can be restored.");
 
-        final Set<JobResult> dirtyResults = new HashSet<>();
+        final Set<StreamResult> dirtyResults = new HashSet<>();
         for (FileStatus s : statuses) {
             if (!s.isDir()) {
                 if (hasValidDirtyJobResultStoreEntryExtension(s.getPath().getName())) {
@@ -235,7 +235,7 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
         }
 
         @JsonCreator
-        private JsonJobResultEntry(@JsonProperty(FIELD_NAME_RESULT) JobResult jobResult) {
+        private JsonJobResultEntry(@JsonProperty(FIELD_NAME_RESULT) StreamResult jobResult) {
             super(jobResult);
         }
 
@@ -243,7 +243,7 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
         @JsonProperty(FIELD_NAME_RESULT)
         @JsonSerialize(using = JobResultSerializer.class)
         @JsonDeserialize(using = JobResultDeserializer.class)
-        public JobResult getJobResult() {
+        public StreamResult getJobResult() {
             return super.getJobResult();
         }
 

@@ -22,11 +22,8 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.time.Deadline;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
@@ -332,13 +329,13 @@ public class ExecutionGraphTestUtils {
     // ------------------------------------------------------------------------
 
     public static DefaultExecutionGraph createExecutionGraph(
-            ScheduledExecutorService executor, JobVertex... vertices) throws Exception {
+            ScheduledExecutorService executor, StreamVertex... vertices) throws Exception {
 
         return createExecutionGraph(executor, Duration.ofSeconds(10L), vertices);
     }
 
     public static DefaultExecutionGraph createExecutionGraph(
-            ScheduledExecutorService executor, Duration timeout, JobVertex... vertices)
+            ScheduledExecutorService executor, Duration timeout, StreamVertex... vertices)
             throws Exception {
 
         checkNotNull(vertices);
@@ -346,23 +343,23 @@ public class ExecutionGraphTestUtils {
 
         DefaultExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(JobGraphTestUtils.streamingJobGraph(vertices))
+                        .setJobGraph(StreamGraphTestUtils.streamingStreamGraph(vertices))
                         .setRpcTimeout(timeout)
                         .build(executor);
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
         return executionGraph;
     }
 
-    public static JobVertex createNoOpVertex(int parallelism) {
+    public static StreamVertex createNoOpVertex(int parallelism) {
         return createNoOpVertex("vertex", parallelism);
     }
 
-    public static JobVertex createNoOpVertex(String name, int parallelism) {
-        return createNoOpVertex(name, parallelism, JobVertex.MAX_PARALLELISM_DEFAULT);
+    public static StreamVertex createNoOpVertex(String name, int parallelism) {
+        return createNoOpVertex(name, parallelism, StreamVertex.MAX_PARALLELISM_DEFAULT);
     }
 
-    public static JobVertex createNoOpVertex(String name, int parallelism, int maxParallelism) {
-        JobVertex vertex = new JobVertex(name);
+    public static StreamVertex createNoOpVertex(String name, int parallelism, int maxParallelism) {
+        StreamVertex vertex = new StreamVertex(name);
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
         vertex.setMaxParallelism(maxParallelism);
@@ -377,9 +374,9 @@ public class ExecutionGraphTestUtils {
         return new ExecutionVertexID(new JobVertexID(), new Random().nextInt(Integer.MAX_VALUE));
     }
 
-    public static JobVertex createJobVertex(
+    public static StreamVertex createJobVertex(
             String task1, int numTasks, Class<NoOpInvokable> invokable) {
-        JobVertex groupVertex = new JobVertex(task1);
+        StreamVertex groupVertex = new StreamVertex(task1);
         groupVertex.setInvokableClass(invokable);
         groupVertex.setParallelism(numTasks);
         return groupVertex;
@@ -398,7 +395,7 @@ public class ExecutionGraphTestUtils {
             ScheduledExecutorService executor)
             throws Exception {
 
-        JobVertex ajv = new JobVertex("TestVertex", id);
+        StreamVertex ajv = new StreamVertex("TestVertex", id);
         ajv.setInvokableClass(AbstractInvokable.class);
         ajv.setParallelism(parallelism);
         if (slotSharingGroup != null) {
@@ -408,14 +405,14 @@ public class ExecutionGraphTestUtils {
         return getExecutionJobVertex(ajv, executor);
     }
 
-    public static ExecutionJobVertex getExecutionJobVertex(JobVertex jobVertex) throws Exception {
+    public static ExecutionJobVertex getExecutionJobVertex(StreamVertex jobVertex) throws Exception {
         return getExecutionJobVertex(jobVertex, new DirectScheduledExecutorService());
     }
 
     public static ExecutionJobVertex getExecutionJobVertex(
-            JobVertex jobVertex, ScheduledExecutorService executor) throws Exception {
+            StreamVertex jobVertex, ScheduledExecutorService executor) throws Exception {
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertex);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
@@ -479,7 +476,7 @@ public class ExecutionGraphTestUtils {
     // ------------------------------------------------------------------------
 
     /**
-     * Verifies the generated {@link ExecutionJobVertex} for a given {@link JobVertex} in a {@link
+     * Verifies the generated {@link ExecutionJobVertex} for a given {@link StreamVertex} in a {@link
      * ExecutionGraph}.
      *
      * @param executionGraph the generated execution graph
@@ -491,9 +488,9 @@ public class ExecutionGraphTestUtils {
      */
     static void verifyGeneratedExecutionJobVertex(
             ExecutionGraph executionGraph,
-            JobVertex originJobVertex,
-            @Nullable List<JobVertex> inputJobVertices,
-            @Nullable List<JobVertex> outputJobVertices) {
+            StreamVertex originJobVertex,
+            @Nullable List<StreamVertex> inputJobVertices,
+            @Nullable List<StreamVertex> outputJobVertices) {
 
         ExecutionJobVertex ejv = executionGraph.getAllVertices().get(originJobVertex.getID());
         assertThat(ejv).isNotNull();

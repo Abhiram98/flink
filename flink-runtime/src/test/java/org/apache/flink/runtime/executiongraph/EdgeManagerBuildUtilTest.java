@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -278,8 +278,8 @@ class EdgeManagerBuildUtilTest {
     private ExecutionGraph setupExecutionGraph(
             int upstream, int downstream, DistributionPattern pattern, boolean isDynamicGraph)
             throws Exception {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
 
         v1.setParallelism(upstream);
         v2.setParallelism(downstream);
@@ -289,7 +289,7 @@ class EdgeManagerBuildUtilTest {
 
         v2.connectNewDataSetAsInput(v1, pattern, ResultPartitionType.PIPELINED);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
 
         TestingDefaultExecutionGraphBuilder builder =
                 TestingDefaultExecutionGraphBuilder.newBuilder()

@@ -19,22 +19,22 @@
 package org.apache.flink.runtime.highavailability;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.Preconditions;
 
 /**
  * {@code JobResultEntry} is the entity managed by the {@link StreamResultStore}. It collects
- * information about a globally terminated job (e.g. {@link JobResult}).
+ * information about a globally terminated job (e.g. {@link StreamResult}).
  */
 public class StreamResultEntry {
 
-    private final JobResult jobResult;
+    private final StreamResult jobResult;
 
-    public StreamResultEntry(JobResult jobResult) {
+    public StreamResultEntry(StreamResult jobResult) {
         this.jobResult = Preconditions.checkNotNull(jobResult);
     }
 
-    public JobResult getJobResult() {
+    public StreamResult getJobResult() {
         return jobResult;
     }
 

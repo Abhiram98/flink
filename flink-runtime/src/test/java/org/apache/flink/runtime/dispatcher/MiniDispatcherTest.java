@@ -31,9 +31,9 @@ import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.heartbeat.HeartbeatServicesImpl;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.resourcemanager.utils.TestingResourceManagerGateway;
@@ -81,7 +81,7 @@ public class MiniDispatcherTest extends TestLogger {
     public final TestingFatalErrorHandlerResource testingFatalErrorHandlerResource =
             new TestingFatalErrorHandlerResource();
 
-    private static JobGraph jobGraph;
+    private static StreamGraph jobGraph;
 
     private static ExecutionGraphInfo executionGraphInfo;
 
@@ -109,12 +109,12 @@ public class MiniDispatcherTest extends TestLogger {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-        jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
 
         executionGraphInfo =
                 new ExecutionGraphInfo(
                         new ArchivedExecutionGraphBuilder()
-                                .setJobID(jobGraph.getJobID())
+                                .setJobID(jobGraph.getStreamID())
                                 .setState(JobStatus.FINISHED)
                                 .build());
 
@@ -161,7 +161,7 @@ public class MiniDispatcherTest extends TestLogger {
             final TestingJobManagerRunner testingJobManagerRunner =
                     testingJobManagerRunnerFactory.takeCreatedJobManagerRunner();
 
-            assertThat(testingJobManagerRunner.getJobID(), is(jobGraph.getJobID()));
+            assertThat(testingJobManagerRunner.getJobID(), is(jobGraph.getStreamID()));
         } finally {
             RpcUtils.terminateRpcEndpoint(miniDispatcher);
         }
@@ -247,7 +247,7 @@ public class MiniDispatcherTest extends TestLogger {
             testingJobManagerRunner.completeResultFuture(
                     new ExecutionGraphInfo(
                             new ArchivedExecutionGraphBuilder()
-                                    .setJobID(jobGraph.getJobID())
+                                    .setJobID(jobGraph.getStreamID())
                                     .setState(JobStatus.SUSPENDED)
                                     .build()));
 
@@ -261,7 +261,7 @@ public class MiniDispatcherTest extends TestLogger {
     /**
      * Tests that the {@link MiniDispatcher} only terminates in {@link
      * ClusterEntrypoint.ExecutionMode#NORMAL} after it has served the {@link
-     * org.apache.flink.runtime.jobmaster.JobResult} once.
+     * StreamResult} once.
      */
     @Test
     public void testJobResultRetrieval() throws Exception {
@@ -282,12 +282,12 @@ public class MiniDispatcherTest extends TestLogger {
             final DispatcherGateway dispatcherGateway =
                     miniDispatcher.getSelfGateway(DispatcherGateway.class);
 
-            final CompletableFuture<JobResult> jobResultFuture =
-                    dispatcherGateway.requestJobResult(jobGraph.getJobID(), timeout);
+            final CompletableFuture<StreamResult> jobResultFuture =
+                    dispatcherGateway.requestJobResult(jobGraph.getStreamID(), timeout);
 
-            final JobResult jobResult = jobResultFuture.get();
+            final StreamResult jobResult = jobResultFuture.get();
 
-            assertThat(jobResult.getStreamId(), is(jobGraph.getJobID()));
+            assertThat(jobResult.getStreamId(), is(jobGraph.getStreamID()));
         } finally {
             RpcUtils.terminateRpcEndpoint(miniDispatcher);
         }
@@ -309,11 +309,11 @@ public class MiniDispatcherTest extends TestLogger {
             final DispatcherGateway dispatcherGateway =
                     miniDispatcher.getSelfGateway(DispatcherGateway.class);
 
-            dispatcherGateway.cancelJob(jobGraph.getJobID(), Duration.ofSeconds(10L));
+            dispatcherGateway.cancelJob(jobGraph.getStreamID(), Duration.ofSeconds(10L));
             testingJobManagerRunner.completeResultFuture(
                     new ExecutionGraphInfo(
                             new ArchivedExecutionGraphBuilder()
-                                    .setJobID(jobGraph.getJobID())
+                                    .setJobID(jobGraph.getStreamID())
                                     .setState(JobStatus.CANCELED)
                                     .build()));
 
@@ -335,8 +335,8 @@ public class MiniDispatcherTest extends TestLogger {
 
     private MiniDispatcher createMiniDispatcher(
             ClusterEntrypoint.ExecutionMode executionMode,
-            @Nullable JobGraph recoveredJobGraph,
-            @Nullable JobResult recoveredDirtyJob)
+            @Nullable StreamGraph recoveredJobGraph,
+            @Nullable StreamResult recoveredDirtyJob)
             throws Exception {
         final JobManagerRunnerRegistry jobManagerRunnerRegistry =
                 new DefaultJobManagerRunnerRegistry(2);

@@ -23,11 +23,8 @@ import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.state.OperatorStreamStateHandle;
@@ -89,8 +86,8 @@ public class TestUtils {
     }
 
     @Nonnull
-    public static JobGraph createJobGraphFromJobVerticesWithCheckpointing(
-            SavepointRestoreSettings savepointRestoreSettings, JobVertex... jobVertices) {
+    public static StreamGraph createJobGraphFromJobVerticesWithCheckpointing(
+            SavepointRestoreSettings savepointRestoreSettings, StreamVertex... jobVertices) {
 
         // enable checkpointing which is required to resume from a savepoint
         final CheckpointCoordinatorConfiguration checkpointCoordinatorConfiguration =

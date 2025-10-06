@@ -23,11 +23,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroupImpl;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -241,8 +238,8 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
         createTwoExeVerticesPerJv1AndJv2(slotSharingGroup);
         int parallelism = 4;
 
-        JobVertex v1 = createJobVertex("v1", jobVertexId1, parallelism);
-        JobVertex v2 = createJobVertex("v2", jobVertexId2, parallelism);
+        StreamVertex v1 = createJobVertex("v1", jobVertexId1, parallelism);
+        StreamVertex v2 = createJobVertex("v2", jobVertexId2, parallelism);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
@@ -252,7 +249,7 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
         assertThat(v1.getProducedDataSets()).hasSize(2);
         assertThat(v2.getInputs()).hasSize(2);
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(v1, v2);
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -314,9 +311,9 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                 .contains(ev3.getId());
     }
 
-    private static JobVertex createJobVertex(
+    private static StreamVertex createJobVertex(
             String vertexName, JobVertexID vertexId, int parallelism) {
-        JobVertex jobVertex = new JobVertex(vertexName, vertexId);
+        StreamVertex jobVertex = new StreamVertex(vertexName, vertexId);
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(NoOpInvokable.class);
         return jobVertex;

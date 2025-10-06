@@ -21,7 +21,7 @@ package org.apache.flink.runtime.dispatcher.cleanup;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.dispatcher.TestingJobManagerRunnerFactory;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
 
 import java.util.concurrent.Executor;
@@ -39,7 +39,7 @@ public class TestingCleanupRunnerFactory extends TestingJobManagerRunnerFactory
 
     @Override
     public TestingJobManagerRunner create(
-            JobResult jobResult,
+            StreamResult jobResult,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Configuration configuration,
             Executor cleanupExecutor) {

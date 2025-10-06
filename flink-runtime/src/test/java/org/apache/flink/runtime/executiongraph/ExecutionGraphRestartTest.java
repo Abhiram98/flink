@@ -26,10 +26,10 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolBridge;
 import org.apache.flink.runtime.jobmaster.slotpool.LocationPreferenceSlotSelectionStrategy;
@@ -99,10 +99,10 @@ class ExecutionGraphRestartTest {
 
             final int numTasksExceedSlotPool = 50;
             // create a graph with task count larger than slot pool
-            JobVertex sender =
+            StreamVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            JobGraph graph = JobGraphTestUtils.streamingJobGraph(sender);
+            StreamGraph graph = StreamGraphTestUtils.streamingStreamGraph(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -128,10 +128,10 @@ class ExecutionGraphRestartTest {
 
             final int numTasksExceedSlotPool = 50;
             // create a graph with task count larger than slot pool
-            JobVertex sender =
+            StreamVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            JobGraph graph = JobGraphTestUtils.streamingJobGraph(sender);
+            StreamGraph graph = StreamGraphTestUtils.streamingStreamGraph(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -281,10 +281,10 @@ class ExecutionGraphRestartTest {
      */
     @Test
     void testFailingExecutionAfterRestart() throws Exception {
-        JobVertex sender = ExecutionGraphTestUtils.createJobVertex("Task1", 1, NoOpInvokable.class);
-        JobVertex receiver =
+        StreamVertex sender = ExecutionGraphTestUtils.createJobVertex("Task1", 1, NoOpInvokable.class);
+        StreamVertex receiver =
                 ExecutionGraphTestUtils.createJobVertex("Task2", 1, NoOpInvokable.class);
-        JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
         try (SlotPool slotPool = SlotPoolUtils.createDeclarativeSlotPoolBridge()) {
             SchedulerBase scheduler =
@@ -408,16 +408,16 @@ class ExecutionGraphRestartTest {
         slotPool.connectToResourceManager(resourceManagerGateway);
     }
 
-    private static JobGraph createJobGraph() {
-        JobVertex sender =
+    private static StreamGraph createJobGraph() {
+        StreamVertex sender =
                 ExecutionGraphTestUtils.createJobVertex("Task", NUM_TASKS, NoOpInvokable.class);
-        return JobGraphTestUtils.streamingJobGraph(sender);
+        return StreamGraphTestUtils.streamingStreamGraph(sender);
     }
 
-    private static JobGraph createJobGraphToCancel() throws IOException {
-        JobVertex vertex =
+    private static StreamGraph createJobGraphToCancel() throws IOException {
+        StreamVertex vertex =
                 ExecutionGraphTestUtils.createJobVertex("Test Vertex", 1, NoOpInvokable.class);
-        JobGraph jobGraph =
+        StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 jobGraph, Integer.MAX_VALUE, Integer.MAX_VALUE);

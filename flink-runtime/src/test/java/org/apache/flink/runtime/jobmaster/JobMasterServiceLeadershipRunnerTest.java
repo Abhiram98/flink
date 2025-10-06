@@ -29,9 +29,9 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.highavailability.StreamResultEntry;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.factories.JobMasterServiceProcessFactory;
 import org.apache.flink.runtime.jobmaster.factories.TestingJobMasterServiceProcessFactory;
 import org.apache.flink.runtime.jobmaster.utils.TestingJobMasterGatewayBuilder;
@@ -81,7 +81,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
     private static final Duration TESTING_TIMEOUT = Duration.ofSeconds(10);
 
-    private static JobGraph jobGraph;
+    private static StreamGraph jobGraph;
 
     private TestingLeaderElection leaderElection;
 
@@ -92,9 +92,9 @@ class JobMasterServiceLeadershipRunnerTest {
     @BeforeAll
     static void setupClass() {
 
-        final JobVertex jobVertex = new JobVertex("Test vertex");
+        final StreamVertex jobVertex = new StreamVertex("Test vertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
-        jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertex);
     }
 
     @BeforeEach
@@ -249,7 +249,7 @@ class JobMasterServiceLeadershipRunnerTest {
     private ExecutionGraphInfo createFailedExecutionGraphInfo(FlinkException testException) {
         return new ExecutionGraphInfo(
                 ArchivedExecutionGraph.createSparseArchivedExecutionGraph(
-                        jobGraph.getJobID(),
+                        jobGraph.getStreamID(),
                         jobGraph.getName(),
                         JobStatus.FAILED,
                         jobGraph.getJobType(),
@@ -677,7 +677,7 @@ class JobMasterServiceLeadershipRunnerTest {
     @Test
     void testJobAlreadyDone() throws Exception {
         final JobID jobId = new JobID();
-        final JobResult jobResult =
+        final StreamResult jobResult =
                 TestingJobResultStore.createJobResult(jobId, ApplicationStatus.UNKNOWN);
         jobResultStore.createDirtyResultAsync(new StreamResultEntry(jobResult)).get();
         try (JobManagerRunner jobManagerRunner =

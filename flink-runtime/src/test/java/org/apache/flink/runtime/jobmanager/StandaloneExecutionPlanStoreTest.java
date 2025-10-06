@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.jobmanager;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.concurrent.Executors;
 
@@ -35,7 +35,7 @@ public class StandaloneExecutionPlanStoreTest {
     public void testNoOps() throws Exception {
         StandaloneExecutionPlanStore executionPlans = new StandaloneExecutionPlanStore();
 
-        ExecutionPlan executionPlan = JobGraphTestUtils.emptyJobGraph();
+        ExecutionPlan executionPlan = StreamGraphTestUtils.emptyJobGraph();
 
         assertEquals(0, executionPlans.getStreamIds().size());
 

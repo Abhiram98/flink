@@ -25,8 +25,8 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
 import org.apache.flink.runtime.minicluster.TestingMiniClusterConfiguration;
@@ -87,7 +87,7 @@ class JobIntermediateDatasetReuseTest {
     private void internalTestClusterPartitionReuse(
             int producerParallelism,
             int consumerParallelism,
-            Consumer<JobResult> jobResultVerification)
+            Consumer<StreamResult> jobResultVerification)
             throws Exception {
         final TestingMiniClusterConfiguration miniClusterConfiguration =
                 TestingMiniClusterConfiguration.newBuilder().build();
@@ -97,18 +97,18 @@ class JobIntermediateDatasetReuseTest {
             miniCluster.start();
 
             IntermediateDataSetID intermediateDataSetID = new IntermediateDataSetID();
-            final JobGraph firstJobGraph =
+            final StreamGraph firstJobGraph =
                     createFirstJobGraph(producerParallelism, intermediateDataSetID);
-            miniCluster.submitJob(firstJobGraph).get();
-            CompletableFuture<JobResult> jobResultFuture =
-                    miniCluster.requestJobResult(firstJobGraph.getJobID());
-            JobResult jobResult = jobResultFuture.get();
+            miniCluster.submitStream(firstJobGraph).get();
+            CompletableFuture<StreamResult> jobResultFuture =
+                    miniCluster.requestStreamResult(firstJobGraph.getStreamID());
+            StreamResult jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isTrue();
 
-            final JobGraph secondJobGraph =
+            final StreamGraph secondJobGraph =
                     createSecondJobGraph(consumerParallelism, intermediateDataSetID);
-            miniCluster.submitJob(secondJobGraph).get();
-            jobResultFuture = miniCluster.requestJobResult(secondJobGraph.getJobID());
+            miniCluster.submitStream(secondJobGraph).get();
+            jobResultFuture = miniCluster.requestStreamResult(secondJobGraph.getStreamID());
             jobResult = jobResultFuture.get();
             jobResultVerification.accept(jobResult);
         }
@@ -124,20 +124,20 @@ class JobIntermediateDatasetReuseTest {
             miniCluster.start();
 
             IntermediateDataSetID intermediateDataSetID = new IntermediateDataSetID();
-            final JobGraph firstJobGraph = createFirstJobGraph(1, intermediateDataSetID);
-            miniCluster.submitJob(firstJobGraph).get();
-            CompletableFuture<JobResult> jobResultFuture =
-                    miniCluster.requestJobResult(firstJobGraph.getJobID());
-            JobResult jobResult = jobResultFuture.get();
+            final StreamGraph firstJobGraph = createFirstJobGraph(1, intermediateDataSetID);
+            miniCluster.submitStream(firstJobGraph).get();
+            CompletableFuture<StreamResult> jobResultFuture =
+                    miniCluster.requestStreamResult(firstJobGraph.getStreamID());
+            StreamResult jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isTrue();
 
             miniCluster.terminateTaskManager(0);
             miniCluster.startTaskManager();
 
-            final JobGraph secondJobGraph = createSecondJobGraph(1, intermediateDataSetID);
+            final StreamGraph secondJobGraph = createSecondJobGraph(1, intermediateDataSetID);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(secondJobGraph, 1024, 1000L);
-            miniCluster.submitJob(secondJobGraph).get();
-            jobResultFuture = miniCluster.requestJobResult(secondJobGraph.getJobID());
+            miniCluster.submitStream(secondJobGraph).get();
+            jobResultFuture = miniCluster.requestStreamResult(secondJobGraph.getStreamID());
             jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isFalse();
             final ClusterDatasetCorruptedException exception =
@@ -147,21 +147,21 @@ class JobIntermediateDatasetReuseTest {
                     .isEqualTo(intermediateDataSetID);
 
             firstJobGraph.setJobID(new JobID());
-            miniCluster.submitJob(firstJobGraph).get();
-            jobResultFuture = miniCluster.requestJobResult(firstJobGraph.getJobID());
+            miniCluster.submitStream(firstJobGraph).get();
+            jobResultFuture = miniCluster.requestStreamResult(firstJobGraph.getStreamID());
             jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isTrue();
 
             secondJobGraph.setJobID(new JobID());
-            miniCluster.submitJob(secondJobGraph).get();
-            jobResultFuture = miniCluster.requestJobResult(secondJobGraph.getJobID());
+            miniCluster.submitStream(secondJobGraph).get();
+            jobResultFuture = miniCluster.requestStreamResult(secondJobGraph.getStreamID());
             jobResult = jobResultFuture.get();
             Assertions.assertThat(jobResult.isSuccess()).isTrue();
         }
     }
 
     private ClusterDatasetCorruptedException getClusterDatasetCorruptedException(
-            JobResult jobResult) {
+            StreamResult jobResult) {
         Assertions.assertThat(jobResult.getSerializedThrowable().isPresent()).isTrue();
         Throwable throwable =
                 jobResult
@@ -177,23 +177,23 @@ class JobIntermediateDatasetReuseTest {
         return null;
     }
 
-    private JobGraph createSecondJobGraph(
+    private StreamGraph createSecondJobGraph(
             int parallelism, IntermediateDataSetID intermediateDataSetID) {
-        final JobVertex receiver = new JobVertex("Receiver 2", null);
+        final StreamVertex receiver = new StreamVertex("Receiver 2", null);
         receiver.setParallelism(parallelism);
         receiver.setInvokableClass(Receiver.class);
         receiver.addIntermediateDataSetIdToConsume(intermediateDataSetID);
 
-        return new JobGraph(null, "Second Job", receiver);
+        return new StreamGraph(null, "Second Job", receiver);
     }
 
-    private JobGraph createFirstJobGraph(
+    private StreamGraph createFirstJobGraph(
             int parallelism, IntermediateDataSetID intermediateDataSetID) {
-        final JobVertex sender = new JobVertex("Sender");
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setParallelism(parallelism);
         sender.setInvokableClass(Sender.class);
 
-        final JobVertex receiver = new JobVertex("Receiver");
+        final StreamVertex receiver = new StreamVertex("Receiver");
         receiver.setParallelism(parallelism);
         receiver.setInvokableClass(Receiver.class);
 
@@ -204,7 +204,7 @@ class JobIntermediateDatasetReuseTest {
                 intermediateDataSetID,
                 false);
 
-        return new JobGraph(null, "First Job", sender, receiver);
+        return new StreamGraph(null, "First Job", sender, receiver);
     }
 
     /**

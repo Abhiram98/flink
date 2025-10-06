@@ -25,7 +25,7 @@ import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.cleanup.ResourceCleanerFactory;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypoint;
 import org.apache.flink.runtime.entrypoint.JobClusterEntrypoint;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
@@ -59,7 +59,7 @@ public class MiniDispatcher extends Dispatcher {
             DispatcherId fencingToken,
             DispatcherServices dispatcherServices,
             @Nullable ExecutionPlan executionPlan,
-            @Nullable JobResult recoveredDirtyJob,
+            @Nullable StreamResult recoveredDirtyJob,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             JobClusterEntrypoint.ExecutionMode executionMode)
             throws Exception {
@@ -80,7 +80,7 @@ public class MiniDispatcher extends Dispatcher {
             DispatcherId fencingToken,
             DispatcherServices dispatcherServices,
             @Nullable ExecutionPlan executionPlan,
-            @Nullable JobResult recoveredDirtyJob,
+            @Nullable StreamResult recoveredDirtyJob,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             JobManagerRunnerRegistry jobManagerRunnerRegistry,
             ResourceCleanerFactory resourceCleanerFactory,
@@ -120,13 +120,13 @@ public class MiniDispatcher extends Dispatcher {
     }
 
     @Override
-    public CompletableFuture<JobResult> requestJobResult(JobID jobId, Duration timeout) {
-        final CompletableFuture<JobResult> jobResultFuture = super.requestJobResult(jobId, timeout);
+    public CompletableFuture<StreamResult> requestJobResult(JobID jobId, Duration timeout) {
+        final CompletableFuture<StreamResult> jobResultFuture = super.requestJobResult(jobId, timeout);
 
         if (executionMode == ClusterEntrypoint.ExecutionMode.NORMAL) {
             // terminate the MiniDispatcher once we served the first JobResult successfully
             jobResultFuture.thenAccept(
-                    (JobResult result) -> {
+                    (StreamResult result) -> {
                         ApplicationStatus status =
                                 result.getSerializedThrowable().isPresent()
                                         ? ApplicationStatus.FAILED

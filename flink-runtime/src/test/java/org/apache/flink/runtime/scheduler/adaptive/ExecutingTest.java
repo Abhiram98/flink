@@ -55,7 +55,7 @@ import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
@@ -1066,7 +1066,7 @@ class ExecutingTest {
                 throws JobException {
             super(
                     new MockInternalExecutionGraphAccessor(),
-                    new JobVertex("test"),
+                    new StreamVertex("test"),
                     new DefaultVertexParallelismInfo(1, 1, max -> Optional.empty()),
                     new CoordinatorStoreImpl(),
                     UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup());

@@ -31,7 +31,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -107,7 +107,7 @@ public class SsgNetworkMemoryCalculationUtils {
             getMaxSubpartitionInfo(ejv, maxSubpartitionNums, partitionTypes, ejvs);
         }
 
-        JobVertex jv = ejv.getJobVertex();
+        StreamVertex jv = ejv.getJobVertex();
 
         return TaskInputsOutputsDescriptor.from(
                 jv.getNumberOfInputs(),

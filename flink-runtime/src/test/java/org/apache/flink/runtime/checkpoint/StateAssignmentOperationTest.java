@@ -30,14 +30,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
@@ -501,9 +495,9 @@ class StateAssignmentOperationTest {
     @Test
     void testChannelStateAssignmentDownscalingTwoDifferentGates()
             throws JobException, JobExecutionException {
-        JobVertex upstream1 = createJobVertex(new OperatorID(), 2);
-        JobVertex upstream2 = createJobVertex(new OperatorID(), 2);
-        JobVertex downstream = createJobVertex(new OperatorID(), 2);
+        StreamVertex upstream1 = createJobVertex(new OperatorID(), 2);
+        StreamVertex upstream2 = createJobVertex(new OperatorID(), 2);
+        StreamVertex downstream = createJobVertex(new OperatorID(), 2);
         List<OperatorID> operatorIds =
                 Stream.of(upstream1, upstream2, downstream)
                         .map(v -> v.getOperatorIDs().get(0).getGeneratedOperatorID())
@@ -565,9 +559,9 @@ class StateAssignmentOperationTest {
     @Test
     public void testChannelStateAssignmentTwoGatesPartiallyDownscaling()
             throws JobException, JobExecutionException {
-        JobVertex upstream1 = createJobVertex(new OperatorID(), 2);
-        JobVertex upstream2 = createJobVertex(new OperatorID(), 2);
-        JobVertex downstream = createJobVertex(new OperatorID(), 3);
+        StreamVertex upstream1 = createJobVertex(new OperatorID(), 2);
+        StreamVertex upstream2 = createJobVertex(new OperatorID(), 2);
+        StreamVertex downstream = createJobVertex(new OperatorID(), 3);
         List<OperatorID> operatorIds =
                 Stream.of(upstream1, upstream2, downstream)
                         .map(v -> v.getOperatorIDs().get(0).getGeneratedOperatorID())
@@ -1170,7 +1164,7 @@ class StateAssignmentOperationTest {
             SubtaskStateMapper downstreamRescaler,
             SubtaskStateMapper upstreamRescaler)
             throws JobException, JobExecutionException {
-        final JobVertex[] jobVertices =
+        final StreamVertex[] jobVertices =
                 operatorIdsAndParallelism.stream()
                         .map(
                                 idWithParallelism ->
@@ -1178,7 +1172,7 @@ class StateAssignmentOperationTest {
                                                 idWithParallelism.getOperatorID(),
                                                 idWithParallelism.getOperatorID(),
                                                 idWithParallelism.getParallelism()))
-                        .toArray(JobVertex[]::new);
+                        .toArray(StreamVertex[]::new);
         for (int index = 1; index < jobVertices.length; index++) {
             connectVertices(
                     jobVertices[index - 1],
@@ -1190,9 +1184,9 @@ class StateAssignmentOperationTest {
         return toExecutionVertices(jobVertices);
     }
 
-    private Map<OperatorID, ExecutionJobVertex> toExecutionVertices(JobVertex... jobVertices)
+    private Map<OperatorID, ExecutionJobVertex> toExecutionVertices(StreamVertex... jobVertices)
             throws JobException, JobExecutionException {
-        JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertices);
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -1212,8 +1206,8 @@ class StateAssignmentOperationTest {
     }
 
     private void connectVertices(
-            JobVertex upstream,
-            JobVertex downstream,
+            StreamVertex upstream,
+            StreamVertex downstream,
             SubtaskStateMapper upstreamRescaler,
             SubtaskStateMapper downstreamRescaler) {
         final JobEdge jobEdge =
@@ -1226,21 +1220,21 @@ class StateAssignmentOperationTest {
     private ExecutionJobVertex buildExecutionJobVertex(
             OperatorID operatorID, OperatorID userDefinedOperatorId, int parallelism) {
         try {
-            JobVertex jobVertex = createJobVertex(operatorID, userDefinedOperatorId, parallelism);
+            StreamVertex jobVertex = createJobVertex(operatorID, userDefinedOperatorId, parallelism);
             return ExecutionGraphTestUtils.getExecutionJobVertex(jobVertex);
         } catch (Exception e) {
             throw new AssertionError("Cannot create ExecutionJobVertex", e);
         }
     }
 
-    private JobVertex createJobVertex(OperatorID operatorID, int parallelism) {
+    private StreamVertex createJobVertex(OperatorID operatorID, int parallelism) {
         return createJobVertex(operatorID, operatorID, parallelism);
     }
 
-    private JobVertex createJobVertex(
+    private StreamVertex createJobVertex(
             OperatorID operatorID, OperatorID userDefinedOperatorId, int parallelism) {
-        JobVertex jobVertex =
-                new JobVertex(
+        StreamVertex jobVertex =
+                new StreamVertex(
                         operatorID.toHexString(),
                         new JobVertexID(),
                         singletonList(

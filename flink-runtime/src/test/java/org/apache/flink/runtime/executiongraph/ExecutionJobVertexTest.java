@@ -21,7 +21,7 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
@@ -49,7 +49,7 @@ class ExecutionJobVertexTest {
 
     @Test
     void testParallelismGreaterThanMaxParallelism() {
-        JobVertex jobVertex = new JobVertex("testVertex");
+        StreamVertex jobVertex = new StreamVertex("testVertex");
         jobVertex.setInvokableClass(AbstractInvokable.class);
         // parallelism must be smaller than the max parallelism
         jobVertex.setParallelism(172);
@@ -168,7 +168,7 @@ class ExecutionJobVertexTest {
 
     public static ExecutionJobVertex createDynamicExecutionJobVertex(
             int parallelism, int maxParallelism, int defaultMaxParallelism) throws Exception {
-        JobVertex jobVertex = new JobVertex("testVertex");
+        StreamVertex jobVertex = new StreamVertex("testVertex");
         jobVertex.setInvokableClass(AbstractInvokable.class);
         jobVertex.getOrCreateResultDataSet(
                 new IntermediateDataSetID(), ResultPartitionType.BLOCKING);

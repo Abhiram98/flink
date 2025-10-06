@@ -18,11 +18,11 @@
 package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.topology.Topology;
 
-/** Represents a logical topology, i.e. {@link JobGraph}. */
+/** Represents a logical topology, i.e. {@link StreamGraph}. */
 public interface LogicalTopology
         extends Topology<
                 JobVertexID,

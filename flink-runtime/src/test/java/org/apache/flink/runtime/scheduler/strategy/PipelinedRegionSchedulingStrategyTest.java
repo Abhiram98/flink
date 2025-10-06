@@ -24,9 +24,9 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -222,9 +222,9 @@ class PipelinedRegionSchedulingStrategyTest {
 
     @Test
     void testComputingCrossRegionConsumedPartitionGroupsCorrectly() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 4);
-        final JobVertex v2 = createJobVertex("v2", 3);
-        final JobVertex v3 = createJobVertex("v3", 2);
+        final StreamVertex v1 = createJobVertex("v1", 4);
+        final StreamVertex v2 = createJobVertex("v2", 3);
+        final StreamVertex v3 = createJobVertex("v3", 2);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -233,8 +233,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -286,9 +286,9 @@ class PipelinedRegionSchedulingStrategyTest {
 
     @Test
     void testSchedulingTopologyWithBlockingCrossRegionConsumedPartitionGroups() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 4);
-        final JobVertex v2 = createJobVertex("v2", 3);
-        final JobVertex v3 = createJobVertex("v3", 2);
+        final StreamVertex v1 = createJobVertex("v1", 4);
+        final StreamVertex v2 = createJobVertex("v2", 3);
+        final StreamVertex v3 = createJobVertex("v3", 2);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -297,8 +297,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -359,9 +359,9 @@ class PipelinedRegionSchedulingStrategyTest {
 
     @Test
     void testSchedulingTopologyWithHybridCrossRegionConsumedPartitionGroups() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 4);
-        final JobVertex v2 = createJobVertex("v2", 3);
-        final JobVertex v3 = createJobVertex("v3", 2);
+        final StreamVertex v1 = createJobVertex("v1", 4);
+        final StreamVertex v2 = createJobVertex("v2", 3);
+        final StreamVertex v3 = createJobVertex("v3", 2);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -370,8 +370,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -428,14 +428,14 @@ class PipelinedRegionSchedulingStrategyTest {
 
     @Test
     void testScheduleBlockingDownstreamTaskIndividually() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 2);
-        final JobVertex v2 = createJobVertex("v2", 2);
+        final StreamVertex v1 = createJobVertex("v1", 2);
+        final StreamVertex v2 = createJobVertex("v2", 2);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -458,17 +458,17 @@ class PipelinedRegionSchedulingStrategyTest {
 
     @Test
     void testFinishHybridPartitionWillNotRescheduleDownstream() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 1);
-        final JobVertex v2 = createJobVertex("v2", 1);
-        final JobVertex v3 = createJobVertex("v3", 1);
+        final StreamVertex v1 = createJobVertex("v1", 1);
+        final StreamVertex v2 = createJobVertex("v2", 1);
+        final StreamVertex v3 = createJobVertex("v3", 1);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_FULL);
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -500,10 +500,10 @@ class PipelinedRegionSchedulingStrategyTest {
      */
     @Test
     void testScheduleTopologyWithHybridAndBlockingEdge() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 1);
-        final JobVertex v2 = createJobVertex("v2", 1);
-        final JobVertex v3 = createJobVertex("v3", 1);
-        final JobVertex v4 = createJobVertex("v4", 1);
+        final StreamVertex v1 = createJobVertex("v1", 1);
+        final StreamVertex v2 = createJobVertex("v2", 1);
+        final StreamVertex v3 = createJobVertex("v3", 1);
+        final StreamVertex v4 = createJobVertex("v4", 1);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_FULL);
@@ -512,8 +512,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v4.connectNewDataSetAsInput(
                 v3, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -547,11 +547,11 @@ class PipelinedRegionSchedulingStrategyTest {
     /** Inner non-pipelined edge will not affect it's region be scheduled. */
     @Test
     void testSchedulingRegionWithInnerNonPipelinedEdge() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 1);
-        final JobVertex v2 = createJobVertex("v2", 1);
-        final JobVertex v3 = createJobVertex("v3", 1);
-        final JobVertex v4 = createJobVertex("v4", 1);
-        final JobVertex v5 = createJobVertex("v5", 1);
+        final StreamVertex v1 = createJobVertex("v1", 1);
+        final StreamVertex v2 = createJobVertex("v2", 1);
+        final StreamVertex v3 = createJobVertex("v3", 1);
+        final StreamVertex v4 = createJobVertex("v4", 1);
+        final StreamVertex v5 = createJobVertex("v5", 1);
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -568,8 +568,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v4.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -592,10 +592,10 @@ class PipelinedRegionSchedulingStrategyTest {
      */
     @Test
     void testDownstreamRegionWillBeBlockedByBlockingEdge() throws Exception {
-        final JobVertex v1 = createJobVertex("v1", 1);
-        final JobVertex v2 = createJobVertex("v2", 1);
-        final JobVertex v3 = createJobVertex("v3", 1);
-        final JobVertex v4 = createJobVertex("v4", 1);
+        final StreamVertex v1 = createJobVertex("v1", 1);
+        final StreamVertex v2 = createJobVertex("v2", 1);
+        final StreamVertex v3 = createJobVertex("v3", 1);
+        final StreamVertex v4 = createJobVertex("v4", 1);
 
         v4.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
@@ -604,8 +604,8 @@ class PipelinedRegionSchedulingStrategyTest {
         v4.connectNewDataSetAsInput(
                 v3, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
-        final JobGraph jobGraph =
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
@@ -625,8 +625,8 @@ class PipelinedRegionSchedulingStrategyTest {
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(4);
     }
 
-    private static JobVertex createJobVertex(String vertexName, int parallelism) {
-        JobVertex jobVertex = new JobVertex(vertexName);
+    private static StreamVertex createJobVertex(String vertexName, int parallelism) {
+        StreamVertex jobVertex = new StreamVertex(vertexName);
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(AbstractInvokable.class);
         return jobVertex;

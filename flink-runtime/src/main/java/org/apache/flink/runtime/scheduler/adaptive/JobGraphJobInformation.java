@@ -18,8 +18,8 @@
 package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -32,18 +32,18 @@ import org.apache.flink.shaded.guava32.com.google.common.collect.Iterables;
 
 import java.util.Collection;
 
-/** {@link JobInformation} created from a {@link JobGraph}. */
+/** {@link JobInformation} created from a {@link StreamGraph}. */
 public class JobGraphJobInformation implements JobInformation {
 
-    private final JobGraph jobGraph;
+    private final StreamGraph jobGraph;
     private final JobID jobID;
     private final String name;
     private final VertexParallelismStore vertexParallelismStore;
 
     public JobGraphJobInformation(
-            JobGraph jobGraph, VertexParallelismStore vertexParallelismStore) {
+            StreamGraph jobGraph, VertexParallelismStore vertexParallelismStore) {
         this.jobGraph = jobGraph;
-        this.jobID = jobGraph.getJobID();
+        this.jobID = jobGraph.getStreamID();
         this.name = jobGraph.getName();
         this.vertexParallelismStore = vertexParallelismStore;
     }
@@ -79,7 +79,7 @@ public class JobGraphJobInformation implements JobInformation {
     }
 
     /** Returns a copy of a jobGraph that can be mutated. */
-    public JobGraph copyJobGraph() {
+    public StreamGraph copyJobGraph() {
         return InstantiationUtil.cloneUnchecked(jobGraph);
     }
 
@@ -89,12 +89,12 @@ public class JobGraphJobInformation implements JobInformation {
 
     private static final class JobVertexInformation implements JobInformation.VertexInformation {
 
-        private final JobVertex jobVertex;
+        private final StreamVertex jobVertex;
 
         private final VertexParallelismInformation parallelismInfo;
 
         private JobVertexInformation(
-                JobVertex jobVertex, VertexParallelismInformation parallelismInfo) {
+                StreamVertex jobVertex, VertexParallelismInformation parallelismInfo) {
             this.jobVertex = jobVertex;
             this.parallelismInfo = parallelismInfo;
         }

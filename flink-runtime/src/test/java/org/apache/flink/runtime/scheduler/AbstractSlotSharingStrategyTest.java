@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroupImpl;
@@ -117,7 +117,7 @@ abstract class AbstractSlotSharingStrategyTest {
 
     /** Util class to represent the simple job vertex information. */
     protected static class TestingJobVertexInfo {
-        final JobVertex jobVertex = new JobVertex(null, new JobVertexID());
+        final StreamVertex jobVertex = new StreamVertex(null, new JobVertexID());
         @Nonnull SlotSharingGroup slotSharingGroup;
         @Nullable CoLocationGroup coLocationGroup;
         int parallelism;

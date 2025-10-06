@@ -28,11 +28,8 @@ import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartitionTest;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchScheduler;
 import org.apache.flink.runtime.shuffle.PartitionDescriptor;
@@ -249,7 +246,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
             final List<SlotSharingGroup> slotSharingGroups, int defaultMaxParallelism)
             throws Exception {
 
-        JobGraph jobGraph =
+        StreamGraph jobGraph =
                 createJobGraph(
                         slotSharingGroups, Arrays.asList(4, -1, -1), ResultPartitionType.BLOCKING);
 
@@ -275,7 +272,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
                 .build(EXECUTOR_EXTENSION.getExecutor());
     }
 
-    private static JobGraph createJobGraph(
+    private static StreamGraph createJobGraph(
             final List<SlotSharingGroup> slotSharingGroups,
             List<Integer> parallelisms,
             ResultPartitionType resultPartitionType) {
@@ -283,17 +280,17 @@ class SsgNetworkMemoryCalculationUtilsTest {
         assertThat(slotSharingGroups).hasSize(3);
         assertThat(parallelisms).hasSize(3);
 
-        JobVertex source = new JobVertex("source");
+        StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
         trySetParallelism(source, parallelisms.get(0));
         source.setSlotSharingGroup(slotSharingGroups.get(0));
 
-        JobVertex map = new JobVertex("map");
+        StreamVertex map = new StreamVertex("map");
         map.setInvokableClass(NoOpInvokable.class);
         trySetParallelism(map, parallelisms.get(1));
         map.setSlotSharingGroup(slotSharingGroups.get(1));
 
-        JobVertex sink = new JobVertex("sink");
+        StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
         trySetParallelism(sink, parallelisms.get(2));
         sink.setSlotSharingGroup(slotSharingGroups.get(2));
@@ -311,14 +308,14 @@ class SsgNetworkMemoryCalculationUtilsTest {
         }
 
         if (!resultPartitionType.isBlockingOrBlockingPersistentResultPartition()) {
-            return JobGraphTestUtils.streamingJobGraph(source, map, sink);
+            return StreamGraphTestUtils.streamingStreamGraph(source, map, sink);
 
         } else {
-            return JobGraphTestUtils.batchJobGraph(source, map, sink);
+            return StreamGraphTestUtils.batchJobGraph(source, map, sink);
         }
     }
 
-    private static void trySetParallelism(JobVertex jobVertex, int parallelism) {
+    private static void trySetParallelism(StreamVertex jobVertex, int parallelism) {
         if (parallelism > 0) {
             jobVertex.setParallelism(parallelism);
         }

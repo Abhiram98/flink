@@ -55,12 +55,9 @@ import org.apache.flink.runtime.executiongraph.failover.ResultPartitionAvailabil
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertex.FinalizeOnMasterContext;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex.FinalizeOnMasterContext;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
@@ -840,7 +837,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     @Override
     public void attachJobGraph(
-            List<JobVertex> verticesToAttach, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> verticesToAttach, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
 
         assertRunningInJobMasterMainThread();
@@ -866,9 +863,9 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     /** Attach job vertices without initializing them. */
     private void attachJobVertices(
-            List<JobVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
-        for (JobVertex jobVertex : topologicallySorted) {
+        for (StreamVertex jobVertex : topologicallySorted) {
 
             if (jobVertex.isInputVertex() && !jobVertex.isStoppable()) {
                 this.isStoppable = false;
@@ -899,10 +896,10 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         }
     }
 
-    private void initializeJobVertices(List<JobVertex> topologicallySorted) throws JobException {
+    private void initializeJobVertices(List<StreamVertex> topologicallySorted) throws JobException {
         final long createTimestamp = System.currentTimeMillis();
 
-        for (JobVertex jobVertex : topologicallySorted) {
+        for (StreamVertex jobVertex : topologicallySorted) {
             final ExecutionJobVertex ejv = tasks.get(jobVertex.getID());
             initializeJobVertex(ejv, createTimestamp);
         }

@@ -26,8 +26,8 @@ import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.blob.VoidBlobStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.util.InstantiationUtil;
 
@@ -71,7 +71,7 @@ public class ClientUtilsTest {
     @Test
     void uploadAndSetUserJars() throws Exception {
         java.nio.file.Path tmpDir = TempDirUtils.newFolder(temporaryFolder).toPath();
-        JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
 
         Collection<Path> jars =
                 Arrays.asList(
@@ -95,14 +95,14 @@ public class ClientUtilsTest {
         assertThat(jobGraph.getUserJarBlobKeys().stream().distinct()).hasSameSizeAs(jars);
 
         for (PermanentBlobKey blobKey : jobGraph.getUserJarBlobKeys()) {
-            blobServer.getFile(jobGraph.getJobID(), blobKey);
+            blobServer.getFile(jobGraph.getStreamID(), blobKey);
         }
     }
 
     @Test
     void uploadAndSetUserArtifacts() throws Exception {
         java.nio.file.Path tmpDir = TempDirUtils.newFolder(temporaryFolder).toPath();
-        JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
 
         Collection<DistributedCache.DistributedCacheEntry> localArtifacts =
                 Arrays.asList(
@@ -162,14 +162,14 @@ public class ClientUtilsTest {
                     original,
                     jobGraph.getUserArtifacts().get(original.filePath),
                     false,
-                    jobGraph.getJobID());
+                    jobGraph.getStreamID());
         }
         for (DistributedCache.DistributedCacheEntry original : distributedArtifacts) {
             assertState(
                     original,
                     jobGraph.getUserArtifacts().get(original.filePath),
                     true,
-                    jobGraph.getJobID());
+                    jobGraph.getStreamID());
         }
     }
 

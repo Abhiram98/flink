@@ -20,9 +20,9 @@ package org.apache.flink.runtime.scheduler.benchmark.e2e;
 
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolBridgeBuilder;
 import org.apache.flink.runtime.jobmaster.slotpool.LocationPreferenceSlotSelectionStrategy;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlotProvider;
@@ -51,7 +51,7 @@ public class SchedulerEndToEndBenchmarkBase extends SchedulerBenchmarkBase {
     ComponentMainThreadExecutor mainThreadExecutor;
 
     JobConfiguration jobConfiguration;
-    JobGraph jobGraph;
+    StreamGraph jobGraph;
     PhysicalSlotProvider physicalSlotProvider;
     SlotPool slotPool;
 
@@ -63,7 +63,7 @@ public class SchedulerEndToEndBenchmarkBase extends SchedulerBenchmarkBase {
                 ComponentMainThreadExecutorServiceAdapter.forSingleThreadExecutor(
                         scheduledExecutorService);
 
-        final List<JobVertex> jobVertices = createDefaultJobVertices(jobConfiguration);
+        final List<StreamVertex> jobVertices = createDefaultJobVertices(jobConfiguration);
         jobGraph = createJobGraph(jobVertices, jobConfiguration);
 
         slotPool =
@@ -84,7 +84,7 @@ public class SchedulerEndToEndBenchmarkBase extends SchedulerBenchmarkBase {
     }
 
     DefaultScheduler createScheduler(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             PhysicalSlotProvider physicalSlotProvider,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService executorService)

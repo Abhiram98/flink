@@ -28,8 +28,8 @@ import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -113,13 +113,13 @@ class RescalePartitionerTest extends StreamPartitionerTest {
 
         counts.rescale().print().setParallelism(2);
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        StreamGraph jobGraph = env.getStreamGraph().getJobGraph();
 
-        List<JobVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
-        JobVertex sourceVertex = jobVertices.get(0);
-        JobVertex mapVertex = jobVertices.get(1);
-        JobVertex sinkVertex = jobVertices.get(2);
+        StreamVertex sourceVertex = jobVertices.get(0);
+        StreamVertex mapVertex = jobVertices.get(1);
+        StreamVertex sinkVertex = jobVertices.get(2);
 
         assertThat(sourceVertex.getParallelism()).isEqualTo(2);
         assertThat(mapVertex.getParallelism()).isEqualTo(4);

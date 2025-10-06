@@ -30,14 +30,14 @@ import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testtasks.OnceBlockingNoOpInvokable;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -115,26 +115,26 @@ public class AdaptiveSchedulerClusterITCase {
     @Test
     void testAutomaticScaleDownInCaseOfLostSlots() throws Exception {
         final MiniCluster miniCluster = internalMiniClusterExtension.getMiniCluster();
-        final JobGraph jobGraph = createBlockingJobGraph(PARALLELISM);
+        final StreamGraph jobGraph = createBlockingJobGraph(PARALLELISM);
 
-        miniCluster.submitJob(jobGraph).join();
-        final CompletableFuture<JobResult> resultFuture =
-                miniCluster.requestJobResult(jobGraph.getJobID());
+        miniCluster.submitStream(jobGraph).join();
+        final CompletableFuture<StreamResult> resultFuture =
+                miniCluster.requestStreamResult(jobGraph.getStreamID());
 
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(),
+                jobGraph.getStreamID(),
                 JOB_VERTEX_ID,
                 NUMBER_SLOTS_PER_TASK_MANAGER * NUMBER_TASK_MANAGERS);
 
         miniCluster.terminateTaskManager(0);
 
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(),
+                jobGraph.getStreamID(),
                 JOB_VERTEX_ID,
                 NUMBER_SLOTS_PER_TASK_MANAGER * (NUMBER_TASK_MANAGERS - 1));
         OnceBlockingNoOpInvokable.unblock();
 
-        final JobResult jobResult = resultFuture.join();
+        final StreamResult jobResult = resultFuture.join();
 
         assertThat(jobResult.isSuccess()).isTrue();
     }
@@ -144,25 +144,25 @@ public class AdaptiveSchedulerClusterITCase {
         final MiniCluster miniCluster = internalMiniClusterExtension.getMiniCluster();
         int initialInstanceCount = NUMBER_SLOTS_PER_TASK_MANAGER * NUMBER_TASK_MANAGERS;
         int targetInstanceCount = initialInstanceCount + NUMBER_SLOTS_PER_TASK_MANAGER;
-        final JobGraph jobGraph = createBlockingJobGraph(targetInstanceCount);
+        final StreamGraph jobGraph = createBlockingJobGraph(targetInstanceCount);
 
         log.info(
                 "Submitting job with parallelism of "
                         + targetInstanceCount
                         + ", to a cluster with only one TM.");
-        miniCluster.submitJob(jobGraph).join();
-        final CompletableFuture<JobResult> jobResultFuture =
-                miniCluster.requestJobResult(jobGraph.getJobID());
+        miniCluster.submitStream(jobGraph).join();
+        final CompletableFuture<StreamResult> jobResultFuture =
+                miniCluster.requestStreamResult(jobGraph.getStreamID());
 
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(), JOB_VERTEX_ID, initialInstanceCount);
+                jobGraph.getStreamID(), JOB_VERTEX_ID, initialInstanceCount);
 
         log.info("Start additional TaskManager to scale up to the full parallelism.");
         miniCluster.startTaskManager();
 
         log.info("Waiting until Invokable is running with higher parallelism");
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(), JOB_VERTEX_ID, targetInstanceCount);
+                jobGraph.getStreamID(), JOB_VERTEX_ID, targetInstanceCount);
         OnceBlockingNoOpInvokable.unblock();
 
         assertThat(jobResultFuture.join().isSuccess()).isTrue();
@@ -172,11 +172,11 @@ public class AdaptiveSchedulerClusterITCase {
     void testCheckpointStatsPersistedAcrossRescale() throws Exception {
         final MiniCluster miniCluster = internalMiniClusterExtension.getMiniCluster();
 
-        JobVertex jobVertex = new JobVertex("jobVertex", JOB_VERTEX_ID);
+        StreamVertex jobVertex = new StreamVertex("jobVertex", JOB_VERTEX_ID);
         jobVertex.setInvokableClass(CheckpointingNoOpInvokable.class);
         jobVertex.setParallelism(PARALLELISM);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertex);
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder()
@@ -185,11 +185,11 @@ public class AdaptiveSchedulerClusterITCase {
                                 .build(),
                         null));
 
-        miniCluster.submitJob(jobGraph).join();
+        miniCluster.submitStream(jobGraph).join();
 
         // wait until the desired parallelism is reached
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(),
+                jobGraph.getStreamID(),
                 JOB_VERTEX_ID,
                 NUMBER_SLOTS_PER_TASK_MANAGER * NUMBER_TASK_MANAGERS);
 
@@ -197,7 +197,7 @@ public class AdaptiveSchedulerClusterITCase {
         CommonTestUtils.waitUntilCondition(
                 () ->
                         miniCluster
-                                .getExecutionGraph(jobGraph.getJobID())
+                                .getExecutionGraph(jobGraph.getStreamID())
                                 .thenApply(
                                         eg ->
                                                 eg.getCheckpointStatsSnapshot()
@@ -209,14 +209,14 @@ public class AdaptiveSchedulerClusterITCase {
         miniCluster.terminateTaskManager(0);
 
         waitUntilParallelismForVertexReached(
-                jobGraph.getJobID(),
+                jobGraph.getStreamID(),
                 JOB_VERTEX_ID,
                 NUMBER_SLOTS_PER_TASK_MANAGER * (NUMBER_TASK_MANAGERS - 1));
 
         // check that the very first checkpoint is still accessible
         final List<AbstractCheckpointStats> checkpointHistory =
                 miniCluster
-                        .getExecutionGraph(jobGraph.getJobID())
+                        .getExecutionGraph(jobGraph.getStreamID())
                         .thenApply(
                                 eg -> eg.getCheckpointStatsSnapshot().getHistory().getCheckpoints())
                         .get();
@@ -265,14 +265,14 @@ public class AdaptiveSchedulerClusterITCase {
         }
     }
 
-    private JobGraph createBlockingJobGraph(int parallelism) throws IOException {
-        final JobVertex blockingOperator = new JobVertex("Blocking operator", JOB_VERTEX_ID);
+    private StreamGraph createBlockingJobGraph(int parallelism) throws IOException {
+        final StreamVertex blockingOperator = new StreamVertex("Blocking operator", JOB_VERTEX_ID);
 
         blockingOperator.setInvokableClass(OnceBlockingNoOpInvokable.class);
 
         blockingOperator.setParallelism(parallelism);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(blockingOperator);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(blockingOperator);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
 

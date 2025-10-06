@@ -57,16 +57,16 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.StreamResultEntry;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.JobResultStoreOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.factories.DefaultJobManagerJobMetricGroupFactory;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
@@ -168,7 +168,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
     private final Collection<ExecutionPlan> recoveredJobs;
 
-    private final Collection<JobResult> recoveredDirtyJobs;
+    private final Collection<StreamResult> recoveredDirtyJobs;
 
     private final DispatcherBootstrapFactory dispatcherBootstrapFactory;
 
@@ -220,7 +220,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobs,
+            Collection<StreamResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices)
             throws Exception {
@@ -238,7 +238,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobs,
+            Collection<StreamResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices,
             JobManagerRunnerRegistry jobManagerRunnerRegistry)
@@ -259,7 +259,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobs,
+            Collection<StreamResult> recoveredDirtyJobs,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices,
             JobManagerRunnerRegistry jobManagerRunnerRegistry,
@@ -376,10 +376,10 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
     private static void assertRecoveredJobsAndDirtyJobResults(
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobResults) {
+            Collection<StreamResult> recoveredDirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
                 recoveredDirtyJobResults.stream()
-                        .map(JobResult::getStreamId)
+                        .map(StreamResult::getStreamId)
                         .collect(Collectors.toSet());
 
         final boolean noRecoveredExecutionPlanHasDirtyJobResult =
@@ -449,7 +449,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         recoveredDirtyJobs.clear();
     }
 
-    private void runCleanupRetry(final JobResult jobResult) {
+    private void runCleanupRetry(final StreamResult jobResult) {
         checkNotNull(jobResult);
 
         try {
@@ -585,8 +585,8 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     private CompletableFuture<Acknowledge> internalSubmitJob(ExecutionPlan executionPlan) {
-        if (executionPlan instanceof JobGraph) {
-            applyParallelismOverrides((JobGraph) executionPlan);
+        if (executionPlan instanceof StreamGraph) {
+            applyParallelismOverrides((StreamGraph) executionPlan);
         }
 
         log.info("Submitting job '{}' ({}).", executionPlan.getName(), executionPlan.getJobID());
@@ -657,7 +657,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 System.currentTimeMillis());
     }
 
-    private JobManagerRunner createJobCleanupRunner(JobResult dirtyJobResult) throws Exception {
+    private JobManagerRunner createJobCleanupRunner(StreamResult dirtyJobResult) throws Exception {
         Preconditions.checkState(!jobManagerRunnerRegistry.isRegistered(dirtyJobResult.getStreamId()));
         return cleanupRunnerFactory.create(
                 dirtyJobResult,
@@ -928,7 +928,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     @Override
-    public CompletableFuture<JobResult> requestJobResult(JobID jobId, Duration timeout) {
+    public CompletableFuture<StreamResult> requestJobResult(JobID jobId, Duration timeout) {
         if (!jobManagerRunnerRegistry.isRegistered(jobId)) {
             final ExecutionGraphInfo executionGraphInfo = executionGraphInfoStore.get(jobId);
 
@@ -936,7 +936,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 return FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId));
             } else {
                 return CompletableFuture.completedFuture(
-                        JobResult.createFrom(executionGraphInfo.getArchivedExecutionGraph()));
+                        StreamResult.createFrom(executionGraphInfo.getArchivedExecutionGraph()));
             }
         }
 
@@ -945,7 +945,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 .getResultFuture()
                 .thenApply(
                         jobManagerRunnerResult ->
-                                JobResult.createFrom(
+                                StreamResult.createFrom(
                                         jobManagerRunnerResult
                                                 .getExecutionGraphInfo()
                                                 .getArchivedExecutionGraph()));
@@ -1410,7 +1410,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
      * Creates a dirty entry in the {@link #jobResultStore} if there's no entry at all for the given
      * {@code executionGraph} in the {@code JobResultStore}.
      *
-     * @param executionGraph The {@link AccessExecutionGraph} for which the {@link JobResult} shall
+     * @param executionGraph The {@link AccessExecutionGraph} for which the {@link StreamResult} shall
      *     be persisted.
      * @param hasCleanJobResultEntry The decision the dirty entry check is based on.
      * @return {@code CompletableFuture} that completes as soon as the entry exists.
@@ -1446,7 +1446,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         }
 
         return jobResultStore.createDirtyResultAsync(
-                new StreamResultEntry(JobResult.createFrom(executionGraph)));
+                new StreamResultEntry(StreamResult.createFrom(executionGraph)));
     }
 
     private void writeToExecutionGraphInfoStore(ExecutionGraphInfo executionGraphInfo) {
@@ -1593,11 +1593,11 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         return CompletableFuture.runAsync(() -> terminateJob(jobId), getMainThreadExecutor(jobId));
     }
 
-    private void applyParallelismOverrides(JobGraph jobGraph) {
+    private void applyParallelismOverrides(StreamGraph jobGraph) {
         Map<String, String> overrides = new HashMap<>();
         overrides.putAll(configuration.get(PipelineOptions.PARALLELISM_OVERRIDES));
         overrides.putAll(jobGraph.getJobConfiguration().get(PipelineOptions.PARALLELISM_OVERRIDES));
-        for (JobVertex vertex : jobGraph.getVertices()) {
+        for (StreamVertex vertex : jobGraph.getVertices()) {
             String override = overrides.get(vertex.getID().toHexString());
             if (override != null) {
                 int currentParallelism = vertex.getParallelism();

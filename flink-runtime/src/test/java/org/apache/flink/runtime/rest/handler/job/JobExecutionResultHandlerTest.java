@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -109,7 +109,7 @@ class JobExecutionResultHandlerTest {
                                 jobId -> {
                                     assertThat(jobId).isEqualTo(TEST_JOB_ID);
                                     return CompletableFuture.completedFuture(
-                                            JobResult.createFrom(executionGraph));
+                                            StreamResult.createFrom(executionGraph));
                                 })
                         .build();
 

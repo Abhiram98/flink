@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rest.messages.RestResponseMarshallingTestBase;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
@@ -62,7 +62,7 @@ public class JobExecutionResultResponseBodyTest
                 new Object[][] {
                     {
                         JobExecutionResultResponseBody.created(
-                                new JobResult.Builder()
+                                new StreamResult.Builder()
                                         .jobId(TEST_JOB_ID)
                                         .applicationStatus(ApplicationStatus.SUCCEEDED)
                                         .netRuntime(TEST_NET_RUNTIME)
@@ -74,7 +74,7 @@ public class JobExecutionResultResponseBodyTest
                     },
                     {
                         JobExecutionResultResponseBody.created(
-                                new JobResult.Builder()
+                                new StreamResult.Builder()
                                         .jobId(TEST_JOB_ID)
                                         .applicationStatus(ApplicationStatus.FAILED)
                                         .netRuntime(TEST_NET_RUNTIME)
@@ -109,8 +109,8 @@ public class JobExecutionResultResponseBodyTest
 
         assertThat(actual.getStatus()).isEqualTo(actual.getStatus());
 
-        final JobResult expectedJobExecutionResult = expected.getJobExecutionResult();
-        final JobResult actualJobExecutionResult = actual.getJobExecutionResult();
+        final StreamResult expectedJobExecutionResult = expected.getJobExecutionResult();
+        final StreamResult actualJobExecutionResult = actual.getJobExecutionResult();
 
         if (expectedJobExecutionResult != null) {
             assertThat(actualJobExecutionResult).isNotNull();

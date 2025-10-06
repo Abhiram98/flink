@@ -34,7 +34,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.failover.ResultPartitionAvailabilityChecker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
@@ -153,7 +153,7 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     void setInternalTaskFailuresListener(InternalFailuresListener internalTaskFailuresListener);
 
     void attachJobGraph(
-            List<JobVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException;
 
     void transitionToRunning();

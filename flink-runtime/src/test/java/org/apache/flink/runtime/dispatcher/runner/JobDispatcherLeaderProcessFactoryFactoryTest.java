@@ -22,12 +22,12 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.dispatcher.TestingPartialDispatcherServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.StandaloneExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.TestingJobPersistenceComponentFactory;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rest.util.NoOpFatalErrorHandler;
 import org.apache.flink.runtime.rpc.TestingRpcService;
 import org.apache.flink.runtime.testutils.TestingJobResultStore;
@@ -54,7 +54,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithoutDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
 
         final JobDispatcherLeaderProcessFactory factory =
                 createDispatcherLeaderProcessFactoryFromTestInstance(
@@ -66,9 +66,9 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithMatchingDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
-        final JobResult jobResult =
-                TestingJobResultStore.createSuccessfulJobResult(jobGraph.getJobID());
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
+        final StreamResult jobResult =
+                TestingJobResultStore.createSuccessfulJobResult(jobGraph.getStreamID());
 
         final JobDispatcherLeaderProcessFactory factory =
                 createDispatcherLeaderProcessFactoryFromTestInstance(
@@ -80,8 +80,8 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithNotMatchingDirtyJobResult() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
-        final JobResult jobResult = TestingJobResultStore.createSuccessfulJobResult(new JobID());
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
+        final StreamResult jobResult = TestingJobResultStore.createSuccessfulJobResult(new JobID());
 
         final JobDispatcherLeaderProcessFactory factory =
                 createDispatcherLeaderProcessFactoryFromTestInstance(
@@ -105,8 +105,8 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     private static JobDispatcherLeaderProcessFactory
             createDispatcherLeaderProcessFactoryFromTestInstance(
-                    @Nullable JobGraph jobGraph,
-                    @Nullable JobResult dirtyJobResult,
+                    @Nullable StreamGraph jobGraph,
+                    @Nullable StreamResult dirtyJobResult,
                     Path storageDir)
                     throws IOException {
         final JobDispatcherLeaderProcessFactoryFactory testInstance =

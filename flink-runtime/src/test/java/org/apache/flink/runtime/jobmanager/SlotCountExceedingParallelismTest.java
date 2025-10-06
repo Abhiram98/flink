@@ -27,9 +27,9 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -78,36 +78,36 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
     @Test
     public void testNoSlotSharingAndBlockingResultSender() throws Exception {
         // Sender with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM);
+        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM);
         submitJobGraphAndWait(jobGraph);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultReceiver() throws Exception {
         // Receiver with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM, PARALLELISM * 2);
+        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM, PARALLELISM * 2);
         submitJobGraphAndWait(jobGraph);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultBoth() throws Exception {
         // Both sender and receiver with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM * 2);
+        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM * 2);
         submitJobGraphAndWait(jobGraph);
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    private void submitJobGraphAndWait(final JobGraph jobGraph)
+    private void submitJobGraphAndWait(final StreamGraph jobGraph)
             throws JobExecutionException, InterruptedException {
         MINI_CLUSTER_RESOURCE.getMiniCluster().executeJobBlocking(jobGraph);
     }
 
-    private JobGraph createTestJobGraph(
+    private StreamGraph createTestJobGraph(
             String jobName, int senderParallelism, int receiverParallelism) {
 
         // The sender and receiver invokable logic ensure that each subtask gets the expected data
-        final JobVertex sender = new JobVertex("Sender");
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setInvokableClass(RoundRobinSubtaskIndexSender.class);
         sender.getConfiguration()
                 .get(
@@ -115,7 +115,7 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
                         receiverParallelism);
         sender.setParallelism(senderParallelism);
 
-        final JobVertex receiver = new JobVertex("Receiver");
+        final StreamVertex receiver = new StreamVertex("Receiver");
         receiver.setInvokableClass(SubtaskIndexReceiver.class);
         receiver.getConfiguration()
                 .get(getIntConfigOption(SubtaskIndexReceiver.CONFIG_KEY), senderParallelism);

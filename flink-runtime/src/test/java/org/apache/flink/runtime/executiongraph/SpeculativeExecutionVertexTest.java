@@ -24,9 +24,9 @@ import org.apache.flink.core.io.GenericInputSplit;
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.TestingInternalFailuresListener;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -136,8 +136,8 @@ class SpeculativeExecutionVertexTest {
 
     @Test
     void testVertexTerminationAndJobTermination() throws Exception {
-        final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final StreamVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
         eg.transitionToRunning();
 
@@ -240,7 +240,7 @@ class SpeculativeExecutionVertexTest {
     @Test
     void testGetNextInputSplit() throws Exception {
         final TestInputSource source = new TestInputSource();
-        final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
         jobVertex.setInputSplitSource(source);
 
         final SpeculativeExecutionVertex ev = createSpeculativeExecutionVertex(jobVertex);
@@ -276,15 +276,15 @@ class SpeculativeExecutionVertexTest {
         return createSpeculativeExecutionVertex(ExecutionGraphTestUtils.createNoOpVertex(1));
     }
 
-    private SpeculativeExecutionVertex createSpeculativeExecutionVertex(final JobVertex jobVertex)
+    private SpeculativeExecutionVertex createSpeculativeExecutionVertex(final StreamVertex jobVertex)
             throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         return (SpeculativeExecutionVertex)
                 executionGraph.getJobVertex(jobVertex.getID()).getTaskVertices()[0];
     }
 
-    private ExecutionGraph createExecutionGraph(final JobGraph jobGraph) throws Exception {
+    private ExecutionGraph createExecutionGraph(final StreamGraph jobGraph) throws Exception {
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

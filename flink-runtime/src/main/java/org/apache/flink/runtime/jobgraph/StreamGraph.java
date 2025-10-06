@@ -65,7 +65,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>The JobGraph defines the job-wide configuration settings, while each vertex and intermediate
  * result define the characteristics of the concrete operation and intermediate data.
  */
-public class JobGraph implements ExecutionPlan {
+public class StreamGraph implements ExecutionPlan {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,8 +74,8 @@ public class JobGraph implements ExecutionPlan {
     private long initialClientHeartbeatTimeout;
 
     /** List of task vertices included in this job graph. */
-    private final Map<JobVertexID, JobVertex> taskVertices =
-            new LinkedHashMap<JobVertexID, JobVertex>();
+    private final Map<JobVertexID, StreamVertex> taskVertices =
+            new LinkedHashMap<JobVertexID, StreamVertex>();
 
     /** The job configuration attached to this job. */
     private Configuration jobConfiguration = new Configuration();
@@ -133,7 +133,7 @@ public class JobGraph implements ExecutionPlan {
      *
      * @param jobName The name of the job.
      */
-    public JobGraph(String jobName) {
+    public StreamGraph(String jobName) {
         this(null, jobName);
     }
 
@@ -145,7 +145,7 @@ public class JobGraph implements ExecutionPlan {
      * @param jobId The id of the job. A random ID is generated, if {@code null} is passed.
      * @param jobName The name of the job.
      */
-    public JobGraph(@Nullable JobID jobId, String jobName) {
+    public StreamGraph(@Nullable JobID jobId, String jobName) {
         this.jobID = jobId == null ? new JobID() : jobId;
         this.jobName = jobName == null ? "(unnamed job)" : jobName;
 
@@ -166,10 +166,10 @@ public class JobGraph implements ExecutionPlan {
      * @param jobName The name of the job.
      * @param vertices The vertices to add to the graph.
      */
-    public JobGraph(@Nullable JobID jobId, String jobName, JobVertex... vertices) {
+    public StreamGraph(@Nullable JobID jobId, String jobName, StreamVertex... vertices) {
         this(jobId, jobName);
 
-        for (JobVertex vertex : vertices) {
+        for (StreamVertex vertex : vertices) {
             addVertex(vertex);
         }
     }
@@ -181,8 +181,7 @@ public class JobGraph implements ExecutionPlan {
      *
      * @return the ID of the job
      */
-    @Override
-    public JobID getJobID() {
+    public JobID getStreamID() {
         return this.jobID;
     }
 
@@ -206,7 +205,7 @@ public class JobGraph implements ExecutionPlan {
         boolean hasVerticesWithUnknownResource = false;
         boolean hasVerticesWithConfiguredResource = false;
 
-        for (JobVertex jobVertex : getVertices()) {
+        for (StreamVertex jobVertex : getVertices()) {
             if (jobVertex.getMinResources() == ResourceSpec.UNKNOWN) {
                 hasVerticesWithUnknownResource = true;
             } else {
@@ -322,9 +321,9 @@ public class JobGraph implements ExecutionPlan {
      *
      * @param vertex the new task vertex to be added
      */
-    public void addVertex(JobVertex vertex) {
+    public void addVertex(StreamVertex vertex) {
         final JobVertexID id = vertex.getID();
-        JobVertex previous = taskVertices.put(id, vertex);
+        StreamVertex previous = taskVertices.put(id, vertex);
 
         // if we had a prior association, restore and throw an exception
         if (previous != null) {
@@ -339,7 +338,7 @@ public class JobGraph implements ExecutionPlan {
      *
      * @return an Iterable to iterate all vertices registered with the job graph
      */
-    public Iterable<JobVertex> getVertices() {
+    public Iterable<StreamVertex> getVertices() {
         return this.taskVertices.values();
     }
 
@@ -349,8 +348,8 @@ public class JobGraph implements ExecutionPlan {
      *
      * @return an array of all job vertices that are registered with the job graph
      */
-    public JobVertex[] getVerticesAsArray() {
-        return this.taskVertices.values().toArray(new JobVertex[this.taskVertices.size()]);
+    public StreamVertex[] getVerticesAsArray() {
+        return this.taskVertices.values().toArray(new StreamVertex[this.taskVertices.size()]);
     }
 
     /**
@@ -365,7 +364,7 @@ public class JobGraph implements ExecutionPlan {
     public Set<SlotSharingGroup> getSlotSharingGroups() {
         final Set<SlotSharingGroup> slotSharingGroups =
                 IterableUtils.toStream(getVertices())
-                        .map(JobVertex::getSlotSharingGroup)
+                        .map(StreamVertex::getSlotSharingGroup)
                         .collect(Collectors.toSet());
         return Collections.unmodifiableSet(slotSharingGroups);
     }
@@ -378,7 +377,7 @@ public class JobGraph implements ExecutionPlan {
     public Set<CoLocationGroup> getCoLocationGroups() {
         final Set<CoLocationGroup> coLocationGroups =
                 IterableUtils.toStream(getVertices())
-                        .map(JobVertex::getCoLocationGroup)
+                        .map(StreamVertex::getCoLocationGroup)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toSet());
         return Collections.unmodifiableSet(coLocationGroups);
@@ -412,7 +411,7 @@ public class JobGraph implements ExecutionPlan {
      * @return the vertex with the matching ID or <code>null</code> if no vertex with such ID could
      *     be found
      */
-    public JobVertex findVertexByID(JobVertexID id) {
+    public StreamVertex findVertexByID(JobVertexID id) {
         return this.taskVertices.get(id);
     }
 
@@ -438,7 +437,7 @@ public class JobGraph implements ExecutionPlan {
     @Override
     public int getMaximumParallelism() {
         int maxParallelism = -1;
-        for (JobVertex vertex : taskVertices.values()) {
+        for (StreamVertex vertex : taskVertices.values()) {
             maxParallelism = Math.max(vertex.getParallelism(), maxParallelism);
         }
         return maxParallelism;
@@ -448,22 +447,22 @@ public class JobGraph implements ExecutionPlan {
     //  Topological Graph Access
     // --------------------------------------------------------------------------------------------
 
-    public List<JobVertex> getVerticesSortedTopologicallyFromSources()
+    public List<StreamVertex> getVerticesSortedTopologicallyFromSources()
             throws InvalidProgramException {
         // early out on empty lists
         if (this.taskVertices.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<JobVertex> sorted = new ArrayList<JobVertex>(this.taskVertices.size());
-        Set<JobVertex> remaining = new LinkedHashSet<JobVertex>(this.taskVertices.values());
+        List<StreamVertex> sorted = new ArrayList<StreamVertex>(this.taskVertices.size());
+        Set<StreamVertex> remaining = new LinkedHashSet<StreamVertex>(this.taskVertices.values());
 
         // start by finding the vertices with no input edges
         // and the ones with disconnected inputs (that refer to some standalone data set)
         {
-            Iterator<JobVertex> iter = remaining.iterator();
+            Iterator<StreamVertex> iter = remaining.iterator();
             while (iter.hasNext()) {
-                JobVertex vertex = iter.next();
+                StreamVertex vertex = iter.next();
 
                 if (vertex.hasNoConnectedInputs()) {
                     sorted.add(vertex);
@@ -483,7 +482,7 @@ public class JobGraph implements ExecutionPlan {
                 throw new InvalidProgramException("The job graph is cyclic.");
             }
 
-            JobVertex current = sorted.get(startNodePos++);
+            StreamVertex current = sorted.get(startNodePos++);
             addNodesThatHaveNoNewPredecessors(current, sorted, remaining);
         }
 
@@ -491,7 +490,7 @@ public class JobGraph implements ExecutionPlan {
     }
 
     private void addNodesThatHaveNoNewPredecessors(
-            JobVertex start, List<JobVertex> target, Set<JobVertex> remaining) {
+            StreamVertex start, List<StreamVertex> target, Set<StreamVertex> remaining) {
 
         // forward traverse over all produced data sets and all their consumers
         for (IntermediateDataSet dataSet : start.getProducedDataSets()) {
@@ -499,7 +498,7 @@ public class JobGraph implements ExecutionPlan {
 
                 // a vertex can be added, if it has no predecessors that are still in the
                 // 'remaining' set
-                JobVertex v = edge.getTarget();
+                StreamVertex v = edge.getTarget();
                 if (!remaining.contains(v)) {
                     continue;
                 }
@@ -548,7 +547,7 @@ public class JobGraph implements ExecutionPlan {
     }
 
     /**
-     * Adds the given jar files to the {@link JobGraph} via {@link JobGraph#addJar}.
+     * Adds the given jar files to the {@link StreamGraph} via {@link StreamGraph#addJar}.
      *
      * @param jarFilesToAttach a list of the {@link URL URLs} of the jar files to attach to the
      *     jobgraph.

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.highavailability;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -102,11 +102,11 @@ public interface StreamResultStore {
     CompletableFuture<Boolean> hasCleanStreamResultEntryAsync(JobID jobId);
 
     /**
-     * Get the persisted {@link JobResult} instances that are marked as {@code dirty}. This is
+     * Get the persisted {@link StreamResult} instances that are marked as {@code dirty}. This is
      * useful for recovery of finalization steps.
      *
      * @return A set of dirty {@code JobResults} from the store.
      * @throws IOException if collecting the set of dirty results failed for IO reasons.
      */
-    Set<JobResult> getDirtyResults() throws IOException;
+    Set<StreamResult> getDirtyResults() throws IOException;
 }

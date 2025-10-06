@@ -40,16 +40,9 @@ import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointRetentionPolicy;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -132,7 +125,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
-/** The StreamingJobGraphGenerator converts a {@link StreamGraph} into a {@link JobGraph}. */
+/** The StreamingJobGraphGenerator converts a {@link org.apache.flink.streaming.api.graph.StreamGraph} into a {@link org.apache.flink.runtime.jobgraph.StreamGraph}. */
 @Internal
 public class StreamingJobGraphGenerator {
 
@@ -141,7 +134,7 @@ public class StreamingJobGraphGenerator {
     // ------------------------------------------------------------------------
 
     @VisibleForTesting
-    public static JobGraph createJobGraph(StreamGraph streamGraph) {
+    public static org.apache.flink.runtime.jobgraph.StreamGraph createJobGraph(org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         return new StreamingJobGraphGenerator(
                         Thread.currentThread().getContextClassLoader(),
                         streamGraph,
@@ -150,8 +143,8 @@ public class StreamingJobGraphGenerator {
                 .createJobGraph();
     }
 
-    public static JobGraph createJobGraph(
-            ClassLoader userClassLoader, StreamGraph streamGraph, @Nullable JobID jobID) {
+    public static StreamGraph createJobGraph(
+            ClassLoader userClassLoader, org.apache.flink.streaming.api.graph.StreamGraph streamGraph, @Nullable JobID jobID) {
         // TODO Currently, we construct a new thread pool for the compilation of each job. In the
         // future, we may refactor the job submission framework and make it reusable across jobs.
         final ExecutorService serializationExecutor =
@@ -174,9 +167,9 @@ public class StreamingJobGraphGenerator {
     // ------------------------------------------------------------------------
 
     private final ClassLoader userClassloader;
-    private final StreamGraph streamGraph;
+    private final org.apache.flink.streaming.api.graph.StreamGraph streamGraph;
 
-    private final JobGraph jobGraph;
+    private final org.apache.flink.runtime.jobgraph.StreamGraph jobGraph;
     private final Collection<Integer> builtVertices;
 
     private final StreamGraphHasher defaultStreamGraphHasher;
@@ -189,7 +182,7 @@ public class StreamingJobGraphGenerator {
 
     private StreamingJobGraphGenerator(
             ClassLoader userClassloader,
-            StreamGraph streamGraph,
+            org.apache.flink.streaming.api.graph.StreamGraph streamGraph,
             @Nullable JobID jobID,
             Executor serializationExecutor) {
         this.userClassloader = userClassloader;
@@ -199,7 +192,7 @@ public class StreamingJobGraphGenerator {
 
         this.builtVertices = new HashSet<>();
         this.serializationExecutor = Preconditions.checkNotNull(serializationExecutor);
-        jobGraph = new JobGraph(jobID, streamGraph.getJobName());
+        jobGraph = new StreamGraph(jobID, streamGraph.getJobName());
 
         // Generate deterministic hashes for the nodes in order to identify them across
         // submission iff they didn't change.
@@ -218,7 +211,7 @@ public class StreamingJobGraphGenerator {
                         streamGraph, new AtomicBoolean(false), hashes, legacyHashes);
     }
 
-    private JobGraph createJobGraph() {
+    private org.apache.flink.runtime.jobgraph.StreamGraph createJobGraph() {
         preValidate(streamGraph, userClassloader);
         jobGraph.setJobType(streamGraph.getJobType());
         jobGraph.setDynamic(streamGraph.isDynamic());
@@ -258,7 +251,7 @@ public class StreamingJobGraphGenerator {
                 JobGraphUtils.prepareUserArtifactEntries(
                         streamGraph.getUserArtifacts().stream()
                                 .collect(Collectors.toMap(e -> e.f0, e -> e.f1)),
-                        jobGraph.getJobID());
+                        jobGraph.getStreamID());
 
         for (Map.Entry<String, DistributedCache.DistributedCacheEntry> entry :
                 distributedCacheEntries.entrySet()) {
@@ -291,7 +284,7 @@ public class StreamingJobGraphGenerator {
     }
 
     public static void serializeOperatorCoordinatorsAndStreamConfig(
-            JobGraph jobGraph,
+            org.apache.flink.runtime.jobgraph.StreamGraph jobGraph,
             Executor serializationExecutor,
             JobVertexBuildContext jobVertexBuildContext) {
         try {
@@ -324,7 +317,7 @@ public class StreamingJobGraphGenerator {
     }
 
     private static void waitForSerializationFuturesAndUpdateJobVertices(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext)
+            StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext)
             throws ExecutionException, InterruptedException {
         for (Map.Entry<
                         JobVertexID,
@@ -334,7 +327,7 @@ public class StreamingJobGraphGenerator {
                                 .getCoordinatorSerializationFuturesPerJobVertex()
                                 .entrySet()) {
             final JobVertexID jobVertexId = futuresPerJobVertex.getKey();
-            final JobVertex jobVertex = jobGraph.findVertexByID(jobVertexId);
+            final StreamVertex jobVertex = jobGraph.findVertexByID(jobVertexId);
 
             Preconditions.checkState(
                     jobVertex != null,
@@ -349,13 +342,13 @@ public class StreamingJobGraphGenerator {
     public static void addVertexIndexPrefixInVertexName(
             JobVertexBuildContext jobVertexBuildContext,
             AtomicInteger vertexIndexId,
-            JobGraph jobGraph) {
+            org.apache.flink.runtime.jobgraph.StreamGraph jobGraph) {
         if (!jobVertexBuildContext.getStreamGraph().isVertexNameIncludeIndexPrefix()) {
             return;
         }
         Set<JobVertexID> jobVertexIds =
                 jobVertexBuildContext.getJobVerticesInOrder().values().stream()
-                        .map(JobVertex::getID)
+                        .map(StreamVertex::getID)
                         .collect(Collectors.toSet());
         // JobVertexBuildContext only contains incrementally generated jobVertex instances. The
         // setName method needs to set the names based on the topological order of all jobVertices,
@@ -373,11 +366,11 @@ public class StreamingJobGraphGenerator {
     }
 
     public static void setVertexDescription(JobVertexBuildContext jobVertexBuildContext) {
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
-        final StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
-        for (Map.Entry<Integer, JobVertex> headOpAndJobVertex : jobVertices.entrySet()) {
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        for (Map.Entry<Integer, StreamVertex> headOpAndJobVertex : jobVertices.entrySet()) {
             Integer headOpId = headOpAndJobVertex.getKey();
-            JobVertex vertex = headOpAndJobVertex.getValue();
+            StreamVertex vertex = headOpAndJobVertex.getValue();
             StringBuilder builder = new StringBuilder();
             switch (streamGraph.getVertexDescriptionMode()) {
                 case CASCADING:
@@ -497,7 +490,7 @@ public class StreamingJobGraphGenerator {
         List<StreamNode> chainedSources;
         final Map<Integer, Map<Integer, StreamConfig>> chainedConfigs =
                 jobVertexBuildContext.getChainedConfigs();
-        final StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
 
         if (!chainedConfigs.containsKey(node.getId())) {
             // node is not head operator of a vertex
@@ -526,7 +519,7 @@ public class StreamingJobGraphGenerator {
     }
 
     @SuppressWarnings("deprecation")
-    public static void preValidate(StreamGraph streamGraph, ClassLoader userClassloader) {
+    public static void preValidate(org.apache.flink.streaming.api.graph.StreamGraph streamGraph, ClassLoader userClassloader) {
         CheckpointConfig checkpointConfig = streamGraph.getCheckpointConfig();
 
         if (checkpointConfig.isCheckpointingEnabled()) {
@@ -672,7 +665,7 @@ public class StreamingJobGraphGenerator {
     /**
      * Sets up task chains from the source {@link StreamNode} instances.
      *
-     * <p>This will recursively create all {@link JobVertex} instances.
+     * <p>This will recursively create all {@link StreamVertex} instances.
      */
     private void setChaining() {
         // we separate out the sources that run as inputs to another operator (chained inputs)
@@ -852,9 +845,9 @@ public class StreamingJobGraphGenerator {
      * parallelism at early stage if possible, to avoid invalid partition reuse.
      */
     private void setVertexParallelismsForDynamicGraphIfNecessary() {
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
         // Note that the jobVertices are reverse topological order
-        final List<JobVertex> topologicalOrderVertices =
+        final List<StreamVertex> topologicalOrderVertices =
                 IterableUtils.toStream(jobVertices.values()).collect(Collectors.toList());
         Collections.reverse(topologicalOrderVertices);
 
@@ -876,10 +869,10 @@ public class StreamingJobGraphGenerator {
                     }
                 });
 
-        final Map<JobVertex, Set<JobVertex>> forwardProducersByJobVertex = new HashMap<>();
+        final Map<StreamVertex, Set<StreamVertex>> forwardProducersByJobVertex = new HashMap<>();
         jobVertices.forEach(
                 (startNodeId, jobVertex) -> {
-                    Set<JobVertex> forwardConsumers =
+                    Set<StreamVertex> forwardConsumers =
                             jobVertexBuildContext.getChainInfo(startNodeId).getTransitiveOutEdges()
                                     .stream()
                                     .filter(
@@ -890,7 +883,7 @@ public class StreamingJobGraphGenerator {
                                     .map(jobVertices::get)
                                     .collect(Collectors.toSet());
 
-                    for (JobVertex forwardConsumer : forwardConsumers) {
+                    for (StreamVertex forwardConsumer : forwardConsumers) {
                         forwardProducersByJobVertex.compute(
                                 forwardConsumer,
                                 (ignored, producers) -> {
@@ -961,7 +954,7 @@ public class StreamingJobGraphGenerator {
             Optional<OperatorChainInfo> operatorChainInfo,
             Map<Integer, String> chainedNames,
             JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         List<ChainedSourceInfo> chainedSourceInfos =
                 operatorChainInfo
                         .map(
@@ -986,7 +979,7 @@ public class StreamingJobGraphGenerator {
     }
 
     private static List<ChainedSourceInfo> getChainedSourcesByVertexId(
-            Integer vertexId, OperatorChainInfo chainInfo, StreamGraph streamGraph) {
+            Integer vertexId, OperatorChainInfo chainInfo, org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         return streamGraph.getStreamNode(vertexId).getInEdges().stream()
                 .map(inEdge -> chainInfo.getChainedSources().get(inEdge.getSourceId()))
                 .filter(Objects::nonNull)
@@ -1029,7 +1022,7 @@ public class StreamingJobGraphGenerator {
 
     private StreamConfig createJobVertex(Integer streamNodeId, OperatorChainInfo chainInfo) {
 
-        JobVertex jobVertex;
+        StreamVertex jobVertex;
         StreamNode streamNode = streamGraph.getStreamNode(streamNodeId);
 
         byte[] hash = jobVertexBuildContext.getHash(streamNodeId);
@@ -1069,7 +1062,7 @@ public class StreamingJobGraphGenerator {
                     .write(new TaskConfig(jobVertex.getConfiguration()));
         } else {
             jobVertex =
-                    new JobVertex(
+                    new StreamVertex(
                             chainInfo.getChainedName(streamNodeId), jobVertexId, operatorIDPairs);
         }
 
@@ -1137,7 +1130,7 @@ public class StreamingJobGraphGenerator {
             StreamConfig config,
             Map<Integer, ChainedSourceInfo> chainedSources,
             JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         OperatorInfo operatorInfo = jobVertexBuildContext.getOperatorInfo(vertexId);
         StreamNode vertex = streamGraph.getStreamNode(vertexId);
 
@@ -1402,7 +1395,7 @@ public class StreamingJobGraphGenerator {
             boolean isPersistentDataSet,
             IntermediateDataSetID dataSetId,
             ResultPartitionType partitionType,
-            StreamGraph streamGraph) {
+            org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         int consumerParallelism =
                 streamGraph.getStreamNode(consumerEdge.getTargetId()).getParallelism();
         int consumerMaxParallelism =
@@ -1469,7 +1462,7 @@ public class StreamingJobGraphGenerator {
             List<StreamEdge> chainableOutputs,
             List<StreamEdge> nonChainableOutputs,
             JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         for (StreamEdge edge : chainableOutputs) {
             StreamPartitioner<?> partitioner = edge.getPartitioner();
             if (partitioner instanceof ForwardForConsecutiveHashPartitioner
@@ -1522,15 +1515,15 @@ public class StreamingJobGraphGenerator {
             Integer headOfChain,
             StreamEdge edge,
             NonChainedOutput output,
-            Map<Integer, JobVertex> jobVertices,
+            Map<Integer, StreamVertex> jobVertices,
             JobVertexBuildContext jobVertexBuildContext) {
 
         jobVertexBuildContext.addPhysicalEdgesInOrder(edge);
 
         Integer downStreamVertexID = edge.getTargetId();
 
-        JobVertex headVertex = jobVertices.get(headOfChain);
-        JobVertex downStreamVertex = jobVertices.get(downStreamVertexID);
+        StreamVertex headVertex = jobVertices.get(headOfChain);
+        StreamVertex downStreamVertex = jobVertices.get(downStreamVertexID);
 
         StreamConfig downStreamConfig = new StreamConfig(downStreamVertex.getConfiguration());
 
@@ -1615,7 +1608,7 @@ public class StreamingJobGraphGenerator {
 
     public static ResultPartitionType determineUndefinedResultPartitionType(
             StreamEdge edge, JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         Attribute sourceNodeAttribute =
                 streamGraph.getStreamNode(edge.getSourceId()).getAttribute();
         if (sourceNodeAttribute.isNoOutputUntilEndOfInput()) {
@@ -1654,13 +1647,13 @@ public class StreamingJobGraphGenerator {
         }
     }
 
-    public static boolean isChainable(StreamEdge edge, StreamGraph streamGraph) {
+    public static boolean isChainable(StreamEdge edge, org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         StreamNode downStreamVertex = streamGraph.getTargetVertex(edge);
 
         return downStreamVertex.getInEdges().size() == 1 && isChainableInput(edge, streamGraph);
     }
 
-    public static boolean isChainableInput(StreamEdge edge, StreamGraph streamGraph) {
+    public static boolean isChainableInput(StreamEdge edge, org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         StreamNode upStreamVertex = streamGraph.getSourceVertex(edge);
         StreamNode downStreamVertex = streamGraph.getTargetVertex(edge);
 
@@ -1702,7 +1695,7 @@ public class StreamingJobGraphGenerator {
 
     @VisibleForTesting
     static boolean areOperatorsChainable(
-            StreamNode upStreamVertex, StreamNode downStreamVertex, StreamGraph streamGraph) {
+            StreamNode upStreamVertex, StreamNode downStreamVertex, org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         StreamOperatorFactory<?> upStreamOperator = upStreamVertex.getOperatorFactory();
         StreamOperatorFactory<?> downStreamOperator = downStreamVertex.getOperatorFactory();
         if (downStreamOperator == null || upStreamOperator == null) {
@@ -1765,7 +1758,7 @@ public class StreamingJobGraphGenerator {
 
     /** Backtraces the head of an operator chain. */
     private static StreamOperatorFactory<?> getHeadOperator(
-            StreamNode upStreamVertex, StreamGraph streamGraph) {
+            StreamNode upStreamVertex, org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         if (streamGraph.getHeadOperatorForNodeFromCache(upStreamVertex) == null) {
             if (upStreamVertex.getInEdges().size() == 1
                     && isChainable(upStreamVertex.getInEdges().get(0), streamGraph)) {
@@ -1786,11 +1779,11 @@ public class StreamingJobGraphGenerator {
 
     public static void markSupportingConcurrentExecutionAttempts(
             JobVertexBuildContext jobVertexBuildContext) {
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
 
-        for (Map.Entry<Integer, JobVertex> entry : jobVertices.entrySet()) {
-            final JobVertex jobVertex = entry.getValue();
+        for (Map.Entry<Integer, StreamVertex> entry : jobVertices.entrySet()) {
+            final StreamVertex jobVertex = entry.getValue();
             final Set<Integer> vertexOperators = new HashSet<>();
             vertexOperators.add(entry.getKey());
             final Map<Integer, StreamConfig> vertexChainedConfigs =
@@ -1814,22 +1807,22 @@ public class StreamingJobGraphGenerator {
     }
 
     public static void setSlotSharingAndCoLocation(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+            StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         setSlotSharing(jobGraph, jobVertexBuildContext);
         setCoLocation(jobVertexBuildContext);
     }
 
     private static void setSlotSharing(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+            org.apache.flink.runtime.jobgraph.StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<String, SlotSharingGroup> specifiedSlotSharingGroups = new HashMap<>();
         final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups =
                 buildVertexRegionSlotSharingGroups(jobGraph, jobVertexBuildContext);
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
 
-        for (Map.Entry<Integer, JobVertex> entry : jobVertices.entrySet()) {
+        for (Map.Entry<Integer, StreamVertex> entry : jobVertices.entrySet()) {
 
-            final JobVertex vertex = entry.getValue();
+            final StreamVertex vertex = entry.getValue();
             final String slotSharingGroupKey =
                     streamGraph.getStreamNode(entry.getKey()).getSlotSharingGroup();
 
@@ -1874,12 +1867,12 @@ public class StreamingJobGraphGenerator {
 
     /**
      * Maps a vertex to its region slot sharing group. If {@link
-     * StreamGraph#isAllVerticesInSameSlotSharingGroupByDefault()} returns true, all regions will be
+     * org.apache.flink.streaming.api.graph.StreamGraph#isAllVerticesInSameSlotSharingGroupByDefault()} returns true, all regions will be
      * in the same slot sharing group.
      */
     private static Map<JobVertexID, SlotSharingGroup> buildVertexRegionSlotSharingGroups(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
-        StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+            org.apache.flink.runtime.jobgraph.StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups = new HashMap<>();
         final SlotSharingGroup defaultSlotSharingGroup = new SlotSharingGroup();
         streamGraph
@@ -1914,13 +1907,13 @@ public class StreamingJobGraphGenerator {
     private static void setCoLocation(JobVertexBuildContext jobVertexBuildContext) {
         final Map<String, Tuple2<SlotSharingGroup, CoLocationGroupImpl>> coLocationGroups =
                 new HashMap<>();
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
-        final StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
 
-        for (Map.Entry<Integer, JobVertex> entry : jobVertices.entrySet()) {
+        for (Map.Entry<Integer, StreamVertex> entry : jobVertices.entrySet()) {
 
             final StreamNode node = streamGraph.getStreamNode(entry.getKey());
-            final JobVertex vertex = entry.getValue();
+            final StreamVertex vertex = entry.getValue();
             final SlotSharingGroup sharingGroup = vertex.getSlotSharingGroup();
 
             // configure co-location constraint
@@ -1949,7 +1942,7 @@ public class StreamingJobGraphGenerator {
 
     public static void setManagedMemoryFraction(JobVertexBuildContext jobVertexBuildContext) {
 
-        final Map<Integer, JobVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
+        final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
 
         // all slot sharing groups in this job
         final Set<SlotSharingGroup> slotSharingGroups =
@@ -1961,9 +1954,9 @@ public class StreamingJobGraphGenerator {
         // maps a job vertex ID to IDs of all operators in the vertex
         final Map<JobVertexID, Set<Integer>> vertexOperators = new HashMap<>();
 
-        for (Map.Entry<Integer, JobVertex> entry : jobVertices.entrySet()) {
+        for (Map.Entry<Integer, StreamVertex> entry : jobVertices.entrySet()) {
             final int headOperatorId = entry.getKey();
-            final JobVertex jobVertex = entry.getValue();
+            final StreamVertex jobVertex = entry.getValue();
 
             final SlotSharingGroup jobVertexSlotSharingGroup = jobVertex.getSlotSharingGroup();
 
@@ -1995,7 +1988,7 @@ public class StreamingJobGraphGenerator {
             final Map<JobVertexID, Integer> vertexHeadOperators,
             final Map<JobVertexID, Set<Integer>> vertexOperators,
             final JobVertexBuildContext jobVertexBuildContext) {
-        final StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<Integer, Map<Integer, StreamConfig>> vertexChainedConfigs =
                 jobVertexBuildContext.getChainedConfigs();
         final Set<Integer> groupOperatorIds =
@@ -2079,7 +2072,7 @@ public class StreamingJobGraphGenerator {
         }
     }
 
-    public static void configureCheckpointing(StreamGraph streamGraph, JobGraph jobGraph) {
+    public static void configureCheckpointing(org.apache.flink.streaming.api.graph.StreamGraph streamGraph, org.apache.flink.runtime.jobgraph.StreamGraph jobGraph) {
         CheckpointConfig cfg = streamGraph.getCheckpointConfig();
 
         long interval = cfg.getCheckpointInterval();

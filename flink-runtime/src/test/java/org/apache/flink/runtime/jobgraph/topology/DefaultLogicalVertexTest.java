@@ -18,11 +18,8 @@
 
 package org.apache.flink.runtime.jobgraph.topology;
 
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.TestLogger;
 
@@ -46,11 +43,11 @@ import static org.junit.Assert.assertNotNull;
 /** Unit tests for {@link DefaultLogicalVertex}. */
 public class DefaultLogicalVertexTest extends TestLogger {
 
-    private JobVertex upstreamJobVertex;
+    private StreamVertex upstreamJobVertex;
 
     private DefaultLogicalVertex upstreamLogicalVertex;
 
-    private JobVertex downstreamJobVertex;
+    private StreamVertex downstreamJobVertex;
 
     private DefaultLogicalVertex downstreamLogicalVertex;
 
@@ -108,7 +105,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
     }
 
     static void assertVerticesEquals(
-            final Iterable<JobVertex> jobVertices,
+            final Iterable<StreamVertex> jobVertices,
             final Iterable<DefaultLogicalVertex> logicalVertices) {
 
         final Map<JobVertexID, DefaultLogicalVertex> logicalVertextMap =
@@ -116,7 +113,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
                         .collect(
                                 Collectors.toMap(DefaultLogicalVertex::getId, Function.identity()));
 
-        for (JobVertex jobVertex : jobVertices) {
+        for (StreamVertex jobVertex : jobVertices) {
             final DefaultLogicalVertex logicalVertex = logicalVertextMap.remove(jobVertex.getID());
 
             assertNotNull(logicalVertex);
@@ -128,7 +125,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
     }
 
     static void assertVertexInfoEquals(
-            final JobVertex jobVertex, final DefaultLogicalVertex logicalVertex) {
+            final StreamVertex jobVertex, final DefaultLogicalVertex logicalVertex) {
 
         assertEquals(jobVertex.getID(), logicalVertex.getId());
     }

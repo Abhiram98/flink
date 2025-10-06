@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.testutils.FlinkMatchers;
 import org.apache.flink.runtime.checkpoint.TestingRetrievableStateStorageHelper;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.persistence.IntegerResourceVersion;
@@ -69,7 +69,7 @@ import static org.junit.Assert.fail;
  */
 public class DefaultExecutionPlanStoreTest extends TestLogger {
 
-    private final ExecutionPlan testingExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+    private final ExecutionPlan testingExecutionPlan = StreamGraphTestUtils.emptyJobGraph();
     private final long timeout = 100L;
 
     private TestingStateHandleStore.Builder<ExecutionPlan> builder;
@@ -449,7 +449,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         final Optional<JobResourceRequirements> maybeRecovered =
                 JobResourceRequirements.readFromExecutionPlan(
                         Objects.requireNonNull(
-                                (JobGraph) executionPlanStore.recoverExecutionPlan(jobId)));
+                                (StreamGraph) executionPlanStore.recoverExecutionPlan(jobId)));
         Assertions.assertThat(maybeRecovered).get().isEqualTo(expected);
     }
 

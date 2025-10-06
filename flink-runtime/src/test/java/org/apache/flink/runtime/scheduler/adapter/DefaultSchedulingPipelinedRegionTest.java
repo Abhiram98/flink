@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
@@ -109,11 +109,11 @@ class DefaultSchedulingPipelinedRegionTest {
      */
     @Test
     void returnsIncidentBlockingPartitions() throws Exception {
-        final JobVertex a = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex b = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex c = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex d = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex e = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex a = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex b = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex c = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex d = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex e = ExecutionGraphTestUtils.createNoOpVertex(1);
 
         b.connectNewDataSetAsInput(a, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
         c.connectNewDataSetAsInput(b, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);

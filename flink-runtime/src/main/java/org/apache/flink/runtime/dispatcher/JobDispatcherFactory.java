@@ -21,7 +21,7 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.dispatcher.cleanup.CheckpointResourcesCleanupRunnerFactory;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypoint;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.Preconditions;
@@ -41,13 +41,13 @@ public enum JobDispatcherFactory implements DispatcherFactory {
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobResults,
+            Collection<StreamResult> recoveredDirtyJobResults,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             PartialDispatcherServicesWithJobPersistenceComponents
                     partialDispatcherServicesWithJobPersistenceComponents)
             throws Exception {
         final ExecutionPlan recoveredExecutionPlan = Iterables.getOnlyElement(recoveredJobs, null);
-        final JobResult recoveredDirtyJob =
+        final StreamResult recoveredDirtyJob =
                 Iterables.getOnlyElement(recoveredDirtyJobResults, null);
 
         Preconditions.checkArgument(

@@ -24,9 +24,9 @@ import org.apache.flink.runtime.dispatcher.JobDispatcherFactory;
 import org.apache.flink.runtime.dispatcher.PartialDispatcherServices;
 import org.apache.flink.runtime.entrypoint.component.JobGraphRetriever;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmanager.JobPersistenceComponentFactory;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.util.FlinkException;
@@ -65,7 +65,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
             PartialDispatcherServices partialDispatcherServices,
             FatalErrorHandler fatalErrorHandler) {
 
-        final JobGraph jobGraph;
+        final StreamGraph jobGraph;
 
         try {
             jobGraph =
@@ -77,11 +77,11 @@ public class JobDispatcherLeaderProcessFactoryFactory
         }
 
         final StreamResultStore jobResultStore = jobPersistenceComponentFactory.createJobResultStore();
-        final Collection<JobResult> recoveredDirtyJobResults = getDirtyJobResults(jobResultStore);
+        final Collection<StreamResult> recoveredDirtyJobResults = getDirtyJobResults(jobResultStore);
 
-        final Optional<JobResult> maybeRecoveredDirtyJobResult =
+        final Optional<StreamResult> maybeRecoveredDirtyJobResult =
                 extractDirtyJobResult(recoveredDirtyJobResults, jobGraph);
-        final Optional<JobGraph> maybeJobGraph =
+        final Optional<StreamGraph> maybeJobGraph =
                 getJobGraphBasedOnDirtyJobResults(jobGraph, recoveredDirtyJobResults);
 
         final DefaultDispatcherGatewayServiceFactory defaultDispatcherServiceFactory =
@@ -101,7 +101,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
         return new JobDispatcherLeaderProcessFactoryFactory(jobGraphRetriever);
     }
 
-    private static Collection<JobResult> getDirtyJobResults(StreamResultStore jobResultStore) {
+    private static Collection<StreamResult> getDirtyJobResults(StreamResultStore jobResultStore) {
         try {
             return jobResultStore.getDirtyResults();
         } catch (IOException e) {
@@ -111,11 +111,11 @@ public class JobDispatcherLeaderProcessFactoryFactory
         }
     }
 
-    private static Optional<JobResult> extractDirtyJobResult(
-            Collection<JobResult> dirtyJobResults, JobGraph jobGraph) {
-        Optional<JobResult> actualDirtyJobResult = Optional.empty();
-        for (JobResult dirtyJobResult : dirtyJobResults) {
-            if (dirtyJobResult.getStreamId().equals(jobGraph.getJobID())) {
+    private static Optional<StreamResult> extractDirtyJobResult(
+            Collection<StreamResult> dirtyJobResults, StreamGraph jobGraph) {
+        Optional<StreamResult> actualDirtyJobResult = Optional.empty();
+        for (StreamResult dirtyJobResult : dirtyJobResults) {
+            if (dirtyJobResult.getStreamId().equals(jobGraph.getStreamID())) {
                 actualDirtyJobResult = Optional.of(dirtyJobResult);
             } else {
                 LOG.warn(
@@ -127,14 +127,14 @@ public class JobDispatcherLeaderProcessFactoryFactory
         return actualDirtyJobResult;
     }
 
-    private static Optional<JobGraph> getJobGraphBasedOnDirtyJobResults(
-            JobGraph jobGraph, Collection<JobResult> dirtyJobResults) {
+    private static Optional<StreamGraph> getJobGraphBasedOnDirtyJobResults(
+            StreamGraph jobGraph, Collection<StreamResult> dirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
-                dirtyJobResults.stream().map(JobResult::getStreamId).collect(Collectors.toSet());
-        if (jobIdsOfFinishedJobs.contains(jobGraph.getJobID())) {
+                dirtyJobResults.stream().map(StreamResult::getStreamId).collect(Collectors.toSet());
+        if (jobIdsOfFinishedJobs.contains(jobGraph.getStreamID())) {
             LOG.info(
                     "Skipping recovery of a job with job id {}, because it already reached a globally terminal state",
-                    jobGraph.getJobID());
+                    jobGraph.getStreamID());
             return Optional.empty();
         }
         return Optional.of(jobGraph);

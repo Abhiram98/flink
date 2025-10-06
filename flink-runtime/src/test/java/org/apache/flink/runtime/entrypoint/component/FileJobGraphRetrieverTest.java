@@ -20,9 +20,9 @@ package org.apache.flink.runtime.entrypoint.component;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.UnmodifiableConfiguration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.FlinkException;
 
@@ -66,9 +66,9 @@ public class FileJobGraphRetrieverTest {
 
         jarFileInJobGraph = TEMPORARY_FOLDER.newFile("jar_file_in_job_graph.jar").toPath();
 
-        final JobVertex source = new JobVertex("source");
-        final JobVertex target = new JobVertex("target");
-        final JobGraph jobGraph =
+        final StreamVertex source = new StreamVertex("source");
+        final StreamVertex target = new StreamVertex("target");
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(source, target))
                         .addClasspaths(Collections.singletonList(jarFileInJobGraph.toUri().toURL()))
@@ -98,7 +98,7 @@ public class FileJobGraphRetrieverTest {
 
         final FileJobGraphRetriever fileJobGraphRetriever =
                 FileJobGraphRetriever.createFrom(configuration, usrLibDir);
-        final JobGraph jobGraphFromFile = fileJobGraphRetriever.retrieveJobGraph(configuration);
+        final StreamGraph jobGraphFromFile = fileJobGraphRetriever.retrieveJobGraph(configuration);
 
         assertThat(jobGraphFromFile.getClasspaths(), containsInAnyOrder(expectedURLs.toArray()));
     }
@@ -108,7 +108,7 @@ public class FileJobGraphRetrieverTest {
         final FileJobGraphRetriever fileJobGraphRetriever =
                 FileJobGraphRetriever.createFrom(configuration, null);
         final List<URL> expectedUrls = Collections.singletonList(jarFileInJobGraph.toUri().toURL());
-        final JobGraph jobGraph = fileJobGraphRetriever.retrieveJobGraph(configuration);
+        final StreamGraph jobGraph = fileJobGraphRetriever.retrieveJobGraph(configuration);
 
         assertThat(jobGraph.getClasspaths(), containsInAnyOrder(expectedUrls.toArray()));
     }

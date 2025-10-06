@@ -21,9 +21,9 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -344,13 +344,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
                         rootDir,
                         new ScheduledExecutorServiceAdapter(EXECUTOR_RESOURCE.getExecutor()))) {
             miniCluster.start();
-            final JobVertex vertex = new JobVertex("blockingVertex");
+            final StreamVertex vertex = new StreamVertex("blockingVertex");
             // The adaptive scheduler expects that every vertex has a configured parallelism
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
-            miniCluster.submitJob(jobGraph);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(vertex);
+            miniCluster.submitStream(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }
     }

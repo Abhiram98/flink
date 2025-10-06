@@ -34,8 +34,8 @@ import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.StreamResultEntry;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
@@ -110,7 +110,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     private JobID jobId;
 
-    private JobGraph jobGraph;
+    private StreamGraph jobGraph;
 
     private TestingDispatcher dispatcher;
 
@@ -128,8 +128,8 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Before
     public void setup() throws Exception {
-        jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
-        jobId = jobGraph.getJobID();
+        jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
+        jobId = jobGraph.getStreamID();
 
         globalCleanupFuture = new CompletableFuture<>();
         localCleanupFuture = new CompletableFuture<>();

@@ -24,9 +24,9 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
@@ -63,9 +63,9 @@ class ExecutionGraphPartitionReleaseTest {
     @Test
     void testStrategyNotifiedOfFinishedVerticesAndResultsRespected() throws Exception {
         // setup a simple pipeline of 3 operators with blocking partitions
-        final JobVertex sourceVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex operatorVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex sinkVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex sourceVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex operatorVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex sinkVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
 
         operatorVertex.connectNewDataSetAsInput(
                 sourceVertex, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
@@ -145,10 +145,10 @@ class ExecutionGraphPartitionReleaseTest {
         // setup a pipeline of 2 failover regions (f1 -> f2), where
         // f1 is just a source
         // f2 consists of 3 operators (o1,o2,o3), where o1 consumes f1, and o2/o3 consume o1
-        final JobVertex sourceVertex = ExecutionGraphTestUtils.createNoOpVertex("source", 1);
-        final JobVertex operator1Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator1", 1);
-        final JobVertex operator2Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator2", 1);
-        final JobVertex operator3Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator3", 1);
+        final StreamVertex sourceVertex = ExecutionGraphTestUtils.createNoOpVertex("source", 1);
+        final StreamVertex operator1Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator1", 1);
+        final StreamVertex operator2Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator2", 1);
+        final StreamVertex operator3Vertex = ExecutionGraphTestUtils.createNoOpVertex("operator3", 1);
 
         operator1Vertex.connectNewDataSetAsInput(
                 sourceVertex, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
@@ -231,7 +231,7 @@ class ExecutionGraphPartitionReleaseTest {
     }
 
     private static Execution getCurrentExecution(
-            final JobVertex jobVertex, final ExecutionGraph executionGraph) {
+            final StreamVertex jobVertex, final ExecutionGraph executionGraph) {
         return executionGraph
                 .getJobVertex(jobVertex.getID())
                 .getTaskVertices()[0]
@@ -239,10 +239,10 @@ class ExecutionGraphPartitionReleaseTest {
     }
 
     private SchedulerBase createScheduler(
-            final JobMasterPartitionTracker partitionTracker, final JobVertex... vertices)
+            final JobMasterPartitionTracker partitionTracker, final StreamVertex... vertices)
             throws Exception {
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(vertices);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(vertices);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

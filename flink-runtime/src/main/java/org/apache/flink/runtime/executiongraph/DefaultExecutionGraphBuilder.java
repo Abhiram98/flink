@@ -38,9 +38,9 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -69,12 +69,12 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
  * Utility class to encapsulate the logic of building an {@link DefaultExecutionGraph} from a {@link
- * JobGraph}.
+ * StreamGraph}.
  */
 public class DefaultExecutionGraphBuilder {
 
     public static DefaultExecutionGraph buildGraph(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             Configuration jobManagerConfig,
             ScheduledExecutorService futureExecutor,
             Executor ioExecutor,
@@ -104,7 +104,7 @@ public class DefaultExecutionGraphBuilder {
         checkNotNull(jobGraph, "job graph cannot be null");
 
         final String jobName = jobGraph.getName();
-        final JobID jobId = jobGraph.getJobID();
+        final JobID jobId = jobGraph.getStreamID();
         final JobType jobType = jobGraph.getJobType();
 
         final JobInformation jobInformation =
@@ -188,7 +188,7 @@ public class DefaultExecutionGraphBuilder {
         final long initMasterStart = System.nanoTime();
         log.info("Running initialization on master for job {} ({}).", jobName, jobId);
 
-        for (JobVertex vertex : jobGraph.getVertices()) {
+        for (StreamVertex vertex : jobGraph.getVertices()) {
             String executableClass = vertex.getInvokableClassName();
             if (executableClass == null || executableClass.isEmpty()) {
                 throw new JobSubmissionException(
@@ -220,7 +220,7 @@ public class DefaultExecutionGraphBuilder {
                 (System.nanoTime() - initMasterStart) / 1_000_000);
 
         // topologically sort the job vertices and attach the graph to the existing one
-        List<JobVertex> sortedTopology = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> sortedTopology = jobGraph.getVerticesSortedTopologicallyFromSources();
         if (log.isDebugEnabled()) {
             log.debug(
                     "Adding {} vertices from job graph {} ({}).",
@@ -356,7 +356,7 @@ public class DefaultExecutionGraphBuilder {
         return executionGraph;
     }
 
-    public static boolean isCheckpointingEnabled(JobGraph jobGraph) {
+    public static boolean isCheckpointingEnabled(StreamGraph jobGraph) {
         return jobGraph.getCheckpointingSettings() != null;
     }
 

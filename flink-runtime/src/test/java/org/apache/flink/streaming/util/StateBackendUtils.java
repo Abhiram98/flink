@@ -23,10 +23,9 @@ import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 
 /** A utility class for configuring state backend. */
 public class StateBackendUtils {
@@ -85,7 +84,7 @@ public class StateBackendUtils {
      */
     public static JobClient configureStateBackendAndExecuteAsync(
             StreamExecutionEnvironment env, StateBackend stateBackend) throws Exception {
-        StreamGraph streamGraph = env.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setStateBackend(stateBackend);
 
         return env.executeAsync(streamGraph);
@@ -99,9 +98,9 @@ public class StateBackendUtils {
      * @param stateBackend The StateBackend to set for the execution environment.
      * @return The JobGraph representing the configured job.
      */
-    public static JobGraph configureStateBackendAndGetJobGraph(
+    public static StreamGraph configureStateBackendAndGetJobGraph(
             StreamExecutionEnvironment env, StateBackend stateBackend) {
-        StreamGraph streamGraph = env.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setStateBackend(stateBackend);
         return streamGraph.getJobGraph();
     }
@@ -116,12 +115,12 @@ public class StateBackendUtils {
      * @param jobId The JobID to associate with the JobGraph.
      * @return The JobGraph representing the configured job.
      */
-    public static JobGraph configureStateBackendAndGetJobGraph(
+    public static StreamGraph configureStateBackendAndGetJobGraph(
             StreamExecutionEnvironment env,
             StateBackend stateBackend,
             ClassLoader userClassLoader,
             JobID jobId) {
-        StreamGraph streamGraph = env.getStreamGraph();
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setStateBackend(stateBackend);
         return streamGraph.getJobGraph(userClassLoader, jobId);
     }

@@ -34,12 +34,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.failover.RestartAllFailoverStrategy;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -592,7 +588,7 @@ class OperatorCoordinatorSchedulerTest {
     }
 
     private DefaultScheduler createSchedulerWithoutCheckpointingAndDeployTasks() throws Exception {
-        final Consumer<JobGraph> noCheckpoints = (jobGraph) -> jobGraph.setSnapshotSettings(null);
+        final Consumer<StreamGraph> noCheckpoints = (jobGraph) -> jobGraph.setSnapshotSettings(null);
         final DefaultScheduler scheduler =
                 setupTestJobAndScheduler(
                         new TestingOperatorCoordinator.Provider(testOperatorId),
@@ -636,7 +632,7 @@ class OperatorCoordinatorSchedulerTest {
                 new TestingCheckpointStorageAccessCoordinatorView();
         storage.registerSavepoint(savepointPointer, savepointMetadata);
 
-        final Consumer<JobGraph> savepointConfigurer =
+        final Consumer<StreamGraph> savepointConfigurer =
                 (jobGraph) -> {
                     SchedulerTestingUtils.enableCheckpointing(
                             jobGraph, new ModernStateBackend(), storage.asCheckpointStorage());
@@ -663,15 +659,15 @@ class OperatorCoordinatorSchedulerTest {
     private DefaultScheduler setupTestJobAndScheduler(
             OperatorCoordinator.Provider provider,
             @Nullable TaskExecutorOperatorEventGateway taskExecutorOperatorEventGateway,
-            @Nullable Consumer<JobGraph> jobGraphPreProcessing,
+            @Nullable Consumer<StreamGraph> jobGraphPreProcessing,
             boolean restartAllOnFailover)
             throws Exception {
 
         final OperatorIDPair opIds =
                 OperatorIDPair.of(
                         new OperatorID(), provider.getOperatorId(), "operatorName", "operatorUid");
-        final JobVertex vertex =
-                new JobVertex(
+        final StreamVertex vertex =
+                new StreamVertex(
                         "Vertex with OperatorCoordinator",
                         testVertexId,
                         Collections.singletonList(opIds));
@@ -679,7 +675,7 @@ class OperatorCoordinatorSchedulerTest {
         vertex.addOperatorCoordinator(new SerializedValue<>(provider));
         vertex.setParallelism(2);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
 
         SchedulerTestingUtils.enableCheckpointing(jobGraph);
@@ -712,7 +708,7 @@ class OperatorCoordinatorSchedulerTest {
     }
 
     private static DefaultSchedulerBuilder createSchedulerBuilder(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService scheduledExecutorService) {
 
@@ -724,7 +720,7 @@ class OperatorCoordinatorSchedulerTest {
     }
 
     private static DefaultSchedulerBuilder createSchedulerBuilder(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             TaskExecutorOperatorEventGateway operatorEventGateway,
             ScheduledExecutorService scheduledExecutorService) {
@@ -739,7 +735,7 @@ class OperatorCoordinatorSchedulerTest {
     }
 
     private static DefaultSchedulerBuilder createSchedulerBuilder(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             TaskManagerGateway taskManagerGateway,
             ScheduledExecutorService executorService) {

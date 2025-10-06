@@ -20,9 +20,9 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertex.FinalizeOnMasterContext;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex.FinalizeOnMasterContext;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
@@ -41,7 +41,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests that the {@link JobVertex#finalizeOnMaster(FinalizeOnMasterContext)} is called properly and
+ * Tests that the {@link StreamVertex#finalizeOnMaster(FinalizeOnMasterContext)} is called properly and
  * only when the execution graph reaches the successful final state.
  */
 class FinalizeOnMasterTest {
@@ -52,17 +52,17 @@ class FinalizeOnMasterTest {
 
     @Test
     void testFinalizeIsCalledUponSuccess() throws Exception {
-        final JobVertex vertex1 = spy(new JobVertex("test vertex 1"));
+        final StreamVertex vertex1 = spy(new StreamVertex("test vertex 1"));
         vertex1.setInvokableClass(NoOpInvokable.class);
         vertex1.setParallelism(3);
 
-        final JobVertex vertex2 = spy(new JobVertex("test vertex 2"));
+        final StreamVertex vertex2 = spy(new StreamVertex("test vertex 2"));
         vertex2.setInvokableClass(NoOpInvokable.class);
         vertex2.setParallelism(2);
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        JobGraphTestUtils.streamingJobGraph(vertex1, vertex2),
+                        StreamGraphTestUtils.streamingStreamGraph(vertex1, vertex2),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();
@@ -85,13 +85,13 @@ class FinalizeOnMasterTest {
 
     @Test
     void testFinalizeIsNotCalledUponFailure() throws Exception {
-        final JobVertex vertex = spy(new JobVertex("test vertex 1"));
+        final StreamVertex vertex = spy(new StreamVertex("test vertex 1"));
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        JobGraphTestUtils.streamingJobGraph(vertex),
+                        StreamGraphTestUtils.streamingStreamGraph(vertex),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();

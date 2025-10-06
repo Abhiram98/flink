@@ -22,7 +22,7 @@ import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
@@ -36,7 +36,7 @@ import static org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkUti
 /** The base class of benchmarks related to deploying tasks. */
 public class DeployingTasksBenchmarkBase extends SchedulerBenchmarkBase {
 
-    List<JobVertex> jobVertices;
+    List<StreamVertex> jobVertices;
     ExecutionGraph executionGraph;
 
     public void setup(JobConfiguration jobConfiguration) throws Exception {

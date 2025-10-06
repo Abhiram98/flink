@@ -19,6 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.state.CompositeStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.StateObject;
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
 
 /**
  * Simple container class which contains the task state and key-group state handles for the sub
- * tasks of a {@link org.apache.flink.runtime.jobgraph.JobVertex}.
+ * tasks of a {@link StreamVertex}.
  *
  * <p>This class basically groups all non-partitioned state and key-group state belonging to the
  * same job vertex together.

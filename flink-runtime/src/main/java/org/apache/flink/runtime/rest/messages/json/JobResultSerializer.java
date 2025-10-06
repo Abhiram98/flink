@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.json;
 
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.OptionalFailure;
 import org.apache.flink.util.SerializedThrowable;
 import org.apache.flink.util.SerializedValue;
@@ -34,11 +34,11 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * JSON serializer for {@link JobResult}.
+ * JSON serializer for {@link StreamResult}.
  *
  * @see JobResultDeserializer
  */
-public class JobResultSerializer extends StdSerializer<JobResult> {
+public class JobResultSerializer extends StdSerializer<StreamResult> {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,7 +60,7 @@ public class JobResultSerializer extends StdSerializer<JobResult> {
             new SerializedThrowableSerializer();
 
     public JobResultSerializer() {
-        super(JobResult.class);
+        super(StreamResult.class);
 
         final JavaType objectSerializedValueType =
                 TypeFactory.defaultInstance()
@@ -70,7 +70,7 @@ public class JobResultSerializer extends StdSerializer<JobResult> {
 
     @Override
     public void serialize(
-            final JobResult result, final JsonGenerator gen, final SerializerProvider provider)
+            final StreamResult result, final JsonGenerator gen, final SerializerProvider provider)
             throws IOException {
 
         gen.writeStartObject();

@@ -32,7 +32,7 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.io.network.partition.PartitionNotFoundException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
 import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
@@ -116,8 +116,8 @@ class RemoveCachedShuffleDescriptorTest {
             throws Exception {
         final JobID jobId = new JobID();
 
-        final JobVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
-        final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
+        final StreamVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
+        final StreamVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
                 TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
@@ -184,8 +184,8 @@ class RemoveCachedShuffleDescriptorTest {
             throws Exception {
         final JobID jobId = new JobID();
 
-        final JobVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
-        final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
+        final StreamVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
+        final StreamVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
                 TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
@@ -249,8 +249,8 @@ class RemoveCachedShuffleDescriptorTest {
             throws Exception {
         final JobID jobId = new JobID();
 
-        final JobVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
-        final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
+        final StreamVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
+        final StreamVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
                 TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
@@ -331,8 +331,8 @@ class RemoveCachedShuffleDescriptorTest {
             throws Exception {
         final JobID jobId = new JobID();
 
-        final JobVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
-        final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
+        final StreamVertex v1 = ExecutionGraphTestUtils.createNoOpVertex("v1", PARALLELISM);
+        final StreamVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
                 TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
@@ -385,8 +385,8 @@ class RemoveCachedShuffleDescriptorTest {
 
     private SchedulerBase createSchedulerAndDeploy(
             JobID jobId,
-            JobVertex v1,
-            JobVertex v2,
+            StreamVertex v1,
+            StreamVertex v2,
             DistributionPattern distributionPattern,
             BlobWriter blobWriter,
             Configuration jobMasterConfiguration)
@@ -395,7 +395,7 @@ class RemoveCachedShuffleDescriptorTest {
                 false,
                 jobId,
                 v1,
-                new JobVertex[] {v2},
+                new StreamVertex[] {v2},
                 distributionPattern,
                 blobWriter,
                 mainThreadExecutor,
@@ -406,7 +406,7 @@ class RemoveCachedShuffleDescriptorTest {
     }
 
     private void triggerGlobalFailoverAndComplete(
-            SchedulerBase scheduler, JobVertex upstream, JobVertex downstream)
+            SchedulerBase scheduler, StreamVertex upstream, StreamVertex downstream)
             throws TimeoutException {
 
         final Throwable t = new Exception();
@@ -437,7 +437,7 @@ class RemoveCachedShuffleDescriptorTest {
     }
 
     private void triggerExceptionAndComplete(
-            ExecutionGraph executionGraph, JobVertex upstream, JobVertex downstream)
+            ExecutionGraph executionGraph, StreamVertex upstream, StreamVertex downstream)
             throws TimeoutException {
 
         final ExecutionVertex ev11 =
@@ -468,12 +468,12 @@ class RemoveCachedShuffleDescriptorTest {
     }
 
     private static CachedShuffleDescriptors getConsumedCachedShuffleDescriptor(
-            ExecutionGraph executionGraph, JobVertex vertex) {
+            ExecutionGraph executionGraph, StreamVertex vertex) {
         return getConsumedCachedShuffleDescriptor(executionGraph, vertex, 0);
     }
 
     private static CachedShuffleDescriptors getConsumedCachedShuffleDescriptor(
-            ExecutionGraph executionGraph, JobVertex vertex, int taskNum) {
+            ExecutionGraph executionGraph, StreamVertex vertex, int taskNum) {
 
         final ExecutionJobVertex ejv = executionGraph.getJobVertex(vertex.getID());
         final List<IntermediateResult> consumedResults = Objects.requireNonNull(ejv).getInputs();

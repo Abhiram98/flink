@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobgraph.forwardgroup;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 
 import org.junit.jupiter.api.Test;
@@ -50,9 +50,9 @@ class ForwardGroupComputeUtilTest {
      */
     @Test
     void testIsolatedVertices() throws Exception {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
 
         Set<ForwardGroup> groups = computeForwardGroups(v1, v2, v3);
 
@@ -79,9 +79,9 @@ class ForwardGroupComputeUtilTest {
     private void testThreeVerticesConnectSequentially(
             boolean isForward1, boolean isForward2, int numOfGroups, Integer... groupSizes)
             throws Exception {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
@@ -117,10 +117,10 @@ class ForwardGroupComputeUtilTest {
      */
     @Test
     void testTwoInputsMergesIntoOne() throws Exception {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
-        JobVertex v4 = new JobVertex("v4");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
+        StreamVertex v4 = new StreamVertex("v4");
 
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
@@ -152,10 +152,10 @@ class ForwardGroupComputeUtilTest {
      */
     @Test
     void testOneInputSplitsIntoTwo() throws Exception {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
-        JobVertex v4 = new JobVertex("v4");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
+        StreamVertex v4 = new StreamVertex("v4");
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
@@ -171,7 +171,7 @@ class ForwardGroupComputeUtilTest {
         checkGroupSize(groups, 1, 3);
     }
 
-    private static Set<ForwardGroup> computeForwardGroups(JobVertex... vertices) {
+    private static Set<ForwardGroup> computeForwardGroups(StreamVertex... vertices) {
         Arrays.asList(vertices).forEach(vertex -> vertex.setInvokableClass(NoOpInvokable.class));
         return new HashSet<>(
                 ForwardGroupComputeUtil.computeForwardGroupsAndCheckParallelism(

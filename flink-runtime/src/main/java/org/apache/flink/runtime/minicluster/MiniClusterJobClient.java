@@ -25,7 +25,7 @@ import org.apache.flink.api.common.accumulators.AccumulatorHelper;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -50,7 +50,7 @@ public final class MiniClusterJobClient implements JobClient, CoordinationReques
     private final JobID jobID;
     private final MiniCluster miniCluster;
     private final ClassLoader classLoader;
-    private final CompletableFuture<JobResult> jobResultFuture;
+    private final CompletableFuture<StreamResult> jobResultFuture;
 
     /**
      * Creates a {@link MiniClusterJobClient} for the given {@link JobID} and {@link MiniCluster}.
@@ -70,10 +70,10 @@ public final class MiniClusterJobClient implements JobClient, CoordinationReques
             // Make sure to shutdown the cluster when the job completes.
             jobResultFuture =
                     miniCluster
-                            .requestJobResult(jobID)
+                            .requestStreamResult(jobID)
                             .whenComplete((result, throwable) -> shutDownCluster(miniCluster));
         } else if (finalizationBehaviour == JobFinalizationBehavior.NOTHING) {
-            jobResultFuture = miniCluster.requestJobResult(jobID);
+            jobResultFuture = miniCluster.requestStreamResult(jobID);
         } else {
             throw new IllegalArgumentException(
                     "Unexpected shutdown behavior: " + finalizationBehaviour);
@@ -137,7 +137,7 @@ public final class MiniClusterJobClient implements JobClient, CoordinationReques
         return jobResultFuture.thenApply(
                 result -> {
                     try {
-                        return result.toJobExecutionResult(classLoader);
+                        return result.toStreamExecutionResult(classLoader);
                     } catch (Exception e) {
                         throw new CompletionException(
                                 "Failed to convert JobResult to JobExecutionResult.", e);

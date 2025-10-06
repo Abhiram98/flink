@@ -27,7 +27,7 @@ import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -400,11 +400,11 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
             @Nullable Throwable throwable,
             @Nullable JobCheckpointingSettings checkpointingSettings,
             long initializationTimestamp,
-            Iterable<JobVertex> jobVertices,
+            Iterable<StreamVertex> jobVertices,
             VertexParallelismStore initialParallelismStore) {
         final Map<JobVertexID, ArchivedExecutionJobVertex> archivedJobVertices = new HashMap<>();
         final List<ArchivedExecutionJobVertex> archivedVerticesInCreationOrder = new ArrayList<>();
-        for (JobVertex jobVertex : jobVertices) {
+        for (StreamVertex jobVertex : jobVertices) {
             final VertexParallelismInformation parallelismInfo =
                     initialParallelismStore.getParallelismInfo(jobVertex.getID());
 

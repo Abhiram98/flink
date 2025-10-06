@@ -41,7 +41,7 @@ import org.apache.flink.runtime.failure.DefaultFailureEnricherContext;
 import org.apache.flink.runtime.io.network.partition.PartitionException;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
@@ -113,7 +113,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
 
     protected DefaultScheduler(
             final Logger log,
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final Consumer<ComponentMainThreadExecutor> startUpAction,
@@ -171,7 +171,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
                 "Using failover strategy {} for {} ({}).",
                 failoverStrategy,
                 jobGraph.getName(),
-                jobGraph.getJobID());
+                jobGraph.getStreamID());
 
         final Context taskFailureCtx =
                 DefaultFailureEnricherContext.forTaskFailure(

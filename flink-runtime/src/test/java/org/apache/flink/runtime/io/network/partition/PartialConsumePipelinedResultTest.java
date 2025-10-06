@@ -26,9 +26,9 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
@@ -78,11 +78,11 @@ class PartialConsumePipelinedResultTest {
      */
     @Test
     void testPartialConsumePipelinedResultReceiver() throws Exception {
-        final JobVertex sender = new JobVertex("Sender");
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setInvokableClass(SlowBufferSender.class);
         sender.setParallelism(PARALLELISM);
 
-        final JobVertex receiver = new JobVertex("Receiver");
+        final StreamVertex receiver = new StreamVertex("Receiver");
         receiver.setInvokableClass(SingleBufferReceiver.class);
         receiver.setParallelism(PARALLELISM);
 
@@ -91,7 +91,7 @@ class PartialConsumePipelinedResultTest {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 

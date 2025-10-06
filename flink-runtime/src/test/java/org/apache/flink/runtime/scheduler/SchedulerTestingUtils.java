@@ -40,13 +40,8 @@ import org.apache.flink.runtime.executiongraph.ResultPartitionBytes;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
@@ -90,19 +85,19 @@ public class SchedulerTestingUtils {
     private SchedulerTestingUtils() {}
 
     public static DefaultScheduler createScheduler(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final ScheduledExecutorService executorService)
             throws Exception {
         return new DefaultSchedulerBuilder(jobGraph, mainThreadExecutor, executorService).build();
     }
 
-    public static void enableCheckpointing(final JobGraph jobGraph) {
+    public static void enableCheckpointing(final StreamGraph jobGraph) {
         enableCheckpointing(jobGraph, null, null);
     }
 
     public static void enableCheckpointing(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             @Nullable StateBackend stateBackend,
             @Nullable CheckpointStorage checkpointStorage) {
         enableCheckpointing(
@@ -114,7 +109,7 @@ public class SchedulerTestingUtils {
     }
 
     public static void enableCheckpointing(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             @Nullable StateBackend stateBackend,
             @Nullable CheckpointStorage checkpointStorage,
             long checkpointInterval,
@@ -341,8 +336,8 @@ public class SchedulerTestingUtils {
     public static SchedulerBase createSchedulerAndDeploy(
             boolean isAdaptive,
             JobID jobId,
-            JobVertex producer,
-            JobVertex[] consumers,
+            StreamVertex producer,
+            StreamVertex[] consumers,
             DistributionPattern distributionPattern,
             BlobWriter blobWriter,
             ComponentMainThreadExecutor mainThreadExecutor,
@@ -351,9 +346,9 @@ public class SchedulerTestingUtils {
             ScheduledExecutorService scheduledExecutor,
             Configuration jobMasterConfiguration)
             throws Exception {
-        final List<JobVertex> vertices = new ArrayList<>(Collections.singletonList(producer));
+        final List<StreamVertex> vertices = new ArrayList<>(Collections.singletonList(producer));
         IntermediateDataSetID dataSetId = new IntermediateDataSetID();
-        for (JobVertex consumer : consumers) {
+        for (StreamVertex consumer : consumers) {
             consumer.connectNewDataSetAsInput(
                     producer, distributionPattern, ResultPartitionType.BLOCKING, dataSetId, false);
             vertices.add(consumer);
@@ -384,7 +379,7 @@ public class SchedulerTestingUtils {
                                 // Transition upstream vertices into FINISHED
                                 finishJobVertex(executionGraph, producer.getID());
                                 // Deploy downstream sink vertices
-                                for (JobVertex consumer : consumers) {
+                                for (StreamVertex consumer : consumers) {
                                     if (isAdaptive) {
                                         initializeExecutionJobVertex(
                                                 consumer.getID(), executionGraph);
@@ -415,7 +410,7 @@ public class SchedulerTestingUtils {
     private static DefaultScheduler createScheduler(
             boolean isAdaptive,
             JobID jobId,
-            List<JobVertex> jobVertices,
+            List<StreamVertex> jobVertices,
             BlobWriter blobWriter,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService ioExecutor,
@@ -423,7 +418,7 @@ public class SchedulerTestingUtils {
             ScheduledExecutorService scheduledExecutor,
             Configuration jobMasterConfiguration)
             throws Exception {
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)

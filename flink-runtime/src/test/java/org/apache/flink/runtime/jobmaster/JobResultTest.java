@@ -32,20 +32,20 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Tests for {@link JobResult}. */
+/** Tests for {@link StreamResult}. */
 class JobResultTest {
 
     @Test
     void testNetRuntimeMandatory() {
-        assertThatThrownBy(() -> new JobResult.Builder().jobId(new JobID()).build())
+        assertThatThrownBy(() -> new StreamResult.Builder().jobId(new JobID()).build())
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("netRuntime must be greater than or equals 0");
     }
 
     @Test
     void testIsNotSuccess() {
-        final JobResult jobResult =
-                new JobResult.Builder()
+        final StreamResult jobResult =
+                new StreamResult.Builder()
                         .jobId(new JobID())
                         .serializedThrowable(new SerializedThrowable(new RuntimeException()))
                         .netRuntime(Long.MAX_VALUE)
@@ -56,16 +56,16 @@ class JobResultTest {
 
     @Test
     void testIsSuccess() {
-        final JobResult jobResult =
-                new JobResult.Builder().jobId(new JobID()).netRuntime(Long.MAX_VALUE).build();
+        final StreamResult jobResult =
+                new StreamResult.Builder().jobId(new JobID()).netRuntime(Long.MAX_VALUE).build();
 
         assertThat(jobResult.isSuccess()).isTrue();
     }
 
     @Test
     void testCancelledJobIsFailureResult() {
-        final JobResult jobResult =
-                JobResult.createFrom(
+        final StreamResult jobResult =
+                StreamResult.createFrom(
                         new ArchivedExecutionGraphBuilder()
                                 .setJobID(new JobID())
                                 .setState(JobStatus.CANCELED)
@@ -76,8 +76,8 @@ class JobResultTest {
 
     @Test
     void testFailedJobIsFailureResult() {
-        final JobResult jobResult =
-                JobResult.createFrom(
+        final StreamResult jobResult =
+                StreamResult.createFrom(
                         new ArchivedExecutionGraphBuilder()
                                 .setJobID(new JobID())
                                 .setState(JobStatus.FAILED)
@@ -91,8 +91,8 @@ class JobResultTest {
     @Test
     void testCancelledJobThrowsJobCancellationException() {
         final FlinkException cause = new FlinkException("Test exception");
-        final JobResult jobResult =
-                JobResult.createFrom(
+        final StreamResult jobResult =
+                StreamResult.createFrom(
                         new ArchivedExecutionGraphBuilder()
                                 .setJobID(new JobID())
                                 .setState(JobStatus.CANCELED)
@@ -101,7 +101,7 @@ class JobResultTest {
 
         assertThatThrownBy(
                         () -> {
-                            jobResult.toJobExecutionResult(getClass().getClassLoader());
+                            jobResult.toStreamExecutionResult(getClass().getClassLoader());
                         })
                 .isInstanceOf(JobCancellationException.class)
                 .hasNoCause();
@@ -110,15 +110,15 @@ class JobResultTest {
     @Test
     void testFailedJobThrowsJobExecutionException() {
         final FlinkException cause = new FlinkException("Test exception");
-        final JobResult jobResult =
-                JobResult.createFrom(
+        final StreamResult jobResult =
+                StreamResult.createFrom(
                         new ArchivedExecutionGraphBuilder()
                                 .setJobID(new JobID())
                                 .setState(JobStatus.FAILED)
                                 .setFailureCause(new ErrorInfo(cause, 42L))
                                 .build());
 
-        assertThatThrownBy(() -> jobResult.toJobExecutionResult(getClass().getClassLoader()))
+        assertThatThrownBy(() -> jobResult.toStreamExecutionResult(getClass().getClassLoader()))
                 .isInstanceOf(JobExecutionException.class)
                 .cause()
                 .isEqualTo(cause);
@@ -128,7 +128,7 @@ class JobResultTest {
     void testFailureResultRequiresFailureCause() {
         assertThatThrownBy(
                         () ->
-                                JobResult.createFrom(
+                                StreamResult.createFrom(
                                         new ArchivedExecutionGraphBuilder()
                                                 .setJobID(new JobID())
                                                 .setState(JobStatus.FAILED)

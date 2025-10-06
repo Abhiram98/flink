@@ -37,7 +37,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * A task vertex that runs an initialization and a finalization on the master. If necessary, it
  * tries to deserialize input and output formats, and initialize and finalize them on master.
  */
-public class InputOutputFormatVertex extends JobVertex {
+public class InputOutputFormatVertex extends StreamVertex {
 
     private static final long serialVersionUID = 1L;
 

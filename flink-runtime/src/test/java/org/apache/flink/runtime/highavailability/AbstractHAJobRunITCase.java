@@ -24,8 +24,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.testutils.AllCallbackWrapper;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.zookeeper.ZooKeeperExtension;
 import org.apache.flink.test.junit5.InjectMiniCluster;
@@ -85,16 +85,16 @@ public abstract class AbstractHAJobRunITCase {
     @Test
     public void testJobExecutionInHaMode(@InjectMiniCluster MiniCluster flinkCluster)
             throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
 
         // providing a timeout helps making the test fail in case some issue occurred while
         // initializing the cluster
-        flinkCluster.submitJob(jobGraph).get(30, TimeUnit.SECONDS);
+        flinkCluster.submitStream(jobGraph).get(30, TimeUnit.SECONDS);
 
         final Deadline deadline = Deadline.fromNow(Duration.ofSeconds(30));
         final JobStatus jobStatus =
                 FutureUtils.retrySuccessfulWithDelay(
-                                () -> flinkCluster.getJobStatus(jobGraph.getJobID()),
+                                () -> flinkCluster.getJobStatus(jobGraph.getStreamID()),
                                 Duration.ofMillis(10),
                                 deadline,
                                 status -> flinkCluster.isRunning() && status == JobStatus.FINISHED,

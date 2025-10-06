@@ -22,7 +22,7 @@ package org.apache.flink.runtime.jobgraph.forwardgroup;
 import org.apache.flink.runtime.executiongraph.VertexGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 public class ForwardGroupComputeUtil {
 
     public static Map<JobVertexID, ForwardGroup> computeForwardGroupsAndCheckParallelism(
-            final Iterable<JobVertex> topologicallySortedVertices) {
+            final Iterable<StreamVertex> topologicallySortedVertices) {
         final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 computeForwardGroups(
                         topologicallySortedVertices, ForwardGroupComputeUtil::getForwardProducers);
@@ -56,19 +56,19 @@ public class ForwardGroupComputeUtil {
     }
 
     public static Map<JobVertexID, ForwardGroup> computeForwardGroups(
-            final Iterable<JobVertex> topologicallySortedVertices,
-            final Function<JobVertex, Set<JobVertex>> forwardProducersRetriever) {
+            final Iterable<StreamVertex> topologicallySortedVertices,
+            final Function<StreamVertex, Set<StreamVertex>> forwardProducersRetriever) {
 
-        final Map<JobVertex, Set<JobVertex>> vertexToGroup = new IdentityHashMap<>();
+        final Map<StreamVertex, Set<StreamVertex>> vertexToGroup = new IdentityHashMap<>();
 
         // iterate all the vertices which are topologically sorted
-        for (JobVertex vertex : topologicallySortedVertices) {
-            Set<JobVertex> currentGroup = new HashSet<>();
+        for (StreamVertex vertex : topologicallySortedVertices) {
+            Set<StreamVertex> currentGroup = new HashSet<>();
             currentGroup.add(vertex);
             vertexToGroup.put(vertex, currentGroup);
 
-            for (JobVertex producerVertex : forwardProducersRetriever.apply(vertex)) {
-                final Set<JobVertex> producerGroup = vertexToGroup.get(producerVertex);
+            for (StreamVertex producerVertex : forwardProducersRetriever.apply(vertex)) {
+                final Set<StreamVertex> producerGroup = vertexToGroup.get(producerVertex);
 
                 if (producerGroup == null) {
                     throw new IllegalStateException(
@@ -89,7 +89,7 @@ public class ForwardGroupComputeUtil {
         }
 
         final Map<JobVertexID, ForwardGroup> ret = new HashMap<>();
-        for (Set<JobVertex> vertexGroup :
+        for (Set<StreamVertex> vertexGroup :
                 VertexGroupComputeUtil.uniqueVertexGroups(vertexToGroup)) {
             if (vertexGroup.size() > 1) {
                 ForwardGroup forwardGroup = new ForwardGroup(vertexGroup);
@@ -101,7 +101,7 @@ public class ForwardGroupComputeUtil {
         return ret;
     }
 
-    static Set<JobVertex> getForwardProducers(final JobVertex jobVertex) {
+    static Set<StreamVertex> getForwardProducers(final StreamVertex jobVertex) {
         return jobVertex.getInputs().stream()
                 .filter(JobEdge::isForward)
                 .map(JobEdge::getSource)

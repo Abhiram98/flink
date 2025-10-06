@@ -54,11 +54,8 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.PartitionTrackerFactory;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.factories.JobManagerJobMetricGroupFactory;
@@ -163,7 +160,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     private final ResourceID resourceId;
 
-    private final JobGraph jobGraph;
+    private final StreamGraph jobGraph;
 
     private final Duration rpcTimeout;
 
@@ -321,7 +318,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         final String jobName = executionPlan.getName();
         final JobID jid = executionPlan.getJobID();
 
-        this.jobGraph = (JobGraph) executionPlan;
+        this.jobGraph = (StreamGraph) executionPlan;
 
         log.info("Initializing job '{}' ({}).", jobName, jid);
 
@@ -474,14 +471,14 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         log.info(
                 "Stopping the JobMaster for job '{}' ({}).",
                 jobGraph.getName(),
-                jobGraph.getJobID());
+                jobGraph.getStreamID());
 
         // make sure there is a graceful exit
         return stopJobExecution(
                         new FlinkException(
                                 String.format(
                                         "Stopping JobMaster for job '%s' (%s).",
-                                        jobGraph.getName(), jobGraph.getJobID())))
+                                        jobGraph.getName(), jobGraph.getStreamID())))
                 .exceptionally(
                         exception -> {
                             throw new CompletionException(
@@ -584,7 +581,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
             taskManagerRegistration
                     .getTaskExecutorGateway()
-                    .disconnectJobManager(jobGraph.getJobID(), cause);
+                    .disconnectJobManager(jobGraph.getStreamID(), cause);
         }
 
         return CompletableFuture.completedFuture(Acknowledge.get());
@@ -778,7 +775,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
             final TaskManagerRegistrationInformation taskManagerRegistrationInformation,
             final Duration timeout) {
 
-        if (!jobGraph.getJobID().equals(jobId)) {
+        if (!jobGraph.getStreamID().equals(jobId)) {
             log.debug(
                     "Rejecting TaskManager registration attempt because of wrong job id {}.",
                     jobId);
@@ -1050,7 +1047,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
         taskManager
                 .getTaskExecutorGateway()
-                .getAndRetainPartitionWithMetrics(jobGraph.getJobID())
+                .getAndRetainPartitionWithMetrics(jobGraph.getStreamID())
                 .thenAccept(
                         partitionWithMetrics -> {
                             if (fetchAndRetainPartitions) {
@@ -1077,7 +1074,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
                                 taskManager
                                         .getTaskExecutorGateway()
                                         .releasePartitions(
-                                                jobGraph.getJobID(),
+                                                jobGraph.getStreamID(),
                                                 partitionWithMetrics.stream()
                                                         .map(PartitionWithMetrics::getPartition)
                                                         .map(
@@ -1129,7 +1126,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     private void startJobExecution() throws Exception {
         validateRunsInMainThread();
 
-        JobShuffleContext context = new JobShuffleContextImpl(jobGraph.getJobID(), this);
+        JobShuffleContext context = new JobShuffleContextImpl(jobGraph.getStreamID(), this);
         shuffleMaster.registerJob(context);
 
         startJobMasterServices();
@@ -1137,7 +1134,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         log.info(
                 "Starting execution of job '{}' ({}) under job master id {}.",
                 jobGraph.getName(),
-                jobGraph.getJobID(),
+                jobGraph.getStreamID(),
                 getFencingToken());
 
         startScheduling();
@@ -1198,7 +1195,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         return FutureUtils.runAfterwards(
                 terminationFuture,
                 () -> {
-                    shuffleMaster.unregisterJob(jobGraph.getJobID());
+                    shuffleMaster.unregisterJob(jobGraph.getStreamID());
                     disconnectTaskManagerResourceManagerConnections(cause);
                     stopJobMasterServices();
                 });
@@ -1334,7 +1331,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         resourceManagerConnection =
                 new ResourceManagerConnection(
                         log,
-                        jobGraph.getJobID(),
+                        jobGraph.getStreamID(),
                         resourceId,
                         getAddress(),
                         getFencingToken(),
@@ -1416,7 +1413,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         ResourceManagerGateway resourceManagerGateway =
                 establishedResourceManagerConnection.getResourceManagerGateway();
         resourceManagerGateway.disconnectJobManager(
-                jobGraph.getJobID(), schedulerNG.requestJobStatus(), cause);
+                jobGraph.getStreamID(), schedulerNG.requestJobStatus(), cause);
         blocklistHandler.deregisterBlocklistListener(resourceManagerGateway);
         slotPoolService.disconnectResourceManager();
     }

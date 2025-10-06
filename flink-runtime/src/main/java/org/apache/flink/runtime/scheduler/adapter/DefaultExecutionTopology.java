@@ -25,12 +25,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.failover.SchedulingPipelinedRegionComputeUtil;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalPipelinedRegion;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalTopology;
 import org.apache.flink.runtime.jobgraph.topology.LogicalEdge;
@@ -165,7 +161,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
 
     private static Map<JobVertexID, DefaultLogicalPipelinedRegion>
             computeLogicalPipelinedRegionsByJobVertexId(final ExecutionGraph executionGraph) {
-        List<JobVertex> topologicallySortedJobVertices =
+        List<StreamVertex> topologicallySortedJobVertices =
                 IterableUtils.toStream(executionGraph.getVerticesTopologically())
                         .map(ExecutionJobVertex::getJobVertex)
                         .collect(Collectors.toList());
@@ -205,7 +201,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                 .map(JobEdge::getSource)
                 .filter(r -> r.getResultType().mustBePipelinedConsumed())
                 .map(IntermediateDataSet::getProducer)
-                .map(JobVertex::getID)
+                .map(StreamVertex::getID)
                 .forEach(id -> checkState(newJobVertexIds.contains(id)));
 
         final Iterable<ExecutionVertex> newExecutionVertices =

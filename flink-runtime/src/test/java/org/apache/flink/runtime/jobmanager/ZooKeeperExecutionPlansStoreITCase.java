@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.testutils.EachCallbackWrapper;
 import org.apache.flink.runtime.dispatcher.NoOpExecutionPlanListener;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.persistence.RetrievableStateStorageHelper;
 import org.apache.flink.runtime.state.RetrievableStreamStateHandle;
 import org.apache.flink.runtime.state.memory.ByteStreamStateHandle;
@@ -313,7 +313,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
         submittedExecutionPlanStore.start(listener);
         otherSubmittedExecutionPlanStore.start(listener);
 
-        final ExecutionPlan executionPlan = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan executionPlan = StreamGraphTestUtils.emptyJobGraph();
         submittedExecutionPlanStore.putExecutionPlan(executionPlan);
 
         final ExecutionPlan recoveredExecutionPlan =
@@ -354,7 +354,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
     }
 
     private ExecutionPlan createExecutionPlan(JobID jobId, String jobName) {
-        final JobVertex jobVertex = new JobVertex("Test JobVertex");
+        final StreamVertex jobVertex = new StreamVertex("Test JobVertex");
         jobVertex.setParallelism(1);
 
         return JobGraphBuilder.newStreamingJobGraphBuilder()

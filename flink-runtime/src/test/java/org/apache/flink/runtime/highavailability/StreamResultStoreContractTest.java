@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.highavailability;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.testutils.TestingJobResultStore;
 
 import org.junit.jupiter.api.Test;
@@ -156,7 +156,7 @@ public interface StreamResultStoreContractTest {
         streamResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY).join();
         assertThat(
                         streamResultStore.getDirtyResults().stream()
-                                .map(JobResult::getStreamId)
+                                .map(StreamResult::getStreamId)
                                 .collect(Collectors.toList()))
                 .singleElement()
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
@@ -174,7 +174,7 @@ public interface StreamResultStoreContractTest {
 
         assertThat(
                         streamResultStore.getDirtyResults().stream()
-                                .map(JobResult::getStreamId)
+                                .map(StreamResult::getStreamId)
                                 .collect(Collectors.toList()))
                 .singleElement()
                 .isEqualTo(otherDirtyStreamResultEntry.getStreamId());

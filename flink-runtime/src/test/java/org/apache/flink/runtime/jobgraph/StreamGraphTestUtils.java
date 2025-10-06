@@ -22,34 +22,34 @@ import org.apache.flink.runtime.testtasks.NoOpInvokable;
 
 import java.util.Arrays;
 
-/** Utilities for creating {@link JobGraph JobGraphs} for testing purposes. */
-public class JobGraphTestUtils {
+/** Utilities for creating {@link StreamGraph JobGraphs} for testing purposes. */
+public class StreamGraphTestUtils {
 
-    public static JobGraph emptyJobGraph() {
+    public static StreamGraph emptyJobGraph() {
         return JobGraphBuilder.newStreamingJobGraphBuilder().build();
     }
 
-    public static JobGraph singleNoOpJobGraph() {
-        JobVertex jobVertex = new JobVertex("jobVertex");
+    public static StreamGraph singleNoOpJobGraph() {
+        StreamVertex jobVertex = new StreamVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
 
         return JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
     }
 
-    public static JobGraph streamingJobGraph(JobVertex... jobVertices) {
+    public static StreamGraph streamingStreamGraph(StreamVertex... jobVertices) {
         return JobGraphBuilder.newStreamingJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    public static JobGraph batchJobGraph(JobVertex... jobVertices) {
+    public static StreamGraph batchJobGraph(StreamVertex... jobVertices) {
         return JobGraphBuilder.newBatchJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    private JobGraphTestUtils() {
+    private StreamGraphTestUtils() {
         throw new UnsupportedOperationException("This class should never be instantiated.");
     }
 }

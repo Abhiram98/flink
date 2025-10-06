@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.highavailability;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.function.SupplierWithException;
@@ -116,12 +116,12 @@ public abstract class AbstractThreadsafeJobResultStore implements StreamResultSt
     protected abstract boolean hasCleanJobResultEntryInternal(JobID jobId) throws IOException;
 
     @Override
-    public Set<JobResult> getDirtyResults() throws IOException {
+    public Set<StreamResult> getDirtyResults() throws IOException {
         return withReadLock(this::getDirtyResultsInternal);
     }
 
     @GuardedBy("readWriteLock")
-    protected abstract Set<JobResult> getDirtyResultsInternal() throws IOException;
+    protected abstract Set<StreamResult> getDirtyResultsInternal() throws IOException;
 
     private CompletableFuture<Void> withWriteLockAsync(ThrowingRunnable<IOException> runnable) {
         return FutureUtils.runAsync(

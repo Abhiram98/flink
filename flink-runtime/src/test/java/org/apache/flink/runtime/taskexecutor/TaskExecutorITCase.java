@@ -28,11 +28,11 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.TestingAbstractInvokables;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -88,37 +88,37 @@ class TaskExecutorITCase {
      */
     @Test
     void testJobReExecutionAfterTaskExecutorTermination() throws Exception {
-        final JobGraph jobGraph = createJobGraph(PARALLELISM);
+        final StreamGraph jobGraph = createJobGraph(PARALLELISM);
 
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
-        final CompletableFuture<JobResult> jobResultFuture =
+        final CompletableFuture<StreamResult> jobResultFuture =
                 submitJobAndWaitUntilRunning(jobGraph, miniCluster);
 
         // kill one TaskExecutor which should fail the job execution
         miniCluster.terminateTaskManager(0);
 
-        final JobResult jobResult = jobResultFuture.get();
+        final StreamResult jobResult = jobResultFuture.get();
 
         assertThat(jobResult.isSuccess()).isFalse();
 
         miniCluster.startTaskManager();
 
-        final JobGraph newJobGraph = createJobGraph(PARALLELISM);
+        final StreamGraph newJobGraph = createJobGraph(PARALLELISM);
         BlockingOperator.unblock();
-        miniCluster.submitJob(newJobGraph).get();
+        miniCluster.submitStream(newJobGraph).get();
 
-        miniCluster.requestJobResult(newJobGraph.getJobID()).get();
+        miniCluster.requestStreamResult(newJobGraph.getStreamID()).get();
     }
 
     /** Tests that the job can recover from a failing {@link TaskExecutor}. */
     @Test
     void testJobRecoveryWithFailingTaskExecutor() throws Exception {
-        final JobGraph jobGraph = createJobGraphWithRestartStrategy(PARALLELISM);
+        final StreamGraph jobGraph = createJobGraphWithRestartStrategy(PARALLELISM);
 
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
-        final CompletableFuture<JobResult> jobResultFuture =
+        final CompletableFuture<StreamResult> jobResultFuture =
                 submitJobAndWaitUntilRunning(jobGraph, miniCluster);
 
         // start an additional TaskExecutor
@@ -131,17 +131,17 @@ class TaskExecutorITCase {
         assertThat(jobResultFuture.get().isSuccess()).isTrue();
     }
 
-    private static CompletableFuture<JobResult> submitJobAndWaitUntilRunning(
-            JobGraph jobGraph, MiniCluster miniCluster) throws Exception {
-        miniCluster.submitJob(jobGraph).get();
+    private static CompletableFuture<StreamResult> submitJobAndWaitUntilRunning(
+            StreamGraph jobGraph, MiniCluster miniCluster) throws Exception {
+        miniCluster.submitStream(jobGraph).get();
 
-        final CompletableFuture<JobResult> jobResultFuture =
-                miniCluster.requestJobResult(jobGraph.getJobID());
+        final CompletableFuture<StreamResult> jobResultFuture =
+                miniCluster.requestStreamResult(jobGraph.getStreamID());
 
         assertThat(jobResultFuture).isNotDone();
 
         CommonTestUtils.waitUntilCondition(
-                jobIsRunning(() -> miniCluster.getExecutionGraph(jobGraph.getJobID())), 50L);
+                jobIsRunning(() -> miniCluster.getExecutionGraph(jobGraph.getStreamID())), 50L);
 
         return jobResultFuture;
     }
@@ -162,19 +162,19 @@ class TaskExecutorITCase {
         };
     }
 
-    private JobGraph createJobGraphWithRestartStrategy(int parallelism) throws IOException {
-        final JobGraph jobGraph = createJobGraph(parallelism);
+    private StreamGraph createJobGraphWithRestartStrategy(int parallelism) throws IOException {
+        final StreamGraph jobGraph = createJobGraph(parallelism);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, 0L);
 
         return jobGraph;
     }
 
-    private JobGraph createJobGraph(int parallelism) {
-        final JobVertex sender = new JobVertex("Sender");
+    private StreamGraph createJobGraph(int parallelism) {
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setParallelism(parallelism);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);
 
-        final JobVertex receiver = new JobVertex("Blocking receiver");
+        final StreamVertex receiver = new StreamVertex("Blocking receiver");
         receiver.setParallelism(parallelism);
         receiver.setInvokableClass(BlockingOperator.class);
         BlockingOperator.reset();
@@ -186,7 +186,7 @@ class TaskExecutorITCase {
         sender.setSlotSharingGroup(slotSharingGroup);
         receiver.setSlotSharingGroup(slotSharingGroup);
 
-        return JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        return StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
     }
 
     /** Blocking invokable which is controlled by a static field. */

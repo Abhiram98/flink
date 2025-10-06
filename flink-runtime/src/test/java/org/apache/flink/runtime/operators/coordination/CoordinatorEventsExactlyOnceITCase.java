@@ -30,9 +30,9 @@ import org.apache.flink.runtime.checkpoint.PrioritizedOperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -150,10 +150,10 @@ public class CoordinatorEventsExactlyOnceITCase {
         final int delay1 = 1;
         final int delay2 = 100;
 
-        final JobVertex task1 = buildJobVertex(OPERATOR_1_NAME, numEvents1, delay1);
-        final JobVertex task2 = buildJobVertex(OPERATOR_2_NAME, numEvents2, delay2);
+        final StreamVertex task1 = buildJobVertex(OPERATOR_1_NAME, numEvents1, delay1);
+        final StreamVertex task2 = buildJobVertex(OPERATOR_2_NAME, numEvents2, delay2);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobName("Coordinator Events Job")
                         .addJobVertices(Arrays.asList(task1, task2))
@@ -179,9 +179,9 @@ public class CoordinatorEventsExactlyOnceITCase {
     //  test setup helpers
     // ------------------------------------------------------------------------
 
-    private static JobVertex buildJobVertex(String name, int numEvents, int delay)
+    private static StreamVertex buildJobVertex(String name, int numEvents, int delay)
             throws IOException {
-        final JobVertex vertex = new JobVertex(name);
+        final StreamVertex vertex = new StreamVertex(name);
         final OperatorID opId = OperatorID.fromJobVertexID(vertex.getID());
 
         vertex.setParallelism(1);

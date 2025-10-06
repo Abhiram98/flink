@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -42,10 +42,10 @@ class AllVerticesIteratorTest {
     void testAllVertices() {
         try {
 
-            JobVertex v1 = new JobVertex("v1");
-            JobVertex v2 = new JobVertex("v2");
-            JobVertex v3 = new JobVertex("v3");
-            JobVertex v4 = new JobVertex("v4");
+            StreamVertex v1 = new StreamVertex("v1");
+            StreamVertex v2 = new StreamVertex("v2");
+            StreamVertex v3 = new StreamVertex("v3");
+            StreamVertex v4 = new StreamVertex("v4");
 
             v1.setInvokableClass(AbstractInvokable.class);
             v2.setInvokableClass(AbstractInvokable.class);

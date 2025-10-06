@@ -21,12 +21,8 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
@@ -239,11 +235,11 @@ public class IntermediateResultPartitionTest {
             ScheduledExecutorService scheduledExecutorService)
             throws Exception {
 
-        final JobVertex v1 = new JobVertex("v1");
+        final StreamVertex v1 = new StreamVertex("v1");
         v1.setInvokableClass(NoOpInvokable.class);
         v1.setParallelism(producerParallelism);
 
-        final JobVertex v2 = new JobVertex("v2");
+        final StreamVertex v2 = new StreamVertex("v2");
         v2.setInvokableClass(NoOpInvokable.class);
         if (consumerParallelism > 0) {
             v2.setParallelism(consumerParallelism);
@@ -252,7 +248,7 @@ public class IntermediateResultPartitionTest {
             v2.setMaxParallelism(consumerMaxParallelism);
         }
 
-        final JobVertex v3 = new JobVertex("v3");
+        final StreamVertex v3 = new StreamVertex("v3");
         v3.setInvokableClass(NoOpInvokable.class);
         if (consumerParallelism > 0) {
             v3.setParallelism(consumerParallelism);
@@ -267,7 +263,7 @@ public class IntermediateResultPartitionTest {
         v3.connectNewDataSetAsInput(
                 v1, distributionPattern, ResultPartitionType.BLOCKING, dataSetId, false);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3))
                         .build();
@@ -291,7 +287,7 @@ public class IntermediateResultPartitionTest {
     }
 
     public static VertexParallelismStore computeVertexParallelismStoreConsideringDynamicGraph(
-            Iterable<JobVertex> vertices, boolean isDynamicGraph, int defaultMaxParallelism) {
+            Iterable<StreamVertex> vertices, boolean isDynamicGraph, int defaultMaxParallelism) {
         if (isDynamicGraph) {
             return AdaptiveBatchScheduler.computeVertexParallelismStoreForDynamicGraph(
                     vertices, defaultMaxParallelism);
@@ -303,15 +299,15 @@ public class IntermediateResultPartitionTest {
     private static IntermediateResult createResult(
             ResultPartitionType resultPartitionType, int parallelism) throws Exception {
 
-        JobVertex source = new JobVertex("v1");
+        StreamVertex source = new StreamVertex("v1");
         source.setInvokableClass(NoOpInvokable.class);
         source.setParallelism(parallelism);
 
-        JobVertex sink1 = new JobVertex("v2");
+        StreamVertex sink1 = new StreamVertex("v2");
         sink1.setInvokableClass(NoOpInvokable.class);
         sink1.setParallelism(parallelism);
 
-        JobVertex sink2 = new JobVertex("v3");
+        StreamVertex sink2 = new StreamVertex("v3");
         sink2.setInvokableClass(NoOpInvokable.class);
         sink2.setParallelism(parallelism);
 
@@ -323,7 +319,7 @@ public class IntermediateResultPartitionTest {
 
         ScheduledExecutorService executorService = new DirectScheduledExecutorService();
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink1, sink2);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(source, sink1, sink2);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

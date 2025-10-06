@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
 import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
@@ -77,7 +77,7 @@ public class NonLeaderRetrievalRestfulGateway implements RestfulGateway {
     }
 
     @Override
-    public CompletableFuture<JobResult> requestJobResult(JobID jobId, Duration timeout) {
+    public CompletableFuture<StreamResult> requestJobResult(JobID jobId, Duration timeout) {
         throw new UnsupportedOperationException(MESSAGE);
     }
 

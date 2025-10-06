@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
@@ -286,7 +286,7 @@ class DefaultCheckpointPlanCalculatorTest {
             List<VertexDeclaration> vertexDeclarations, List<EdgeDeclaration> edgeDeclarations)
             throws Exception {
 
-        JobVertex[] jobVertices = new JobVertex[vertexDeclarations.size()];
+        StreamVertex[] jobVertices = new StreamVertex[vertexDeclarations.size()];
         for (int i = 0; i < vertexDeclarations.size(); ++i) {
             jobVertices[i] =
                     ExecutionGraphTestUtils.createJobVertex(

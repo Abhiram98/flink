@@ -20,11 +20,8 @@ package org.apache.flink.runtime.jobgraph.jsonplan;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonFactory;
@@ -41,9 +38,9 @@ public class JsonPlanGenerator {
     private static final String NOT_SET = "";
     private static final String EMPTY = "{}";
 
-    public static String generatePlan(JobGraph jg) {
+    public static String generatePlan(StreamGraph jg) {
         return generatePlan(
-                jg.getJobID(),
+                jg.getStreamID(),
                 jg.getName(),
                 jg.getJobType(),
                 jg.getVertices(),
@@ -54,7 +51,7 @@ public class JsonPlanGenerator {
             JobID jobID,
             String jobName,
             JobType jobType,
-            Iterable<JobVertex> vertices,
+            Iterable<StreamVertex> vertices,
             VertexParallelism vertexParallelism) {
         try {
             final StringWriter writer = new StringWriter(1024);
@@ -70,7 +67,7 @@ public class JsonPlanGenerator {
             gen.writeArrayFieldStart("nodes");
 
             // info per vertex
-            for (JobVertex vertex : vertices) {
+            for (StreamVertex vertex : vertices) {
 
                 String operator =
                         vertex.getOperatorName() != null ? vertex.getOperatorName() : NOT_SET;
@@ -123,7 +120,7 @@ public class JsonPlanGenerator {
                             continue;
                         }
 
-                        JobVertex predecessor = edge.getSource().getProducer();
+                        StreamVertex predecessor = edge.getSource().getProducer();
 
                         String shipStrategy = edge.getShipStrategyName();
                         String preProcessingOperation = edge.getPreProcessingOperationName();

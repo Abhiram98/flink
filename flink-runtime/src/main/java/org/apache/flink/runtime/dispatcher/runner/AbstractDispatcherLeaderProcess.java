@@ -26,7 +26,7 @@ import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.dispatcher.DispatcherId;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
@@ -259,7 +259,7 @@ public abstract class AbstractDispatcherLeaderProcess implements DispatcherLeade
         DispatcherGatewayService create(
                 DispatcherId dispatcherId,
                 Collection<ExecutionPlan> recoveredJobs,
-                Collection<JobResult> recoveredDirtyJobResults,
+                Collection<StreamResult> recoveredDirtyJobResults,
                 ExecutionPlanWriter executionPlanWriter,
                 StreamResultStore jobResultStore);
     }

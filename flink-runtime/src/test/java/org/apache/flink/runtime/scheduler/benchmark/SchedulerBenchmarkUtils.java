@@ -29,11 +29,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -61,16 +58,16 @@ import static org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchSche
 /** Utilities for scheduler benchmarks. */
 public class SchedulerBenchmarkUtils {
 
-    public static List<JobVertex> createDefaultJobVertices(JobConfiguration jobConfiguration) {
+    public static List<StreamVertex> createDefaultJobVertices(JobConfiguration jobConfiguration) {
 
-        final List<JobVertex> jobVertices = new ArrayList<>();
+        final List<StreamVertex> jobVertices = new ArrayList<>();
 
-        final JobVertex source = new JobVertex("source");
+        final StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
         source.setParallelism(jobConfiguration.getParallelism());
         jobVertices.add(source);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
         sink.setParallelism(jobConfiguration.getParallelism());
         jobVertices.add(sink);
@@ -83,15 +80,15 @@ public class SchedulerBenchmarkUtils {
         return jobVertices;
     }
 
-    public static JobGraph createJobGraph(JobConfiguration jobConfiguration) throws IOException {
+    public static StreamGraph createJobGraph(JobConfiguration jobConfiguration) throws IOException {
         return createJobGraph(Collections.emptyList(), jobConfiguration);
     }
 
-    public static JobGraph createJobGraph(
-            List<JobVertex> jobVertices, JobConfiguration jobConfiguration) throws IOException {
+    public static StreamGraph createJobGraph(
+            List<StreamVertex> jobVertices, JobConfiguration jobConfiguration) throws IOException {
 
-        final JobGraph jobGraph =
-                JobGraphTestUtils.streamingJobGraph(jobVertices.toArray(new JobVertex[0]));
+        final StreamGraph jobGraph =
+                StreamGraphTestUtils.streamingStreamGraph(jobVertices.toArray(new StreamVertex[0]));
 
         jobGraph.setJobType(jobConfiguration.getJobType());
 
@@ -101,12 +98,12 @@ public class SchedulerBenchmarkUtils {
     }
 
     public static DefaultScheduler createAndInitScheduler(
-            List<JobVertex> jobVertices,
+            List<StreamVertex> jobVertices,
             JobConfiguration jobConfiguration,
             ScheduledExecutorService scheduledExecutorService)
             throws Exception {
 
-        final JobGraph jobGraph = createJobGraph(jobVertices, jobConfiguration);
+        final StreamGraph jobGraph = createJobGraph(jobVertices, jobConfiguration);
 
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();
@@ -142,7 +139,7 @@ public class SchedulerBenchmarkUtils {
     }
 
     public static ExecutionGraph createAndInitExecutionGraph(
-            List<JobVertex> jobVertices,
+            List<StreamVertex> jobVertices,
             JobConfiguration jobConfiguration,
             ScheduledExecutorService scheduledExecutorService)
             throws Exception {

@@ -20,9 +20,9 @@ package org.apache.flink.runtime.jobmaster;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
 import org.apache.flink.runtime.minicluster.TestingMiniClusterConfiguration;
@@ -46,7 +46,7 @@ class JobExecutionITCase {
         final int numSlotsPerTaskExecutor = 1;
         final int numTaskExecutors = 3;
         final int parallelism = numTaskExecutors * numSlotsPerTaskExecutor;
-        final JobGraph jobGraph = createJobGraph(parallelism);
+        final StreamGraph jobGraph = createJobGraph(parallelism);
 
         final TestingMiniClusterConfiguration miniClusterConfiguration =
                 TestingMiniClusterConfiguration.newBuilder()
@@ -59,21 +59,21 @@ class JobExecutionITCase {
                 TestingMiniCluster.newBuilder(miniClusterConfiguration).build()) {
             miniCluster.start();
 
-            miniCluster.submitJob(jobGraph).get();
+            miniCluster.submitStream(jobGraph).get();
 
-            final CompletableFuture<JobResult> jobResultFuture =
-                    miniCluster.requestJobResult(jobGraph.getJobID());
+            final CompletableFuture<StreamResult> jobResultFuture =
+                    miniCluster.requestStreamResult(jobGraph.getStreamID());
 
             assertThat(jobResultFuture.get().isSuccess()).isTrue();
         }
     }
 
-    private JobGraph createJobGraph(int parallelism) {
-        final JobVertex sender = new JobVertex("Sender");
+    private StreamGraph createJobGraph(int parallelism) {
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setParallelism(parallelism);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);
 
-        final JobVertex receiver = new JobVertex("Receiver");
+        final StreamVertex receiver = new StreamVertex("Receiver");
         receiver.setParallelism(parallelism);
         receiver.setInvokableClass(TestingAbstractInvokables.Receiver.class);
 
@@ -90,6 +90,6 @@ class JobExecutionITCase {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        return StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
     }
 }

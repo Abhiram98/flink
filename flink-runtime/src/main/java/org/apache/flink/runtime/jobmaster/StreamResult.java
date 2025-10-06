@@ -51,7 +51,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  *
  * <p>This is used by the {@link JobMaster} to send the results to the {@link Dispatcher}.
  */
-public class JobResult implements Serializable {
+public class StreamResult implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class JobResult implements Serializable {
     /** Stores the cause of the job failure, or {@code null} if the job finished successfully. */
     @Nullable private final SerializedThrowable serializedThrowable;
 
-    private JobResult(
+    private StreamResult(
             final JobID jobId,
             final ApplicationStatus applicationStatus,
             final Map<String, SerializedValue<OptionalFailure<Object>>> accumulatorResults,
@@ -113,7 +113,7 @@ public class JobResult implements Serializable {
     }
 
     /**
-     * Converts the {@link JobResult} to a {@link JobExecutionResult}.
+     * Converts the {@link StreamResult} to a {@link JobExecutionResult}.
      *
      * @param classLoader to use for deserialization
      * @return JobExecutionResult
@@ -122,7 +122,7 @@ public class JobResult implements Serializable {
      * @throws IOException if the accumulator could not be deserialized
      * @throws ClassNotFoundException if the accumulator could not deserialized
      */
-    public JobExecutionResult toJobExecutionResult(ClassLoader classLoader)
+    public JobExecutionResult toStreamExecutionResult(ClassLoader classLoader)
             throws JobExecutionException, IOException, ClassNotFoundException {
         if (applicationStatus == ApplicationStatus.SUCCEEDED) {
             return new JobExecutionResult(
@@ -158,7 +158,7 @@ public class JobResult implements Serializable {
         }
     }
 
-    /** Builder for {@link JobResult}. */
+    /** Builder for {@link StreamResult}. */
     @Internal
     public static class Builder {
 
@@ -198,8 +198,8 @@ public class JobResult implements Serializable {
             return this;
         }
 
-        public JobResult build() {
-            return new JobResult(
+        public StreamResult build() {
+            return new StreamResult(
                     jobId,
                     applicationStatus,
                     accumulatorResults == null ? Collections.emptyMap() : accumulatorResults,
@@ -209,13 +209,13 @@ public class JobResult implements Serializable {
     }
 
     /**
-     * Creates the {@link JobResult} from the given {@link AccessExecutionGraph} which must be in a
+     * Creates the {@link StreamResult} from the given {@link AccessExecutionGraph} which must be in a
      * globally terminal state.
      *
      * @param accessExecutionGraph to create the JobResult from
      * @return JobResult of the given AccessExecutionGraph
      */
-    public static JobResult createFrom(AccessExecutionGraph accessExecutionGraph) {
+    public static StreamResult createFrom(AccessExecutionGraph accessExecutionGraph) {
         final JobID jobId = accessExecutionGraph.getJobID();
         final JobStatus jobStatus = accessExecutionGraph.getState();
 
@@ -230,7 +230,7 @@ public class JobResult implements Serializable {
                         + jobStatus
                         + '.');
 
-        final JobResult.Builder builder = new JobResult.Builder();
+        final StreamResult.Builder builder = new StreamResult.Builder();
         builder.jobId(jobId);
 
         builder.applicationStatus(ApplicationStatus.fromJobStatus(accessExecutionGraph.getState()));

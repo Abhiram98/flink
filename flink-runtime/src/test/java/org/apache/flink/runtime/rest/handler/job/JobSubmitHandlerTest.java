@@ -24,8 +24,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.net.SSLUtilsTest;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -146,7 +146,7 @@ public class JobSubmitHandlerTest {
         final Path jobGraphFile = TempDirUtils.newFile(temporaryFolder).toPath();
         try (ObjectOutputStream objectOut =
                 new ObjectOutputStream(Files.newOutputStream(jobGraphFile))) {
-            objectOut.writeObject(JobGraphTestUtils.emptyJobGraph());
+            objectOut.writeObject(StreamGraphTestUtils.emptyJobGraph());
         }
 
         TestingDispatcherGateway.Builder builder = TestingDispatcherGateway.newBuilder();
@@ -183,7 +183,7 @@ public class JobSubmitHandlerTest {
         final Path jobGraphFile = TempDirUtils.newFile(temporaryFolder).toPath();
         try (ObjectOutputStream objectOut =
                 new ObjectOutputStream(Files.newOutputStream(jobGraphFile))) {
-            objectOut.writeObject(JobGraphTestUtils.emptyJobGraph());
+            objectOut.writeObject(StreamGraphTestUtils.emptyJobGraph());
         }
         final Path countExceedingFile = TempDirUtils.newFile(temporaryFolder).toPath();
 
@@ -251,7 +251,7 @@ public class JobSubmitHandlerTest {
         final Path jarFile = TempDirUtils.newFile(temporaryFolder).toPath();
         final Path artifactFile = TempDirUtils.newFile(temporaryFolder).toPath();
 
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
         // the entry that should be updated
         jobGraph.addUserArtifact(
                 dcEntryName, new DistributedCache.DistributedCacheEntry("random", false));
@@ -309,7 +309,7 @@ public class JobSubmitHandlerTest {
 
         final Path jobGraphFile = TempDirUtils.newFile(temporaryFolder).toPath();
 
-        JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
         try (ObjectOutputStream objectOut =
                 new ObjectOutputStream(Files.newOutputStream(jobGraphFile))) {
             objectOut.writeObject(jobGraph);

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.JobException;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -34,7 +34,7 @@ public class SpeculativeExecutionJobVertex extends ExecutionJobVertex {
 
     public SpeculativeExecutionJobVertex(
             InternalExecutionGraphAccessor graph,
-            JobVertex jobVertex,
+            StreamVertex jobVertex,
             VertexParallelismInformation parallelismInfo,
             CoordinatorStore coordinatorStore,
             StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
@@ -83,7 +83,7 @@ public class SpeculativeExecutionJobVertex extends ExecutionJobVertex {
         @Override
         ExecutionJobVertex createExecutionJobVertex(
                 InternalExecutionGraphAccessor graph,
-                JobVertex jobVertex,
+                StreamVertex jobVertex,
                 VertexParallelismInformation parallelismInfo,
                 CoordinatorStore coordinatorStore,
                 StreamManagerStreamMetricGroup jobManagerJobMetricGroup)

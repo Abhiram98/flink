@@ -21,7 +21,7 @@ package org.apache.flink.runtime.highavailability;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.testutils.FlinkAssertions;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.TestLoggerExtension;
 import org.apache.flink.util.concurrent.ManuallyTriggeredScheduledExecutor;
@@ -250,21 +250,21 @@ public class FileSystemJobResultStoreFileOperationsTest {
         final File dirtyFile = expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY);
         final FileSystemJobResultStore.JsonJobResultEntry deserializedEntry =
                 MAPPER.readValue(dirtyFile, FileSystemJobResultStore.JsonJobResultEntry.class);
-        final JobResult deserializedJobResult = deserializedEntry.getJobResult();
+        final StreamResult deserializedJobResult = deserializedEntry.getJobResult();
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getStreamId)
+                .extracting(StreamResult::getStreamId)
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getApplicationStatus)
+                .extracting(StreamResult::getApplicationStatus)
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getApplicationStatus());
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getNetRuntime)
+                .extracting(StreamResult::getNetRuntime)
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getNetRuntime());
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getSerializedThrowable)
+                .extracting(StreamResult::getSerializedThrowable)
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getSerializedThrowable());
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getAccumulatorResults)
+                .extracting(StreamResult::getAccumulatorResults)
                 .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getAccumulatorResults());
     }
 

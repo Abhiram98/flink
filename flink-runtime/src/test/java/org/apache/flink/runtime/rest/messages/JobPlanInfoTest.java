@@ -18,8 +18,8 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
 
@@ -36,7 +36,7 @@ class JobPlanInfoTest extends RestResponseMarshallingTestBase<JobPlanInfo> {
 
     @Override
     protected JobPlanInfo getTestResponseInstance() {
-        JobGraph jg = JobGraphTestUtils.emptyJobGraph();
+        StreamGraph jg = StreamGraphTestUtils.emptyJobGraph();
         return new JobPlanInfo(JsonPlanGenerator.generatePlan(jg));
     }
 }

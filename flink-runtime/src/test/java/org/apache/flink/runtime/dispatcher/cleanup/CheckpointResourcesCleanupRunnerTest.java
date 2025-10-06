@@ -33,7 +33,7 @@ import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.UnavailableDispatcherOperationException;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryFactory;
@@ -364,7 +364,7 @@ class CheckpointResourcesCleanupRunnerTest {
     }
 
     private static CompletableFuture<JobManagerRunnerResult> getResultFutureFromTestInstance(
-            JobResult jobResult,
+            StreamResult jobResult,
             ThrowingConsumer<CheckpointResourcesCleanupRunner, ? extends Exception>
                     preCheckLifecycleHandling)
             throws Exception {
@@ -431,7 +431,7 @@ class CheckpointResourcesCleanupRunnerTest {
 
     @Test
     void testRequestJob_JobId() {
-        final JobResult jobResult = createDummySuccessJobResult();
+        final StreamResult jobResult = createDummySuccessJobResult();
         testRequestJobExecutionGraph(
                 jobResult,
                 System.currentTimeMillis(),
@@ -441,7 +441,7 @@ class CheckpointResourcesCleanupRunnerTest {
 
     @Test
     void testRequestJob_JobState() {
-        final JobResult jobResult = createDummySuccessJobResult();
+        final StreamResult jobResult = createDummySuccessJobResult();
         testRequestJobExecutionGraph(
                 jobResult,
                 System.currentTimeMillis(),
@@ -466,7 +466,7 @@ class CheckpointResourcesCleanupRunnerTest {
     void testRequestJobWithFailure() {
         final SerializedThrowable expectedError =
                 new SerializedThrowable(new Exception("Expected exception"));
-        final JobResult jobResult = createJobResultWithFailure(expectedError);
+        final StreamResult jobResult = createJobResultWithFailure(expectedError);
         testRequestJobExecutionGraph(
                 jobResult,
                 System.currentTimeMillis(),
@@ -477,7 +477,7 @@ class CheckpointResourcesCleanupRunnerTest {
     }
 
     private static void testRequestJobExecutionGraph(
-            JobResult jobResult,
+            StreamResult jobResult,
             long initializationTimestamp,
             Function<AccessExecutionGraph, Boolean> assertion) {
         testRequestJob(
@@ -488,7 +488,7 @@ class CheckpointResourcesCleanupRunnerTest {
     }
 
     private static void testRequestJob(
-            JobResult jobResult,
+            StreamResult jobResult,
             long initializationTimestamp,
             Function<ExecutionGraphInfo, Boolean> assertion) {
         final CheckpointResourcesCleanupRunner testInstance =
@@ -502,12 +502,12 @@ class CheckpointResourcesCleanupRunnerTest {
         assertThat(response).isCompletedWithValueMatching(assertion::apply);
     }
 
-    private static JobResult createDummySuccessJobResult() {
+    private static StreamResult createDummySuccessJobResult() {
         return createJobResult(new JobID(), ApplicationStatus.SUCCEEDED);
     }
 
-    private static JobResult createJobResultWithFailure(SerializedThrowable throwable) {
-        return new JobResult.Builder()
+    private static StreamResult createJobResultWithFailure(SerializedThrowable throwable) {
+        return new StreamResult.Builder()
                 .jobId(new JobID())
                 .applicationStatus(ApplicationStatus.FAILED)
                 .serializedThrowable(throwable)
@@ -515,8 +515,8 @@ class CheckpointResourcesCleanupRunnerTest {
                 .build();
     }
 
-    private static JobResult createJobResult(JobID jobId, ApplicationStatus applicationStatus) {
-        return new JobResult.Builder()
+    private static StreamResult createJobResult(JobID jobId, ApplicationStatus applicationStatus) {
+        return new StreamResult.Builder()
                 .jobId(jobId)
                 .applicationStatus(applicationStatus)
                 .netRuntime(1)
@@ -534,7 +534,7 @@ class CheckpointResourcesCleanupRunnerTest {
 
     private static class TestInstanceBuilder {
 
-        private JobResult jobResult = createDummySuccessJobResult();
+        private StreamResult jobResult = createDummySuccessJobResult();
         private CheckpointRecoveryFactory checkpointRecoveryFactory =
                 createCheckpointRecoveryFactory();
         private SharedStateRegistryFactory sharedStateRegistryFactory =
@@ -543,7 +543,7 @@ class CheckpointResourcesCleanupRunnerTest {
         private Configuration configuration = new Configuration();
         private long initializationTimestamp = System.currentTimeMillis();
 
-        public TestInstanceBuilder withJobResult(JobResult jobResult) {
+        public TestInstanceBuilder withJobResult(StreamResult jobResult) {
             this.jobResult = jobResult;
             return this;
         }

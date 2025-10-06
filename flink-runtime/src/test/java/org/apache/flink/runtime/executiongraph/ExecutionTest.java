@@ -22,8 +22,8 @@ import org.apache.flink.runtime.checkpoint.JobManagerTaskRestore;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlot;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -69,14 +69,14 @@ class ExecutionTest {
      */
     @Test
     void testTerminationFutureIsCompletedAfterSlotRelease() throws Exception {
-        final JobVertex jobVertex = createNoOpJobVertex();
+        final StreamVertex jobVertex = createNoOpJobVertex();
         final JobVertexID jobVertexId = jobVertex.getID();
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                StreamGraphTestUtils.streamingStreamGraph(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -115,12 +115,12 @@ class ExecutionTest {
      */
     @Test
     void testTaskRestoreStateIsNulledAfterDeployment() throws Exception {
-        final JobVertex jobVertex = createNoOpJobVertex();
+        final StreamVertex jobVertex = createNoOpJobVertex();
         final JobVertexID jobVertexId = jobVertex.getID();
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                StreamGraphTestUtils.streamingStreamGraph(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -150,7 +150,7 @@ class ExecutionTest {
     @Test
     void testCanceledExecutionReturnsSlot() throws Exception {
 
-        final JobVertex jobVertex = createNoOpJobVertex();
+        final StreamVertex jobVertex = createNoOpJobVertex();
         final JobVertexID jobVertexId = jobVertex.getID();
 
         final SimpleAckingTaskManagerGateway taskManagerGateway =
@@ -165,7 +165,7 @@ class ExecutionTest {
                                                 .build()));
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                StreamGraphTestUtils.streamingStreamGraph(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -198,13 +198,13 @@ class ExecutionTest {
     /** Tests that a slot release will atomically release the assigned {@link Execution}. */
     @Test
     void testSlotReleaseAtomicallyReleasesExecution() throws Exception {
-        final JobVertex jobVertex = createNoOpJobVertex();
+        final StreamVertex jobVertex = createNoOpJobVertex();
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                StreamGraphTestUtils.streamingStreamGraph(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -236,8 +236,8 @@ class ExecutionTest {
     }
 
     @Nonnull
-    private JobVertex createNoOpJobVertex() {
-        final JobVertex jobVertex = new JobVertex("Test vertex", new JobVertexID());
+    private StreamVertex createNoOpJobVertex() {
+        final StreamVertex jobVertex = new StreamVertex("Test vertex", new JobVertexID());
         jobVertex.setInvokableClass(NoOpInvokable.class);
 
         return jobVertex;

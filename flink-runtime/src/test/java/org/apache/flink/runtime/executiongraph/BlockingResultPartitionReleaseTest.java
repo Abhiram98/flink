@@ -28,7 +28,7 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -91,9 +91,9 @@ class BlockingResultPartitionReleaseTest {
     private void testResultPartitionConsumedByMultiConsumers(boolean isAdaptive) throws Exception {
         int parallelism = 2;
         JobID jobId = new JobID();
-        JobVertex producer = ExecutionGraphTestUtils.createNoOpVertex("producer", parallelism);
-        JobVertex consumer1 = ExecutionGraphTestUtils.createNoOpVertex("consumer1", parallelism);
-        JobVertex consumer2 = ExecutionGraphTestUtils.createNoOpVertex("consumer2", parallelism);
+        StreamVertex producer = ExecutionGraphTestUtils.createNoOpVertex("producer", parallelism);
+        StreamVertex consumer1 = ExecutionGraphTestUtils.createNoOpVertex("consumer1", parallelism);
+        StreamVertex consumer2 = ExecutionGraphTestUtils.createNoOpVertex("consumer2", parallelism);
 
         TestingPartitionTracker partitionTracker = new TestingPartitionTracker();
         SchedulerBase scheduler =
@@ -101,7 +101,7 @@ class BlockingResultPartitionReleaseTest {
                         isAdaptive,
                         jobId,
                         producer,
-                        new JobVertex[] {consumer1, consumer2},
+                        new StreamVertex[] {consumer1, consumer2},
                         DistributionPattern.ALL_TO_ALL,
                         new TestingBlobWriter(Integer.MAX_VALUE),
                         mainThreadExecutor,

@@ -23,11 +23,11 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
@@ -78,39 +78,39 @@ class AdaptiveSchedulerSlotSharingITCase {
                             .build());
 
     @Test
-    void testSchedulingOfJobRequiringSlotSharing() throws Exception {
+    void testSchedulingOfStreamRequiringSlotSharing() throws Exception {
         // run job multiple times to ensure slots are cleaned up properly
-        runJob();
-        runJob();
+        runStream();
+        runStream();
     }
 
-    private void runJob() throws Exception {
+    private void runStream() throws Exception {
         final MiniCluster miniCluster = INTERNAL_MINI_CLUSTER_EXTENSION.getMiniCluster();
-        final JobGraph jobGraph = createJobGraphWithSlotSharingGroup();
+        final StreamGraph streamGraph = createStreamGraphWithSlotSharingGroup();
 
-        miniCluster.submitJob(jobGraph).join();
+        miniCluster.submitStream(streamGraph).join();
 
-        final JobResult jobResult = miniCluster.requestJobResult(jobGraph.getJobID()).join();
+        final StreamResult streamResult = miniCluster.requestStreamResult(streamGraph.getStreamID()).join();
 
         // this throws an exception if the job failed
-        jobResult.toJobExecutionResult(getClass().getClassLoader());
+        streamResult.toStreamExecutionResult(getClass().getClassLoader());
 
-        assertThat(jobResult.isSuccess()).isTrue();
+        assertThat(streamResult.isSuccess()).isTrue();
     }
 
     /**
      * Returns a JobGraph that requires slot sharing to work in order to be able to run with a
      * single slot.
      */
-    private static JobGraph createJobGraphWithSlotSharingGroup() {
+    private static StreamGraph createStreamGraphWithSlotSharingGroup() {
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 
-        final JobVertex source = new JobVertex("Source");
+        final StreamVertex source = new StreamVertex("Source");
         source.setInvokableClass(NoOpInvokable.class);
         source.setParallelism(PARALLELISM);
         source.setSlotSharingGroup(slotSharingGroup);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
         sink.setParallelism(PARALLELISM);
         sink.setSlotSharingGroup(slotSharingGroup);
@@ -118,6 +118,6 @@ class AdaptiveSchedulerSlotSharingITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return StreamGraphTestUtils.streamingStreamGraph(source, sink);
     }
 }

@@ -36,12 +36,8 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -133,10 +129,10 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid3 = new JobVertexID();
         final JobVertexID jid4 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
-        JobVertex v3 = new JobVertex("v3", jid3);
-        JobVertex v4 = new JobVertex("v4", jid4);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
+        StreamVertex v3 = new StreamVertex("v3", jid3);
+        StreamVertex v4 = new StreamVertex("v4", jid4);
 
         v1.setParallelism(10);
         v2.setParallelism(10);
@@ -155,8 +151,8 @@ class DefaultExecutionGraphDeploymentTest {
         v4.connectNewDataSetAsInput(
                 v2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
-        final JobID jobId = jobGraph.getJobID();
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
+        final JobID jobId = jobGraph.getStreamID();
 
         DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
         DefaultExecutionGraph eg =
@@ -251,8 +247,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 7650, v2, 2350);
         Collection<Execution> executions =
@@ -271,8 +267,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 7, v2, 6);
         Collection<Execution> executions =
@@ -291,8 +287,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 7, v2, 6);
         Collection<Execution> executions =
@@ -314,8 +310,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 1, v2, 1);
         ExecutionGraph graph = scheduler.getExecutionGraph();
@@ -378,8 +374,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 1, v2, 1);
         Map<ExecutionAttemptID, Execution> executions =
@@ -408,8 +404,8 @@ class DefaultExecutionGraphDeploymentTest {
         final JobVertexID jid1 = new JobVertexID();
         final JobVertexID jid2 = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", jid1);
-        JobVertex v2 = new JobVertex("v2", jid2);
+        StreamVertex v1 = new StreamVertex("v1", jid1);
+        StreamVertex v2 = new StreamVertex("v2", jid2);
 
         SchedulerBase scheduler = setupScheduler(v1, 19, v2, 37);
         Collection<Execution> executions =
@@ -430,8 +426,8 @@ class DefaultExecutionGraphDeploymentTest {
      */
     @Test
     void testNoResourceAvailableFailure() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         int dop1 = 2;
         int dop2 = 2;
@@ -445,7 +441,7 @@ class DefaultExecutionGraphDeploymentTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final JobGraph graph = JobGraphTestUtils.batchJobGraph(v1, v2);
+        final StreamGraph graph = StreamGraphTestUtils.batchJobGraph(v1, v2);
 
         DirectScheduledExecutorService directExecutor = new DirectScheduledExecutorService();
 
@@ -500,7 +496,7 @@ class DefaultExecutionGraphDeploymentTest {
                 .isEqualTo(CheckpointingOptions.MAX_RETAINED_CHECKPOINTS.defaultValue().intValue());
     }
 
-    private SchedulerBase setupScheduler(JobVertex v1, int dop1, JobVertex v2, int dop2)
+    private SchedulerBase setupScheduler(StreamVertex v1, int dop1, StreamVertex v2, int dop2)
             throws Exception {
         v1.setParallelism(dop1);
         v2.setParallelism(dop2);
@@ -513,7 +509,7 @@ class DefaultExecutionGraphDeploymentTest {
         // execution graph that executes actions synchronously
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(v1, v2),
+                                StreamGraphTestUtils.streamingStreamGraph(v1, v2),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -565,11 +561,11 @@ class DefaultExecutionGraphDeploymentTest {
         final int sourceParallelism = 2;
         final int sinkParallelism = 1;
 
-        final JobVertex sourceVertex = new JobVertex("source");
+        final StreamVertex sourceVertex = new StreamVertex("source");
         sourceVertex.setInvokableClass(NoOpInvokable.class);
         sourceVertex.setParallelism(sourceParallelism);
 
-        final JobVertex sinkVertex = new JobVertex("sink");
+        final StreamVertex sinkVertex = new StreamVertex("sink");
         sinkVertex.setInvokableClass(NoOpInvokable.class);
         sinkVertex.setParallelism(sinkParallelism);
 
@@ -593,7 +589,7 @@ class DefaultExecutionGraphDeploymentTest {
         final RpcTaskManagerGateway taskManagerGateway =
                 new RpcTaskManagerGateway(taskExecutorGateway, JobMasterId.generate());
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sourceVertex, sinkVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sourceVertex, sinkVertex);
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithoutImmediatePhysicalSlotCreation();
@@ -649,7 +645,7 @@ class DefaultExecutionGraphDeploymentTest {
     }
 
     private ExecutionGraph createExecutionGraph(Configuration configuration) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         new CheckpointCoordinatorConfiguration(

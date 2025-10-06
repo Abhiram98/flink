@@ -17,20 +17,20 @@
 
 package org.apache.flink.runtime.jobmaster.utils;
 
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-/** Testing utils surrounding the {@link JobResult}. */
+/** Testing utils surrounding the {@link StreamResult}. */
 public final class JobResultUtils {
-    public static void assertSuccess(final JobResult result) {
+    public static void assertSuccess(final StreamResult result) {
         throwAssertionErrorOnFailedResult(result);
     }
 
-    public static void assertIncomplete(final CompletableFuture<JobResult> result) {
+    public static void assertIncomplete(final CompletableFuture<StreamResult> result) {
         if (result.isDone()) {
-            final JobResult jobResult;
+            final StreamResult jobResult;
             try {
                 jobResult = result.get();
             } catch (InterruptedException | ExecutionException e) {
@@ -47,7 +47,7 @@ public final class JobResultUtils {
         }
     }
 
-    private static void throwAssertionErrorOnFailedResult(final JobResult result) {
+    private static void throwAssertionErrorOnFailedResult(final StreamResult result) {
         if (!result.isSuccess()) {
             if (result.getSerializedThrowable().isPresent()) {
                 throw new AssertionError(

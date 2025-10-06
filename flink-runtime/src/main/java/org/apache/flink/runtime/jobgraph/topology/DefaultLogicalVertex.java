@@ -18,11 +18,8 @@
 
 package org.apache.flink.runtime.jobgraph.topology;
 
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 
 import java.util.List;
 import java.util.function.Function;
@@ -30,17 +27,17 @@ import java.util.stream.Collectors;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** Default implementation of {@link LogicalVertex}. It is an adapter of {@link JobVertex}. */
+/** Default implementation of {@link LogicalVertex}. It is an adapter of {@link StreamVertex}. */
 public class DefaultLogicalVertex implements LogicalVertex {
 
-    private final JobVertex jobVertex;
+    private final StreamVertex jobVertex;
 
     private final Function<IntermediateDataSetID, DefaultLogicalResult> resultRetriever;
 
     private final List<LogicalEdge> inputEdges;
 
     DefaultLogicalVertex(
-            final JobVertex jobVertex,
+            final StreamVertex jobVertex,
             final Function<IntermediateDataSetID, DefaultLogicalResult> resultRetriever) {
 
         this.jobVertex = checkNotNull(jobVertex);

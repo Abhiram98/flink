@@ -33,7 +33,7 @@ import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.metrics.groups.JobManagerMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
@@ -69,7 +69,7 @@ class TestingDispatcher extends Dispatcher {
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobs,
+            Collection<StreamResult> recoveredDirtyJobs,
             Configuration configuration,
             HighAvailabilityServices highAvailabilityServices,
             GatewayRetriever<ResourceManagerGateway> resourceManagerGatewayRetriever,
@@ -168,7 +168,7 @@ class TestingDispatcher extends Dispatcher {
     public static class Builder {
         private DispatcherId fencingToken = DispatcherId.generate();
         private Collection<ExecutionPlan> recoveredJobs = Collections.emptyList();
-        @Nullable private Collection<JobResult> recoveredDirtyJobs = null;
+        @Nullable private Collection<StreamResult> recoveredDirtyJobs = null;
         private HighAvailabilityServices highAvailabilityServices =
                 new TestingHighAvailabilityServices();
 
@@ -215,7 +215,7 @@ class TestingDispatcher extends Dispatcher {
             return this;
         }
 
-        public Builder setRecoveredDirtyJobs(@Nullable Collection<JobResult> recoveredDirtyJobs) {
+        public Builder setRecoveredDirtyJobs(@Nullable Collection<StreamResult> recoveredDirtyJobs) {
             this.recoveredDirtyJobs = recoveredDirtyJobs;
             return this;
         }
