@@ -208,9 +208,9 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 // initial run
                 DispatcherGateway dispatcherGateway = grantLeadership(dispatcherLeaderElection);
 
-                final ExecutionPlan jobGraph = createJobGraphWithBlobs();
-                LOG.info("Initial job submission {}.", jobGraph.getJobID());
-                dispatcherGateway.submitJob(jobGraph, TESTING_TIMEOUT).get();
+                final ExecutionPlan executionPlan = createExecutionPlanWithBlobs();
+                LOG.info("Initial job submission {}.", executionPlan.getJobID());
+                dispatcherGateway.submitJob(executionPlan, TESTING_TIMEOUT).get();
 
                 dispatcherLeaderElection.notLeader();
 
@@ -218,11 +218,11 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 LOG.info("Re-grant leadership first time.");
                 dispatcherGateway = grantLeadership(dispatcherLeaderElection);
 
-                LOG.info("Cancel recovered job {}.", jobGraph.getJobID());
+                LOG.info("Cancel recovered job {}.", executionPlan.getJobID());
                 // cancellation of the job should remove everything
                 final CompletableFuture<JobResult> jobResultFuture =
-                        dispatcherGateway.requestJobResult(jobGraph.getJobID(), TESTING_TIMEOUT);
-                dispatcherGateway.cancelJob(jobGraph.getJobID(), TESTING_TIMEOUT).get();
+                        dispatcherGateway.requestJobResult(executionPlan.getJobID(), TESTING_TIMEOUT);
+                dispatcherGateway.cancelJob(executionPlan.getJobID(), TESTING_TIMEOUT).get();
 
                 // a successful cancellation should eventually remove all job information
                 final JobResult jobResult = jobResultFuture.get();
@@ -287,16 +287,16 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 .get();
     }
 
-    private ExecutionPlan createJobGraphWithBlobs() throws IOException {
+    private ExecutionPlan createExecutionPlanWithBlobs() throws IOException {
         final JobVertex vertex = new JobVertex("test vertex");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
         final PermanentBlobKey permanentBlobKey =
-                blobServer.putPermanent(jobGraph.getJobID(), new byte[256]);
-        jobGraph.addUserJarBlobKey(permanentBlobKey);
+                blobServer.putPermanent(executionPlan.getJobID(), new byte[256]);
+        executionPlan.addUserJarBlobKey(permanentBlobKey);
 
-        return jobGraph;
+        return executionPlan;
     }
 }
