@@ -124,14 +124,14 @@ class FileBufferReaderITCase {
         try (final MiniCluster miniCluster = new MiniCluster(miniClusterConfiguration)) {
             miniCluster.start();
 
-            final ExecutionPlan jobGraph = createJobGraph();
+            final ExecutionPlan executionPlan = createExecutionPlan();
 
             // the job needs to complete without throwing an exception
-            miniCluster.executeJobBlocking(jobGraph);
+            miniCluster.executeJobBlocking(executionPlan);
         }
     }
 
-    private static ExecutionPlan createJobGraph() {
+    private static ExecutionPlan createExecutionPlan() {
         final SlotSharingGroup group1 = new SlotSharingGroup();
         final SlotSharingGroup group2 = new SlotSharingGroup();
 
