@@ -19,8 +19,8 @@
 package org.apache.flink.runtime.rest.handler.legacy.metrics;
 
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails.CurrentAttempts;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails.CurrentAttempts;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.dump.MetricDump;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -104,8 +104,8 @@ public class MetricStore {
         representativeAttempts.keySet().retainAll(activeJobs);
     }
 
-    public synchronized void updateCurrentExecutionAttempts(Collection<JobDetails> jobs) {
-        for (JobDetails job : jobs) {
+    public synchronized void updateCurrentExecutionAttempts(Collection<StreamDetails> jobs) {
+        for (StreamDetails job : jobs) {
             String jobId = job.getJobId().toString();
             Map<String, Map<Integer, CurrentAttempts>> currentAttempts =
                     job.getCurrentExecutionAttempts();

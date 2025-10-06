@@ -33,7 +33,7 @@ import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
 import org.apache.flink.runtime.metrics.dump.MetricQueryService;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -120,7 +120,7 @@ public interface RestfulGateway extends RpcGateway {
      * @param timeout for the asynchronous operation
      * @return Future containing the job details
      */
-    CompletableFuture<MultipleJobsDetails> requestMultipleJobDetails(@RpcTimeout Duration timeout);
+    CompletableFuture<MultipleStreamsDetails> requestMultipleJobDetails(@RpcTimeout Duration timeout);
 
     /**
      * Requests the cluster status overview.

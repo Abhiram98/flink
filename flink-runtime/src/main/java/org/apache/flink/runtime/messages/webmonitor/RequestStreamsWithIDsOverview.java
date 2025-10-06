@@ -20,17 +20,17 @@ package org.apache.flink.runtime.messages.webmonitor;
 
 /**
  * This message requests an overview of how many jobs are in which status. The response to this
- * message is a {@link org.apache.flink.runtime.messages.webmonitor.JobsOverview} message.
+ * message is a {@link StreamsOverview} message.
  */
-public class RequestJobsWithIDsOverview implements InfoMessage {
+public class RequestStreamsWithIDsOverview implements InfoMessage {
 
     private static final long serialVersionUID = 3052933564788843275L;
 
     // ------------------------------------------------------------------------
 
-    private static final RequestJobsWithIDsOverview INSTANCE = new RequestJobsWithIDsOverview();
+    private static final RequestStreamsWithIDsOverview INSTANCE = new RequestStreamsWithIDsOverview();
 
-    public static RequestJobsWithIDsOverview getInstance() {
+    public static RequestStreamsWithIDsOverview getInstance() {
         return INSTANCE;
     }
 
@@ -38,23 +38,23 @@ public class RequestJobsWithIDsOverview implements InfoMessage {
 
     @Override
     public int hashCode() {
-        return RequestJobsWithIDsOverview.class.hashCode();
+        return RequestStreamsWithIDsOverview.class.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && obj.getClass() == RequestJobsWithIDsOverview.class;
+        return obj != null && obj.getClass() == RequestStreamsWithIDsOverview.class;
     }
 
     @Override
     public String toString() {
-        return RequestJobsWithIDsOverview.class.getSimpleName();
+        return RequestStreamsWithIDsOverview.class.getSimpleName();
     }
 
     // ------------------------------------------------------------------------
 
     /** No external instantiation */
-    private RequestJobsWithIDsOverview() {}
+    private RequestStreamsWithIDsOverview() {}
 
     /** Preserve the singleton property by returning the singleton instance */
     private Object readResolve() {

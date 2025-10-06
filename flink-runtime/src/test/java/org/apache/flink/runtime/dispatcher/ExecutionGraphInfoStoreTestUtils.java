@@ -31,7 +31,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
@@ -143,11 +143,11 @@ public class ExecutionGraphInfoStoreTestUtils {
         }
     }
 
-    static Collection<JobDetails> generateJobDetails(
+    static Collection<StreamDetails> generateJobDetails(
             Collection<ExecutionGraphInfo> executionGraphInfos) {
         return executionGraphInfos.stream()
                 .map(ExecutionGraphInfo::getArchivedExecutionGraph)
-                .map(JobDetails::createDetailsForJob)
+                .map(StreamDetails::createDetailsForJob)
                 .collect(Collectors.toList());
     }
 

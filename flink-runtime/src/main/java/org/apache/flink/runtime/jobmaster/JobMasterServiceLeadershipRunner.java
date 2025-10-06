@@ -28,7 +28,7 @@ import org.apache.flink.runtime.leaderelection.LeaderContender;
 import org.apache.flink.runtime.leaderelection.LeaderElection;
 import org.apache.flink.runtime.leaderelection.LeadershipLostException;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.util.ExceptionUtils;
@@ -209,11 +209,11 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
     }
 
     @Override
-    public CompletableFuture<JobDetails> requestJobDetails(Duration timeout) {
+    public CompletableFuture<StreamDetails> requestJobDetails(Duration timeout) {
         return requestJob(timeout)
                 .thenApply(
                         executionGraphInfo ->
-                                JobDetails.createDetailsForJob(
+                                StreamDetails.createDetailsForJob(
                                         executionGraphInfo.getArchivedExecutionGraph()));
     }
 

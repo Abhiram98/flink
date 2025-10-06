@@ -38,27 +38,27 @@ import java.util.Objects;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** An overview of how many jobs are in which status. */
-public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
+public class StreamIdsWithStatusOverview implements ResponseBody, InfoMessage {
 
     private static final long serialVersionUID = -3699051943490133183L;
 
     public static final String FIELD_NAME_JOBS = "jobs";
 
     @JsonProperty(FIELD_NAME_JOBS)
-    private final Collection<JobIdWithStatus> jobsWithStatus;
+    private final Collection<StreamIdWithStatus> jobsWithStatus;
 
     @JsonCreator
-    public JobIdsWithStatusOverview(
-            @JsonProperty(FIELD_NAME_JOBS) Collection<JobIdWithStatus> jobsWithStatus) {
+    public StreamIdsWithStatusOverview(
+            @JsonProperty(FIELD_NAME_JOBS) Collection<StreamIdWithStatus> jobsWithStatus) {
         this.jobsWithStatus = checkNotNull(jobsWithStatus);
     }
 
-    public JobIdsWithStatusOverview(
-            JobIdsWithStatusOverview first, JobIdsWithStatusOverview second) {
+    public StreamIdsWithStatusOverview(
+            StreamIdsWithStatusOverview first, StreamIdsWithStatusOverview second) {
         this.jobsWithStatus = combine(first.getJobsWithStatus(), second.getJobsWithStatus());
     }
 
-    public Collection<JobIdWithStatus> getJobsWithStatus() {
+    public Collection<StreamIdWithStatus> getJobsWithStatus() {
         return jobsWithStatus;
     }
 
@@ -73,8 +73,8 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
-        } else if (obj instanceof JobIdsWithStatusOverview) {
-            JobIdsWithStatusOverview that = (JobIdsWithStatusOverview) obj;
+        } else if (obj instanceof StreamIdsWithStatusOverview) {
+            StreamIdsWithStatusOverview that = (StreamIdsWithStatusOverview) obj;
             return jobsWithStatus.equals(that.getJobsWithStatus());
         } else {
             return false;
@@ -88,12 +88,12 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
 
     // ------------------------------------------------------------------------
 
-    private static Collection<JobIdWithStatus> combine(
-            Collection<JobIdWithStatus> first, Collection<JobIdWithStatus> second) {
+    private static Collection<StreamIdWithStatus> combine(
+            Collection<StreamIdWithStatus> first, Collection<StreamIdWithStatus> second) {
         checkNotNull(first);
         checkNotNull(second);
 
-        ArrayList<JobIdWithStatus> result = new ArrayList<>(first.size() + second.size());
+        ArrayList<StreamIdWithStatus> result = new ArrayList<>(first.size() + second.size());
 
         result.addAll(first);
         result.addAll(second);
@@ -105,7 +105,7 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
     // Static classes
     // -------------------------------------------------------------------------
 
-    public static final class JobIdWithStatus implements Serializable {
+    public static final class StreamIdWithStatus implements Serializable {
 
         private static final long serialVersionUID = -499449819268733026L;
 
@@ -121,7 +121,7 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
         private final JobStatus jobStatus;
 
         @JsonCreator
-        public JobIdWithStatus(
+        public StreamIdWithStatus(
                 @JsonProperty(FIELD_NAME_JOB_ID) @JsonDeserialize(using = JobIDDeserializer.class)
                         JobID jobId,
                 @JsonProperty(FIELD_NAME_JOB_STATUS) JobStatus jobStatus) {
@@ -145,7 +145,7 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            JobIdWithStatus that = (JobIdWithStatus) o;
+            StreamIdWithStatus that = (StreamIdWithStatus) o;
             return Objects.equals(jobId, that.jobId) && jobStatus == that.jobStatus;
         }
 

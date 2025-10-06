@@ -33,7 +33,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.rest.handler.async.OperationResult;
@@ -134,7 +134,7 @@ public final class TestingDispatcherGateway extends TestingRestfulGateway
                     requestCheckpointStatsSnapshotFunction,
             Function<JobID, CompletableFuture<StreamResult>> requestJobResultFunction,
             Function<JobID, CompletableFuture<JobStatus>> requestJobStatusFunction,
-            Supplier<CompletableFuture<MultipleJobsDetails>> requestMultipleJobDetailsSupplier,
+            Supplier<CompletableFuture<MultipleStreamsDetails>> requestMultipleJobDetailsSupplier,
             Supplier<CompletableFuture<ClusterOverview>> requestClusterOverviewSupplier,
             Supplier<CompletableFuture<Collection<String>>>
                     requestMetricQueryServiceAddressesSupplier,

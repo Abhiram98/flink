@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobmaster.*;
 import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.state.SharedStateRegistryFactory;
 import org.apache.flink.util.ExceptionUtils;
@@ -186,11 +186,11 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
     }
 
     @Override
-    public CompletableFuture<JobDetails> requestJobDetails(Duration timeout) {
+    public CompletableFuture<StreamDetails> requestJobDetails(Duration timeout) {
         return requestJob(timeout)
                 .thenApply(
                         executionGraphInfo ->
-                                JobDetails.createDetailsForJob(
+                                StreamDetails.createDetailsForJob(
                                         executionGraphInfo.getArchivedExecutionGraph()));
     }
 

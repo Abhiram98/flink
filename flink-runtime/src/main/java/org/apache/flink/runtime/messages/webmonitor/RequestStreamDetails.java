@@ -23,16 +23,16 @@ package org.apache.flink.runtime.messages.webmonitor;
  * finished jobs.
  *
  * <p>The response to this message is a {@link
- * org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails} message.
+ * MultipleStreamsDetails} message.
  */
-public class RequestJobDetails implements InfoMessage {
+public class RequestStreamDetails implements InfoMessage {
 
     private static final long serialVersionUID = 5208137000412166747L;
 
     private final boolean includeRunning;
     private final boolean includeFinished;
 
-    public RequestJobDetails(boolean includeRunning, boolean includeFinished) {
+    public RequestStreamDetails(boolean includeRunning, boolean includeFinished) {
         this.includeRunning = includeRunning;
         this.includeFinished = includeFinished;
     }
@@ -53,8 +53,8 @@ public class RequestJobDetails implements InfoMessage {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (o instanceof RequestJobDetails) {
-            RequestJobDetails that = (RequestJobDetails) o;
+        } else if (o instanceof RequestStreamDetails) {
+            RequestStreamDetails that = (RequestStreamDetails) o;
 
             return this.includeFinished == that.includeFinished
                     && this.includeRunning == that.includeRunning;

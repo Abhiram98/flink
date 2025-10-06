@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.job.JobsOverviewHandler;
 
@@ -27,7 +27,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
 /** Message headers for {@link JobsOverviewHandler}. */
 public final class JobsOverviewHeaders
         implements RuntimeMessageHeaders<
-                EmptyRequestBody, MultipleJobsDetails, EmptyMessageParameters> {
+                EmptyRequestBody, MultipleStreamsDetails, EmptyMessageParameters> {
 
     private static final JobsOverviewHeaders INSTANCE = new JobsOverviewHeaders();
 
@@ -52,8 +52,8 @@ public final class JobsOverviewHeaders
     }
 
     @Override
-    public Class<MultipleJobsDetails> getResponseClass() {
-        return MultipleJobsDetails.class;
+    public Class<MultipleStreamsDetails> getResponseClass() {
+        return MultipleStreamsDetails.class;
     }
 
     @Override

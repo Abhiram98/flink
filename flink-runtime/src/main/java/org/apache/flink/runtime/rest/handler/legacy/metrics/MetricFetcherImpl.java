@@ -23,8 +23,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.configuration.WebOptions;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.metrics.dump.MetricDumpSerialization;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
@@ -138,17 +138,17 @@ public class MetricFetcherImpl<T extends RestfulGateway> implements MetricFetche
                 /*
                  * Remove all metrics that belong to a job that is not running and no longer archived.
                  */
-                CompletableFuture<MultipleJobsDetails> jobDetailsFuture =
+                CompletableFuture<MultipleStreamsDetails> jobDetailsFuture =
                         leaderGateway.requestMultipleJobDetails(timeout);
 
                 jobDetailsFuture.whenCompleteAsync(
-                        (MultipleJobsDetails jobDetails, Throwable throwable) -> {
+                        (MultipleStreamsDetails jobDetails, Throwable throwable) -> {
                             if (throwable != null) {
                                 LOG.debug("Fetching of JobDetails failed.", throwable);
                             } else {
                                 ArrayList<String> toRetain =
                                         new ArrayList<>(jobDetails.getJobs().size());
-                                for (JobDetails job : jobDetails.getJobs()) {
+                                for (StreamDetails job : jobDetails.getJobs()) {
                                     toRetain.add(job.getJobId().toString());
                                 }
                                 metrics.retainJobs(toRetain);

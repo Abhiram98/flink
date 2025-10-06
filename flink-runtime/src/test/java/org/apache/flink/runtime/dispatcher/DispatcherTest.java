@@ -71,8 +71,8 @@ import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
@@ -384,7 +384,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 is(JobStatus.INITIALIZING));
 
         // ensure correct JobDetails
-        MultipleJobsDetails multiDetails =
+        MultipleStreamsDetails multiDetails =
                 dispatcherGateway.requestMultipleJobDetails(TIMEOUT).get();
         assertEquals(1, multiDetails.getJobs().size());
         assertEquals(jobId, multiDetails.getJobs().iterator().next().getJobId());
@@ -1193,7 +1193,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
         dispatcher.getJobTerminationFuture(jobId, TIMEOUT).get();
 
-        final MultipleJobsDetails multipleJobsDetails =
+        final MultipleStreamsDetails multipleJobsDetails =
                 dispatcherGateway.requestMultipleJobDetails(TIMEOUT).get();
 
         InstantiationUtil.serializeObject(multipleJobsDetails);
@@ -1253,7 +1253,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 .setJobId(jobId)
                 .setJobDetailsFunction(
                         () ->
-                                JobDetails.createDetailsForJob(
+                                StreamDetails.createDetailsForJob(
                                         new ArchivedExecutionGraphBuilder()
                                                 .setJobID(jobId)
                                                 .setState(currentJobStatus)
@@ -1279,8 +1279,8 @@ public class DispatcherTest extends AbstractDispatcherTest {
     }
 
     private static void assertOnlyContainsSingleJobWithState(
-            final JobStatus expectedJobStatus, final MultipleJobsDetails multipleJobsDetails) {
-        final Collection<JobDetails> finishedJobDetails = multipleJobsDetails.getJobs();
+            final JobStatus expectedJobStatus, final MultipleStreamsDetails multipleJobsDetails) {
+        final Collection<StreamDetails> finishedJobDetails = multipleJobsDetails.getJobs();
         assertEquals(1, finishedJobDetails.size());
         assertEquals(expectedJobStatus, finishedJobDetails.iterator().next().getStatus());
     }

@@ -22,13 +22,13 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobIdsWithStatusOverview;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
-import org.apache.flink.runtime.messages.webmonitor.RequestJobDetails;
-import org.apache.flink.runtime.messages.webmonitor.RequestJobsOverview;
-import org.apache.flink.runtime.messages.webmonitor.RequestJobsWithIDsOverview;
+import org.apache.flink.runtime.messages.webmonitor.RequestStreamsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamIdsWithStatusOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
+import org.apache.flink.runtime.messages.webmonitor.RequestStreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.RequestStreamsWithIDsOverview;
 import org.apache.flink.runtime.messages.webmonitor.RequestStatusOverview;
 
 import org.junit.jupiter.api.Test;
@@ -43,35 +43,35 @@ class WebMonitorMessagesTest {
     void testStatusMessages() throws Exception {
         final Random rnd = new Random();
 
-        GenericMessageTester.testMessageInstance(RequestJobsOverview.getInstance());
-        GenericMessageTester.testMessageInstance(RequestJobsWithIDsOverview.getInstance());
+        GenericMessageTester.testMessageInstance(RequestStreamsOverview.getInstance());
+        GenericMessageTester.testMessageInstance(RequestStreamsWithIDsOverview.getInstance());
         GenericMessageTester.testMessageInstance(RequestStatusOverview.getInstance());
-        GenericMessageTester.testMessageInstance(RequestJobsOverview.getInstance());
+        GenericMessageTester.testMessageInstance(RequestStreamsOverview.getInstance());
 
         GenericMessageTester.testMessageInstance(
-                GenericMessageTester.instantiateGeneric(RequestJobDetails.class, rnd));
+                GenericMessageTester.instantiateGeneric(RequestStreamDetails.class, rnd));
         GenericMessageTester.testMessageInstance(
                 GenericMessageTester.instantiateGeneric(ClusterOverview.class, rnd));
         GenericMessageTester.testMessageInstance(
-                GenericMessageTester.instantiateGeneric(JobsOverview.class, rnd));
+                GenericMessageTester.instantiateGeneric(StreamsOverview.class, rnd));
 
         GenericMessageTester.testMessageInstance(
-                new JobIdsWithStatusOverview(
+                new StreamIdsWithStatusOverview(
                         Arrays.asList(
-                                new JobIdsWithStatusOverview.JobIdWithStatus(
+                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                         JobID.generate(), JobStatus.RUNNING),
-                                new JobIdsWithStatusOverview.JobIdWithStatus(
+                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                         JobID.generate(), JobStatus.CANCELED),
-                                new JobIdsWithStatusOverview.JobIdWithStatus(
+                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                         JobID.generate(), JobStatus.CREATED),
-                                new JobIdsWithStatusOverview.JobIdWithStatus(
+                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                         JobID.generate(), JobStatus.FAILED),
-                                new JobIdsWithStatusOverview.JobIdWithStatus(
+                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                         JobID.generate(), JobStatus.RESTARTING))));
     }
 
     @Test
-    void testJobDetailsMessage() throws Exception {
+    void testStreamDetailsMessage() throws Exception {
         final Random rnd = new Random();
 
         int[] numVerticesPerState = new int[ExecutionState.values().length];
@@ -91,8 +91,8 @@ class WebMonitorMessagesTest {
         JobID jid = GenericMessageTester.randomJobId(rnd);
         JobStatus status = GenericMessageTester.randomJobStatus(rnd);
 
-        JobDetails msg1 =
-                new JobDetails(
+        StreamDetails msg1 =
+                new StreamDetails(
                         jid,
                         name,
                         time,
@@ -102,8 +102,8 @@ class WebMonitorMessagesTest {
                         lastModified,
                         numVerticesPerState,
                         numTotal);
-        JobDetails msg2 =
-                new JobDetails(
+        StreamDetails msg2 =
+                new StreamDetails(
                         jid,
                         name,
                         time,
@@ -118,13 +118,13 @@ class WebMonitorMessagesTest {
     }
 
     @Test
-    void testMultipleJobDetails() throws Exception {
+    void testMultipleStreamDetails() throws Exception {
         final Random rnd = new Random();
-        GenericMessageTester.testMessageInstance(new MultipleJobsDetails(randomJobDetails(rnd)));
+        GenericMessageTester.testMessageInstance(new MultipleStreamsDetails(randomStreamDetails(rnd)));
     }
 
-    private Collection<JobDetails> randomJobDetails(Random rnd) {
-        final JobDetails[] details = new JobDetails[rnd.nextInt(10)];
+    private Collection<StreamDetails> randomStreamDetails(Random rnd) {
+        final StreamDetails[] details = new StreamDetails[rnd.nextInt(10)];
         for (int k = 0; k < details.length; k++) {
             int[] numVerticesPerState = new int[ExecutionState.values().length];
             int numTotal = 0;
@@ -144,7 +144,7 @@ class WebMonitorMessagesTest {
             JobStatus status = JobStatus.values()[rnd.nextInt(JobStatus.values().length)];
 
             details[k] =
-                    new JobDetails(
+                    new StreamDetails(
                             jid,
                             name,
                             time,

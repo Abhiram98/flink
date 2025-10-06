@@ -24,8 +24,8 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
@@ -113,7 +113,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
-        final JobsOverview expectedJobsOverview = JobsOverview.create(jobStatuses);
+        final StreamsOverview expectedJobsOverview = StreamsOverview.create(jobStatuses);
 
         final File rootDir = temporaryFolder.newFolder();
 
@@ -138,7 +138,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> executionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(executionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(executionGraphInfos);
 
         final File rootDir = temporaryFolder.newFolder();
 
@@ -304,7 +304,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> newExecutionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
 
         try (final FileExecutionGraphInfoStore executionGraphInfoStore =
                 new FileExecutionGraphInfoStore(

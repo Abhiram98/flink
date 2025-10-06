@@ -72,9 +72,9 @@ import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.groups.JobManagerMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -841,40 +841,40 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         CompletableFuture<Collection<JobStatus>> allJobsFuture =
                 allOptionalJobsFuture.thenApply(this::flattenOptionalCollection);
 
-        final JobsOverview completedJobsOverview = executionGraphInfoStore.getStoredJobsOverview();
+        final StreamsOverview completedJobsOverview = executionGraphInfoStore.getStoredJobsOverview();
 
         return allJobsFuture.thenCombine(
                 taskManagerOverviewFuture,
                 (Collection<JobStatus> runningJobsStatus, ResourceOverview resourceOverview) -> {
-                    final JobsOverview allJobsOverview =
-                            JobsOverview.create(runningJobsStatus).combine(completedJobsOverview);
+                    final StreamsOverview allJobsOverview =
+                            StreamsOverview.create(runningJobsStatus).combine(completedJobsOverview);
                     return new ClusterOverview(resourceOverview, allJobsOverview);
                 });
     }
 
     @Override
-    public CompletableFuture<MultipleJobsDetails> requestMultipleJobDetails(Duration timeout) {
-        List<CompletableFuture<Optional<JobDetails>>> individualOptionalJobDetails =
+    public CompletableFuture<MultipleStreamsDetails> requestMultipleJobDetails(Duration timeout) {
+        List<CompletableFuture<Optional<StreamDetails>>> individualOptionalJobDetails =
                 queryJobMastersForInformation(
                         jobManagerRunner -> jobManagerRunner.requestJobDetails(timeout));
 
-        CompletableFuture<Collection<Optional<JobDetails>>> optionalCombinedJobDetails =
+        CompletableFuture<Collection<Optional<StreamDetails>>> optionalCombinedJobDetails =
                 FutureUtils.combineAll(individualOptionalJobDetails);
 
-        CompletableFuture<Collection<JobDetails>> combinedJobDetails =
+        CompletableFuture<Collection<StreamDetails>> combinedJobDetails =
                 optionalCombinedJobDetails.thenApply(this::flattenOptionalCollection);
 
-        final Collection<JobDetails> completedJobDetails =
+        final Collection<StreamDetails> completedJobDetails =
                 executionGraphInfoStore.getAvailableJobDetails();
 
         return combinedJobDetails.thenApply(
-                (Collection<JobDetails> runningJobDetails) -> {
-                    final Map<JobID, JobDetails> deduplicatedJobs = new HashMap<>();
+                (Collection<StreamDetails> runningJobDetails) -> {
+                    final Map<JobID, StreamDetails> deduplicatedJobs = new HashMap<>();
 
                     completedJobDetails.forEach(job -> deduplicatedJobs.put(job.getJobId(), job));
                     runningJobDetails.forEach(job -> deduplicatedJobs.put(job.getJobId(), job));
 
-                    return new MultipleJobsDetails(new HashSet<>(deduplicatedJobs.values()));
+                    return new MultipleStreamsDetails(new HashSet<>(deduplicatedJobs.values()));
                 });
     }
 
@@ -885,7 +885,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 .orElseGet(
                         () -> {
                             // is it a completed job?
-                            final JobDetails jobDetails =
+                            final StreamDetails jobDetails =
                                     executionGraphInfoStore.getAvailableJobDetails(jobId);
                             if (jobDetails == null) {
                                 return FutureUtils.completedExceptionally(
