@@ -267,10 +267,10 @@ class ExecutionPartitionLifecycleTest {
                                                 .withTaskManagerLocation(taskManagerLocation)
                                                 .build()));
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producerVertex, consumerVertex);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(producerVertex, consumerVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
