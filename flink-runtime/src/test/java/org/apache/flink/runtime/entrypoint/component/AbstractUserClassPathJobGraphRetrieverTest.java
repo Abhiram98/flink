@@ -38,18 +38,18 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/** Tests for the {@link AbstractUserClassPathJobGraphRetriever}. */
+/** Tests for the {@link AbstractUserClassPathExecutionPlanRetriever}. */
 public class AbstractUserClassPathJobGraphRetrieverTest extends TestLogger {
 
     @Rule public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static class TestJobGraphRetriever extends AbstractUserClassPathJobGraphRetriever {
+    private static class TestJobGraphRetriever extends AbstractUserClassPathExecutionPlanRetriever {
         TestJobGraphRetriever(File jobDir) throws IOException {
             super(jobDir);
         }
 
         @Override
-        public ExecutionPlan retrieveJobGraph(Configuration configuration) {
+        public ExecutionPlan retrieveExecutionPlan(Configuration configuration) {
             throw new UnsupportedOperationException("This method should not be called.");
         }
     }

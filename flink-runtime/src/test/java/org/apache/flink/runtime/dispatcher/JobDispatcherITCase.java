@@ -27,7 +27,7 @@ import org.apache.flink.runtime.dispatcher.runner.DefaultDispatcherRunnerFactory
 import org.apache.flink.runtime.dispatcher.runner.JobDispatcherLeaderProcessFactoryFactory;
 import org.apache.flink.runtime.entrypoint.component.DefaultDispatcherResourceManagerComponentFactory;
 import org.apache.flink.runtime.entrypoint.component.DispatcherResourceManagerComponentFactory;
-import org.apache.flink.runtime.entrypoint.component.FileJobGraphRetriever;
+import org.apache.flink.runtime.entrypoint.component.FileExecutionPlanRetriever;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
@@ -68,7 +68,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
 
 import static java.nio.file.StandardOpenOption.CREATE;
-import static org.apache.flink.runtime.entrypoint.component.FileJobGraphRetriever.JOB_GRAPH_FILE_PATH;
+import static org.apache.flink.runtime.entrypoint.component.FileExecutionPlanRetriever.EXECUTION_PLAN_FILE_PATH;
 
 /** An integration test which recovers from checkpoint after regaining the leadership. */
 @ExtendWith(TestLoggerExtension.class)
@@ -85,7 +85,7 @@ public class JobDispatcherITCase {
                 return new DefaultDispatcherResourceManagerComponentFactory(
                         new DefaultDispatcherRunnerFactory(
                                 JobDispatcherLeaderProcessFactoryFactory.create(
-                                        FileJobGraphRetriever.createFrom(configuration, null))),
+                                        FileExecutionPlanRetriever.createFrom(configuration, null))),
                         StandaloneResourceManagerFactory.getInstance(),
                         JobRestEndpointFactory.INSTANCE);
             } catch (IOException e) {
@@ -168,12 +168,12 @@ public class JobDispatcherITCase {
                         .setJobCheckpointingSettings(checkpointingSettings)
                         .build();
 
-        final Path jobGraphPath = tmpPath.resolve(JOB_GRAPH_FILE_PATH.defaultValue());
+        final Path jobGraphPath = tmpPath.resolve(EXECUTION_PLAN_FILE_PATH.defaultValue());
         try (ObjectOutputStream objectOutputStream =
                 new ObjectOutputStream(Files.newOutputStream(jobGraphPath, CREATE))) {
             objectOutputStream.writeObject(jobGraph);
         }
-        configuration.setString(JOB_GRAPH_FILE_PATH.key(), jobGraphPath.toString());
+        configuration.setString(EXECUTION_PLAN_FILE_PATH.key(), jobGraphPath.toString());
         return jobGraph.getJobID();
     }
 

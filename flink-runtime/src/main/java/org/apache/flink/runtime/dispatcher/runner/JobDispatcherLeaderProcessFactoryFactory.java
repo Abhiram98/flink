@@ -70,7 +70,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
         try {
             jobGraph =
                     Preconditions.checkNotNull(
-                            jobGraphRetriever.retrieveJobGraph(
+                            jobGraphRetriever.retrieveExecutionPlan(
                                     partialDispatcherServices.getConfiguration()));
         } catch (FlinkException e) {
             throw new FlinkRuntimeException("Could not retrieve the JobGraph.", e);

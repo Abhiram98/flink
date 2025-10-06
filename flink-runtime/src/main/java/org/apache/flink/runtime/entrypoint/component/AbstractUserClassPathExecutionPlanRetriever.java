@@ -33,12 +33,12 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 /** Abstract class for the JobGraphRetriever which supports getting user classpaths. */
-public abstract class AbstractUserClassPathJobGraphRetriever implements JobGraphRetriever {
+public abstract class AbstractUserClassPathExecutionPlanRetriever implements JobGraphRetriever {
 
     /** User classpaths in relative form to the working directory. */
     @Nonnull private final Collection<URL> userClassPaths;
 
-    protected AbstractUserClassPathJobGraphRetriever(@Nullable File jobDir) throws IOException {
+    protected AbstractUserClassPathExecutionPlanRetriever(@Nullable File jobDir) throws IOException {
         if (jobDir == null) {
             userClassPaths = Collections.emptyList();
         } else {

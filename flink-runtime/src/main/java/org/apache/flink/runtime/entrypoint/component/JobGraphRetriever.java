@@ -32,5 +32,5 @@ public interface JobGraphRetriever {
      * @return the retrieved {@link ExecutionPlan}.
      * @throws FlinkException if the {@link ExecutionPlan} could not be retrieved
      */
-    ExecutionPlan retrieveJobGraph(Configuration configuration) throws FlinkException;
+    ExecutionPlan retrieveExecutionPlan(Configuration configuration) throws FlinkException;
 }
