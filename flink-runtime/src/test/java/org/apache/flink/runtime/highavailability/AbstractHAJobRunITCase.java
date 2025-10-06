@@ -85,7 +85,7 @@ public abstract class AbstractHAJobRunITCase {
     @Test
     public void testJobExecutionInHaMode(@InjectMiniCluster MiniCluster flinkCluster)
             throws Exception {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         // providing a timeout helps making the test fail in case some issue occurred while
         // initializing the cluster

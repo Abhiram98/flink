@@ -29,7 +29,7 @@ public class ExecutionPlanTestUtils {
         return ExecutionPlanBuilder.newStreamingJobGraphBuilder().build();
     }
 
-    public static ExecutionPlan singleNoOpJobGraph() {
+    public static ExecutionPlan singleNoOpExecutionPlan() {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);

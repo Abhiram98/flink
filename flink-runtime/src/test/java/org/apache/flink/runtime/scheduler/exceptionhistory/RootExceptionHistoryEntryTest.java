@@ -63,12 +63,12 @@ class RootExceptionHistoryEntryTest {
 
     @BeforeEach
     void setup() throws JobException, JobExecutionException {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
-        jobGraph.getVertices().forEach(v -> v.setParallelism(3));
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
+        executionPlan.getVertices().forEach(v -> v.setParallelism(3));
 
         executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setExecutionPlan(jobGraph)
+                        .setExecutionPlan(executionPlan)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
     }

@@ -189,7 +189,7 @@ class JobMasterTest {
     private static final long heartbeatInterval = 1000L;
     private static final long heartbeatTimeout = 5_000_000L;
 
-    private static final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+    private static final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
     private static TestingRpcService rpcService;
 
@@ -420,7 +420,7 @@ class JobMasterTest {
 
         rpcService.registerGateway(taskExecutorGateway.getAddress(), taskExecutorGateway);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
                         .withHeartbeatServices(new HeartbeatServicesImpl(5L, 1000L))
@@ -1524,7 +1524,7 @@ class JobMasterTest {
         final JobManagerSharedServices jobManagerSharedServices =
                 new TestingJobManagerSharedServicesBuilder().build();
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         final LocalUnresolvedTaskManagerLocation taskManagerUnresolvedLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -2409,7 +2409,7 @@ class JobMasterTest {
             HeartbeatServices heartbeatServices,
             BiConsumer<LocalUnresolvedTaskManagerLocation, JobMasterGateway> jobReachedRunningState)
             throws Exception {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         final JobMasterBuilder.TestingOnCompletionActions onCompletionActions =
                 new JobMasterBuilder.TestingOnCompletionActions();
 
@@ -2541,7 +2541,7 @@ class JobMasterTest {
     }
 
     private ExecutionPlan createSingleVertexJobWithRestartStrategy() throws IOException {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, Integer.MAX_VALUE, 0L);
 

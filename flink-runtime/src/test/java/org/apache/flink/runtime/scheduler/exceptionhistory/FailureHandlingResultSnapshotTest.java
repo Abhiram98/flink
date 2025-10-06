@@ -71,7 +71,7 @@ class FailureHandlingResultSnapshotTest {
 
     @BeforeEach
     void setup() throws JobException, JobExecutionException {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         jobGraph.getVertices().forEach(v -> v.setParallelism(3));
 
         executionGraph =

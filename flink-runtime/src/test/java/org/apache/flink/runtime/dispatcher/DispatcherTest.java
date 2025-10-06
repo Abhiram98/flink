@@ -164,7 +164,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         jobId = jobGraph.getJobID();
         jobMasterLeaderElection = new TestingLeaderElection();
         haServices.setJobMasterLeaderElection(jobId, jobMasterLeaderElection);
@@ -1010,7 +1010,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 createAndStartDispatcher(heartbeatServices, haServices, jobManagerRunnerFactory);
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        final ExecutionPlan blockedJobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan blockedJobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         blockedJobGraph.setJobID(blockingId);
 
         // Submit two jobs, one blocks forever

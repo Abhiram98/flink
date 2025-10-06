@@ -240,7 +240,7 @@ class JobMasterPartitionReleaseTest {
 
             HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 5_000_000L);
 
-            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
             jobMaster =
                     new JobMasterBuilder(jobGraph, rpcService)
                             .withConfiguration(configuration)

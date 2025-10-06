@@ -270,7 +270,7 @@ class DefaultDispatcherRunnerITCase {
     }
 
     private static ExecutionPlan createJobGraph() {
-        return ExecutionPlanTestUtils.singleNoOpJobGraph();
+        return ExecutionPlanTestUtils.singleNoOpExecutionPlan();
     }
 
     private DispatcherRunner createDispatcherRunner() throws Exception {

@@ -103,7 +103,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
 
         TestingExecutionDeploymentTrackerWrapper deploymentTrackerWrapper =
                 new TestingExecutionDeploymentTrackerWrapper();
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         try (JobMaster jobMaster =
                 createAndStartJobMaster(onCompletionActions, deploymentTrackerWrapper, jobGraph)) {
             JobMasterGateway jobMasterGateway = jobMaster.getSelfGateway(JobMasterGateway.class);
@@ -164,7 +164,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
     void testExecutionDeploymentReconciliationForPendingExecution() throws Exception {
         TestingExecutionDeploymentTrackerWrapper deploymentTrackerWrapper =
                 new TestingExecutionDeploymentTrackerWrapper();
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         try (JobMaster jobMaster = createAndStartJobMaster(deploymentTrackerWrapper, jobGraph)) {
             JobMasterGateway jobMasterGateway = jobMaster.getSelfGateway(JobMasterGateway.class);
             TESTING_RPC_SERVICE_EXTENSION

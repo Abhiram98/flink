@@ -109,7 +109,7 @@ public class MiniDispatcherTest extends TestLogger {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-        jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         executionGraphInfo =
                 new ExecutionGraphInfo(

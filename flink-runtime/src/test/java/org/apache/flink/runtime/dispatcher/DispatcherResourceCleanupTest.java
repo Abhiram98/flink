@@ -127,7 +127,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Before
     public void setup() throws Exception {
-        jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
+        jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         jobId = jobGraph.getJobID();
 
         globalCleanupFuture = new CompletableFuture<>();
