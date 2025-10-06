@@ -37,7 +37,7 @@ public interface ExecutionGraphFactory {
     /**
      * Create and restore {@link ExecutionGraph} from the given {@link ExecutionPlan} and services.
      *
-     * @param jobGraph jobGraph to initialize the ExecutionGraph with
+     * @param executionPlan jobGraph to initialize the ExecutionGraph with
      * @param completedCheckpointStore completedCheckpointStore to pass to the CheckpointCoordinator
      * @param checkpointsCleaner checkpointsCleaner to pass to the CheckpointCoordinator
      * @param checkpointIdCounter checkpointIdCounter to pass to the CheckpointCoordinator
@@ -56,7 +56,7 @@ public interface ExecutionGraphFactory {
      * @throws Exception if the {@link ExecutionGraph} could not be created and restored
      */
     ExecutionGraph createAndRestoreExecutionGraph(
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             CompletedCheckpointStore completedCheckpointStore,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointIDCounter checkpointIdCounter,

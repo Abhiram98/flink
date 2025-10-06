@@ -126,7 +126,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
     @Override
     public ExecutionGraph createAndRestoreExecutionGraph(
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             CompletedCheckpointStore completedCheckpointStore,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointIDCounter checkpointIdCounter,
@@ -151,7 +151,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
         final ExecutionGraph newExecutionGraph =
                 DefaultExecutionGraphBuilder.buildGraph(
-                        jobGraph,
+                        executionPlan,
                         configuration,
                         futureExecutor,
                         ioExecutor,
@@ -187,7 +187,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
                 // check whether we can restore from a savepoint
                 tryRestoreExecutionGraphFromSavepoint(
-                        newExecutionGraph, jobGraph.getSavepointRestoreSettings());
+                        newExecutionGraph, executionPlan.getSavepointRestoreSettings());
             }
         }
 
