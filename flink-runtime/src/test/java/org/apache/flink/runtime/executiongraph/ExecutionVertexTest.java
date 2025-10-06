@@ -67,11 +67,11 @@ class ExecutionVertexTest {
         partitionTracker.setStopTrackingAndReleasePartitionsConsumer(
                 releasePartitionsFuture::complete);
 
-        final ExecutionPlan jobGraph =
+        final ExecutionPlan executionPlan =
                 ExecutionPlanTestUtils.streamingExecutionPlan(producerJobVertex, consumerJobVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setPartitionTracker(partitionTracker)
@@ -111,7 +111,7 @@ class ExecutionVertexTest {
     @Test
     void testFindLatestAllocationIgnoresFailedAttempts() throws Exception {
         final JobVertex source = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(source);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(source);
         final TestingPhysicalSlotProvider withLimitedAmountOfPhysicalSlots =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final Configuration configuration = new Configuration();
@@ -119,7 +119,7 @@ class ExecutionVertexTest {
         configuration.set(JobManagerOptions.MAX_ATTEMPTS_HISTORY_SIZE, 1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setJobMasterConfiguration(configuration)
