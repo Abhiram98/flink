@@ -37,7 +37,7 @@ import java.util.Map;
  * @param <C> The type of the parent ComponentMetricGroup.
  */
 @Internal
-public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
+public abstract class StreamMetricGroup<C extends ComponentMetricGroup<C>>
         extends ComponentMetricGroup<C> {
 
     /** The ID of the job represented by this metrics group. */
@@ -48,7 +48,7 @@ public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
 
     // ------------------------------------------------------------------------
 
-    protected JobMetricGroup(
+    protected StreamMetricGroup(
             MetricRegistry registry,
             C parent,
             JobID jobId,

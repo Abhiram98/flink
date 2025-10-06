@@ -67,7 +67,7 @@ public final class ScopeFormats {
         return this.taskManagerFormat;
     }
 
-    public TaskManagerJobScopeFormat getTaskManagerJobFormat() {
+    public TaskManagerJobScopeFormat getTaskManagerStreamFormat() {
         return this.taskManagerJobFormat;
     }
 

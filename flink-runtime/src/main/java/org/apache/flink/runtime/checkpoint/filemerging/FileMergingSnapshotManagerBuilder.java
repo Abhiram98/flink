@@ -19,7 +19,7 @@ package org.apache.flink.runtime.checkpoint.filemerging;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.util.Preconditions;
 
@@ -51,7 +51,7 @@ public class FileMergingSnapshotManagerBuilder {
 
     @Nullable private Executor ioExecutor = null;
 
-    @Nullable private TaskManagerJobMetricGroup metricGroup;
+    @Nullable private TaskManagerStreamMetricGroup metricGroup;
 
     /**
      * Initialize the builder.
@@ -98,7 +98,7 @@ public class FileMergingSnapshotManagerBuilder {
         return this;
     }
 
-    public FileMergingSnapshotManagerBuilder setMetricGroup(TaskManagerJobMetricGroup metricGroup) {
+    public FileMergingSnapshotManagerBuilder setMetricGroup(TaskManagerStreamMetricGroup metricGroup) {
         this.metricGroup = metricGroup;
         return this;
     }

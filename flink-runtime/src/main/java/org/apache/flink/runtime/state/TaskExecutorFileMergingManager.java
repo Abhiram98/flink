@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.filemerging.FileMergingType;
 import org.apache.flink.runtime.checkpoint.filemerging.PhysicalFilePool;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.util.ShutdownHookUtil;
 
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class TaskExecutorFileMergingManager {
             @Nonnull ExecutionAttemptID executionAttemptID,
             Configuration clusterConfiguration,
             Configuration jobConfiguration,
-            TaskManagerJobMetricGroup metricGroup) {
+            TaskManagerStreamMetricGroup metricGroup) {
         boolean mergingEnabled =
                 jobConfiguration
                         .getOptional(FILE_MERGING_ENABLED)

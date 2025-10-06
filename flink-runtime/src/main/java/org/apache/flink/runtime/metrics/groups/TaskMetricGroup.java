@@ -41,7 +41,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>Contains extra logic for adding operators.
  */
 @Internal
-public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGroup> {
+public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerStreamMetricGroup> {
 
     private final Map<String, InternalOperatorMetricGroup> operators = new HashMap<>();
 
@@ -66,7 +66,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
 
     TaskMetricGroup(
             MetricRegistry registry,
-            TaskManagerJobMetricGroup parent,
+            TaskManagerStreamMetricGroup parent,
             ExecutionAttemptID executionId,
             String taskName) {
         super(
@@ -95,7 +95,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
     //  properties
     // ------------------------------------------------------------------------
 
-    public final TaskManagerJobMetricGroup parent() {
+    public final TaskManagerStreamMetricGroup parent() {
         return parent;
     }
 

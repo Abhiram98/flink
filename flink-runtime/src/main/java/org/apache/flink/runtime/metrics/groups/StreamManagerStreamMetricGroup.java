@@ -38,7 +38,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * specific job, running on the JobManager.
  */
 @Internal
-public class StreamManagerStreamMetricGroup extends JobMetricGroup<JobManagerMetricGroup> {
+public class StreamManagerStreamMetricGroup extends StreamMetricGroup<JobManagerMetricGroup> {
     private final Map<String, StreamManagerOperatorMetricGroup> operators = new HashMap<>();
 
     StreamManagerStreamMetricGroup(

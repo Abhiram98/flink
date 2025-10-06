@@ -21,7 +21,7 @@ package org.apache.flink.runtime.state;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandle;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandleStreamImpl;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
@@ -89,7 +89,7 @@ public class TaskExecutorStateChangelogStoragesManager {
     public StateChangelogStorage<?> stateChangelogStorageForJob(
             @Nonnull JobID jobId,
             Configuration configuration,
-            TaskManagerJobMetricGroup metricGroup,
+            TaskManagerStreamMetricGroup metricGroup,
             LocalRecoveryConfig localRecoveryConfig)
             throws IOException {
         synchronized (lock) {

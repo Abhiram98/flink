@@ -19,9 +19,10 @@
 package org.apache.flink.runtime.metrics.scope;
 
 import org.apache.flink.api.common.JobID;
+import org.apache.flink.runtime.metrics.groups.StreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskManagerMetricGroup;
 
-/** The scope format for the {@link org.apache.flink.runtime.metrics.groups.JobMetricGroup}. */
+/** The scope format for the {@link StreamMetricGroup}. */
 public class TaskManagerJobScopeFormat extends ScopeFormat {
 
     public TaskManagerJobScopeFormat(String format, TaskManagerScopeFormat parentFormat) {

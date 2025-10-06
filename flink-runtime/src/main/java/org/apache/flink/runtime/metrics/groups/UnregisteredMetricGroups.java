@@ -56,7 +56,7 @@ public class UnregisteredMetricGroups {
         return new UnregisteredTaskManagerMetricGroup();
     }
 
-    public static TaskManagerJobMetricGroup createUnregisteredTaskManagerJobMetricGroup() {
+    public static TaskManagerStreamMetricGroup createUnregisteredTaskManagerJobMetricGroup() {
         return new UnregisteredTaskManagerJobMetricGroup();
     }
 
@@ -156,8 +156,8 @@ public class UnregisteredMetricGroups {
         }
     }
 
-    /** A safe drop-in replacement for {@link TaskManagerJobMetricGroup}s. */
-    public static class UnregisteredTaskManagerJobMetricGroup extends TaskManagerJobMetricGroup {
+    /** A safe drop-in replacement for {@link TaskManagerStreamMetricGroup}s. */
+    public static class UnregisteredTaskManagerJobMetricGroup extends TaskManagerStreamMetricGroup {
         private static final JobID DEFAULT_JOB_ID = new JobID(0, 0);
         private static final String DEFAULT_JOB_NAME = "UnregisteredJob";
 

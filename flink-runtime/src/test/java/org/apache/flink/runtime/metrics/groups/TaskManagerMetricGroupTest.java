@@ -54,21 +54,21 @@ class TaskManagerMetricGroupTest {
 
     @Test
     void testReCreateAfterRemoval() {
-        TaskManagerJobMetricGroup oldGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
+        TaskManagerStreamMetricGroup oldGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
         metricGroup.removeJobMetricsGroup(JOB_ID);
         assertThat(metricGroup.addJob(JOB_ID, JOB_NAME)).isNotSameAs(oldGroup);
     }
 
     @Test
     void testCloseOnRemove() {
-        TaskManagerJobMetricGroup tmJobMetricGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
+        TaskManagerStreamMetricGroup tmJobMetricGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
         metricGroup.removeJobMetricsGroup(JOB_ID);
         assertThat(tmJobMetricGroup.isClosed()).isTrue();
     }
 
     @Test
     void testCloseWithoutRemoval() {
-        TaskManagerJobMetricGroup jobGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
+        TaskManagerStreamMetricGroup jobGroup = metricGroup.addJob(JOB_ID, JOB_NAME);
         metricGroup.close();
         assertThat(jobGroup.isClosed()).isTrue();
     }

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for the {@link TaskManagerJobMetricGroup}. */
+/** Tests for the {@link TaskManagerStreamMetricGroup}. */
 class TaskManagerJobGroupTest {
 
     private MetricRegistryImpl registry;
@@ -57,8 +57,8 @@ class TaskManagerJobGroupTest {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "theHostName", new ResourceID("test-tm-id"));
-        JobMetricGroup jmGroup =
-                new TaskManagerJobMetricGroup(registry, tmGroup, new JobID(), "myJobName");
+        StreamMetricGroup jmGroup =
+                new TaskManagerStreamMetricGroup(registry, tmGroup, new JobID(), "myJobName");
 
         assertThat(jmGroup.getScopeComponents())
                 .containsExactly("theHostName", "taskmanager", "test-tm-id", "myJobName");
@@ -80,7 +80,7 @@ class TaskManagerJobGroupTest {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "theHostName", new ResourceID("test-tm-id"));
-        JobMetricGroup jmGroup = new TaskManagerJobMetricGroup(registry, tmGroup, jid, "myJobName");
+        StreamMetricGroup jmGroup = new TaskManagerStreamMetricGroup(registry, tmGroup, jid, "myJobName");
 
         assertThat(jmGroup.getScopeComponents()).containsExactly("some-constant", "myJobName");
 
@@ -101,7 +101,7 @@ class TaskManagerJobGroupTest {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "theHostName", new ResourceID("test-tm-id"));
-        JobMetricGroup jmGroup = new TaskManagerJobMetricGroup(registry, tmGroup, jid, "myJobName");
+        StreamMetricGroup jmGroup = new TaskManagerStreamMetricGroup(registry, tmGroup, jid, "myJobName");
 
         assertThat(jmGroup.getScopeComponents())
                 .containsExactly("peter", "test-tm-id", "some-constant", jid.toString());
@@ -117,7 +117,7 @@ class TaskManagerJobGroupTest {
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
                         registry, "host", new ResourceID("id"));
-        TaskManagerJobMetricGroup job = new TaskManagerJobMetricGroup(registry, tm, jid, "jobname");
+        TaskManagerStreamMetricGroup job = new TaskManagerStreamMetricGroup(registry, tm, jid, "jobname");
 
         QueryScopeInfo.JobQueryScopeInfo info =
                 job.createQueryServiceMetricInfo(new DummyCharacterFilter());

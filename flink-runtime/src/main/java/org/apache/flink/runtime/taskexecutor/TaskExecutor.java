@@ -79,7 +79,7 @@ import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.TaskThreadInfoResponse;
 import org.apache.flink.runtime.messages.ThreadInfoSample;
 import org.apache.flink.runtime.metrics.MetricNames;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskManagerMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskMetricGroup;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
@@ -734,7 +734,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                                 + ")");
             }
 
-            TaskManagerJobMetricGroup jobGroup =
+            TaskManagerStreamMetricGroup jobGroup =
                     taskManagerMetricGroup.addJob(
                             jobInformation.getJobId(), jobInformation.getJobName());
 
