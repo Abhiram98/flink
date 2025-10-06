@@ -37,15 +37,15 @@ public class StandaloneExecutionPlanStoreTest {
 
         ExecutionPlan executionPlan = JobGraphTestUtils.emptyJobGraph();
 
-        assertEquals(0, executionPlans.getJobIds().size());
+        assertEquals(0, executionPlans.getStreamIds().size());
 
         executionPlans.putExecutionPlan(executionPlan);
-        assertEquals(0, executionPlans.getJobIds().size());
+        assertEquals(0, executionPlans.getStreamIds().size());
 
         executionPlans
                 .globalCleanupAsync(executionPlan.getJobID(), Executors.directExecutor())
                 .join();
-        assertEquals(0, executionPlans.getJobIds().size());
+        assertEquals(0, executionPlans.getStreamIds().size());
 
         assertNull(executionPlans.recoverExecutionPlan(new JobID()));
     }

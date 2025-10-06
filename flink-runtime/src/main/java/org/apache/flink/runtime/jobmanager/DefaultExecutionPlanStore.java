@@ -64,7 +64,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
 
     /** The set of IDs of all added execution plans. */
     @GuardedBy("lock")
-    private final Set<JobID> addedExecutionPlans = new HashSet<>();
+    private final Set<JobID> addedExecutionStreams = new HashSet<>();
 
     /** Submitted execution plans handle store. */
     private final StateHandleStore<ExecutionPlan, R> executionPlanStateHandleStore;
@@ -134,12 +134,12 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
 
     @Nullable
     @Override
-    public ExecutionPlan recoverExecutionPlan(JobID jobId) throws Exception {
-        checkNotNull(jobId, "Job ID");
+    public ExecutionPlan recoverExecutionPlan(JobID streamId) throws Exception {
+        checkNotNull(streamId, "Job ID");
 
-        LOG.debug("Recovering execution plan {} from {}.", jobId, executionPlanStateHandleStore);
+        LOG.debug("Recovering execution plan {} from {}.", streamId, executionPlanStateHandleStore);
 
-        final String name = executionPlanStoreUtil.jobIDToName(jobId);
+        final String name = executionPlanStoreUtil.jobIDToName(streamId);
 
         synchronized (lock) {
             verifyIsRunning();
@@ -183,7 +183,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                             ioe);
                 }
 
-                addedExecutionPlans.add(executionPlan.getJobID());
+                addedExecutionStreams.add(executionPlan.getJobID());
 
                 LOG.info("Recovered {}.", executionPlan);
 
@@ -201,10 +201,10 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
     public void putExecutionPlan(ExecutionPlan executionPlan) throws Exception {
         checkNotNull(executionPlan, "Execution Plan");
 
-        final JobID jobID = executionPlan.getJobID();
-        final String name = executionPlanStoreUtil.jobIDToName(jobID);
+        final JobID streamID = executionPlan.getJobID();
+        final String name = executionPlanStoreUtil.jobIDToName(streamID);
 
-        LOG.debug("Adding execution plan {} to {}.", jobID, executionPlanStateHandleStore);
+        LOG.debug("Adding execution plan {} to {}.", streamID, executionPlanStateHandleStore);
 
         boolean success = false;
 
@@ -218,7 +218,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                     try {
                         executionPlanStateHandleStore.addAndLock(name, executionPlan);
 
-                        addedExecutionPlans.add(jobID);
+                        addedExecutionStreams.add(streamID);
 
                         success = true;
                     } catch (StateHandleStore.AlreadyExistException ignored) {
@@ -227,7 +227,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                                 executionPlan,
                                 executionPlanStateHandleStore);
                     }
-                } else if (addedExecutionPlans.contains(jobID)) {
+                } else if (addedExecutionStreams.contains(streamID)) {
                     try {
                         executionPlanStateHandleStore.replace(name, currentVersion, executionPlan);
                         LOG.info("Updated {} in {}.", executionPlan, getClass().getSimpleName());
@@ -251,51 +251,51 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
     }
 
     @Override
-    public void putJobResourceRequirements(
-            JobID jobId, JobResourceRequirements jobResourceRequirements) throws Exception {
+    public void putStreamResourceRequirements(
+            JobID streamId, JobResourceRequirements streamResourceRequirements) throws Exception {
         synchronized (lock) {
-            @Nullable final ExecutionPlan executionPlan = recoverExecutionPlan(jobId);
+            @Nullable final ExecutionPlan executionPlan = recoverExecutionPlan(streamId);
             if (executionPlan == null) {
                 throw new NoSuchElementException(
                         String.format(
                                 "ExecutionPlan for job [%s] was not found in ExecutionPlanStore and is needed for attaching JobResourceRequirements.",
-                                jobId));
+                                streamId));
             }
 
-            JobResourceRequirements.writeToExecutionPlan(executionPlan, jobResourceRequirements);
+            JobResourceRequirements.writeToExecutionPlan(executionPlan, streamResourceRequirements);
             putExecutionPlan(executionPlan);
         }
     }
 
     @Override
-    public CompletableFuture<Void> globalCleanupAsync(JobID jobId, Executor executor) {
-        checkNotNull(jobId, "Job ID");
+    public CompletableFuture<Void> globalCleanupAsync(JobID streamId, Executor executor) {
+        checkNotNull(streamId, "Job ID");
 
         return runAsyncWithLockAssertRunning(
                 () -> {
                     LOG.debug(
                             "Removing execution plan {} from {}.",
-                            jobId,
+                            streamId,
                             executionPlanStateHandleStore);
 
-                    final String name = executionPlanStoreUtil.jobIDToName(jobId);
-                    releaseAndRemoveOrThrowCompletionException(jobId, name);
+                    final String name = executionPlanStoreUtil.jobIDToName(streamId);
+                    releaseAndRemoveOrThrowCompletionException(streamId, name);
 
-                    addedExecutionPlans.remove(jobId);
+                    addedExecutionStreams.remove(streamId);
 
                     LOG.info(
                             "Removed execution plan {} from {}.",
-                            jobId,
+                            streamId,
                             executionPlanStateHandleStore);
                 },
                 executor);
     }
 
     @GuardedBy("lock")
-    private void releaseAndRemoveOrThrowCompletionException(JobID jobId, String jobName) {
+    private void releaseAndRemoveOrThrowCompletionException(JobID streamId, String streamName) {
         boolean success;
         try {
-            success = executionPlanStateHandleStore.releaseAndTryRemove(jobName);
+            success = executionPlanStateHandleStore.releaseAndTryRemove(streamName);
         } catch (Exception e) {
             throw new CompletionException(e);
         }
@@ -305,7 +305,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                     new FlinkException(
                             String.format(
                                     "Could not remove execution plan with job id %s from %s.",
-                                    jobId, executionPlanStateHandleStore)));
+                                    streamId, executionPlanStateHandleStore)));
         }
     }
 
@@ -315,28 +315,28 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
      * <p>Releasing the locks allows that another instance can delete the job from the {@link
      * ExecutionPlanStore}.
      *
-     * @param jobId specifying the job to release the locks for
+     * @param streamId specifying the job to release the locks for
      * @param executor the executor being used for the asynchronous execution of the local cleanup.
      * @returns The cleanup result future.
      */
     @Override
-    public CompletableFuture<Void> localCleanupAsync(JobID jobId, Executor executor) {
-        checkNotNull(jobId, "Job ID");
+    public CompletableFuture<Void> localCleanupAsync(JobID streamId, Executor executor) {
+        checkNotNull(streamId, "Job ID");
 
         return runAsyncWithLockAssertRunning(
                 () -> {
                     LOG.debug(
                             "Releasing execution plan {} from {}.",
-                            jobId,
+                            streamId,
                             executionPlanStateHandleStore);
 
                     executionPlanStateHandleStore.release(
-                            executionPlanStoreUtil.jobIDToName(jobId));
-                    addedExecutionPlans.remove(jobId);
+                            executionPlanStoreUtil.jobIDToName(streamId));
+                    addedExecutionStreams.remove(streamId);
 
                     LOG.info(
                             "Released execution plan {} from {}.",
-                            jobId,
+                            streamId,
                             executionPlanStateHandleStore);
                 },
                 executor);
@@ -359,7 +359,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
     }
 
     @Override
-    public Collection<JobID> getJobIds() throws Exception {
+    public Collection<JobID> getStreamIds() throws Exception {
         LOG.debug("Retrieving all stored job ids from {}.", executionPlanStateHandleStore);
 
         final Collection<String> names;
@@ -371,11 +371,11 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                     e);
         }
 
-        final List<JobID> jobIds = new ArrayList<>(names.size());
+        final List<JobID> streamIds = new ArrayList<>(names.size());
 
         for (String name : names) {
             try {
-                jobIds.add(executionPlanStoreUtil.nameToJobID(name));
+                streamIds.add(executionPlanStoreUtil.nameToJobID(name));
             } catch (Exception exception) {
                 LOG.warn(
                         "Could not parse job id from {}. This indicates a malformed name.",
@@ -384,24 +384,24 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
             }
         }
 
-        LOG.info("Retrieved job ids {} from {}", jobIds, executionPlanStateHandleStore);
+        LOG.info("Retrieved job ids {} from {}", streamIds, executionPlanStateHandleStore);
 
-        return jobIds;
+        return streamIds;
     }
 
     @Override
-    public void onAddedExecutionPlan(JobID jobId) {
+    public void onAddedExecutionPlan(JobID streamId) {
         synchronized (lock) {
             if (running) {
-                if (!addedExecutionPlans.contains(jobId)) {
+                if (!addedExecutionStreams.contains(streamId)) {
                     try {
                         // This has been added by someone else. Or we were fast to remove it (false
                         // positive).
-                        executionPlanListener.onAddedExecutionPlan(jobId);
+                        executionPlanListener.onAddedExecutionPlan(streamId);
                     } catch (Throwable t) {
                         LOG.error(
                                 "Failed to notify execution plan listener onAddedExecutionPlan event for {}",
-                                jobId,
+                                streamId,
                                 t);
                     }
                 }
@@ -410,17 +410,17 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
     }
 
     @Override
-    public void onRemovedExecutionPlan(JobID jobId) {
+    public void onRemovedExecutionPlan(JobID streamId) {
         synchronized (lock) {
             if (running) {
-                if (addedExecutionPlans.contains(jobId)) {
+                if (addedExecutionStreams.contains(streamId)) {
                     try {
                         // Someone else removed one of our execution plans. Mean!
-                        executionPlanListener.onRemovedExecutionPlan(jobId);
+                        executionPlanListener.onRemovedExecutionPlan(streamId);
                     } catch (Throwable t) {
                         LOG.error(
                                 "Failed to notify execution plan listener onRemovedExecutionPlan event for {}",
-                                jobId,
+                                streamId,
                                 t);
                     }
                 }

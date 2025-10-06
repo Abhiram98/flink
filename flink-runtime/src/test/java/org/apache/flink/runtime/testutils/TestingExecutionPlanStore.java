@@ -112,9 +112,9 @@ public class TestingExecutionPlanStore implements ExecutionPlanStore {
     }
 
     @Override
-    public synchronized ExecutionPlan recoverExecutionPlan(JobID jobId) throws Exception {
+    public synchronized ExecutionPlan recoverExecutionPlan(JobID streamId) throws Exception {
         verifyIsStarted();
-        return recoverExecutionPlanFunction.apply(jobId, storedJobs);
+        return recoverExecutionPlanFunction.apply(streamId, storedJobs);
     }
 
     @Override
@@ -125,28 +125,28 @@ public class TestingExecutionPlanStore implements ExecutionPlanStore {
     }
 
     @Override
-    public void putJobResourceRequirements(
-            JobID jobId, JobResourceRequirements jobResourceRequirements) throws Exception {
+    public void putStreamResourceRequirements(
+            JobID streamId, JobResourceRequirements streamResourceRequirements) throws Exception {
         verifyIsStarted();
         final ExecutionPlan executionPlan =
-                Preconditions.checkNotNull(storedJobs.get(jobId), "Job [%s] not found.", jobId);
-        putJobResourceRequirementsConsumer.accept(executionPlan, jobResourceRequirements);
+                Preconditions.checkNotNull(storedJobs.get(streamId), "Job [%s] not found.", streamId);
+        putJobResourceRequirementsConsumer.accept(executionPlan, streamResourceRequirements);
     }
 
     @Override
-    public synchronized CompletableFuture<Void> globalCleanupAsync(JobID jobId, Executor executor) {
+    public synchronized CompletableFuture<Void> globalCleanupAsync(JobID streamId, Executor executor) {
         verifyIsStarted();
-        return globalCleanupFunction.apply(jobId, executor).thenRun(() -> storedJobs.remove(jobId));
+        return globalCleanupFunction.apply(streamId, executor).thenRun(() -> storedJobs.remove(streamId));
     }
 
     @Override
-    public synchronized CompletableFuture<Void> localCleanupAsync(JobID jobId, Executor executor) {
+    public synchronized CompletableFuture<Void> localCleanupAsync(JobID streamId, Executor executor) {
         verifyIsStarted();
-        return localCleanupFunction.apply(jobId, executor);
+        return localCleanupFunction.apply(streamId, executor);
     }
 
     @Override
-    public synchronized Collection<JobID> getJobIds() throws Exception {
+    public synchronized Collection<JobID> getStreamIds() throws Exception {
         verifyIsStarted();
         return jobIdsFunction.apply(
                 Collections.unmodifiableSet(new HashSet<>(storedJobs.keySet())));

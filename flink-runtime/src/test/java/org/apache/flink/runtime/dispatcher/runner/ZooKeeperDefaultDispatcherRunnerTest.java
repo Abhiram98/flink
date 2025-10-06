@@ -237,7 +237,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                                 curatorFrameworkWrapper.asCuratorFramework());
 
                 CommonTestUtils.waitUntilCondition(
-                        () -> submittedExecutionPlanStore.getJobIds().isEmpty(), 20L);
+                        () -> submittedExecutionPlanStore.getStreamIds().isEmpty(), 20L);
             }
         }
 

@@ -269,7 +269,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
-        final Collection<JobID> jobIds = executionPlanStore.getJobIds();
+        final Collection<JobID> jobIds = executionPlanStore.getStreamIds();
         assertThat(jobIds, contains(existingJobIds.toArray()));
     }
 
@@ -423,7 +423,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
         executionPlanStore.putExecutionPlan(testingExecutionPlan);
-        executionPlanStore.putJobResourceRequirements(
+        executionPlanStore.putStreamResourceRequirements(
                 testingExecutionPlan.getJobID(), jobResourceRequirements);
 
         assertStoredRequirementsAre(
@@ -434,7 +434,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
                         .setParallelismForJobVertex(new JobVertexID(), 1, 1)
                         .build();
 
-        executionPlanStore.putJobResourceRequirements(
+        executionPlanStore.putStreamResourceRequirements(
                 testingExecutionPlan.getJobID(), updatedJobResourceRequirements);
 
         assertStoredRequirementsAre(
@@ -466,7 +466,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        executionPlanStore.putJobResourceRequirements(
+                        executionPlanStore.putStreamResourceRequirements(
                                 new JobID(), JobResourceRequirements.empty()));
     }
 

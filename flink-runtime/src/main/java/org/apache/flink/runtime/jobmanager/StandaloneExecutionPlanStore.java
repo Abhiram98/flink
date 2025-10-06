@@ -49,18 +49,18 @@ public class StandaloneExecutionPlanStore implements ExecutionPlanStore {
     }
 
     @Override
-    public void putJobResourceRequirements(
-            JobID jobId, JobResourceRequirements jobResourceRequirements) {
+    public void putStreamResourceRequirements(
+            JobID streamId, JobResourceRequirements streamResourceRequirements) {
         // Nothing to do
     }
 
     @Override
-    public Collection<JobID> getJobIds() {
+    public Collection<JobID> getStreamIds() {
         return Collections.emptyList();
     }
 
     @Override
-    public ExecutionPlan recoverExecutionPlan(JobID jobId) {
+    public ExecutionPlan recoverExecutionPlan(JobID streamId) {
         return null;
     }
 }

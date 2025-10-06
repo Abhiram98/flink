@@ -1178,7 +1178,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 .thenRunAsync(
                         () -> {
                             try {
-                                executionPlanWriter.putJobResourceRequirements(
+                                executionPlanWriter.putStreamResourceRequirements(
                                         jobId, jobResourceRequirements);
                             } catch (Exception e) {
                                 throw new CompletionException(

@@ -166,7 +166,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private Collection<JobID> getJobIds() {
         try {
-            return executionPlanStore.getJobIds();
+            return executionPlanStore.getStreamIds();
         } catch (Exception e) {
             throw new FlinkRuntimeException("Could not retrieve job ids of persisted jobs.", e);
         }
@@ -221,8 +221,8 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
     // ------------------------------------------------------------
 
     @Override
-    public void onAddedExecutionPlan(JobID jobId) {
-        runIfStateIs(State.RUNNING, () -> handleAddedExecutionPlan(jobId));
+    public void onAddedExecutionPlan(JobID streamId) {
+        runIfStateIs(State.RUNNING, () -> handleAddedExecutionPlan(streamId));
     }
 
     private void handleAddedExecutionPlan(JobID jobId) {
@@ -282,8 +282,8 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
     }
 
     @Override
-    public void onRemovedExecutionPlan(JobID jobId) {
-        runIfStateIs(State.RUNNING, () -> handleRemovedExecutionPlan(jobId));
+    public void onRemovedExecutionPlan(JobID streamId) {
+        runIfStateIs(State.RUNNING, () -> handleRemovedExecutionPlan(streamId));
     }
 
     private void handleRemovedExecutionPlan(JobID jobId) {

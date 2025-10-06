@@ -100,13 +100,13 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
             ExecutionPlan executionPlan = createExecutionPlan(new JobID(), "JobName");
 
             // Empty state
-            assertThat(executionPlans.getJobIds()).isEmpty();
+            assertThat(executionPlans.getStreamIds()).isEmpty();
 
             // Add initial
             executionPlans.putExecutionPlan(executionPlan);
 
             // Verify initial job graph
-            Collection<JobID> jobIds = executionPlans.getJobIds();
+            Collection<JobID> jobIds = executionPlans.getStreamIds();
             assertThat(jobIds).hasSize(1);
 
             JobID jobId = jobIds.iterator().next();
@@ -118,7 +118,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
             executionPlans.putExecutionPlan(executionPlan);
 
             // Verify updated
-            jobIds = executionPlans.getJobIds();
+            jobIds = executionPlans.getStreamIds();
             assertThat(jobIds).hasSize(1);
 
             jobId = jobIds.iterator().next();
@@ -131,7 +131,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
                     .join();
 
             // Empty state
-            assertThat(executionPlans.getJobIds()).isEmpty();
+            assertThat(executionPlans.getStreamIds()).isEmpty();
 
             // Nothing should have been notified
             verify(listener, atMost(1)).onAddedExecutionPlan(any(JobID.class));
@@ -187,7 +187,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
                 executionPlans.putExecutionPlan(executionPlan);
             }
 
-            Collection<JobID> actual = executionPlans.getJobIds();
+            Collection<JobID> actual = executionPlans.getStreamIds();
 
             assertThat(actual).hasSameSizeAs(expected.entrySet());
 
@@ -203,7 +203,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
             }
 
             // Empty state
-            assertThat(executionPlans.getJobIds()).isEmpty();
+            assertThat(executionPlans.getStreamIds()).isEmpty();
 
             // Nothing should have been notified
             verify(listener, atMost(expected.size())).onAddedExecutionPlan(any(JobID.class));

@@ -195,7 +195,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph should be removed from ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 IsEmptyCollection.empty());
 
         CommonTestUtils.waitUntilCondition(
@@ -316,7 +316,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph is still stored in the ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 equalTo(Collections.singleton(jobId)));
         assertThat(
                 "The JobResultStore should have this job marked as dirty.",
@@ -340,7 +340,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph is not stored in the ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 IsEmptyCollection.empty());
         assertTrue(
                 "The JobResultStore has the job listed as clean.",

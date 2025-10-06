@@ -28,12 +28,12 @@ public enum NoOpExecutionPlanListener implements ExecutionPlanStore.ExecutionPla
     INSTANCE;
 
     @Override
-    public void onAddedExecutionPlan(JobID jobId) {
+    public void onAddedExecutionPlan(JobID streamId) {
         // No op
     }
 
     @Override
-    public void onRemovedExecutionPlan(JobID jobId) {
+    public void onRemovedExecutionPlan(JobID streamId) {
         // No op
     }
 }

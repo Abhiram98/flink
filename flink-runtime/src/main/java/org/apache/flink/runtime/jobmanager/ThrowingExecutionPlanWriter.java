@@ -34,8 +34,8 @@ public enum ThrowingExecutionPlanWriter implements ExecutionPlanWriter {
     }
 
     @Override
-    public void putJobResourceRequirements(
-            JobID jobId, JobResourceRequirements jobResourceRequirements) {
+    public void putStreamResourceRequirements(
+            JobID streamId, JobResourceRequirements streamResourceRequirements) {
         throw new UnsupportedOperationException("Cannot persist job resource requirements.");
     }
 }

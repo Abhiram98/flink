@@ -39,7 +39,7 @@ public interface ExecutionPlanStore extends ExecutionPlanWriter {
      * registered.
      */
     @Nullable
-    ExecutionPlan recoverExecutionPlan(JobID jobId) throws Exception;
+    ExecutionPlan recoverExecutionPlan(JobID streamId) throws Exception;
 
     /**
      * Get all job ids of submitted job graphs to the submitted execution plan store.
@@ -47,7 +47,7 @@ public interface ExecutionPlanStore extends ExecutionPlanWriter {
      * @return Collection of submitted job ids
      * @throws Exception if the operation fails
      */
-    Collection<JobID> getJobIds() throws Exception;
+    Collection<JobID> getStreamIds() throws Exception;
 
     /**
      * A listener for {@link ExecutionPlan} instances. This is used to react to races between
@@ -62,16 +62,16 @@ public interface ExecutionPlanStore extends ExecutionPlanWriter {
          * <p><strong>Important:</strong> It is possible to get false positives and be notified
          * about a job graph, which was added by this instance.
          *
-         * @param jobId The {@link JobID} of the added job graph
+         * @param streamId The {@link JobID} of the added job graph
          */
-        void onAddedExecutionPlan(JobID jobId);
+        void onAddedExecutionPlan(JobID streamId);
 
         /**
          * Callback for {@link ExecutionPlan} instances removed by a different {@link
          * ExecutionPlanStore} instance.
          *
-         * @param jobId The {@link JobID} of the removed job graph
+         * @param streamId The {@link JobID} of the removed job graph
          */
-        void onRemovedExecutionPlan(JobID jobId);
+        void onRemovedExecutionPlan(JobID streamId);
     }
 }
