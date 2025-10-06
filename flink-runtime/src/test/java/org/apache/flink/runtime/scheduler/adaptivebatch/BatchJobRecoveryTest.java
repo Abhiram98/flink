@@ -63,15 +63,8 @@ import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingResultPartition;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingTopology;
-import org.apache.flink.runtime.shuffle.DefaultShuffleMetrics;
-import org.apache.flink.runtime.shuffle.JobShuffleContextImpl;
-import org.apache.flink.runtime.shuffle.NettyShuffleDescriptor;
-import org.apache.flink.runtime.shuffle.NettyShuffleMaster;
-import org.apache.flink.runtime.shuffle.PartitionWithMetrics;
-import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
-import org.apache.flink.runtime.shuffle.ShuffleMaster;
-import org.apache.flink.runtime.shuffle.ShuffleMasterContextImpl;
-import org.apache.flink.runtime.shuffle.ShuffleMetrics;
+import org.apache.flink.runtime.shuffle.*;
+import org.apache.flink.runtime.shuffle.StreamShuffleContextImpl;
 import org.apache.flink.runtime.source.coordinator.SourceCoordinator;
 import org.apache.flink.runtime.source.coordinator.SourceCoordinatorProvider;
 import org.apache.flink.runtime.source.event.ReaderRegistrationEvent;
@@ -1047,7 +1040,7 @@ public class BatchJobRecoveryTest {
                                 (timeout, set) ->
                                         CompletableFuture.completedFuture(allPartitionWithMetrics))
                         .build();
-        shuffleMaster.registerJob(new JobShuffleContextImpl(jobGraph.getStreamID(), jobMasterGateway));
+        shuffleMaster.registerJob(new StreamShuffleContextImpl(jobGraph.getStreamID(), jobMasterGateway));
         final JobMasterPartitionTracker partitionTracker =
                 new JobMasterPartitionTrackerImpl(
                         jobGraph.getStreamID(), shuffleMaster, ignored -> Optional.empty());

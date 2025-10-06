@@ -29,37 +29,37 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** The default implementation of {@link JobShuffleContext}. */
-public class JobShuffleContextImpl implements JobShuffleContext {
+/** The default implementation of {@link StreamShuffleContext}. */
+public class StreamShuffleContextImpl implements StreamShuffleContext {
 
-    private final JobID jobId;
+    private final JobID streamId;
 
-    private final JobMasterGateway jobMasterGateway;
+    private final JobMasterGateway streamMasterGateway;
 
-    public JobShuffleContextImpl(JobID jobId, JobMasterGateway jobMasterGateway) {
-        this.jobId = checkNotNull(jobId);
-        this.jobMasterGateway = checkNotNull(jobMasterGateway);
+    public StreamShuffleContextImpl(JobID streamId, JobMasterGateway streamMasterGateway) {
+        this.streamId = checkNotNull(streamId);
+        this.streamMasterGateway = checkNotNull(streamMasterGateway);
     }
 
     @Override
-    public JobID getJobId() {
-        return jobId;
+    public JobID getStreamId() {
+        return streamId;
     }
 
     @Override
     public CompletableFuture<?> stopTrackingAndReleasePartitions(
             Collection<ResultPartitionID> partitionIds) {
-        return jobMasterGateway.stopTrackingAndReleasePartitions(partitionIds);
+        return streamMasterGateway.stopTrackingAndReleasePartitions(partitionIds);
     }
 
     @Override
     public CompletableFuture<Collection<PartitionWithMetrics>> getPartitionWithMetrics(
             Duration timeout, Set<ResultPartitionID> expectedPartitions) {
-        return jobMasterGateway.getPartitionWithMetrics(timeout, expectedPartitions);
+        return streamMasterGateway.getPartitionWithMetrics(timeout, expectedPartitions);
     }
 
     @Override
     public void notifyPartitionRecoveryStarted() {
-        jobMasterGateway.startFetchAndRetainPartitionWithMetricsOnTaskManager();
+        streamMasterGateway.startFetchAndRetainPartitionWithMetricsOnTaskManager();
     }
 }

@@ -30,10 +30,10 @@ import java.util.concurrent.CompletableFuture;
  * Job level shuffle context which can offer some job information like job ID and through it, the
  * shuffle plugin notify the job to stop tracking the lost result partitions.
  */
-public interface JobShuffleContext {
+public interface StreamShuffleContext {
 
     /** @return the corresponding {@link JobID}. */
-    JobID getJobId();
+    JobID getStreamId();
 
     /**
      * Notifies the job to stop tracking and release the target result partitions, which means these

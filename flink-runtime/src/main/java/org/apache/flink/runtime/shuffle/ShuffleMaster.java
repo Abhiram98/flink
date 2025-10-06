@@ -52,14 +52,14 @@ public interface ShuffleMaster<T extends ShuffleDescriptor> extends AutoCloseabl
     default void close() throws Exception {}
 
     /**
-     * Registers the target job together with the corresponding {@link JobShuffleContext} to this
+     * Registers the target job together with the corresponding {@link StreamShuffleContext} to this
      * shuffle master. Through the shuffle context, one can obtain some basic information like job
      * ID, job configuration. It enables ShuffleMaster to notify JobMaster about lost result
      * partitions, so that JobMaster can identify and reproduce unavailable partitions earlier.
      *
      * @param context the corresponding shuffle context of the target job.
      */
-    default void registerJob(JobShuffleContext context) {}
+    default void registerJob(StreamShuffleContext context) {}
 
     /**
      * Unregisters the target job from this shuffle master, which means the corresponding job has

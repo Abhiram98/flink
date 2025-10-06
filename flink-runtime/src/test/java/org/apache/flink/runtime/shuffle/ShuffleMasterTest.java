@@ -146,7 +146,7 @@ class ShuffleMasterTest {
 
         private final BlockingQueue<ResultPartitionID> partitions = new LinkedBlockingQueue<>();
 
-        private final AtomicReference<JobShuffleContext> jobContext = new AtomicReference<>();
+        private final AtomicReference<StreamShuffleContext> jobContext = new AtomicReference<>();
 
         private final boolean stopTrackingPartition;
 
@@ -173,7 +173,7 @@ class ShuffleMasterTest {
         }
 
         @Override
-        public void registerJob(JobShuffleContext context) {
+        public void registerJob(StreamShuffleContext context) {
             assertShuffleMasterAlive();
             assertThat(jobContext.compareAndSet(null, context)).isTrue();
             super.registerJob(context);

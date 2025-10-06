@@ -85,11 +85,8 @@ import org.apache.flink.runtime.rpc.RpcService;
 import org.apache.flink.runtime.rpc.RpcServiceUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
-import org.apache.flink.runtime.shuffle.JobShuffleContext;
-import org.apache.flink.runtime.shuffle.JobShuffleContextImpl;
-import org.apache.flink.runtime.shuffle.PartitionWithMetrics;
-import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
-import org.apache.flink.runtime.shuffle.ShuffleMaster;
+import org.apache.flink.runtime.shuffle.*;
+import org.apache.flink.runtime.shuffle.StreamShuffleContext;
 import org.apache.flink.runtime.slots.ResourceRequirement;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.taskexecutor.TaskExecutorGateway;
@@ -1126,7 +1123,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     private void startJobExecution() throws Exception {
         validateRunsInMainThread();
 
-        JobShuffleContext context = new JobShuffleContextImpl(jobGraph.getStreamID(), this);
+        StreamShuffleContext context = new StreamShuffleContextImpl(jobGraph.getStreamID(), this);
         shuffleMaster.registerJob(context);
 
         startJobMasterServices();
