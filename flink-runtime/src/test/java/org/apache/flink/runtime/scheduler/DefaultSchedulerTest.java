@@ -2042,7 +2042,7 @@ public class DefaultSchedulerTest {
         return singleJobVertexJobGraph(1);
     }
 
-    public static ExecutionPlan singleNonParallelJobVertexJobGraphForBatch() {
+    public static ExecutionPlan singleNonParallelJobVertexExecutionPlanForBatch() {
         return singleJobVertexJobGraphForBatch(1);
     }
 
