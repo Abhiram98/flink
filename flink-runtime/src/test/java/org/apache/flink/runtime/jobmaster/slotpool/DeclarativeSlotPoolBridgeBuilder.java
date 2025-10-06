@@ -39,7 +39,7 @@ import static org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorSer
 /** Builder for a {@link DeclarativeSlotPoolBridge}. */
 public class DeclarativeSlotPoolBridgeBuilder {
 
-    private JobID jobId = new JobID();
+    private JobID streamId = new JobID();
     private Duration batchSlotTimeout = JobManagerOptions.SLOT_IDLE_TIMEOUT.defaultValue();
     private Duration idleSlotTimeout = TestingUtils.infiniteDuration();
     private Clock clock = SystemClock.getInstance();
@@ -80,8 +80,8 @@ public class DeclarativeSlotPoolBridgeBuilder {
         return this;
     }
 
-    public DeclarativeSlotPoolBridgeBuilder setJobId(JobID jobId) {
-        this.jobId = jobId;
+    public DeclarativeSlotPoolBridgeBuilder setStreamId(JobID streamId) {
+        this.streamId = streamId;
         return this;
     }
 
@@ -104,7 +104,7 @@ public class DeclarativeSlotPoolBridgeBuilder {
 
     public DeclarativeSlotPoolBridge build() {
         return new DeclarativeSlotPoolBridge(
-                jobId,
+                streamId,
                 new DefaultDeclarativeSlotPoolFactory(),
                 clock,
                 TestingUtils.infiniteDuration(),
@@ -119,7 +119,7 @@ public class DeclarativeSlotPoolBridgeBuilder {
     public DeclarativeSlotPoolBridge buildAndStart() throws Exception {
         final DeclarativeSlotPoolBridge slotPool =
                 new DeclarativeSlotPoolBridge(
-                        jobId,
+                        streamId,
                         new DefaultDeclarativeSlotPoolFactory(),
                         clock,
                         TestingUtils.infiniteDuration(),
