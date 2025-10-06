@@ -52,7 +52,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
         buildVerticesAndResults(jobVertices);
     }
 
-    public static DefaultLogicalTopology fromJobGraph(final ExecutionPlan jobGraph) {
+    public static DefaultLogicalTopology fromExecutionPlan(final ExecutionPlan jobGraph) {
         checkNotNull(jobGraph);
 
         return fromTopologicallySortedJobVertices(

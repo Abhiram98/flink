@@ -135,7 +135,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
     public AdaptiveBatchScheduler(
             final Logger log,
-            final ExecutionPlan jobGraph,
+            final ExecutionPlan executionPlan,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final Consumer<ComponentMainThreadExecutor> startUpAction,
@@ -167,7 +167,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
         super(
                 log,
-                jobGraph,
+                executionPlan,
                 ioExecutor,
                 jobMasterConfiguration,
                 startUpAction,
@@ -190,10 +190,10 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
                 shuffleMaster,
                 rpcTimeout,
                 computeVertexParallelismStoreForDynamicGraph(
-                        jobGraph.getVertices(), defaultMaxParallelism),
+                        executionPlan.getVertices(), defaultMaxParallelism),
                 new DefaultExecutionDeployer.Factory());
 
-        this.logicalTopology = DefaultLogicalTopology.fromJobGraph(jobGraph);
+        this.logicalTopology = DefaultLogicalTopology.fromExecutionPlan(executionPlan);
 
         this.vertexParallelismAndInputInfosDecider =
                 checkNotNull(vertexParallelismAndInputInfosDecider);

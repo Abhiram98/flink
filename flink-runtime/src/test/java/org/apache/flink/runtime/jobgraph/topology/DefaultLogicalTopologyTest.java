@@ -50,7 +50,7 @@ public class DefaultLogicalTopologyTest extends TestLogger {
     @Before
     public void setUp() throws Exception {
         jobGraph = createJobGraph();
-        logicalTopology = DefaultLogicalTopology.fromJobGraph(jobGraph);
+        logicalTopology = DefaultLogicalTopology.fromExecutionPlan(jobGraph);
     }
 
     @Test

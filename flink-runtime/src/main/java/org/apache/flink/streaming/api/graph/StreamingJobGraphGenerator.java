@@ -1890,7 +1890,7 @@ public class StreamingJobGraphGenerator {
                 streamGraph.isAllVerticesInSameSlotSharingGroupByDefault();
 
         final Iterable<DefaultLogicalPipelinedRegion> regions =
-                DefaultLogicalTopology.fromJobGraph(jobGraph).getAllPipelinedRegions();
+                DefaultLogicalTopology.fromExecutionPlan(jobGraph).getAllPipelinedRegions();
         for (DefaultLogicalPipelinedRegion region : regions) {
             final SlotSharingGroup regionSlotSharingGroup;
             if (allRegionsInSameSlotSharingGroup) {
