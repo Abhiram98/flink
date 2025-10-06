@@ -65,7 +65,7 @@ class LeaderChangeClusterComponentsTest {
 
     private static EmbeddedHaServicesWithLeadershipControl highAvailabilityServices;
 
-    private ExecutionPlan jobGraph;
+    private ExecutionPlan executionPlan;
 
     private JobID jobId;
 
@@ -89,8 +89,8 @@ class LeaderChangeClusterComponentsTest {
 
     @BeforeEach
     void setup() {
-        jobGraph = createJobGraph(PARALLELISM);
-        jobId = jobGraph.getJobID();
+        executionPlan = createExecutionPlan(PARALLELISM);
+        jobId = executionPlan.getJobID();
     }
 
     @AfterAll
@@ -103,7 +103,7 @@ class LeaderChangeClusterComponentsTest {
     @Test
     void testReelectionOfDispatcher() throws Exception {
         final CompletableFuture<JobSubmissionResult> submissionFuture =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitJob(executionPlan);
 
         submissionFuture.get();
 
@@ -121,7 +121,7 @@ class LeaderChangeClusterComponentsTest {
         BlockingOperator.isBlocking = false;
 
         final CompletableFuture<JobSubmissionResult> submissionFuture2 =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitJob(executionPlan);
 
         submissionFuture2.get();
 
@@ -135,7 +135,7 @@ class LeaderChangeClusterComponentsTest {
     @Test
     void testReelectionOfJobMaster() throws Exception {
         final CompletableFuture<JobSubmissionResult> submissionFuture =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitJob(executionPlan);
 
         submissionFuture.get();
 
@@ -183,7 +183,7 @@ class LeaderChangeClusterComponentsTest {
                 10L);
     }
 
-    private ExecutionPlan createJobGraph(int parallelism) {
+    private ExecutionPlan createExecutionPlan(int parallelism) {
         BlockingOperator.isBlocking = true;
         final JobVertex vertex = new JobVertex("blocking operator");
         vertex.setParallelism(parallelism);
