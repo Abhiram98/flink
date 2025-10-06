@@ -144,7 +144,7 @@ class MetricFetcherTest {
         counters.put(
                 c3,
                 new Tuple2<>(
-                        new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+                        new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                                 jobID.toString(), "taskid", "opname", "abc"),
                         "joc"));
         meters.put(

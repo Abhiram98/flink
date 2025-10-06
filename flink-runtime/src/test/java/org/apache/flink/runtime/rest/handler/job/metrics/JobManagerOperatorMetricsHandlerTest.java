@@ -40,7 +40,7 @@ public class JobManagerOperatorMetricsHandlerTest
 
     @Override
     QueryScopeInfo getQueryScopeInfo() {
-        return new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+        return new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                 TEST_JOB_ID, TEST_VERTEX_ID, TEST_OPERATOR_NAME);
     }
 

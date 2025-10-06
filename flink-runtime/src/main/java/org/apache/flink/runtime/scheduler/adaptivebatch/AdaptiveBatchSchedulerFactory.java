@@ -55,7 +55,7 @@ import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlotProviderImpl;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotSelectionStrategy;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.DefaultExecutionGraphFactory;
 import org.apache.flink.runtime.scheduler.DefaultExecutionOperations;
@@ -108,7 +108,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,
             BlobWriter blobWriter,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             Duration slotRequestTimeout,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker partitionTracker,
@@ -204,7 +204,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,
             BlobWriter blobWriter,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker partitionTracker,
             ExecutionDeploymentTracker executionDeploymentTracker,

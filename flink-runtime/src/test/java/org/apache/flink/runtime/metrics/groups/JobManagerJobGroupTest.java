@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for the {@link JobManagerJobMetricGroup}. */
+/** Tests for the {@link StreamManagerStreamMetricGroup}. */
 class JobManagerJobGroupTest {
 
     @Test
@@ -39,7 +39,7 @@ class JobManagerJobGroupTest {
                 new MetricRegistryImpl(
                         MetricRegistryTestUtils.defaultMetricRegistryConfiguration());
 
-        JobManagerJobMetricGroup jmGroup =
+        StreamManagerStreamMetricGroup jmGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(new JobID(), "myJobName");
 
@@ -60,7 +60,7 @@ class JobManagerJobGroupTest {
         MetricRegistryImpl registry =
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
 
-        JobManagerJobMetricGroup jmGroup =
+        StreamManagerStreamMetricGroup jmGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(new JobID(), "myJobName");
 
@@ -81,7 +81,7 @@ class JobManagerJobGroupTest {
 
         JobID jid = new JobID();
 
-        JobManagerJobMetricGroup jmGroup =
+        StreamManagerStreamMetricGroup jmGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(jid, "myJobName");
 
@@ -100,7 +100,7 @@ class JobManagerJobGroupTest {
         MetricRegistryImpl registry =
                 new MetricRegistryImpl(
                         MetricRegistryTestUtils.defaultMetricRegistryConfiguration());
-        JobManagerJobMetricGroup jmj =
+        StreamManagerStreamMetricGroup jmj =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(jid, "myJobName");
 

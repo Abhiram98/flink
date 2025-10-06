@@ -404,8 +404,8 @@ public class MetricStore {
                     }
                     break;
                 case INFO_CATEGORY_JM_OPERATOR:
-                    QueryScopeInfo.JobManagerOperatorQueryScopeInfo jmOperatorInfo =
-                            (QueryScopeInfo.JobManagerOperatorQueryScopeInfo) info;
+                    QueryScopeInfo.StreamManagerOperatorQueryScopeInfo jmOperatorInfo =
+                            (QueryScopeInfo.StreamManagerOperatorQueryScopeInfo) info;
                     job = jobs.computeIfAbsent(jmOperatorInfo.jobID, k -> new JobMetricStore());
                     task =
                             job.tasks.computeIfAbsent(

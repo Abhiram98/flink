@@ -38,7 +38,7 @@ class InternalSplitEnumeratorGroupTest {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");

@@ -42,7 +42,7 @@ import org.apache.flink.runtime.jobmaster.slotpool.RequestSlotMatchingStrategy;
 import org.apache.flink.runtime.jobmaster.slotpool.SimpleRequestSlotMatchingStrategy;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolServiceFactory;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerFactory;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
@@ -113,7 +113,7 @@ public final class DefaultSlotPoolServiceSchedulerFactory
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,
             BlobWriter blobWriter,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             Duration slotRequestTimeout,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker partitionTracker,

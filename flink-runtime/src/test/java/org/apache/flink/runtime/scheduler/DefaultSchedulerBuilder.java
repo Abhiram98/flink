@@ -43,7 +43,7 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchScheduler;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchSchedulerFactory;
@@ -93,7 +93,7 @@ public class DefaultSchedulerBuilder {
             new StandaloneCheckpointRecoveryFactory();
     private Duration rpcTimeout = Duration.ofSeconds(300);
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
-    private JobManagerJobMetricGroup jobManagerJobMetricGroup =
+    private StreamManagerStreamMetricGroup jobManagerJobMetricGroup =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;
     private JobMasterPartitionTracker partitionTracker = NoOpJobMasterPartitionTracker.INSTANCE;
@@ -199,7 +199,7 @@ public class DefaultSchedulerBuilder {
     }
 
     public DefaultSchedulerBuilder setJobManagerJobMetricGroup(
-            JobManagerJobMetricGroup jobManagerJobMetricGroup) {
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup) {
         this.jobManagerJobMetricGroup = jobManagerJobMetricGroup;
         return this;
     }

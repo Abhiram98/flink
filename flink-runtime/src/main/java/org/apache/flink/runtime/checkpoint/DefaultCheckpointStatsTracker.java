@@ -23,7 +23,7 @@ import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointStatistics;
 import org.apache.flink.runtime.rest.util.RestMapperUtils;
 import org.apache.flink.traces.Span;
@@ -69,7 +69,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     /** History of checkpoints. */
     private final CheckpointStatsHistory history;
 
-    private final JobManagerJobMetricGroup metricGroup;
+    private final StreamManagerStreamMetricGroup metricGroup;
 
     private Optional<JobInitializationMetricsBuilder> jobInitializationMetricsBuilder =
             Optional.empty();
@@ -95,7 +95,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
      * @param metricGroup Metric group for exposed metrics
      */
     public DefaultCheckpointStatsTracker(
-            int numRememberedCheckpoints, JobManagerJobMetricGroup metricGroup) {
+            int numRememberedCheckpoints, StreamManagerStreamMetricGroup metricGroup) {
         this(numRememberedCheckpoints, metricGroup, null);
     }
 
@@ -109,7 +109,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
      */
     public DefaultCheckpointStatsTracker(
             int numRememberedCheckpoints,
-            JobManagerJobMetricGroup metricGroup,
+            StreamManagerStreamMetricGroup metricGroup,
             @Nullable CheckpointStatsListener checkpointStatsListener) {
         checkArgument(numRememberedCheckpoints >= 0, "Negative number of remembered checkpoints");
         this.history = new CheckpointStatsHistory(numRememberedCheckpoints);

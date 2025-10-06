@@ -37,7 +37,7 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
@@ -82,7 +82,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private MarkPartitionFinishedStrategy markPartitionFinishedStrategy =
             ResultPartitionType::isBlockingOrBlockingPersistentResultPartition;
 
-    private Function<JobManagerJobMetricGroup, CheckpointStatsTracker>
+    private Function<StreamManagerStreamMetricGroup, CheckpointStatsTracker>
             checkpointStatsTrackerFactory = metricGroup -> NoOpCheckpointStatsTracker.INSTANCE;
 
     private boolean nonFinishedHybridPartitionShouldBeUnknown = false;
@@ -174,7 +174,7 @@ public class TestingDefaultExecutionGraphBuilder {
     }
 
     public TestingDefaultExecutionGraphBuilder setCheckpointStatsTracker(
-            Function<JobManagerJobMetricGroup, CheckpointStatsTracker>
+            Function<StreamManagerStreamMetricGroup, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory) {
         this.checkpointStatsTrackerFactory = checkpointStatsTrackerFactory;
         return this;
@@ -183,7 +183,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private DefaultExecutionGraph build(
             boolean isDynamicGraph, ScheduledExecutorService executorService)
             throws JobException, JobExecutionException {
-        final JobManagerJobMetricGroup metricGroup =
+        final StreamManagerStreamMetricGroup metricGroup =
                 UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
         return DefaultExecutionGraphBuilder.buildGraph(
                 jobGraph,

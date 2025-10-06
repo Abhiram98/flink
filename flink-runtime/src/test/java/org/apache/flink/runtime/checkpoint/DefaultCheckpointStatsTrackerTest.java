@@ -24,7 +24,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -360,7 +360,7 @@ class DefaultCheckpointStatsTrackerTest {
         JobVertexID jobVertexID = new JobVertexID();
         final List<Span> reportedSpans = new ArrayList<>();
 
-        JobManagerJobMetricGroup metricGroup =
+        StreamManagerStreamMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
 
                     @Override
@@ -396,7 +396,7 @@ class DefaultCheckpointStatsTrackerTest {
     public void testInitializationSpanCreation() throws Exception {
         final List<Span> reportedSpans = new ArrayList<>();
 
-        JobManagerJobMetricGroup metricGroup =
+        StreamManagerStreamMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
 
                     @Override
@@ -497,7 +497,7 @@ class DefaultCheckpointStatsTrackerTest {
     void testMetricsRegistration() {
         final Collection<String> registeredGaugeNames = new ArrayList<>();
 
-        JobManagerJobMetricGroup metricGroup =
+        StreamManagerStreamMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
                     @Override
                     public <T, G extends Gauge<T>> G gauge(String name, G gauge) {
@@ -548,7 +548,7 @@ class DefaultCheckpointStatsTrackerTest {
     @SuppressWarnings("unchecked")
     void testMetricsAreUpdated() throws Exception {
         final Map<String, Gauge<?>> registeredGauges = new HashMap<>();
-        JobManagerJobMetricGroup metricGroup =
+        StreamManagerStreamMetricGroup metricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
                     @Override
                     public <T, G extends Gauge<T>> G gauge(String name, G gauge) {

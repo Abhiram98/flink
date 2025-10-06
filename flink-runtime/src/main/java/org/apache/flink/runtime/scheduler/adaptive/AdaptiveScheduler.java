@@ -87,7 +87,7 @@ import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlot;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
@@ -414,7 +414,7 @@ public class AdaptiveScheduler
     private JobGraphJobInformation jobInformation;
     private ResourceCounter desiredResources = ResourceCounter.empty();
 
-    private final JobManagerJobMetricGroup jobManagerJobMetricGroup;
+    private final StreamManagerStreamMetricGroup jobManagerJobMetricGroup;
 
     private final JobFailureMetricReporter jobFailureMetricReporter;
     private final boolean reportEventsAsSpans;
@@ -432,7 +432,7 @@ public class AdaptiveScheduler
             ClassLoader userCodeClassLoader,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             RestartBackoffTimeStrategy restartBackoffTimeStrategy,
             long initializationTimestamp,
             ComponentMainThreadExecutor mainThreadExecutor,
@@ -472,7 +472,7 @@ public class AdaptiveScheduler
     AdaptiveScheduler(
             Settings settings,
             StateTransitionManagerFactory stateTransitionManagerFactory,
-            BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
+            BiFunction<StreamManagerStreamMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory,
             JobGraph jobGraph,
             @Nullable JobResourceRequirements jobResourceRequirements,
@@ -483,7 +483,7 @@ public class AdaptiveScheduler
             ClassLoader userCodeClassLoader,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             RestartBackoffTimeStrategy restartBackoffTimeStrategy,
             long initializationTimestamp,
             ComponentMainThreadExecutor mainThreadExecutor,
@@ -1504,7 +1504,7 @@ public class AdaptiveScheduler
     }
 
     @Override
-    public JobManagerJobMetricGroup getMetricGroup() {
+    public StreamManagerStreamMetricGroup getMetricGroup() {
         return jobManagerJobMetricGroup;
     }
 

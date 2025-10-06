@@ -38,7 +38,7 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTrackerDeploymentListenerAdapter;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
     private final ScheduledExecutorService futureExecutor;
     private final Executor ioExecutor;
     private final Duration rpcTimeout;
-    private final JobManagerJobMetricGroup jobManagerJobMetricGroup;
+    private final StreamManagerStreamMetricGroup jobManagerJobMetricGroup;
     private final BlobWriter blobWriter;
     private final ShuffleMaster<?> shuffleMaster;
     private final JobMasterPartitionTracker jobMasterPartitionTracker;
@@ -75,7 +75,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
             ScheduledExecutorService futureExecutor,
             Executor ioExecutor,
             Duration rpcTimeout,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             BlobWriter blobWriter,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker jobMasterPartitionTracker) {
@@ -102,7 +102,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
             ScheduledExecutorService futureExecutor,
             Executor ioExecutor,
             Duration rpcTimeout,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             BlobWriter blobWriter,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker jobMasterPartitionTracker,

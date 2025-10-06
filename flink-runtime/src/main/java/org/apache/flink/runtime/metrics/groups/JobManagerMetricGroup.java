@@ -40,7 +40,7 @@ import java.util.concurrent.Executor;
 public class JobManagerMetricGroup extends ComponentMetricGroup<JobManagerMetricGroup>
         implements LocallyCleanableResource {
 
-    private final Map<JobID, JobManagerJobMetricGroup> jobs = new HashMap<>();
+    private final Map<JobID, StreamManagerStreamMetricGroup> jobs = new HashMap<>();
 
     private final String hostname;
 
@@ -71,15 +71,15 @@ public class JobManagerMetricGroup extends ComponentMetricGroup<JobManagerMetric
     //  job groups
     // ------------------------------------------------------------------------
 
-    public JobManagerJobMetricGroup addJob(JobID jobId, String jobName) {
+    public StreamManagerStreamMetricGroup addJob(JobID jobId, String jobName) {
         // get or create a jobs metric group
-        JobManagerJobMetricGroup currentJobGroup;
+        StreamManagerStreamMetricGroup currentJobGroup;
         synchronized (this) {
             if (!isClosed()) {
                 currentJobGroup = jobs.get(jobId);
 
                 if (currentJobGroup == null || currentJobGroup.isClosed()) {
-                    currentJobGroup = new JobManagerJobMetricGroup(registry, this, jobId, jobName);
+                    currentJobGroup = new StreamManagerStreamMetricGroup(registry, this, jobId, jobName);
                     jobs.put(jobId, currentJobGroup);
                 }
                 return currentJobGroup;
@@ -96,7 +96,7 @@ public class JobManagerMetricGroup extends ComponentMetricGroup<JobManagerMetric
         }
 
         synchronized (this) {
-            JobManagerJobMetricGroup containedGroup = jobs.remove(jobId);
+            StreamManagerStreamMetricGroup containedGroup = jobs.remove(jobId);
             if (containedGroup != null) {
                 containedGroup.close();
             }

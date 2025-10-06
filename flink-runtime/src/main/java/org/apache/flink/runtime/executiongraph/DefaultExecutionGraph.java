@@ -63,7 +63,7 @@ import org.apache.flink.runtime.jobgraph.JobVertex.FinalizeOnMasterContext;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
@@ -840,7 +840,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     @Override
     public void attachJobGraph(
-            List<JobVertex> verticesToAttach, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<JobVertex> verticesToAttach, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
 
         assertRunningInJobMasterMainThread();
@@ -866,7 +866,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     /** Attach job vertices without initializing them. */
     private void attachJobVertices(
-            List<JobVertex> topologicallySorted, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<JobVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
         for (JobVertex jobVertex : topologicallySorted) {
 

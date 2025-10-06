@@ -71,7 +71,7 @@ import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalService;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
@@ -205,7 +205,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     private final JobManagerJobStatusListener jobStatusListener;
 
-    private final JobManagerJobMetricGroup jobManagerJobMetricGroup;
+    private final StreamManagerStreamMetricGroup jobManagerJobMetricGroup;
 
     // -------- Misc ---------
 
@@ -401,7 +401,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     private SchedulerNG createScheduler(
             SlotPoolServiceSchedulerFactory slotPoolServiceSchedulerFactory,
             ExecutionDeploymentTracker executionDeploymentTracker,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             JobStatusListener jobStatusListener)
             throws Exception {
         final SchedulerNG scheduler =

@@ -19,12 +19,13 @@
 package org.apache.flink.runtime.metrics.scope;
 
 import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerOperatorMetricGroup;
 import org.apache.flink.util.AbstractID;
 
 /**
  * The scope format for the {@link
- * org.apache.flink.runtime.metrics.groups.JobManagerOperatorMetricGroup}.
+ * StreamManagerOperatorMetricGroup}.
  */
 public class JobManagerOperatorScopeFormat extends ScopeFormat {
     public JobManagerOperatorScopeFormat(String format, JobManagerJobScopeFormat parentFormat) {
@@ -43,7 +44,7 @@ public class JobManagerOperatorScopeFormat extends ScopeFormat {
     }
 
     public String[] formatScope(
-            JobManagerJobMetricGroup parent,
+            StreamManagerStreamMetricGroup parent,
             AbstractID vertexId,
             String taskName,
             OperatorID operatorID,

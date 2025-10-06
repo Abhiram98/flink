@@ -23,7 +23,7 @@ import org.apache.flink.core.testutils.CompletedScheduledFuture;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
@@ -248,7 +248,7 @@ class CreatingExecutionGraphTest {
         }
 
         @Override
-        public JobManagerJobMetricGroup getMetricGroup() {
+        public StreamManagerStreamMetricGroup getMetricGroup() {
             return UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
         }
 

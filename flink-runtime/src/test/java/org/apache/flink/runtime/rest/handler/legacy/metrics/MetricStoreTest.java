@@ -352,8 +352,8 @@ class MetricStoreTest {
         MetricDump.CounterDump cd74 =
                 new MetricDump.CounterDump(speculativeOperator3, "metric7", 18);
 
-        QueryScopeInfo.JobManagerOperatorQueryScopeInfo jmOperator =
-                new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+        QueryScopeInfo.StreamManagerOperatorQueryScopeInfo jmOperator =
+                new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                         JOB_ID.toString(), "taskid", "opname", "abc");
         MetricDump.CounterDump jmCd8 = new MetricDump.CounterDump(jmOperator, "metric8", 19);
         MetricDump.CounterDump jmCd9 = new MetricDump.CounterDump(jmOperator, "metric9", 20);

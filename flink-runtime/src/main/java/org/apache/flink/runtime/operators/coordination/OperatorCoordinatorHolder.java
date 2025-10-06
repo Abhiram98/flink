@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorCoordinatorMetricGroup;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.util.IncompleteFuturesTracker;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.util.ExceptionUtils;
@@ -488,7 +488,7 @@ public class OperatorCoordinatorHolder
             CoordinatorStore coordinatorStore,
             boolean supportsConcurrentExecutionAttempts,
             TaskInformation taskInformation,
-            JobManagerJobMetricGroup metricGroup)
+            StreamManagerStreamMetricGroup metricGroup)
             throws Exception {
 
         try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(classLoader)) {
@@ -526,7 +526,7 @@ public class OperatorCoordinatorHolder
             final SubtaskAccess.SubtaskAccessFactory taskAccesses,
             final boolean supportsConcurrentExecutionAttempts,
             final TaskInformation taskInformation,
-            final JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            final StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws Exception {
         final MetricGroup parentMetricGroup =
                 jobManagerJobMetricGroup.getOrAddOperator(

@@ -34,15 +34,15 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * Special {@link org.apache.flink.metrics.MetricGroup} representing everything belonging to the
  * components running on the JobManager of an Operator.
  */
-public class JobManagerOperatorMetricGroup extends ComponentMetricGroup<JobManagerJobMetricGroup> {
+public class StreamManagerOperatorMetricGroup extends ComponentMetricGroup<StreamManagerStreamMetricGroup> {
     private final AbstractID vertexId;
     private final String taskName;
     private final String operatorName;
     private final OperatorID operatorID;
 
-    public JobManagerOperatorMetricGroup(
+    public StreamManagerOperatorMetricGroup(
             MetricRegistry registry,
-            JobManagerJobMetricGroup parent,
+            StreamManagerStreamMetricGroup parent,
             AbstractID vertexId,
             String taskName,
             OperatorID operatorID,
@@ -66,10 +66,10 @@ public class JobManagerOperatorMetricGroup extends ComponentMetricGroup<JobManag
     }
 
     @Override
-    protected QueryScopeInfo.JobManagerOperatorQueryScopeInfo createQueryServiceMetricInfo(
+    protected QueryScopeInfo.StreamManagerOperatorQueryScopeInfo createQueryServiceMetricInfo(
             CharacterFilter filter) {
-        return new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
-                this.parent.jobId.toString(),
+        return new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
+                this.parent.streamId.toString(),
                 vertexId.toString(),
                 filter.filterCharacters(this.operatorName));
     }

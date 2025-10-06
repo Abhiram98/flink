@@ -43,7 +43,7 @@ import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.TestUtils;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.shuffle.ShuffleTestUtils;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
@@ -159,7 +159,7 @@ class DefaultExecutionGraphFactoryTest {
         final JobGraph jobGraphWithParallelism2 = createJobGraphWithSavepoint(true, savepointId, 2);
 
         List<Span> spans = new ArrayList<>();
-        final JobManagerJobMetricGroup jobManagerJobMetricGroup =
+        final StreamManagerStreamMetricGroup jobManagerJobMetricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
                     @Override
                     public void addSpan(SpanBuilder spanBuilder) {
@@ -217,7 +217,7 @@ class DefaultExecutionGraphFactoryTest {
     }
 
     private ExecutionGraphFactory createExecutionGraphFactory(
-            JobManagerJobMetricGroup metricGroup) {
+            StreamManagerStreamMetricGroup metricGroup) {
         return new DefaultExecutionGraphFactory(
                 new Configuration(),
                 ClassLoader.getSystemClassLoader(),

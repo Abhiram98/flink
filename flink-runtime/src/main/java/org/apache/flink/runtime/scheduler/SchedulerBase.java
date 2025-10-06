@@ -81,7 +81,7 @@ import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.metrics.MetricNames;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -157,7 +157,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     private final CheckpointIDCounter checkpointIdCounter;
 
-    protected final JobManagerJobMetricGroup jobManagerJobMetricGroup;
+    protected final StreamManagerStreamMetricGroup jobManagerJobMetricGroup;
 
     protected final ExecutionVertexVersioner executionVertexVersioner;
 
@@ -188,7 +188,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final Configuration jobMasterConfiguration,
             final CheckpointsCleaner checkpointsCleaner,
             final CheckpointRecoveryFactory checkpointRecoveryFactory,
-            final JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            final StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             final ExecutionVertexVersioner executionVertexVersioner,
             long initializationTimestamp,
             final ComponentMainThreadExecutor mainThreadExecutor,

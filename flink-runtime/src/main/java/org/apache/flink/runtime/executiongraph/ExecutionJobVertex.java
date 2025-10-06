@@ -41,7 +41,7 @@ import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinatorHolder;
@@ -130,7 +130,7 @@ public class ExecutionJobVertex
             JobVertex jobVertex,
             VertexParallelismInformation parallelismInfo,
             CoordinatorStore coordinatorStore,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
 
         if (graph == null || jobVertex == null) {
@@ -289,7 +289,7 @@ public class ExecutionJobVertex
             SerializedValue<OperatorCoordinator.Provider> provider,
             ClassLoader classLoader,
             CoordinatorStore coordinatorStore,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws Exception {
         return OperatorCoordinatorHolder.create(
                 provider,
@@ -667,7 +667,7 @@ public class ExecutionJobVertex
                 JobVertex jobVertex,
                 VertexParallelismInformation parallelismInfo,
                 CoordinatorStore coordinatorStore,
-                JobManagerJobMetricGroup jobManagerJobMetricGroup)
+                StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
                 throws JobException {
             return new ExecutionJobVertex(
                     graph, jobVertex, parallelismInfo, coordinatorStore, jobManagerJobMetricGroup);
