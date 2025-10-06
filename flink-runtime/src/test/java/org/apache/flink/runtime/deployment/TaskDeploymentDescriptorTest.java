@@ -123,14 +123,14 @@ class TaskDeploymentDescriptorTest {
 
         final TaskDeploymentDescriptor copy = CommonTestUtils.createCopySerializable(orig);
 
-        assertThat(orig.getJobInformation()).isNotSameAs(copy.getJobInformation());
+        assertThat(orig.getStreamInformation()).isNotSameAs(copy.getStreamInformation());
         assertThat(orig.getTaskInformation()).isNotSameAs(copy.getTaskInformation());
         assertThat(orig.getExecutionAttemptId()).isNotSameAs(copy.getExecutionAttemptId());
         assertThat(orig.getTaskRestore()).isNotSameAs(copy.getTaskRestore());
         assertThat(orig.getProducedPartitions()).isNotSameAs(copy.getProducedPartitions());
         assertThat(orig.getInputGates()).isNotSameAs(copy.getInputGates());
 
-        assertThat(orig.getJobInformation()).isEqualTo(copy.getJobInformation());
+        assertThat(orig.getStreamInformation()).isEqualTo(copy.getStreamInformation());
         assertThat(orig.getTaskInformation()).isEqualTo(copy.getTaskInformation());
         assertThat(orig.getExecutionAttemptId()).isEqualTo(copy.getExecutionAttemptId());
         assertThat(orig.getAllocationId()).isEqualTo(copy.getAllocationId());
@@ -151,7 +151,7 @@ class TaskDeploymentDescriptorTest {
                         new TaskDeploymentDescriptor.NonOffloaded<>(serializedJobInformation),
                         new TaskDeploymentDescriptor.Offloaded<>(new PermanentBlobKey()));
 
-        JobInformation actualJobInformation = taskDeploymentDescriptor.getJobInformation();
+        JobInformation actualJobInformation = taskDeploymentDescriptor.getStreamInformation();
         assertThat(actualJobInformation).isEqualTo(jobInformation);
 
         assertThatThrownBy(taskDeploymentDescriptor::getTaskInformation)

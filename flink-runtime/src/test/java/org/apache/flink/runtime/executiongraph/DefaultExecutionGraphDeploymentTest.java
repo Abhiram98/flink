@@ -206,10 +206,10 @@ class DefaultExecutionGraphDeploymentTest {
         TaskDeploymentDescriptor descr = tdd.get();
         assertThat(descr).isNotNull();
 
-        JobInformation jobInformation = descr.getJobInformation();
+        JobInformation jobInformation = descr.getStreamInformation();
         TaskInformation taskInformation = descr.getTaskInformation();
 
-        assertThat(descr.getJobId()).isEqualTo(jobId);
+        assertThat(descr.getStreamId()).isEqualTo(jobId);
         assertThat(jobInformation.getJobId()).isEqualTo(jobId);
         assertThat(taskInformation.getJobVertexId()).isEqualTo(jid2);
         assertThat(descr.getSubtaskIndex()).isEqualTo(3);
