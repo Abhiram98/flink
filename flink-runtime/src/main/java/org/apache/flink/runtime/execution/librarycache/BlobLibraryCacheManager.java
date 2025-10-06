@@ -92,10 +92,10 @@ public class BlobLibraryCacheManager implements LibraryCacheManager {
     }
 
     @Override
-    public ClassLoaderLease registerClassLoaderLease(JobID jobId) {
+    public ClassLoaderLease registerClassLoaderLease(JobID streamId) {
         synchronized (lockObject) {
             return cacheEntries
-                    .computeIfAbsent(jobId, jobID -> new LibraryCacheEntry(jobId))
+                    .computeIfAbsent(streamId, jobID -> new LibraryCacheEntry(streamId))
                     .obtainLease();
         }
     }
