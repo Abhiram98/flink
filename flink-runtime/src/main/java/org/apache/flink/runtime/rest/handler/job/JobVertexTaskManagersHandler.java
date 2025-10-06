@@ -114,11 +114,11 @@ public class JobVertexTaskManagersHandler
         Collection<? extends AccessExecutionJobVertex> vertices = graph.getAllVertices().values();
         List<ArchivedJson> archive = new ArrayList<>(vertices.size());
         for (AccessExecutionJobVertex task : vertices) {
-            ResponseBody json = createJobVertexTaskManagersInfo(task, graph.getJobID(), null);
+            ResponseBody json = createJobVertexTaskManagersInfo(task, graph.getStreamID(), null);
             String path =
                     getMessageHeaders()
                             .getTargetRestEndpointURL()
-                            .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString())
+                            .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString())
                             .replace(
                                     ':' + JobVertexIdPathParameter.KEY,
                                     task.getJobVertexId().toString());

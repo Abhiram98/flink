@@ -332,7 +332,7 @@ class DefaultCheckpointPlanCalculatorTest {
 
     private DefaultCheckpointPlanCalculator createCheckpointPlanCalculator(ExecutionGraph graph) {
         return new DefaultCheckpointPlanCalculator(
-                graph.getJobID(),
+                graph.getStreamID(),
                 new ExecutionGraphCheckpointPlanCalculatorContext(graph),
                 graph.getVerticesTopologically(),
                 true);

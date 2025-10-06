@@ -125,7 +125,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                         context.getMainThreadExecutor());
                 final String updatedPlan =
                         JsonPlanGenerator.generatePlan(
-                                executionGraph.getJobID(),
+                                executionGraph.getStreamID(),
                                 executionGraph.getJobName(),
                                 JobType.STREAMING, // Adaptive scheduler works only with STREAMING
                                 // jobs

@@ -271,7 +271,7 @@ class CheckpointCoordinatorTest {
 
         coordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        executionGraph.getJobID(),
+                        executionGraph.getStreamID(),
                         decliningVertex.getCurrentExecutionAttempt().getAttemptId(),
                         checkpointId,
                         new CheckpointException(CHECKPOINT_DECLINED)),
@@ -407,7 +407,7 @@ class CheckpointCoordinatorTest {
                 Thread.sleep(10);
             }
             coordinator.receiveAcknowledgeMessage(
-                    new AcknowledgeCheckpoint(graph.getJobID(), attemptId, 1L),
+                    new AcknowledgeCheckpoint(graph.getStreamID(), attemptId, 1L),
                     TASK_MANAGER_LOCATION_INFO);
             Thread.sleep(pause / 2);
             assertThat(coordinator.getNumberOfPendingCheckpoints()).isZero();
@@ -662,7 +662,7 @@ class CheckpointCoordinatorTest {
 
             // acknowledge from one of the tasks
             checkpointCoordinator.receiveAcknowledgeMessage(
-                    new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId),
+                    new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId),
                     TASK_MANAGER_LOCATION_INFO);
             assertThat(checkpoint.isDisposed()).isFalse();
             assertThat(checkpoint.areTasksFullyAcknowledged()).isFalse();
@@ -670,7 +670,7 @@ class CheckpointCoordinatorTest {
             // decline checkpoint from the other task
             checkpointCoordinator.receiveDeclineMessage(
                     new DeclineCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             attemptID1,
                             checkpointId,
                             new CheckpointException(CHECKPOINT_DECLINED)),
@@ -911,7 +911,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(checkpoint).isNotNull();
         assertThat(checkpoint.getCheckpointID()).isEqualTo(checkpointId);
-        assertThat(checkpoint.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(checkpoint.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(checkpoint.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(checkpoint.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(checkpoint.getOperatorStates().size()).isZero();
@@ -932,7 +932,7 @@ class CheckpointCoordinatorTest {
 
         // acknowledge from one of the tasks
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId),
                 "Unknown location");
         assertThat(checkpoint.getNumberOfAcknowledgedTasks()).isOne();
         assertThat(checkpoint.getNumberOfNonAcknowledgedTasks()).isOne();
@@ -941,7 +941,7 @@ class CheckpointCoordinatorTest {
 
         // acknowledge the same task again (should not matter)
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId),
                 "Unknown location");
         assertThat(checkpoint.isDisposed()).isFalse();
         assertThat(checkpoint.areTasksFullyAcknowledged()).isFalse();
@@ -950,7 +950,7 @@ class CheckpointCoordinatorTest {
         // and trigger a new one
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(), attemptID1, checkpointId, checkpointException),
+                        graph.getStreamID(), attemptID1, checkpointId, checkpointException),
                 TASK_MANAGER_LOCATION_INFO);
         assertThat(checkpoint.isDisposed()).isTrue();
 
@@ -965,11 +965,11 @@ class CheckpointCoordinatorTest {
         // decline from the other task, nothing should happen
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(), attemptID1, checkpointId, checkpointException),
+                        graph.getStreamID(), attemptID1, checkpointId, checkpointException),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(), attemptID2, checkpointId, checkpointException),
+                        graph.getStreamID(), attemptID2, checkpointId, checkpointException),
                 TASK_MANAGER_LOCATION_INFO);
         assertThat(checkpoint.isDisposed()).isTrue();
         assertThat(failJobCallback.getInvokeCounter()).isOne();
@@ -1036,7 +1036,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(checkpoint1).isNotNull();
         assertThat(checkpoint1.getCheckpointID()).isEqualTo(checkpoint1Id);
-        assertThat(checkpoint1.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(checkpoint1.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(checkpoint1.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(checkpoint1.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(checkpoint1.getOperatorStates()).isEmpty();
@@ -1045,7 +1045,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(checkpoint2).isNotNull();
         assertThat(checkpoint2.getCheckpointID()).isEqualTo(checkpoint2Id);
-        assertThat(checkpoint2.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(checkpoint2.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(checkpoint2.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(checkpoint2.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(checkpoint2.getOperatorStates()).isEmpty();
@@ -1065,7 +1065,7 @@ class CheckpointCoordinatorTest {
         // decline checkpoint from one of the tasks, this should cancel the checkpoint
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpoint1Id,
                         new CheckpointException(CHECKPOINT_DECLINED)),
@@ -1094,7 +1094,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(checkpointNew).isNotNull();
         assertThat(checkpointNew.getCheckpointID()).isEqualTo(checkpointIdNew);
-        assertThat(checkpointNew.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(checkpointNew.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(checkpointNew.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(checkpointNew.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(checkpointNew.getOperatorStates()).isEmpty();
@@ -1106,14 +1106,14 @@ class CheckpointCoordinatorTest {
         // decline from the other task, nothing should happen
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpoint1Id,
                         new CheckpointException(CHECKPOINT_DECLINED)),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpoint1Id,
                         new CheckpointException(CHECKPOINT_DECLINED)),
@@ -1175,7 +1175,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(checkpoint).isNotNull();
         assertThat(checkpoint.getCheckpointID()).isEqualTo(checkpointId);
-        assertThat(checkpoint.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(checkpoint.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(checkpoint.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(checkpoint.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(checkpoint.getOperatorStates()).isEmpty();
@@ -1201,7 +1201,7 @@ class CheckpointCoordinatorTest {
         // acknowledge from one of the tasks
         AcknowledgeCheckpoint acknowledgeCheckpoint1 =
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1226,7 +1226,7 @@ class CheckpointCoordinatorTest {
         // acknowledge the other task.
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1260,7 +1260,7 @@ class CheckpointCoordinatorTest {
         }
 
         CompletedCheckpoint success = checkpointCoordinator.getSuccessfulCheckpoints().get(0);
-        assertThat(success.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(success.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(success.getCheckpointID()).isEqualTo(checkpoint.getCheckpointID());
         assertThat(success.getOperatorStates()).hasSize(2);
 
@@ -1274,10 +1274,10 @@ class CheckpointCoordinatorTest {
         long checkpointIdNew =
                 checkpointCoordinator.getPendingCheckpoints().entrySet().iterator().next().getKey();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointIdNew),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointIdNew),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointIdNew),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointIdNew),
                 TASK_MANAGER_LOCATION_INFO);
 
         assertThat(checkpointCoordinator.getNumberOfPendingCheckpoints()).isZero();
@@ -1285,7 +1285,7 @@ class CheckpointCoordinatorTest {
         assertThat(manuallyTriggeredScheduledExecutor.getActiveScheduledTasks()).isEmpty();
 
         CompletedCheckpoint successNew = checkpointCoordinator.getSuccessfulCheckpoints().get(0);
-        assertThat(successNew.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(successNew.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(successNew.getCheckpointID()).isEqualTo(checkpointIdNew);
         assertThat(successNew.getOperatorStates()).hasSize(2);
         assertThat(successNew.getOperatorStates().values().stream().allMatch(this::hasNoSubState))
@@ -1364,7 +1364,7 @@ class CheckpointCoordinatorTest {
 
         // acknowledge one of the three tasks
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId1),
                 TASK_MANAGER_LOCATION_INFO);
 
         // start the second checkpoint
@@ -1398,16 +1398,16 @@ class CheckpointCoordinatorTest {
         // we acknowledge the remaining two tasks from the first
         // checkpoint and two tasks from the second checkpoint
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID3, checkpointId1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID3, checkpointId1),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointId2),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointId1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointId1),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId2),
                 TASK_MANAGER_LOCATION_INFO);
 
         // now, the first checkpoint should be confirmed
@@ -1425,7 +1425,7 @@ class CheckpointCoordinatorTest {
         // send the last remaining ack for the second checkpoint
         gateway.resetCount();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID3, checkpointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID3, checkpointId2),
                 TASK_MANAGER_LOCATION_INFO);
 
         // now, the second checkpoint should be confirmed
@@ -1445,13 +1445,13 @@ class CheckpointCoordinatorTest {
 
         CompletedCheckpoint sc1 = scs.get(0);
         assertThat(sc1.getCheckpointID()).isEqualTo(checkpointId1);
-        assertThat(sc1.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(sc1.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(sc1.getOperatorStates()).hasSize(3);
         assertThat(sc1.getOperatorStates().values()).allMatch(this::hasNoSubState);
 
         CompletedCheckpoint sc2 = scs.get(1);
         assertThat(sc2.getCheckpointID()).isEqualTo(checkpointId2);
-        assertThat(sc2.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(sc2.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(sc2.getOperatorStates()).hasSize(3);
         assertThat(sc2.getOperatorStates().values()).allMatch(this::hasNoSubState);
 
@@ -1540,7 +1540,7 @@ class CheckpointCoordinatorTest {
         // acknowledge one of the three tasks
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpointId1,
                         new CheckpointMetrics(),
@@ -1594,7 +1594,7 @@ class CheckpointCoordinatorTest {
 
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID3,
                         checkpointId2,
                         new CheckpointMetrics(),
@@ -1603,7 +1603,7 @@ class CheckpointCoordinatorTest {
 
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId2,
                         new CheckpointMetrics(),
@@ -1612,7 +1612,7 @@ class CheckpointCoordinatorTest {
 
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId1,
                         new CheckpointMetrics(),
@@ -1621,7 +1621,7 @@ class CheckpointCoordinatorTest {
 
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpointId2,
                         new CheckpointMetrics(),
@@ -1650,7 +1650,7 @@ class CheckpointCoordinatorTest {
         List<CompletedCheckpoint> scs = checkpointCoordinator.getSuccessfulCheckpoints();
         CompletedCheckpoint success = scs.get(0);
         assertThat(success.getCheckpointID()).isEqualTo(checkpointId2);
-        assertThat(success.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(success.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(success.getOperatorStates()).hasSize(3);
 
         // the first confirm message should be out
@@ -1663,7 +1663,7 @@ class CheckpointCoordinatorTest {
         // send the last remaining ack for the first checkpoint. This should not do anything
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID3,
                         checkpointId1,
                         new CheckpointMetrics(),
@@ -1727,7 +1727,7 @@ class CheckpointCoordinatorTest {
 
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpoint.getCheckpointID(),
                         new CheckpointMetrics(),
@@ -1797,13 +1797,13 @@ class CheckpointCoordinatorTest {
 
         // unknown checkpoint
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, 1L),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, 1L),
                 TASK_MANAGER_LOCATION_INFO);
 
         // unknown ack vertex
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(), createExecutionAttemptId(), checkpointId),
+                        graph.getStreamID(), createExecutionAttemptId(), checkpointId),
                 TASK_MANAGER_LOCATION_INFO);
 
         checkpointCoordinator.shutdown();
@@ -1872,7 +1872,7 @@ class CheckpointCoordinatorTest {
         // acknowledge the first trigger vertex
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1887,7 +1887,7 @@ class CheckpointCoordinatorTest {
         // receive an acknowledge message for an unknown vertex
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         createExecutionAttemptId(),
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1916,7 +1916,7 @@ class CheckpointCoordinatorTest {
         TaskStateSnapshot triggerSubtaskState = mock(TaskStateSnapshot.class);
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1930,7 +1930,7 @@ class CheckpointCoordinatorTest {
         subtaskStateMock.reset();
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId,
                         new CheckpointException(CHECKPOINT_DECLINED)),
@@ -1946,7 +1946,7 @@ class CheckpointCoordinatorTest {
         // late acknowledge message from the second ack vertex
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -1975,7 +1975,7 @@ class CheckpointCoordinatorTest {
         // receive an acknowledge message for an unknown vertex
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         createExecutionAttemptId(),
                         checkpointId,
                         new CheckpointMetrics(),
@@ -2056,7 +2056,7 @@ class CheckpointCoordinatorTest {
 
         assertThat(pending).isNotNull();
         assertThat(pending.getCheckpointID()).isEqualTo(checkpointId);
-        assertThat(pending.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(pending.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(pending.getNumberOfNonAcknowledgedTasks()).isEqualTo(2);
         assertThat(pending.getNumberOfAcknowledgedTasks()).isZero();
         assertThat(pending.getOperatorStates()).isEmpty();
@@ -2076,7 +2076,7 @@ class CheckpointCoordinatorTest {
         // acknowledge from one of the tasks
         AcknowledgeCheckpoint acknowledgeCheckpoint2 =
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID2,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -2099,7 +2099,7 @@ class CheckpointCoordinatorTest {
         // acknowledge the other task.
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         attemptID1,
                         checkpointId,
                         new CheckpointMetrics(),
@@ -2125,7 +2125,7 @@ class CheckpointCoordinatorTest {
         }
 
         CompletedCheckpoint success = savepointFuture.get();
-        assertThat(success.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(success.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(success.getCheckpointID()).isEqualTo(pending.getCheckpointID());
         assertThat(success.getOperatorStates()).hasSize(2);
 
@@ -2202,10 +2202,10 @@ class CheckpointCoordinatorTest {
 
         // 2nd checkpoint should subsume the 1st checkpoint, but not the savepoint
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointId2),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId2),
                 TASK_MANAGER_LOCATION_INFO);
         // no completed checkpoint before checkpointId2.
         verify(checkpointCoordinator, times(1))
@@ -2234,10 +2234,10 @@ class CheckpointCoordinatorTest {
 
         // savepoints should not subsume checkpoints
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, savepointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, savepointId2),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, savepointId2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, savepointId2),
                 TASK_MANAGER_LOCATION_INFO);
 
         // we do not send notify checkpoint complete for savepoints
@@ -2255,10 +2255,10 @@ class CheckpointCoordinatorTest {
 
         // Ack first savepoint
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, savepointId1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, savepointId1),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, savepointId1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, savepointId1),
                 TASK_MANAGER_LOCATION_INFO);
 
         // we do not send notify checkpoint complete for savepoints
@@ -2276,10 +2276,10 @@ class CheckpointCoordinatorTest {
         long checkpointId4 = counter.getLast();
 
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointId4),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointId4),
                 TASK_MANAGER_LOCATION_INFO);
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID2, checkpointId4),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID2, checkpointId4),
                 TASK_MANAGER_LOCATION_INFO);
 
         // checkpoint2 would be subsumed.
@@ -2334,7 +2334,7 @@ class CheckpointCoordinatorTest {
 
             // now, once we acknowledge one checkpoint, it should trigger the next one
             checkpointCoordinator.receiveAcknowledgeMessage(
-                    new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, 1L),
+                    new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, 1L),
                     TASK_MANAGER_LOCATION_INFO);
 
             Predicate<ScheduledFuture<?>> checkpointTriggerPredicate =
@@ -2424,7 +2424,7 @@ class CheckpointCoordinatorTest {
         // and allow two more checkpoints to be triggered
         // now, once we acknowledge one checkpoint, it should trigger the next one
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, 2L),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, 2L),
                 TASK_MANAGER_LOCATION_INFO);
 
         // after a while, there should be the new checkpoints
@@ -2558,7 +2558,7 @@ class CheckpointCoordinatorTest {
         long checkpointId = checkpointIDCounter.getLast();
         for (int i = 0; i < numSavepoints; i++, checkpointId--) {
             checkpointCoordinator.receiveAcknowledgeMessage(
-                    new AcknowledgeCheckpoint(graph.getJobID(), attemptID1, checkpointId),
+                    new AcknowledgeCheckpoint(graph.getStreamID(), attemptID1, checkpointId),
                     TASK_MANAGER_LOCATION_INFO);
         }
 
@@ -2946,7 +2946,7 @@ class CheckpointCoordinatorTest {
 
             for (int i = 0; i < numCheckpoints; ++i) {
                 performIncrementalCheckpoint(
-                        graph.getJobID(), coordinator, jobVertex1, keyGroupPartitions1, i);
+                        graph.getStreamID(), coordinator, jobVertex1, keyGroupPartitions1, i);
             }
 
             List<CompletedCheckpoint> completedCheckpoints = coordinator.getSuccessfulCheckpoints();
@@ -3141,7 +3141,7 @@ class CheckpointCoordinatorTest {
         manuallyTriggeredScheduledExecutor.triggerAll();
         final PendingCheckpoint syncSavepoint =
                 declineSynchronousSavepoint(
-                        graph.getJobID(), coordinator, attemptID1, expectedRootCause);
+                        graph.getStreamID(), coordinator, attemptID1, expectedRootCause);
 
         assertThat(syncSavepoint.isDisposed()).isTrue();
         String expectedRootCauseMessage =
@@ -3385,7 +3385,7 @@ class CheckpointCoordinatorTest {
 
             coordinator.receiveDeclineMessage(
                     new DeclineCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             createExecutionAttemptId(),
                             1L,
                             new CheckpointException(CHECKPOINT_DECLINED)),
@@ -3494,14 +3494,14 @@ class CheckpointCoordinatorTest {
                         checkpointIdRef.set(checkpointId);
                         AcknowledgeCheckpoint acknowledgeCheckpoint1 =
                                 new AcknowledgeCheckpoint(
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         attemptID1,
                                         checkpointId,
                                         new CheckpointMetrics(),
                                         taskOperatorSubtaskStates1);
                         AcknowledgeCheckpoint acknowledgeCheckpoint2 =
                                 new AcknowledgeCheckpoint(
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         attemptID2,
                                         checkpointId,
                                         new CheckpointMetrics(),
@@ -3564,7 +3564,7 @@ class CheckpointCoordinatorTest {
         }
 
         CompletedCheckpoint success = checkpointCoordinator.getSuccessfulCheckpoints().get(0);
-        assertThat(success.getJobId()).isEqualTo(graph.getJobID());
+        assertThat(success.getJobId()).isEqualTo(graph.getStreamID());
         assertThat(success.getOperatorStates().size()).isEqualTo(2);
 
         checkpointCoordinator.shutdown();
@@ -3675,14 +3675,14 @@ class CheckpointCoordinatorTest {
                         checkpointIdRef.set(checkpointId);
                         AcknowledgeCheckpoint acknowledgeCheckpoint1 =
                                 new AcknowledgeCheckpoint(
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         attemptID1,
                                         checkpointId,
                                         new CheckpointMetrics(),
                                         taskOperatorSubtaskStates1);
                         AcknowledgeCheckpoint acknowledgeCheckpoint2 =
                                 new AcknowledgeCheckpoint(
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         attemptID2,
                                         checkpointId,
                                         new CheckpointMetrics(),
@@ -3787,7 +3787,7 @@ class CheckpointCoordinatorTest {
                     Collections.max(checkpointCoordinator.getPendingCheckpoints().keySet());
             AcknowledgeCheckpoint acknowledgeCheckpoint1 =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             attemptID,
                             checkpointId2,
                             new CheckpointMetrics(),
@@ -3957,7 +3957,7 @@ class CheckpointCoordinatorTest {
                 checkpointCoordinator.getPendingCheckpoints().entrySet().iterator().next().getKey();
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         task.getCurrentExecutionAttempt().getAttemptId(),
                         completedCheckpointId,
                         new CheckpointMetrics(),
@@ -3972,7 +3972,7 @@ class CheckpointCoordinatorTest {
                 checkpointCoordinator.getPendingCheckpoints().entrySet().iterator().next().getKey();
         checkpointCoordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         task.getCurrentExecutionAttempt().getAttemptId(),
                         abortedCheckpointId,
                         new CheckpointException(CHECKPOINT_EXPIRED)),
@@ -3999,7 +3999,7 @@ class CheckpointCoordinatorTest {
                 .setCheckpointStorage(new FileSystemCheckpointStorage(checkpointDir.toURI()))
                 .build(graph);
         Path jobCheckpointPath =
-                new Path(checkpointDir.getAbsolutePath(), graph.getJobID().toString());
+                new Path(checkpointDir.getAbsolutePath(), graph.getStreamID().toString());
         FileSystem fs = FileSystem.get(checkpointDir.toURI());
 
         // directory will not be created if checkpointing is disabled
@@ -4276,7 +4276,7 @@ class CheckpointCoordinatorTest {
             ExecutionGraph graph) {
         coordinator.receiveDeclineMessage(
                 new DeclineCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         graph.getJobVertex(nackVertexID)
                                 .getTaskVertices()[0]
                                 .getCurrentExecutionAttempt()
@@ -4306,7 +4306,7 @@ class CheckpointCoordinatorTest {
         OperatorID operatorID = jobVertex.getOperatorIDs().get(0).getGeneratedOperatorID();
         coordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         jobVertex.getTaskVertices()[0].getCurrentExecutionAttempt().getAttemptId(),
                         checkpointId,
                         new CheckpointMetrics(),

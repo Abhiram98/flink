@@ -258,10 +258,10 @@ class Executing extends StateWithExecutionGraph
         StopWithSavepointTerminationManager.checkSavepointActionPreconditions(
                 executionGraph.getCheckpointCoordinator(),
                 targetDirectory,
-                executionGraph.getJobID(),
+                executionGraph.getStreamID(),
                 getLogger());
 
-        getLogger().info("Triggering stop-with-savepoint for job {}.", executionGraph.getJobID());
+        getLogger().info("Triggering stop-with-savepoint for job {}.", executionGraph.getStreamID());
 
         CheckpointScheduling schedulingProvider = new CheckpointSchedulingProvider(executionGraph);
 

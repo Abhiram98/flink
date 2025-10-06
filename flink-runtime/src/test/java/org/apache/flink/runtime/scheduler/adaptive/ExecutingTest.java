@@ -558,9 +558,9 @@ class ExecutingTest {
     void testJobInformationMethods() throws Exception {
         try (MockExecutingContext ctx = new MockExecutingContext()) {
             Executing exec = new ExecutingStateBuilder().build(ctx);
-            final JobID jobId = exec.getExecutionGraph().getJobID();
+            final JobID jobId = exec.getExecutionGraph().getStreamID();
             assertThat(exec.getJob()).isInstanceOf(ArchivedExecutionGraph.class);
-            assertThat(exec.getJob().getJobID()).isEqualTo(jobId);
+            assertThat(exec.getJob().getStreamID()).isEqualTo(jobId);
             assertThat(exec.getJobStatus()).isEqualTo(JobStatus.RUNNING);
         }
     }

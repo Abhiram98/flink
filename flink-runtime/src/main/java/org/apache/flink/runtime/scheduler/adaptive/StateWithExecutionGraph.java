@@ -142,7 +142,7 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     JobID getJobId() {
-        return executionGraph.getJobID();
+        return executionGraph.getStreamID();
     }
 
     protected OperatorCoordinatorHandler getOperatorCoordinatorHandler() {
@@ -306,7 +306,7 @@ abstract class StateWithExecutionGraph implements State {
         logger.info(
                 "Triggering {}savepoint for job {}.",
                 cancelJob ? "cancel-with-" : "",
-                executionGraph.getJobID());
+                executionGraph.getStreamID());
 
         if (cancelJob) {
             checkpointCoordinator.stopCheckpointScheduler();
@@ -326,7 +326,7 @@ abstract class StateWithExecutionGraph implements State {
                                 logger.info(
                                         "Savepoint stored in {}. Now cancelling {}.",
                                         path,
-                                        executionGraph.getJobID());
+                                        executionGraph.getStreamID());
                                 cancel();
                             }
                             return path;
@@ -337,7 +337,7 @@ abstract class StateWithExecutionGraph implements State {
     CompletableFuture<CompletedCheckpoint> triggerCheckpoint(CheckpointType checkpointType) {
         final CheckpointCoordinator checkpointCoordinator =
                 executionGraph.getCheckpointCoordinator();
-        final JobID jobID = executionGraph.getJobID();
+        final JobID jobID = executionGraph.getStreamID();
         if (checkpointCoordinator == null) {
             throw new IllegalStateException(String.format("Job %s is not a streaming job.", jobID));
         }

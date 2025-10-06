@@ -300,7 +300,7 @@ class ExecutionPartitionLifecycleTest {
                                 expectedIntermediateResultPartitionId)
                         .get();
         taskExecutorResourceId = taskManagerLocation.getResourceID();
-        jobId = executionGraph.getJobID();
+        jobId = executionGraph.getStreamID();
     }
 
     @Nonnull

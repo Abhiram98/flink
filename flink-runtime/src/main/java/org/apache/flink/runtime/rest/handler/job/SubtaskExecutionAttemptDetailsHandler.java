@@ -114,13 +114,13 @@ public class SubtaskExecutionAttemptDetailsHandler
                 for (AccessExecution attempt : subtask.getCurrentExecutions()) {
                     ResponseBody curAttemptJson =
                             SubtaskExecutionAttemptDetailsInfo.create(
-                                    attempt, null, graph.getJobID(), task.getJobVertexId(), null);
+                                    attempt, null, graph.getStreamID(), task.getJobVertexId(), null);
                     String curAttemptPath =
                             getMessageHeaders()
                                     .getTargetRestEndpointURL()
                                     .replace(
                                             ':' + StreamIdPathParameter.KEY,
-                                            graph.getJobID().toString())
+                                            graph.getStreamID().toString())
                                     .replace(
                                             ':' + JobVertexIdPathParameter.KEY,
                                             task.getJobVertexId().toString())
@@ -140,7 +140,7 @@ public class SubtaskExecutionAttemptDetailsHandler
                                 SubtaskExecutionAttemptDetailsInfo.create(
                                         attempt,
                                         null,
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         task.getJobVertexId(),
                                         null);
                         String path =
@@ -148,7 +148,7 @@ public class SubtaskExecutionAttemptDetailsHandler
                                         .getTargetRestEndpointURL()
                                         .replace(
                                                 ':' + StreamIdPathParameter.KEY,
-                                                graph.getJobID().toString())
+                                                graph.getStreamID().toString())
                                         .replace(
                                                 ':' + JobVertexIdPathParameter.KEY,
                                                 task.getJobVertexId().toString())

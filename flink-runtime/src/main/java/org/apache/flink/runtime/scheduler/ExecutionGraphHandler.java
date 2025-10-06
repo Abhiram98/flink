@@ -145,9 +145,9 @@ public class ExecutionGraphHandler {
             String errorMessage =
                     "Received " + messageType + " message for job {} with no CheckpointCoordinator";
             if (executionGraph.getState() == JobStatus.RUNNING) {
-                log.error(errorMessage, executionGraph.getJobID());
+                log.error(errorMessage, executionGraph.getStreamID());
             } else {
-                log.debug(errorMessage, executionGraph.getJobID());
+                log.debug(errorMessage, executionGraph.getStreamID());
             }
         }
     }

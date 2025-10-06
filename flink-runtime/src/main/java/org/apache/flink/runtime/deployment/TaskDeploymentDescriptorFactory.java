@@ -106,7 +106,7 @@ public class TaskDeploymentDescriptorFactory {
                         jobID, blobWriter, offloadShuffleDescriptorsThreshold);
     }
 
-    public MaybeOffloaded<JobInformation> getSerializedJobInformation() {
+    public MaybeOffloaded<JobInformation> getSerializedStreamInformation() {
         return serializedJobInformation;
     }
 

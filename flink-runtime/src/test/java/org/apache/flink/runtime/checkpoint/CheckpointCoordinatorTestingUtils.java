@@ -881,13 +881,13 @@ public class CheckpointCoordinatorTestingUtils {
 
             DefaultCheckpointPlanCalculator checkpointPlanCalculator =
                     new DefaultCheckpointPlanCalculator(
-                            executionGraph.getJobID(),
+                            executionGraph.getStreamID(),
                             new ExecutionGraphCheckpointPlanCalculatorContext(executionGraph),
                             executionGraph.getVerticesTopologically(),
                             allowCheckpointsAfterTasksFinished);
 
             return new CheckpointCoordinator(
-                    executionGraph.getJobID(),
+                    executionGraph.getStreamID(),
                     checkpointCoordinatorConfiguration,
                     coordinatorsToCheckpoint,
                     checkpointIDCounter,

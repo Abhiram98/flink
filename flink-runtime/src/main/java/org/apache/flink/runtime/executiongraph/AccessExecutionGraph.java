@@ -52,7 +52,7 @@ public interface AccessExecutionGraph extends JobStatusProvider {
      *
      * @return job ID for this execution graph
      */
-    JobID getJobID();
+    JobID getStreamID();
 
     /**
      * Returns the job name for the execution graph.

@@ -151,7 +151,7 @@ class CheckpointCoordinatorFailureTest {
 
         AcknowledgeCheckpoint acknowledgeMessage =
                 new AcknowledgeCheckpoint(
-                        testGraph.getJobID(),
+                        testGraph.getStreamID(),
                         vertex.getCurrentExecutionAttempt().getAttemptId(),
                         checkpointId,
                         new CheckpointMetrics(),
@@ -252,7 +252,7 @@ class CheckpointCoordinatorFailureTest {
         try {
             checkpointCoordinator.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             attemptId,
                             checkpointIDCounter.getLast(),
                             expectedReportedMetrics,

@@ -48,11 +48,11 @@ public class KvStateHandler {
             throws UnknownKvStateLocation, FlinkStreamNotFoundException {
 
         // sanity check for the correct JobID
-        if (executionGraph.getJobID().equals(jobId)) {
+        if (executionGraph.getStreamID().equals(jobId)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         "Lookup key-value state for job {} with registration " + "name {}.",
-                        executionGraph.getJobID(),
+                        executionGraph.getStreamID(),
                         registrationName);
             }
 
@@ -81,11 +81,11 @@ public class KvStateHandler {
             final InetSocketAddress kvStateServerAddress)
             throws FlinkStreamNotFoundException {
 
-        if (executionGraph.getJobID().equals(jobId)) {
+        if (executionGraph.getStreamID().equals(jobId)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         "Key value state registered for job {} under name {}.",
-                        executionGraph.getJobID(),
+                        executionGraph.getStreamID(),
                         registrationName);
             }
 
@@ -113,11 +113,11 @@ public class KvStateHandler {
             final String registrationName)
             throws FlinkStreamNotFoundException {
 
-        if (executionGraph.getJobID().equals(jobId)) {
+        if (executionGraph.getStreamID().equals(jobId)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         "Key value state unregistered for job {} under name {}.",
-                        executionGraph.getJobID(),
+                        executionGraph.getStreamID(),
                         registrationName);
             }
 

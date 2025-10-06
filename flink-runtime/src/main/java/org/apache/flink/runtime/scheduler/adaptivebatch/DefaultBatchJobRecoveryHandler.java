@@ -156,12 +156,12 @@ public class DefaultBatchJobRecoveryHandler
 
         // notify the shuffle master the recovery process has started and try to fetch partitions
         context.getShuffleMaster()
-                .notifyPartitionRecoveryStarted(context.getExecutionGraph().getJobID());
+                .notifyPartitionRecoveryStarted(context.getExecutionGraph().getStreamID());
 
         if (!jobEventManager.replay(this)) {
             log.warn(
                     "Fail to replay log for {}, will start the job as a new one.",
-                    context.getExecutionGraph().getJobID());
+                    context.getExecutionGraph().getStreamID());
             recoverFailed();
             return;
         }
@@ -544,7 +544,7 @@ public class DefaultBatchJobRecoveryHandler
         String message =
                 String.format(
                         "Job %s recover failed from JM failover, fail global.",
-                        context.getExecutionGraph().getJobID());
+                        context.getExecutionGraph().getStreamID());
         log.warn(message);
         context.getExecutionGraph().transitionState(JobStatus.RECONCILING, JobStatus.RUNNING);
 
@@ -566,7 +566,7 @@ public class DefaultBatchJobRecoveryHandler
     private void recoverFinished() {
         log.info(
                 "Job {} successfully recovered from JM failover",
-                context.getExecutionGraph().getJobID());
+                context.getExecutionGraph().getStreamID());
 
         context.getExecutionGraph().transitionState(JobStatus.RECONCILING, JobStatus.RUNNING);
         checkExecutionGraphState();
@@ -727,7 +727,7 @@ public class DefaultBatchJobRecoveryHandler
         CompletableFuture<Collection<PartitionWithMetrics>> fetchPartitionsFuture =
                 context.getShuffleMaster()
                         .getPartitionWithMetrics(
-                                context.getExecutionGraph().getJobID(),
+                                context.getExecutionGraph().getStreamID(),
                                 previousWorkerRecoveryTimeout,
                                 partitionsToReserve);
 

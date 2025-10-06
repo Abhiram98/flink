@@ -252,7 +252,7 @@ public class ArchivedExecutionGraphTest {
         // ExecutionGraph
         // -------------------------------------------------------------------------------------------------------------
         assertThat(runtimeGraph.getJsonPlan()).isEqualTo(archivedGraph.getJsonPlan());
-        assertThat(runtimeGraph.getJobID()).isEqualTo(archivedGraph.getJobID());
+        assertThat(runtimeGraph.getStreamID()).isEqualTo(archivedGraph.getStreamID());
         assertThat(runtimeGraph.getJobName()).isEqualTo(archivedGraph.getJobName());
         assertThat(runtimeGraph.getState()).isEqualTo(archivedGraph.getState());
         assertThat(runtimeGraph.getFailureInfo().getExceptionAsString())

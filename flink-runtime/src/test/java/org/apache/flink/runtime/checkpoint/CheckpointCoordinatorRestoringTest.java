@@ -120,7 +120,7 @@ class CheckpointCoordinatorRestoringTest {
                             jobVertex.getJobVertexId(), partitionIdx, partitions.get(partitionIdx));
             final AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            executionGraph.getJobID(),
+                            executionGraph.getStreamID(),
                             jobVertex
                                     .getTaskVertices()[partitionIdx]
                                     .getCurrentExecutionAttempt()
@@ -354,7 +354,7 @@ class CheckpointCoordinatorRestoringTest {
 
             AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             jobVertex1
                                     .getTaskVertices()[index]
                                     .getCurrentExecutionAttempt()
@@ -396,7 +396,7 @@ class CheckpointCoordinatorRestoringTest {
 
             AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             jobVertex2
                                     .getTaskVertices()[index]
                                     .getCurrentExecutionAttempt()
@@ -544,7 +544,7 @@ class CheckpointCoordinatorRestoringTest {
                     OperatorID.fromJobVertexID(jobVertexID1), operatorSubtaskState);
             AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             jobVertex1
                                     .getTaskVertices()[index]
                                     .getCurrentExecutionAttempt()
@@ -566,7 +566,7 @@ class CheckpointCoordinatorRestoringTest {
                     OperatorID.fromJobVertexID(jobVertexID2), operatorSubtaskState);
             AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             jobVertex2
                                     .getTaskVertices()[index]
                                     .getCurrentExecutionAttempt()
@@ -770,7 +770,7 @@ class CheckpointCoordinatorRestoringTest {
 
         CompletedCheckpoint completedCheckpoint =
                 new CompletedCheckpoint(
-                        newGraph.getJobID(),
+                        newGraph.getStreamID(),
                         2,
                         System.currentTimeMillis(),
                         System.currentTimeMillis() + 3000,
@@ -1031,7 +1031,7 @@ class CheckpointCoordinatorRestoringTest {
 
             AcknowledgeCheckpoint acknowledgeCheckpoint =
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             jobVertex
                                     .getTaskVertices()[index]
                                     .getCurrentExecutionAttempt()
@@ -1090,7 +1090,7 @@ class CheckpointCoordinatorRestoringTest {
                 new FullyFinishedOperatorState(null, null, op1.getGeneratedOperatorID(), 1, 1));
         CompletedCheckpoint completedCheckpoint =
                 new CompletedCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         2,
                         System.currentTimeMillis(),
                         System.currentTimeMillis() + 3000,
@@ -1132,7 +1132,7 @@ class CheckpointCoordinatorRestoringTest {
         CompletedCheckpointStore completedCheckpointStore = new EmbeddedCompletedCheckpointStore();
         CompletedCheckpoint completedCheckpoint =
                 new CompletedCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         2,
                         System.currentTimeMillis(),
                         System.currentTimeMillis() + 3000,
@@ -1185,7 +1185,7 @@ class CheckpointCoordinatorRestoringTest {
                 coordinator.getPendingCheckpoints().keySet().stream().findFirst().get();
         coordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         graph.getJobVertex(jobVertexID)
                                 .getTaskVertices()[0]
                                 .getCurrentExecutionAttempt()

@@ -347,7 +347,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
         }
 
         return new ArchivedExecutionGraph(
-                executionGraph.getJobID(),
+                executionGraph.getStreamID(),
                 executionGraph.getJobName(),
                 archivedTasks,
                 archivedVerticesInCreationOrder,

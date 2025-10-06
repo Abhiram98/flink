@@ -125,7 +125,7 @@ class CheckpointStateRestoreTest {
 
             coord.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             statefulExec1.getAttemptId(),
                             checkpointId,
                             new CheckpointMetrics(),
@@ -133,7 +133,7 @@ class CheckpointStateRestoreTest {
                     TASK_MANAGER_LOCATION_INFO);
             coord.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             statefulExec2.getAttemptId(),
                             checkpointId,
                             new CheckpointMetrics(),
@@ -141,7 +141,7 @@ class CheckpointStateRestoreTest {
                     TASK_MANAGER_LOCATION_INFO);
             coord.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             statefulExec3.getAttemptId(),
                             checkpointId,
                             new CheckpointMetrics(),
@@ -149,11 +149,11 @@ class CheckpointStateRestoreTest {
                     TASK_MANAGER_LOCATION_INFO);
             coord.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(), statelessExec1.getAttemptId(), checkpointId),
+                            graph.getStreamID(), statelessExec1.getAttemptId(), checkpointId),
                     TASK_MANAGER_LOCATION_INFO);
             coord.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(), statelessExec2.getAttemptId(), checkpointId),
+                            graph.getStreamID(), statelessExec2.getAttemptId(), checkpointId),
                     TASK_MANAGER_LOCATION_INFO);
 
             assertThat(coord.getNumberOfRetainedSuccessfulCheckpoints()).isOne();

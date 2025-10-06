@@ -106,7 +106,7 @@ public class SubtaskExecutionAttemptAccumulatorsHandler
                                     .getTargetRestEndpointURL()
                                     .replace(
                                             ':' + StreamIdPathParameter.KEY,
-                                            graph.getJobID().toString())
+                                            graph.getStreamID().toString())
                                     .replace(
                                             ':' + JobVertexIdPathParameter.KEY,
                                             task.getJobVertexId().toString())
@@ -128,7 +128,7 @@ public class SubtaskExecutionAttemptAccumulatorsHandler
                                         .getTargetRestEndpointURL()
                                         .replace(
                                                 ':' + StreamIdPathParameter.KEY,
-                                                graph.getJobID().toString())
+                                                graph.getStreamID().toString())
                                         .replace(
                                                 ':' + JobVertexIdPathParameter.KEY,
                                                 task.getJobVertexId().toString())

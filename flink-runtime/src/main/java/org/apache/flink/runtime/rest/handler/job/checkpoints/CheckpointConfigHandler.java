@@ -84,7 +84,7 @@ public class CheckpointConfigHandler
         String path =
                 CheckpointConfigHeaders.getInstance()
                         .getTargetRestEndpointURL()
-                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString());
         return Collections.singletonList(new ArchivedJson(path, response));
     }
 
@@ -96,7 +96,7 @@ public class CheckpointConfigHandler
         if (checkpointCoordinatorConfiguration == null) {
             throw new RestHandlerException(
                     "Checkpointing is not enabled for this job ("
-                            + executionGraph.getJobID()
+                            + executionGraph.getStreamID()
                             + ").",
                     HttpResponseStatus.NOT_FOUND,
                     RestHandlerException.LoggingBehavior.IGNORE);

@@ -88,7 +88,7 @@ public class JobAccumulatorsHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString());
         return Collections.singleton(new ArchivedJson(path, json));
     }
 

@@ -91,7 +91,7 @@ public class JobDetailsHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString());
         return Collections.singleton(new ArchivedJson(path, json));
     }
 
@@ -122,7 +122,7 @@ public class JobDetailsHandler
                     createJobVertexDetailsInfo(
                             accessExecutionJobVertex,
                             now,
-                            executionGraph.getJobID(),
+                            executionGraph.getStreamID(),
                             metricFetcher);
 
             jobVertexInfos.add(vertexDetailsInfo);
@@ -138,7 +138,7 @@ public class JobDetailsHandler
         }
 
         return new JobDetailsInfo(
-                executionGraph.getJobID(),
+                executionGraph.getStreamID(),
                 executionGraph.getJobName(),
                 executionGraph.isStoppable(),
                 executionGraph.getState(),

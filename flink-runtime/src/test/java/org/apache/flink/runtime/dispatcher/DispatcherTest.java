@@ -1321,7 +1321,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         submitFuture.get();
         final ArchivedExecutionGraph archivedExecutionGraph =
                 dispatcherGateway.requestJob(failedJobId, TIMEOUT).get();
-        Assertions.assertThat(archivedExecutionGraph.getJobID()).isEqualTo(failedJobId);
+        Assertions.assertThat(archivedExecutionGraph.getStreamID()).isEqualTo(failedJobId);
         Assertions.assertThat(archivedExecutionGraph.getJobName()).isEqualTo(failedJobName);
         Assertions.assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
         Assertions.assertThat(archivedExecutionGraph.getFailureInfo())

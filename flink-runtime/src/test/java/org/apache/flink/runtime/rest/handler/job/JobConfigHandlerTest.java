@@ -69,7 +69,7 @@ class JobConfigHandlerTest {
                         .setArchivedExecutionConfig(archivedExecutionConfig)
                         .build();
         final HandlerRequest<EmptyRequestBody> handlerRequest =
-                createRequest(archivedExecutionGraph.getJobID());
+                createRequest(archivedExecutionGraph.getStreamID());
 
         final JobConfigInfo jobConfigInfoResponse =
                 jobConfigHandler.handleRequest(handlerRequest, archivedExecutionGraph);

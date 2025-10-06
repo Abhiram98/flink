@@ -79,7 +79,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
                         0);
         CheckpointCoordinator checkpointCoordinator =
                 new CheckpointCoordinator(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         checkpointCoordinatorConfiguration,
                         Collections.emptyList(),
                         new StandaloneCheckpointIDCounter(),
@@ -90,7 +90,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
                         manualThreadExecutor,
                         mock(CheckpointFailureManager.class),
                         new DefaultCheckpointPlanCalculator(
-                                graph.getJobID(),
+                                graph.getStreamID(),
                                 new ExecutionGraphCheckpointPlanCalculatorContext(graph),
                                 graph.getVerticesTopologically(),
                                 false),

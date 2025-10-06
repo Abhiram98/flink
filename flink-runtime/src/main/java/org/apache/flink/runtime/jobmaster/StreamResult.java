@@ -216,7 +216,7 @@ public class StreamResult implements Serializable {
      * @return JobResult of the given AccessExecutionGraph
      */
     public static StreamResult createFrom(AccessExecutionGraph accessExecutionGraph) {
-        final JobID jobId = accessExecutionGraph.getJobID();
+        final JobID jobId = accessExecutionGraph.getStreamID();
         final JobStatus jobStatus = accessExecutionGraph.getState();
 
         checkArgument(

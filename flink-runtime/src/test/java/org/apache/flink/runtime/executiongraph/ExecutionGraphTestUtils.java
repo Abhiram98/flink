@@ -497,7 +497,7 @@ public class ExecutionGraphTestUtils {
 
         // verify basic properties
         assertThat(originJobVertex.getParallelism()).isEqualTo(ejv.getParallelism());
-        assertThat(executionGraph.getJobID()).isEqualTo(ejv.getJobId());
+        assertThat(executionGraph.getStreamID()).isEqualTo(ejv.getJobId());
         assertThat(originJobVertex.getID()).isEqualTo(ejv.getJobVertexId());
         assertThat(originJobVertex).isEqualTo(ejv.getJobVertex());
 
@@ -519,7 +519,7 @@ public class ExecutionGraphTestUtils {
 
         int subtaskIndex = 0;
         for (ExecutionVertex ev : ejv.getTaskVertices()) {
-            assertThat(executionGraph.getJobID()).isEqualTo(ev.getJobId());
+            assertThat(executionGraph.getStreamID()).isEqualTo(ev.getJobId());
             assertThat(originJobVertex.getID()).isEqualTo(ev.getJobvertexId());
 
             assertThat(originJobVertex.getParallelism())

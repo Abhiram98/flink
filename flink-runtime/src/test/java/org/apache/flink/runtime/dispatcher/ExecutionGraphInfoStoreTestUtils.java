@@ -117,7 +117,7 @@ public class ExecutionGraphInfoStoreTestUtils {
                     expectedExecutionGraphInfo.getArchivedExecutionGraph();
             ArchivedExecutionGraph thatExecutionGraph = that.getArchivedExecutionGraph();
             return thisExecutionGraph.isStoppable() == thatExecutionGraph.isStoppable()
-                    && Objects.equals(thisExecutionGraph.getJobID(), thatExecutionGraph.getJobID())
+                    && Objects.equals(thisExecutionGraph.getStreamID(), thatExecutionGraph.getStreamID())
                     && Objects.equals(
                             thisExecutionGraph.getJobName(), thatExecutionGraph.getJobName())
                     && thisExecutionGraph.getState() == thatExecutionGraph.getState()

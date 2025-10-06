@@ -71,7 +71,7 @@ public class JobConfigHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString());
         return Collections.singleton(new ArchivedJson(path, json));
     }
 
@@ -86,6 +86,6 @@ public class JobConfigHandler
         }
 
         return new JobConfigInfo(
-                executionGraph.getJobID(), executionGraph.getJobName(), executionConfigInfo);
+                executionGraph.getStreamID(), executionGraph.getJobName(), executionConfigInfo);
     }
 }

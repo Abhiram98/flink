@@ -230,7 +230,7 @@ class CheckpointCoordinatorMasterHooksTest {
         final long checkpointId =
                 cc.getPendingCheckpoints().values().iterator().next().getCheckpointID();
         cc.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, checkpointId),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, checkpointId),
                 "Unknown location");
         assertThat(cc.getNumberOfPendingCheckpoints()).isZero();
 
@@ -485,7 +485,7 @@ class CheckpointCoordinatorMasterHooksTest {
                         0);
         Executor executor = Executors.directExecutor();
         return new CheckpointCoordinator(
-                graph.getJobID(),
+                graph.getStreamID(),
                 chkConfig,
                 Collections.emptyList(),
                 new StandaloneCheckpointIDCounter(),
@@ -496,7 +496,7 @@ class CheckpointCoordinatorMasterHooksTest {
                 testingScheduledExecutor,
                 new CheckpointFailureManager(0, NoOpFailJobCall.INSTANCE),
                 new DefaultCheckpointPlanCalculator(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         new ExecutionGraphCheckpointPlanCalculatorContext(graph),
                         graph.getVerticesTopologically(),
                         false),

@@ -206,7 +206,7 @@ public class JobDetails implements Serializable {
         lastChanged = Math.max(lastChanged, finished);
 
         return new JobDetails(
-                job.getJobID(),
+                job.getStreamID(),
                 job.getJobName(),
                 started,
                 finished,

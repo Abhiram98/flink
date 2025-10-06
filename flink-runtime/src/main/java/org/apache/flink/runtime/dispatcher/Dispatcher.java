@@ -1332,7 +1332,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         Preconditions.checkArgument(
                 terminalJobStatus.isTerminalState(),
                 "Job %s is in state %s which is not terminal.",
-                archivedExecutionGraph.getJobID(),
+                archivedExecutionGraph.getStreamID(),
                 terminalJobStatus);
 
         // the failureInfo contains the reason for why job was failed/suspended, but for
@@ -1345,13 +1345,13 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 && isFailureInfoRelatedToJobTermination) {
             log.info(
                     "Job {} reached terminal state {}.\n{}",
-                    archivedExecutionGraph.getJobID(),
+                    archivedExecutionGraph.getStreamID(),
                     terminalJobStatus,
                     archivedExecutionGraph.getFailureInfo().getExceptionAsString().trim());
         } else {
             log.info(
                     "Job {} reached terminal state {}.",
-                    archivedExecutionGraph.getJobID(),
+                    archivedExecutionGraph.getStreamID(),
                     terminalJobStatus);
         }
 
@@ -1417,7 +1417,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
      */
     private CompletableFuture<Void> createDirtyJobResultEntryIfMissingAsync(
             AccessExecutionGraph executionGraph, boolean hasCleanJobResultEntry) {
-        final JobID jobId = executionGraph.getJobID();
+        final JobID jobId = executionGraph.getStreamID();
         if (hasCleanJobResultEntry) {
             log.warn("Job {} is already marked as clean but clean up was triggered again.", jobId);
             return FutureUtils.completedVoidFuture();
@@ -1456,7 +1456,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             log.info(
                     "Could not store completed job {}({}).",
                     executionGraphInfo.getArchivedExecutionGraph().getJobName(),
-                    executionGraphInfo.getArchivedExecutionGraph().getJobID(),
+                    executionGraphInfo.getArchivedExecutionGraph().getStreamID(),
                     e);
         }
     }
@@ -1472,13 +1472,13 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                 log.info(
                                         "Could not archive completed job {}({}) to the history server.",
                                         executionGraphInfo.getArchivedExecutionGraph().getJobName(),
-                                        executionGraphInfo.getArchivedExecutionGraph().getJobID(),
+                                        executionGraphInfo.getArchivedExecutionGraph().getStreamID(),
                                         throwable);
                             }
                             return Acknowledge.get();
                         },
                         getMainThreadExecutor(
-                                executionGraphInfo.getArchivedExecutionGraph().getJobID()));
+                                executionGraphInfo.getArchivedExecutionGraph().getStreamID()));
     }
 
     private void jobMasterFailed(JobID jobId, Throwable cause) {

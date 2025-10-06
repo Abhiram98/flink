@@ -436,7 +436,7 @@ class CheckpointResourcesCleanupRunnerTest {
                 jobResult,
                 System.currentTimeMillis(),
                 actualExecutionGraph ->
-                        actualExecutionGraph.getJobID().equals(jobResult.getStreamId()));
+                        actualExecutionGraph.getStreamID().equals(jobResult.getStreamId()));
     }
 
     @Test

@@ -55,7 +55,7 @@ public class ExecutionGraphInfo implements Serializable {
     }
 
     public JobID getJobId() {
-        return executionGraph.getJobID();
+        return executionGraph.getStreamID();
     }
 
     public ArchivedExecutionGraph getArchivedExecutionGraph() {

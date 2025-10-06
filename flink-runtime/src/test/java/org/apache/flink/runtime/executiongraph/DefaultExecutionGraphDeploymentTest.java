@@ -105,8 +105,8 @@ class DefaultExecutionGraphDeploymentTest {
      *
      * @param eg the execution graph that was created
      */
-    protected void checkJobOffloaded(DefaultExecutionGraph eg) throws Exception {
-        assertThat(eg.getTaskDeploymentDescriptorFactory().getSerializedJobInformation())
+    protected void checkStreamOffloaded(DefaultExecutionGraph eg) throws Exception {
+        assertThat(eg.getTaskDeploymentDescriptorFactory().getSerializedStreamInformation())
                 .isInstanceOf(TaskDeploymentDescriptor.NonOffloaded.class);
     }
 
@@ -115,10 +115,10 @@ class DefaultExecutionGraphDeploymentTest {
      * offloading is used).
      *
      * @param eg the execution graph that was created
-     * @param jobVertexId job vertex ID
+     * @param streamVertexId job vertex ID
      */
-    protected void checkTaskOffloaded(ExecutionGraph eg, JobVertexID jobVertexId) throws Exception {
-        assertThat(eg.getJobVertex(jobVertexId).getTaskInformationOrBlobKey().isLeft()).isTrue();
+    protected void checkTaskOffloaded(ExecutionGraph eg, JobVertexID streamVertexId) throws Exception {
+        assertThat(eg.getJobVertex(streamVertexId).getTaskInformationOrBlobKey().isLeft()).isTrue();
     }
 
     @Test
@@ -163,7 +163,7 @@ class DefaultExecutionGraphDeploymentTest {
 
         eg.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
-        checkJobOffloaded(eg);
+        checkStreamOffloaded(eg);
 
         ExecutionJobVertex ejv = eg.getAllVertices().get(jid2);
         ExecutionVertex vertex = ejv.getTaskVertices()[3];
@@ -324,7 +324,7 @@ class DefaultExecutionGraphDeploymentTest {
         Map<String, Accumulator<?, ?>> accumulators = new HashMap<>();
         accumulators.put("acc", new IntCounter(4));
         AccumulatorSnapshot accumulatorSnapshot =
-                new AccumulatorSnapshot(graph.getJobID(), execution1.getAttemptId(), accumulators);
+                new AccumulatorSnapshot(graph.getStreamID(), execution1.getAttemptId(), accumulators);
 
         TaskExecutionState state =
                 new TaskExecutionState(
@@ -347,7 +347,7 @@ class DefaultExecutionGraphDeploymentTest {
         Map<String, Accumulator<?, ?>> accumulators2 = new HashMap<>();
         accumulators2.put("acc", new IntCounter(8));
         AccumulatorSnapshot accumulatorSnapshot2 =
-                new AccumulatorSnapshot(graph.getJobID(), execution2.getAttemptId(), accumulators2);
+                new AccumulatorSnapshot(graph.getStreamID(), execution2.getAttemptId(), accumulators2);
 
         TaskExecutionState state2 =
                 new TaskExecutionState(
@@ -461,7 +461,7 @@ class DefaultExecutionGraphDeploymentTest {
 
         final ExecutionGraph eg = scheduler.getExecutionGraph();
 
-        checkJobOffloaded((DefaultExecutionGraph) eg);
+        checkStreamOffloaded((DefaultExecutionGraph) eg);
 
         // schedule, this triggers mock deployment
         scheduler.startScheduling();
@@ -519,7 +519,7 @@ class DefaultExecutionGraphDeploymentTest {
                         .build();
         final ExecutionGraph eg = scheduler.getExecutionGraph();
 
-        checkJobOffloaded((DefaultExecutionGraph) eg);
+        checkStreamOffloaded((DefaultExecutionGraph) eg);
 
         // schedule, this triggers mock deployment
         scheduler.startScheduling();

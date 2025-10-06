@@ -1449,7 +1449,7 @@ public class AdaptiveScheduler
                         : null;
         LOG.info(
                 "Job {} reached terminal state {}.",
-                archivedExecutionGraph.getJobID(),
+                archivedExecutionGraph.getStreamID(),
                 archivedExecutionGraph.getState(),
                 optionalFailure);
 

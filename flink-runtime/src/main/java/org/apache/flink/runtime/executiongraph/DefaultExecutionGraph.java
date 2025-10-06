@@ -496,7 +496,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
         checkpointCoordinatorTimer =
                 MdcUtils.scopeToJob(
-                        getJobID(),
+                        this.getStreamID(),
                         Executors.newSingleThreadScheduledExecutor(
                                 new DispatcherThreadFactory(
                                         Thread.currentThread().getThreadGroup(),
@@ -551,7 +551,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     private CheckpointPlanCalculator createCheckpointPlanCalculator(
             boolean enableCheckpointsAfterTasksFinish) {
         return new DefaultCheckpointPlanCalculator(
-                getJobID(),
+                this.getStreamID(),
                 new ExecutionGraphCheckpointPlanCalculatorContext(this),
                 getVerticesTopologically(),
                 enableCheckpointsAfterTasksFinish);
@@ -610,8 +610,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         return jsonPlan;
     }
 
-    @Override
-    public JobID getJobID() {
+    public JobID getStreamID() {
         return jobInformation.getJobId();
     }
 
@@ -1060,7 +1059,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                         }
 
                         onTerminalState(state);
-                        LOG.info("Job {} has been suspended.", getJobID());
+                        LOG.info("Job {} has been suspended.", this.getStreamID());
                     });
         } else {
             throw new IllegalStateException(
@@ -1105,7 +1104,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 return executionConfig.archive();
             }
         } catch (IOException | ClassNotFoundException e) {
-            LOG.error("Couldn't create ArchivedExecutionConfig for job {} ", getJobID(), e);
+            LOG.error("Couldn't create ArchivedExecutionConfig for job {} ", this.getStreamID(), e);
         }
         return null;
     }
@@ -1156,7 +1155,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             LOG.info(
                     "Job {} ({}) switched from state {} to {}.",
                     getJobName(),
-                    getJobID(),
+                    this.getStreamID(),
                     current,
                     newState,
                     error);
@@ -1341,7 +1340,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     private void onTerminalState(JobStatus status) {
-        LOG.debug("ExecutionGraph {} reached terminal state {}.", getJobID(), status);
+        LOG.debug("ExecutionGraph {} reached terminal state {}.", this.getStreamID(), status);
 
         try {
             CheckpointCoordinator coord = this.checkpointCoordinator;
@@ -1583,7 +1582,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 LOG.debug("Received accumulator result for unknown execution {}.", execID);
             }
         } catch (Exception e) {
-            LOG.error("Cannot update accumulators for job {}.", getJobID(), e);
+            LOG.error("Cannot update accumulators for job {}.", this.getStreamID(), e);
         }
     }
 
@@ -1605,7 +1604,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
             for (JobStatusListener listener : jobStatusListeners) {
                 try {
-                    listener.jobStatusChanges(getJobID(), newState, timestamp);
+                    listener.jobStatusChanges(this.getStreamID(), newState, timestamp);
                 } catch (Throwable t) {
                     LOG.warn("Error while notifying JobStatusListener", t);
                 }
@@ -1617,7 +1616,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                     listener ->
                             listener.onEvent(
                                     new DefaultJobExecutionStatusEvent(
-                                            getJobID(), getJobName(), oldState, newState, cause)));
+                                            this.getStreamID(), getJobName(), oldState, newState, cause)));
         }
     }
 
@@ -1677,7 +1676,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         CompletableFuture.runAsync(
                 () -> {
                     for (PermanentBlobKey blobKey : blobKeys) {
-                        blobWriter.deletePermanent(getJobID(), blobKey);
+                        blobWriter.deletePermanent(this.getStreamID(), blobKey);
                     }
                 },
                 ioExecutor);

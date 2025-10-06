@@ -227,7 +227,7 @@ class CheckpointCoordinatorTriggeringTest {
                 checkpointCoordinator.triggerCheckpoint(true);
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 2),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 2),
                 TASK_MANAGER_LOCATION_INFO);
         checkpoint.get();
 
@@ -282,7 +282,7 @@ class CheckpointCoordinatorTriggeringTest {
                 checkpointCoordinator.triggerCheckpoint(true);
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 3),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 3),
                 TASK_MANAGER_LOCATION_INFO);
         checkpoint.get();
 
@@ -352,7 +352,7 @@ class CheckpointCoordinatorTriggeringTest {
 
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 1),
                 TASK_MANAGER_LOCATION_INFO);
         checkpoint.get();
         Assertions.assertThat(
@@ -394,7 +394,7 @@ class CheckpointCoordinatorTriggeringTest {
 
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 1),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 1),
                 TASK_MANAGER_LOCATION_INFO);
         checkpoint.get();
         Assertions.assertThat(
@@ -446,7 +446,7 @@ class CheckpointCoordinatorTriggeringTest {
                         org.apache.flink.core.execution.CheckpointType.INCREMENTAL);
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 3),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 3),
                 TASK_MANAGER_LOCATION_INFO);
         checkpoint.get();
 
@@ -482,7 +482,7 @@ class CheckpointCoordinatorTriggeringTest {
                         SavepointFormatType.CANONICAL);
         manuallyTriggeredScheduledExecutor.triggerAll();
         checkpointCoordinator.receiveAcknowledgeMessage(
-                new AcknowledgeCheckpoint(graph.getJobID(), attemptID, savepointId),
+                new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, savepointId),
                 TASK_MANAGER_LOCATION_INFO);
         return savepointFuture.get();
     }
@@ -555,7 +555,7 @@ class CheckpointCoordinatorTriggeringTest {
             assertThat(firstCallId).isOne();
 
             AcknowledgeCheckpoint ackMsg =
-                    new AcknowledgeCheckpoint(graph.getJobID(), attemptID, 1L);
+                    new AcknowledgeCheckpoint(graph.getStreamID(), attemptID, 1L);
 
             // tell the coordinator that the checkpoint is done
             final long ackTime = System.nanoTime();

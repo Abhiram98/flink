@@ -61,7 +61,7 @@ class Finished implements State {
             Throwable cause, CompletableFuture<Map<String, String>> failureLabels) {
         logger.debug(
                 "Ignore global failure because we already finished the job {}.",
-                archivedExecutionGraph.getJobID(),
+                archivedExecutionGraph.getStreamID(),
                 cause);
     }
 
