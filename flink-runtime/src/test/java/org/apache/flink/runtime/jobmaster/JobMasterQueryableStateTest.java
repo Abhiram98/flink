@@ -32,7 +32,7 @@ import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.rpc.TestingRpcService;
@@ -145,7 +145,7 @@ class JobMasterQueryableStateTest {
                                     jobMasterGateway
                                             .requestKvStateLocation(new JobID(), "unknown")
                                             .get())
-                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkJobNotFoundException.class));
+                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkStreamNotFoundException.class));
         }
     }
 
@@ -169,7 +169,7 @@ class JobMasterQueryableStateTest {
                                             new JobID(),
                                             new JobVertexID(),
                                             "any-name"))
-                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkJobNotFoundException.class));
+                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkStreamNotFoundException.class));
         }
     }
 

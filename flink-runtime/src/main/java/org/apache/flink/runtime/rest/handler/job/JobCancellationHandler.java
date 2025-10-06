@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -124,7 +124,7 @@ public class JobCancellationHandler
                                             "Job cancellation timed out.",
                                             HttpResponseStatus.REQUEST_TIMEOUT,
                                             error));
-                        } else if (error instanceof FlinkJobNotFoundException) {
+                        } else if (error instanceof FlinkStreamNotFoundException) {
                             throw new CompletionException(
                                     new RestHandlerException(
                                             "Job could not be found.",

@@ -74,7 +74,7 @@ import org.apache.flink.runtime.jobmaster.utils.TestingJobMasterGatewayBuilder;
 import org.apache.flink.runtime.leaderelection.LeaderElection;
 import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
@@ -767,7 +767,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         Assertions.assertThat(resultsFuture).isCompletedExceptionally();
 
         Assertions.assertThatThrownBy(resultsFuture::get)
-                .hasCauseInstanceOf(FlinkJobNotFoundException.class)
+                .hasCauseInstanceOf(FlinkStreamNotFoundException.class)
                 .hasMessageContaining("Could not find Flink job");
     }
 
@@ -785,7 +785,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
             dispatcherGateway.requestJob(new JobID(), TIMEOUT).get();
         } catch (ExecutionException e) {
             final Throwable throwable = ExceptionUtils.stripExecutionException(e);
-            assertThat(throwable, instanceOf(FlinkJobNotFoundException.class));
+            assertThat(throwable, instanceOf(FlinkStreamNotFoundException.class));
         }
     }
 
@@ -1454,7 +1454,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                         dispatcherGateway.updateJobResourceRequirements(
                                 jobId, JobResourceRequirements.empty()))
                 .eventuallyFailsWith(ExecutionException.class)
-                .withCauseInstanceOf(FlinkJobNotFoundException.class);
+                .withCauseInstanceOf(FlinkStreamNotFoundException.class);
 
         dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
         blockingJobMaster.waitForBlockingInit();

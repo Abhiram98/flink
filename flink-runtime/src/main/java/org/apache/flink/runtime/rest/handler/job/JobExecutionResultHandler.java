@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -88,7 +88,7 @@ public class JobExecutionResultHandler
     private static CompletionException propagateException(final Throwable throwable) {
         final Throwable cause = ExceptionUtils.stripCompletionException(throwable);
 
-        if (cause instanceof FlinkJobNotFoundException) {
+        if (cause instanceof FlinkStreamNotFoundException) {
             throw new CompletionException(
                     new RestHandlerException(
                             throwable.getMessage(), HttpResponseStatus.NOT_FOUND, throwable));

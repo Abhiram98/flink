@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -93,7 +93,7 @@ public abstract class AbstractExecutionGraphHandler<
                 .exceptionally(
                         throwable -> {
                             throwable = ExceptionUtils.stripCompletionException(throwable);
-                            if (throwable instanceof FlinkJobNotFoundException) {
+                            if (throwable instanceof FlinkStreamNotFoundException) {
                                 throw new CompletionException(
                                         new NotFoundException(
                                                 String.format("Job %s not found", jobId),

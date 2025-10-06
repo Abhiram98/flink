@@ -69,7 +69,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.jobmaster.factories.DefaultJobManagerJobMetricGroupFactory;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
@@ -821,7 +821,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         }
 
         log.debug("Dispatcher is unable to cancel job {}: not found", jobId);
-        return FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId));
+        return FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId));
     }
 
     @Override
@@ -889,7 +889,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                     executionGraphInfoStore.getAvailableJobDetails(jobId);
                             if (jobDetails == null) {
                                 return FutureUtils.completedExceptionally(
-                                        new FlinkJobNotFoundException(jobId));
+                                        new FlinkStreamNotFoundException(jobId));
                             } else {
                                 return CompletableFuture.completedFuture(jobDetails.getStatus());
                             }
@@ -901,7 +901,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             JobID jobId, Duration timeout) {
         Optional<JobManagerRunner> maybeJob = getJobManagerRunner(jobId);
         return maybeJob.map(job -> job.requestJob(timeout))
-                .orElse(FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId)))
+                .orElse(FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId)))
                 .exceptionally(t -> getExecutionGraphInfoFromStore(t, jobId));
     }
 
@@ -933,7 +933,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             final ExecutionGraphInfo executionGraphInfo = executionGraphInfoStore.get(jobId);
 
             if (executionGraphInfo == null) {
-                return FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId));
+                return FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId));
             } else {
                 return CompletableFuture.completedFuture(
                         JobResult.createFrom(executionGraphInfo.getArchivedExecutionGraph()));
@@ -1491,7 +1491,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     /** Ensures that the JobMasterGateway is available. */
     private CompletableFuture<JobMasterGateway> getJobMasterGateway(JobID jobId) {
         if (!jobManagerRunnerRegistry.isRegistered(jobId)) {
-            return FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId));
+            return FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId));
         }
 
         final JobManagerRunner job = jobManagerRunnerRegistry.get(jobId);

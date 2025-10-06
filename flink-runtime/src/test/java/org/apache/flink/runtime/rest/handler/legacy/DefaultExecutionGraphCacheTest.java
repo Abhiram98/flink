@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.handler.legacy;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -139,7 +139,7 @@ class DefaultExecutionGraphCacheTest {
                 createCountingRestfulGateway(
                         expectedJobId,
                         FutureUtils.completedExceptionally(
-                                new FlinkJobNotFoundException(expectedJobId)),
+                                new FlinkStreamNotFoundException(expectedJobId)),
                         CompletableFuture.completedFuture(expectedExecutionGraphInfo));
 
         try (ExecutionGraphCache executionGraphCache =

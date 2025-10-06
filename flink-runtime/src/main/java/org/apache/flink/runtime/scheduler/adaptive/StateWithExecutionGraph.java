@@ -44,7 +44,7 @@ import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -265,7 +265,7 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
-            throws FlinkJobNotFoundException, UnknownKvStateLocation {
+            throws FlinkStreamNotFoundException, UnknownKvStateLocation {
         return kvStateHandler.requestKvStateLocation(jobId, registrationName);
     }
 
@@ -276,7 +276,7 @@ abstract class StateWithExecutionGraph implements State {
             String registrationName,
             KvStateID kvStateId,
             InetSocketAddress kvStateServerAddress)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         kvStateHandler.notifyKvStateRegistered(
                 jobId,
                 jobVertexId,
@@ -291,7 +291,7 @@ abstract class StateWithExecutionGraph implements State {
             JobVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         kvStateHandler.notifyKvStateUnregistered(
                 jobId, jobVertexId, keyGroupRange, registrationName);
     }

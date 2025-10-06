@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsTracker;
 import org.apache.flink.runtime.checkpoint.DefaultCheckpointStatsTracker;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -175,7 +175,7 @@ class AbstractCheckpointStatsHandlerTest {
                 () -> CompletableFuture.completedFuture(null);
         CheckpointStatsSnapshot checkpointStatsSnapshot1 = getTestCheckpointStatsSnapshot();
         CompletableFuture<CheckpointStatsSnapshot> failedFuture = new CompletableFuture<>();
-        failedFuture.completeExceptionally(new FlinkJobNotFoundException(JOB_ID));
+        failedFuture.completeExceptionally(new FlinkStreamNotFoundException(JOB_ID));
 
         try (RecordingCheckpointStatsHandler checkpointStatsHandler =
                 new RecordingCheckpointStatsHandler(

@@ -85,7 +85,7 @@ import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlot;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -844,7 +844,7 @@ public class AdaptiveScheduler
 
     @Override
     public KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
-            throws UnknownKvStateLocation, FlinkJobNotFoundException {
+            throws UnknownKvStateLocation, FlinkStreamNotFoundException {
         final Optional<StateWithExecutionGraph> asOptional =
                 state.as(StateWithExecutionGraph.class);
 
@@ -863,7 +863,7 @@ public class AdaptiveScheduler
             String registrationName,
             KvStateID kvStateId,
             InetSocketAddress kvStateServerAddress)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         state.tryRun(
                 StateWithExecutionGraph.class,
                 stateWithExecutionGraph ->
@@ -883,7 +883,7 @@ public class AdaptiveScheduler
             JobVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         state.tryRun(
                 StateWithExecutionGraph.class,
                 stateWithExecutionGraph ->

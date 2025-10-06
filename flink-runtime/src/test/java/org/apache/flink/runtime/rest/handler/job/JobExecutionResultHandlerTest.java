@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobmaster.JobResult;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
@@ -127,7 +127,7 @@ class JobExecutionResultHandlerTest {
                         .setRequestJobStatusFunction(
                                 jobId ->
                                         FutureUtils.completedExceptionally(
-                                                new FlinkJobNotFoundException(jobId)))
+                                                new FlinkStreamNotFoundException(jobId)))
                         .build();
 
         assertThatFuture(

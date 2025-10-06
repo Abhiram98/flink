@@ -37,7 +37,7 @@ import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguratio
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.jobmaster.JobResult;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
 import org.apache.flink.runtime.minicluster.TestingMiniClusterConfiguration;
@@ -184,7 +184,7 @@ public class JobDispatcherITCase {
                     try {
                         return cluster.getJobStatus(jobId).get() == status;
                     } catch (ExecutionException e) {
-                        if (ExceptionUtils.findThrowable(e, FlinkJobNotFoundException.class)
+                        if (ExceptionUtils.findThrowable(e, FlinkStreamNotFoundException.class)
                                 .isPresent()) {
                             // job may not be yet submitted
                             return false;

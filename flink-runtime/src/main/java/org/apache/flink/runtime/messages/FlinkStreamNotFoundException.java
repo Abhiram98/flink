@@ -22,11 +22,11 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.util.FlinkException;
 
 /** Exception indicating that we could not find a Flink job with the given job ID. */
-public class FlinkJobNotFoundException extends FlinkException {
+public class FlinkStreamNotFoundException extends FlinkException {
 
     private static final long serialVersionUID = 2294698055059659025L;
 
-    public FlinkJobNotFoundException(JobID jobId) {
-        super("Could not find Flink job (" + jobId + ')');
+    public FlinkStreamNotFoundException(JobID streamId) {
+        super("Could not find Flink job (" + streamId + ')');
     }
 }

@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
 import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
 import org.apache.flink.runtime.metrics.dump.MetricQueryService;
@@ -69,12 +69,12 @@ public interface RestfulGateway extends RpcGateway {
 
     /**
      * Requests the {@link ArchivedExecutionGraph} for the given jobId. If there is no such graph,
-     * then the future is completed with a {@link FlinkJobNotFoundException}.
+     * then the future is completed with a {@link FlinkStreamNotFoundException}.
      *
      * @param jobId identifying the job whose {@link ArchivedExecutionGraph} is requested
      * @param timeout for the asynchronous operation
      * @return Future containing the {@link ArchivedExecutionGraph} for the given jobId, otherwise
-     *     {@link FlinkJobNotFoundException}
+     *     {@link FlinkStreamNotFoundException}
      */
     default CompletableFuture<ArchivedExecutionGraph> requestJob(
             JobID jobId, @RpcTimeout Duration timeout) {
@@ -85,12 +85,12 @@ public interface RestfulGateway extends RpcGateway {
     /**
      * Requests the {@link ExecutionGraphInfo} containing additional information besides the {@link
      * ArchivedExecutionGraph}. If there is no such graph, then the future is completed with a
-     * {@link FlinkJobNotFoundException}.
+     * {@link FlinkStreamNotFoundException}.
      *
      * @param jobId identifying the job whose {@link ExecutionGraphInfo} is requested
      * @param timeout for the asynchronous operation
      * @return Future containing the {@link ExecutionGraphInfo} for the given jobId, otherwise
-     *     {@link FlinkJobNotFoundException}
+     *     {@link FlinkStreamNotFoundException}
      */
     CompletableFuture<ExecutionGraphInfo> requestExecutionGraphInfo(
             JobID jobId, @RpcTimeout Duration timeout);

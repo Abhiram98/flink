@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.util.FileUtils;
@@ -398,11 +398,11 @@ public class CommonTestUtils {
 
     /**
      * @return the path as {@link java.net.URI} to the latest checkpoint.
-     * @throws FlinkJobNotFoundException if job not found
+     * @throws FlinkStreamNotFoundException if job not found
      */
     public static Optional<String> getLatestCompletedCheckpointPath(
             JobID jobID, MiniCluster cluster)
-            throws InterruptedException, ExecutionException, FlinkJobNotFoundException {
+            throws InterruptedException, ExecutionException, FlinkStreamNotFoundException {
         return Optional.ofNullable(
                         cluster.getExecutionGraph(jobID).get().getCheckpointStatsSnapshot())
                 .flatMap(

@@ -42,7 +42,7 @@ import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -110,7 +110,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
     // ------------------------------------------------------------------------------------
 
     KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
-            throws UnknownKvStateLocation, FlinkJobNotFoundException;
+            throws UnknownKvStateLocation, FlinkStreamNotFoundException;
 
     void notifyKvStateRegistered(
             JobID jobId,
@@ -119,14 +119,14 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
             String registrationName,
             KvStateID kvStateId,
             InetSocketAddress kvStateServerAddress)
-            throws FlinkJobNotFoundException;
+            throws FlinkStreamNotFoundException;
 
     void notifyKvStateUnregistered(
             JobID jobId,
             JobVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
-            throws FlinkJobNotFoundException;
+            throws FlinkStreamNotFoundException;
 
     // ------------------------------------------------------------------------
 

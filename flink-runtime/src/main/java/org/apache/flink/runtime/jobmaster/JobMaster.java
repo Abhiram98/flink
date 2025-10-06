@@ -69,7 +69,7 @@ import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalListener;
 import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalService;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -663,7 +663,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         try {
             return CompletableFuture.completedFuture(
                     schedulerNG.requestKvStateLocation(jobId, registrationName));
-        } catch (UnknownKvStateLocation | FlinkJobNotFoundException e) {
+        } catch (UnknownKvStateLocation | FlinkStreamNotFoundException e) {
             log.info("Error while request key-value state location", e);
             return FutureUtils.completedExceptionally(e);
         }
@@ -687,7 +687,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
                     kvStateId,
                     kvStateServerAddress);
             return CompletableFuture.completedFuture(Acknowledge.get());
-        } catch (FlinkJobNotFoundException e) {
+        } catch (FlinkStreamNotFoundException e) {
             log.info("Error while receiving notification about key-value state registration", e);
             return FutureUtils.completedExceptionally(e);
         }
@@ -703,7 +703,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
             schedulerNG.notifyKvStateUnregistered(
                     jobId, jobVertexId, keyGroupRange, registrationName);
             return CompletableFuture.completedFuture(Acknowledge.get());
-        } catch (FlinkJobNotFoundException e) {
+        } catch (FlinkStreamNotFoundException e) {
             log.info("Error while receiving notification about key-value state de-registration", e);
             return FutureUtils.completedExceptionally(e);
         }
