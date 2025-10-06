@@ -37,7 +37,7 @@ import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.DefaultCheckpointStatsTracker;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingCleanupRunnerFactory;
 import org.apache.flink.runtime.execution.librarycache.LibraryCacheManager;
@@ -363,7 +363,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
             acknowledgeFuture.get();
             fail("job submission should have failed");
         } catch (ExecutionException e) {
-            assertTrue(ExceptionUtils.findThrowable(e, JobSubmissionException.class).isPresent());
+            assertTrue(ExceptionUtils.findThrowable(e, StreamSubmissionException.class).isPresent());
         }
     }
 

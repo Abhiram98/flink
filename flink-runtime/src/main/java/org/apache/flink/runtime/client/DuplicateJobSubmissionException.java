@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 /**
  * Exception which is returned upon job submission if the submitted job is currently being executed.
  */
-public class DuplicateJobSubmissionException extends JobSubmissionException {
+public class DuplicateJobSubmissionException extends StreamSubmissionException {
 
     private static final long serialVersionUID = 2917336585664347210L;
 

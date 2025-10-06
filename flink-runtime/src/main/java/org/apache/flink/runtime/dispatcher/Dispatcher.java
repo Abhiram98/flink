@@ -41,7 +41,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpoint;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.dispatcher.cleanup.CleanupRunnerFactory;
@@ -544,7 +544,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                         DuplicateJobSubmissionException.of(jobID));
                             } else if (executionPlan.isPartialResourceConfigured()) {
                                 return FutureUtils.completedExceptionally(
-                                        new JobSubmissionException(
+                                        new StreamSubmissionException(
                                                 jobID,
                                                 "Currently jobs is not supported if parts of the vertices "
                                                         + "have resources configured. The limitation will be "
@@ -628,7 +628,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                                 terminationThrowable);
                                 log.error("Failed to submit job {}.", jobId, strippedThrowable);
                                 throw new CompletionException(
-                                        new JobSubmissionException(
+                                        new StreamSubmissionException(
                                                 jobId, "Failed to submit job.", strippedThrowable));
                             },
                             getMainThreadExecutor(jobId));

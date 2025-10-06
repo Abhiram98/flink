@@ -33,7 +33,7 @@ import org.apache.flink.runtime.checkpoint.CompletedCheckpointStore;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.checkpoint.hooks.MasterHooks;
 import org.apache.flink.runtime.client.JobExecutionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategyFactoryLoader;
@@ -191,7 +191,7 @@ public class DefaultExecutionGraphBuilder {
         for (StreamVertex vertex : jobGraph.getVertices()) {
             String executableClass = vertex.getInvokableClassName();
             if (executableClass == null || executableClass.isEmpty()) {
-                throw new JobSubmissionException(
+                throw new StreamSubmissionException(
                         jobId,
                         "The vertex "
                                 + vertex.getID()

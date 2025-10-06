@@ -21,15 +21,15 @@ package org.apache.flink.runtime.client;
 import org.apache.flink.api.common.JobID;
 
 /** This exception denotes an error while submitting a job to the JobManager. */
-public class JobSubmissionException extends JobExecutionException {
+public class StreamSubmissionException extends JobExecutionException {
 
     private static final long serialVersionUID = 2818087325120827526L;
 
-    public JobSubmissionException(final JobID jobID, final String msg, final Throwable cause) {
-        super(jobID, msg, cause);
+    public StreamSubmissionException(final JobID streamId, final String msg, final Throwable cause) {
+        super(streamId, msg, cause);
     }
 
-    public JobSubmissionException(final JobID jobID, final String msg) {
-        super(jobID, msg);
+    public StreamSubmissionException(final JobID streamId, final String msg) {
+        super(streamId, msg);
     }
 }

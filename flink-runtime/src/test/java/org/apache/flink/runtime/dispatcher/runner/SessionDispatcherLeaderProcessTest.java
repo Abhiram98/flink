@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
@@ -702,7 +702,7 @@ class SessionDispatcherLeaderProcessTest {
                         .setSubmitFunction(
                                 jobGraph ->
                                         FutureUtils.completedExceptionally(
-                                                new JobSubmissionException(
+                                                new StreamSubmissionException(
                                                         jobGraph.getJobID(), "test exception")))
                         .build();
 
@@ -716,7 +716,7 @@ class SessionDispatcherLeaderProcessTest {
 
         assertThat(actualCause)
                 .extracting(FlinkAssertions::chainOfCauses, FlinkAssertions.STREAM_THROWABLE)
-                .hasAtLeastOneElementOfType(JobSubmissionException.class);
+                .hasAtLeastOneElementOfType(StreamSubmissionException.class);
 
         fatalErrorHandler.clearError();
     }

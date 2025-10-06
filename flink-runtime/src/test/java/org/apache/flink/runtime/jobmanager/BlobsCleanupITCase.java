@@ -28,7 +28,7 @@ import org.apache.flink.configuration.UnmodifiableConfiguration;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
@@ -188,7 +188,7 @@ public class BlobsCleanupITCase extends TestLogger {
                 fail("Expected job submission failure.");
             } catch (ExecutionException e) {
                 assertThat(
-                        ExceptionUtils.findThrowable(e, JobSubmissionException.class).isPresent(),
+                        ExceptionUtils.findThrowable(e, StreamSubmissionException.class).isPresent(),
                         is(true));
             }
         } else {

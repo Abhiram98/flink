@@ -27,7 +27,7 @@ import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.blob.BlobUtils;
 import org.apache.flink.runtime.blob.TestingBlobStoreBuilder;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingResourceCleanerFactory;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
@@ -276,7 +276,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
             submissionFuture.get();
             fail("Job submission was expected to fail.");
         } catch (ExecutionException ee) {
-            assertThat(ee, containsCause(JobSubmissionException.class));
+            assertThat(ee, containsCause(StreamSubmissionException.class));
         }
 
         assertGlobalCleanupTriggered(jobId);
