@@ -68,7 +68,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
 
     private static final long TIMEOUT = 5000L;
 
-    private ExecutionPlan jobGraph;
+    private ExecutionPlan executionPlan;
     private JobVertex v1;
     private JobVertex v2;
     private JobVertex v3;
@@ -76,7 +76,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
 
     @Before
     public void setUp() {
-        buildJobGraphWithBlockingEdgeWithinRegion();
+        buildExecutionPlanWithBlockingEdgeWithinRegion();
     }
 
     /**
@@ -93,7 +93,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
      *                         +----+
      * </pre>
      */
-    private void buildJobGraphWithBlockingEdgeWithinRegion() {
+    private void buildExecutionPlanWithBlockingEdgeWithinRegion() {
         v1 = new JobVertex("v1");
         v1.setInvokableClass(AbstractInvokable.class);
         v1.setParallelism(1);
@@ -119,7 +119,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
         v4.connectNewDataSetAsInput(
                 v3, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2, v3, v4);
+        executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2, v3, v4);
     }
 
     /**
@@ -133,7 +133,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
