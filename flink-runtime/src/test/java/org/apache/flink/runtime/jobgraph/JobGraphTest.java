@@ -354,14 +354,14 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void checkpointingIsDisabledByDefaultForStreamingJobGraph() {
-        final ExecutionPlan jobGraph = JobGraphBuilder.newStreamingJobGraphBuilder().build();
+        final ExecutionPlan jobGraph = ExecutionPlanBuilder.newStreamingJobGraphBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
 
     @Test
     public void checkpointingIsDisabledByDefaultForBatchJobGraph() {
-        final ExecutionPlan jobGraph = JobGraphBuilder.newBatchJobGraphBuilder().build();
+        final ExecutionPlan jobGraph = ExecutionPlanBuilder.newBatchExecutionPlanBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
@@ -369,7 +369,7 @@ public class JobGraphTest extends TestLogger {
     @Test
     public void checkpointingIsEnabledIfIntervalIsqAndLegal() {
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(createCheckpointSettingsWithInterval(10))
                         .build();
 
@@ -379,7 +379,7 @@ public class JobGraphTest extends TestLogger {
     @Test
     public void checkpointingIsDisabledIfIntervalIsMaxValue() {
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(
                                 createCheckpointSettingsWithInterval(Long.MAX_VALUE))
                         .build();
@@ -420,7 +420,7 @@ public class JobGraphTest extends TestLogger {
         v4.setSlotSharingGroup(group2);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();
 
@@ -440,7 +440,7 @@ public class JobGraphTest extends TestLogger {
         v1.setStrictlyCoLocatedWith(v2);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();
 

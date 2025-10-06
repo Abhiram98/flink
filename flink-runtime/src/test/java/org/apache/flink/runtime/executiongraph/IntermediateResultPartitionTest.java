@@ -264,7 +264,7 @@ public class IntermediateResultPartitionTest {
                 v1, distributionPattern, ResultPartitionType.BLOCKING, dataSetId, false);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder()
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3))
                         .build();
 

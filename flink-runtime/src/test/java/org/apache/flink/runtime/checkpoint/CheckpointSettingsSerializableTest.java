@@ -23,7 +23,7 @@ import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
@@ -88,7 +88,7 @@ class CheckpointSettingsSerializableTest {
                         serHooks);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(checkpointingSettings)
                         .build();
 

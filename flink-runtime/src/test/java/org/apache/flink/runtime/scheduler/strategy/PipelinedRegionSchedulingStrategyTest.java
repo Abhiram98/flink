@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuild
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.testutils.TestingUtils;
@@ -235,7 +235,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -299,7 +299,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -372,7 +372,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -436,7 +436,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -469,7 +469,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -514,7 +514,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -570,7 +570,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
@@ -606,7 +606,7 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

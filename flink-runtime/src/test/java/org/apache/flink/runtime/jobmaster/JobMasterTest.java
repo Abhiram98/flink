@@ -1070,7 +1070,7 @@ class JobMasterTest {
         source.setInvokableClass(AbstractInvokable.class);
 
         final ExecutionPlan inputSplitJobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(source).build();
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(source).build();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(inputSplitJobGraph, 100, 0L);
 
         try (final JobMaster jobMaster =

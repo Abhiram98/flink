@@ -21,7 +21,7 @@ package org.apache.flink.runtime.entrypoint.component;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.UnmodifiableConfiguration;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.FlinkException;
@@ -69,7 +69,7 @@ public class FileJobGraphRetrieverTest {
         final JobVertex source = new JobVertex("source");
         final JobVertex target = new JobVertex("target");
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(source, target))
                         .addClasspaths(Collections.singletonList(jarFileInJobGraph.toUri().toURL()))
                         .build();

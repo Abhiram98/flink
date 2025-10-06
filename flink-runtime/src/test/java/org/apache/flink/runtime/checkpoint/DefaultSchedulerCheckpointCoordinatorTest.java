@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -201,7 +201,7 @@ class DefaultSchedulerCheckpointCoordinatorTest {
                 new JobCheckpointingSettings(chkConfig, null);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertex(jobVertex)
                         .setJobCheckpointingSettings(checkpointingSettings)
                         .build();

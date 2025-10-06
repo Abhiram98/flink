@@ -22,7 +22,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -96,7 +96,7 @@ class JobRecoveryITCase {
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
         ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(sender, receiver))
                         .setJobName(getClass().getSimpleName())
                         .build();

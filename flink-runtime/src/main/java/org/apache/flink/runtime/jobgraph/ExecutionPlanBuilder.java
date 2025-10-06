@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Builder for the {@link ExecutionPlan}. */
-public class JobGraphBuilder {
+public class ExecutionPlanBuilder {
 
     private final JobType jobType;
 
@@ -60,59 +60,59 @@ public class JobGraphBuilder {
 
     @Nullable private Configuration jobConfiguration = null;
 
-    private JobGraphBuilder(JobType jobType) {
+    private ExecutionPlanBuilder(JobType jobType) {
         this.jobType = jobType;
     }
 
-    public JobGraphBuilder setJobName(String jobName) {
+    public ExecutionPlanBuilder setJobName(String jobName) {
         this.jobName = jobName;
         return this;
     }
 
-    public JobGraphBuilder addJobVertices(Collection<? extends JobVertex> jobVerticesToAdd) {
+    public ExecutionPlanBuilder addJobVertices(Collection<? extends JobVertex> jobVerticesToAdd) {
         jobVertices.addAll(jobVerticesToAdd);
         return this;
     }
 
-    public JobGraphBuilder addJobVertex(JobVertex jobVertex) {
+    public ExecutionPlanBuilder addJobVertex(JobVertex jobVertex) {
         return addJobVertices(Collections.singleton(jobVertex));
     }
 
-    public JobGraphBuilder setJobId(JobID jobId) {
+    public ExecutionPlanBuilder setJobId(JobID jobId) {
         this.jobId = jobId;
         return this;
     }
 
-    public JobGraphBuilder setExecutionConfig(ExecutionConfig newExecutionConfig)
+    public ExecutionPlanBuilder setExecutionConfig(ExecutionConfig newExecutionConfig)
             throws IOException {
         this.serializedExecutionConfig = new SerializedValue<ExecutionConfig>(newExecutionConfig);
         return this;
     }
 
-    public JobGraphBuilder addUserArtifacts(
+    public ExecutionPlanBuilder addUserArtifacts(
             Map<String, DistributedCache.DistributedCacheEntry> newUserArtifacts) {
         userArtifacts.putAll(newUserArtifacts);
         return this;
     }
 
-    public JobGraphBuilder setJobCheckpointingSettings(
+    public ExecutionPlanBuilder setJobCheckpointingSettings(
             JobCheckpointingSettings newJobCheckpointingSettings) {
         this.jobCheckpointingSettings = newJobCheckpointingSettings;
         return this;
     }
 
-    public JobGraphBuilder setSavepointRestoreSettings(
+    public ExecutionPlanBuilder setSavepointRestoreSettings(
             SavepointRestoreSettings newSavepointRestoreSettings) {
         savepointRestoreSettings = newSavepointRestoreSettings;
         return this;
     }
 
-    public JobGraphBuilder addClasspaths(Collection<URL> additionalClasspaths) {
+    public ExecutionPlanBuilder addClasspaths(Collection<URL> additionalClasspaths) {
         classpaths.addAll(additionalClasspaths);
         return this;
     }
 
-    public JobGraphBuilder setJobConfiguration(Configuration jobConfiguration) {
+    public ExecutionPlanBuilder setJobConfiguration(Configuration jobConfiguration) {
         this.jobConfiguration = jobConfiguration;
         return this;
     }
@@ -151,11 +151,11 @@ public class JobGraphBuilder {
         return jobGraph;
     }
 
-    public static JobGraphBuilder newStreamingJobGraphBuilder() {
-        return new JobGraphBuilder(JobType.STREAMING);
+    public static ExecutionPlanBuilder newStreamingJobGraphBuilder() {
+        return new ExecutionPlanBuilder(JobType.STREAMING);
     }
 
-    public static JobGraphBuilder newBatchJobGraphBuilder() {
-        return new JobGraphBuilder(JobType.BATCH);
+    public static ExecutionPlanBuilder newBatchExecutionPlanBuilder() {
+        return new ExecutionPlanBuilder(JobType.BATCH);
     }
 }

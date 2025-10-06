@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobmanager;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.testutils.EachCallbackWrapper;
 import org.apache.flink.runtime.dispatcher.NoOpExecutionPlanListener;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.persistence.RetrievableStateStorageHelper;
@@ -357,7 +357,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
         final JobVertex jobVertex = new JobVertex("Test JobVertex");
         jobVertex.setParallelism(1);
 
-        return JobGraphBuilder.newStreamingJobGraphBuilder()
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .setJobName(jobName)
                 .setJobId(jobId)
                 .addJobVertex(jobVertex)

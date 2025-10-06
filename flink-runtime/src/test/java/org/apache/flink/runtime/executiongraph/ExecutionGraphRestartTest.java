@@ -27,7 +27,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -418,7 +418,7 @@ class ExecutionGraphRestartTest {
         JobVertex vertex =
                 ExecutionGraphTestUtils.createJobVertex("Test Vertex", 1, NoOpInvokable.class);
         ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 jobGraph, Integer.MAX_VALUE, Integer.MAX_VALUE);
         return jobGraph;

@@ -245,7 +245,7 @@ class TaskDeploymentDescriptorFactoryTest {
             throws JobException, JobExecutionException {
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder()
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)
                         .build();

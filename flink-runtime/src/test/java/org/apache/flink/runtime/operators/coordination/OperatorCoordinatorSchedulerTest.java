@@ -676,7 +676,7 @@ class OperatorCoordinatorSchedulerTest {
         vertex.setParallelism(2);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
 
         SchedulerTestingUtils.enableCheckpointing(jobGraph);
         if (jobGraphPreProcessing != null) {

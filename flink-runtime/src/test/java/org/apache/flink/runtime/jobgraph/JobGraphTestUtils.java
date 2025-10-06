@@ -26,7 +26,7 @@ import java.util.Arrays;
 public class JobGraphTestUtils {
 
     public static ExecutionPlan emptyJobGraph() {
-        return JobGraphBuilder.newStreamingJobGraphBuilder().build();
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder().build();
     }
 
     public static ExecutionPlan singleNoOpJobGraph() {
@@ -34,17 +34,17 @@ public class JobGraphTestUtils {
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
 
-        return JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
     }
 
     public static ExecutionPlan streamingJobGraph(JobVertex... jobVertices) {
-        return JobGraphBuilder.newStreamingJobGraphBuilder()
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
     public static ExecutionPlan batchJobGraph(JobVertex... jobVertices) {
-        return JobGraphBuilder.newBatchJobGraphBuilder()
+        return ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }

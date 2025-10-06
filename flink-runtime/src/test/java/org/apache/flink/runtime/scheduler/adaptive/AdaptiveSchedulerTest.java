@@ -2427,7 +2427,7 @@ public class AdaptiveSchedulerTest {
                 onFailedCheckpointCount);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Collections.singletonList(JOB_VERTEX))
                         .setJobCheckpointingSettings(
                                 new JobCheckpointingSettings(

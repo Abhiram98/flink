@@ -582,7 +582,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         DispatcherGateway dispatcherGateway = dispatcher.getSelfGateway(DispatcherGateway.class);
 
         final ExecutionPlan emptyJobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder().setJobId(jobId).build();
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder().setJobId(jobId).build();
 
         dispatcherGateway.submitJob(emptyJobGraph, TIMEOUT).get();
 

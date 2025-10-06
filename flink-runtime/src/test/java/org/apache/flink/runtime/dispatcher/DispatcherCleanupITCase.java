@@ -33,7 +33,7 @@ import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -388,7 +388,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
                         .build();
         final JobCheckpointingSettings checkpointingSettings =
                 new JobCheckpointingSettings(checkpointCoordinatorConfiguration, null);
-        return JobGraphBuilder.newStreamingJobGraphBuilder()
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .addJobVertex(firstVertex)
                 .addJobVertex(secondVertex)
                 .setJobCheckpointingSettings(checkpointingSettings)

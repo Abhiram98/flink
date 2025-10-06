@@ -31,7 +31,7 @@ import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.client.JobSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -251,7 +251,7 @@ public class BlobsCleanupITCase extends TestLogger {
         }
         source.setParallelism(numTasks);
 
-        return JobGraphBuilder.newStreamingJobGraphBuilder()
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .setJobId(new JobID(0, testCase.ordinal()))
                 .addJobVertex(source)
                 .build();

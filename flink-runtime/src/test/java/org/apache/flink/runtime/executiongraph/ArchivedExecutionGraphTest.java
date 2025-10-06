@@ -108,7 +108,7 @@ public class ArchivedExecutionGraphTest {
                 new JobCheckpointingSettings(chkConfig, null);
 
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(asList(v1, v2))
                         .setJobCheckpointingSettings(checkpointingSettings)
                         .setExecutionConfig(config)

@@ -419,7 +419,7 @@ public class SchedulerTestingUtils {
             Configuration jobMasterConfiguration)
             throws Exception {
         final ExecutionPlan jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder()
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)
                         .build();
