@@ -1903,7 +1903,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -2129,7 +2129,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(2);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         final LocalUnresolvedTaskManagerLocation taskManagerLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -2516,7 +2516,7 @@ class JobMasterTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        return ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
+        return ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
     }
 
     private File createSavepoint(long savepointId) throws IOException {

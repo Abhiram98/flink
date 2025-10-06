@@ -98,7 +98,7 @@ class CheckpointSettingsSerializableTest {
 
         final ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(copy)
+                        .setExecutionPlan(copy)
                         .setUserClassLoader(classLoader)
                         .build(EXECUTOR_EXTENSION.getExecutor());
 

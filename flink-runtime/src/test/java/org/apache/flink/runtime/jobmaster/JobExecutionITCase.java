@@ -90,6 +90,6 @@ class JobExecutionITCase {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(sender, receiver);
     }
 }

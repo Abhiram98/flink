@@ -100,7 +100,7 @@ class DefaultOperatorCoordinatorHandlerTest {
 
     private DefaultExecutionGraph createDynamicGraph(JobVertex... jobVertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(new ExecutionPlan(new JobID(), "TestJob", jobVertices))
+                .setExecutionPlan(new ExecutionPlan(new JobID(), "TestJob", jobVertices))
                 .buildDynamicGraph(EXECUTOR_EXTENSION.getExecutor());
     }
 }

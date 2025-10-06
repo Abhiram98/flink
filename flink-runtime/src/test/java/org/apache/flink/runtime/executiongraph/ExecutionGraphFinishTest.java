@@ -49,7 +49,7 @@ class ExecutionGraphFinishTest {
     void testJobFinishes() throws Exception {
 
         ExecutionPlan jobGraph =
-                ExecutionPlanTestUtils.streamingJobGraph(
+                ExecutionPlanTestUtils.streamingExecutionPlan(
                         ExecutionGraphTestUtils.createJobVertex("Task1", 2, NoOpInvokable.class),
                         ExecutionGraphTestUtils.createJobVertex("Task2", 2, NoOpInvokable.class));
 

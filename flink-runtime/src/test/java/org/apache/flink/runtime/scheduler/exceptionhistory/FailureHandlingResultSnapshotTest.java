@@ -76,7 +76,7 @@ class FailureHandlingResultSnapshotTest {
 
         executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
     }

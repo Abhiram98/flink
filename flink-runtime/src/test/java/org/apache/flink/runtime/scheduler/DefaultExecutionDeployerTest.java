@@ -306,7 +306,7 @@ class DefaultExecutionDeployerTest {
         final JobVertex vertex = new JobVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return ExecutionPlanTestUtils.streamingJobGraph(vertex);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
     }
 
     private static ExecutionPlan nonParallelSourceSinkJobGraph() {
@@ -319,13 +319,13 @@ class DefaultExecutionDeployerTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(source, sink);
     }
 
     private ExecutionGraph createExecutionGraph(final ExecutionPlan jobGraph) throws Exception {
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .setShuffleMaster(shuffleMaster)
                         .setPartitionTracker(partitionTracker)
                         .build(executor);

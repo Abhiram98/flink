@@ -194,7 +194,7 @@ class DefaultSchedulerBatchSchedulingTest {
         final JobVertex jobVertex = new JobVertex("testing task");
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(NoOpInvokable.class);
-        return ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        return ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
     }
 
     private SchedulerNG createScheduler(

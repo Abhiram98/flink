@@ -82,7 +82,7 @@ class JobMasterQueryableStateTest {
         JOB_VERTEX_1.setSlotSharingGroup(slotSharingGroup);
         JOB_VERTEX_2.setSlotSharingGroup(slotSharingGroup);
 
-        JOB_GRAPH = ExecutionPlanTestUtils.streamingJobGraph(JOB_VERTEX_1, JOB_VERTEX_2);
+        JOB_GRAPH = ExecutionPlanTestUtils.streamingExecutionPlan(JOB_VERTEX_1, JOB_VERTEX_2);
         JOB_GRAPH.setJobType(JobType.STREAMING);
     }
 

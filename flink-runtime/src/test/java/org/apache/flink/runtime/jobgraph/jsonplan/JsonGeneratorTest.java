@@ -79,7 +79,7 @@ public class JsonGeneratorTest {
                     join1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
             ExecutionPlan jg =
-                    ExecutionPlanTestUtils.batchJobGraph(
+                    ExecutionPlanTestUtils.batchExecutionPlan(
                             source1,
                             source2,
                             source3,

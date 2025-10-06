@@ -74,7 +74,7 @@ class ExecutionGraphCoLocationRestartTest {
         groupVertex.setStrictlyCoLocatedWith(groupVertex2);
 
         // initiate and schedule job
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(groupVertex, groupVertex2);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(groupVertex, groupVertex2);
 
         final ManuallyTriggeredScheduledExecutorService delayExecutor =
                 new ManuallyTriggeredScheduledExecutorService();

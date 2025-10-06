@@ -68,7 +68,7 @@ class ExecutionVertexTest {
                 releasePartitionsFuture::complete);
 
         final ExecutionPlan jobGraph =
-                ExecutionPlanTestUtils.streamingJobGraph(producerJobVertex, consumerJobVertex);
+                ExecutionPlanTestUtils.streamingExecutionPlan(producerJobVertex, consumerJobVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,
@@ -111,7 +111,7 @@ class ExecutionVertexTest {
     @Test
     void testFindLatestAllocationIgnoresFailedAttempts() throws Exception {
         final JobVertex source = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(source);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(source);
         final TestingPhysicalSlotProvider withLimitedAmountOfPhysicalSlots =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final Configuration configuration = new Configuration();

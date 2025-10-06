@@ -345,7 +345,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         secondVertex.setInvokableClass(NoOpInvokable.class);
 
         ExecutionPlan jobGraphWithTwoVertices =
-                ExecutionPlanTestUtils.streamingJobGraph(firstVertex, secondVertex);
+                ExecutionPlanTestUtils.streamingExecutionPlan(firstVertex, secondVertex);
 
         dispatcher =
                 createAndStartDispatcher(

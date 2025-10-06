@@ -76,7 +76,7 @@ class ExecutionTest {
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -120,7 +120,7 @@ class ExecutionTest {
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -165,7 +165,7 @@ class ExecutionTest {
                                                 .build()));
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -204,7 +204,7 @@ class ExecutionTest {
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

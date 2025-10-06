@@ -238,7 +238,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -302,7 +302,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -375,7 +375,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -439,7 +439,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -472,7 +472,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -517,7 +517,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -573,7 +573,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -609,7 +609,7 @@ class PipelinedRegionSchedulingStrategyTest {
                 ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();

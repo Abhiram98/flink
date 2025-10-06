@@ -176,7 +176,7 @@ public class AdaptiveSchedulerClusterITCase {
         jobVertex.setInvokableClass(CheckpointingNoOpInvokable.class);
         jobVertex.setParallelism(PARALLELISM);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex);
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder()
@@ -272,7 +272,7 @@ public class AdaptiveSchedulerClusterITCase {
 
         blockingOperator.setParallelism(parallelism);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(blockingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(blockingOperator);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
 

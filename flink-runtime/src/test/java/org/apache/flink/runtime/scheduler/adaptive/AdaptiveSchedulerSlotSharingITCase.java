@@ -118,6 +118,6 @@ class AdaptiveSchedulerSlotSharingITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(source, sink);
     }
 }

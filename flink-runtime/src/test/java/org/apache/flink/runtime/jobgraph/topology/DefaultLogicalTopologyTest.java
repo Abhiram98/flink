@@ -84,7 +84,7 @@ public class DefaultLogicalTopologyTest extends TestLogger {
         jobVertices[1].connectNewDataSetAsInput(jobVertices[0], ALL_TO_ALL, PIPELINED);
         jobVertices[2].connectNewDataSetAsInput(jobVertices[1], ALL_TO_ALL, BLOCKING);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(jobVertices);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(jobVertices);
     }
 
     private static void assertVertexAndConnectedResultsEquals(

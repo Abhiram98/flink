@@ -102,7 +102,7 @@ class AdaptiveSchedulerSimpleITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(source, sink);
     }
 
     @Test
@@ -114,7 +114,7 @@ class AdaptiveSchedulerSimpleITCase {
         alwaysFailingOperator.setInvokableClass(AlwaysFailingInvokable.class);
         alwaysFailingOperator.setParallelism(1);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(alwaysFailingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(alwaysFailingOperator);
         // configure a high delay between attempts: We'll stay in RESTARTING for 10 seconds.
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 jobGraph, Integer.MAX_VALUE, timeInRestartingState);
@@ -153,7 +153,7 @@ class AdaptiveSchedulerSimpleITCase {
         onceFailingOperator.setInvokableClass(OnceFailingInvokable.class);
 
         onceFailingOperator.setParallelism(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(onceFailingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(onceFailingOperator);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
         return jobGraph;
     }

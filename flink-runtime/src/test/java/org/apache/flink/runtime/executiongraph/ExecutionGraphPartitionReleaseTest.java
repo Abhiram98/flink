@@ -242,7 +242,7 @@ class ExecutionGraphPartitionReleaseTest {
             final JobMasterPartitionTracker partitionTracker, final JobVertex... vertices)
             throws Exception {
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(vertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(vertices);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

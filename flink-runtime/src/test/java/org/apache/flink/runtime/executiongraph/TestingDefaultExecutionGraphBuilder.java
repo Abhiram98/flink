@@ -94,7 +94,7 @@ public class TestingDefaultExecutionGraphBuilder {
         return this;
     }
 
-    public TestingDefaultExecutionGraphBuilder setJobGraph(ExecutionPlan jobGraph) {
+    public TestingDefaultExecutionGraphBuilder setExecutionPlan(ExecutionPlan jobGraph) {
         this.jobGraph = jobGraph;
         return this;
     }

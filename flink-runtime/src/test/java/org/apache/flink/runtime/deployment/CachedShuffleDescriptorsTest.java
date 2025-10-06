@@ -203,7 +203,7 @@ class CachedShuffleDescriptorsTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.HYBRID_FULL);
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

@@ -267,7 +267,7 @@ class ExecutionPartitionLifecycleTest {
                                                 .withTaskManagerLocation(taskManagerLocation)
                                                 .build()));
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producerVertex, consumerVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producerVertex, consumerVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

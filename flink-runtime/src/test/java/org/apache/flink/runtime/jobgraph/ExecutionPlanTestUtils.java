@@ -37,13 +37,13 @@ public class ExecutionPlanTestUtils {
         return ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
     }
 
-    public static ExecutionPlan streamingJobGraph(JobVertex... jobVertices) {
+    public static ExecutionPlan streamingExecutionPlan(JobVertex... jobVertices) {
         return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    public static ExecutionPlan batchJobGraph(JobVertex... jobVertices) {
+    public static ExecutionPlan batchExecutionPlan(JobVertex... jobVertices) {
         return ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();

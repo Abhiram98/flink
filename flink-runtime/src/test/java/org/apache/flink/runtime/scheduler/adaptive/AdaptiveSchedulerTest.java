@@ -155,7 +155,7 @@ import java.util.stream.IntStream;
 import static org.apache.flink.core.testutils.FlinkAssertions.assertThatFuture;
 import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.createExecutionAttemptId;
 import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.createNoOpVertex;
-import static org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils.streamingJobGraph;
+import static org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils.streamingExecutionPlan;
 import static org.apache.flink.runtime.jobmaster.slotpool.SlotPoolTestUtils.createSlotOffersForResourceRequirements;
 import static org.apache.flink.runtime.jobmaster.slotpool.SlotPoolTestUtils.offerSlots;
 import static org.apache.flink.runtime.scheduler.SchedulerTestingUtils.enableCheckpointing;
@@ -1065,7 +1065,7 @@ public class AdaptiveSchedulerTest {
         final int expectedMaxParallelism =
                 KeyGroupRangeAssignment.computeDefaultMaxParallelism(parallelism);
         final JobVertex vertex = createNoOpVertex(parallelism);
-        final ExecutionPlan jobGraph = streamingJobGraph(vertex);
+        final ExecutionPlan jobGraph = streamingExecutionPlan(vertex);
 
         final DefaultDeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), singleThreadMainThreadExecutor);
@@ -1989,7 +1989,7 @@ public class AdaptiveSchedulerTest {
     void testComputeVertexParallelismStoreForExecutionInReactiveMode() {
         JobVertex v1 = createNoOpVertex("v1", 1, 50);
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
-        ExecutionPlan graph = streamingJobGraph(v1, v2);
+        ExecutionPlan graph = streamingExecutionPlan(v1, v2);
 
         VertexParallelismStore parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
@@ -2009,7 +2009,7 @@ public class AdaptiveSchedulerTest {
     void testComputeVertexParallelismStoreForExecutionInDefaultMode() {
         JobVertex v1 = createNoOpVertex("v1", 1, 50);
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
-        ExecutionPlan graph = streamingJobGraph(v1, v2);
+        ExecutionPlan graph = streamingExecutionPlan(v1, v2);
 
         VertexParallelismStore parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
@@ -2542,7 +2542,7 @@ public class AdaptiveSchedulerTest {
     }
 
     private static ExecutionPlan createJobGraph() {
-        return streamingJobGraph(JOB_VERTEX);
+        return streamingExecutionPlan(JOB_VERTEX);
     }
 
     private static class LifecycleMethodCapturingState extends DummyState {

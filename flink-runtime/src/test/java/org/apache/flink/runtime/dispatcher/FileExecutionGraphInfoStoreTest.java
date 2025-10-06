@@ -349,7 +349,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(vertex);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
             miniCluster.submitJob(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }

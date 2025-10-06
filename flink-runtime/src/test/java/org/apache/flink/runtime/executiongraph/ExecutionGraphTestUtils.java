@@ -346,7 +346,7 @@ public class ExecutionGraphTestUtils {
 
         DefaultExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(ExecutionPlanTestUtils.streamingJobGraph(vertices))
+                        .setExecutionPlan(ExecutionPlanTestUtils.streamingExecutionPlan(vertices))
                         .setRpcTimeout(timeout)
                         .build(executor);
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
@@ -415,7 +415,7 @@ public class ExecutionGraphTestUtils {
     public static ExecutionJobVertex getExecutionJobVertex(
             JobVertex jobVertex, ScheduledExecutorService executor) throws Exception {
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

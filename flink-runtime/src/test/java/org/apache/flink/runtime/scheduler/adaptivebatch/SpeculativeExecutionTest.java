@@ -362,7 +362,7 @@ class SpeculativeExecutionTest {
         final JobVertex source = createNoOpVertex("source", 1);
         final JobVertex sink = createNoOpVertex("sink", -1);
         sink.connectNewDataSetAsInput(source, DistributionPattern.ALL_TO_ALL, resultPartitionType);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(source, sink);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(source, sink);
 
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();

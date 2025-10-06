@@ -148,7 +148,7 @@ class FileBufferReaderITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        return ExecutionPlanTestUtils.batchJobGraph(source, sink);
+        return ExecutionPlanTestUtils.batchExecutionPlan(source, sink);
     }
 
     /**

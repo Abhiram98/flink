@@ -84,7 +84,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     void testAllTasksInCreatedAndNoSlowTasks() throws Exception {
         final int parallelism = 3;
         final JobVertex jobVertex = createNoOpVertex(parallelism);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex);
 
         // all tasks are in the CREATED state, which is not classified as slow tasks.
         final ExecutionGraph executionGraph =
@@ -412,7 +412,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     }
 
     private ExecutionGraph createExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertices);
 
         final SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
@@ -429,7 +429,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     }
 
     private ExecutionGraph createDynamicExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertices);
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

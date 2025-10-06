@@ -249,10 +249,10 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
         assertThat(v1.getProducedDataSets()).hasSize(2);
         assertThat(v2.getInputs()).hasSize(2);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(v1, v2);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2);
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_EXTENSION.getExecutor());
         final SchedulingTopology topology = executionGraph.getSchedulingTopology();
 

@@ -91,7 +91,7 @@ class PartialConsumePipelinedResultTest {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(sender, receiver);
 
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 

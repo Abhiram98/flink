@@ -584,7 +584,7 @@ class VertexThreadInfoTrackerTest {
 
             final SchedulerBase scheduler =
                     createScheduler(
-                            ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
+                            ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex),
                             ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                             new DirectScheduledExecutorService());
             final ExecutionGraph eg = scheduler.getExecutionGraph();

@@ -186,7 +186,7 @@ class TaskExecutorITCase {
         sender.setSlotSharingGroup(slotSharingGroup);
         receiver.setSlotSharingGroup(slotSharingGroup);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(sender, receiver);
     }
 
     /** Blocking invokable which is controlled by a static field. */

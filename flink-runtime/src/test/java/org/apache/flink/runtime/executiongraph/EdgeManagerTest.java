@@ -136,7 +136,7 @@ class EdgeManagerTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.BLOCKING);
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
         SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
                         jobGraph,

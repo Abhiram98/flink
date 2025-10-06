@@ -292,7 +292,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(vertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
         final PermanentBlobKey permanentBlobKey =
                 blobServer.putPermanent(jobGraph.getJobID(), new byte[256]);
         jobGraph.addUserJarBlobKey(permanentBlobKey);

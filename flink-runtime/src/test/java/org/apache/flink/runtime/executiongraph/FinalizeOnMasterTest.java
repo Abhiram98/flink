@@ -62,7 +62,7 @@ class FinalizeOnMasterTest {
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        ExecutionPlanTestUtils.streamingJobGraph(vertex1, vertex2),
+                        ExecutionPlanTestUtils.streamingExecutionPlan(vertex1, vertex2),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();
@@ -91,7 +91,7 @@ class FinalizeOnMasterTest {
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        ExecutionPlanTestUtils.streamingJobGraph(vertex),
+                        ExecutionPlanTestUtils.streamingExecutionPlan(vertex),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();

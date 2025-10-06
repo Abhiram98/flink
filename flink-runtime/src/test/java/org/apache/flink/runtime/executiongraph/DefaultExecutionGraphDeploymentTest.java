@@ -151,13 +151,13 @@ class DefaultExecutionGraphDeploymentTest {
         v4.connectNewDataSetAsInput(
                 v2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(v1, v2, v3, v4);
-        final JobID jobId = jobGraph.getJobID();
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2, v3, v4);
+        final JobID jobId = executionPlan.getJobID();
 
         DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
         DefaultExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(executionPlan)
                         .setBlobWriter(blobWriter)
                         .build(executor);
 
@@ -441,7 +441,7 @@ class DefaultExecutionGraphDeploymentTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final ExecutionPlan graph = ExecutionPlanTestUtils.batchJobGraph(v1, v2);
+        final ExecutionPlan graph = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2);
 
         DirectScheduledExecutorService directExecutor = new DirectScheduledExecutorService();
 
@@ -509,7 +509,7 @@ class DefaultExecutionGraphDeploymentTest {
         // execution graph that executes actions synchronously
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(v1, v2),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(v1, v2),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -589,13 +589,13 @@ class DefaultExecutionGraphDeploymentTest {
         final RpcTaskManagerGateway taskManagerGateway =
                 new RpcTaskManagerGateway(taskExecutorGateway, JobMasterId.generate());
 
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sourceVertex, sinkVertex);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(sourceVertex, sinkVertex);
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithoutImmediatePhysicalSlotCreation();
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -645,8 +645,8 @@ class DefaultExecutionGraphDeploymentTest {
     }
 
     private ExecutionGraph createExecutionGraph(Configuration configuration) throws Exception {
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
-        jobGraph.setSnapshotSettings(
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.emptyExecutionPlan();
+        executionPlan.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         new CheckpointCoordinatorConfiguration(
                                 100,
@@ -661,7 +661,7 @@ class DefaultExecutionGraphDeploymentTest {
                         null));
 
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(jobGraph)
+                .setExecutionPlan(executionPlan)
                 .setJobMasterConfig(configuration)
                 .setBlobWriter(blobWriter)
                 .build(EXECUTOR_EXTENSION.getExecutor());

@@ -55,11 +55,11 @@ class DefaultExecutionGraphRescalingTest {
         final int maxParallelism = 10;
         final JobVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertices);
 
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         for (JobVertex jv : jobVertices) {
@@ -77,7 +77,7 @@ class DefaultExecutionGraphRescalingTest {
 
         eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         for (JobVertex jv : jobVertices) {
@@ -95,7 +95,7 @@ class DefaultExecutionGraphRescalingTest {
 
         eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         for (JobVertex jv : jobVertices) {
@@ -117,7 +117,7 @@ class DefaultExecutionGraphRescalingTest {
         final int maxParallelism = 10;
         final JobVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertices);
 
         for (JobVertex jv : jobVertices) {
             jv.setParallelism(maxParallelism + 1);
@@ -126,7 +126,7 @@ class DefaultExecutionGraphRescalingTest {
         try {
             // this should fail since we set the parallelism to maxParallelism + 1
             TestingDefaultExecutionGraphBuilder.newBuilder()
-                    .setJobGraph(jobGraph)
+                    .setExecutionPlan(jobGraph)
                     .build(EXECUTOR_RESOURCE.getExecutor());
 
             fail(

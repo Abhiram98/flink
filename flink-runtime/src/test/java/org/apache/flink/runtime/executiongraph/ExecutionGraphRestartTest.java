@@ -102,7 +102,7 @@ class ExecutionGraphRestartTest {
             JobVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            ExecutionPlan graph = ExecutionPlanTestUtils.streamingJobGraph(sender);
+            ExecutionPlan graph = ExecutionPlanTestUtils.streamingExecutionPlan(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -131,7 +131,7 @@ class ExecutionGraphRestartTest {
             JobVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            ExecutionPlan graph = ExecutionPlanTestUtils.streamingJobGraph(sender);
+            ExecutionPlan graph = ExecutionPlanTestUtils.streamingExecutionPlan(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -284,7 +284,7 @@ class ExecutionGraphRestartTest {
         JobVertex sender = ExecutionGraphTestUtils.createJobVertex("Task1", 1, NoOpInvokable.class);
         JobVertex receiver =
                 ExecutionGraphTestUtils.createJobVertex("Task2", 1, NoOpInvokable.class);
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(sender, receiver);
 
         try (SlotPool slotPool = SlotPoolUtils.createDeclarativeSlotPoolBridge()) {
             SchedulerBase scheduler =
@@ -411,7 +411,7 @@ class ExecutionGraphRestartTest {
     private static ExecutionPlan createJobGraph() {
         JobVertex sender =
                 ExecutionGraphTestUtils.createJobVertex("Task", NUM_TASKS, NoOpInvokable.class);
-        return ExecutionPlanTestUtils.streamingJobGraph(sender);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(sender);
     }
 
     private static ExecutionPlan createJobGraphToCancel() throws IOException {

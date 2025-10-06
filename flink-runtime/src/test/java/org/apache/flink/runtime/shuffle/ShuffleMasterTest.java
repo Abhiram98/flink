@@ -119,7 +119,7 @@ class ShuffleMasterTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(source, sink);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(source, sink);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, Duration.ofSeconds(2));
         return jobGraph;
     }

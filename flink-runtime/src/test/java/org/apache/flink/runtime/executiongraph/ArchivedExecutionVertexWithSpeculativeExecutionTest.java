@@ -120,7 +120,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
     @Test
     void testVertexTerminationAndJobTermination() throws Exception {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
         eg.transitionToRunning();
 
@@ -201,7 +201,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
 
     private SpeculativeExecutionVertex createSpeculativeExecutionVertex() throws Exception {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         ExecutionJobVertex jv = executionGraph.getJobVertex(jobVertex.getID());
         assertThat(jv).isNotNull();
@@ -211,7 +211,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
     private ExecutionGraph createExecutionGraph(final ExecutionPlan jobGraph) throws Exception {
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .setExecutionJobVertexFactory(new SpeculativeExecutionJobVertex.Factory())
                         .build(EXECUTOR_RESOURCE.getExecutor());
 

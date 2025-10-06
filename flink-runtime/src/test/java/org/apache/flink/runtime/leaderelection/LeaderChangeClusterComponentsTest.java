@@ -189,7 +189,7 @@ class LeaderChangeClusterComponentsTest {
         vertex.setParallelism(parallelism);
         vertex.setInvokableClass(BlockingOperator.class);
 
-        return ExecutionPlanTestUtils.streamingJobGraph(vertex);
+        return ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
     }
 
     /**

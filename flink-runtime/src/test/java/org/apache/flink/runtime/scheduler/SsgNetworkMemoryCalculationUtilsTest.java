@@ -255,7 +255,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
                         jobGraph.getVertices(), defaultMaxParallelism);
 
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(jobGraph)
+                .setExecutionPlan(jobGraph)
                 .setVertexParallelismStore(vertexParallelismStore)
                 .setShuffleMaster(SHUFFLE_MASTER)
                 .buildDynamicGraph(EXECUTOR_EXTENSION.getExecutor());
@@ -265,7 +265,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
             final List<SlotSharingGroup> slotSharingGroups, ResultPartitionType resultPartitionType)
             throws Exception {
         TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(
+                .setExecutionPlan(
                         createJobGraph(
                                 slotSharingGroups, Arrays.asList(4, 5, 6), resultPartitionType))
                 .setShuffleMaster(SHUFFLE_MASTER)
@@ -308,10 +308,10 @@ class SsgNetworkMemoryCalculationUtilsTest {
         }
 
         if (!resultPartitionType.isBlockingOrBlockingPersistentResultPartition()) {
-            return ExecutionPlanTestUtils.streamingJobGraph(source, map, sink);
+            return ExecutionPlanTestUtils.streamingExecutionPlan(source, map, sink);
 
         } else {
-            return ExecutionPlanTestUtils.batchJobGraph(source, map, sink);
+            return ExecutionPlanTestUtils.batchExecutionPlan(source, map, sink);
         }
     }
 

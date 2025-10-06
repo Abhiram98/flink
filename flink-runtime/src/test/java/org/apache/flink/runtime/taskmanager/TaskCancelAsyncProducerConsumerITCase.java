@@ -117,7 +117,7 @@ public class TaskCancelAsyncProducerConsumerITCase {
         producer.setSlotSharingGroup(slot);
         consumer.setSlotSharingGroup(slot);
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(producer, consumer);
 
         // Submit job and wait until running
         flink.runDetached(jobGraph);

@@ -119,7 +119,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
         v4.connectNewDataSetAsInput(
                 v3, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        jobGraph = ExecutionPlanTestUtils.batchJobGraph(v1, v2, v3, v4);
+        jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2, v3, v4);
     }
 
     /**

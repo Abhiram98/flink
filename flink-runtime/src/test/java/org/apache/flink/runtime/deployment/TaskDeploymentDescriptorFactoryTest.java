@@ -212,7 +212,7 @@ class TaskDeploymentDescriptorFactoryTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.ALL_TO_ALL, ResultPartitionType.HYBRID_FULL);
 
-        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,
@@ -252,7 +252,7 @@ class TaskDeploymentDescriptorFactoryTest {
 
         return TestingDefaultExecutionGraphBuilder.newBuilder()
                 .setJobMasterConfig(jobMasterConfig)
-                .setJobGraph(jobGraph)
+                .setExecutionPlan(jobGraph)
                 .setBlobWriter(blobWriter)
                 .setMarkPartitionFinishedStrategy(markPartitionFinishedStrategy)
                 .build(EXECUTOR_RESOURCE.getExecutor());

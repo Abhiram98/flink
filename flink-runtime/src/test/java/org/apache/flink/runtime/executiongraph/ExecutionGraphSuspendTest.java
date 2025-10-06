@@ -321,7 +321,7 @@ class ExecutionGraphSuspendTest {
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                ExecutionPlanTestUtils.streamingJobGraph(vertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(vertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

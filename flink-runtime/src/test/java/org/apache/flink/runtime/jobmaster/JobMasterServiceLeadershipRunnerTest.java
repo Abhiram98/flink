@@ -94,7 +94,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
         final JobVertex jobVertex = new JobVertex("Test vertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
-        jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertex);
+        jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex);
     }
 
     @BeforeEach

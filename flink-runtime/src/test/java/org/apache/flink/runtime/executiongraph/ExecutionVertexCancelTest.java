@@ -246,7 +246,7 @@ class ExecutionVertexCancelTest {
     void testSendCancelAndReceiveFail() throws Exception {
         final SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
-                        ExecutionPlanTestUtils.streamingJobGraph(createNoOpVertex(10)),
+                        ExecutionPlanTestUtils.streamingExecutionPlan(createNoOpVertex(10)),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         final ExecutionGraph graph = scheduler.getExecutionGraph();
