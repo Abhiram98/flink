@@ -796,7 +796,7 @@ public class FineGrainedSlotManager implements SlotManager {
         return taskManagerTracker.getRegisteredTaskManager(instanceID)
                 .map(TaskManagerInfo::getAllocatedSlots).map(Map::values)
                 .orElse(Collections.emptyList()).stream()
-                .map(slot -> new SlotInfo(slot.getJobId(), slot.getResourceProfile()))
+                .map(slot -> new SlotInfo(slot.getStreamId(), slot.getResourceProfile()))
                 .collect(Collectors.toList());
     }
 

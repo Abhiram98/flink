@@ -36,7 +36,7 @@ public interface TaskManagerSlotInformation {
     AllocationID getAllocationId();
 
     @Nullable
-    JobID getJobId();
+    JobID getStreamId();
 
     SlotState getState();
 

@@ -55,7 +55,7 @@ public interface SlotStatusSyncer {
      * Allocate a slot from the task manager.
      *
      * @param instanceId of the task manager
-     * @param jobId of the slot
+     * @param streamId of the slot
      * @param targetAddress of the job
      * @param resourceProfile of the slot
      * @return a {@link CompletableFuture} of the slot allocation, which will be completed
@@ -63,7 +63,7 @@ public interface SlotStatusSyncer {
      */
     CompletableFuture<Void> allocateSlot(
             InstanceID instanceId,
-            JobID jobId,
+            JobID streamId,
             String targetAddress,
             ResourceProfile resourceProfile);
 
@@ -86,7 +86,7 @@ public interface SlotStatusSyncer {
     /**
      * Frees all currently inactive slot allocated for the given job.
      *
-     * @param jobId of the job
+     * @param streamId of the job
      */
-    void freeInactiveSlots(JobID jobId);
+    void freeInactiveSlots(JobID streamId);
 }

@@ -163,10 +163,10 @@ class TaskExecutorRecoveryTest {
 
         for (SlotStatus status : recoveredSlotReport.getSlotReport()) {
             if (status.getSlotID().equals(allocatedSlotID)) {
-                assertThat(status.getJobID(), is(jobId));
+                assertThat(status.getStreamID(), is(jobId));
                 assertThat(status.getAllocationID(), is(allocationId));
             } else {
-                assertThat(status.getJobID(), is(nullValue()));
+                assertThat(status.getStreamID(), is(nullValue()));
             }
         }
 
