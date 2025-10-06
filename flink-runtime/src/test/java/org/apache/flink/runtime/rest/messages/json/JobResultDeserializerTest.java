@@ -58,7 +58,7 @@ class JobResultDeserializerTest {
                                 + "}",
                         JobResult.class);
 
-        assertThat(jobResult.getJobId())
+        assertThat(jobResult.getStreamId())
                 .isEqualTo(JobID.fromHexString("1bb5e8c7df49938733b7c6a73678de6a"));
         assertThat(jobResult.getNetRuntime()).isZero();
         assertThat(jobResult.getAccumulatorResults().size()).isZero();

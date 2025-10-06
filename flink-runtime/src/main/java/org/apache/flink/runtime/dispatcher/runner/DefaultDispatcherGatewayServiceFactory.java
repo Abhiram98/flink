@@ -24,7 +24,7 @@ import org.apache.flink.runtime.dispatcher.DispatcherId;
 import org.apache.flink.runtime.dispatcher.NoOpDispatcherBootstrap;
 import org.apache.flink.runtime.dispatcher.PartialDispatcherServices;
 import org.apache.flink.runtime.dispatcher.PartialDispatcherServicesWithJobPersistenceComponents;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rpc.RpcService;
@@ -58,7 +58,7 @@ class DefaultDispatcherGatewayServiceFactory
             Collection<ExecutionPlan> recoveredJobs,
             Collection<JobResult> recoveredDirtyJobResults,
             ExecutionPlanWriter executionPlanWriter,
-            JobResultStore jobResultStore) {
+            StreamResultStore jobResultStore) {
 
         final Dispatcher dispatcher;
         try {

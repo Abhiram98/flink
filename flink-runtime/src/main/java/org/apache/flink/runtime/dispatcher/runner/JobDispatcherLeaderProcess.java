@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.dispatcher.runner;
 
 import org.apache.flink.runtime.dispatcher.DispatcherId;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobmanager.ThrowingExecutionPlanWriter;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -39,14 +39,14 @@ public class JobDispatcherLeaderProcess extends AbstractDispatcherLeaderProcess 
     @Nullable private final JobGraph jobGraph;
     @Nullable private final JobResult recoveredDirtyJobResult;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     JobDispatcherLeaderProcess(
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherGatewayServiceFactory,
             @Nullable JobGraph jobGraph,
             @Nullable JobResult recoveredDirtyJobResult,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             FatalErrorHandler fatalErrorHandler) {
         super(leaderSessionId, fatalErrorHandler);
         this.dispatcherGatewayServiceFactory = dispatcherGatewayServiceFactory;

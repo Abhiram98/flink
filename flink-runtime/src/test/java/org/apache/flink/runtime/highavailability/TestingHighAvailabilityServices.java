@@ -68,7 +68,7 @@ public class TestingHighAvailabilityServices implements HighAvailabilityServices
 
     private volatile ExecutionPlanStore executionPlanStore;
 
-    private volatile JobResultStore jobResultStore = new EmbeddedJobResultStore();
+    private volatile StreamResultStore jobResultStore = new EmbeddedJobResultStore();
 
     private CompletableFuture<Void> closeFuture = new CompletableFuture<>();
 
@@ -124,7 +124,7 @@ public class TestingHighAvailabilityServices implements HighAvailabilityServices
         this.executionPlanStore = executionPlanStore;
     }
 
-    public void setJobResultStore(JobResultStore jobResultStore) {
+    public void setJobResultStore(StreamResultStore jobResultStore) {
         this.jobResultStore = jobResultStore;
     }
 
@@ -260,7 +260,7 @@ public class TestingHighAvailabilityServices implements HighAvailabilityServices
     }
 
     @Override
-    public JobResultStore getJobResultStore() {
+    public StreamResultStore getJobResultStore() {
         return jobResultStore;
     }
 

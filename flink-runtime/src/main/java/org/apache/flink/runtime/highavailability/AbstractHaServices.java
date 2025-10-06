@@ -65,7 +65,7 @@ public abstract class AbstractHaServices implements HighAvailabilityServices {
     /** Store for arbitrary blobs. */
     private final BlobStoreService blobStoreService;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final DefaultLeaderElectionService leaderElectionService;
 
@@ -74,7 +74,7 @@ public abstract class AbstractHaServices implements HighAvailabilityServices {
             LeaderElectionDriverFactory driverFactory,
             Executor ioExecutor,
             BlobStoreService blobStoreService,
-            JobResultStore jobResultStore) {
+            StreamResultStore jobResultStore) {
 
         this.configuration = checkNotNull(config);
         this.ioExecutor = checkNotNull(ioExecutor);
@@ -141,7 +141,7 @@ public abstract class AbstractHaServices implements HighAvailabilityServices {
     }
 
     @Override
-    public JobResultStore getJobResultStore() throws Exception {
+    public StreamResultStore getJobResultStore() throws Exception {
         return jobResultStore;
     }
 

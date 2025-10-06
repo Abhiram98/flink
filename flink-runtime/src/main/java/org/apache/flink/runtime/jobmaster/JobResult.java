@@ -88,7 +88,7 @@ public class JobResult implements Serializable {
                 || (applicationStatus == ApplicationStatus.UNKNOWN && serializedThrowable == null);
     }
 
-    public JobID getJobId() {
+    public JobID getStreamId() {
         return jobId;
     }
 

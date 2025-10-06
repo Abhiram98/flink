@@ -70,7 +70,7 @@ public class TestingHighAvailabilityServicesBuilder {
 
     private ExecutionPlanStore executionPlanStore = new StandaloneExecutionPlanStore();
 
-    private JobResultStore jobResultStore = new EmbeddedJobResultStore();
+    private StreamResultStore jobResultStore = new EmbeddedJobResultStore();
 
     private CompletableFuture<Void> closeFuture = new CompletableFuture<>();
 
@@ -167,7 +167,7 @@ public class TestingHighAvailabilityServicesBuilder {
         return this;
     }
 
-    public TestingHighAvailabilityServicesBuilder setJobResultStore(JobResultStore jobResultStore) {
+    public TestingHighAvailabilityServicesBuilder setJobResultStore(StreamResultStore jobResultStore) {
         this.jobResultStore = jobResultStore;
         return this;
     }

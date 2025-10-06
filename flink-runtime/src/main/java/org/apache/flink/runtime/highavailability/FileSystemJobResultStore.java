@@ -53,7 +53,7 @@ import java.util.concurrent.Executor;
 import static org.apache.flink.util.StringUtils.isNullOrWhitespaceOnly;
 
 /**
- * An implementation of the {@link JobResultStore} which persists job result data to an underlying
+ * An implementation of the {@link StreamResultStore} which persists job result data to an underlying
  * distributed filesystem.
  */
 public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
@@ -153,10 +153,10 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
     }
 
     @Override
-    public void createDirtyResultInternal(JobResultEntry jobResultEntry) throws IOException {
+    public void createDirtyResultInternal(StreamResultEntry jobResultEntry) throws IOException {
         createBasePathIfNeeded();
 
-        final Path path = constructDirtyPath(jobResultEntry.getJobId());
+        final Path path = constructDirtyPath(jobResultEntry.getStreamId());
         try (OutputStream os = fileSystem.create(path, FileSystem.WriteMode.NO_OVERWRITE)) {
             mapper.writeValue(
                     // working around the internally used _writeAndClose method to ensure that close
@@ -219,18 +219,18 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
     }
 
     /**
-     * Wrapper class around {@link JobResultEntry} to allow for serialization of a schema version,
+     * Wrapper class around {@link StreamResultEntry} to allow for serialization of a schema version,
      * so that future schema changes can be handled in a backwards compatible manner.
      */
     @JsonIgnoreProperties(
             value = {JsonJobResultEntry.FIELD_NAME_VERSION},
             allowGetters = true)
     @VisibleForTesting
-    static class JsonJobResultEntry extends JobResultEntry {
+    static class JsonJobResultEntry extends StreamResultEntry {
         private static final String FIELD_NAME_RESULT = "result";
         static final String FIELD_NAME_VERSION = "version";
 
-        private JsonJobResultEntry(JobResultEntry entry) {
+        private JsonJobResultEntry(StreamResultEntry entry) {
             this(entry.getJobResult());
         }
 
@@ -250,7 +250,7 @@ public class FileSystemJobResultStore extends AbstractThreadsafeJobResultStore {
         @JsonIgnore
         @Override
         public JobID getJobId() {
-            return super.getJobId();
+            return super.getStreamId();
         }
 
         public int getVersion() {

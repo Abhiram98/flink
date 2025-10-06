@@ -36,7 +36,7 @@ import org.apache.flink.runtime.dispatcher.TestingJobMasterServiceLeadershipRunn
 import org.apache.flink.runtime.dispatcher.TestingPartialDispatcherServices;
 import org.apache.flink.runtime.dispatcher.cleanup.CleanupRunnerFactory;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingCleanupRunnerFactory;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
@@ -99,7 +99,7 @@ class DefaultDispatcherRunnerITCase {
 
     private ExecutionPlanStore executionPlanStore;
 
-    private JobResultStore jobResultStore;
+    private StreamResultStore jobResultStore;
 
     private PartialDispatcherServices partialDispatcherServices;
 

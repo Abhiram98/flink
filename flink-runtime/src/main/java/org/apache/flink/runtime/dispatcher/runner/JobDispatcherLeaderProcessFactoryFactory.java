@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.dispatcher.JobDispatcherFactory;
 import org.apache.flink.runtime.dispatcher.PartialDispatcherServices;
 import org.apache.flink.runtime.entrypoint.component.JobGraphRetriever;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobmanager.JobPersistenceComponentFactory;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -76,7 +76,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
             throw new FlinkRuntimeException("Could not retrieve the JobGraph.", e);
         }
 
-        final JobResultStore jobResultStore = jobPersistenceComponentFactory.createJobResultStore();
+        final StreamResultStore jobResultStore = jobPersistenceComponentFactory.createJobResultStore();
         final Collection<JobResult> recoveredDirtyJobResults = getDirtyJobResults(jobResultStore);
 
         final Optional<JobResult> maybeRecoveredDirtyJobResult =
@@ -101,7 +101,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
         return new JobDispatcherLeaderProcessFactoryFactory(jobGraphRetriever);
     }
 
-    private static Collection<JobResult> getDirtyJobResults(JobResultStore jobResultStore) {
+    private static Collection<JobResult> getDirtyJobResults(StreamResultStore jobResultStore) {
         try {
             return jobResultStore.getDirtyResults();
         } catch (IOException e) {
@@ -115,12 +115,12 @@ public class JobDispatcherLeaderProcessFactoryFactory
             Collection<JobResult> dirtyJobResults, JobGraph jobGraph) {
         Optional<JobResult> actualDirtyJobResult = Optional.empty();
         for (JobResult dirtyJobResult : dirtyJobResults) {
-            if (dirtyJobResult.getJobId().equals(jobGraph.getJobID())) {
+            if (dirtyJobResult.getStreamId().equals(jobGraph.getJobID())) {
                 actualDirtyJobResult = Optional.of(dirtyJobResult);
             } else {
                 LOG.warn(
                         "Unexpected dirty JobResultStore entry: Job '{}' is listed as dirty, isn't part of this single-job cluster, though.",
-                        dirtyJobResult.getJobId());
+                        dirtyJobResult.getStreamId());
             }
         }
 
@@ -130,7 +130,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
     private static Optional<JobGraph> getJobGraphBasedOnDirtyJobResults(
             JobGraph jobGraph, Collection<JobResult> dirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
-                dirtyJobResults.stream().map(JobResult::getJobId).collect(Collectors.toSet());
+                dirtyJobResults.stream().map(JobResult::getStreamId).collect(Collectors.toSet());
         if (jobIdsOfFinishedJobs.contains(jobGraph.getJobID())) {
             LOG.info(
                     "Skipping recovery of a job with job id {}, because it already reached a globally terminal state",

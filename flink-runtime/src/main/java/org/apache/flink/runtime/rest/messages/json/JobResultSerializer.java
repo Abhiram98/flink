@@ -76,7 +76,7 @@ public class JobResultSerializer extends StdSerializer<JobResult> {
         gen.writeStartObject();
 
         gen.writeFieldName(FIELD_NAME_JOB_ID);
-        jobIdSerializer.serialize(result.getJobId(), gen, provider);
+        jobIdSerializer.serialize(result.getStreamId(), gen, provider);
 
         gen.writeFieldName(FIELD_NAME_APPLICATION_STATUS);
         gen.writeString(result.getApplicationStatus().name());

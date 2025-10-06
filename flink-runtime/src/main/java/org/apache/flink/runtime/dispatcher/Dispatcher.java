@@ -54,8 +54,8 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionJobVertex;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.JobResultStoreOptions;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
@@ -153,7 +153,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     private final Configuration configuration;
 
     private final ExecutionPlanWriter executionPlanWriter;
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final HighAvailabilityServices highAvailabilityServices;
     private final GatewayRetriever<ResourceManagerGateway> resourceManagerGatewayRetriever;
@@ -379,7 +379,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             Collection<JobResult> recoveredDirtyJobResults) {
         final Set<JobID> jobIdsOfFinishedJobs =
                 recoveredDirtyJobResults.stream()
-                        .map(JobResult::getJobId)
+                        .map(JobResult::getStreamId)
                         .collect(Collectors.toSet());
 
         final boolean noRecoveredExecutionPlanHasDirtyJobResult =
@@ -459,7 +459,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                     new DispatcherException(
                             String.format(
                                     "Could not start cleanup retry for job %s.",
-                                    jobResult.getJobId()),
+                                    jobResult.getStreamId()),
                             throwable));
         }
     }
@@ -581,7 +581,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
      *     either successfully or as a failure
      */
     private CompletableFuture<Boolean> isInGloballyTerminalState(JobID jobId) {
-        return jobResultStore.hasJobResultEntryAsync(jobId);
+        return jobResultStore.hasStreamResultEntryAsync(jobId);
     }
 
     private CompletableFuture<Acknowledge> internalSubmitJob(ExecutionPlan executionPlan) {
@@ -658,12 +658,12 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     private JobManagerRunner createJobCleanupRunner(JobResult dirtyJobResult) throws Exception {
-        Preconditions.checkState(!jobManagerRunnerRegistry.isRegistered(dirtyJobResult.getJobId()));
+        Preconditions.checkState(!jobManagerRunnerRegistry.isRegistered(dirtyJobResult.getStreamId()));
         return cleanupRunnerFactory.create(
                 dirtyJobResult,
                 highAvailabilityServices.getCheckpointRecoveryFactory(),
                 configuration,
-                getIoExecutor(dirtyJobResult.getJobId()));
+                getIoExecutor(dirtyJobResult.getStreamId()));
     }
 
     private void runJob(JobManagerRunner jobManagerRunner, ExecutionType executionType)
@@ -1386,7 +1386,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 terminalJobStatus);
 
         return jobResultStore
-                .hasCleanJobResultEntryAsync(jobId)
+                .hasCleanStreamResultEntryAsync(jobId)
                 .thenCompose(
                         hasCleanJobResultEntry ->
                                 createDirtyJobResultEntryIfMissingAsync(
@@ -1423,7 +1423,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             return FutureUtils.completedVoidFuture();
         } else {
             return jobResultStore
-                    .hasDirtyJobResultEntryAsync(jobId)
+                    .hasDirtyStreamResultEntryAsync(jobId)
                     .thenCompose(
                             hasDirtyJobResultEntry ->
                                     createDirtyJobResultEntryAsync(
@@ -1446,7 +1446,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         }
 
         return jobResultStore.createDirtyResultAsync(
-                new JobResultEntry(JobResult.createFrom(executionGraph)));
+                new StreamResultEntry(JobResult.createFrom(executionGraph)));
     }
 
     private void writeToExecutionGraphInfoStore(ExecutionGraphInfo executionGraphInfo) {

@@ -18,20 +18,20 @@
 
 package org.apache.flink.runtime.jobmanager;
 
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.util.Preconditions;
 
 /**
  * {@code TestingJobPersistenceComponentFactory} implements {@link JobPersistenceComponentFactory}
- * for a given {@link ExecutionPlanStore} and {@link JobResultStore}.
+ * for a given {@link ExecutionPlanStore} and {@link StreamResultStore}.
  */
 public class TestingJobPersistenceComponentFactory implements JobPersistenceComponentFactory {
 
     private final ExecutionPlanStore executionPlanStore;
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     public TestingJobPersistenceComponentFactory(
-            ExecutionPlanStore executionPlanStore, JobResultStore jobResultStore) {
+            ExecutionPlanStore executionPlanStore, StreamResultStore jobResultStore) {
         this.executionPlanStore = Preconditions.checkNotNull(executionPlanStore);
         this.jobResultStore = Preconditions.checkNotNull(jobResultStore);
     }
@@ -42,7 +42,7 @@ public class TestingJobPersistenceComponentFactory implements JobPersistenceComp
     }
 
     @Override
-    public JobResultStore createJobResultStore() {
+    public StreamResultStore createJobResultStore() {
         return jobResultStore;
     }
 }

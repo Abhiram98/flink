@@ -44,7 +44,7 @@ public class TestingCleanupRunnerFactory extends TestingJobManagerRunnerFactory
             Configuration configuration,
             Executor cleanupExecutor) {
         try {
-            return offerTestingJobManagerRunner(jobResult.getJobId());
+            return offerTestingJobManagerRunner(jobResult.getStreamId());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

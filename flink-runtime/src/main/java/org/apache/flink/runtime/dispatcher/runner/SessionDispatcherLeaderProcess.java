@@ -23,7 +23,7 @@ import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.dispatcher.DispatcherId;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
@@ -58,7 +58,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private final ExecutionPlanStore executionPlanStore;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final Executor ioExecutor;
 
@@ -68,7 +68,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherGatewayServiceFactory,
             ExecutionPlanStore executionPlanStore,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             Executor ioExecutor,
             FatalErrorHandler fatalErrorHandler) {
         super(leaderSessionId, fatalErrorHandler);
@@ -132,7 +132,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
                         dirtyJobs ->
                                 this.recoverJobsIfRunning(
                                         dirtyJobs.stream()
-                                                .map(JobResult::getJobId)
+                                                .map(JobResult::getStreamId)
                                                 .collect(Collectors.toSet())),
                         ioExecutor)
                 .thenAcceptBoth(dirtyJobsFuture, this::createDispatcherIfRunning)
@@ -319,7 +319,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherFactory,
             ExecutionPlanStore executionPlanStore,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             Executor ioExecutor,
             FatalErrorHandler fatalErrorHandler) {
         return new SessionDispatcherLeaderProcess(

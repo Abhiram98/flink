@@ -38,10 +38,10 @@ import java.util.concurrent.CompletableFuture;
  * </ul>
  */
 @Internal
-public interface JobResultStore {
+public interface StreamResultStore {
 
     /**
-     * Registers the passed {@link JobResultEntry} instance as {@code dirty} which indicates that
+     * Registers the passed {@link StreamResultEntry} instance as {@code dirty} which indicates that
      * clean-up operations still need to be performed. Once the job resource cleanup has been
      * finalized, we can mark the {@code JobResultEntry} as {@code clean} result using {@link
      * #markResultAsCleanAsync(JobID)}.
@@ -52,10 +52,10 @@ public interface JobResultStore {
      *     jobResultEntry} has a {@code JobID} attached that is already registered in this {@code
      *     JobResultStore}.
      */
-    CompletableFuture<Void> createDirtyResultAsync(JobResultEntry jobResultEntry);
+    CompletableFuture<Void> createDirtyResultAsync(StreamResultEntry jobResultEntry);
 
     /**
-     * Marks an existing {@link JobResultEntry} as {@code clean}. This indicates that no more
+     * Marks an existing {@link StreamResultEntry} as {@code clean}. This indicates that no more
      * resource cleanup steps need to be performed. No actions should be triggered if the passed
      * {@code JobID} belongs to a job that was already marked as clean.
      *
@@ -71,12 +71,12 @@ public interface JobResultStore {
      *
      * @param jobId Ident of the job we wish to check the store for.
      * @return a successfully completed future with {@code true} if a {@code dirty} or {@code clean}
-     *     {@link JobResultEntry} exists for the given {@code JobID}; otherwise {@code false}.
+     *     {@link StreamResultEntry} exists for the given {@code JobID}; otherwise {@code false}.
      */
-    default CompletableFuture<Boolean> hasJobResultEntryAsync(JobID jobId) {
-        return hasDirtyJobResultEntryAsync(jobId)
+    default CompletableFuture<Boolean> hasStreamResultEntryAsync(JobID jobId) {
+        return hasDirtyStreamResultEntryAsync(jobId)
                 .thenCombine(
-                        hasCleanJobResultEntryAsync(jobId),
+                        hasCleanStreamResultEntryAsync(jobId),
                         (result1, result2) -> result1 || result2);
     }
 
@@ -88,7 +88,7 @@ public interface JobResultStore {
      * @return a successfully completed future with {@code true}, if a {@code dirty} entry exists
      *     for the given {@code JobID}; otherwise {@code false}.
      */
-    CompletableFuture<Boolean> hasDirtyJobResultEntryAsync(JobID jobId);
+    CompletableFuture<Boolean> hasDirtyStreamResultEntryAsync(JobID jobId);
 
     /**
      * Returns the future of whether the store contains a {@code clean} entry for the given {@code
@@ -99,7 +99,7 @@ public interface JobResultStore {
      *     for the given {@code JobID}; otherwise a successfully completed future with {@code
      *     false}.
      */
-    CompletableFuture<Boolean> hasCleanJobResultEntryAsync(JobID jobId);
+    CompletableFuture<Boolean> hasCleanStreamResultEntryAsync(JobID jobId);
 
     /**
      * Get the persisted {@link JobResult} instances that are marked as {@code dirty}. This is

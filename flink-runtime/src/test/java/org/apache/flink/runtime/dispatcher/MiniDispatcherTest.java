@@ -287,7 +287,7 @@ public class MiniDispatcherTest extends TestLogger {
 
             final JobResult jobResult = jobResultFuture.get();
 
-            assertThat(jobResult.getJobId(), is(jobGraph.getJobID()));
+            assertThat(jobResult.getStreamId(), is(jobGraph.getJobID()));
         } finally {
             RpcUtils.terminateRpcEndpoint(miniDispatcher);
         }

@@ -115,8 +115,8 @@ public class JobExecutionResultResponseBodyTest
         if (expectedJobExecutionResult != null) {
             assertThat(actualJobExecutionResult).isNotNull();
 
-            assertThat(actualJobExecutionResult.getJobId())
-                    .isEqualTo(expectedJobExecutionResult.getJobId());
+            assertThat(actualJobExecutionResult.getStreamId())
+                    .isEqualTo(expectedJobExecutionResult.getStreamId());
             assertThat(actualJobExecutionResult.getApplicationStatus())
                     .isEqualTo(expectedJobExecutionResult.getApplicationStatus());
             assertThat(actualJobExecutionResult.getNetRuntime())

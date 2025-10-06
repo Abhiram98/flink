@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.dispatcher.JobCancellationFailedException;
 import org.apache.flink.runtime.execution.librarycache.LibraryCacheManager;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmaster.factories.JobMasterServiceProcessFactory;
 import org.apache.flink.runtime.leaderelection.LeaderContender;
 import org.apache.flink.runtime.leaderelection.LeaderElection;
@@ -82,7 +82,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
 
     private final LeaderElection leaderElection;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final LibraryCacheManager.ClassLoaderLease classLoaderLease;
 
@@ -112,7 +112,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
     public JobMasterServiceLeadershipRunner(
             JobMasterServiceProcessFactory jobMasterServiceProcessFactory,
             LeaderElection leaderElection,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             LibraryCacheManager.ClassLoaderLease classLoaderLease,
             FatalErrorHandler fatalErrorHandler) {
         this.jobMasterServiceProcessFactory = jobMasterServiceProcessFactory;
@@ -259,7 +259,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                                 supplyAsyncIfValidLeader(
                                                 leaderSessionId,
                                                 () ->
-                                                        jobResultStore.hasJobResultEntryAsync(
+                                                        jobResultStore.hasStreamResultEntryAsync(
                                                                 getJobID()),
                                                 () ->
                                                         FutureUtils.completedExceptionally(

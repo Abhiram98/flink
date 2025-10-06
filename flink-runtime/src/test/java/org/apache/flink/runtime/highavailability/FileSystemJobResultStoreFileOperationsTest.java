@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static org.apache.flink.runtime.highavailability.JobResultStoreContractTest.DUMMY_JOB_RESULT_ENTRY;
+import static org.apache.flink.runtime.highavailability.StreamResultStoreContractTest.DUMMY_STREAM_RESULT_ENTRY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for the internal {@link FileSystemJobResultStore} mechanisms. */
@@ -128,7 +128,7 @@ public class FileSystemJobResultStoreFileOperationsTest {
         // Result store operations are creating the base directory on-the-fly
         assertThat(emptyBaseDirectory).doesNotExist();
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
         assertThat(emptyBaseDirectory).doesNotExist();
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
@@ -138,67 +138,67 @@ public class FileSystemJobResultStoreFileOperationsTest {
     @Test
     public void testStoreDirtyJobResultCreatesFile() throws Exception {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
         assertThat(getCleanResultIdsFromFileSystem()).isEmpty();
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).exists().isFile().isNotEmpty();
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).exists().isFile().isNotEmpty();
     }
 
     @Test
     public void testStoreCleanJobResultCreatesFile() throws Exception {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
         CompletableFuture<Void> markCleanAsync =
-                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         assertThat(getCleanResultIdsFromFileSystem())
-                .doesNotContain(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                .doesNotContain(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(markCleanAsync).eventuallySucceeds();
         assertThat(getCleanResultIdsFromFileSystem())
-                .containsExactlyInAnyOrder(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                .containsExactlyInAnyOrder(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
     }
 
     @Test
     public void testStoreCleanJobResultDeletesDirtyFile() {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).exists().isFile().isNotEmpty();
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).exists().isFile().isNotEmpty();
 
         CompletableFuture<Void> markResultAsCleanAsync =
-                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(markResultAsCleanAsync).eventuallySucceeds();
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
     }
 
     @Test
     public void testCleanDirtyJobResultTwiceIsIdempotent() throws IOException {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
         CompletableFuture<Void> cleanResultAsync =
-                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(cleanResultAsync).eventuallySucceeds();
         final byte[] cleanFileData =
-                FileUtils.readAllBytes(expectedCleanFile(DUMMY_JOB_RESULT_ENTRY).toPath());
+                FileUtils.readAllBytes(expectedCleanFile(DUMMY_STREAM_RESULT_ENTRY).toPath());
 
         CompletableFuture<Void> markResultAsCleanAsync =
-                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(markResultAsCleanAsync).eventuallySucceeds();
-        assertThat(expectedCleanFile(DUMMY_JOB_RESULT_ENTRY))
+        assertThat(expectedCleanFile(DUMMY_STREAM_RESULT_ENTRY))
                 .as(
                         "Marking the same job %s as clean should be idempotent.",
-                        DUMMY_JOB_RESULT_ENTRY.getJobId())
+                        DUMMY_STREAM_RESULT_ENTRY.getStreamId())
                 .hasBinaryContent(cleanFileData);
     }
 
@@ -214,27 +214,27 @@ public class FileSystemJobResultStoreFileOperationsTest {
                         path.getFileSystem(), path, true, manuallyTriggeredExecutor);
 
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).exists().isFile().isNotEmpty();
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).exists().isFile().isNotEmpty();
 
         CompletableFuture<Void> markResultAsCleanAsync =
-                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                fileSystemJobResultStore.markResultAsCleanAsync(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(markResultAsCleanAsync).eventuallySucceeds();
-        assertThat(expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
-        assertThat(expectedCleanFile(DUMMY_JOB_RESULT_ENTRY)).doesNotExist();
+        assertThat(expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
+        assertThat(expectedCleanFile(DUMMY_STREAM_RESULT_ENTRY)).doesNotExist();
     }
 
     @Test
     public void testVersionSerialization() throws IOException {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
-        final File dirtyFile = expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY);
+        final File dirtyFile = expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY);
         final FileSystemJobResultStore.JsonJobResultEntry deserializedEntry =
                 MAPPER.readValue(dirtyFile, FileSystemJobResultStore.JsonJobResultEntry.class);
         assertThat(dirtyFile).isFile().content().containsPattern("\"version\":1");
@@ -244,28 +244,28 @@ public class FileSystemJobResultStoreFileOperationsTest {
     @Test
     public void testJobResultSerializationDeserialization() throws IOException {
         CompletableFuture<Void> dirtyResultAsync =
-                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_JOB_RESULT_ENTRY);
+                fileSystemJobResultStore.createDirtyResultAsync(DUMMY_STREAM_RESULT_ENTRY);
         manuallyTriggeredExecutor.triggerAll();
         FlinkAssertions.assertThatFuture(dirtyResultAsync).eventuallySucceeds();
-        final File dirtyFile = expectedDirtyFile(DUMMY_JOB_RESULT_ENTRY);
+        final File dirtyFile = expectedDirtyFile(DUMMY_STREAM_RESULT_ENTRY);
         final FileSystemJobResultStore.JsonJobResultEntry deserializedEntry =
                 MAPPER.readValue(dirtyFile, FileSystemJobResultStore.JsonJobResultEntry.class);
         final JobResult deserializedJobResult = deserializedEntry.getJobResult();
         assertThat(deserializedJobResult)
-                .extracting(JobResult::getJobId)
-                .isEqualTo(DUMMY_JOB_RESULT_ENTRY.getJobId());
+                .extracting(JobResult::getStreamId)
+                .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getStreamId());
         assertThat(deserializedJobResult)
                 .extracting(JobResult::getApplicationStatus)
-                .isEqualTo(DUMMY_JOB_RESULT_ENTRY.getJobResult().getApplicationStatus());
+                .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getApplicationStatus());
         assertThat(deserializedJobResult)
                 .extracting(JobResult::getNetRuntime)
-                .isEqualTo(DUMMY_JOB_RESULT_ENTRY.getJobResult().getNetRuntime());
+                .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getNetRuntime());
         assertThat(deserializedJobResult)
                 .extracting(JobResult::getSerializedThrowable)
-                .isEqualTo(DUMMY_JOB_RESULT_ENTRY.getJobResult().getSerializedThrowable());
+                .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getSerializedThrowable());
         assertThat(deserializedJobResult)
                 .extracting(JobResult::getAccumulatorResults)
-                .isEqualTo(DUMMY_JOB_RESULT_ENTRY.getJobResult().getAccumulatorResults());
+                .isEqualTo(DUMMY_STREAM_RESULT_ENTRY.getJobResult().getAccumulatorResults());
     }
 
     private List<JobID> getCleanResultIdsFromFileSystem() throws IOException {
@@ -280,7 +280,7 @@ public class FileSystemJobResultStoreFileOperationsTest {
         for (File cleanFile : cleanFiles) {
             final FileSystemJobResultStore.JsonJobResultEntry entry =
                     MAPPER.readValue(cleanFile, FileSystemJobResultStore.JsonJobResultEntry.class);
-            cleanResults.add(entry.getJobResult().getJobId());
+            cleanResults.add(entry.getJobResult().getStreamId());
         }
 
         return cleanResults;
@@ -292,10 +292,10 @@ public class FileSystemJobResultStoreFileOperationsTest {
      * @param entry The job ID to construct the expected dirty path from.
      * @return The expected dirty file.
      */
-    private File expectedDirtyFile(JobResultEntry entry) {
+    private File expectedDirtyFile(StreamResultEntry entry) {
         return new File(
                 temporaryFolder.toURI().getPath(),
-                entry.getJobId().toString() + FileSystemJobResultStore.DIRTY_FILE_EXTENSION);
+                entry.getStreamId().toString() + FileSystemJobResultStore.DIRTY_FILE_EXTENSION);
     }
 
     /**
@@ -304,9 +304,9 @@ public class FileSystemJobResultStoreFileOperationsTest {
      * @param entry The job entry to construct the expected clean path from.
      * @return The expected clean file.
      */
-    private File expectedCleanFile(JobResultEntry entry) {
+    private File expectedCleanFile(StreamResultEntry entry) {
         return new File(
                 temporaryFolder.toURI().getPath(),
-                entry.getJobId().toString() + FileSystemJobResultStore.FILE_EXTENSION);
+                entry.getStreamId().toString() + FileSystemJobResultStore.FILE_EXTENSION);
     }
 }

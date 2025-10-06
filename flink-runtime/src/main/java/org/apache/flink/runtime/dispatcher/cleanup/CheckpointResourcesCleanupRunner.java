@@ -174,7 +174,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
 
     @Override
     public JobID getJobID() {
-        return jobResult.getJobId();
+        return jobResult.getStreamId();
     }
 
     @Override
@@ -223,7 +223,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
             JobResult jobResult, long initializationTimestamp) {
         return new ExecutionGraphInfo(
                 ArchivedExecutionGraph.createSparseArchivedExecutionGraph(
-                        jobResult.getJobId(),
+                        jobResult.getStreamId(),
                         "unknown",
                         getJobStatus(jobResult),
                         null,

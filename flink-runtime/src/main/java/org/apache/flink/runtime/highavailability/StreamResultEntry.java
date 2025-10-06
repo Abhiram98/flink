@@ -23,14 +23,14 @@ import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.util.Preconditions;
 
 /**
- * {@code JobResultEntry} is the entity managed by the {@link JobResultStore}. It collects
+ * {@code JobResultEntry} is the entity managed by the {@link StreamResultStore}. It collects
  * information about a globally terminated job (e.g. {@link JobResult}).
  */
-public class JobResultEntry {
+public class StreamResultEntry {
 
     private final JobResult jobResult;
 
-    public JobResultEntry(JobResult jobResult) {
+    public StreamResultEntry(JobResult jobResult) {
         this.jobResult = Preconditions.checkNotNull(jobResult);
     }
 
@@ -38,7 +38,7 @@ public class JobResultEntry {
         return jobResult;
     }
 
-    public JobID getJobId() {
-        return jobResult.getJobId();
+    public JobID getStreamId() {
+        return jobResult.getStreamId();
     }
 }

@@ -32,8 +32,8 @@ import org.apache.flink.runtime.dispatcher.cleanup.TestingResourceCleanerFactory
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
@@ -360,7 +360,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
     public void testJobBeingMarkedAsCleanAfterCleanup() throws Exception {
         final CompletableFuture<JobID> markAsCleanFuture = new CompletableFuture<>();
 
-        final JobResultStore jobResultStore =
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withMarkResultAsCleanConsumer(
                                 jobID -> {
@@ -552,7 +552,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Test
     public void testFatalErrorIfJobCannotBeMarkedDirtyInJobResultStore() throws Exception {
-        final JobResultStore jobResultStore =
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withCreateDirtyResultConsumer(
                                 jobResult ->
@@ -582,8 +582,8 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Test
     public void testErrorHandlingIfJobCannotBeMarkedAsCleanInJobResultStore() throws Exception {
-        final CompletableFuture<JobResultEntry> dirtyJobFuture = new CompletableFuture<>();
-        final JobResultStore jobResultStore =
+        final CompletableFuture<StreamResultEntry> dirtyJobFuture = new CompletableFuture<>();
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withCreateDirtyResultConsumer(
                                 jobResultEntry -> {
@@ -622,7 +622,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
             // expected
         }
 
-        assertThat(dirtyJobFuture.get().getJobId(), is(jobId));
+        assertThat(dirtyJobFuture.get().getStreamId(), is(jobId));
     }
 
     /** Tests that a failing {@link JobManagerRunner} will be properly cleaned up. */

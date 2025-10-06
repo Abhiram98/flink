@@ -34,7 +34,7 @@ import org.apache.flink.runtime.dispatcher.SessionDispatcherFactory;
 import org.apache.flink.runtime.dispatcher.VoidHistoryServerArchivist;
 import org.apache.flink.runtime.heartbeat.TestingHeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServicesUtils;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
@@ -198,7 +198,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                                 }
 
                                 @Override
-                                public JobResultStore createJobResultStore() {
+                                public StreamResultStore createJobResultStore() {
                                     return new EmbeddedJobResultStore();
                                 }
                             },

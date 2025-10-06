@@ -45,8 +45,8 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
@@ -229,7 +229,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         final JobResult jobResult =
                 TestingJobResultStore.createJobResult(
                         jobGraph.getJobID(), ApplicationStatus.SUCCEEDED);
-        haServices.getJobResultStore().createDirtyResultAsync(new JobResultEntry(jobResult)).get();
+        haServices.getJobResultStore().createDirtyResultAsync(new StreamResultEntry(jobResult)).get();
         assertDuplicateJobSubmission();
     }
 
@@ -238,7 +238,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         final JobResult jobResult =
                 TestingJobResultStore.createJobResult(
                         jobGraph.getJobID(), ApplicationStatus.SUCCEEDED);
-        haServices.getJobResultStore().createDirtyResultAsync(new JobResultEntry(jobResult)).get();
+        haServices.getJobResultStore().createDirtyResultAsync(new StreamResultEntry(jobResult)).get();
         haServices.getJobResultStore().markResultAsCleanAsync(jobGraph.getJobID()).get();
 
         assertDuplicateJobSubmission();
@@ -1834,7 +1834,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 CompletableFuture<Void> future,
                 JobMasterServiceProcessFactory jobMasterServiceProcessFactory,
                 LeaderElection leaderElection,
-                JobResultStore jobResultStore,
+                StreamResultStore jobResultStore,
                 LibraryCacheManager.ClassLoaderLease classLoaderLease,
                 FatalErrorHandler fatalErrorHandler) {
             super(

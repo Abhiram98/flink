@@ -29,7 +29,7 @@ import org.apache.flink.runtime.dispatcher.cleanup.TestingRetryStrategies;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.heartbeat.HeartbeatServicesImpl;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
@@ -77,7 +77,7 @@ class TestingDispatcher extends Dispatcher {
             BlobServer blobServer,
             FatalErrorHandler fatalErrorHandler,
             ExecutionPlanWriter executionPlanWriter,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             JobManagerMetricGroup jobManagerMetricGroup,
             @Nullable String metricServiceQueryAddress,
             Executor ioExecutor,
@@ -179,7 +179,7 @@ class TestingDispatcher extends Dispatcher {
         private HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 1000L);
 
         private ExecutionPlanWriter executionPlanWriter = NoOpExecutionPlanWriter.INSTANCE;
-        private JobResultStore jobResultStore = new EmbeddedJobResultStore();
+        private StreamResultStore jobResultStore = new EmbeddedJobResultStore();
 
         private Configuration configuration = new Configuration();
 
@@ -248,7 +248,7 @@ class TestingDispatcher extends Dispatcher {
             return this;
         }
 
-        public Builder setJobResultStore(JobResultStore jobResultStore) {
+        public Builder setJobResultStore(StreamResultStore jobResultStore) {
             this.jobResultStore = jobResultStore;
             return this;
         }

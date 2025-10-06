@@ -26,8 +26,8 @@ import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.execution.librarycache.LibraryCacheManager;
 import org.apache.flink.runtime.execution.librarycache.TestingClassLoaderLease;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
@@ -87,7 +87,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
     private TestingFatalErrorHandler fatalErrorHandler;
 
-    private JobResultStore jobResultStore;
+    private StreamResultStore jobResultStore;
 
     @BeforeAll
     static void setupClass() {
@@ -679,7 +679,7 @@ class JobMasterServiceLeadershipRunnerTest {
         final JobID jobId = new JobID();
         final JobResult jobResult =
                 TestingJobResultStore.createJobResult(jobId, ApplicationStatus.UNKNOWN);
-        jobResultStore.createDirtyResultAsync(new JobResultEntry(jobResult)).get();
+        jobResultStore.createDirtyResultAsync(new StreamResultEntry(jobResult)).get();
         try (JobManagerRunner jobManagerRunner =
                 newJobMasterServiceLeadershipRunnerBuilder()
                         .setJobMasterServiceProcessFactory(

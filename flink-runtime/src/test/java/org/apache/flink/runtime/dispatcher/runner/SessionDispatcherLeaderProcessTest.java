@@ -23,7 +23,7 @@ import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.client.JobSubmissionException;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
@@ -80,7 +80,7 @@ class SessionDispatcherLeaderProcessTest {
     private TestingFatalErrorHandler fatalErrorHandler;
 
     private ExecutionPlanStore executionPlanStore;
-    private JobResultStore jobResultStore;
+    private StreamResultStore jobResultStore;
 
     private AbstractDispatcherLeaderProcess.DispatcherGatewayServiceFactory
             dispatcherServiceFactory;
@@ -296,7 +296,7 @@ class SessionDispatcherLeaderProcessTest {
             // start returns without the initial recovery being completed
             // mimic ZK message about an added jobgraph while the recovery is ongoing
             recoveryInitiatedLatch.await();
-            dispatcherLeaderProcess.onAddedExecutionPlan(dirtyJobResult.getJobId());
+            dispatcherLeaderProcess.onAddedExecutionPlan(dirtyJobResult.getStreamId());
             jobGraphAddedLatch.trigger();
 
             assertThatFuture(recoveredExecutionPlansFuture)
