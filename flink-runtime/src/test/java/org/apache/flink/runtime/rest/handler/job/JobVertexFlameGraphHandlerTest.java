@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecution;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
@@ -59,7 +59,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JobVertexFlameGraphHandlerTest {
 
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
 
     private static VertexThreadInfoStats taskThreadInfoStatsDefaultSample;
     private static JobVertexFlameGraphHandler handler;

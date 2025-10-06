@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobgraph.forwardgroup;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -40,7 +40,7 @@ public class ForwardGroup {
     private int parallelism = ExecutionConfig.PARALLELISM_DEFAULT;
 
     private int maxParallelism = StreamVertex.MAX_PARALLELISM_DEFAULT;
-    private final Set<JobVertexID> jobVertexIds = new HashSet<>();
+    private final Set<StreamVertexID> jobVertexIds = new HashSet<>();
 
     public ForwardGroup(final Set<StreamVertex> jobVertices) {
         checkNotNull(jobVertices);
@@ -102,7 +102,7 @@ public class ForwardGroup {
         return jobVertexIds.size();
     }
 
-    public Set<JobVertexID> getJobVertexIds() {
+    public Set<StreamVertexID> getJobVertexIds() {
         return jobVertexIds;
     }
 }

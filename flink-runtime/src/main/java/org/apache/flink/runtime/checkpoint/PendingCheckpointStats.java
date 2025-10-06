@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toConcurrentMap;
  *
  * <p>This is the starting point for all checkpoint tracking. The life cycle of instances of this
  * class is tightly coupled to a {@link PendingCheckpoint} instance, which forwards statistics about
- * acknowledged subtasks via {@link #reportSubtaskStats(JobVertexID, SubtaskStateStats)}.
+ * acknowledged subtasks via {@link #reportSubtaskStats(StreamVertexID, SubtaskStateStats)}.
  *
  * <p>Depending on whether the {@link PendingCheckpoint} is finalized successfully or aborted, we
  * replace ourselves with a {@link CompletedCheckpointStats} or {@link FailedCheckpointStats} and
@@ -73,7 +73,7 @@ public class PendingCheckpointStats extends AbstractCheckpointStats {
             long checkpointId,
             long triggerTimestamp,
             CheckpointProperties props,
-            Map<JobVertexID, Integer> taskStats) {
+            Map<StreamVertexID, Integer> taskStats) {
         this(
                 checkpointId,
                 triggerTimestamp,
@@ -100,7 +100,7 @@ public class PendingCheckpointStats extends AbstractCheckpointStats {
             long triggerTimestamp,
             CheckpointProperties props,
             int totalSubtaskCount,
-            Map<JobVertexID, TaskStateStats> taskStats) {
+            Map<StreamVertexID, TaskStateStats> taskStats) {
         this(
                 checkpointId,
                 triggerTimestamp,
@@ -122,7 +122,7 @@ public class PendingCheckpointStats extends AbstractCheckpointStats {
             CheckpointProperties props,
             int totalSubtaskCount,
             int acknowledgedSubtaskCount,
-            Map<JobVertexID, TaskStateStats> taskStats,
+            Map<StreamVertexID, TaskStateStats> taskStats,
             long currentCheckpointedSize,
             long currentStateSize,
             long processedData,
@@ -191,7 +191,7 @@ public class PendingCheckpointStats extends AbstractCheckpointStats {
      * @param subtask The statistics for the subtask.
      * @return <code>true</code> if successfully reported or <code>false</code> otherwise.
      */
-    boolean reportSubtaskStats(JobVertexID jobVertexId, SubtaskStateStats subtask) {
+    boolean reportSubtaskStats(StreamVertexID jobVertexId, SubtaskStateStats subtask) {
         TaskStateStats taskStateStats = taskStats.get(jobVertexId);
 
         if (taskStateStats != null && taskStateStats.reportSubtaskStats(subtask)) {

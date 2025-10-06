@@ -23,7 +23,7 @@ import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.clusterframework.types.SlotProfile;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
@@ -94,7 +94,7 @@ class MergingSharedSlotProfileRetrieverTest {
         // preferred locations
         List<ExecutionVertexID> executions =
                 IntStream.range(0, 3)
-                        .mapToObj(i -> new ExecutionVertexID(new JobVertexID(), 0))
+                        .mapToObj(i -> new ExecutionVertexID(new StreamVertexID(), 0))
                         .collect(Collectors.toList());
 
         List<TaskManagerLocation> allLocations =
@@ -171,7 +171,7 @@ class MergingSharedSlotProfileRetrieverTest {
             int executionSlotSharingGroupSize) {
         List<ExecutionVertexID> executions =
                 prevAllocationIDs.stream()
-                        .map(stub -> new ExecutionVertexID(new JobVertexID(), 0))
+                        .map(stub -> new ExecutionVertexID(new StreamVertexID(), 0))
                         .collect(Collectors.toList());
         return getSlotProfile(
                 EMPTY_PREFERRED_LOCATIONS_RETRIEVER,

@@ -26,7 +26,7 @@ import org.apache.flink.runtime.blob.BlobStore;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.types.Either;
 import org.apache.flink.util.SerializedValue;
@@ -94,7 +94,7 @@ class DefaultExecutionGraphDeploymentWithBlobServerTest
     }
 
     @Override
-    protected void checkTaskOffloaded(ExecutionGraph eg, JobVertexID streamVertexId) throws Exception {
+    protected void checkTaskOffloaded(ExecutionGraph eg, StreamVertexID streamVertexId) throws Exception {
         Either<SerializedValue<TaskInformation>, PermanentBlobKey> taskInformationOrBlobKey =
                 eg.getJobVertex(streamVertexId).getTaskInformationOrBlobKey();
 

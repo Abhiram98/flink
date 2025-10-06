@@ -23,7 +23,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecution;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
@@ -99,7 +99,7 @@ public class SubtaskExecutionAttemptDetailsHandler
             throws RestHandlerException {
 
         final JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
-        final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
 
         return SubtaskExecutionAttemptDetailsInfo.create(
                 execution, metricFetcher, jobID, jobVertexID, null);

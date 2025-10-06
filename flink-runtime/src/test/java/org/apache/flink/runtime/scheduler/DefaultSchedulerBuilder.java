@@ -41,7 +41,7 @@ import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFa
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -408,11 +408,11 @@ public class DefaultSchedulerBuilder {
     }
 
     public static VertexParallelismAndInputInfosDecider createCustomParallelismDecider(
-            Function<JobVertexID, Integer> parallelismFunction) {
+            Function<StreamVertexID, Integer> parallelismFunction) {
         return new VertexParallelismAndInputInfosDecider() {
             @Override
             public ParallelismAndInputInfos decideParallelismAndInputInfosForVertex(
-                    JobVertexID jobVertexId,
+                    StreamVertexID jobVertexId,
                     List<BlockingResultInfo> consumedResults,
                     int vertexInitialParallelism,
                     int vertexMinParallelism,
@@ -431,7 +431,7 @@ public class DefaultSchedulerBuilder {
 
             @Override
             public int computeSourceParallelismUpperBound(
-                    JobVertexID jobVertexId, int maxParallelism) {
+                    StreamVertexID jobVertexId, int maxParallelism) {
                 return parallelismFunction.apply(jobVertexId);
             }
 

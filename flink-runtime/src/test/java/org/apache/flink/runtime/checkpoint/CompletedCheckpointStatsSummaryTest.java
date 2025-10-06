@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -101,8 +101,8 @@ public class CompletedCheckpointStatsSummaryTest {
         SubtaskStateStats latest = mock(SubtaskStateStats.class);
         when(latest.getAckTimestamp()).thenReturn(ackTimestamp);
 
-        Map<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
-        JobVertexID jobVertexId = new JobVertexID();
+        Map<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
+        StreamVertexID jobVertexId = new StreamVertexID();
         taskStats.put(jobVertexId, new TaskStateStats(jobVertexId, 1));
 
         return new CompletedCheckpointStats(
@@ -138,7 +138,7 @@ public class CompletedCheckpointStatsSummaryTest {
                         triggerTimestamp,
                         CheckpointProperties.forSavepoint(false, SavepointFormatType.CANONICAL),
                         1,
-                        singletonMap(new JobVertexID(), new TaskStateStats(new JobVertexID(), 1)),
+                        singletonMap(new StreamVertexID(), new TaskStateStats(new StreamVertexID(), 1)),
                         1,
                         stateSize,
                         processedData,

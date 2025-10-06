@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
 import org.apache.flink.runtime.execution.SuppressRestartsException;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.util.Preconditions;
@@ -41,7 +41,7 @@ public class KvStateLocationRegistry {
     private final JobID jobId;
 
     /** Job vertices for determining parallelism per key. */
-    private final Map<JobVertexID, ExecutionJobVertex> jobVertices;
+    private final Map<StreamVertexID, ExecutionJobVertex> jobVertices;
 
     /**
      * Location info keyed by registration name. The name needs to be unique per JobID, i.e. two
@@ -55,7 +55,7 @@ public class KvStateLocationRegistry {
      * @param jobId JobID this coordinator belongs to.
      * @param jobVertices Job vertices map of all vertices of this job.
      */
-    public KvStateLocationRegistry(JobID jobId, Map<JobVertexID, ExecutionJobVertex> jobVertices) {
+    public KvStateLocationRegistry(JobID jobId, Map<StreamVertexID, ExecutionJobVertex> jobVertices) {
         this.jobId = Preconditions.checkNotNull(jobId, "JobID");
         this.jobVertices = Preconditions.checkNotNull(jobVertices, "Job vertices");
     }
@@ -85,7 +85,7 @@ public class KvStateLocationRegistry {
      * @throws IndexOutOfBoundsException If key group index is out of bounds.
      */
     public void notifyKvStateRegistered(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -136,7 +136,7 @@ public class KvStateLocationRegistry {
      * @throws IllegalArgumentException If the registration name is not known
      */
     public void notifyKvStateUnregistered(
-            JobVertexID jobVertexId, KeyGroupRange keyGroupRange, String registrationName) {
+            StreamVertexID jobVertexId, KeyGroupRange keyGroupRange, String registrationName) {
 
         KvStateLocation location = lookupTable.get(registrationName);
 

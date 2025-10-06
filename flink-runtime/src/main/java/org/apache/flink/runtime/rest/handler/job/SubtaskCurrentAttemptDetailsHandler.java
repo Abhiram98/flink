@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.AccessExecution;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
@@ -82,7 +82,7 @@ public class SubtaskCurrentAttemptDetailsHandler
         final AccessExecution execution = executionVertex.getCurrentExecutionAttempt();
 
         final JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
-        final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
 
         final Collection<AccessExecution> attempts = executionVertex.getCurrentExecutions();
         List<SubtaskExecutionAttemptDetailsInfo> otherConcurrentAttempts = null;

@@ -792,7 +792,7 @@ public class AdaptiveScheduler
 
     @Override
     public SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
         return state.tryCall(
                         StateWithExecutionGraph.class,
                         stateWithExecutionGraph ->
@@ -852,7 +852,7 @@ public class AdaptiveScheduler
     @Override
     public void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -874,7 +874,7 @@ public class AdaptiveScheduler
     @Override
     public void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
             throws FlinkStreamNotFoundException {
@@ -1330,7 +1330,7 @@ public class AdaptiveScheduler
             StreamGraph adjustedJobGraph = jobInformation.copyJobGraph();
 
             for (StreamVertex vertex : adjustedJobGraph.getVertices()) {
-                JobVertexID id = vertex.getID();
+                StreamVertexID id = vertex.getID();
 
                 // use the determined "available parallelism" to use
                 // the resources we have access to

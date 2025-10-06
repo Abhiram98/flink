@@ -117,17 +117,17 @@ class DefaultExecutionGraphDeploymentTest {
      * @param eg the execution graph that was created
      * @param streamVertexId job vertex ID
      */
-    protected void checkTaskOffloaded(ExecutionGraph eg, JobVertexID streamVertexId) throws Exception {
+    protected void checkTaskOffloaded(ExecutionGraph eg, StreamVertexID streamVertexId) throws Exception {
         assertThat(eg.getJobVertex(streamVertexId).getTaskInformationOrBlobKey().isLeft()).isTrue();
     }
 
     @Test
     void testBuildDeploymentDescriptor() throws Exception {
 
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
-        final JobVertexID jid3 = new JobVertexID();
-        final JobVertexID jid4 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
+        final StreamVertexID jid3 = new StreamVertexID();
+        final StreamVertexID jid4 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -244,8 +244,8 @@ class DefaultExecutionGraphDeploymentTest {
     @Test
     void testRegistrationOfExecutionsFinishing() throws Exception {
 
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -264,8 +264,8 @@ class DefaultExecutionGraphDeploymentTest {
     @Test
     void testRegistrationOfExecutionsFailing() throws Exception {
 
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -284,8 +284,8 @@ class DefaultExecutionGraphDeploymentTest {
     @Test
     void testRegistrationOfExecutionsFailedExternally() throws Exception {
 
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -307,8 +307,8 @@ class DefaultExecutionGraphDeploymentTest {
      */
     @Test
     void testAccumulatorsAndMetricsForwarding() throws Exception {
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -371,8 +371,8 @@ class DefaultExecutionGraphDeploymentTest {
      */
     @Test
     void testAccumulatorsAndMetricsStorage() throws Exception {
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);
@@ -401,8 +401,8 @@ class DefaultExecutionGraphDeploymentTest {
     @Test
     void testRegistrationOfExecutionsCanceled() throws Exception {
 
-        final JobVertexID jid1 = new JobVertexID();
-        final JobVertexID jid2 = new JobVertexID();
+        final StreamVertexID jid1 = new StreamVertexID();
+        final StreamVertexID jid2 = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", jid1);
         StreamVertex v2 = new StreamVertex("v2", jid2);

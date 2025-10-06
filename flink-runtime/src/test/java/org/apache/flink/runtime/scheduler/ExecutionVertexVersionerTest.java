@@ -19,7 +19,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +37,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ExecutionVertexVersionerTest {
 
     private static final ExecutionVertexID TEST_EXECUTION_VERTEX_ID1 =
-            new ExecutionVertexID(new JobVertexID(), 0);
+            new ExecutionVertexID(new StreamVertexID(), 0);
     private static final ExecutionVertexID TEST_EXECUTION_VERTEX_ID2 =
-            new ExecutionVertexID(new JobVertexID(), 0);
+            new ExecutionVertexID(new StreamVertexID(), 0);
     private static final Collection<ExecutionVertexID> TEST_ALL_EXECUTION_VERTEX_IDS =
             Arrays.asList(TEST_EXECUTION_VERTEX_ID1, TEST_EXECUTION_VERTEX_ID2);
 

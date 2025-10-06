@@ -38,7 +38,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
 
     private final List<DefaultLogicalVertex> verticesSorted;
 
-    private final Map<JobVertexID, DefaultLogicalVertex> idToVertexMap;
+    private final Map<StreamVertexID, DefaultLogicalVertex> idToVertexMap;
 
     private final Map<IntermediateDataSetID, DefaultLogicalResult> idToResultMap;
 
@@ -65,7 +65,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
     }
 
     private void buildVerticesAndResults(final Iterable<StreamVertex> topologicallySortedJobVertices) {
-        final Function<JobVertexID, DefaultLogicalVertex> vertexRetriever = this::getVertex;
+        final Function<StreamVertexID, DefaultLogicalVertex> vertexRetriever = this::getVertex;
         final Function<IntermediateDataSetID, DefaultLogicalResult> resultRetriever =
                 this::getResult;
 
@@ -88,7 +88,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
         return verticesSorted;
     }
 
-    public DefaultLogicalVertex getVertex(final JobVertexID vertexId) {
+    public DefaultLogicalVertex getVertex(final StreamVertexID vertexId) {
         return Optional.ofNullable(idToVertexMap.get(vertexId))
                 .orElseThrow(
                         () -> new IllegalArgumentException("can not find vertex: " + vertexId));

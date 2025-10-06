@@ -58,7 +58,7 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
     private static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_EXTENSION =
             TestingUtils.defaultExecutorExtension();
 
-    private final JobVertexID jobVertexId3 = new JobVertexID();
+    private final StreamVertexID jobVertexId3 = new StreamVertexID();
 
     private TestingSchedulingExecutionVertex ev11;
     private TestingSchedulingExecutionVertex ev12;
@@ -145,7 +145,7 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
 
     @Test
     void testCoLocationConstraintIsRespected() {
-        List<Tuple2<JobVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
+        List<Tuple2<StreamVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
                 new ArrayList<>();
         CoLocationGroup coLocationGroup1 = new CoLocationGroupImpl();
         CoLocationGroup coLocationGroup2 = new CoLocationGroupImpl();
@@ -312,7 +312,7 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
     }
 
     private static StreamVertex createJobVertex(
-            String vertexName, JobVertexID vertexId, int parallelism) {
+            String vertexName, StreamVertexID vertexId, int parallelism) {
         StreamVertex jobVertex = new StreamVertex(vertexName, vertexId);
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(NoOpInvokable.class);

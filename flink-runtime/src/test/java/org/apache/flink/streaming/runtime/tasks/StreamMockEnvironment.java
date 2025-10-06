@@ -44,7 +44,7 @@ import org.apache.flink.runtime.io.network.api.writer.RecordOrEventCollectingRes
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.memory.MemoryManager;
@@ -342,8 +342,8 @@ public class StreamMockEnvironment implements Environment {
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
-        return new JobVertexID(new byte[16]);
+    public StreamVertexID getJobVertexId() {
+        return new StreamVertexID(new byte[16]);
     }
 
     @Override

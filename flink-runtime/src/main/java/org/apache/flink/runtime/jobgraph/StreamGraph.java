@@ -74,8 +74,8 @@ public class StreamGraph implements ExecutionPlan {
     private long initialClientHeartbeatTimeout;
 
     /** List of task vertices included in this job graph. */
-    private final Map<JobVertexID, StreamVertex> taskVertices =
-            new LinkedHashMap<JobVertexID, StreamVertex>();
+    private final Map<StreamVertexID, StreamVertex> taskVertices =
+            new LinkedHashMap<StreamVertexID, StreamVertex>();
 
     /** The job configuration attached to this job. */
     private Configuration jobConfiguration = new Configuration();
@@ -322,7 +322,7 @@ public class StreamGraph implements ExecutionPlan {
      * @param vertex the new task vertex to be added
      */
     public void addVertex(StreamVertex vertex) {
-        final JobVertexID id = vertex.getID();
+        final StreamVertexID id = vertex.getID();
         StreamVertex previous = taskVertices.put(id, vertex);
 
         // if we had a prior association, restore and throw an exception
@@ -411,7 +411,7 @@ public class StreamGraph implements ExecutionPlan {
      * @return the vertex with the matching ID or <code>null</code> if no vertex with such ID could
      *     be found
      */
-    public StreamVertex findVertexByID(JobVertexID id) {
+    public StreamVertex findVertexByID(StreamVertexID id) {
         return this.taskVertices.get(id);
     }
 

@@ -149,9 +149,9 @@ public class BatchJobRecoveryTest {
     private static final int SOURCE_PARALLELISM = 5;
     private static final int MIDDLE_PARALLELISM = 5;
     private static final int DECIDED_SINK_PARALLELISM = 2;
-    private static final JobVertexID SOURCE_ID = new JobVertexID();
-    private static final JobVertexID MIDDLE_ID = new JobVertexID();
-    private static final JobVertexID SINK_ID = new JobVertexID();
+    private static final StreamVertexID SOURCE_ID = new StreamVertexID();
+    private static final StreamVertexID MIDDLE_ID = new StreamVertexID();
+    private static final StreamVertexID SINK_ID = new StreamVertexID();
     private static final JobID JOB_ID = new JobID();
 
     private SourceCoordinatorProvider<MockSourceSplit> provider;
@@ -852,7 +852,7 @@ public class BatchJobRecoveryTest {
 
     private void registerPartitions(
             AdaptiveBatchScheduler scheduler,
-            Set<JobVertexID> unavailablePartitionsJobVertices,
+            Set<StreamVertexID> unavailablePartitionsJobVertices,
             Set<ExecutionVertexID> unavailablePartitionsExecutionVertices) {
         // register partitions
         ExecutionGraph executionGraph = scheduler.getExecutionGraph();
@@ -917,7 +917,7 @@ public class BatchJobRecoveryTest {
     }
 
     private static SourceCoordinator<?, ?> getInternalSourceCoordinator(
-            final ExecutionGraph executionGraph, final JobVertexID sourceID) throws Exception {
+            final ExecutionGraph executionGraph, final StreamVertexID sourceID) throws Exception {
         ExecutionJobVertex sourceJobVertex = executionGraph.getJobVertex(sourceID);
         OperatorCoordinatorHolder operatorCoordinatorHolder =
                 new ArrayList<>(sourceJobVertex.getOperatorCoordinators()).get(0);
@@ -943,7 +943,7 @@ public class BatchJobRecoveryTest {
     public static void transitionExecutionsState(
             final SchedulerBase scheduler,
             final ExecutionState state,
-            final JobVertexID jobVertexID) {
+            final StreamVertexID jobVertexID) {
         AdaptiveBatchSchedulerTest.transitionExecutionsState(
                 scheduler, state, scheduler.getExecutionJobVertex(jobVertexID).getJobVertex());
     }
@@ -989,12 +989,12 @@ public class BatchJobRecoveryTest {
     }
 
     private static ExecutionVertex getExecutionVertex(
-            final JobVertexID jobVertexId, int subtask, final ExecutionGraph executionGraph) {
+            final StreamVertexID jobVertexId, int subtask, final ExecutionGraph executionGraph) {
         return getExecutionVertices(jobVertexId, executionGraph).get(subtask);
     }
 
     private static List<ExecutionVertex> getExecutionVertices(
-            final JobVertexID jobVertexId, final ExecutionGraph executionGraph) {
+            final StreamVertexID jobVertexId, final ExecutionGraph executionGraph) {
         checkState(executionGraph.getJobVertex(jobVertexId).isInitialized());
         return Arrays.asList(executionGraph.getJobVertex(jobVertexId).getTaskVertices());
     }

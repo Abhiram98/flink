@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.RestResponseMarshallingTestBase;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
 
@@ -50,6 +50,6 @@ class SubtasksAllAccumulatorsInfoTest
                     new SubtasksAllAccumulatorsInfo.SubtaskAccumulatorsInfo(
                             i, i, "host-" + i + ":123", userAccumulators));
         }
-        return new SubtasksAllAccumulatorsInfo(new JobVertexID(), 4, subtaskAccumulatorsInfos);
+        return new SubtasksAllAccumulatorsInfo(new StreamVertexID(), 4, subtaskAccumulatorsInfos);
     }
 }

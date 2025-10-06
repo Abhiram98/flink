@@ -533,7 +533,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     @Override
     public CompletableFuture<SerializedInputSplit> requestNextInputSplit(
-            final JobVertexID vertexID, final ExecutionAttemptID executionAttempt) {
+            final StreamVertexID vertexID, final ExecutionAttemptID executionAttempt) {
 
         try {
             return CompletableFuture.completedFuture(
@@ -666,7 +666,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     @Override
     public CompletableFuture<Acknowledge> notifyKvStateRegistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName,
             final KvStateID kvStateId,
@@ -690,7 +690,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     @Override
     public CompletableFuture<Acknowledge> notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName) {
         try {

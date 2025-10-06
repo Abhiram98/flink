@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.ParallelismAndInputInfos;
 import org.apache.flink.runtime.executiongraph.ResultPartitionBytes;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.apache.flink.shaded.guava32.com.google.common.collect.Iterables;
 
@@ -296,7 +296,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
                         new long[] {10L, 15L, 13L, 12L, 1L, 10L, 8L, 20L, 12L, 17L});
         ParallelismAndInputInfos parallelismAndInputInfos =
                 decider.decideParallelismAndInputInfosForVertex(
-                        new JobVertexID(),
+                        new StreamVertexID(),
                         Collections.singletonList(allToAllBlockingResultInfo),
                         3,
                         MIN_PARALLELISM,
@@ -335,7 +335,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
         int dynamicSourceParallelism = 4;
         ParallelismAndInputInfos parallelismAndInputInfos =
                 decider.decideParallelismAndInputInfosForVertex(
-                        new JobVertexID(),
+                        new StreamVertexID(),
                         Collections.singletonList(allToAllBlockingResultInfo),
                         -1,
                         dynamicSourceParallelism,
@@ -390,7 +390,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
                 DefaultVertexParallelismAndInputInfosDecider.from(MAX_PARALLELISM, configuration);
         assertThat(
                         vertexParallelismAndInputInfosDecider.computeSourceParallelismUpperBound(
-                                new JobVertexID(), VERTEX_MAX_PARALLELISM))
+                                new StreamVertexID(), VERTEX_MAX_PARALLELISM))
                 .isEqualTo(DEFAULT_SOURCE_PARALLELISM);
     }
 
@@ -401,7 +401,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
                 DefaultVertexParallelismAndInputInfosDecider.from(MAX_PARALLELISM, configuration);
         assertThat(
                         vertexParallelismAndInputInfosDecider.computeSourceParallelismUpperBound(
-                                new JobVertexID(), VERTEX_MAX_PARALLELISM))
+                                new StreamVertexID(), VERTEX_MAX_PARALLELISM))
                 .isEqualTo(MAX_PARALLELISM);
     }
 
@@ -415,7 +415,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
                 DefaultVertexParallelismAndInputInfosDecider.from(MAX_PARALLELISM, configuration);
         assertThat(
                         vertexParallelismAndInputInfosDecider.computeSourceParallelismUpperBound(
-                                new JobVertexID(), VERTEX_MAX_PARALLELISM))
+                                new StreamVertexID(), VERTEX_MAX_PARALLELISM))
                 .isEqualTo(VERTEX_MAX_PARALLELISM);
     }
 
@@ -491,7 +491,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
         final DefaultVertexParallelismAndInputInfosDecider decider =
                 createDecider(minParallelism, maxParallelism, dataVolumePerTask);
         return decider.decideParallelism(
-                new JobVertexID(), consumedResults, minParallelism, maxParallelism);
+                new StreamVertexID(), consumedResults, minParallelism, maxParallelism);
     }
 
     private static ParallelismAndInputInfos createDeciderAndDecideParallelismAndInputInfos(
@@ -502,7 +502,7 @@ class DefaultVertexParallelismAndInputInfosDeciderTest {
         final DefaultVertexParallelismAndInputInfosDecider decider =
                 createDecider(minParallelism, maxParallelism, dataVolumePerTask);
         return decider.decideParallelismAndInputInfosForVertex(
-                new JobVertexID(), consumedResults, -1, minParallelism, maxParallelism);
+                new StreamVertexID(), consumedResults, -1, minParallelism, maxParallelism);
     }
 
     private AllToAllBlockingResultInfo createAllToAllBlockingResultInfo(

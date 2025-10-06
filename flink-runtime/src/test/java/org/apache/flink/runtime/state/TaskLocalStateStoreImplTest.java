@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.util.concurrent.Executors;
@@ -53,14 +53,14 @@ class TaskLocalStateStoreImplTest {
     protected TaskLocalStateStoreImpl taskLocalStateStore;
     protected JobID jobID;
     protected AllocationID allocationID;
-    protected JobVertexID jobVertexID;
+    protected StreamVertexID jobVertexID;
     protected int subtaskIdx;
 
     @BeforeEach
     void before() throws Exception {
         jobID = new JobID();
         allocationID = new AllocationID();
-        jobVertexID = new JobVertexID();
+        jobVertexID = new StreamVertexID();
         subtaskIdx = 0;
         this.allocationBaseDirs =
                 new File[] {
@@ -77,7 +77,7 @@ class TaskLocalStateStoreImplTest {
             File[] allocationBaseDirs,
             JobID jobID,
             AllocationID allocationID,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIdx) {
         LocalSnapshotDirectoryProviderImpl directoryProvider =
                 new LocalSnapshotDirectoryProviderImpl(

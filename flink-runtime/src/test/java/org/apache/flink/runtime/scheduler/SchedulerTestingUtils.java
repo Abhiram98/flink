@@ -171,12 +171,12 @@ public class SchedulerTestingUtils {
     }
 
     public static ExecutionState getExecutionState(
-            DefaultScheduler scheduler, JobVertexID jvid, int subtask) {
+            DefaultScheduler scheduler, StreamVertexID jvid, int subtask) {
         final ExecutionJobVertex ejv = getJobVertex(scheduler, jvid);
         return ejv.getTaskVertices()[subtask].getCurrentExecutionAttempt().getState();
     }
 
-    public static void failExecution(DefaultScheduler scheduler, JobVertexID jvid, int subtask) {
+    public static void failExecution(DefaultScheduler scheduler, StreamVertexID jvid, int subtask) {
         final ExecutionAttemptID attemptID = getAttemptId(scheduler, jvid, subtask);
         scheduler.updateTaskExecutionState(
                 new TaskExecutionState(
@@ -184,7 +184,7 @@ public class SchedulerTestingUtils {
     }
 
     public static void canceledExecution(
-            DefaultScheduler scheduler, JobVertexID jvid, int subtask) {
+            DefaultScheduler scheduler, StreamVertexID jvid, int subtask) {
         final ExecutionAttemptID attemptID = getAttemptId(scheduler, jvid, subtask);
         scheduler.updateTaskExecutionState(
                 new TaskExecutionState(
@@ -194,7 +194,7 @@ public class SchedulerTestingUtils {
     public static void setExecutionToState(
             ExecutionState executionState,
             DefaultScheduler scheduler,
-            JobVertexID jvid,
+            StreamVertexID jvid,
             int subtask) {
         final ExecutionAttemptID attemptID = getAttemptId(scheduler, jvid, subtask);
         scheduler.updateTaskExecutionState(new TaskExecutionState(attemptID, executionState));
@@ -297,13 +297,13 @@ public class SchedulerTestingUtils {
     }
 
     private static ExecutionJobVertex getJobVertex(
-            DefaultScheduler scheduler, JobVertexID jobVertexId) {
+            DefaultScheduler scheduler, StreamVertexID jobVertexId) {
         final ExecutionVertexID id = new ExecutionVertexID(jobVertexId, 0);
         return scheduler.getExecutionVertex(id).getJobVertex();
     }
 
     public static ExecutionAttemptID getAttemptId(
-            DefaultScheduler scheduler, JobVertexID jvid, int subtask) {
+            DefaultScheduler scheduler, StreamVertexID jvid, int subtask) {
         final ExecutionJobVertex ejv = getJobVertex(scheduler, jvid);
         assert ejv != null;
         return ejv.getTaskVertices()[subtask].getCurrentExecutionAttempt().getAttemptId();
@@ -396,7 +396,7 @@ public class SchedulerTestingUtils {
     }
 
     private static void initializeExecutionJobVertex(
-            JobVertexID jobVertex, ExecutionGraph executionGraph) {
+            StreamVertexID jobVertex, ExecutionGraph executionGraph) {
         try {
             executionGraph.initializeJobVertex(
                     executionGraph.getJobVertex(jobVertex), System.currentTimeMillis());
@@ -436,7 +436,7 @@ public class SchedulerTestingUtils {
 
     private static void deployTasks(
             ExecutionGraph executionGraph,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             TestingLogicalSlotBuilder slotBuilder)
             throws JobException, ExecutionException, InterruptedException {
 

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobmaster;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.state.KeyGroupRange;
 
@@ -43,7 +43,7 @@ public interface KvStateRegistryGateway {
      */
     CompletableFuture<Acknowledge> notifyKvStateRegistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName,
             final KvStateID kvStateId,
@@ -60,7 +60,7 @@ public interface KvStateRegistryGateway {
      */
     CompletableFuture<Acknowledge> notifyKvStateUnregistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName);
 }

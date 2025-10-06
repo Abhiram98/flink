@@ -18,7 +18,7 @@
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.adaptive.JobSchedulingPlan.SlotAssignment;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobAllocationsInformation.VertexAllocationInformation;
@@ -185,7 +185,7 @@ class StateLocalitySlotAssignerTest {
     }
 
     private static VertexInformation createVertex(int parallelism) {
-        JobVertexID id = new JobVertexID();
+        StreamVertexID id = new StreamVertexID();
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
         slotSharingGroup.addVertexToGroup(id);
         return new TestVertexInformation(id, parallelism, slotSharingGroup);

@@ -23,7 +23,7 @@ import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.TestingStreamStateHandle;
 import org.apache.flink.testutils.TestingUtils;
@@ -56,7 +56,7 @@ class DefaultCheckpointPlanTest {
 
     @Test
     void testAbortionIfPartiallyFinishedVertexUsedUnionListState() throws Exception {
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         OperatorID operatorId = new OperatorID();
 
         ExecutionGraph executionGraph =
@@ -91,7 +91,7 @@ class DefaultCheckpointPlanTest {
 
     @Test
     void testAbortionIfPartiallyOperatorsFinishedVertexUsedUnionListState() throws Exception {
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         OperatorID operatorId = new OperatorID();
 
         ExecutionGraph executionGraph =
@@ -129,9 +129,9 @@ class DefaultCheckpointPlanTest {
 
     @Test
     void testFulfillFinishedStates() throws Exception {
-        JobVertexID fullyFinishedVertexId = new JobVertexID();
-        JobVertexID finishedOnRestoreVertexId = new JobVertexID();
-        JobVertexID partiallyFinishedVertexId = new JobVertexID();
+        StreamVertexID fullyFinishedVertexId = new StreamVertexID();
+        StreamVertexID finishedOnRestoreVertexId = new StreamVertexID();
+        StreamVertexID partiallyFinishedVertexId = new StreamVertexID();
         OperatorID fullyFinishedOperatorId = new OperatorID();
         OperatorID finishedOnRestoreOperatorId = new OperatorID();
         OperatorID partiallyFinishedOperatorId = new OperatorID();
@@ -189,7 +189,7 @@ class DefaultCheckpointPlanTest {
 
     @Test
     void testFulfillFullyFinishedStatesWithCoordinator() throws Exception {
-        JobVertexID finishedJobVertexID = new JobVertexID();
+        StreamVertexID finishedJobVertexID = new StreamVertexID();
         OperatorID finishedOperatorID = new OperatorID();
 
         ExecutionGraph executionGraph =

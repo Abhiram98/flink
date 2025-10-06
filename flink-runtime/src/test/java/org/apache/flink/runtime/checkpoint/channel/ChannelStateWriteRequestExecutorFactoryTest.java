@@ -18,7 +18,7 @@
 package org.apache.flink.runtime.checkpoint.channel;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 
@@ -57,7 +57,7 @@ public class ChannelStateWriteRequestExecutorFactoryTest {
         for (int i = 0; i < numberOfTasks; i++) {
             ChannelStateWriteRequestExecutor newExecutor =
                     executorFactory.getOrCreateExecutor(
-                            new JobVertexID(),
+                            new StreamVertexID(),
                             RANDOM.nextInt(numberOfTasks),
                             () -> CHECKPOINT_STORAGE.createCheckpointStorage(JOB_ID),
                             maxSubtasksPerChannelStateFile);
@@ -77,7 +77,7 @@ public class ChannelStateWriteRequestExecutorFactoryTest {
     @Test
     void testSomeSubtasksCloseDuringOtherSubtasksStarting() throws Exception {
         JobID jobID = new JobID();
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         int numberOfSubtask = 100_000;
         int maxSubtasksPerChannelStateFile = 10;
 

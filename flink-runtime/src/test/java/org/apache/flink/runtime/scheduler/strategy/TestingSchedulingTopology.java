@@ -24,7 +24,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.SchedulingTopologyListener;
 
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
     }
 
     public TestingSchedulingExecutionVertex newExecutionVertex() {
-        return newExecutionVertex(new JobVertexID(), 0);
+        return newExecutionVertex(new StreamVertexID(), 0);
     }
 
     public TestingSchedulingExecutionVertex newExecutionVertex(ExecutionState executionState) {
@@ -171,7 +171,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
     }
 
     public TestingSchedulingExecutionVertex newExecutionVertex(
-            final JobVertexID jobVertexId, final int subtaskIndex) {
+            final StreamVertexID jobVertexId, final int subtaskIndex) {
         final TestingSchedulingExecutionVertex newVertex =
                 TestingSchedulingExecutionVertex.withExecutionVertexID(jobVertexId, subtaskIndex);
         addSchedulingExecutionVertex(newVertex);
@@ -459,7 +459,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
     /** Builder for {@link TestingSchedulingExecutionVertex}. */
     public class SchedulingExecutionVerticesBuilder {
 
-        private JobVertexID jobVertexId = new JobVertexID();
+        private StreamVertexID jobVertexId = new StreamVertexID();
 
         private int parallelism = 1;
 
@@ -468,7 +468,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
             return this;
         }
 
-        public SchedulingExecutionVerticesBuilder withJobVertexID(final JobVertexID jobVertexId) {
+        public SchedulingExecutionVerticesBuilder withJobVertexID(final StreamVertexID jobVertexId) {
             this.jobVertexId = jobVertexId;
             return this;
         }

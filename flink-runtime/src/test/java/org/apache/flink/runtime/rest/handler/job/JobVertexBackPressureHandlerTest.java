@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.dump.MetricDump;
 import org.apache.flink.runtime.metrics.dump.MetricDump.GaugeDump;
@@ -57,7 +57,7 @@ class JobVertexBackPressureHandlerTest {
     /** Job ID for which back pressure stats exist. */
     private static final JobID TEST_JOB_ID_BACK_PRESSURE_STATS_AVAILABLE = new JobID();
 
-    private static final JobVertexID TEST_JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID TEST_JOB_VERTEX_ID = new StreamVertexID();
 
     /** Job ID for which back pressure stats are not available. */
     private static final JobID TEST_JOB_ID_BACK_PRESSURE_STATS_ABSENT = new JobID();
@@ -255,7 +255,7 @@ class JobVertexBackPressureHandlerTest {
         final Map<String, String> pathParameters = new HashMap<>();
         pathParameters.put(
                 StreamIdPathParameter.KEY, TEST_JOB_ID_BACK_PRESSURE_STATS_ABSENT.toString());
-        pathParameters.put(JobVertexIdPathParameter.KEY, new JobVertexID().toString());
+        pathParameters.put(JobVertexIdPathParameter.KEY, new StreamVertexID().toString());
 
         final HandlerRequest<EmptyRequestBody> request =
                 HandlerRequest.resolveParametersAndCreate(

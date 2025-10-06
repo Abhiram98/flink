@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobmanager.scheduler;
 
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Collections;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class SlotSharingGroup implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Set<JobVertexID> ids = new TreeSet<>();
+    private final Set<StreamVertexID> ids = new TreeSet<>();
 
     private final SlotSharingGroupId slotSharingGroupId = new SlotSharingGroupId();
 
@@ -46,15 +46,15 @@ public class SlotSharingGroup implements java.io.Serializable {
 
     // --------------------------------------------------------------------------------------------
 
-    public void addVertexToGroup(final JobVertexID id) {
+    public void addVertexToGroup(final StreamVertexID id) {
         ids.add(checkNotNull(id));
     }
 
-    public void removeVertexFromGroup(final JobVertexID id) {
+    public void removeVertexFromGroup(final StreamVertexID id) {
         ids.remove(checkNotNull(id));
     }
 
-    public Set<JobVertexID> getJobVertexIds() {
+    public Set<StreamVertexID> getJobVertexIds() {
         return Collections.unmodifiableSet(ids);
     }
 

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /** Represents an edge in {@link LogicalTopology}, i.e. {@link JobEdge}. */
 public interface LogicalEdge {
@@ -29,5 +29,5 @@ public interface LogicalEdge {
     DistributionPattern getDistributionPattern();
 
     /** Returns the ID of producer vertex. */
-    JobVertexID getProducerVertexId();
+    StreamVertexID getProducerVertexId();
 }

@@ -39,7 +39,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
@@ -192,7 +192,7 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
         return executionGraphHandler.requestNextInputSplit(vertexID, executionAttempt);
     }
 
@@ -271,7 +271,7 @@ abstract class StateWithExecutionGraph implements State {
 
     void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -288,7 +288,7 @@ abstract class StateWithExecutionGraph implements State {
 
     void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
             throws FlinkStreamNotFoundException {

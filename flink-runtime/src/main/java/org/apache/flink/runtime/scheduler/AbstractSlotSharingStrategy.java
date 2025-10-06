@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.adapter.DefaultExecutionTopology;
@@ -95,9 +95,9 @@ abstract class AbstractSlotSharingStrategy
      * topologically sorted.
      */
     @Nonnull
-    static LinkedHashMap<JobVertexID, List<SchedulingExecutionVertex>> getExecutionVertices(
+    static LinkedHashMap<StreamVertexID, List<SchedulingExecutionVertex>> getExecutionVertices(
             SchedulingTopology topology) {
-        final LinkedHashMap<JobVertexID, List<SchedulingExecutionVertex>> vertices =
+        final LinkedHashMap<StreamVertexID, List<SchedulingExecutionVertex>> vertices =
                 new LinkedHashMap<>();
         for (SchedulingExecutionVertex executionVertex : topology.getVertices()) {
             final List<SchedulingExecutionVertex> executionVertexGroup =

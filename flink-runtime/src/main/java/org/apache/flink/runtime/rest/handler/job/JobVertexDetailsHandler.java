@@ -23,7 +23,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecution;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
@@ -82,7 +82,7 @@ public class JobVertexDetailsHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws NotFoundException {
         JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
-        JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
         if (jobVertex == null) {
@@ -119,7 +119,7 @@ public class JobVertexDetailsHandler
         final long now = System.currentTimeMillis();
         for (AccessExecutionVertex vertex : jobVertex.getTaskVertices()) {
             final AccessExecution execution = vertex.getCurrentExecutionAttempt();
-            final JobVertexID jobVertexID = jobVertex.getJobVertexId();
+            final StreamVertexID jobVertexID = jobVertex.getJobVertexId();
 
             final Collection<AccessExecution> attempts = vertex.getCurrentExecutions();
             List<SubtaskExecutionAttemptDetailsInfo> otherConcurrentAttempts = null;

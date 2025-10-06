@@ -158,7 +158,7 @@ class DefaultExecutionGraphDeploymentWithSmallBlobCacheSizeLimitTest
         final List<StreamVertex> vertices = new ArrayList<>();
 
         for (int i = 0; i < numberOfVertices; i++) {
-            StreamVertex vertex = new StreamVertex(String.format("v%d", i + 1), new JobVertexID());
+            StreamVertex vertex = new StreamVertex(String.format("v%d", i + 1), new StreamVertexID());
             vertex.setParallelism(parallelism);
             vertex.setInvokableClass(BatchTask.class);
             vertices.add(vertex);

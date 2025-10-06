@@ -21,7 +21,7 @@ package org.apache.flink.runtime.query;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,7 @@ class KvStateLocationRegistryTest {
         InetSocketAddress server = new InetSocketAddress(InetAddress.getLocalHost(), 12032);
 
         // Create registry
-        Map<JobVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertices);
+        Map<StreamVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertices);
         KvStateLocationRegistry registry = new KvStateLocationRegistry(new JobID(), vertexMap);
 
         // Register
@@ -91,7 +91,7 @@ class KvStateLocationRegistryTest {
         // Unregister
         for (int i = 0; i < vertices.length; i++) {
             int numKeyGroups = vertices[i].getMaxParallelism();
-            JobVertexID jobVertexId = vertices[i].getJobVertexId();
+            StreamVertexID jobVertexId = vertices[i].getJobVertexId();
             for (int keyGroupIndex = 0; keyGroupIndex < numKeyGroups; keyGroupIndex++) {
                 registry.notifyKvStateUnregistered(
                         jobVertexId,
@@ -111,7 +111,7 @@ class KvStateLocationRegistryTest {
         ExecutionJobVertex[] vertices =
                 new ExecutionJobVertex[] {createJobVertex(32), createJobVertex(13)};
 
-        Map<JobVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertices);
+        Map<StreamVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertices);
 
         String registrationName = "duplicated-name";
         KvStateLocationRegistry registry = new KvStateLocationRegistry(new JobID(), vertexMap);
@@ -141,7 +141,7 @@ class KvStateLocationRegistryTest {
     @Test
     void testUnregisterBeforeRegister() throws Exception {
         ExecutionJobVertex vertex = createJobVertex(4);
-        Map<JobVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertex);
+        Map<StreamVertexID, ExecutionJobVertex> vertexMap = createVertexMap(vertex);
 
         KvStateLocationRegistry registry = new KvStateLocationRegistry(new JobID(), vertexMap);
         assertThatThrownBy(
@@ -163,7 +163,7 @@ class KvStateLocationRegistryTest {
         ExecutionJobVertex[] vertices =
                 new ExecutionJobVertex[] {createJobVertex(32), createJobVertex(13)};
 
-        Map<JobVertexID, ExecutionJobVertex> vertexMap = new HashMap<>();
+        Map<StreamVertexID, ExecutionJobVertex> vertexMap = new HashMap<>();
         for (ExecutionJobVertex vertex : vertices) {
             vertexMap.put(vertex.getJobVertexId(), vertex);
         }
@@ -205,7 +205,7 @@ class KvStateLocationRegistryTest {
     // ------------------------------------------------------------------------
 
     private ExecutionJobVertex createJobVertex(int maxParallelism) {
-        JobVertexID id = new JobVertexID();
+        StreamVertexID id = new StreamVertexID();
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
 
         when(vertex.getJobVertexId()).thenReturn(id);
@@ -214,8 +214,8 @@ class KvStateLocationRegistryTest {
         return vertex;
     }
 
-    private Map<JobVertexID, ExecutionJobVertex> createVertexMap(ExecutionJobVertex... vertices) {
-        Map<JobVertexID, ExecutionJobVertex> vertexMap = new HashMap<>();
+    private Map<StreamVertexID, ExecutionJobVertex> createVertexMap(ExecutionJobVertex... vertices) {
+        Map<StreamVertexID, ExecutionJobVertex> vertexMap = new HashMap<>();
         for (ExecutionJobVertex vertex : vertices) {
             vertexMap.put(vertex.getJobVertexId(), vertex);
         }

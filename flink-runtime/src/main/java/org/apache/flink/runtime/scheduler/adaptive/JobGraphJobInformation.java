@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
@@ -54,7 +54,7 @@ public class JobGraphJobInformation implements JobInformation {
     }
 
     @Override
-    public JobInformation.VertexInformation getVertexInformation(JobVertexID jobVertexId) {
+    public JobInformation.VertexInformation getVertexInformation(StreamVertexID jobVertexId) {
         return new JobVertexInformation(
                 jobGraph.findVertexByID(jobVertexId),
                 vertexParallelismStore.getParallelismInfo(jobVertexId));
@@ -100,7 +100,7 @@ public class JobGraphJobInformation implements JobInformation {
         }
 
         @Override
-        public JobVertexID getJobVertexID() {
+        public StreamVertexID getJobVertexID() {
             return jobVertex.getID();
         }
 

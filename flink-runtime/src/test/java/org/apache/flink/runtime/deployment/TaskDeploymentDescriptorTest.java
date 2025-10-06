@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.JobInformation;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.operators.BatchTask;
 import org.apache.flink.runtime.util.DefaultGroupCache;
@@ -65,7 +65,7 @@ class TaskDeploymentDescriptorTest {
     @TempDir Path temporaryFolder;
 
     private static final JobID jobID = new JobID();
-    private static final JobVertexID vertexID = new JobVertexID();
+    private static final StreamVertexID vertexID = new StreamVertexID();
     private static final ExecutionAttemptID execId = createExecutionAttemptId(vertexID);
     private static final AllocationID allocationId = new AllocationID();
     private static final String jobName = "job name";

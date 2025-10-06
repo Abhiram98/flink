@@ -23,7 +23,7 @@ import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter.ChannelSta
 import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.buffer.FreeingBufferRecycler;
 import org.apache.flink.runtime.io.network.buffer.NetworkBuffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.StreamStateHandle;
@@ -68,7 +68,7 @@ import static org.assertj.core.api.Assertions.fail;
 class ChannelStateCheckpointWriterTest {
     private static final RunnableWithException NO_OP_RUNNABLE = () -> {};
     private final Random random = new Random();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
     private static final int SUBTASK_INDEX = 0;
     private static final SubtaskID SUBTASK_ID = SubtaskID.of(JOB_VERTEX_ID, SUBTASK_INDEX);
 
@@ -215,7 +215,7 @@ class ChannelStateCheckpointWriterTest {
             throws Exception {
         Map<SubtaskID, ChannelStateWriteResult> subtasks = new HashMap<>();
         for (int i = 0; i < maxSubtasksPerChannelStateFile; i++) {
-            subtasks.put(SubtaskID.of(new JobVertexID(), i), new ChannelStateWriteResult());
+            subtasks.put(SubtaskID.of(new StreamVertexID(), i), new ChannelStateWriteResult());
         }
         MemoryCheckpointOutputStream stream = new MemoryCheckpointOutputStream(1000);
         ChannelStateCheckpointWriter writer = createWriter(stream, subtasks.keySet());
@@ -247,7 +247,7 @@ class ChannelStateCheckpointWriterTest {
             throws Exception {
         Map<SubtaskID, ChannelStateWriteResult> subtasks = new HashMap<>();
         for (int i = 0; i < maxSubtasksPerChannelStateFile; i++) {
-            subtasks.put(SubtaskID.of(new JobVertexID(), i), new ChannelStateWriteResult());
+            subtasks.put(SubtaskID.of(new StreamVertexID(), i), new ChannelStateWriteResult());
         }
         MemoryCheckpointOutputStream stream = new MemoryCheckpointOutputStream(1000);
         ChannelStateCheckpointWriter writer = createWriter(stream, subtasks.keySet());
@@ -289,7 +289,7 @@ class ChannelStateCheckpointWriterTest {
             int maxSubtasksPerChannelStateFile) {
         Map<SubtaskID, ChannelStateWriteResult> subtasks = new HashMap<>();
         for (int i = 0; i < maxSubtasksPerChannelStateFile; i++) {
-            subtasks.put(SubtaskID.of(new JobVertexID(), i), new ChannelStateWriteResult());
+            subtasks.put(SubtaskID.of(new StreamVertexID(), i), new ChannelStateWriteResult());
         }
         MemoryCheckpointOutputStream stream = new MemoryCheckpointOutputStream(1000);
         ChannelStateCheckpointWriter writer = createWriter(stream, subtasks.keySet());
@@ -320,7 +320,7 @@ class ChannelStateCheckpointWriterTest {
     void testCloseGetHandleThrowException() throws Exception {
         Map<SubtaskID, ChannelStateWriteResult> subtasks = new HashMap<>();
         for (int i = 0; i < 5; i++) {
-            subtasks.put(SubtaskID.of(new JobVertexID(), i), new ChannelStateWriteResult());
+            subtasks.put(SubtaskID.of(new StreamVertexID(), i), new ChannelStateWriteResult());
         }
         CloseExceptionOutputStream stream = new CloseExceptionOutputStream();
         ChannelStateCheckpointWriter writer = createWriter(stream, subtasks.keySet());
@@ -368,7 +368,7 @@ class ChannelStateCheckpointWriterTest {
         subtasks.put(subtask1, new ChannelStateWriteResult());
         MemoryCheckpointOutputStream stream = new MemoryCheckpointOutputStream(1000);
         ChannelStateCheckpointWriter writer = createWriter(stream, subtasks.keySet());
-        writer.fail(new JobVertexID(), 0, new TestException());
+        writer.fail(new StreamVertexID(), 0, new TestException());
         assertThatThrownBy(
                         () -> writer.registerSubtaskResult(subtask0, new ChannelStateWriteResult()))
                 .isInstanceOf(IllegalStateException.class)

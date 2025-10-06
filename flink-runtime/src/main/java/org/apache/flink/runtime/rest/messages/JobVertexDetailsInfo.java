@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.job.JobVertexDetailsHandler;
 import org.apache.flink.runtime.rest.messages.job.SubtaskExecutionAttemptDetailsInfo;
 import org.apache.flink.runtime.rest.messages.json.JobVertexIDDeserializer;
@@ -48,7 +48,7 @@ public class JobVertexDetailsInfo implements ResponseBody {
 
     @JsonProperty(FIELD_NAME_VERTEX_ID)
     @JsonSerialize(using = JobVertexIDSerializer.class)
-    private final JobVertexID id;
+    private final StreamVertexID id;
 
     @JsonProperty(FIELD_NAME_VERTEX_NAME)
     private final String name;
@@ -72,7 +72,7 @@ public class JobVertexDetailsInfo implements ResponseBody {
     public JobVertexDetailsInfo(
             @JsonDeserialize(using = JobVertexIDDeserializer.class)
                     @JsonProperty(FIELD_NAME_VERTEX_ID)
-                    JobVertexID id,
+            StreamVertexID id,
             @JsonProperty(FIELD_NAME_VERTEX_NAME) String name,
             @JsonProperty(FIELD_NAME_PARALLELISM) int parallelism,
             @JsonProperty(FIELD_NAME_MAX_PARALLELISM) int maxParallelism,

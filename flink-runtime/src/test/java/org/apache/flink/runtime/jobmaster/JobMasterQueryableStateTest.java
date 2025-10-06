@@ -164,7 +164,7 @@ class JobMasterQueryableStateTest {
                                     registerKvState(
                                             jobMasterGateway,
                                             new JobID(),
-                                            new JobVertexID(),
+                                            new StreamVertexID(),
                                             "any-name"))
                     .satisfies(FlinkAssertions.anyCauseMatches(FlinkStreamNotFoundException.class));
         }
@@ -326,7 +326,7 @@ class JobMasterQueryableStateTest {
     private static void registerKvState(
             KvStateRegistryGateway stateRegistryGateway,
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             String registrationName)
             throws UnknownHostException, ExecutionException, InterruptedException {
         stateRegistryGateway

@@ -581,7 +581,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 .getTaskVertices()[executionVertexId.getSubtaskIndex()];
     }
 
-    public ExecutionJobVertex getExecutionJobVertex(final JobVertexID jobVertexId) {
+    public ExecutionJobVertex getExecutionJobVertex(final StreamVertexID jobVertexId) {
         return executionGraph.getAllVertices().get(jobVertexId);
     }
 
@@ -803,7 +803,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
         mainThreadExecutor.assertRunningInMainThread();
 
         return executionGraphHandler.requestNextInputSplit(vertexID, executionAttempt);
@@ -854,7 +854,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public void notifyKvStateRegistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName,
             final KvStateID kvStateId,
@@ -874,7 +874,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public void notifyKvStateUnregistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName)
             throws FlinkStreamNotFoundException {

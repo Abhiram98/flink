@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.failover.partitionrelease.Partiti
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
@@ -105,7 +105,7 @@ public interface InternalExecutionGraphAccessor {
 
     void deleteBlobs(List<PermanentBlobKey> blobKeys);
 
-    ExecutionJobVertex getJobVertex(JobVertexID id);
+    ExecutionJobVertex getJobVertex(StreamVertexID id);
 
     boolean isDynamic();
 
@@ -125,7 +125,7 @@ public interface InternalExecutionGraphAccessor {
      * @return the input info
      */
     JobVertexInputInfo getJobVertexInputInfo(
-            JobVertexID jobVertexId, IntermediateDataSetID resultId);
+            StreamVertexID jobVertexId, IntermediateDataSetID resultId);
 
     TaskDeploymentDescriptorFactory getTaskDeploymentDescriptorFactory();
 }

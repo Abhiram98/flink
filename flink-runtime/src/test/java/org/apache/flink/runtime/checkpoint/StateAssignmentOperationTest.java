@@ -1236,7 +1236,7 @@ class StateAssignmentOperationTest {
         StreamVertex jobVertex =
                 new StreamVertex(
                         operatorID.toHexString(),
-                        new JobVertexID(),
+                        new StreamVertexID(),
                         singletonList(
                                 OperatorIDPair.of(
                                         operatorID,

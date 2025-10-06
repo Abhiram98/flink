@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
 import org.apache.flink.runtime.executiongraph.IOMetrics;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerConfiguration;
@@ -64,7 +64,7 @@ class SubtaskExecutionAttemptDetailsHandlerTest {
     void testHandleRequest() throws Exception {
 
         final JobID jobID = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
 
         // The testing subtask.
         final int subtaskIndex = 1;

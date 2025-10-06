@@ -33,7 +33,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -72,7 +72,7 @@ public class AdaptiveSchedulerClusterITCase {
     private static final int NUMBER_SLOTS_PER_TASK_MANAGER = 2;
     private static final int NUMBER_TASK_MANAGERS = 2;
     private static final int PARALLELISM = NUMBER_SLOTS_PER_TASK_MANAGER * NUMBER_TASK_MANAGERS;
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
 
     private final Configuration configuration = createConfiguration();
 
@@ -280,7 +280,7 @@ public class AdaptiveSchedulerClusterITCase {
     }
 
     private void waitUntilParallelismForVertexReached(
-            JobID jobId, JobVertexID jobVertexId, int targetParallelism) throws Exception {
+            JobID jobId, StreamVertexID jobVertexId, int targetParallelism) throws Exception {
 
         CommonTestUtils.waitUntilCondition(
                 () -> {

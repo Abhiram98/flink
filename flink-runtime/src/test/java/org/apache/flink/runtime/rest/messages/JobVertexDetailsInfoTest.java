@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages;
 
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.job.SubtaskExecutionAttemptDetailsInfo;
 import org.apache.flink.runtime.rest.messages.job.metrics.IOMetricsInfo;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
@@ -118,7 +118,7 @@ class JobVertexDetailsInfoTest extends RestResponseMarshallingTestBase<JobVertex
 
         int parallelism = 1 + (random.nextInt() / 3);
         return new JobVertexDetailsInfo(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "jobVertex" + random.nextLong(),
                 parallelism,
                 2 * parallelism,

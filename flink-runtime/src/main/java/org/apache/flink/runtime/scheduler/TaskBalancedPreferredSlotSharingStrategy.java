@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationConstraint;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -86,7 +86,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
 
         private final SchedulingTopology topology;
 
-        private final Map<JobVertexID, SlotSharingGroup> slotSharingGroupMap;
+        private final Map<StreamVertexID, SlotSharingGroup> slotSharingGroupMap;
 
         /** Record the {@link ExecutionSlotSharingGroup}s for {@link SlotSharingGroup}s. */
         private final Map<SlotSharingGroup, List<ExecutionSlotSharingGroup>>
@@ -101,7 +101,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
         private final Map<ExecutionVertexID, ExecutionSlotSharingGroup>
                 executionSlotSharingGroupMap;
 
-        private final Map<JobVertexID, CoLocationGroup> coLocationGroupMap;
+        private final Map<StreamVertexID, CoLocationGroup> coLocationGroupMap;
 
         private final Map<CoLocationConstraint, ExecutionSlotSharingGroup>
                 constraintToExecutionSlotSharingGroupMap;
@@ -114,7 +114,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
 
             this.coLocationGroupMap = new HashMap<>();
             for (CoLocationGroup coLocationGroup : coLocationGroups) {
-                for (JobVertexID jobVertexId : coLocationGroup.getVertexIds()) {
+                for (StreamVertexID jobVertexId : coLocationGroup.getVertexIds()) {
                     coLocationGroupMap.put(jobVertexId, coLocationGroup);
                 }
             }
@@ -126,7 +126,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
             this.executionSlotSharingGroupMap = new HashMap<>();
 
             for (SlotSharingGroup slotSharingGroup : slotSharingGroups) {
-                for (JobVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
+                for (StreamVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
                     slotSharingGroupMap.put(jobVertexId, slotSharingGroup);
                 }
             }
@@ -134,16 +134,16 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
 
         private Map<ExecutionVertexID, ExecutionSlotSharingGroup> build() {
 
-            final LinkedHashMap<JobVertexID, List<SchedulingExecutionVertex>> allVertices =
+            final LinkedHashMap<StreamVertexID, List<SchedulingExecutionVertex>> allVertices =
                     getExecutionVertices(topology);
 
             initParalleledExecutionSlotSharingGroupsMap(allVertices);
 
             // Loop on job vertices
-            for (Map.Entry<JobVertexID, List<SchedulingExecutionVertex>> executionVertexInfos :
+            for (Map.Entry<StreamVertexID, List<SchedulingExecutionVertex>> executionVertexInfos :
                     allVertices.entrySet()) {
 
-                JobVertexID jobVertexID = executionVertexInfos.getKey();
+                StreamVertexID jobVertexID = executionVertexInfos.getKey();
                 List<SchedulingExecutionVertex> executionVertices = executionVertexInfos.getValue();
                 final SlotSharingGroup slotSharingGroup = slotSharingGroupMap.get(jobVertexID);
 
@@ -159,7 +159,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
         }
 
         private void initParalleledExecutionSlotSharingGroupsMap(
-                final LinkedHashMap<JobVertexID, List<SchedulingExecutionVertex>> allVertices) {
+                final LinkedHashMap<StreamVertexID, List<SchedulingExecutionVertex>> allVertices) {
 
             allVertices.entrySet().stream()
                     .map(
@@ -248,7 +248,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
         }
 
         private CoLocationConstraint getCoLocationConstraint(SchedulingExecutionVertex sev) {
-            final JobVertexID jobVertexID = sev.getId().getJobVertexId();
+            final StreamVertexID jobVertexID = sev.getId().getJobVertexId();
             final int subtaskIndex = sev.getId().getSubtaskIndex();
             return coLocationGroupMap.get(jobVertexID).getLocationConstraint(subtaskIndex);
         }
@@ -299,8 +299,8 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
                 final ExecutionSlotSharingGroup executionSlotSharingGroup,
                 @Nonnull SchedulingExecutionVertex executionVertex) {
             final ExecutionVertexID executionVertexId = executionVertex.getId();
-            final JobVertexID jobVertexId = executionVertexId.getJobVertexId();
-            final Set<JobVertexID> allocatedJobVertices =
+            final StreamVertexID jobVertexId = executionVertexId.getJobVertexId();
+            final Set<StreamVertexID> allocatedJobVertices =
                     executionSlotSharingGroup.getExecutionVertexIds().stream()
                             .map(ExecutionVertexID::getJobVertexId)
                             .collect(Collectors.toSet());

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.jobmanager.scheduler;
 
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.AbstractID;
 import org.apache.flink.util.Preconditions;
 
@@ -52,7 +52,7 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
     }
 
     @Override
-    public List<JobVertexID> getVertexIds() {
+    public List<StreamVertexID> getVertexIds() {
         return vertices.stream().map(StreamVertex::getID).collect(ImmutableList.toImmutableList());
     }
 

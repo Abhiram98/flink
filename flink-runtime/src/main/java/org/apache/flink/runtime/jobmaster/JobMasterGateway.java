@@ -35,7 +35,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -96,7 +96,7 @@ public interface JobMasterGateway
      *     empty object.
      */
     CompletableFuture<SerializedInputSplit> requestNextInputSplit(
-            final JobVertexID vertexID, final ExecutionAttemptID executionAttempt);
+            final StreamVertexID vertexID, final ExecutionAttemptID executionAttempt);
 
     /**
      * Requests the current state of the partition. The state of a partition is currently bound to

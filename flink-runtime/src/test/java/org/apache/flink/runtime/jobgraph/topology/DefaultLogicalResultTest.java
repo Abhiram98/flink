@@ -45,7 +45,7 @@ public class DefaultLogicalResultTest extends TestLogger {
 
     private DefaultLogicalResult logicalResult;
 
-    private Map<JobVertexID, StreamVertex> vertexMap;
+    private Map<StreamVertexID, StreamVertex> vertexMap;
 
     private StreamVertex producerVertex;
 

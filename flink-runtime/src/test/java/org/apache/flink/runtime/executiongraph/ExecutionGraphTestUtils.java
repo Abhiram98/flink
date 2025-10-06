@@ -256,7 +256,7 @@ public class ExecutionGraphTestUtils {
         }
     }
 
-    public static void finishJobVertex(ExecutionGraph executionGraph, JobVertexID jobVertexId) {
+    public static void finishJobVertex(ExecutionGraph executionGraph, StreamVertexID jobVertexId) {
         for (ExecutionVertex vertex :
                 Objects.requireNonNull(executionGraph.getJobVertex(jobVertexId))
                         .getTaskVertices()) {
@@ -371,7 +371,7 @@ public class ExecutionGraphTestUtils {
     // ------------------------------------------------------------------------
 
     public static ExecutionVertexID createRandomExecutionVertexId() {
-        return new ExecutionVertexID(new JobVertexID(), new Random().nextInt(Integer.MAX_VALUE));
+        return new ExecutionVertexID(new StreamVertexID(), new Random().nextInt(Integer.MAX_VALUE));
     }
 
     public static StreamVertex createJobVertex(
@@ -383,13 +383,13 @@ public class ExecutionGraphTestUtils {
     }
 
     public static ExecutionJobVertex getExecutionJobVertex(
-            JobVertexID id, ScheduledExecutorService executor) throws Exception {
+            StreamVertexID id, ScheduledExecutorService executor) throws Exception {
 
         return getExecutionJobVertex(id, 1, null, executor);
     }
 
     public static ExecutionJobVertex getExecutionJobVertex(
-            JobVertexID id,
+            StreamVertexID id,
             int parallelism,
             @Nullable SlotSharingGroup slotSharingGroup,
             ScheduledExecutorService executor)
@@ -424,22 +424,22 @@ public class ExecutionGraphTestUtils {
         return scheduler.getExecutionJobVertex(jobVertex.getID());
     }
 
-    public static ExecutionJobVertex getExecutionJobVertex(JobVertexID id) throws Exception {
+    public static ExecutionJobVertex getExecutionJobVertex(StreamVertexID id) throws Exception {
         return getExecutionJobVertex(id, new DirectScheduledExecutorService());
     }
 
     public static ExecutionVertex getExecutionVertex() throws Exception {
-        return getExecutionJobVertex(new JobVertexID(), new DirectScheduledExecutorService())
+        return getExecutionJobVertex(new StreamVertexID(), new DirectScheduledExecutorService())
                 .getTaskVertices()[0];
     }
 
     public static Execution getExecution() throws Exception {
-        final ExecutionJobVertex ejv = getExecutionJobVertex(new JobVertexID());
+        final ExecutionJobVertex ejv = getExecutionJobVertex(new StreamVertexID());
         return ejv.getTaskVertices()[0].getCurrentExecutionAttempt();
     }
 
     public static Execution getExecution(
-            final JobVertexID jid,
+            final StreamVertexID jid,
             final int subtaskIndex,
             final int numTasks,
             final SlotSharingGroup slotSharingGroup)
@@ -453,15 +453,15 @@ public class ExecutionGraphTestUtils {
     }
 
     public static ExecutionAttemptID createExecutionAttemptId() {
-        return createExecutionAttemptId(new JobVertexID(0, 0));
+        return createExecutionAttemptId(new StreamVertexID(0, 0));
     }
 
-    public static ExecutionAttemptID createExecutionAttemptId(JobVertexID jobVertexId) {
+    public static ExecutionAttemptID createExecutionAttemptId(StreamVertexID jobVertexId) {
         return createExecutionAttemptId(jobVertexId, 0, 0);
     }
 
     public static ExecutionAttemptID createExecutionAttemptId(
-            JobVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
+            StreamVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
         return createExecutionAttemptId(
                 new ExecutionVertexID(jobVertexId, subtaskIndex), attemptNumber);
     }

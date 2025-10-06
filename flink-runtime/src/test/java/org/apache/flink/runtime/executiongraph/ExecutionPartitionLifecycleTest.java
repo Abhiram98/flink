@@ -305,7 +305,7 @@ class ExecutionPartitionLifecycleTest {
 
     @Nonnull
     private StreamVertex createNoOpJobVertex() {
-        final StreamVertex jobVertex = new StreamVertex("Test vertex", new JobVertexID());
+        final StreamVertex jobVertex = new StreamVertex("Test vertex", new StreamVertexID());
         jobVertex.setInvokableClass(NoOpInvokable.class);
 
         return jobVertex;

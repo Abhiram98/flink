@@ -20,7 +20,7 @@ package org.apache.flink.runtime.operators.coordination;
 
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.operators.coordination.util.IncompleteFuturesTracker;
 import org.apache.flink.runtime.testutils.DirectScheduledExecutorService;
@@ -182,7 +182,7 @@ public class EventReceivingTasks implements SubtaskAccess.SubtaskAccessFactory {
         private TestSubtaskAccess(int subtaskIndex, int attemptNumber, boolean isRunning) {
             this.subtaskIndex = subtaskIndex;
             this.executionAttemptId =
-                    createExecutionAttemptId(new JobVertexID(), subtaskIndex, attemptNumber);
+                    createExecutionAttemptId(new StreamVertexID(), subtaskIndex, attemptNumber);
             this.running = new CompletableFuture<>();
             if (isRunning) {
                 switchToRunning();

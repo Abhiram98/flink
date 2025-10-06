@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.job;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.AccessExecution;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.util.MutableIOMetrics;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -197,7 +197,7 @@ public class SubtaskExecutionAttemptDetailsInfo implements ResponseBody {
             AccessExecution execution,
             @Nullable MetricFetcher metricFetcher,
             JobID jobID,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             @Nullable List<SubtaskExecutionAttemptDetailsInfo> otherConcurrentAttempts) {
         final ExecutionState status = execution.getState();
         final long now = System.currentTimeMillis();

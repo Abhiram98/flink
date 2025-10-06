@@ -19,7 +19,7 @@
 
 package org.apache.flink.runtime.jobgraph.topology;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +31,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /** Set of {@link LogicalVertex} that are connected through pipelined {@link LogicalResult}. */
 public class DefaultLogicalPipelinedRegion implements LogicalPipelinedRegion {
 
-    private final Map<JobVertexID, LogicalVertex> vertexById;
+    private final Map<StreamVertexID, LogicalVertex> vertexById;
 
     public DefaultLogicalPipelinedRegion(final Set<? extends LogicalVertex> logicalVertices) {
         checkNotNull(logicalVertices);
@@ -47,12 +47,12 @@ public class DefaultLogicalPipelinedRegion implements LogicalPipelinedRegion {
     }
 
     @Override
-    public LogicalVertex getVertex(JobVertexID vertexId) {
+    public LogicalVertex getVertex(StreamVertexID vertexId) {
         return vertexById.get(vertexId);
     }
 
     @Override
-    public boolean contains(JobVertexID vertexId) {
+    public boolean contains(StreamVertexID vertexId) {
         return vertexById.containsKey(vertexId);
     }
 

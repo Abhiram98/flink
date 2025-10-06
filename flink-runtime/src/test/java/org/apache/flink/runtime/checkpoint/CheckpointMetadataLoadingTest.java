@@ -23,7 +23,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.OperatorStreamStateHandle;
@@ -67,7 +67,7 @@ class CheckpointMetadataLoadingTest {
 
         final CompletedCheckpointStorageLocation testSavepoint =
                 createSavepointWithOperatorSubtaskState(checkpointId, operatorId, parallelism);
-        final Map<JobVertexID, ExecutionJobVertex> tasks =
+        final Map<StreamVertexID, ExecutionJobVertex> tasks =
                 createTasks(operatorId, parallelism, parallelism);
 
         final CompletedCheckpoint loaded =
@@ -91,7 +91,7 @@ class CheckpointMetadataLoadingTest {
 
         final CompletedCheckpointStorageLocation testSavepoint =
                 createSavepointWithOperatorSubtaskState(242L, operatorId, parallelism);
-        final Map<JobVertexID, ExecutionJobVertex> tasks =
+        final Map<StreamVertexID, ExecutionJobVertex> tasks =
                 createTasks(operatorId, parallelism, parallelism + 1);
 
         assertThatThrownBy(
@@ -118,7 +118,7 @@ class CheckpointMetadataLoadingTest {
 
         final CompletedCheckpointStorageLocation testSavepoint =
                 createSavepointWithOperatorSubtaskState(242L, operatorId, parallelism);
-        final Map<JobVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
+        final Map<StreamVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
 
         assertThatThrownBy(
                         () ->
@@ -144,7 +144,7 @@ class CheckpointMetadataLoadingTest {
 
         final CompletedCheckpointStorageLocation testSavepoint =
                 createSavepointWithOperatorSubtaskState(242L, operatorId, parallelism);
-        final Map<JobVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
+        final Map<StreamVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
 
         final CompletedCheckpoint loaded =
                 Checkpoints.loadAndValidateCheckpoint(
@@ -173,7 +173,7 @@ class CheckpointMetadataLoadingTest {
 
         final CompletedCheckpointStorageLocation testSavepoint =
                 createSavepointWithOperatorState(42L, state);
-        final Map<JobVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
+        final Map<StreamVertexID, ExecutionJobVertex> tasks = Collections.emptyMap();
 
         assertThatThrownBy(
                         () ->
@@ -233,10 +233,10 @@ class CheckpointMetadataLoadingTest {
         return createSavepointWithOperatorState(checkpointId, state);
     }
 
-    private static Map<JobVertexID, ExecutionJobVertex> createTasks(
+    private static Map<StreamVertexID, ExecutionJobVertex> createTasks(
             OperatorID operatorId, int parallelism, int maxParallelism) {
-        final JobVertexID vertexId =
-                new JobVertexID(operatorId.getLowerPart(), operatorId.getUpperPart());
+        final StreamVertexID vertexId =
+                new StreamVertexID(operatorId.getLowerPart(), operatorId.getUpperPart());
 
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
         when(vertex.getParallelism()).thenReturn(parallelism);
@@ -248,7 +248,7 @@ class CheckpointMetadataLoadingTest {
             when(vertex.canRescaleMaxParallelism(anyInt())).thenReturn(false);
         }
 
-        Map<JobVertexID, ExecutionJobVertex> tasks = new HashMap<>();
+        Map<StreamVertexID, ExecutionJobVertex> tasks = new HashMap<>();
         tasks.put(vertexId, vertex);
 
         return tasks;

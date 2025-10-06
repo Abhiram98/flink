@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.StatsSummary;
 import org.apache.flink.runtime.checkpoint.SubtaskStateStats;
 import org.apache.flink.runtime.checkpoint.TaskStateStats;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -90,7 +90,7 @@ public class TaskCheckpointStatisticDetailsHandler
             HandlerRequest<EmptyRequestBody> request, AbstractCheckpointStats checkpointStats)
             throws RestHandlerException {
 
-        final JobVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
 
         final TaskStateStats taskStatistics = checkpointStats.getTaskStateStats(jobVertexId);
 

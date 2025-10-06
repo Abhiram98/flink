@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
@@ -355,8 +355,8 @@ public class CompletedCheckpointTest {
     /** Tests that the stats callbacks happen if the callback is registered. */
     @Test
     void testCompletedCheckpointStatsCallbacks() throws Exception {
-        Map<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
-        JobVertexID jobVertexId = new JobVertexID();
+        Map<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
+        StreamVertexID jobVertexId = new StreamVertexID();
         taskStats.put(jobVertexId, new TaskStateStats(jobVertexId, 1));
         CompletedCheckpointStats checkpointStats =
                 new CompletedCheckpointStats(
@@ -392,10 +392,10 @@ public class CompletedCheckpointTest {
 
     @Test
     void testIsJavaSerializable() throws Exception {
-        TaskStateStats task1 = new TaskStateStats(new JobVertexID(), 3);
-        TaskStateStats task2 = new TaskStateStats(new JobVertexID(), 4);
+        TaskStateStats task1 = new TaskStateStats(new StreamVertexID(), 3);
+        TaskStateStats task2 = new TaskStateStats(new StreamVertexID(), 4);
 
-        HashMap<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
+        HashMap<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
         taskStats.put(task1.getJobVertexId(), task1);
         taskStats.put(task2.getJobVertexId(), task2);
 

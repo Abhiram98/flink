@@ -155,7 +155,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     private boolean isStoppable = true;
 
     /** All job vertices that are part of this graph. */
-    private final Map<JobVertexID, ExecutionJobVertex> tasks;
+    private final Map<StreamVertexID, ExecutionJobVertex> tasks;
 
     /** All vertices, in the order in which they were created. * */
     private final List<ExecutionJobVertex> verticesInCreationOrder;
@@ -667,12 +667,12 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public ExecutionJobVertex getJobVertex(JobVertexID id) {
+    public ExecutionJobVertex getJobVertex(StreamVertexID id) {
         return this.tasks.get(id);
     }
 
     @Override
-    public Map<JobVertexID, ExecutionJobVertex> getAllVertices() {
+    public Map<StreamVertexID, ExecutionJobVertex> getAllVertices() {
         return Collections.unmodifiableMap(this.tasks);
     }
 
@@ -948,7 +948,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     private boolean areJobVerticesAllInitialized(final SlotSharingGroup group) {
-        for (JobVertexID jobVertexId : group.getJobVertexIds()) {
+        for (StreamVertexID jobVertexId : group.getJobVertexIds()) {
             final ExecutionJobVertex jobVertex = getJobVertex(jobVertexId);
             checkNotNull(jobVertex, "Unknown job vertex %s", jobVertexId);
             if (!jobVertex.isInitialized()) {
@@ -1484,7 +1484,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 getSchedulingTopology().getResultPartition(resultPartitionId);
         final SchedulingExecutionVertex producer = schedulingResultPartition.getProducer();
         final ExecutionVertexID producerId = producer.getId();
-        final JobVertexID jobVertexId = producerId.getJobVertexId();
+        final StreamVertexID jobVertexId = producerId.getJobVertexId();
         final ExecutionJobVertex jobVertex = getJobVertex(jobVertexId);
         checkNotNull(jobVertex, "Unknown job vertex %s", jobVertexId);
 
@@ -1741,7 +1741,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     @Override
     public JobVertexInputInfo getJobVertexInputInfo(
-            JobVertexID jobVertexId, IntermediateDataSetID resultId) {
+            StreamVertexID jobVertexId, IntermediateDataSetID resultId) {
         return vertexInputInfoStore.get(jobVertexId, resultId);
     }
 

@@ -253,7 +253,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         int defaultMaxParallelism =
                 getDefaultMaxParallelism(jobMasterConfiguration, executionConfig);
 
-        final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
+        final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 ForwardGroupComputeUtil.computeForwardGroupsAndCheckParallelism(
                         jobGraph.getVerticesSortedTopologicallyFromSources());
 

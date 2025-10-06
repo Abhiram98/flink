@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job.metrics;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-/** Handler that returns the watermarks given a {@link JobID} and {@link JobVertexID}. */
+/** Handler that returns the watermarks given a {@link JobID} and {@link StreamVertexID}. */
 public class JobVertexWatermarksHandler
         extends AbstractJobVertexHandler<MetricCollectionResponseBody, JobVertexMessageParameters> {
 

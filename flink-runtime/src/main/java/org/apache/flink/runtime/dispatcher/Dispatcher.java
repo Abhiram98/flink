@@ -60,7 +60,7 @@ import org.apache.flink.runtime.highavailability.JobResultStoreOptions;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
@@ -1162,7 +1162,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         return performOperationOnJobMasterGateway(jobId, gateway -> gateway.requestJob(webTimeout))
                 .thenApply(
                         job -> {
-                            final Map<JobVertexID, Integer> maxParallelismPerJobVertex =
+                            final Map<StreamVertexID, Integer> maxParallelismPerJobVertex =
                                     new HashMap<>();
                             for (ArchivedExecutionJobVertex vertex :
                                     job.getArchivedExecutionGraph().getVerticesTopologically()) {
@@ -1209,7 +1209,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
     private static void validateMaxParallelism(
             JobResourceRequirements jobResourceRequirements,
-            Map<JobVertexID, Integer> maxParallelismPerJobVertex) {
+            Map<StreamVertexID, Integer> maxParallelismPerJobVertex) {
 
         final List<String> validationErrors =
                 JobResourceRequirements.validate(

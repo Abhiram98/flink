@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages;
 
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.job.JobVertexTaskManagersHandler;
 import org.apache.flink.runtime.rest.messages.job.metrics.IOMetricsInfo;
 import org.apache.flink.runtime.rest.messages.json.JobVertexIDDeserializer;
@@ -47,7 +47,7 @@ public class JobVertexTaskManagersInfo implements ResponseBody {
 
     @JsonProperty(VERTEX_TASK_FIELD_ID)
     @JsonSerialize(using = JobVertexIDSerializer.class)
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
 
     @JsonProperty(VERTEX_TASK_FIELD_NAME)
     private final String name;
@@ -62,7 +62,7 @@ public class JobVertexTaskManagersInfo implements ResponseBody {
     public JobVertexTaskManagersInfo(
             @JsonDeserialize(using = JobVertexIDDeserializer.class)
                     @JsonProperty(VERTEX_TASK_FIELD_ID)
-                    JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             @JsonProperty(VERTEX_TASK_FIELD_NAME) String name,
             @JsonProperty(VERTEX_TASK_FIELD_NOW) long now,
             @JsonProperty(VERTEX_TASK_FIELD_TASK_MANAGERS)

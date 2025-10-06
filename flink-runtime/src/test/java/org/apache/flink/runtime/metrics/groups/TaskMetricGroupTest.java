@@ -24,7 +24,7 @@ import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricRegistryImpl;
 import org.apache.flink.runtime.metrics.MetricRegistryTestUtils;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -69,7 +69,7 @@ class TaskMetricGroupTest {
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
-                        .addTask(createExecutionAttemptId(new JobVertexID(), 13, 2), "aTaskName");
+                        .addTask(createExecutionAttemptId(new StreamVertexID(), 13, 2), "aTaskName");
 
         assertThat(taskGroup.getScopeComponents())
                 .containsExactly(
@@ -89,7 +89,7 @@ class TaskMetricGroupTest {
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
 
         JobID jid = new JobID();
-        JobVertexID vertexId = new JobVertexID();
+        StreamVertexID vertexId = new StreamVertexID();
         ExecutionAttemptID executionId = createExecutionAttemptId(vertexId, 13, 2);
 
         TaskManagerMetricGroup tmGroup =
@@ -115,7 +115,7 @@ class TaskMetricGroupTest {
         MetricRegistryImpl registry =
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
 
-        ExecutionAttemptID executionId = createExecutionAttemptId(new JobVertexID(), 13, 1);
+        ExecutionAttemptID executionId = createExecutionAttemptId(new StreamVertexID(), 13, 1);
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
@@ -142,7 +142,7 @@ class TaskMetricGroupTest {
     @Test
     void testCreateQueryServiceMetricInfo() {
         JobID jid = new JobID();
-        JobVertexID vid = new JobVertexID();
+        StreamVertexID vid = new StreamVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(vid, 4, 5);
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(

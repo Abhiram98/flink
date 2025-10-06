@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /** Mutability extension to the {@link VertexParallelismStore}. */
 public interface MutableVertexParallelismStore extends VertexParallelismStore {
@@ -28,5 +28,5 @@ public interface MutableVertexParallelismStore extends VertexParallelismStore {
      * @param vertexId vertex to set parallelism for
      * @param info parallelism information for the given vertex
      */
-    void setParallelismInfo(JobVertexID vertexId, VertexParallelismInformation info);
+    void setParallelismInfo(StreamVertexID vertexId, VertexParallelismInformation info);
 }

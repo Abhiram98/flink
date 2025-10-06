@@ -20,14 +20,14 @@ package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /** Default implementation of {@link LogicalEdge}. It is an adapter of {@link JobEdge}. */
 public class DefaultLogicalEdge implements LogicalEdge {
 
     private final DistributionPattern distributionPattern;
 
-    private final JobVertexID producerVertexId;
+    private final StreamVertexID producerVertexId;
 
     DefaultLogicalEdge(JobEdge jobEdge) {
         this.distributionPattern = jobEdge.getDistributionPattern();
@@ -40,7 +40,7 @@ public class DefaultLogicalEdge implements LogicalEdge {
     }
 
     @Override
-    public JobVertexID getProducerVertexId() {
+    public StreamVertexID getProducerVertexId() {
         return producerVertexId;
     }
 }

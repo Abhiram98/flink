@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.fs.FSDataInputStream;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.memory.MemCheckpointStreamFactory;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.util.MethodForwardingTestUtil;
@@ -204,10 +204,10 @@ class CheckpointStreamWithResultProviderTest {
     private LocalSnapshotDirectoryProvider createLocalRecoveryDirectoryProvider()
             throws IOException {
         File localStateDir = TempDirUtils.newFolder(temporaryFolder);
-        JobID jobID = new JobID();
-        JobVertexID jobVertexID = new JobVertexID();
+        JobID streamId = new JobID();
+        StreamVertexID streamVertexId = new StreamVertexID();
         int subtaskIdx = 0;
         return new LocalSnapshotDirectoryProviderImpl(
-                localStateDir, jobID, jobVertexID, subtaskIdx);
+                localStateDir, streamId, streamVertexId, subtaskIdx);
     }
 }

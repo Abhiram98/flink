@@ -25,7 +25,7 @@ import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkRuntimeException;
 
@@ -76,7 +76,7 @@ public class TaskLocalStateStoreImpl implements OwnedTaskLocalStateStore {
     @Nonnull protected final AllocationID allocationID;
 
     /** JobVertexID of the owning subtask. */
-    @Nonnull protected final JobVertexID jobVertexID;
+    @Nonnull protected final StreamVertexID jobVertexID;
 
     /** Subtask index of the owning subtask. */
     @Nonnegative protected final int subtaskIndex;
@@ -102,7 +102,7 @@ public class TaskLocalStateStoreImpl implements OwnedTaskLocalStateStore {
     public TaskLocalStateStoreImpl(
             @Nonnull JobID jobID,
             @Nonnull AllocationID allocationID,
-            @Nonnull JobVertexID jobVertexID,
+            @Nonnull StreamVertexID jobVertexID,
             @Nonnegative int subtaskIndex,
             @Nonnull LocalRecoveryConfig localRecoveryConfig,
             @Nonnull Executor discardExecutor) {

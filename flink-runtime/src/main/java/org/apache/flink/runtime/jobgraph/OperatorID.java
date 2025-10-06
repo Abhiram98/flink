@@ -37,7 +37,7 @@ public class OperatorID extends AbstractID {
         super(lowerPart, upperPart);
     }
 
-    public static OperatorID fromJobVertexID(JobVertexID id) {
+    public static OperatorID fromJobVertexID(StreamVertexID id) {
         return new OperatorID(id.getLowerPart(), id.getUpperPart());
     }
 }

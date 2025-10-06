@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages;
 
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.job.metrics.IOMetricsInfo;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
 
@@ -80,6 +80,6 @@ class JobVertexTaskManagersInfoTest
                         AggregatedTaskDetailsInfo.create(Collections.emptyList())));
 
         return new JobVertexTaskManagersInfo(
-                new JobVertexID(), "test", System.currentTimeMillis(), taskManagersInfoList);
+                new StreamVertexID(), "test", System.currentTimeMillis(), taskManagersInfoList);
     }
 }

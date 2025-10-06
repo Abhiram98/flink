@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -40,11 +40,11 @@ public class PendingCheckpointStatsTest {
         CheckpointProperties props =
                 CheckpointProperties.forCheckpoint(
                         CheckpointRetentionPolicy.NEVER_RETAIN_AFTER_TERMINATION);
-        TaskStateStats task1 = new TaskStateStats(new JobVertexID(), 3);
-        TaskStateStats task2 = new TaskStateStats(new JobVertexID(), 4);
+        TaskStateStats task1 = new TaskStateStats(new StreamVertexID(), 3);
+        TaskStateStats task2 = new TaskStateStats(new StreamVertexID(), 4);
         int totalSubtaskCount = task1.getNumberOfSubtasks() + task2.getNumberOfSubtasks();
 
-        HashMap<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
+        HashMap<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
         taskStats.put(task1.getJobVertexId(), task1);
         taskStats.put(task2.getJobVertexId(), task2);
 
@@ -65,10 +65,10 @@ public class PendingCheckpointStatsTest {
         assertThat(pending.getEndToEndDuration()).isEqualTo(-1);
         assertThat(pending.getTaskStateStats(task1.getJobVertexId())).isEqualTo(task1);
         assertThat(pending.getTaskStateStats(task2.getJobVertexId())).isEqualTo(task2);
-        assertThat(pending.getTaskStateStats(new JobVertexID())).isNull();
+        assertThat(pending.getTaskStateStats(new StreamVertexID())).isNull();
 
         // Report subtasks and check getters
-        assertThat(pending.reportSubtaskStats(new JobVertexID(), createSubtaskStats(0, false)))
+        assertThat(pending.reportSubtaskStats(new StreamVertexID(), createSubtaskStats(0, false)))
                 .isFalse();
 
         long stateSize = 0;
@@ -114,10 +114,10 @@ public class PendingCheckpointStatsTest {
     /** Test reporting of a completed checkpoint. */
     @Test
     void testReportCompletedCheckpoint() {
-        TaskStateStats task1 = new TaskStateStats(new JobVertexID(), 3);
-        TaskStateStats task2 = new TaskStateStats(new JobVertexID(), 4);
+        TaskStateStats task1 = new TaskStateStats(new StreamVertexID(), 3);
+        TaskStateStats task2 = new TaskStateStats(new StreamVertexID(), 4);
 
-        HashMap<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
+        HashMap<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
         taskStats.put(task1.getJobVertexId(), task1);
         taskStats.put(task2.getJobVertexId(), task2);
 
@@ -177,10 +177,10 @@ public class PendingCheckpointStatsTest {
     /** Test reporting of a failed checkpoint. */
     @Test
     void testReportFailedCheckpoint() {
-        TaskStateStats task1 = new TaskStateStats(new JobVertexID(), 3);
-        TaskStateStats task2 = new TaskStateStats(new JobVertexID(), 4);
+        TaskStateStats task1 = new TaskStateStats(new StreamVertexID(), 3);
+        TaskStateStats task2 = new TaskStateStats(new StreamVertexID(), 4);
 
-        HashMap<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
+        HashMap<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
         taskStats.put(task1.getJobVertexId(), task1);
         taskStats.put(task2.getJobVertexId(), task2);
 
@@ -238,10 +238,10 @@ public class PendingCheckpointStatsTest {
 
     @Test
     void testIsJavaSerializable() throws Exception {
-        TaskStateStats task1 = new TaskStateStats(new JobVertexID(), 3);
-        TaskStateStats task2 = new TaskStateStats(new JobVertexID(), 4);
+        TaskStateStats task1 = new TaskStateStats(new StreamVertexID(), 3);
+        TaskStateStats task2 = new TaskStateStats(new StreamVertexID(), 4);
 
-        HashMap<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
+        HashMap<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
         taskStats.put(task1.getJobVertexId(), task1);
         taskStats.put(task2.getJobVertexId(), task2);
 

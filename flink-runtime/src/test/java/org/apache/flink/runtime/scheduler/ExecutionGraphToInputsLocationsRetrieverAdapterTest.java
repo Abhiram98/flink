@@ -177,7 +177,7 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
         final ExecutionGraphToInputsLocationsRetrieverAdapter inputsLocationsRetriever =
                 new ExecutionGraphToInputsLocationsRetrieverAdapter(eg);
 
-        ExecutionVertexID invalidExecutionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        ExecutionVertexID invalidExecutionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         assertThatThrownBy(
                         () ->
                                 inputsLocationsRetriever.getTaskManagerLocation(

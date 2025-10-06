@@ -81,7 +81,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
 
     private final Supplier<List<ExecutionVertexID>> sortedExecutionVertexIds;
 
-    private final Map<JobVertexID, DefaultLogicalPipelinedRegion>
+    private final Map<StreamVertexID, DefaultLogicalPipelinedRegion>
             logicalPipelinedRegionsByJobVertexId;
 
     /** Listeners that will be notified whenever the scheduling topology is updated. */
@@ -90,7 +90,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
     private DefaultExecutionTopology(
             Supplier<List<ExecutionVertexID>> sortedExecutionVertexIds,
             EdgeManager edgeManager,
-            Map<JobVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId) {
+            Map<StreamVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId) {
         this.sortedExecutionVertexIds = checkNotNull(sortedExecutionVertexIds);
         this.edgeManager = checkNotNull(edgeManager);
         this.logicalPipelinedRegionsByJobVertexId =
@@ -159,7 +159,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
         return edgeManager;
     }
 
-    private static Map<JobVertexID, DefaultLogicalPipelinedRegion>
+    private static Map<StreamVertexID, DefaultLogicalPipelinedRegion>
             computeLogicalPipelinedRegionsByJobVertexId(final ExecutionGraph executionGraph) {
         List<StreamVertex> topologicallySortedJobVertices =
                 IterableUtils.toStream(executionGraph.getVerticesTopologically())
@@ -171,7 +171,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                                 topologicallySortedJobVertices)
                         .getAllPipelinedRegions();
 
-        Map<JobVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId =
+        Map<StreamVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId =
                 new HashMap<>();
         for (DefaultLogicalPipelinedRegion logicalPipelinedRegion : logicalPipelinedRegions) {
             for (LogicalVertex vertex : logicalPipelinedRegion.getVertices()) {
@@ -188,7 +188,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
 
         checkNotNull(executionGraph, "execution graph can not be null");
 
-        final Set<JobVertexID> newJobVertexIds =
+        final Set<StreamVertexID> newJobVertexIds =
                 newlyInitializedJobVertices.stream()
                         .map(ExecutionJobVertex::getJobVertexId)
                         .collect(Collectors.toSet());

@@ -56,7 +56,7 @@ public class StreamVertex implements java.io.Serializable {
     // --------------------------------------------------------------------------------------------
 
     /** The ID of the vertex. */
-    private final JobVertexID id;
+    private final StreamVertexID id;
 
     /**
      * The IDs of all operators contained in this vertex.
@@ -179,9 +179,9 @@ public class StreamVertex implements java.io.Serializable {
      * @param name The name of the new job vertex.
      * @param id The id of the job vertex.
      */
-    public StreamVertex(String name, JobVertexID id) {
+    public StreamVertex(String name, StreamVertexID id) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = id == null ? new JobVertexID() : id;
+        this.id = id == null ? new StreamVertexID() : id;
         OperatorIDPair operatorIDPair =
                 OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.id));
         this.operatorIDs = Collections.singletonList(operatorIDPair);
@@ -194,9 +194,9 @@ public class StreamVertex implements java.io.Serializable {
      * @param primaryId The id of the job vertex.
      * @param operatorIDPairs The operator ID pairs of the job vertex.
      */
-    public StreamVertex(String name, JobVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
+    public StreamVertex(String name, StreamVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = primaryId == null ? new JobVertexID() : primaryId;
+        this.id = primaryId == null ? new StreamVertexID() : primaryId;
         this.operatorIDs = Collections.unmodifiableList(operatorIDPairs);
     }
 
@@ -207,7 +207,7 @@ public class StreamVertex implements java.io.Serializable {
      *
      * @return The ID of this job vertex
      */
-    public JobVertexID getID() {
+    public StreamVertexID getID() {
         return this.id;
     }
 

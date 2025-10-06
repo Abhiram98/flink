@@ -25,7 +25,7 @@ import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.SuppressRestartsException;
 import org.apache.flink.runtime.executiongraph.Execution;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.adaptive.JobFailureMetricReporter;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingExecutionVertex;
@@ -113,7 +113,7 @@ class ExecutionFailureHandlerTest {
     @Test
     void testNormalFailureHandling() throws Exception {
         final Set<ExecutionVertexID> tasksToRestart =
-                Collections.singleton(new ExecutionVertexID(new JobVertexID(), 0));
+                Collections.singleton(new ExecutionVertexID(new StreamVertexID(), 0));
         failoverStrategy.setTasksToRestart(tasksToRestart);
 
         Execution execution =
@@ -221,7 +221,7 @@ class ExecutionFailureHandlerTest {
     @Test
     void testNewAttemptAndNumberOfRestarts() throws Exception {
         final Set<ExecutionVertexID> tasksToRestart =
-                Collections.singleton(new ExecutionVertexID(new JobVertexID(), 0));
+                Collections.singleton(new ExecutionVertexID(new StreamVertexID(), 0));
         failoverStrategy.setTasksToRestart(tasksToRestart);
 
         Execution execution =

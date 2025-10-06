@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.messages.ThreadInfoSample;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
 import org.apache.flink.runtime.taskexecutor.TaskExecutorThreadInfoGateway;
@@ -382,9 +382,9 @@ public class VertexThreadInfoTracker implements VertexStatsTracker<VertexThreadI
 
     static class JobVertexKey {
         private final JobID jobId;
-        private final JobVertexID jobVertexId;
+        private final StreamVertexID jobVertexId;
 
-        private JobVertexKey(JobID jobId, JobVertexID jobVertexId) {
+        private JobVertexKey(JobID jobId, StreamVertexID jobVertexId) {
             this.jobId = jobId;
             this.jobVertexId = jobVertexId;
         }
@@ -416,7 +416,7 @@ public class VertexThreadInfoTracker implements VertexStatsTracker<VertexThreadI
         private final JobVertexKey jobVertexKey;
         private final int subtaskIndex;
 
-        private ExecutionVertexKey(JobID jobId, JobVertexID jobVertexId, int subtaskIndex) {
+        private ExecutionVertexKey(JobID jobId, StreamVertexID jobVertexId, int subtaskIndex) {
             this.jobVertexKey = new JobVertexKey(jobId, jobVertexId);
             this.subtaskIndex = subtaskIndex;
         }

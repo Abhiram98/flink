@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroupImpl;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -55,7 +55,7 @@ class TaskBalancedPreferredSlotSharingStrategyTest extends AbstractSlotSharingSt
 
     @Test
     void testVerticesInDifferentSlotSharingGroups() {
-        List<Tuple2<JobVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
+        List<Tuple2<StreamVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
                 new ArrayList<>();
         List<TestingJobVertexInfo> testingJobVertexInfos =
                 Lists.newArrayList(
@@ -115,7 +115,7 @@ class TaskBalancedPreferredSlotSharingStrategyTest extends AbstractSlotSharingSt
 
     @Test
     void testCoLocationConstraintIsRespected() {
-        List<Tuple2<JobVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
+        List<Tuple2<StreamVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos =
                 new ArrayList<>();
         CoLocationGroup coLocationGroup1 = new CoLocationGroupImpl();
         CoLocationGroup coLocationGroup2 = new CoLocationGroupImpl();

@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -98,7 +98,7 @@ public class JobVertexTaskManagersHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
         JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
-        JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
         if (jobVertex == null) {

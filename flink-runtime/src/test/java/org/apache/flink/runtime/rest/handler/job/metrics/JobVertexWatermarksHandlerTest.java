@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job.metrics;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
@@ -60,7 +60,7 @@ class JobVertexWatermarksHandlerTest {
 
     private static final JobID TEST_JOB_ID = new JobID();
 
-    private static final JobVertexID TEST_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID TEST_VERTEX_ID = new StreamVertexID();
 
     private MetricFetcher metricFetcher;
     private MetricStore.TaskMetricStore taskMetricStore;

@@ -24,7 +24,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlot;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -70,7 +70,7 @@ class ExecutionTest {
     @Test
     void testTerminationFutureIsCompletedAfterSlotRelease() throws Exception {
         final StreamVertex jobVertex = createNoOpJobVertex();
-        final JobVertexID jobVertexId = jobVertex.getID();
+        final StreamVertexID jobVertexId = jobVertex.getID();
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
@@ -116,7 +116,7 @@ class ExecutionTest {
     @Test
     void testTaskRestoreStateIsNulledAfterDeployment() throws Exception {
         final StreamVertex jobVertex = createNoOpJobVertex();
-        final JobVertexID jobVertexId = jobVertex.getID();
+        final StreamVertexID jobVertexId = jobVertex.getID();
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
@@ -151,7 +151,7 @@ class ExecutionTest {
     void testCanceledExecutionReturnsSlot() throws Exception {
 
         final StreamVertex jobVertex = createNoOpJobVertex();
-        final JobVertexID jobVertexId = jobVertex.getID();
+        final StreamVertexID jobVertexId = jobVertex.getID();
 
         final SimpleAckingTaskManagerGateway taskManagerGateway =
                 new SimpleAckingTaskManagerGateway();
@@ -237,7 +237,7 @@ class ExecutionTest {
 
     @Nonnull
     private StreamVertex createNoOpJobVertex() {
-        final StreamVertex jobVertex = new StreamVertex("Test vertex", new JobVertexID());
+        final StreamVertex jobVertex = new StreamVertex("Test vertex", new StreamVertexID());
         jobVertex.setInvokableClass(NoOpInvokable.class);
 
         return jobVertex;

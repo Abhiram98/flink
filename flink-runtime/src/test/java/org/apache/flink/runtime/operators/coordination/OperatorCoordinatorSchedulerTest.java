@@ -87,7 +87,7 @@ import static org.assertj.core.api.Assertions.fail;
  */
 class OperatorCoordinatorSchedulerTest {
 
-    private final JobVertexID testVertexId = new JobVertexID();
+    private final StreamVertexID testVertexId = new StreamVertexID();
     private final OperatorID testOperatorId = new OperatorID();
 
     @RegisterExtension
@@ -940,7 +940,7 @@ class OperatorCoordinatorSchedulerTest {
     // ------------------------------------------------------------------------
 
     private static ExecutionJobVertex getJobVertex(
-            DefaultScheduler scheduler, JobVertexID jobVertexId) {
+            DefaultScheduler scheduler, StreamVertexID jobVertexId) {
         final ExecutionVertexID id = new ExecutionVertexID(jobVertexId, 0);
         return scheduler.getExecutionVertex(id).getJobVertex();
     }

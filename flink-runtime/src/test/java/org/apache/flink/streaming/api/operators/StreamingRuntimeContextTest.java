@@ -44,7 +44,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.externalresource.ExternalResourceInfoProvider;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
@@ -547,7 +547,7 @@ class StreamingRuntimeContextTest {
                                 KeyGroupRange keyGroupRange = new KeyGroupRange(0, 0);
                                 TaskKvStateRegistry kvStateRegistry =
                                         new KvStateRegistry()
-                                                .createTaskRegistry(new JobID(), new JobVertexID());
+                                                .createTaskRegistry(new JobID(), new StreamVertexID());
                                 CloseableRegistry cancelStreamRegistry = new CloseableRegistry();
                                 AbstractKeyedStateBackend<Integer> backend =
                                         abstractStateBackend.createKeyedStateBackend(
@@ -618,7 +618,7 @@ class StreamingRuntimeContextTest {
                                 KeyGroupRange keyGroupRange = new KeyGroupRange(0, 0);
                                 TaskKvStateRegistry kvStateRegistry =
                                         new KvStateRegistry()
-                                                .createTaskRegistry(new JobID(), new JobVertexID());
+                                                .createTaskRegistry(new JobID(), new StreamVertexID());
                                 CloseableRegistry cancelStreamRegistry = new CloseableRegistry();
                                 AbstractKeyedStateBackend<Integer> backend =
                                         abstractStateBackend.createKeyedStateBackend(

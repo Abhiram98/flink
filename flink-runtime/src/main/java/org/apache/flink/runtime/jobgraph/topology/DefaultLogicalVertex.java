@@ -49,7 +49,7 @@ public class DefaultLogicalVertex implements LogicalVertex {
     }
 
     @Override
-    public JobVertexID getId() {
+    public StreamVertexID getId() {
         return jobVertex.getID();
     }
 

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.jobmaster.event;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class ExecutionVertexResetEventTest {
 
     @Test
     void testSerializeExecutionVertexResetEvent() throws IOException {
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         ExecutionVertexID executionVertexId1 = new ExecutionVertexID(jobVertexId, 0);
         ExecutionVertexID executionVertexId2 = new ExecutionVertexID(jobVertexId, 1);
         ExecutionVertexID executionVertexId3 = new ExecutionVertexID(jobVertexId, 2);

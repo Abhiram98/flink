@@ -112,13 +112,13 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
     private final VertexParallelismAndInputInfosDecider vertexParallelismAndInputInfosDecider;
 
-    private final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId;
+    private final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId;
 
     private final Map<IntermediateDataSetID, BlockingResultInfo> blockingResultInfos;
 
     private final HybridPartitionDataConsumeConstraint hybridPartitionDataConsumeConstraint;
 
-    private final Map<JobVertexID, CompletableFuture<Integer>>
+    private final Map<StreamVertexID, CompletableFuture<Integer>>
             sourceParallelismFuturesByJobVertexId;
 
     private final SpeculativeExecutionHandler speculativeExecutionHandler;
@@ -129,7 +129,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
      * the future, all other executions within the same vertex must also be restarted to ensure the
      * consistency and correctness of the state.
      */
-    private Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
+    private Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
 
     private final BatchJobRecoveryHandler jobRecoveryHandler;
 
@@ -161,7 +161,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             final int defaultMaxParallelism,
             final BlocklistOperations blocklistOperations,
             final HybridPartitionDataConsumeConstraint hybridPartitionDataConsumeConstraint,
-            final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId,
+            final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId,
             final BatchJobRecoveryHandler jobRecoveryHandler)
             throws Exception {
 
@@ -267,7 +267,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             Set<ExecutionVertexID> originalNeedToRestartVertices =
                     failureHandlingResult.getVerticesToRestart();
 
-            Set<JobVertexID> extraNeedToRestartJobVertices =
+            Set<StreamVertexID> extraNeedToRestartJobVertices =
                     originalNeedToRestartVertices.stream()
                             .map(ExecutionVertexID::getJobVertexId)
                             .filter(jobVerticesWithUnRecoveredCoordinators::contains)
@@ -676,7 +676,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             // the ordering of these elements received by the committer cannot be assured, which
             // would break the assumption that CommittableSummary is received before
             // CommittableWithLineage.
-            for (JobVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
+            for (StreamVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
                 ExecutionJobVertex executionJobVertex = getExecutionJobVertex(jobVertexId);
                 if (!executionJobVertex.isParallelismDecided()) {
                     log.info(
@@ -967,7 +967,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         }
 
         @Override
-        public void onRecoveringFinished(Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators) {
+        public void onRecoveringFinished(Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators) {
             AdaptiveBatchScheduler.this.jobVerticesWithUnRecoveredCoordinators =
                     new HashSet<>(jobVerticesWithUnRecoveredCoordinators);
             tryComputeSourceParallelismThenRunAsync(

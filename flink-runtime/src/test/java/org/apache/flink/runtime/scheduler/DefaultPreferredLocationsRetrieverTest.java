@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.taskmanager.LocalTaskManagerLocation;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
@@ -50,8 +50,8 @@ class DefaultPreferredLocationsRetrieverTest {
         final TestingInputsLocationsRetriever.Builder locationRetrieverBuilder =
                 new TestingInputsLocationsRetriever.Builder();
 
-        final ExecutionVertexID consumerId = new ExecutionVertexID(new JobVertexID(), 0);
-        final ExecutionVertexID producerId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID consumerId = new ExecutionVertexID(new StreamVertexID(), 0);
+        final ExecutionVertexID producerId = new ExecutionVertexID(new StreamVertexID(), 0);
         locationRetrieverBuilder.connectConsumerToProducer(consumerId, producerId);
 
         final TestingInputsLocationsRetriever inputsLocationsRetriever =
@@ -97,10 +97,10 @@ class DefaultPreferredLocationsRetrieverTest {
         final TestingInputsLocationsRetriever.Builder locationRetrieverBuilder =
                 new TestingInputsLocationsRetriever.Builder();
 
-        final ExecutionVertexID consumerId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID consumerId = new ExecutionVertexID(new StreamVertexID(), 0);
 
         int parallelism1 = 3;
-        final JobVertexID jobVertexId1 = new JobVertexID();
+        final StreamVertexID jobVertexId1 = new StreamVertexID();
         final List<ExecutionVertexID> producers1 = new ArrayList<>(parallelism1);
         for (int i = 0; i < parallelism1; i++) {
             final ExecutionVertexID producerId = new ExecutionVertexID(jobVertexId1, i);
@@ -108,7 +108,7 @@ class DefaultPreferredLocationsRetrieverTest {
         }
         locationRetrieverBuilder.connectConsumerToProducers(consumerId, producers1);
 
-        final JobVertexID jobVertexId2 = new JobVertexID();
+        final StreamVertexID jobVertexId2 = new StreamVertexID();
         int parallelism2 = 5;
         final List<ExecutionVertexID> producers2 = new ArrayList<>(parallelism2);
         for (int i = 0; i < parallelism2; i++) {
@@ -171,13 +171,13 @@ class DefaultPreferredLocationsRetrieverTest {
             final List<TaskManagerLocation> expectedPreferredLocations,
             final Set<Integer> indicesOfProducersToIgnore) {
 
-        final JobVertexID producerJobVertexId = new JobVertexID();
+        final StreamVertexID producerJobVertexId = new StreamVertexID();
         final List<ExecutionVertexID> producerIds =
                 IntStream.range(0, producerParallelism)
                         .mapToObj(i -> new ExecutionVertexID(producerJobVertexId, i))
                         .collect(Collectors.toList());
 
-        final JobVertexID consumerJobVertexId = new JobVertexID();
+        final StreamVertexID consumerJobVertexId = new StreamVertexID();
         final List<ExecutionVertexID> consumerIds =
                 IntStream.range(0, consumerParallelism)
                         .mapToObj(i -> new ExecutionVertexID(consumerJobVertexId, i))

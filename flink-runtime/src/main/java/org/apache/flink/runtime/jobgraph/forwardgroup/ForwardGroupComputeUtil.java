@@ -23,7 +23,7 @@ import org.apache.flink.runtime.executiongraph.VertexGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.JobEdge;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,9 +38,9 @@ import static org.apache.flink.util.Preconditions.checkState;
 /** Common utils for computing forward groups. */
 public class ForwardGroupComputeUtil {
 
-    public static Map<JobVertexID, ForwardGroup> computeForwardGroupsAndCheckParallelism(
+    public static Map<StreamVertexID, ForwardGroup> computeForwardGroupsAndCheckParallelism(
             final Iterable<StreamVertex> topologicallySortedVertices) {
-        final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
+        final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 computeForwardGroups(
                         topologicallySortedVertices, ForwardGroupComputeUtil::getForwardProducers);
         // the vertex's parallelism in parallelism-decided forward group should have been set at
@@ -55,7 +55,7 @@ public class ForwardGroupComputeUtil {
         return forwardGroupsByJobVertexId;
     }
 
-    public static Map<JobVertexID, ForwardGroup> computeForwardGroups(
+    public static Map<StreamVertexID, ForwardGroup> computeForwardGroups(
             final Iterable<StreamVertex> topologicallySortedVertices,
             final Function<StreamVertex, Set<StreamVertex>> forwardProducersRetriever) {
 
@@ -88,12 +88,12 @@ public class ForwardGroupComputeUtil {
             }
         }
 
-        final Map<JobVertexID, ForwardGroup> ret = new HashMap<>();
+        final Map<StreamVertexID, ForwardGroup> ret = new HashMap<>();
         for (Set<StreamVertex> vertexGroup :
                 VertexGroupComputeUtil.uniqueVertexGroups(vertexToGroup)) {
             if (vertexGroup.size() > 1) {
                 ForwardGroup forwardGroup = new ForwardGroup(vertexGroup);
-                for (JobVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
+                for (StreamVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
                     ret.put(jobVertexId, forwardGroup);
                 }
             }

@@ -23,7 +23,7 @@ import org.apache.flink.metrics.Gauge;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.testutils.TestingUtils;
@@ -62,7 +62,7 @@ class DefaultCheckpointStatsTrackerTest {
     /** Tests that the number of remembered checkpoints configuration is respected. */
     @Test
     void testTrackerWithoutHistory() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID, 3, 256)
@@ -109,13 +109,13 @@ class DefaultCheckpointStatsTrackerTest {
     /** Tests tracking of checkpoints. */
     @Test
     void testCheckpointTracking() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID, 3, 256)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         ExecutionJobVertex jobVertex = graph.getJobVertex(jobVertexID);
-        Map<JobVertexID, Integer> vertexToDop =
+        Map<StreamVertexID, Integer> vertexToDop =
                 singletonMap(jobVertexID, jobVertex.getParallelism());
 
         CheckpointStatsTracker tracker =
@@ -290,7 +290,7 @@ class DefaultCheckpointStatsTrackerTest {
 
         // "factory" code to enable the instantiation of test data based on a PendingCheckpointStats
         // instance
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
         final PendingCheckpointStats pending =
                 statsTracker.reportPendingCheckpoint(
                         0,
@@ -309,7 +309,7 @@ class DefaultCheckpointStatsTrackerTest {
     /** Tests that snapshots are only created if a new snapshot has been reported or updated. */
     @Test
     void testCreateSnapshot() {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         CheckpointStatsTracker tracker =
                 new DefaultCheckpointStatsTracker(
                         10, UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup());
@@ -357,7 +357,7 @@ class DefaultCheckpointStatsTrackerTest {
 
     @Test
     public void testSpanCreation() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         final List<Span> reportedSpans = new ArrayList<>();
 
         StreamManagerStreamMetricGroup metricGroup =
@@ -557,7 +557,7 @@ class DefaultCheckpointStatsTrackerTest {
                     }
                 };
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)

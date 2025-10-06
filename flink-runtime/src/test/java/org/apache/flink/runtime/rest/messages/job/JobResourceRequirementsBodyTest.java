@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.RestRequestMarshallingTestBase;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
 
@@ -45,8 +45,8 @@ public class JobResourceRequirementsBodyTest
     protected JobResourceRequirementsBody getTestRequestInstance() {
         return new JobResourceRequirementsBody(
                 JobResourceRequirements.newBuilder()
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 42)
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 1337)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 42)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 1337)
                         .build());
     }
 

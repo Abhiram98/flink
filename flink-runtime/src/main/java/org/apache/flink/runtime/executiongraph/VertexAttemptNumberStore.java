@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /** Contains the attempt numbers per vertex. */
 public interface VertexAttemptNumberStore {
@@ -27,5 +27,5 @@ public interface VertexAttemptNumberStore {
      * @param vertexId vertex for which the attempt numbers should be returned
      * @return attempt numbers for the given vertex
      */
-    SubtaskAttemptNumberStore getAttemptCounts(JobVertexID vertexId);
+    SubtaskAttemptNumberStore getAttemptCounts(StreamVertexID vertexId);
 }

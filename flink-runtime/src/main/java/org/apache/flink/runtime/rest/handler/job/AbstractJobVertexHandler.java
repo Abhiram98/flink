@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
@@ -79,7 +79,7 @@ public abstract class AbstractJobVertexHandler<
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
 
-        final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         final AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
         if (jobVertex == null) {

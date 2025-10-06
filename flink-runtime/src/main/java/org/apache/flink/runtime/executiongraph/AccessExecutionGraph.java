@@ -24,7 +24,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.util.OptionalFailure;
 import org.apache.flink.util.SerializedValue;
@@ -86,20 +86,20 @@ public interface AccessExecutionGraph extends JobStatusProvider {
     ErrorInfo getFailureInfo();
 
     /**
-     * Returns the job vertex for the given {@link JobVertexID}.
+     * Returns the job vertex for the given {@link StreamVertexID}.
      *
      * @param id id of job vertex to be returned
      * @return job vertex for the given id, or {@code null}
      */
     @Nullable
-    AccessExecutionJobVertex getJobVertex(JobVertexID id);
+    AccessExecutionJobVertex getJobVertex(StreamVertexID id);
 
     /**
      * Returns a map containing all job vertices for this execution graph.
      *
      * @return map containing all job vertices for this execution graph
      */
-    Map<JobVertexID, ? extends AccessExecutionJobVertex> getAllVertices();
+    Map<StreamVertexID, ? extends AccessExecutionJobVertex> getAllVertices();
 
     /**
      * Returns an iterable containing all job vertices for this execution graph in the order they

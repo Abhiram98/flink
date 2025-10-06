@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.strategy;
 
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.IterableUtils;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class TestingSchedulingExecutionVertex implements SchedulingExecutionVert
     private ExecutionState executionState;
 
     public TestingSchedulingExecutionVertex(
-            JobVertexID jobVertexId, int subtaskIndex, ExecutionState executionState) {
+            StreamVertexID jobVertexId, int subtaskIndex, ExecutionState executionState) {
 
         this.executionVertexId = new ExecutionVertexID(jobVertexId, subtaskIndex);
         this.consumedPartitionGroups = new ArrayList<>();
@@ -99,17 +99,17 @@ public class TestingSchedulingExecutionVertex implements SchedulingExecutionVert
     }
 
     public static TestingSchedulingExecutionVertex withExecutionVertexID(
-            JobVertexID jobVertexId, int subtaskIndex) {
+            StreamVertexID jobVertexId, int subtaskIndex) {
         return newBuilder().withExecutionVertexID(jobVertexId, subtaskIndex).build();
     }
 
     /** Builder for {@link TestingSchedulingExecutionVertex}. */
     public static class Builder {
-        private JobVertexID jobVertexId = new JobVertexID();
+        private StreamVertexID jobVertexId = new StreamVertexID();
         private int subtaskIndex = 0;
         private ExecutionState executionState = ExecutionState.CREATED;
 
-        Builder withExecutionVertexID(JobVertexID jobVertexId, int subtaskIndex) {
+        Builder withExecutionVertexID(StreamVertexID jobVertexId, int subtaskIndex) {
             this.jobVertexId = jobVertexId;
             this.subtaskIndex = subtaskIndex;
             return this;

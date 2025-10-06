@@ -361,7 +361,7 @@ public class ExecutionJobVertex
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertex.getID();
     }
 

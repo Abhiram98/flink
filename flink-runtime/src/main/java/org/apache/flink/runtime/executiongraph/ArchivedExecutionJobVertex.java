@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 
 import java.io.Serializable;
@@ -32,7 +32,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
     private static final long serialVersionUID = -5768187638639437957L;
     private final ArchivedExecutionVertex[] taskVertices;
 
-    private final JobVertexID id;
+    private final StreamVertexID id;
 
     private final String name;
 
@@ -64,7 +64,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
 
     public ArchivedExecutionJobVertex(
             ArchivedExecutionVertex[] taskVertices,
-            JobVertexID id,
+            StreamVertexID id,
             String name,
             int parallelism,
             int maxParallelism,
@@ -111,7 +111,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return id;
     }
 

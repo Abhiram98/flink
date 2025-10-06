@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -76,7 +76,7 @@ public class JobVertexBackPressureHandler
         metricFetcher.update();
 
         final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
-        final JobVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
 
         TaskMetricStore taskMetricStore =
                 metricFetcher

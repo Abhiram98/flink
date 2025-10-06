@@ -21,7 +21,7 @@ package org.apache.flink.runtime.query;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.runtime.taskmanager.Task;
@@ -84,7 +84,7 @@ public class KvStateRegistry {
      */
     public KvStateID registerKvState(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             InternalKvState<?, ?, ?> kvState,
@@ -121,7 +121,7 @@ public class KvStateRegistry {
      */
     public void unregisterKvState(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId) {
@@ -160,7 +160,7 @@ public class KvStateRegistry {
      * @param jobVertexId JobVertexID of the task
      * @return A {@link TaskKvStateRegistry} facade for the task
      */
-    public TaskKvStateRegistry createTaskRegistry(JobID jobId, JobVertexID jobVertexId) {
+    public TaskKvStateRegistry createTaskRegistry(JobID jobId, StreamVertexID jobVertexId) {
         return new TaskKvStateRegistry(this, jobId, jobVertexId);
     }
 

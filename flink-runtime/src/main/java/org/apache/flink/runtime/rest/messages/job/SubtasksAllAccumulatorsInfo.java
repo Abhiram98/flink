@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.job.SubtasksAllAccumulatorsHandler;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.json.JobVertexIDDeserializer;
@@ -42,7 +42,7 @@ public class SubtasksAllAccumulatorsInfo implements ResponseBody {
 
     @JsonProperty(FIELD_NAME_JOB_VERTEX_ID)
     @JsonSerialize(using = JobVertexIDSerializer.class)
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     @JsonProperty(FIELD_NAME_PARALLELISM)
     private final int parallelism;
@@ -54,7 +54,7 @@ public class SubtasksAllAccumulatorsInfo implements ResponseBody {
     public SubtasksAllAccumulatorsInfo(
             @JsonDeserialize(using = JobVertexIDDeserializer.class)
                     @JsonProperty(FIELD_NAME_JOB_VERTEX_ID)
-                    JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             @JsonProperty(FIELD_NAME_PARALLELISM) int parallelism,
             @JsonProperty(FIELD_NAME_SUBTASKS)
                     Collection<SubtaskAccumulatorsInfo> subtaskAccumulatorsInfos) {

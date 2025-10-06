@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.state.CompositeStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
@@ -46,7 +46,7 @@ public class TaskState implements CompositeStateHandle {
 
     private static final long serialVersionUID = -4845578005863201810L;
 
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
 
     /** handles to non-partitioned states, subtaskindex -> subtaskstate. */
     private final Map<Integer, SubtaskState> subtaskStates;
@@ -61,7 +61,7 @@ public class TaskState implements CompositeStateHandle {
     private final int chainLength;
 
     public TaskState(
-            JobVertexID jobVertexID, int parallelism, int maxParallelism, int chainLength) {
+            StreamVertexID jobVertexID, int parallelism, int maxParallelism, int chainLength) {
         Preconditions.checkArgument(
                 parallelism <= maxParallelism,
                 "Parallelism "
@@ -81,7 +81,7 @@ public class TaskState implements CompositeStateHandle {
         this.chainLength = chainLength;
     }
 
-    public JobVertexID getJobVertexID() {
+    public StreamVertexID getJobVertexID() {
         return jobVertexID;
     }
 

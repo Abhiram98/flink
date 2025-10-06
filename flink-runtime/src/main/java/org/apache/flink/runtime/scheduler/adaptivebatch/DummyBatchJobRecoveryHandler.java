@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptivebatch;
 
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import java.util.Collection;
@@ -52,7 +52,7 @@ public class DummyBatchJobRecoveryHandler implements BatchJobRecoveryHandler {
 
     @Override
     public void onExecutionJobVertexInitialization(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             int parallelism,
             Map<IntermediateDataSetID, JobVertexInputInfo> jobVertexInputInfos) {}
 

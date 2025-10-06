@@ -48,7 +48,7 @@ public class InputOutputFormatVertex extends StreamVertex {
     }
 
     public InputOutputFormatVertex(
-            String name, JobVertexID id, List<OperatorIDPair> operatorIDPairs) {
+            String name, StreamVertexID id, List<OperatorIDPair> operatorIDPairs) {
 
         super(name, id, operatorIDPairs);
     }

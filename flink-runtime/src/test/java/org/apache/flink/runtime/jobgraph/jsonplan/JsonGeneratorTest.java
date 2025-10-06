@@ -127,7 +127,7 @@ public class JsonGeneratorTest {
 
     private void checkVertexExists(String vertexId, StreamGraph graph) {
         // validate that the vertex has a valid
-        JobVertexID id = JobVertexID.fromHexString(vertexId);
+        StreamVertexID id = StreamVertexID.fromHexString(vertexId);
         for (StreamVertex vertex : graph.getVertices()) {
             if (vertex.getID().equals(id)) {
                 return;

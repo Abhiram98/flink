@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final DefaultVertexAttemptNumberStore vertexAttemptNumberStore =
                 new DefaultVertexAttemptNumberStore();
 
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final int subtaskIndex = 4;
         final int attemptCount = 2;
 
@@ -48,7 +48,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final DefaultVertexAttemptNumberStore vertexAttemptNumberStore =
                 new DefaultVertexAttemptNumberStore();
 
-        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new JobVertexID(), -1, 0))
+        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new StreamVertexID(), -1, 0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -57,7 +57,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final DefaultVertexAttemptNumberStore vertexAttemptNumberStore =
                 new DefaultVertexAttemptNumberStore();
 
-        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new JobVertexID(), 0, -1))
+        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new StreamVertexID(), 0, -1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

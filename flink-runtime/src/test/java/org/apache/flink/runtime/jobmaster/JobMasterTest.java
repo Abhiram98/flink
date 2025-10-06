@@ -1090,7 +1090,7 @@ class JobMasterTest {
 
             waitUntilAllExecutionsAreScheduledOrDeployed(jobMasterGateway);
 
-            final JobVertexID sourceId = source.getID();
+            final StreamVertexID sourceId = source.getID();
 
             final List<AccessExecution> executions = getExecutions(jobMasterGateway, sourceId);
             final ExecutionAttemptID initialAttemptId = executions.get(0).getAttemptId();
@@ -1140,7 +1140,7 @@ class JobMasterTest {
 
     @Nonnull
     private Supplier<SerializedInputSplit> getInputSplitSupplier(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             JobMasterGateway jobMasterGateway,
             ExecutionAttemptID initialAttemptId) {
         return () -> getInputSplit(jobMasterGateway, jobVertexID, initialAttemptId);
@@ -1163,7 +1163,7 @@ class JobMasterTest {
     }
 
     private static AccessExecution getFirstExecution(
-            final JobMasterGateway jobMasterGateway, final JobVertexID jobVertexId) {
+            final JobMasterGateway jobMasterGateway, final StreamVertexID jobVertexId) {
         final List<AccessExecution> executions = getExecutions(jobMasterGateway, jobVertexId);
 
         assertThat(executions.size()).isGreaterThanOrEqualTo(1);
@@ -1182,7 +1182,7 @@ class JobMasterTest {
     }
 
     private static List<AccessExecution> getExecutions(
-            final JobMasterGateway jobMasterGateway, final JobVertexID jobVertexId) {
+            final JobMasterGateway jobMasterGateway, final StreamVertexID jobVertexId) {
         final ArchivedExecutionGraph archivedExecutionGraph =
                 requestExecutionGraph(jobMasterGateway).getArchivedExecutionGraph();
 
@@ -1252,7 +1252,7 @@ class JobMasterTest {
 
     private static SerializedInputSplit getInputSplit(
             final JobMasterGateway jobMasterGateway,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final ExecutionAttemptID attemptId) {
 
         try {

@@ -38,7 +38,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobmaster.JMTMRegistrationSuccess;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -90,7 +90,7 @@ public class TestingJobMasterGatewayBuilder {
     private Function<TaskExecutionState, CompletableFuture<Acknowledge>>
             updateTaskExecutionStateFunction =
                     ignored -> CompletableFuture.completedFuture(Acknowledge.get());
-    private BiFunction<JobVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
+    private BiFunction<StreamVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
             requestNextInputSplitFunction =
                     (ignoredA, ignoredB) ->
                             CompletableFuture.completedFuture(new SerializedInputSplit(null));
@@ -153,12 +153,12 @@ public class TestingJobMasterGatewayBuilder {
                             FutureUtils.completedExceptionally(
                                     new UnknownKvStateLocation(registrationName));
     private Function<
-                    Tuple6<JobID, JobVertexID, KeyGroupRange, String, KvStateID, InetSocketAddress>,
+                    Tuple6<JobID, StreamVertexID, KeyGroupRange, String, KvStateID, InetSocketAddress>,
                     CompletableFuture<Acknowledge>>
             notifyKvStateRegisteredFunction =
                     ignored -> CompletableFuture.completedFuture(Acknowledge.get());
     private Function<
-                    Tuple4<JobID, JobVertexID, KeyGroupRange, String>,
+                    Tuple4<JobID, StreamVertexID, KeyGroupRange, String>,
                     CompletableFuture<Acknowledge>>
             notifyKvStateUnregisteredFunction =
                     ignored -> CompletableFuture.completedFuture(Acknowledge.get());
@@ -184,7 +184,7 @@ public class TestingJobMasterGatewayBuilder {
             notifyNewBlockedNodesFunction =
                     ignored -> CompletableFuture.completedFuture(Acknowledge.get());
 
-    private Supplier<CompletableFuture<Map<JobVertexID, Integer>>> maxParallelismPerVertexSupplier =
+    private Supplier<CompletableFuture<Map<StreamVertexID, Integer>>> maxParallelismPerVertexSupplier =
             () -> CompletableFuture.completedFuture(Collections.emptyMap());
 
     private Supplier<CompletableFuture<JobResourceRequirements>>
@@ -226,7 +226,7 @@ public class TestingJobMasterGatewayBuilder {
     }
 
     public TestingJobMasterGatewayBuilder setRequestNextInputSplitFunction(
-            BiFunction<JobVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
+            BiFunction<StreamVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
                     requestNextInputSplitFunction) {
         this.requestNextInputSplitFunction = requestNextInputSplitFunction;
         return this;
@@ -365,7 +365,7 @@ public class TestingJobMasterGatewayBuilder {
             Function<
                             Tuple6<
                                     JobID,
-                                    JobVertexID,
+                                    StreamVertexID,
                                     KeyGroupRange,
                                     String,
                                     KvStateID,
@@ -378,7 +378,7 @@ public class TestingJobMasterGatewayBuilder {
 
     public TestingJobMasterGatewayBuilder setNotifyKvStateUnregisteredFunction(
             Function<
-                            Tuple4<JobID, JobVertexID, KeyGroupRange, String>,
+                            Tuple4<JobID, StreamVertexID, KeyGroupRange, String>,
                             CompletableFuture<Acknowledge>>
                     notifyKvStateUnregisteredFunction) {
         this.notifyKvStateUnregisteredFunction = notifyKvStateUnregisteredFunction;
@@ -421,7 +421,7 @@ public class TestingJobMasterGatewayBuilder {
     }
 
     public TestingJobMasterGatewayBuilder setMaxParallelismPerVertexSupplier(
-            Supplier<CompletableFuture<Map<JobVertexID, Integer>>>
+            Supplier<CompletableFuture<Map<StreamVertexID, Integer>>>
                     maxParallelismPerVertexSupplier) {
         this.maxParallelismPerVertexSupplier = maxParallelismPerVertexSupplier;
         return this;

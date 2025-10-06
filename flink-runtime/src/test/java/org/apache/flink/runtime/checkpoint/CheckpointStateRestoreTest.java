@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.state.KeyGroupRange;
@@ -76,8 +76,8 @@ class CheckpointStateRestoreTest {
                     CheckpointCoordinatorTestingUtils.generateKeyGroupState(
                             keyGroupRange, testStates);
 
-            final JobVertexID statefulId = new JobVertexID();
-            final JobVertexID statelessId = new JobVertexID();
+            final StreamVertexID statefulId = new StreamVertexID();
+            final StreamVertexID statelessId = new StreamVertexID();
 
             ExecutionGraph graph =
                     new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -203,8 +203,8 @@ class CheckpointStateRestoreTest {
     @Test
     void testNonRestoredState() throws Exception {
         // --- (1) Create tasks to restore checkpoint with ---
-        JobVertexID jobVertexId1 = new JobVertexID();
-        JobVertexID jobVertexId2 = new JobVertexID();
+        StreamVertexID jobVertexId1 = new StreamVertexID();
+        StreamVertexID jobVertexId2 = new StreamVertexID();
 
         OperatorID operatorId1 = OperatorID.fromJobVertexID(jobVertexId1);
 
@@ -259,7 +259,7 @@ class CheckpointStateRestoreTest {
         assertThat(coord.restoreLatestCheckpointedStateToAll(tasks, true)).isTrue();
 
         // --- (3) JobVertex missing for task state that is part of the checkpoint ---
-        JobVertexID newJobVertexID = new JobVertexID();
+        StreamVertexID newJobVertexID = new StreamVertexID();
         OperatorID newOperatorID = OperatorID.fromJobVertexID(newJobVertexID);
 
         // There is no task for this
@@ -312,7 +312,7 @@ class CheckpointStateRestoreTest {
     }
 
     private ExecutionVertex mockExecutionVertex(
-            Execution execution, JobVertexID vertexId, int subtask, int parallelism) {
+            Execution execution, StreamVertexID vertexId, int subtask, int parallelism) {
         ExecutionVertex mock = mock(ExecutionVertex.class);
         when(mock.getJobvertexId()).thenReturn(vertexId);
         when(mock.getParallelSubtaskIndex()).thenReturn(subtask);
@@ -322,7 +322,7 @@ class CheckpointStateRestoreTest {
         return mock;
     }
 
-    private ExecutionJobVertex mockExecutionJobVertex(JobVertexID id, ExecutionVertex[] vertices) {
+    private ExecutionJobVertex mockExecutionJobVertex(StreamVertexID id, ExecutionVertex[] vertices) {
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
         when(vertex.getParallelism()).thenReturn(vertices.length);
         when(vertex.getMaxParallelism()).thenReturn(vertices.length);

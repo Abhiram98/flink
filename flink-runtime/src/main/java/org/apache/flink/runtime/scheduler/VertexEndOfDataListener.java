@@ -22,7 +22,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import java.util.BitSet;
@@ -38,7 +38,7 @@ import java.util.Set;
 public class VertexEndOfDataListener {
     private final ExecutionGraph executionGraph;
 
-    private final Map<JobVertexID, BitSet> tasksReachedEndOfData;
+    private final Map<StreamVertexID, BitSet> tasksReachedEndOfData;
 
     public VertexEndOfDataListener(ExecutionGraph executionGraph) {
         this.executionGraph = executionGraph;
@@ -53,7 +53,7 @@ public class VertexEndOfDataListener {
         subtaskStatus.set(executionAttemptID.getSubtaskIndex());
     }
 
-    public boolean areAllTasksOfJobVertexEndOfData(JobVertexID jobVertexID) {
+    public boolean areAllTasksOfJobVertexEndOfData(StreamVertexID jobVertexID) {
         BitSet subtaskStatus = tasksReachedEndOfData.get(jobVertexID);
         return subtaskStatus == null
                 || subtaskStatus.cardinality()
@@ -61,11 +61,11 @@ public class VertexEndOfDataListener {
     }
 
     public boolean areAllTasksEndOfData() {
-        Iterator<Map.Entry<JobVertexID, BitSet>> iterator =
+        Iterator<Map.Entry<StreamVertexID, BitSet>> iterator =
                 tasksReachedEndOfData.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<JobVertexID, BitSet> entry = iterator.next();
-            JobVertexID vertex = entry.getKey();
+            Map.Entry<StreamVertexID, BitSet> entry = iterator.next();
+            StreamVertexID vertex = entry.getKey();
             BitSet status = entry.getValue();
             if (status.cardinality() != executionGraph.getJobVertex(vertex).getParallelism()) {
                 return false;
@@ -78,7 +78,7 @@ public class VertexEndOfDataListener {
 
     public void restoreVertices(Set<ExecutionVertexID> executionVertices) {
         for (ExecutionVertexID executionVertex : executionVertices) {
-            JobVertexID jobVertexId = executionVertex.getJobVertexId();
+            StreamVertexID jobVertexId = executionVertex.getJobVertexId();
             tasksReachedEndOfData.putIfAbsent(jobVertexId, new BitSet());
             tasksReachedEndOfData.get(jobVertexId).set(executionVertex.getSubtaskIndex(), false);
         }

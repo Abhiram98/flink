@@ -56,7 +56,7 @@ import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
@@ -1245,7 +1245,7 @@ class ExecutingTest {
         }
 
         @Override
-        public ExecutionJobVertex getJobVertex(JobVertexID id) {
+        public ExecutionJobVertex getJobVertex(StreamVertexID id) {
             throw new UnsupportedOperationException(
                     "This method is not supported by the MockInternalExecutionGraphAccessor.");
         }
@@ -1276,7 +1276,7 @@ class ExecutingTest {
 
         @Override
         public JobVertexInputInfo getJobVertexInputInfo(
-                JobVertexID jobVertexId, IntermediateDataSetID resultId) {
+                StreamVertexID jobVertexId, IntermediateDataSetID resultId) {
             throw new UnsupportedOperationException(
                     "This method is not supported by the MockInternalExecutionGraphAccessor.");
         }

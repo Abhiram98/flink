@@ -18,7 +18,7 @@
 
 package org.apache.flink.streaming.api.graph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public interface StreamGraphHasher {
 
     /**
      * Returns a map with a hash for each {@link StreamNode} of the {@link StreamGraph}. The hash is
-     * used as the {@link JobVertexID} in order to identify nodes across job submissions if they
+     * used as the {@link StreamVertexID} in order to identify nodes across job submissions if they
      * didn't change.
      */
     Map<Integer, byte[]> traverseStreamGraphAndGenerateHashes(StreamGraph streamGraph);

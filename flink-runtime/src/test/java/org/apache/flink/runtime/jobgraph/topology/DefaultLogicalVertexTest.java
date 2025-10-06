@@ -108,7 +108,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
             final Iterable<StreamVertex> jobVertices,
             final Iterable<DefaultLogicalVertex> logicalVertices) {
 
-        final Map<JobVertexID, DefaultLogicalVertex> logicalVertextMap =
+        final Map<StreamVertexID, DefaultLogicalVertex> logicalVertextMap =
                 IterableUtils.toStream(logicalVertices)
                         .collect(
                                 Collectors.toMap(DefaultLogicalVertex::getId, Function.identity()));

@@ -47,7 +47,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.InputChannelBuilde
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.util.function.SupplierWithException;
@@ -78,7 +78,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ChannelPersistenceITCase {
     private static final Random RANDOM = new Random(System.currentTimeMillis());
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
     private static final int SUBTASK_INDEX = 0;
 
     private static final CheckpointStorage CHECKPOINT_STORAGE = new JobManagerCheckpointStorage();

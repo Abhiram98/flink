@@ -36,7 +36,7 @@ import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGate
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
@@ -102,7 +102,7 @@ import static org.mockito.Mockito.spy;
 public class CheckpointCoordinatorTestingUtils {
 
     public static OperatorStateHandle generatePartitionableStateHandle(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int index,
             int namedStates,
             int partitionsPerState,
@@ -130,7 +130,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     static ChainedStateHandle<OperatorStateHandle> generateChainedPartitionableStateHandle(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int index,
             int namedStates,
             int partitionsPerState,
@@ -236,7 +236,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static void verifyStateRestore(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             ExecutionJobVertex executionJobVertex,
             List<KeyGroupRange> keyGroupPartitions)
             throws Exception {
@@ -373,7 +373,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     static TaskStateSnapshot mockSubtaskState(
-            JobVertexID jobVertexID, int index, KeyGroupRange keyGroupRange) throws IOException {
+            StreamVertexID jobVertexID, int index, KeyGroupRange keyGroupRange) throws IOException {
 
         OperatorStateHandle partitionableState =
                 generatePartitionableStateHandle(jobVertexID, index, 2, 8, false);
@@ -395,7 +395,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static KeyGroupsStateHandle generateKeyGroupState(
-            JobVertexID jobVertexID, KeyGroupRange keyGroupPartition, boolean rawState)
+            StreamVertexID jobVertexID, KeyGroupRange keyGroupPartition, boolean rawState)
             throws IOException {
 
         List<Integer> testStatesLists = new ArrayList<>(keyGroupPartition.getNumberOfKeyGroups());
@@ -433,7 +433,7 @@ public class CheckpointCoordinatorTestingUtils {
 
     public static Tuple2<List<StateObject>, OperatorSubtaskState>
             generateSampleOperatorSubtaskState() throws IOException {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         int index = 0;
         Random random = new Random();
         OperatorStateHandle managedOpHandle =
@@ -643,21 +643,21 @@ public class CheckpointCoordinatorTestingUtils {
             this.mainThreadExecutor = ComponentMainThreadExecutorServiceAdapter.forMainThread();
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id) {
+        public CheckpointExecutionGraphBuilder addJobVertex(StreamVertexID id) {
             return addJobVertex(id, true);
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id, boolean isSource) {
+        public CheckpointExecutionGraphBuilder addJobVertex(StreamVertexID id, boolean isSource) {
             return addJobVertex(id, 1, 32768, Collections.emptyList(), isSource);
         }
 
         public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id, int parallelism, int maxParallelism) {
+                StreamVertexID id, int parallelism, int maxParallelism) {
             return addJobVertex(id, parallelism, maxParallelism, Collections.emptyList(), true);
         }
 
         public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id,
+                StreamVertexID id,
                 int parallelism,
                 int maxParallelism,
                 List<OperatorIDPair> operators,
@@ -873,7 +873,7 @@ public class CheckpointCoordinatorTestingUtils {
                 throws Exception {
             return build(
                     new CheckpointExecutionGraphBuilder()
-                            .addJobVertex(new JobVertexID())
+                            .addJobVertex(new StreamVertexID())
                             .build(executorService));
         }
 

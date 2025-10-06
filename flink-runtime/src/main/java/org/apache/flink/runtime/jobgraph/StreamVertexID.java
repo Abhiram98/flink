@@ -25,24 +25,24 @@ import org.apache.flink.util.StringUtils;
 import org.apache.flink.shaded.netty4.io.netty.buffer.ByteBuf;
 
 /** A class for statistically unique job vertex IDs. */
-public class JobVertexID extends AbstractID implements VertexID {
+public class StreamVertexID extends AbstractID implements VertexID {
 
     private static final long serialVersionUID = 1L;
 
-    public JobVertexID() {
+    public StreamVertexID() {
         super();
     }
 
-    public JobVertexID(byte[] bytes) {
+    public StreamVertexID(byte[] bytes) {
         super(bytes);
     }
 
-    public JobVertexID(long lowerPart, long upperPart) {
+    public StreamVertexID(long lowerPart, long upperPart) {
         super(lowerPart, upperPart);
     }
 
-    public static JobVertexID fromHexString(String hexString) {
-        return new JobVertexID(StringUtils.hexStringToByte(hexString));
+    public static StreamVertexID fromHexString(String hexString) {
+        return new StreamVertexID(StringUtils.hexStringToByte(hexString));
     }
 
     public void writeTo(ByteBuf buf) {
@@ -50,9 +50,9 @@ public class JobVertexID extends AbstractID implements VertexID {
         buf.writeLong(upperPart);
     }
 
-    public static JobVertexID fromByteBuf(ByteBuf buf) {
+    public static StreamVertexID fromByteBuf(ByteBuf buf) {
         final long lower = buf.readLong();
         final long upper = buf.readLong();
-        return new JobVertexID(lower, upper);
+        return new StreamVertexID(lower, upper);
     }
 }

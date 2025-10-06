@@ -26,7 +26,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -93,7 +93,7 @@ class TaskExecutorOperatorEventHandlingTest {
     @Test
     void eventHandlingInTaskFailureFailsTask() throws Exception {
         final JobID jobId = new JobID();
-        final ExecutionAttemptID eid = createExecutionAttemptId(new JobVertexID(), 3, 0);
+        final ExecutionAttemptID eid = createExecutionAttemptId(new StreamVertexID(), 3, 0);
 
         try (TaskSubmissionTestEnvironment env =
                 createExecutorWithRunningTask(jobId, eid, OperatorEventFailingInvokable.class)) {
@@ -114,7 +114,7 @@ class TaskExecutorOperatorEventHandlingTest {
     @Test
     void eventToCoordinatorDeliveryFailureFailsTask() throws Exception {
         final JobID jobId = new JobID();
-        final ExecutionAttemptID eid = createExecutionAttemptId(new JobVertexID(), 3, 0);
+        final ExecutionAttemptID eid = createExecutionAttemptId(new StreamVertexID(), 3, 0);
 
         try (TaskSubmissionTestEnvironment env =
                 createExecutorWithRunningTask(jobId, eid, OperatorEventSendingInvokable.class)) {
@@ -128,7 +128,7 @@ class TaskExecutorOperatorEventHandlingTest {
     @Test
     void requestToCoordinatorDeliveryFailureFailsTask() throws Exception {
         final JobID jobId = new JobID();
-        final ExecutionAttemptID eid = createExecutionAttemptId(new JobVertexID(), 3, 0);
+        final ExecutionAttemptID eid = createExecutionAttemptId(new StreamVertexID(), 3, 0);
 
         try (TaskSubmissionTestEnvironment env =
                 createExecutorWithRunningTask(

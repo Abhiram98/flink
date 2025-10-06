@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +36,7 @@ public class TaskStateStats implements Serializable {
     private static final long serialVersionUID = 531803101206574444L;
 
     /** ID of the task the stats belong to. */
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     private final SubtaskStateStats[] subtaskStats;
 
@@ -47,7 +47,7 @@ public class TaskStateStats implements Serializable {
 
     @Nullable private SubtaskStateStats latestAckedSubtaskStats;
 
-    TaskStateStats(JobVertexID jobVertexId, int numSubtasks) {
+    TaskStateStats(StreamVertexID jobVertexId, int numSubtasks) {
         this.jobVertexId = checkNotNull(jobVertexId, "JobVertexID");
         checkArgument(numSubtasks > 0, "Number of subtasks <= 0");
         this.subtaskStats = new SubtaskStateStats[numSubtasks];
@@ -78,7 +78,7 @@ public class TaskStateStats implements Serializable {
     }
 
     /** @return ID of the operator the statistics belong to. */
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 

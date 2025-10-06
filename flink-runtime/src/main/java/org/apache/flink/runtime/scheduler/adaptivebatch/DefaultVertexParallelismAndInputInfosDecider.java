@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.ParallelismAndInputInfos;
 import org.apache.flink.runtime.executiongraph.VertexInputInfoComputationUtils;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
 
     @Override
     public ParallelismAndInputInfos decideParallelismAndInputInfosForVertex(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             List<BlockingResultInfo> consumedResults,
             int vertexInitialParallelism,
             int vertexMinParallelism,
@@ -175,7 +175,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
     }
 
     @Override
-    public int computeSourceParallelismUpperBound(JobVertexID jobVertexId, int maxParallelism) {
+    public int computeSourceParallelismUpperBound(StreamVertexID jobVertexId, int maxParallelism) {
         if (globalDefaultSourceParallelism > maxParallelism) {
             LOG.info(
                     "The global default source parallelism {} is larger than the maximum parallelism {}. "
@@ -216,7 +216,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
      * @return the parallelism and vertex input infos
      */
     private ParallelismAndInputInfos decideParallelismAndEvenlyDistributeSubpartitions(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             List<BlockingResultInfo> consumedResults,
             int initialParallelism,
             int minParallelism,
@@ -234,7 +234,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
     }
 
     int decideParallelism(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             List<BlockingResultInfo> consumedResults,
             int minParallelism,
             int maxParallelism) {
@@ -302,7 +302,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
      * @return the parallelism and vertex input infos
      */
     private ParallelismAndInputInfos decideParallelismAndEvenlyDistributeData(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             List<BlockingResultInfo> consumedResults,
             int initialParallelism,
             int minParallelism,

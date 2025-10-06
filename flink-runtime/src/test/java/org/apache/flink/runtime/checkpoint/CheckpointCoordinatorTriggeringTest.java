@@ -28,7 +28,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
@@ -92,7 +92,7 @@ class CheckpointCoordinatorTriggeringTest {
             CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                     new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-            JobVertexID jobVertexID = new JobVertexID();
+            StreamVertexID jobVertexID = new StreamVertexID();
             ExecutionGraph graph =
                     new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                             .addJobVertex(jobVertexID)
@@ -189,7 +189,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -243,7 +243,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -298,7 +298,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -325,7 +325,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -367,7 +367,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -409,7 +409,7 @@ class CheckpointCoordinatorTriggeringTest {
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID)
@@ -513,7 +513,7 @@ class CheckpointCoordinatorTriggeringTest {
      */
     @Test
     void testMinTimeBetweenCheckpointsInterval() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
 
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
@@ -631,7 +631,7 @@ class CheckpointCoordinatorTriggeringTest {
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         // we need parallelism of 2 to have one task still being not finished
                         // for the checkpoint handling to succeed
-                        .addJobVertex(new JobVertexID(), 2, 2)
+                        .addJobVertex(new StreamVertexID(), 2, 2)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         executionGraph
                 .getAllExecutionVertices()
@@ -686,7 +686,7 @@ class CheckpointCoordinatorTriggeringTest {
 
     @Test
     void testTriggerCheckpointBeforePreviousOneCompleted() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
 
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
@@ -726,7 +726,7 @@ class CheckpointCoordinatorTriggeringTest {
 
     @Test
     void testTriggerCheckpointRequestQueuedWithFailure() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
 
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
@@ -776,7 +776,7 @@ class CheckpointCoordinatorTriggeringTest {
 
     @Test
     void testTriggerCheckpointRequestCancelled() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
 
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
@@ -874,7 +874,7 @@ class CheckpointCoordinatorTriggeringTest {
 
     @Test
     void testTriggerCheckpointSnapshotMasterHookFailed() throws Exception {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
 
         CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway gateway =
                 new CheckpointCoordinatorTestingUtils.CheckpointRecorderTaskManagerGateway();
@@ -940,7 +940,7 @@ class CheckpointCoordinatorTriggeringTest {
                         .build(
                                 new CheckpointCoordinatorTestingUtils
                                                 .CheckpointExecutionGraphBuilder()
-                                        .addJobVertex(new JobVertexID())
+                                        .addJobVertex(new StreamVertexID())
                                         .setMainThreadExecutor(
                                                 ComponentMainThreadExecutorServiceAdapter
                                                         .forSingleThreadExecutor(

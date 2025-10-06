@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointCoordinatorTestingUtils.Che
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
@@ -146,17 +146,17 @@ class CheckpointCoordinatorRestoringTest {
 
     private static class TestingVertex {
 
-        private final JobVertexID id;
+        private final StreamVertexID id;
         private final int parallelism;
         private final int maxParallelism;
 
-        private TestingVertex(JobVertexID id, int parallelism, int maxParallelism) {
+        private TestingVertex(StreamVertexID id, int parallelism, int maxParallelism) {
             this.id = id;
             this.parallelism = parallelism;
             this.maxParallelism = maxParallelism;
         }
 
-        public JobVertexID getId() {
+        public StreamVertexID getId() {
             return id;
         }
 
@@ -186,8 +186,8 @@ class CheckpointCoordinatorRestoringTest {
     void testRestoreLatestCheckpointedState() throws Exception {
         final List<TestingVertex> vertices =
                 Arrays.asList(
-                        new TestingVertex(new JobVertexID(), 3, 42),
-                        new TestingVertex(new JobVertexID(), 2, 13));
+                        new TestingVertex(new StreamVertexID(), 3, 42),
+                        new TestingVertex(new StreamVertexID(), 2, 13));
         testRestoreLatestCheckpointedState(
                 vertices,
                 testSuccessfulCheckpointsArePersistedToCompletedCheckpointStore(vertices));
@@ -291,8 +291,8 @@ class CheckpointCoordinatorRestoringTest {
      */
     private void testRestoreLatestCheckpointedStateWithChangingParallelism(boolean scaleOut)
             throws Exception {
-        final JobVertexID jobVertexID1 = new JobVertexID();
-        final JobVertexID jobVertexID2 = new JobVertexID();
+        final StreamVertexID jobVertexID1 = new StreamVertexID();
+        final StreamVertexID jobVertexID2 = new StreamVertexID();
         int parallelism1 = 3;
         int parallelism2 = scaleOut ? 2 : 13;
 
@@ -498,8 +498,8 @@ class CheckpointCoordinatorRestoringTest {
     //    @Test(expected = IllegalStateException.class)
     @Test
     void testRestoreLatestCheckpointFailureWhenMaxParallelismChanges() throws Exception {
-        final JobVertexID jobVertexID1 = new JobVertexID();
-        final JobVertexID jobVertexID2 = new JobVertexID();
+        final StreamVertexID jobVertexID1 = new StreamVertexID();
+        final StreamVertexID jobVertexID2 = new StreamVertexID();
         int parallelism1 = 3;
         int parallelism2 = 2;
         int maxParallelism1 = 42;
@@ -624,8 +624,8 @@ class CheckpointCoordinatorRestoringTest {
         testStateRecoveryWithTopologyChange(TestScaleType.SAME_PARALLELISM);
     }
 
-    private static Tuple2<JobVertexID, OperatorID> generateIDPair() {
-        JobVertexID jobVertexID = new JobVertexID();
+    private static Tuple2<StreamVertexID, OperatorID> generateIDPair() {
+        StreamVertexID jobVertexID = new StreamVertexID();
         OperatorID operatorID = OperatorID.fromJobVertexID(jobVertexID);
         return new Tuple2<>(jobVertexID, operatorID);
     }
@@ -644,13 +644,13 @@ class CheckpointCoordinatorRestoringTest {
          * Old topology
          * CHAIN(op1 -> op2) * parallelism1 -> CHAIN(op3 -> op4) * parallelism2
          */
-        Tuple2<JobVertexID, OperatorID> id1 = generateIDPair();
-        Tuple2<JobVertexID, OperatorID> id2 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id1 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id2 = generateIDPair();
         int parallelism1 = 10;
         int maxParallelism1 = 64;
 
-        Tuple2<JobVertexID, OperatorID> id3 = generateIDPair();
-        Tuple2<JobVertexID, OperatorID> id4 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id3 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id4 = generateIDPair();
         int parallelism2 = 10;
         int maxParallelism2 = 64;
 
@@ -660,7 +660,7 @@ class CheckpointCoordinatorRestoringTest {
         Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
 
         // prepare vertex1 state
-        for (Tuple2<JobVertexID, OperatorID> id : Arrays.asList(id1, id2)) {
+        for (Tuple2<StreamVertexID, OperatorID> id : Arrays.asList(id1, id2)) {
             OperatorState taskState =
                     new OperatorState(null, null, id.f1, parallelism1, maxParallelism1);
             operatorStates.put(id.f1, taskState);
@@ -681,7 +681,7 @@ class CheckpointCoordinatorRestoringTest {
         List<List<ChainedStateHandle<OperatorStateHandle>>> expectedRawOperatorStates =
                 new ArrayList<>();
         // prepare vertex2 state
-        for (Tuple2<JobVertexID, OperatorID> id : Arrays.asList(id3, id4)) {
+        for (Tuple2<StreamVertexID, OperatorID> id : Arrays.asList(id3, id4)) {
             OperatorState operatorState =
                     new OperatorState(null, null, id.f1, parallelism2, maxParallelism2);
             operatorStates.put(id.f1, operatorState);
@@ -725,10 +725,10 @@ class CheckpointCoordinatorRestoringTest {
          * New topology
          * CHAIN(op5 -> op1 -> op2) * newParallelism1 -> CHAIN(op3 -> op6) * newParallelism2
          */
-        Tuple2<JobVertexID, OperatorID> id5 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id5 = generateIDPair();
         int newParallelism1 = 10;
 
-        Tuple2<JobVertexID, OperatorID> id6 = generateIDPair();
+        Tuple2<StreamVertexID, OperatorID> id6 = generateIDPair();
         int newParallelism2 = parallelism2;
 
         if (scaleType == TestScaleType.INCREASE_PARALLELISM) {
@@ -967,7 +967,7 @@ class CheckpointCoordinatorRestoringTest {
     @Test
     void testRestoreLatestCheckpointedStateWithoutInFlightData() throws Exception {
         // given: Operator with not empty states.
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
         int parallelism1 = 3;
         int maxParallelism1 = 42;
 
@@ -1077,7 +1077,7 @@ class CheckpointCoordinatorRestoringTest {
     void testRestoreFinishedStateWithoutInFlightData() throws Exception {
         // given: Operator with not empty states.
         OperatorIDPair op1 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID, 1, 1, singletonList(op1), true)
@@ -1124,7 +1124,7 @@ class CheckpointCoordinatorRestoringTest {
 
     @Test
     void testJobGraphModificationsAreCheckedForInitialCheckpoint() throws Exception {
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID, 1, 1)
@@ -1167,7 +1167,7 @@ class CheckpointCoordinatorRestoringTest {
 
     @Test
     void testJobGraphModificationsAreCheckedForSavepoint() throws Exception {
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexID, 1, 1)

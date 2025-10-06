@@ -320,13 +320,13 @@ public class StreamingJobGraphGenerator {
             StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext)
             throws ExecutionException, InterruptedException {
         for (Map.Entry<
-                        JobVertexID,
+                StreamVertexID,
                         List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>>
                 futuresPerJobVertex :
                         jobVertexBuildContext
                                 .getCoordinatorSerializationFuturesPerJobVertex()
                                 .entrySet()) {
-            final JobVertexID jobVertexId = futuresPerJobVertex.getKey();
+            final StreamVertexID jobVertexId = futuresPerJobVertex.getKey();
             final StreamVertex jobVertex = jobGraph.findVertexByID(jobVertexId);
 
             Preconditions.checkState(
@@ -346,7 +346,7 @@ public class StreamingJobGraphGenerator {
         if (!jobVertexBuildContext.getStreamGraph().isVertexNameIncludeIndexPrefix()) {
             return;
         }
-        Set<JobVertexID> jobVertexIds =
+        Set<StreamVertexID> jobVertexIds =
                 jobVertexBuildContext.getJobVerticesInOrder().values().stream()
                         .map(StreamVertex::getID)
                         .collect(Collectors.toSet());
@@ -897,7 +897,7 @@ public class StreamingJobGraphGenerator {
                 });
 
         // compute forward groups
-        final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
+        final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 ForwardGroupComputeUtil.computeForwardGroups(
                         topologicalOrderVertices,
                         jobVertex ->
@@ -1033,7 +1033,7 @@ public class StreamingJobGraphGenerator {
                             + "Did you generate them before calling this method?");
         }
 
-        JobVertexID jobVertexId = new JobVertexID(hash);
+        StreamVertexID jobVertexId = new StreamVertexID(hash);
 
         List<ChainedOperatorHashInfo> chainedOperators =
                 chainInfo.getChainedOperatorHashes(streamNodeId);
@@ -1816,7 +1816,7 @@ public class StreamingJobGraphGenerator {
             org.apache.flink.runtime.jobgraph.StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<String, SlotSharingGroup> specifiedSlotSharingGroups = new HashMap<>();
-        final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups =
+        final Map<StreamVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups =
                 buildVertexRegionSlotSharingGroups(jobGraph, jobVertexBuildContext);
         final Map<Integer, StreamVertex> jobVertices = jobVertexBuildContext.getJobVerticesInOrder();
 
@@ -1870,10 +1870,10 @@ public class StreamingJobGraphGenerator {
      * org.apache.flink.streaming.api.graph.StreamGraph#isAllVerticesInSameSlotSharingGroupByDefault()} returns true, all regions will be
      * in the same slot sharing group.
      */
-    private static Map<JobVertexID, SlotSharingGroup> buildVertexRegionSlotSharingGroups(
+    private static Map<StreamVertexID, SlotSharingGroup> buildVertexRegionSlotSharingGroups(
             org.apache.flink.runtime.jobgraph.StreamGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
-        final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups = new HashMap<>();
+        final Map<StreamVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups = new HashMap<>();
         final SlotSharingGroup defaultSlotSharingGroup = new SlotSharingGroup();
         streamGraph
                 .getSlotSharingGroupResource(StreamGraphGenerator.DEFAULT_SLOT_SHARING_GROUP)
@@ -1949,10 +1949,10 @@ public class StreamingJobGraphGenerator {
                 Collections.newSetFromMap(new IdentityHashMap<>());
 
         // maps a job vertex ID to its head operator ID
-        final Map<JobVertexID, Integer> vertexHeadOperators = new HashMap<>();
+        final Map<StreamVertexID, Integer> vertexHeadOperators = new HashMap<>();
 
         // maps a job vertex ID to IDs of all operators in the vertex
-        final Map<JobVertexID, Set<Integer>> vertexOperators = new HashMap<>();
+        final Map<StreamVertexID, Set<Integer>> vertexOperators = new HashMap<>();
 
         for (Map.Entry<Integer, StreamVertex> entry : jobVertices.entrySet()) {
             final int headOperatorId = entry.getKey();
@@ -1985,8 +1985,8 @@ public class StreamingJobGraphGenerator {
 
     private static void setManagedMemoryFractionForSlotSharingGroup(
             final SlotSharingGroup slotSharingGroup,
-            final Map<JobVertexID, Integer> vertexHeadOperators,
-            final Map<JobVertexID, Set<Integer>> vertexOperators,
+            final Map<StreamVertexID, Integer> vertexHeadOperators,
+            final Map<StreamVertexID, Set<Integer>> vertexOperators,
             final JobVertexBuildContext jobVertexBuildContext) {
         final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<Integer, Map<Integer, StreamConfig>> vertexChainedConfigs =
@@ -2016,7 +2016,7 @@ public class StreamingJobGraphGenerator {
                                                 .getManagedMemorySlotScopeUseCases().stream())
                         .collect(Collectors.toSet());
 
-        for (JobVertexID jobVertexID : slotSharingGroup.getJobVertexIds()) {
+        for (StreamVertexID jobVertexID : slotSharingGroup.getJobVertexIds()) {
             for (int operatorNodeId : vertexOperators.get(jobVertexID)) {
                 final StreamConfig operatorConfig =
                         jobVertexBuildContext.getOperatorInfo(operatorNodeId).getVertexConfig();

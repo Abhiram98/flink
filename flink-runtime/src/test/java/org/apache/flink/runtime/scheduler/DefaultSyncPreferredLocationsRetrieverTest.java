@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 
@@ -33,12 +33,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link DefaultSyncPreferredLocationsRetriever}. */
 class DefaultSyncPreferredLocationsRetrieverTest {
-    private static final JobVertexID JV1 = new JobVertexID();
+    private static final StreamVertexID JV1 = new StreamVertexID();
     private static final ExecutionVertexID EV11 = new ExecutionVertexID(JV1, 0);
     private static final ExecutionVertexID EV12 = new ExecutionVertexID(JV1, 1);
     private static final ExecutionVertexID EV13 = new ExecutionVertexID(JV1, 2);
     private static final ExecutionVertexID EV14 = new ExecutionVertexID(JV1, 3);
-    private static final ExecutionVertexID EV21 = new ExecutionVertexID(new JobVertexID(), 0);
+    private static final ExecutionVertexID EV21 = new ExecutionVertexID(new StreamVertexID(), 0);
 
     @Test
     void testAvailableInputLocationRetrieval() {

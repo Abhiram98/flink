@@ -24,7 +24,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.util.FlinkRuntimeException;
 
@@ -104,7 +104,7 @@ public class VertexFinishedStateChecker {
         // Computes the distribution pattern from each predecessor. If there are multiple edges
         // from a single predecessor, ALL_TO_ALL edges would have a higher priority since it
         // implies stricter limitation (must be fully finished).
-        Map<JobVertexID, DistributionPattern> predecessorDistribution = new HashMap<>();
+        Map<StreamVertexID, DistributionPattern> predecessorDistribution = new HashMap<>();
         for (JobEdge jobEdge : vertex.getJobVertex().getInputs()) {
             predecessorDistribution.compute(
                     jobEdge.getSource().getProducer().getID(),
@@ -159,7 +159,7 @@ public class VertexFinishedStateChecker {
 
     private static class VerticesFinishedStatusCache {
         private final Map<OperatorID, OperatorState> operatorStates;
-        private final Map<JobVertexID, VertexFinishedState> finishedCache = new HashMap<>();
+        private final Map<StreamVertexID, VertexFinishedState> finishedCache = new HashMap<>();
 
         private VerticesFinishedStatusCache(Map<OperatorID, OperatorState> operatorStates) {
             this.operatorStates = operatorStates;

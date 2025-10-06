@@ -20,7 +20,7 @@ package org.apache.flink.runtime.query;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 
 /**
@@ -41,7 +41,7 @@ public interface KvStateRegistryListener {
      */
     void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId);
@@ -56,7 +56,7 @@ public interface KvStateRegistryListener {
      */
     void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName);
 }

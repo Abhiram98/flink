@@ -21,9 +21,9 @@ package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.topology.PipelinedRegion;
 
 /** Pipelined region on logical level, i.e., {@link StreamVertex} level. */
 public interface LogicalPipelinedRegion
-        extends PipelinedRegion<JobVertexID, IntermediateDataSetID, LogicalVertex, LogicalResult> {}
+        extends PipelinedRegion<StreamVertexID, IntermediateDataSetID, LogicalVertex, LogicalResult> {}

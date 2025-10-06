@@ -165,7 +165,7 @@ public class SchedulerBenchmarkUtils {
 
     public static void deployTasks(
             ExecutionGraph executionGraph,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             TestingLogicalSlotBuilder slotBuilder)
             throws JobException, ExecutionException, InterruptedException {
 
@@ -198,7 +198,7 @@ public class SchedulerBenchmarkUtils {
     }
 
     public static void transitionTaskStatus(
-            ExecutionGraph executionGraph, JobVertexID jobVertexID, ExecutionState state) {
+            ExecutionGraph executionGraph, StreamVertexID jobVertexID, ExecutionState state) {
 
         for (ExecutionVertex vertex : executionGraph.getJobVertex(jobVertexID).getTaskVertices()) {
             executionGraph.updateState(

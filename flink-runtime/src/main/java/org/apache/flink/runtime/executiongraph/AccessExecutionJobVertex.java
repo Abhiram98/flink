@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 
 /**
@@ -64,11 +64,11 @@ public interface AccessExecutionJobVertex {
     ResourceProfile getResourceProfile();
 
     /**
-     * Returns the {@link JobVertexID} for this job vertex.
+     * Returns the {@link StreamVertexID} for this job vertex.
      *
      * @return JobVertexID for this job vertex.
      */
-    JobVertexID getJobVertexId();
+    StreamVertexID getJobVertexId();
 
     /**
      * Returns all execution vertices for this job vertex.

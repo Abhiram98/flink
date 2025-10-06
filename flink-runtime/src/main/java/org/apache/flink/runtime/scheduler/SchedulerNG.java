@@ -35,11 +35,8 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.StreamGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
@@ -86,7 +83,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
     boolean updateTaskExecutionState(TaskExecutionStateTransition taskExecutionState);
 
     SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException;
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException;
 
     ExecutionState requestPartitionState(
             IntermediateDataSetID intermediateResultId, ResultPartitionID resultPartitionId)
@@ -114,7 +111,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
 
     void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -123,7 +120,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
 
     void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
             throws FlinkStreamNotFoundException;

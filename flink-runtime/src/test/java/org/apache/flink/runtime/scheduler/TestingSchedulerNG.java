@@ -35,7 +35,7 @@ import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
@@ -126,7 +126,7 @@ public class TestingSchedulerNG implements SchedulerNG {
 
     @Override
     public SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
         failOperation();
         return null;
     }
@@ -165,7 +165,7 @@ public class TestingSchedulerNG implements SchedulerNG {
     @Override
     public void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -176,7 +176,7 @@ public class TestingSchedulerNG implements SchedulerNG {
     @Override
     public void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName) {
         failOperation();

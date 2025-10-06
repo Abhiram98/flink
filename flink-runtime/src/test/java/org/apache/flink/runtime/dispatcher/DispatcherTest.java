@@ -1216,7 +1216,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                         // v2 is omitted
                         v3.getID().toHexString(), "21",
                         // unknown vertex added
-                        new JobVertexID().toHexString(), "23"));
+                        new StreamVertexID().toHexString(), "23"));
 
         jobGraph.getJobConfiguration()
                 .set(
@@ -1225,7 +1225,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                                 // verifies that job graph configuration has higher priority
                                 v3.getID().toHexString(), "42",
                                 // unknown vertex added
-                                new JobVertexID().toHexString(), "25"));
+                                new StreamVertexID().toHexString(), "25"));
 
         dispatcher =
                 createAndStartDispatcher(

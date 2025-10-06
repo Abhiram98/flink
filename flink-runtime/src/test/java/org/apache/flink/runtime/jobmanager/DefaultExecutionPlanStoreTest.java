@@ -25,7 +25,7 @@ import org.apache.flink.runtime.checkpoint.TestingRetrievableStateStorageHelper;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.persistence.IntegerResourceVersion;
 import org.apache.flink.runtime.persistence.StateHandleStore;
 import org.apache.flink.runtime.persistence.TestingStateHandleStore;
@@ -417,7 +417,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final JobResourceRequirements jobResourceRequirements =
                 JobResourceRequirements.newBuilder()
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 1)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 1)
                         .build();
 
         final ExecutionPlanStore executionPlanStore =
@@ -431,7 +431,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final JobResourceRequirements updatedJobResourceRequirements =
                 JobResourceRequirements.newBuilder()
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 1)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 1)
                         .build();
 
         executionPlanStore.putStreamResourceRequirements(

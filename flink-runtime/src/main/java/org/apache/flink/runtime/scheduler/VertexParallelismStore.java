@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /**
  * Contains the max parallelism per vertex, along with metadata about how these maxes were
@@ -32,5 +32,5 @@ public interface VertexParallelismStore {
      * @return a parallelism information for the given vertex
      * @throws IllegalStateException if there is no parallelism information for the given vertex
      */
-    VertexParallelismInformation getParallelismInfo(JobVertexID vertexId);
+    VertexParallelismInformation getParallelismInfo(StreamVertexID vertexId);
 }

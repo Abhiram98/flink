@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
@@ -454,9 +454,9 @@ class JobExceptionsHandlerTest {
                         new LocalTaskManagerLocation(),
                         Collections.emptySet()));
 
-        Map<JobVertexID, ArchivedExecutionJobVertex> tasks = new HashMap<>();
+        Map<StreamVertexID, ArchivedExecutionJobVertex> tasks = new HashMap<>();
         for (int i = 1; i < numTasks; i++) {
-            final JobVertexID jobVertexId = new JobVertexID();
+            final StreamVertexID jobVertexId = new StreamVertexID();
             final String taskName = "task name #" + i;
             final Exception otherCause = new Exception("Expected exception #" + i);
             final long otherFailureTimestamp = System.currentTimeMillis();
@@ -484,7 +484,7 @@ class JobExceptionsHandlerTest {
     }
 
     private static ArchivedExecutionJobVertex createArchivedExecutionJobVertex(
-            JobVertexID jobVertexID, String taskName, Exception cause, long failureTimestamp) {
+            StreamVertexID jobVertexID, String taskName, Exception cause, long failureTimestamp) {
         final StringifiedAccumulatorResult[] emptyAccumulators =
                 new StringifiedAccumulatorResult[0];
         final long[] timestamps = new long[ExecutionState.values().length];

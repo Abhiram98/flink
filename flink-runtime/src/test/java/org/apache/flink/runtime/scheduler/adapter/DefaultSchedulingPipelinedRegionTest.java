@@ -26,7 +26,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.testutils.TestingUtils;
@@ -61,7 +61,7 @@ class DefaultSchedulingPipelinedRegionTest {
         final DefaultSchedulingPipelinedRegion pipelinedRegion =
                 new DefaultSchedulingPipelinedRegion(
                         Collections.emptySet(), resultPartitionById::get);
-        final ExecutionVertexID unknownVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID unknownVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         assertThatThrownBy(() -> pipelinedRegion.getVertex(unknownVertexId))
                 .withFailMessage("Expected exception not thrown")
                 .isInstanceOf(IllegalArgumentException.class)
@@ -72,7 +72,7 @@ class DefaultSchedulingPipelinedRegionTest {
     void returnsVertices() {
         final DefaultExecutionVertex vertex =
                 new DefaultExecutionVertex(
-                        new ExecutionVertexID(new JobVertexID(), 0),
+                        new ExecutionVertexID(new StreamVertexID(), 0),
                         Collections.emptyList(),
                         () -> ExecutionState.CREATED,
                         Collections.emptyList(),

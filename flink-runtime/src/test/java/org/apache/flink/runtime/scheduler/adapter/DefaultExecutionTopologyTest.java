@@ -29,7 +29,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.StreamVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumerVertexGroup;
@@ -127,7 +127,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testGetVertexOrThrow() {
-        assertThatThrownBy(() -> adapter.getVertex(new ExecutionVertexID(new JobVertexID(), 0)))
+        assertThatThrownBy(() -> adapter.getVertex(new ExecutionVertexID(new StreamVertexID(), 0)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

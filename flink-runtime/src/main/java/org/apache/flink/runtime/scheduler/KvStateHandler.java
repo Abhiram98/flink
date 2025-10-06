@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
@@ -74,7 +74,7 @@ public class KvStateHandler {
 
     public void notifyKvStateRegistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName,
             final KvStateID kvStateId,
@@ -108,7 +108,7 @@ public class KvStateHandler {
 
     public void notifyKvStateUnregistered(
             final JobID jobId,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final KeyGroupRange keyGroupRange,
             final String registrationName)
             throws FlinkStreamNotFoundException {

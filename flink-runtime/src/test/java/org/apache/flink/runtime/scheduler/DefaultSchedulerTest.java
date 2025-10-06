@@ -252,7 +252,7 @@ public class DefaultSchedulerTest {
     @Test
     void deployTasksOnlyWhenAllSlotRequestsAreFulfilled() throws Exception {
         final StreamGraph jobGraph = singleJobVertexJobGraph(4);
-        final JobVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
+        final StreamVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
@@ -286,7 +286,7 @@ public class DefaultSchedulerTest {
     @Test
     void scheduledVertexOrderFromSchedulingStrategyIsRespected() throws Exception {
         final StreamGraph jobGraph = singleJobVertexJobGraph(10);
-        final JobVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
+        final StreamVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
 
         final List<ExecutionVertexID> desiredScheduleOrder =
                 Arrays.asList(

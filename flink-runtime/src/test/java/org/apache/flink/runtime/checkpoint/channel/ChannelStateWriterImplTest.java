@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter.ChannelSta
 import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.buffer.FreeingBufferRecycler;
 import org.apache.flink.runtime.io.network.buffer.NetworkBuffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.util.function.BiConsumerWithException;
@@ -46,7 +46,7 @@ class ChannelStateWriterImplTest {
     private static final long CHECKPOINT_ID = 42L;
     private static final String TASK_NAME = "test";
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
     private static final int SUBTASK_INDEX = 0;
 
     private static final CheckpointStorage CHECKPOINT_STORAGE = new JobManagerCheckpointStorage();
@@ -303,10 +303,10 @@ class ChannelStateWriterImplTest {
             public void start() throws IllegalStateException {}
 
             @Override
-            public void registerSubtask(JobVertexID jobVertexID, int subtaskIndex) {}
+            public void registerSubtask(StreamVertexID jobVertexID, int subtaskIndex) {}
 
             @Override
-            public void releaseSubtask(JobVertexID jobVertexID, int subtaskIndex) {}
+            public void releaseSubtask(StreamVertexID jobVertexID, int subtaskIndex) {}
         };
     }
 
@@ -408,12 +408,12 @@ class SyncChannelStateWriteRequestExecutor implements ChannelStateWriteRequestEx
     public void start() throws IllegalStateException {}
 
     @Override
-    public void registerSubtask(JobVertexID jobVertexID, int subtaskIndex) {
+    public void registerSubtask(StreamVertexID jobVertexID, int subtaskIndex) {
         deque.add(ChannelStateWriteRequest.registerSubtask(jobVertexID, subtaskIndex));
     }
 
     @Override
-    public void releaseSubtask(JobVertexID jobVertexID, int subtaskIndex) {
+    public void releaseSubtask(StreamVertexID jobVertexID, int subtaskIndex) {
         deque.add(ChannelStateWriteRequest.releaseSubtask(jobVertexID, subtaskIndex));
     }
 

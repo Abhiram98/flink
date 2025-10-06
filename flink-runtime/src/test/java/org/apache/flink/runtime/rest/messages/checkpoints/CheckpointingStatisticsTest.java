@@ -22,7 +22,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsStatus;
 import org.apache.flink.runtime.checkpoint.CheckpointType;
 import org.apache.flink.runtime.checkpoint.SavepointType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.RestResponseMarshallingTestBase;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointStatistics.RestAPICheckpointType;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
@@ -60,16 +60,16 @@ class CheckpointingStatisticsTest extends RestResponseMarshallingTestBase<Checkp
                         new StatsSummaryDto(4L, 4L, 4L, 0, 0, 0, 0, 0),
                         new StatsSummaryDto(5L, 5L, 5L, 0, 0, 0, 0, 0));
 
-        final Map<JobVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask =
+        final Map<StreamVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask =
                 new HashMap<>(2);
 
         checkpointStatisticsPerTask.put(
-                new JobVertexID(),
+                new StreamVertexID(),
                 new TaskCheckpointStatistics(
                         1L, CheckpointStatsStatus.COMPLETED, 1L, 2L, 2L, 3L, 4L, 7, 8, 5, 6));
 
         checkpointStatisticsPerTask.put(
-                new JobVertexID(),
+                new StreamVertexID(),
                 new TaskCheckpointStatistics(
                         1L, CheckpointStatsStatus.COMPLETED, 2L, 3L, 3L, 4L, 5L, 8, 9, 6, 7));
 

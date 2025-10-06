@@ -21,7 +21,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.io.network.buffer.Buffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.CheckpointStorageWorkerView;
 import org.apache.flink.util.CloseableIterator;
@@ -68,7 +68,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
             1000; // includes max-concurrent-checkpoints + checkpoints to be aborted (scheduled via
     // mailbox)
 
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
 
     private final int subtaskIndex;
 
@@ -85,7 +85,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
      * #maxCheckpoints}.
      */
     public ChannelStateWriterImpl(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             String taskName,
             int subtaskIndex,
             SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
@@ -112,7 +112,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
      *     not taken yet.
      */
     ChannelStateWriterImpl(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             String taskName,
             int subtaskIndex,
             SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
@@ -134,7 +134,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
     }
 
     ChannelStateWriterImpl(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             String taskName,
             int subtaskIndex,
             ConcurrentMap<Long, ChannelStateWriteResult> results,

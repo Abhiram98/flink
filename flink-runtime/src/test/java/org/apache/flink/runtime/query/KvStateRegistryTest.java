@@ -26,7 +26,7 @@ import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.core.memory.DataOutputView;
 import org.apache.flink.queryablestate.KvStateID;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.VoidNamespaceSerializer;
@@ -60,7 +60,7 @@ class KvStateRegistryTest {
 
         final JobID jobID = new JobID();
 
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final KeyGroupRange keyGroupRange = new KeyGroupRange(0, 1);
         final String registrationName = "foobar";
 
@@ -156,7 +156,7 @@ class KvStateRegistryTest {
         kvStateRegistry.registerListener(jobId1, listener1);
         kvStateRegistry.registerListener(jobId2, listener2);
 
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final KeyGroupRange keyGroupRange = new KeyGroupRange(0, 1);
         final String registrationName = "foobar";
         final KvStateID kvStateID =
@@ -171,7 +171,7 @@ class KvStateRegistryTest {
         assertThat(registeredNotifications1.poll()).isEqualTo(jobId1);
         assertThat(registeredNotifications2).isEmpty();
 
-        final JobVertexID jobVertexId2 = new JobVertexID();
+        final StreamVertexID jobVertexId2 = new StreamVertexID();
         final KeyGroupRange keyGroupRange2 = new KeyGroupRange(0, 1);
         final String registrationName2 = "barfoo";
         final KvStateID kvStateID2 =
@@ -221,7 +221,7 @@ class KvStateRegistryTest {
         kvStateRegistry.registerListener(HighAvailabilityServices.DEFAULT_JOB_ID, testingListener);
         kvStateRegistry.registerListener(jobId, anotherListener);
 
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
 
         final KeyGroupRange keyGroupRange = new KeyGroupRange(0, 1);
         final String registrationName = "registrationName";
@@ -262,7 +262,7 @@ class KvStateRegistryTest {
         @Override
         public void notifyKvStateRegistered(
                 JobID jobId,
-                JobVertexID jobVertexId,
+                StreamVertexID jobVertexId,
                 KeyGroupRange keyGroupRange,
                 String registrationName,
                 KvStateID kvStateId) {
@@ -272,7 +272,7 @@ class KvStateRegistryTest {
         @Override
         public void notifyKvStateUnregistered(
                 JobID jobId,
-                JobVertexID jobVertexId,
+                StreamVertexID jobVertexId,
                 KeyGroupRange keyGroupRange,
                 String registrationName) {
             stateDeregisteredNotifications.offer(jobId);

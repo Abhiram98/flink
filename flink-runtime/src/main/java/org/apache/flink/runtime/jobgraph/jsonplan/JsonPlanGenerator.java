@@ -98,7 +98,7 @@ public class JsonPlanGenerator {
                 gen.writeStartObject();
 
                 // write the core properties
-                JobVertexID vertexID = vertex.getID();
+                StreamVertexID vertexID = vertex.getID();
                 gen.writeStringField("id", vertexID.toString());
                 gen.writeNumberField(
                         "parallelism",

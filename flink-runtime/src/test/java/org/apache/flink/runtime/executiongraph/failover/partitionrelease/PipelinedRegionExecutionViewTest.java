@@ -19,7 +19,7 @@
 
 package org.apache.flink.runtime.executiongraph.failover.partitionrelease;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.TestingSchedulingExecutionVertex;
 import org.apache.flink.runtime.scheduler.strategy.TestingSchedulingPipelinedRegion;
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class PipelinedRegionExecutionViewTest {
 
     private static final ExecutionVertexID TEST_EXECUTION_VERTEX_ID =
-            new ExecutionVertexID(new JobVertexID(), 0);
+            new ExecutionVertexID(new StreamVertexID(), 0);
 
     private static final TestingSchedulingPipelinedRegion TEST_PIPELINED_REGION =
             new TestingSchedulingPipelinedRegion(
@@ -78,7 +78,7 @@ class PipelinedRegionExecutionViewTest {
         final PipelinedRegionExecutionView pipelinedRegionExecutionView =
                 new PipelinedRegionExecutionView(TEST_PIPELINED_REGION);
 
-        final ExecutionVertexID unknownVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID unknownVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         assertThatThrownBy(() -> pipelinedRegionExecutionView.vertexFinished(unknownVertexId))
                 .isInstanceOf(IllegalArgumentException.class);
     }

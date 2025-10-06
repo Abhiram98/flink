@@ -28,7 +28,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.query.KvStateRegistry;
 import org.apache.flink.runtime.query.TaskKvStateRegistry;
@@ -75,7 +75,7 @@ public class TriggerTestHarness<T, W extends Window> {
         JobID jobID = new JobID();
         KeyGroupRange keyGroupRange = new KeyGroupRange(0, 0);
         TaskKvStateRegistry kvStateRegistry =
-                new KvStateRegistry().createTaskRegistry(new JobID(), new JobVertexID());
+                new KvStateRegistry().createTaskRegistry(new JobID(), new StreamVertexID());
         CloseableRegistry cancelStreamRegistry = new CloseableRegistry();
         @SuppressWarnings("unchecked")
         HeapKeyedStateBackend<Integer> stateBackend =

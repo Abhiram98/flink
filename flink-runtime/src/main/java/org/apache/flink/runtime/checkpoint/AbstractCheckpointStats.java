@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -41,7 +41,7 @@ public abstract class AbstractCheckpointStats implements Serializable {
     final long triggerTimestamp;
 
     /** {@link TaskStateStats} accessible by their ID. */
-    final Map<JobVertexID, TaskStateStats> taskStats;
+    final Map<StreamVertexID, TaskStateStats> taskStats;
 
     /** Total number of subtasks over all tasks. */
     final int numberOfSubtasks;
@@ -54,7 +54,7 @@ public abstract class AbstractCheckpointStats implements Serializable {
             long triggerTimestamp,
             CheckpointProperties props,
             int numberOfSubtasks,
-            Map<JobVertexID, TaskStateStats> taskStats) {
+            Map<StreamVertexID, TaskStateStats> taskStats) {
 
         this.checkpointId = checkpointId;
         this.triggerTimestamp = triggerTimestamp;
@@ -154,7 +154,7 @@ public abstract class AbstractCheckpointStats implements Serializable {
      * @param jobVertexId Job vertex ID of the task stats to look up.
      * @return The task state stats instance for the given ID or <code>null</code>.
      */
-    public TaskStateStats getTaskStateStats(JobVertexID jobVertexId) {
+    public TaskStateStats getTaskStateStats(StreamVertexID jobVertexId) {
         return taskStats.get(jobVertexId);
     }
 

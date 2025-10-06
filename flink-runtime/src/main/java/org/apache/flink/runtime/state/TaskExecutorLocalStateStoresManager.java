@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.Reference;
 import org.apache.flink.util.ShutdownHookUtil;
@@ -129,7 +129,7 @@ public class TaskExecutorLocalStateStoresManager {
     public TaskLocalStateStore localStateStoreForSubtask(
             @Nonnull JobID jobId,
             @Nonnull AllocationID allocationID,
-            @Nonnull JobVertexID jobVertexID,
+            @Nonnull StreamVertexID jobVertexID,
             @Nonnegative int subtaskIndex,
             Configuration clusterConfiguration,
             Configuration jobConfiguration) {
@@ -394,18 +394,18 @@ public class TaskExecutorLocalStateStoresManager {
     }
 
     /**
-     * Composite key of {@link JobVertexID} and subtask index that describes the subtask of a job
+     * Composite key of {@link StreamVertexID} and subtask index that describes the subtask of a job
      * vertex.
      */
     private static final class JobVertexSubtaskKey {
 
         /** The job vertex id. */
-        @Nonnull final JobVertexID jobVertexID;
+        @Nonnull final StreamVertexID jobVertexID;
 
         /** The subtask index. */
         @Nonnegative final int subtaskIndex;
 
-        JobVertexSubtaskKey(@Nonnull JobVertexID jobVertexID, @Nonnegative int subtaskIndex) {
+        JobVertexSubtaskKey(@Nonnull StreamVertexID jobVertexID, @Nonnegative int subtaskIndex) {
             this.jobVertexID = jobVertexID;
             this.subtaskIndex = subtaskIndex;
         }

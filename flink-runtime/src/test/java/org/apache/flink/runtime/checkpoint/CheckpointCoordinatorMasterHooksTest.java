@@ -23,7 +23,7 @@ import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
@@ -80,7 +80,7 @@ class CheckpointCoordinatorMasterHooksTest {
     void testDeduplicateOnRegister() throws Exception {
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         final CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
@@ -103,7 +103,7 @@ class CheckpointCoordinatorMasterHooksTest {
     void testNullOrInvalidId() throws Exception {
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         final CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
@@ -142,7 +142,7 @@ class CheckpointCoordinatorMasterHooksTest {
         // create the checkpoint coordinator
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
@@ -194,7 +194,7 @@ class CheckpointCoordinatorMasterHooksTest {
         when(statelessHook.getIdentifier()).thenReturn("some-id");
 
         // create the checkpoint coordinator
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         final ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
                         .addJobVertex(jobVertexId)
@@ -304,7 +304,7 @@ class CheckpointCoordinatorMasterHooksTest {
                         null);
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
@@ -366,7 +366,7 @@ class CheckpointCoordinatorMasterHooksTest {
 
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
@@ -405,7 +405,7 @@ class CheckpointCoordinatorMasterHooksTest {
         // create the checkpoint coordinator
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .build(EXECUTOR_RESOURCE.getExecutor());
         final ManuallyTriggeredScheduledExecutor manuallyTriggeredScheduledExecutor =
                 new ManuallyTriggeredScheduledExecutor();

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobgraph.topology;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.function.Function;
 
@@ -34,11 +34,11 @@ public class DefaultLogicalResult implements LogicalResult {
 
     private final IntermediateDataSet intermediateDataSet;
 
-    private final Function<JobVertexID, DefaultLogicalVertex> vertexRetriever;
+    private final Function<StreamVertexID, DefaultLogicalVertex> vertexRetriever;
 
     DefaultLogicalResult(
             final IntermediateDataSet intermediateDataSet,
-            final Function<JobVertexID, DefaultLogicalVertex> vertexRetriever) {
+            final Function<StreamVertexID, DefaultLogicalVertex> vertexRetriever) {
 
         this.intermediateDataSet = checkNotNull(intermediateDataSet);
         this.vertexRetriever = checkNotNull(vertexRetriever);

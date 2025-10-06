@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.annotation.docs.FlinkJsonSchema;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.JobVertexResourceRequirements;
 import org.apache.flink.runtime.rest.messages.RequestBody;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -48,7 +48,7 @@ public class JobResourceRequirementsBody implements RequestBody, ResponseBody {
     @JsonAnyGetter
     @JsonSerialize(keyUsing = JobVertexIDKeySerializer.class)
     @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
-    private final Map<JobVertexID, JobVertexResourceRequirements> jobVertexResourceRequirements;
+    private final Map<StreamVertexID, JobVertexResourceRequirements> jobVertexResourceRequirements;
 
     public JobResourceRequirementsBody() {
         this(null);

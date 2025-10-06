@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -64,7 +64,7 @@ public enum NoOpCheckpointStatsTracker implements CheckpointStatsTracker {
             long checkpointId,
             long triggerTimestamp,
             CheckpointProperties props,
-            Map<JobVertexID, Integer> vertexToDop) {
+            Map<StreamVertexID, Integer> vertexToDop) {
         return null;
     }
 

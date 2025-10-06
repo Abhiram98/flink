@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 
 import java.util.Collection;
@@ -34,13 +34,13 @@ public interface JobInformation {
      */
     Collection<SlotSharingGroup> getSlotSharingGroups();
 
-    VertexInformation getVertexInformation(JobVertexID jobVertexId);
+    VertexInformation getVertexInformation(StreamVertexID jobVertexId);
 
     Iterable<VertexInformation> getVertices();
 
     /** Information about a single vertex. */
     interface VertexInformation {
-        JobVertexID getJobVertexID();
+        StreamVertexID getJobVertexID();
 
         int getMinParallelism();
 

@@ -75,8 +75,8 @@ public class ArchivedExecutionGraphTest {
         // Setup
         // -------------------------------------------------------------------------------------------------------------
 
-        JobVertexID v1ID = new JobVertexID();
-        JobVertexID v2ID = new JobVertexID();
+        StreamVertexID v1ID = new StreamVertexID();
+        StreamVertexID v2ID = new StreamVertexID();
 
         StreamVertex v1 = new StreamVertex("v1", v1ID);
         StreamVertex v2 = new StreamVertex("v2", v2ID);
@@ -346,12 +346,12 @@ public class ArchivedExecutionGraphTest {
         // -------------------------------------------------------------------------------------------------------------
         // JobVertices
         // -------------------------------------------------------------------------------------------------------------
-        Map<JobVertexID, ? extends AccessExecutionJobVertex> runtimeVertices =
+        Map<StreamVertexID, ? extends AccessExecutionJobVertex> runtimeVertices =
                 runtimeGraph.getAllVertices();
-        Map<JobVertexID, ? extends AccessExecutionJobVertex> archivedVertices =
+        Map<StreamVertexID, ? extends AccessExecutionJobVertex> archivedVertices =
                 archivedGraph.getAllVertices();
 
-        for (Map.Entry<JobVertexID, ? extends AccessExecutionJobVertex> vertex :
+        for (Map.Entry<StreamVertexID, ? extends AccessExecutionJobVertex> vertex :
                 runtimeVertices.entrySet()) {
             compareExecutionJobVertex(vertex.getValue(), archivedVertices.get(vertex.getKey()));
         }
