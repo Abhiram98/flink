@@ -99,7 +99,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
@@ -133,19 +133,19 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                 createExecutionSlotAllocatorFactory(jobMasterConfiguration, slotPool);
 
         ExecutionConfig executionConfig =
-                jobGraph.getSerializedExecutionConfig().deserializeValue(userCodeLoader);
+                executionPlan.getSerializedExecutionConfig().deserializeValue(userCodeLoader);
 
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
-                                jobGraph.getJobConfiguration(),
+                                executionPlan.getJobConfiguration(),
                                 jobMasterConfiguration,
-                                jobGraph.isCheckpointingEnabled())
+                                executionPlan.isCheckpointingEnabled())
                         .create();
         log.info(
                 "Using restart back off time strategy {} for {} ({}).",
                 restartBackoffTimeStrategy,
-                jobGraph.getName(),
-                jobGraph.getJobID());
+                executionPlan.getName(),
+                executionPlan.getJobID());
 
         final boolean isJobRecoveryEnabled =
                 jobMasterConfiguration.get(BatchExecutionOptions.JOB_RECOVERY_ENABLED)
@@ -154,7 +154,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         BatchJobRecoveryHandler jobRecoveryHandler;
         if (isJobRecoveryEnabled) {
             FileSystemJobEventStore jobEventStore =
-                    new FileSystemJobEventStore(jobGraph.getJobID(), jobMasterConfiguration);
+                    new FileSystemJobEventStore(executionPlan.getJobID(), jobMasterConfiguration);
             JobEventManager jobEventManager = new JobEventManager(jobEventStore);
             jobRecoveryHandler =
                     new DefaultBatchJobRecoveryHandler(jobEventManager, jobMasterConfiguration);
@@ -164,7 +164,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
 
         return createScheduler(
                 log,
-                jobGraph,
+                executionPlan,
                 executionConfig,
                 ioExecutor,
                 jobMasterConfiguration,
@@ -195,7 +195,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @VisibleForTesting
     public static AdaptiveBatchScheduler createScheduler(
             Logger log,
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             ExecutionConfig executionConfig,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
@@ -222,9 +222,9 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
             throws Exception {
 
         checkState(
-                jobGraph.getJobType() == JobType.BATCH,
+                executionPlan.getJobType() == JobType.BATCH,
                 "Adaptive batch scheduler only supports batch jobs");
-        checkAllExchangesAreSupported(jobGraph);
+        checkAllExchangesAreSupported(executionPlan);
 
         final boolean enableSpeculativeExecution =
                 jobMasterConfiguration.get(BatchExecutionOptions.SPECULATIVE_ENABLED);
@@ -258,11 +258,11 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
 
         final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 ForwardGroupComputeUtil.computeForwardGroupsAndCheckParallelism(
-                        jobGraph.getVerticesSortedTopologicallyFromSources());
+                        executionPlan.getVerticesSortedTopologicallyFromSources());
 
         return new AdaptiveBatchScheduler(
                 log,
-                jobGraph,
+                executionPlan,
                 ioExecutor,
                 jobMasterConfiguration,
                 componentMainThreadExecutor -> {},
@@ -355,8 +355,8 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         }
     }
 
-    private static void checkAllExchangesAreSupported(final ExecutionPlan jobGraph) {
-        for (JobVertex jobVertex : jobGraph.getVertices()) {
+    private static void checkAllExchangesAreSupported(final ExecutionPlan executionPlan) {
+        for (JobVertex jobVertex : executionPlan.getVertices()) {
             for (IntermediateDataSet dataSet : jobVertex.getProducedDataSets()) {
                 checkState(
                         dataSet.getResultType().isBlockingOrBlockingPersistentResultPartition()

@@ -104,7 +104,7 @@ class JobMasterSchedulerTest {
         @Override
         public SchedulerNG createInstance(
                 Logger log,
-                ExecutionPlan jobGraph,
+                ExecutionPlan executionPlan,
                 Executor ioExecutor,
                 Configuration jobMasterConfiguration,
                 SlotPoolService slotPoolService,

@@ -55,7 +55,7 @@ public class TestingSchedulerNGFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,

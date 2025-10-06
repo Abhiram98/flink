@@ -47,7 +47,7 @@ public interface SchedulerNGFactory {
 
     SchedulerNG createInstance(
             Logger log,
-            ExecutionPlan jobGraph,
+            ExecutionPlan executionPlan,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
