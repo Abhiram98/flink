@@ -56,7 +56,7 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
     private static final int NUMBER_OF_SLOTS_PER_TM = 2;
     private static final int PARALLELISM = NUMBER_OF_TMS * NUMBER_OF_SLOTS_PER_TM;
 
-    public static final String JOB_NAME =
+    public static final String STREAM_NAME =
             "SlotCountExceedingParallelismTest (no slot sharing, blocking results)";
 
     @ClassRule
@@ -78,33 +78,33 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
     @Test
     public void testNoSlotSharingAndBlockingResultSender() throws Exception {
         // Sender with higher parallelism than available slots
-        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM);
-        submitJobGraphAndWait(jobGraph);
+        StreamGraph streamGraph = createTestStreamGraph(STREAM_NAME, PARALLELISM * 2, PARALLELISM);
+        submitStreamGraphAndWait(streamGraph);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultReceiver() throws Exception {
         // Receiver with higher parallelism than available slots
-        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM, PARALLELISM * 2);
-        submitJobGraphAndWait(jobGraph);
+        StreamGraph streamGraph = createTestStreamGraph(STREAM_NAME, PARALLELISM, PARALLELISM * 2);
+        submitStreamGraphAndWait(streamGraph);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultBoth() throws Exception {
         // Both sender and receiver with higher parallelism than available slots
-        StreamGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM * 2);
-        submitJobGraphAndWait(jobGraph);
+        StreamGraph streamGraph = createTestStreamGraph(STREAM_NAME, PARALLELISM * 2, PARALLELISM * 2);
+        submitStreamGraphAndWait(streamGraph);
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    private void submitJobGraphAndWait(final StreamGraph jobGraph)
+    private void submitStreamGraphAndWait(final StreamGraph streamGraph)
             throws JobExecutionException, InterruptedException {
-        MINI_CLUSTER_RESOURCE.getMiniCluster().executeJobBlocking(jobGraph);
+        MINI_CLUSTER_RESOURCE.getMiniCluster().executeJobBlocking(streamGraph);
     }
 
-    private StreamGraph createTestJobGraph(
-            String jobName, int senderParallelism, int receiverParallelism) {
+    private StreamGraph createTestStreamGraph(
+            String streamName, int senderParallelism, int receiverParallelism) {
 
         // The sender and receiver invokable logic ensure that each subtask gets the expected data
         final StreamVertex sender = new StreamVertex("Sender");
@@ -125,7 +125,7 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
                 sender, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
         return JobGraphBuilder.newBatchJobGraphBuilder()
-                .setJobName(jobName)
+                .setJobName(streamName)
                 .addJobVertices(Arrays.asList(sender, receiver))
                 .build();
     }
