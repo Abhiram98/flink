@@ -49,7 +49,7 @@ class ClientUtilsTest {
 
         assertThatThrownBy(
                         () ->
-                                ClientUtils.waitUntilJobInitializationFinished(
+                                ClientUtils.waitUntilStreamInitializationFinished(
                                         statusSequenceIterator::next,
                                         () -> {
                                             Throwable throwable =
@@ -73,7 +73,7 @@ class ClientUtilsTest {
         Iterator<JobStatus> statusSequenceIterator =
                 Arrays.asList(JobStatus.INITIALIZING, JobStatus.INITIALIZING, JobStatus.FAILED)
                         .iterator();
-        ClientUtils.waitUntilJobInitializationFinished(
+        ClientUtils.waitUntilStreamInitializationFinished(
                 statusSequenceIterator::next,
                 () -> buildJobResult(new RuntimeException("Err")),
                 ClassLoader.getSystemClassLoader());
@@ -84,7 +84,7 @@ class ClientUtilsTest {
     void testWaitUntilJobInitializationFinished_throwsOtherErrors() {
         assertThatThrownBy(
                         () ->
-                                ClientUtils.waitUntilJobInitializationFinished(
+                                ClientUtils.waitUntilStreamInitializationFinished(
                                         () -> {
                                             throw new RuntimeException("other error");
                                         },
@@ -115,7 +115,7 @@ class ClientUtilsTest {
         Iterator<JobStatus> statusSequenceIterator =
                 Arrays.asList(JobStatus.INITIALIZING, JobStatus.INITIALIZING, JobStatus.RUNNING)
                         .iterator();
-        ClientUtils.waitUntilJobInitializationFinished(
+        ClientUtils.waitUntilStreamInitializationFinished(
                 statusSequenceIterator::next,
                 () -> {
                     fail("unexpected call");

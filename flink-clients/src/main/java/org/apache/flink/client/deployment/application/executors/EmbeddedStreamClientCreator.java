@@ -24,7 +24,7 @@ import org.apache.flink.core.execution.JobClient;
 
 /** An interface to be implemented by {@link JobClient} suppliers. */
 @Internal
-public interface EmbeddedJobClientCreator {
+public interface EmbeddedStreamClientCreator {
 
     /**
      * Creates a {@link JobClient} that is adequate for the context in which the job is executed.

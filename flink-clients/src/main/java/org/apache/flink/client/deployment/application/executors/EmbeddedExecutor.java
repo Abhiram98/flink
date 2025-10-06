@@ -74,7 +74,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
 
     private final DispatcherGateway dispatcherGateway;
 
-    private final EmbeddedJobClientCreator streamClientCreator;
+    private final EmbeddedStreamClientCreator streamClientCreator;
 
     private final List<StreamStatusChangedListener> streamStatusChangedListeners;
 
@@ -93,7 +93,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
             final Collection<JobID> submittedStreamIds,
             final DispatcherGateway dispatcherGateway,
             final Configuration configuration,
-            final EmbeddedJobClientCreator streamClientCreator) {
+            final EmbeddedStreamClientCreator streamClientCreator) {
         this.submittedStreamIds = checkNotNull(submittedStreamIds);
         this.dispatcherGateway = checkNotNull(dispatcherGateway);
         this.streamClientCreator = checkNotNull(streamClientCreator);
@@ -158,7 +158,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
                         FunctionUtils.uncheckedFunction(
                                 streamId -> {
                                     org.apache.flink.client.ClientUtils
-                                            .waitUntilJobInitializationFinished(
+                                            .waitUntilStreamInitializationFinished(
                                                     () ->
                                                             dispatcherGateway
                                                                     .requestJobStatus(
