@@ -319,7 +319,7 @@ public class IntermediateResultPartitionTest {
 
         ScheduledExecutorService executorService = new DirectScheduledExecutorService();
 
-        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(source, sink1, sink2);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(source, sink1, sink2);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

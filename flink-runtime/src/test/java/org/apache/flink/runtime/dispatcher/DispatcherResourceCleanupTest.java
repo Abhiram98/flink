@@ -35,7 +35,7 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
@@ -127,7 +127,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Before
     public void setup() throws Exception {
-        jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         jobId = jobGraph.getJobID();
 
         globalCleanupFuture = new CompletableFuture<>();

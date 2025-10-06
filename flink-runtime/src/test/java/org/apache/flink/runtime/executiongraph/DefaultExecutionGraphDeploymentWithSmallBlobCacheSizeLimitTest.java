@@ -173,7 +173,7 @@ class DefaultExecutionGraphDeploymentWithSmallBlobCacheSizeLimitTest
         }
 
         final ExecutionPlan jobGraph =
-                JobGraphTestUtils.batchJobGraph(vertices.toArray(new JobVertex[0]));
+                ExecutionPlanTestUtils.batchJobGraph(vertices.toArray(new JobVertex[0]));
 
         final DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
         final DefaultExecutionGraph eg =

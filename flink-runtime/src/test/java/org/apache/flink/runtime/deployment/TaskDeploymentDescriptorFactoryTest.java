@@ -212,7 +212,7 @@ class TaskDeploymentDescriptorFactoryTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.ALL_TO_ALL, ResultPartitionType.HYBRID_FULL);
 
-        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

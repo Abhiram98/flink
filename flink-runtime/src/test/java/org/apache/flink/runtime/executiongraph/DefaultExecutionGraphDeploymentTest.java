@@ -36,12 +36,8 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -155,7 +151,7 @@ class DefaultExecutionGraphDeploymentTest {
         v4.connectNewDataSetAsInput(
                 v2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(v1, v2, v3, v4);
         final JobID jobId = jobGraph.getJobID();
 
         DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
@@ -445,7 +441,7 @@ class DefaultExecutionGraphDeploymentTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final ExecutionPlan graph = JobGraphTestUtils.batchJobGraph(v1, v2);
+        final ExecutionPlan graph = ExecutionPlanTestUtils.batchJobGraph(v1, v2);
 
         DirectScheduledExecutorService directExecutor = new DirectScheduledExecutorService();
 
@@ -513,7 +509,7 @@ class DefaultExecutionGraphDeploymentTest {
         // execution graph that executes actions synchronously
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(v1, v2),
+                                ExecutionPlanTestUtils.streamingJobGraph(v1, v2),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -593,7 +589,7 @@ class DefaultExecutionGraphDeploymentTest {
         final RpcTaskManagerGateway taskManagerGateway =
                 new RpcTaskManagerGateway(taskExecutorGateway, JobMasterId.generate());
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sourceVertex, sinkVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sourceVertex, sinkVertex);
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithoutImmediatePhysicalSlotCreation();
@@ -649,7 +645,7 @@ class DefaultExecutionGraphDeploymentTest {
     }
 
     private ExecutionGraph createExecutionGraph(Configuration configuration) throws Exception {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         new CheckpointCoordinatorConfiguration(

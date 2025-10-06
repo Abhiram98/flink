@@ -35,7 +35,7 @@ import org.apache.flink.runtime.io.network.partition.AbstractPartitionTrackerTes
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
 import org.apache.flink.runtime.leaderretrieval.SettableLeaderRetrievalService;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -240,7 +240,7 @@ class JobMasterPartitionReleaseTest {
 
             HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 5_000_000L);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
             jobMaster =
                     new JobMasterBuilder(jobGraph, rpcService)
                             .withConfiguration(configuration)

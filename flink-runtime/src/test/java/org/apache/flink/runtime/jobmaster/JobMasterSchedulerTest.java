@@ -29,7 +29,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.jobmaster.slotpool.TestingSlotPoolServiceBuilder;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
@@ -73,7 +73,7 @@ class JobMasterSchedulerTest {
         try {
             final JobMaster jobMaster =
                     new JobMasterBuilder(
-                                    JobGraphTestUtils.emptyJobGraph(),
+                                    ExecutionPlanTestUtils.emptyExecutionPlan(),
                                     TESTING_RPC_SERVICE_EXTENSION.getTestingRpcService())
                             .withSlotPoolServiceSchedulerFactory(
                                     DefaultSlotPoolServiceSchedulerFactory.create(

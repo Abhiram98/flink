@@ -19,11 +19,8 @@
 package org.apache.flink.runtime.jobgraph.jsonplan;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.operators.testutils.DummyInvokable;
 import org.apache.flink.util.jackson.JacksonMapperFactory;
 
@@ -82,7 +79,7 @@ public class JsonGeneratorTest {
                     join1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
             ExecutionPlan jg =
-                    JobGraphTestUtils.batchJobGraph(
+                    ExecutionPlanTestUtils.batchJobGraph(
                             source1,
                             source2,
                             source3,

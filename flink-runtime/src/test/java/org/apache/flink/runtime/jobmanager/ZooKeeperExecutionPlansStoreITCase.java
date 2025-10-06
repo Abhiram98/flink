@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.testutils.EachCallbackWrapper;
 import org.apache.flink.runtime.dispatcher.NoOpExecutionPlanListener;
 import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.persistence.RetrievableStateStorageHelper;
 import org.apache.flink.runtime.state.RetrievableStreamStateHandle;
@@ -313,7 +313,7 @@ public class ZooKeeperExecutionPlansStoreITCase extends TestLogger {
         submittedExecutionPlanStore.start(listener);
         otherSubmittedExecutionPlanStore.start(listener);
 
-        final ExecutionPlan executionPlan = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.emptyExecutionPlan();
         submittedExecutionPlanStore.putExecutionPlan(executionPlan);
 
         final ExecutionPlan recoveredExecutionPlan =

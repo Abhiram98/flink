@@ -189,7 +189,7 @@ class JobMasterTest {
     private static final long heartbeatInterval = 1000L;
     private static final long heartbeatTimeout = 5_000_000L;
 
-    private static final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+    private static final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
 
     private static TestingRpcService rpcService;
 
@@ -420,7 +420,7 @@ class JobMasterTest {
 
         rpcService.registerGateway(taskExecutorGateway.getAddress(), taskExecutorGateway);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
                         .withHeartbeatServices(new HeartbeatServicesImpl(5L, 1000L))
@@ -1524,7 +1524,7 @@ class JobMasterTest {
         final JobManagerSharedServices jobManagerSharedServices =
                 new TestingJobManagerSharedServicesBuilder().build();
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
 
         final LocalUnresolvedTaskManagerLocation taskManagerUnresolvedLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -1903,7 +1903,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -2129,7 +2129,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(2);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
 
         final LocalUnresolvedTaskManagerLocation taskManagerLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -2409,7 +2409,7 @@ class JobMasterTest {
             HeartbeatServices heartbeatServices,
             BiConsumer<LocalUnresolvedTaskManagerLocation, JobMasterGateway> jobReachedRunningState)
             throws Exception {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         final JobMasterBuilder.TestingOnCompletionActions onCompletionActions =
                 new JobMasterBuilder.TestingOnCompletionActions();
 
@@ -2516,7 +2516,7 @@ class JobMasterTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        return JobGraphTestUtils.batchJobGraph(producer, consumer);
+        return ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
     }
 
     private File createSavepoint(long savepointId) throws IOException {
@@ -2541,7 +2541,7 @@ class JobMasterTest {
     }
 
     private ExecutionPlan createSingleVertexJobWithRestartStrategy() throws IOException {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, Integer.MAX_VALUE, 0L);
 

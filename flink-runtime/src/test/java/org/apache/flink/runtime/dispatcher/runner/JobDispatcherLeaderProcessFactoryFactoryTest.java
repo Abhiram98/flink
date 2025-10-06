@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.dispatcher.TestingPartialDispatcherServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.StandaloneExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.TestingJobPersistenceComponentFactory;
@@ -54,7 +54,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithoutDirtyJobResult() throws IOException {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
 
         final JobDispatcherLeaderProcessFactory factory =
                 createDispatcherLeaderProcessFactoryFromTestInstance(
@@ -66,7 +66,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithMatchingDirtyJobResult() throws IOException {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
         final JobResult jobResult =
                 TestingJobResultStore.createSuccessfulJobResult(jobGraph.getJobID());
 
@@ -80,7 +80,7 @@ class JobDispatcherLeaderProcessFactoryFactoryTest {
 
     @Test
     public void testJobGraphWithNotMatchingDirtyJobResult() throws IOException {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
         final JobResult jobResult = TestingJobResultStore.createSuccessfulJobResult(new JobID());
 
         final JobDispatcherLeaderProcessFactory factory =

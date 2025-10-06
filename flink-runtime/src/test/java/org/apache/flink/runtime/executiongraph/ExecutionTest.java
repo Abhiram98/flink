@@ -22,7 +22,7 @@ import org.apache.flink.runtime.checkpoint.JobManagerTaskRestore;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlot;
@@ -76,7 +76,7 @@ class ExecutionTest {
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -120,7 +120,7 @@ class ExecutionTest {
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -165,7 +165,7 @@ class ExecutionTest {
                                                 .build()));
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -204,7 +204,7 @@ class ExecutionTest {
                 TestingPhysicalSlotProvider.createWithLimitedAmountOfPhysicalSlots(1);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(jobVertex),
+                                ExecutionPlanTestUtils.streamingJobGraph(jobVertex),
                                 testMainThreadUtil.getMainThreadExecutor(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

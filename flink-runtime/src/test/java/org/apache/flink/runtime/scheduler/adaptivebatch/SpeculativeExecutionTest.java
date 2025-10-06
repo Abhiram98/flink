@@ -39,7 +39,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.DefaultExecutionOperations;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -362,7 +362,7 @@ class SpeculativeExecutionTest {
         final JobVertex source = createNoOpVertex("source", 1);
         final JobVertex sink = createNoOpVertex("sink", -1);
         sink.connectNewDataSetAsInput(source, DistributionPattern.ALL_TO_ALL, resultPartitionType);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(source, sink);
 
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();

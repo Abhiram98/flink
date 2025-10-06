@@ -30,7 +30,7 @@ import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -203,7 +203,7 @@ class CachedShuffleDescriptorsTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.HYBRID_FULL);
 
-        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

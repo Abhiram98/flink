@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobmaster;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
@@ -90,6 +90,6 @@ class JobExecutionITCase {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        return ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
     }
 }

@@ -26,7 +26,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -102,7 +102,7 @@ class AdaptiveSchedulerSimpleITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
     }
 
     @Test
@@ -114,7 +114,7 @@ class AdaptiveSchedulerSimpleITCase {
         alwaysFailingOperator.setInvokableClass(AlwaysFailingInvokable.class);
         alwaysFailingOperator.setParallelism(1);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(alwaysFailingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(alwaysFailingOperator);
         // configure a high delay between attempts: We'll stay in RESTARTING for 10 seconds.
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 jobGraph, Integer.MAX_VALUE, timeInRestartingState);
@@ -153,7 +153,7 @@ class AdaptiveSchedulerSimpleITCase {
         onceFailingOperator.setInvokableClass(OnceFailingInvokable.class);
 
         onceFailingOperator.setParallelism(1);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(onceFailingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(onceFailingOperator);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
         return jobGraph;
     }

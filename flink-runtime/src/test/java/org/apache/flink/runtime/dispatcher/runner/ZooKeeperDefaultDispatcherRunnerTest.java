@@ -40,7 +40,7 @@ import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.JobPersistenceComponentFactory;
@@ -292,7 +292,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(vertex);
         final PermanentBlobKey permanentBlobKey =
                 blobServer.putPermanent(jobGraph.getJobID(), new byte[256]);
         jobGraph.addUserJarBlobKey(permanentBlobKey);

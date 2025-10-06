@@ -23,9 +23,9 @@ import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import java.util.Arrays;
 
 /** Utilities for creating {@link ExecutionPlan JobGraphs} for testing purposes. */
-public class JobGraphTestUtils {
+public class ExecutionPlanTestUtils {
 
-    public static ExecutionPlan emptyJobGraph() {
+    public static ExecutionPlan emptyExecutionPlan() {
         return ExecutionPlanBuilder.newStreamingJobGraphBuilder().build();
     }
 
@@ -49,7 +49,7 @@ public class JobGraphTestUtils {
                 .build();
     }
 
-    private JobGraphTestUtils() {
+    private ExecutionPlanTestUtils() {
         throw new UnsupportedOperationException("This class should never be instantiated.");
     }
 }

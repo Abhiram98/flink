@@ -24,7 +24,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.core.testutils.EachCallbackWrapper;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.persistence.RetrievableStateStorageHelper;
 import org.apache.flink.runtime.rest.util.NoOpFatalErrorHandler;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -82,7 +82,7 @@ class ZooKeeperExecutionPlanStoreWatcherTest {
             final ZooKeeperStateHandleStore<ExecutionPlan> stateHandleStore =
                     createStateHandleStore(client);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
             final JobID jobID = jobGraph.getJobID();
             stateHandleStore.addAndLock("/" + jobID, jobGraph);
 

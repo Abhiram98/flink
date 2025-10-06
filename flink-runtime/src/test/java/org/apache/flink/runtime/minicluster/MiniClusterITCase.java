@@ -27,7 +27,7 @@ import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.Tasks.AgnosticBinaryReceiver;
 import org.apache.flink.runtime.jobmanager.Tasks.AgnosticReceiver;
@@ -164,7 +164,7 @@ class MiniClusterITCase {
         vertex2.connectNewDataSetAsInput(
                 vertex1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex1, vertex2);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(vertex1, vertex2);
 
         final MiniClusterConfiguration cfg =
                 new MiniClusterConfiguration.Builder()
@@ -214,7 +214,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -245,7 +245,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -283,7 +283,7 @@ class MiniClusterITCase {
                     sender2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
             final ExecutionPlan jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender1, receiver, sender2);
+                    ExecutionPlanTestUtils.streamingJobGraph(sender1, receiver, sender2);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -325,7 +325,7 @@ class MiniClusterITCase {
                     sender2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
             final ExecutionPlan jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender1, receiver, sender2);
+                    ExecutionPlanTestUtils.streamingJobGraph(sender1, receiver, sender2);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -368,7 +368,7 @@ class MiniClusterITCase {
                     forwarder, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
             final ExecutionPlan jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender, forwarder, receiver);
+                    ExecutionPlanTestUtils.streamingJobGraph(sender, forwarder, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -399,7 +399,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -444,7 +444,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -479,7 +479,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -514,7 +514,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -559,7 +559,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -596,7 +596,7 @@ class MiniClusterITCase {
             sink.connectNewDataSetAsInput(
                     source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(source, sink);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(source, sink);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
                     miniCluster.submitJob(jobGraph);
@@ -630,7 +630,7 @@ class MiniClusterITCase {
             failingJobVertex.setInvokableClass(NoOpInvokable.class);
             failingJobVertex.setParallelism(parallelism);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(failingJobVertex);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
                     miniCluster.submitJob(jobGraph);
@@ -671,7 +671,7 @@ class MiniClusterITCase {
             failingJobVertex.setInvokableClass(NoOpInvokable.class);
             failingJobVertex.setParallelism(parallelism);
 
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(failingJobVertex);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
                     miniCluster.submitJob(jobGraph);
@@ -703,7 +703,7 @@ class MiniClusterITCase {
         task.setMaxParallelism(parallelism);
         task.setInvokableClass(NoOpInvokable.class);
 
-        final ExecutionPlan jg = JobGraphTestUtils.streamingJobGraph(task);
+        final ExecutionPlan jg = ExecutionPlanTestUtils.streamingJobGraph(task);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jg, Integer.MAX_VALUE, 1000);
 

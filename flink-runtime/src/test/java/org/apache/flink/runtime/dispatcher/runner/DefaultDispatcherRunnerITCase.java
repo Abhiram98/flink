@@ -39,7 +39,7 @@ import org.apache.flink.runtime.dispatcher.cleanup.TestingCleanupRunnerFactory;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.TestingJobPersistenceComponentFactory;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -270,7 +270,7 @@ class DefaultDispatcherRunnerITCase {
     }
 
     private static ExecutionPlan createJobGraph() {
-        return JobGraphTestUtils.singleNoOpJobGraph();
+        return ExecutionPlanTestUtils.singleNoOpJobGraph();
     }
 
     private DispatcherRunner createDispatcherRunner() throws Exception {

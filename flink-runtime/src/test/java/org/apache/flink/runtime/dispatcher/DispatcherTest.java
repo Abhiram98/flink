@@ -164,7 +164,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         jobId = jobGraph.getJobID();
         jobMasterLeaderElection = new TestingLeaderElection();
         haServices.setJobMasterLeaderElection(jobId, jobMasterLeaderElection);
@@ -345,7 +345,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         secondVertex.setInvokableClass(NoOpInvokable.class);
 
         ExecutionPlan jobGraphWithTwoVertices =
-                JobGraphTestUtils.streamingJobGraph(firstVertex, secondVertex);
+                ExecutionPlanTestUtils.streamingJobGraph(firstVertex, secondVertex);
 
         dispatcher =
                 createAndStartDispatcher(
@@ -872,7 +872,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         dispatcher =
                 createTestingDispatcherBuilder()
                         .setJobManagerRunnerFactory(jobManagerRunnerFactory)
-                        .setRecoveredJobs(Collections.singleton(JobGraphTestUtils.emptyJobGraph()))
+                        .setRecoveredJobs(Collections.singleton(ExecutionPlanTestUtils.emptyExecutionPlan()))
                         .build(rpcService);
 
         dispatcher.start();
@@ -896,7 +896,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testThatDirtilyFinishedJobsNotBeingRetriggered() throws Exception {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.emptyExecutionPlan();
         final JobResult jobResult =
                 TestingJobResultStore.createSuccessfulJobResult(jobGraph.getJobID());
         dispatcher =
@@ -1010,7 +1010,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 createAndStartDispatcher(heartbeatServices, haServices, jobManagerRunnerFactory);
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        final ExecutionPlan blockedJobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan blockedJobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         blockedJobGraph.setJobID(blockingId);
 
         // Submit two jobs, one blocks forever

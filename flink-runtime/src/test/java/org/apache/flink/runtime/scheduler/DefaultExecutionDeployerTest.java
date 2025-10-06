@@ -31,7 +31,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.shuffle.TestingShuffleMaster;
@@ -306,7 +306,7 @@ class DefaultExecutionDeployerTest {
         final JobVertex vertex = new JobVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return JobGraphTestUtils.streamingJobGraph(vertex);
+        return ExecutionPlanTestUtils.streamingJobGraph(vertex);
     }
 
     private static ExecutionPlan nonParallelSourceSinkJobGraph() {
@@ -319,7 +319,7 @@ class DefaultExecutionDeployerTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
     }
 
     private ExecutionGraph createExecutionGraph(final ExecutionPlan jobGraph) throws Exception {

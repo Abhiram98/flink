@@ -32,7 +32,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -117,7 +117,7 @@ public class TaskCancelAsyncProducerConsumerITCase {
         producer.setSlotSharingGroup(slot);
         consumer.setSlotSharingGroup(slot);
 
-        ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(producer, consumer);
 
         // Submit job and wait until running
         flink.runDetached(jobGraph);

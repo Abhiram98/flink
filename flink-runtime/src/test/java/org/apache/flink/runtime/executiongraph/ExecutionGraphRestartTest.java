@@ -28,7 +28,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolBridge;
@@ -102,7 +102,7 @@ class ExecutionGraphRestartTest {
             JobVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            ExecutionPlan graph = JobGraphTestUtils.streamingJobGraph(sender);
+            ExecutionPlan graph = ExecutionPlanTestUtils.streamingJobGraph(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -131,7 +131,7 @@ class ExecutionGraphRestartTest {
             JobVertex sender =
                     ExecutionGraphTestUtils.createJobVertex(
                             "Task", NUM_TASKS + numTasksExceedSlotPool, NoOpInvokable.class);
-            ExecutionPlan graph = JobGraphTestUtils.streamingJobGraph(sender);
+            ExecutionPlan graph = ExecutionPlanTestUtils.streamingJobGraph(sender);
             SchedulerBase scheduler =
                     new DefaultSchedulerBuilder(
                                     graph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
@@ -284,7 +284,7 @@ class ExecutionGraphRestartTest {
         JobVertex sender = ExecutionGraphTestUtils.createJobVertex("Task1", 1, NoOpInvokable.class);
         JobVertex receiver =
                 ExecutionGraphTestUtils.createJobVertex("Task2", 1, NoOpInvokable.class);
-        ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
         try (SlotPool slotPool = SlotPoolUtils.createDeclarativeSlotPoolBridge()) {
             SchedulerBase scheduler =
@@ -411,7 +411,7 @@ class ExecutionGraphRestartTest {
     private static ExecutionPlan createJobGraph() {
         JobVertex sender =
                 ExecutionGraphTestUtils.createJobVertex("Task", NUM_TASKS, NoOpInvokable.class);
-        return JobGraphTestUtils.streamingJobGraph(sender);
+        return ExecutionPlanTestUtils.streamingJobGraph(sender);
     }
 
     private static ExecutionPlan createJobGraphToCancel() throws IOException {

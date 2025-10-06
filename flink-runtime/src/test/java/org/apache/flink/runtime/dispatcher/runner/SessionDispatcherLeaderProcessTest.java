@@ -25,7 +25,7 @@ import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.client.JobSubmissionException;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -70,7 +70,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ExtendWith(TestLoggerExtension.class)
 class SessionDispatcherLeaderProcessTest {
 
-    private static final ExecutionPlan JOB_GRAPH = JobGraphTestUtils.emptyJobGraph();
+    private static final ExecutionPlan JOB_GRAPH = ExecutionPlanTestUtils.emptyExecutionPlan();
 
     private static ExecutorService ioExecutor;
 
@@ -173,7 +173,7 @@ class SessionDispatcherLeaderProcessTest {
     void testRecoveryWithMultipleExecutionPlansAndOneMatchingDirtyJobResult() throws Exception {
         final JobResult matchingDirtyJobResult =
                 TestingJobResultStore.createSuccessfulJobResult(JOB_GRAPH.getJobID());
-        final org.apache.flink.streaming.api.graph.ExecutionPlan otherExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+        final org.apache.flink.streaming.api.graph.ExecutionPlan otherExecutionPlan = ExecutionPlanTestUtils.emptyExecutionPlan();
 
         testJobRecovery(
                 Arrays.asList(otherExecutionPlan, JOB_GRAPH),

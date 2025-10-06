@@ -26,7 +26,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.RpcTaskManagerGateway;
@@ -194,7 +194,7 @@ class DefaultSchedulerBatchSchedulingTest {
         final JobVertex jobVertex = new JobVertex("testing task");
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(NoOpInvokable.class);
-        return JobGraphTestUtils.batchJobGraph(jobVertex);
+        return ExecutionPlanTestUtils.batchJobGraph(jobVertex);
     }
 
     private SchedulerNG createScheduler(

@@ -31,7 +31,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -176,7 +176,7 @@ public class AdaptiveSchedulerClusterITCase {
         jobVertex.setInvokableClass(CheckpointingNoOpInvokable.class);
         jobVertex.setParallelism(PARALLELISM);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertex);
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder()
@@ -272,7 +272,7 @@ public class AdaptiveSchedulerClusterITCase {
 
         blockingOperator.setParallelism(parallelism);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(blockingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(blockingOperator);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
 

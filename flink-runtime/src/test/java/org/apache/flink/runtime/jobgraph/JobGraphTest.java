@@ -120,7 +120,7 @@ public class JobGraphTest extends TestLogger {
                 source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
         ExecutionPlan graph =
-                JobGraphTestUtils.streamingJobGraph(
+                ExecutionPlanTestUtils.streamingJobGraph(
                         source1, source2, intermediate1, intermediate2, target1, target2);
 
         List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
@@ -171,7 +171,7 @@ public class JobGraphTest extends TestLogger {
                     source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
             ExecutionPlan graph =
-                    JobGraphTestUtils.streamingJobGraph(source1, source2, root, l11, l13, l12, l2);
+                    ExecutionPlanTestUtils.streamingJobGraph(source1, source2, root, l11, l13, l12, l2);
             List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
             assertEquals(7, sorted.size());
@@ -220,7 +220,7 @@ public class JobGraphTest extends TestLogger {
             op3.connectNewDataSetAsInput(
                     op2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            ExecutionPlan graph = JobGraphTestUtils.streamingJobGraph(source, op1, op2, op3);
+            ExecutionPlan graph = ExecutionPlanTestUtils.streamingJobGraph(source, op1, op2, op3);
             List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
             assertEquals(4, sorted.size());
@@ -252,7 +252,7 @@ public class JobGraphTest extends TestLogger {
             v4.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            ExecutionPlan jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4);
+            ExecutionPlan jg = ExecutionPlanTestUtils.streamingJobGraph(v1, v2, v3, v4);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -288,7 +288,7 @@ public class JobGraphTest extends TestLogger {
             target.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            ExecutionPlan jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4, source, target);
+            ExecutionPlan jg = ExecutionPlanTestUtils.streamingJobGraph(v1, v2, v3, v4, source, target);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -322,7 +322,7 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testSetUserArtifactBlobKey() throws IOException, ClassNotFoundException {
-        ExecutionPlan jb = JobGraphTestUtils.emptyJobGraph();
+        ExecutionPlan jb = ExecutionPlanTestUtils.emptyExecutionPlan();
 
         final DistributedCache.DistributedCacheEntry[] entries = {
             new DistributedCache.DistributedCacheEntry("p1", true, true),

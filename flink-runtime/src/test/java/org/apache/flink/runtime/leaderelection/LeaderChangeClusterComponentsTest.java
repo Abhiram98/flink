@@ -24,7 +24,7 @@ import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -189,7 +189,7 @@ class LeaderChangeClusterComponentsTest {
         vertex.setParallelism(parallelism);
         vertex.setInvokableClass(BlockingOperator.class);
 
-        return JobGraphTestUtils.streamingJobGraph(vertex);
+        return ExecutionPlanTestUtils.streamingJobGraph(vertex);
     }
 
     /**

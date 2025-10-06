@@ -308,10 +308,10 @@ class SsgNetworkMemoryCalculationUtilsTest {
         }
 
         if (!resultPartitionType.isBlockingOrBlockingPersistentResultPartition()) {
-            return JobGraphTestUtils.streamingJobGraph(source, map, sink);
+            return ExecutionPlanTestUtils.streamingJobGraph(source, map, sink);
 
         } else {
-            return JobGraphTestUtils.batchJobGraph(source, map, sink);
+            return ExecutionPlanTestUtils.batchJobGraph(source, map, sink);
         }
     }
 

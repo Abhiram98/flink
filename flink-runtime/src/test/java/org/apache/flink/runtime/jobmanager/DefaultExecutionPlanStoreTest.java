@@ -23,7 +23,7 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.testutils.FlinkMatchers;
 import org.apache.flink.runtime.checkpoint.TestingRetrievableStateStorageHelper;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.persistence.IntegerResourceVersion;
@@ -68,7 +68,7 @@ import static org.junit.Assert.fail;
  */
 public class DefaultExecutionPlanStoreTest extends TestLogger {
 
-    private final org.apache.flink.streaming.api.graph.ExecutionPlan testingExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+    private final org.apache.flink.streaming.api.graph.ExecutionPlan testingExecutionPlan = ExecutionPlanTestUtils.emptyExecutionPlan();
     private final long timeout = 100L;
 
     private TestingStateHandleStore.Builder<org.apache.flink.streaming.api.graph.ExecutionPlan> builder;

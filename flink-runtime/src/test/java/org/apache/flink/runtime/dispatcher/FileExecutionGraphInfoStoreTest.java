@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
@@ -349,7 +349,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(vertex);
             miniCluster.submitJob(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -91,7 +91,7 @@ class PartialConsumePipelinedResultTest {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
 
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 

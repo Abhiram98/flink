@@ -1186,7 +1186,7 @@ class StateAssignmentOperationTest {
 
     private Map<OperatorID, ExecutionJobVertex> toExecutionVertices(JobVertex... jobVertices)
             throws JobException, JobExecutionException {
-        ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(jobVertices);
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)

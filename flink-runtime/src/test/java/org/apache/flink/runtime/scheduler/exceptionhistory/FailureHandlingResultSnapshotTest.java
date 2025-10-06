@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuild
 import org.apache.flink.runtime.executiongraph.failover.FailureHandlingResult;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.taskmanager.TaskExecutionState;
@@ -71,7 +71,7 @@ class FailureHandlingResultSnapshotTest {
 
     @BeforeEach
     void setup() throws JobException, JobExecutionException {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpJobGraph();
         jobGraph.getVertices().forEach(v -> v.setParallelism(3));
 
         executionGraph =

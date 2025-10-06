@@ -449,7 +449,7 @@ public class DefaultSchedulerTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(v1, v2);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(v1, v2);
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
@@ -1818,7 +1818,7 @@ public class DefaultSchedulerTest {
         map.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(source, map, sink);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingJobGraph(source, map, sink);
         enableCheckpointing(jobGraph, null, null, Long.MAX_VALUE - 1, true);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -2050,14 +2050,14 @@ public class DefaultSchedulerTest {
         final JobVertex vertex = new JobVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return JobGraphTestUtils.batchJobGraph(vertex);
+        return ExecutionPlanTestUtils.batchJobGraph(vertex);
     }
 
     private static ExecutionPlan singleJobVertexJobGraph(final int parallelism) {
         final JobVertex vertex = new JobVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return JobGraphTestUtils.streamingJobGraph(vertex);
+        return ExecutionPlanTestUtils.streamingJobGraph(vertex);
     }
 
     private static ExecutionPlan nonParallelSourceSinkJobGraph() {
@@ -2070,7 +2070,7 @@ public class DefaultSchedulerTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
     }
 
     private static ExecutionPlan sourceSinkJobGraph(final int parallelism) {
@@ -2085,7 +2085,7 @@ public class DefaultSchedulerTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return ExecutionPlanTestUtils.streamingJobGraph(source, sink);
     }
 
     private static JobVertex getOnlyJobVertex(final ExecutionPlan jobGraph) {

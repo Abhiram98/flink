@@ -25,7 +25,7 @@ import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.TestingInternalFailuresListener;
 import org.apache.flink.testutils.TestingUtils;
@@ -137,7 +137,7 @@ class SpeculativeExecutionVertexTest {
     @Test
     void testVertexTerminationAndJobTermination() throws Exception {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
         eg.transitionToRunning();
 
@@ -278,7 +278,7 @@ class SpeculativeExecutionVertexTest {
 
     private SpeculativeExecutionVertex createSpeculativeExecutionVertex(final JobVertex jobVertex)
             throws Exception {
-        final ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph executionGraph = createExecutionGraph(jobGraph);
         return (SpeculativeExecutionVertex)
                 executionGraph.getJobVertex(jobVertex.getID()).getTaskVertices()[0];

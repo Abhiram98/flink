@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -186,7 +186,7 @@ class TaskExecutorITCase {
         sender.setSlotSharingGroup(slotSharingGroup);
         receiver.setSlotSharingGroup(slotSharingGroup);
 
-        return JobGraphTestUtils.streamingJobGraph(sender, receiver);
+        return ExecutionPlanTestUtils.streamingJobGraph(sender, receiver);
     }
 
     /** Blocking invokable which is controlled by a static field. */

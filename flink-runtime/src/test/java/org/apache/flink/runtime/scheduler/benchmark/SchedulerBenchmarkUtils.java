@@ -88,7 +88,7 @@ public class SchedulerBenchmarkUtils {
             List<JobVertex> jobVertices, JobConfiguration jobConfiguration) throws IOException {
 
         final ExecutionPlan jobGraph =
-                JobGraphTestUtils.streamingJobGraph(jobVertices.toArray(new JobVertex[0]));
+                ExecutionPlanTestUtils.streamingJobGraph(jobVertices.toArray(new JobVertex[0]));
 
         jobGraph.setJobType(jobConfiguration.getJobType());
 

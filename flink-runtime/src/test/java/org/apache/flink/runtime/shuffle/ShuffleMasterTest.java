@@ -25,7 +25,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
@@ -119,7 +119,7 @@ class ShuffleMasterTest {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchJobGraph(source, sink);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, Duration.ofSeconds(2));
         return jobGraph;
     }
