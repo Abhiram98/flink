@@ -40,21 +40,19 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * while waiting for their completion.
  */
 @PublicEvolving
-public class WebSubmissionJobClient implements JobClient {
+public class WebSubmissionStreamClient implements JobClient {
 
-    private final JobID jobId;
+    private final JobID streamId;
 
-    public WebSubmissionJobClient(final JobID jobId) {
-        this.jobId = checkNotNull(jobId);
+    public WebSubmissionStreamClient(final JobID streamId) {
+        this.streamId = checkNotNull(streamId);
     }
 
-    @Override
-    public JobID getJobID() {
-        return jobId;
+    public JobID getStreamID() {
+        return streamId;
     }
 
-    @Override
-    public CompletableFuture<JobStatus> getJobStatus() {
+    public CompletableFuture<JobStatus> getStreamStatus() {
         throw new FlinkRuntimeException(
                 "The Job Status cannot be requested when in Web Submission.");
     }
@@ -87,8 +85,7 @@ public class WebSubmissionJobClient implements JobClient {
                 "The Accumulators cannot be fetched through the Job Client when in Web Submission.");
     }
 
-    @Override
-    public CompletableFuture<JobExecutionResult> getJobExecutionResult() {
+    public CompletableFuture<JobExecutionResult> getStreamExecutionResult() {
         throw new FlinkRuntimeException(
                 "The Job Result cannot be fetched through the Job Client when in Web Submission.");
     }
