@@ -25,7 +25,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ArchivedExecution;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
@@ -93,7 +93,7 @@ class SubtaskExecutionAttemptAccumulatorsHandlerTest {
                 new ArchivedExecution(
                         accumulatorResults,
                         null,
-                        createExecutionAttemptId(new JobVertexID(), subtaskIndex, attemptNum),
+                        createExecutionAttemptId(new StreamVertexID(), subtaskIndex, attemptNum),
                         ExecutionState.FINISHED,
                         null,
                         null,

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job.coordination;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.OperatorUidPathParameter;
 
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class ClientCoordinationHeadersTest {
         assertThat(clientCoordinationHeaders.getTargetRestEndpointURL())
                 .isEqualTo(
                         "/jobs/:"
-                                + JobIDPathParameter.KEY
+                                + StreamIdPathParameter.KEY
                                 + "/coordinators/:"
                                 + OperatorUidPathParameter.KEY);
     }

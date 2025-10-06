@@ -19,8 +19,8 @@
 package org.apache.flink.streaming.api.graph.util;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.graph.StreamEdge;
@@ -61,11 +61,11 @@ public class JobVertexBuildContext {
 
     // The created JobVertex, the key is start node id.  It records the order in which the JobVertex
     // is created, and some functions depend on it.
-    private final Map<Integer, JobVertex> jobVerticesInOrder;
+    private final Map<Integer, StreamVertex> jobVerticesInOrder;
 
     // Futures for the serialization of operator coordinators.
     private final Map<
-                    JobVertexID,
+            StreamVertexID,
                     List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>>
             coordinatorSerializationFuturesPerJobVertex;
 
@@ -146,26 +146,26 @@ public class JobVertexBuildContext {
         return physicalEdgesInOrder;
     }
 
-    public void addJobVertex(Integer startNodeId, JobVertex jobVertex) {
+    public void addJobVertex(Integer startNodeId, StreamVertex jobVertex) {
         jobVerticesInOrder.put(startNodeId, jobVertex);
     }
 
-    public Map<Integer, JobVertex> getJobVerticesInOrder() {
+    public Map<Integer, StreamVertex> getJobVerticesInOrder() {
         return jobVerticesInOrder;
     }
 
-    public JobVertex getJobVertex(Integer startNodeId) {
+    public StreamVertex getJobVertex(Integer startNodeId) {
         return jobVerticesInOrder.get(startNodeId);
     }
 
     public void putCoordinatorSerializationFutures(
-            JobVertexID vertexId,
+            StreamVertexID vertexId,
             List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>
                     serializationFutures) {
         coordinatorSerializationFuturesPerJobVertex.put(vertexId, serializationFutures);
     }
 
-    public Map<JobVertexID, List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>>
+    public Map<StreamVertexID, List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>>
             getCoordinatorSerializationFuturesPerJobVertex() {
         return coordinatorSerializationFuturesPerJobVertex;
     }

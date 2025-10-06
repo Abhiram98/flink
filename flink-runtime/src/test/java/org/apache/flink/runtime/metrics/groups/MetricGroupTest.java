@@ -26,7 +26,7 @@ import org.apache.flink.metrics.Metric;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.MetricRegistryConfiguration;
 import org.apache.flink.runtime.metrics.MetricRegistryImpl;
@@ -397,7 +397,7 @@ public class MetricGroupTest {
     @Test
     void testCreateQueryServiceMetricInfo() {
         JobID jid = new JobID();
-        JobVertexID vid = new JobVertexID();
+        StreamVertexID vid = new StreamVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(vid, 4, 5);
         MetricRegistryImpl registry = new MetricRegistryImpl(defaultMetricRegistryConfiguration);
         TaskManagerMetricGroup tm =

@@ -27,7 +27,7 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonPro
 import java.util.Collection;
 
 /** An overview of how many jobs are in which status. */
-public class JobsOverview implements InfoMessage {
+public class StreamsOverview implements InfoMessage {
 
     private static final long serialVersionUID = -3699051943490133183L;
 
@@ -49,7 +49,7 @@ public class JobsOverview implements InfoMessage {
     private final int numJobsFailed;
 
     @JsonCreator
-    public JobsOverview(
+    public StreamsOverview(
             @JsonProperty(FIELD_NAME_JOBS_RUNNING) int numJobsRunningOrPending,
             @JsonProperty(FIELD_NAME_JOBS_FINISHED) int numJobsFinished,
             @JsonProperty(FIELD_NAME_JOBS_CANCELLED) int numJobsCancelled,
@@ -61,7 +61,7 @@ public class JobsOverview implements InfoMessage {
         this.numJobsFailed = numJobsFailed;
     }
 
-    public JobsOverview(JobsOverview first, JobsOverview second) {
+    public StreamsOverview(StreamsOverview first, StreamsOverview second) {
         this.numJobsRunningOrPending =
                 first.numJobsRunningOrPending + second.numJobsRunningOrPending;
         this.numJobsFinished = first.numJobsFinished + second.numJobsFinished;
@@ -91,8 +91,8 @@ public class JobsOverview implements InfoMessage {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (obj instanceof JobsOverview) {
-            JobsOverview that = (JobsOverview) obj;
+        } else if (obj instanceof StreamsOverview) {
+            StreamsOverview that = (StreamsOverview) obj;
             return this.numJobsRunningOrPending == that.numJobsRunningOrPending
                     && this.numJobsFinished == that.numJobsFinished
                     && this.numJobsCancelled == that.numJobsCancelled
@@ -131,11 +131,11 @@ public class JobsOverview implements InfoMessage {
      * @param jobsOverview to combine with this
      * @return Combined jobs overview
      */
-    public JobsOverview combine(JobsOverview jobsOverview) {
-        return new JobsOverview(this, jobsOverview);
+    public StreamsOverview combine(StreamsOverview jobsOverview) {
+        return new StreamsOverview(this, jobsOverview);
     }
 
-    public static JobsOverview create(Collection<JobStatus> allJobsStatus) {
+    public static StreamsOverview create(Collection<JobStatus> allJobsStatus) {
         Preconditions.checkNotNull(allJobsStatus);
 
         int numberRunningOrPendingJobs = 0;
@@ -160,7 +160,7 @@ public class JobsOverview implements InfoMessage {
             }
         }
 
-        return new JobsOverview(
+        return new StreamsOverview(
                 numberRunningOrPendingJobs,
                 numberFinishedJobs,
                 numberCancelledJobs,

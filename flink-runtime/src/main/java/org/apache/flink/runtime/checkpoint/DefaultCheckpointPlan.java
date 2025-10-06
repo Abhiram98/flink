@@ -22,7 +22,7 @@ import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.OperatorStateHandle;
 
@@ -50,7 +50,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
 
     private final boolean mayHaveFinishedTasks;
 
-    private final Map<JobVertexID, ExecutionJobVertex> fullyFinishedOrFinishedOnRestoreVertices;
+    private final Map<StreamVertexID, ExecutionJobVertex> fullyFinishedOrFinishedOnRestoreVertices;
 
     private final IdentityHashMap<ExecutionJobVertex, Integer> vertexOperatorsFinishedTasksCount;
 
@@ -125,9 +125,9 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             return;
         }
 
-        Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex = new HashMap<>();
+        Map<StreamVertexID, ExecutionJobVertex> partlyFinishedVertex = new HashMap<>();
         for (Execution task : finishedTasks) {
-            JobVertexID jobVertexId = task.getVertex().getJobvertexId();
+            StreamVertexID jobVertexId = task.getVertex().getJobvertexId();
             if (!fullyFinishedOrFinishedOnRestoreVertices.containsKey(jobVertexId)) {
                 partlyFinishedVertex.put(jobVertexId, task.getVertex().getJobVertex());
             }
@@ -147,7 +147,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      * {@code UnionListState}.
      */
     private void checkNoPartlyFinishedVertexUsedUnionListState(
-            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
+            Map<StreamVertexID, ExecutionJobVertex> partlyFinishedVertex,
             Map<OperatorID, OperatorState> operatorStates) {
         for (ExecutionJobVertex vertex : partlyFinishedVertex.values()) {
             if (hasUsedUnionListState(vertex, operatorStates)) {
@@ -168,7 +168,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      * forever since all the following checkpoints would be aborted.
      */
     private void checkNoPartlyOperatorsFinishedVertexUsedUnionListState(
-            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
+            Map<StreamVertexID, ExecutionJobVertex> partlyFinishedVertex,
             Map<OperatorID, OperatorState> operatorStates) {
         for (Map.Entry<ExecutionJobVertex, Integer> entry :
                 vertexOperatorsFinishedTasksCount.entrySet()) {

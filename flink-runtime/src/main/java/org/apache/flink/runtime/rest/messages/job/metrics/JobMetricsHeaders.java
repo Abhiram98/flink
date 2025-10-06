@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
 import org.apache.flink.runtime.rest.handler.job.metrics.JobMetricsHandler;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 
 /** {@link MessageHeaders} for {@link JobMetricsHandler}. */
@@ -36,7 +36,7 @@ public final class JobMetricsHeaders extends AbstractMetricsHeaders<JobMetricsMe
 
     @Override
     public String getTargetRestEndpointURL() {
-        return "/jobs/:" + JobIDPathParameter.KEY + "/metrics";
+        return "/jobs/:" + StreamIdPathParameter.KEY + "/metrics";
     }
 
     public static JobMetricsHeaders getInstance() {

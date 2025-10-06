@@ -18,8 +18,8 @@
 package org.apache.flink.streaming.api.graph;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.transformations.PartitionTransformation;
@@ -41,21 +41,21 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
 
     @Test
     void testDefaultGlobalExchangeModeIsAllEdgesPipelined() {
-        final StreamGraph streamGraph = createStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = createStreamGraph();
         assertThat(streamGraph.getGlobalStreamExchangeMode())
                 .isEqualTo(GlobalStreamExchangeMode.ALL_EDGES_PIPELINED);
     }
 
     @Test
     void testAllEdgesBlockingMode() {
-        final StreamGraph streamGraph =
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph =
                 createStreamGraph(GlobalStreamExchangeMode.ALL_EDGES_BLOCKING);
-        final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        final StreamGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
 
-        final List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
-        final JobVertex sourceVertex = verticesSorted.get(0);
-        final JobVertex map1Vertex = verticesSorted.get(1);
-        final JobVertex map2Vertex = verticesSorted.get(2);
+        final List<StreamVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        final StreamVertex sourceVertex = verticesSorted.get(0);
+        final StreamVertex map1Vertex = verticesSorted.get(1);
+        final StreamVertex map2Vertex = verticesSorted.get(2);
 
         assertThat(sourceVertex.getProducedDataSets().get(0).getResultType())
                 .isEqualTo(ResultPartitionType.BLOCKING);
@@ -67,14 +67,14 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
 
     @Test
     void testAllEdgesPipelinedMode() {
-        final StreamGraph streamGraph = createStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = createStreamGraph();
         streamGraph.setGlobalStreamExchangeMode(GlobalStreamExchangeMode.ALL_EDGES_PIPELINED);
-        final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        final org.apache.flink.runtime.jobgraph.StreamGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
 
-        final List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
-        final JobVertex sourceVertex = verticesSorted.get(0);
-        final JobVertex map1Vertex = verticesSorted.get(1);
-        final JobVertex map2Vertex = verticesSorted.get(2);
+        final List<StreamVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        final StreamVertex sourceVertex = verticesSorted.get(0);
+        final StreamVertex map1Vertex = verticesSorted.get(1);
+        final StreamVertex map2Vertex = verticesSorted.get(2);
 
         assertThat(sourceVertex.getProducedDataSets().get(0).getResultType())
                 .isEqualTo(ResultPartitionType.PIPELINED_BOUNDED);
@@ -86,14 +86,14 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
 
     @Test
     void testForwardEdgesPipelinedMode() {
-        final StreamGraph streamGraph =
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph =
                 createStreamGraph(GlobalStreamExchangeMode.FORWARD_EDGES_PIPELINED);
-        final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        final StreamGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
 
-        final List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
-        final JobVertex sourceVertex = verticesSorted.get(0);
-        final JobVertex map1Vertex = verticesSorted.get(1);
-        final JobVertex map2Vertex = verticesSorted.get(2);
+        final List<StreamVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        final StreamVertex sourceVertex = verticesSorted.get(0);
+        final StreamVertex map1Vertex = verticesSorted.get(1);
+        final StreamVertex map2Vertex = verticesSorted.get(2);
 
         assertThat(sourceVertex.getProducedDataSets().get(0).getResultType())
                 .isEqualTo(ResultPartitionType.PIPELINED_BOUNDED);
@@ -105,14 +105,14 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
 
     @Test
     void testPointwiseEdgesPipelinedMode() {
-        final StreamGraph streamGraph =
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph =
                 createStreamGraph(GlobalStreamExchangeMode.POINTWISE_EDGES_PIPELINED);
-        final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        final org.apache.flink.runtime.jobgraph.StreamGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
 
-        final List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
-        final JobVertex sourceVertex = verticesSorted.get(0);
-        final JobVertex map1Vertex = verticesSorted.get(1);
-        final JobVertex map2Vertex = verticesSorted.get(2);
+        final List<StreamVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        final StreamVertex sourceVertex = verticesSorted.get(0);
+        final StreamVertex map1Vertex = verticesSorted.get(1);
+        final StreamVertex map2Vertex = verticesSorted.get(2);
 
         assertThat(sourceVertex.getProducedDataSets().get(0).getResultType())
                 .isEqualTo(ResultPartitionType.PIPELINED_BOUNDED);
@@ -134,13 +134,13 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
                                 new ForwardPartitioner<>(),
                                 StreamExchangeMode.PIPELINED));
         forward.map(i -> i).startNewChain().setParallelism(1);
-        final StreamGraph streamGraph = env.getStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setGlobalStreamExchangeMode(GlobalStreamExchangeMode.ALL_EDGES_BLOCKING);
 
-        final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        final org.apache.flink.runtime.jobgraph.StreamGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
 
-        final List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
-        final JobVertex sourceVertex = verticesSorted.get(0);
+        final List<StreamVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        final StreamVertex sourceVertex = verticesSorted.get(0);
 
         assertThat(sourceVertex.getProducedDataSets().get(0).getResultType())
                 .isEqualTo(ResultPartitionType.PIPELINED_BOUNDED);
@@ -150,7 +150,7 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
      * Topology: source(parallelism=1) --(forward)--> map1(parallelism=1) --(rescale)-->
      * map2(parallelism=2) --(rebalance)--> sink(parallelism=2).
      */
-    private static StreamGraph createStreamGraph() {
+    private static org.apache.flink.streaming.api.graph.StreamGraph createStreamGraph() {
         return createStreamGraph(GlobalStreamExchangeMode.ALL_EDGES_PIPELINED);
     }
 
@@ -158,7 +158,7 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
      * Topology: source(parallelism=1) --(forward)--> map1(parallelism=1) --(rescale)-->
      * map2(parallelism=2) --(rebalance)--> sink(parallelism=2).
      */
-    private static StreamGraph createStreamGraph(
+    private static org.apache.flink.streaming.api.graph.StreamGraph createStreamGraph(
             GlobalStreamExchangeMode globalStreamExchangeMode) {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         if (globalStreamExchangeMode != GlobalStreamExchangeMode.ALL_EDGES_PIPELINED) {
@@ -187,7 +187,7 @@ class StreamingJobGraphGeneratorWithGlobalStreamExchangeModeTest {
 
         map2.rebalance().print().setParallelism(2);
 
-        final StreamGraph streamGraph = env.getStreamGraph();
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setGlobalStreamExchangeMode(globalStreamExchangeMode);
         return streamGraph;
     }

@@ -43,7 +43,7 @@ import java.util.Map;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** The base class for job vertexes. */
-public class JobVertex implements java.io.Serializable {
+public class StreamVertex implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class JobVertex implements java.io.Serializable {
     // --------------------------------------------------------------------------------------------
 
     /** The ID of the vertex. */
-    private final JobVertexID id;
+    private final StreamVertexID id;
 
     /**
      * The IDs of all operators contained in this vertex.
@@ -169,7 +169,7 @@ public class JobVertex implements java.io.Serializable {
      *
      * @param name The name of the new job vertex.
      */
-    public JobVertex(String name) {
+    public StreamVertex(String name) {
         this(name, null);
     }
 
@@ -179,9 +179,9 @@ public class JobVertex implements java.io.Serializable {
      * @param name The name of the new job vertex.
      * @param id The id of the job vertex.
      */
-    public JobVertex(String name, JobVertexID id) {
+    public StreamVertex(String name, StreamVertexID id) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = id == null ? new JobVertexID() : id;
+        this.id = id == null ? new StreamVertexID() : id;
         OperatorIDPair operatorIDPair =
                 OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.id));
         this.operatorIDs = Collections.singletonList(operatorIDPair);
@@ -194,9 +194,9 @@ public class JobVertex implements java.io.Serializable {
      * @param primaryId The id of the job vertex.
      * @param operatorIDPairs The operator ID pairs of the job vertex.
      */
-    public JobVertex(String name, JobVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
+    public StreamVertex(String name, StreamVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = primaryId == null ? new JobVertexID() : primaryId;
+        this.id = primaryId == null ? new StreamVertexID() : primaryId;
         this.operatorIDs = Collections.unmodifiableList(operatorIDPairs);
     }
 
@@ -207,7 +207,7 @@ public class JobVertex implements java.io.Serializable {
      *
      * @return The ID of this job vertex
      */
-    public JobVertexID getID() {
+    public StreamVertexID getID() {
         return this.id;
     }
 
@@ -468,7 +468,7 @@ public class JobVertex implements java.io.Serializable {
      *     not in a common slot sharing group.
      * @see #setSlotSharingGroup(SlotSharingGroup)
      */
-    public void setStrictlyCoLocatedWith(JobVertex strictlyCoLocatedWith) {
+    public void setStrictlyCoLocatedWith(StreamVertex strictlyCoLocatedWith) {
         if (this.slotSharingGroup == null
                 || this.slotSharingGroup != strictlyCoLocatedWith.slotSharingGroup) {
             throw new IllegalArgumentException(
@@ -516,12 +516,12 @@ public class JobVertex implements java.io.Serializable {
     }
 
     public JobEdge connectNewDataSetAsInput(
-            JobVertex input, DistributionPattern distPattern, ResultPartitionType partitionType) {
+            StreamVertex input, DistributionPattern distPattern, ResultPartitionType partitionType) {
         return connectNewDataSetAsInput(input, distPattern, partitionType, false);
     }
 
     public JobEdge connectNewDataSetAsInput(
-            JobVertex input,
+            StreamVertex input,
             DistributionPattern distPattern,
             ResultPartitionType partitionType,
             boolean isBroadcast) {
@@ -530,7 +530,7 @@ public class JobVertex implements java.io.Serializable {
     }
 
     public JobEdge connectNewDataSetAsInput(
-            JobVertex input,
+            StreamVertex input,
             DistributionPattern distPattern,
             ResultPartitionType partitionType,
             IntermediateDataSetID intermediateDataSetId,
@@ -602,7 +602,7 @@ public class JobVertex implements java.io.Serializable {
 
         /**
          * The actual parallelism this vertex will be run with. In contrast, the {@link
-         * #getParallelism()} is the original parallelism set when creating the {@link JobGraph} and
+         * #getParallelism()} is the original parallelism set when creating the {@link StreamGraph} and
          * might be updated e.g. by the {@link
          * org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler}.
          */
@@ -616,7 +616,7 @@ public class JobVertex implements java.io.Serializable {
 
         /**
          * The actual parallelism this vertex will be run with. In contrast, the {@link
-         * #getParallelism()} is the original parallelism set when creating the {@link JobGraph} and
+         * #getParallelism()} is the original parallelism set when creating the {@link StreamGraph} and
          * might be updated e.g. by the {@link
          * org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler}.
          */

@@ -48,13 +48,10 @@ import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.executiongraph.failover.ResultPartitionAvailabilityChecker;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
 import org.apache.flink.runtime.scheduler.InternalFailuresListener;
 import org.apache.flink.runtime.scheduler.exceptionhistory.TestingAccessExecution;
@@ -166,7 +163,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public Map<JobVertexID, ExecutionJobVertex> getAllVertices() {
+    public Map<StreamVertexID, ExecutionJobVertex> getAllVertices() {
         return StreamSupport.stream(getVerticesTopologically().spliterator(), false)
                 .collect(Collectors.toMap(ExecutionJobVertex::getJobVertexId, v -> v));
     }
@@ -313,7 +310,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public ExecutionJobVertex getJobVertex(JobVertexID id) {
+    public ExecutionJobVertex getJobVertex(StreamVertexID id) {
         throw new UnsupportedOperationException();
     }
 
@@ -339,7 +336,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
 
     @Override
     public void attachJobGraph(
-            List<JobVertex> topologicallySorted, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
         throw new UnsupportedOperationException();
     }

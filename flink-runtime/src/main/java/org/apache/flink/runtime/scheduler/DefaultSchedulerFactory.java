@@ -34,11 +34,11 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategyFactoryL
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 import org.apache.flink.util.concurrent.ScheduledExecutorServiceAdapter;
@@ -59,7 +59,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             final Logger log,
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final SlotPoolService slotPoolService,
@@ -68,7 +68,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
             final CheckpointRecoveryFactory checkpointRecoveryFactory,
             final Duration rpcTimeout,
             final BlobWriter blobWriter,
-            final JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            final StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             final Duration slotRequestTimeout,
             final ShuffleMaster<?> shuffleMaster,
             final JobMasterPartitionTracker partitionTracker,
@@ -106,7 +106,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                 "Using restart back off time strategy {} for {} ({}).",
                 restartBackoffTimeStrategy,
                 jobGraph.getName(),
-                jobGraph.getJobID());
+                jobGraph.getStreamID());
 
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(

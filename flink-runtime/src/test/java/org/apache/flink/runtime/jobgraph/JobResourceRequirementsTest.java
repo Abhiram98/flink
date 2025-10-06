@@ -35,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(TestLoggerExtension.class)
 class JobResourceRequirementsTest {
 
-    private final JobVertexID firstVertexId = new JobVertexID();
-    private final JobVertexID secondVertexId = new JobVertexID();
+    private final StreamVertexID firstVertexId = new StreamVertexID();
+    private final StreamVertexID secondVertexId = new StreamVertexID();
 
     @Test
     void testSuccessfulValidation() {
@@ -45,7 +45,7 @@ class JobResourceRequirementsTest {
                         .setParallelismForJobVertex(firstVertexId, 1, 4)
                         .setParallelismForJobVertex(secondVertexId, 1, 4)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 10);
         maxParallelismPerVertex.put(secondVertexId, 10);
         final List<String> validationErrors =
@@ -75,7 +75,7 @@ class JobResourceRequirementsTest {
                         .setParallelismForJobVertex(firstVertexId, 1, 10)
                         .setParallelismForJobVertex(secondVertexId, 1, 5)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 5);
         maxParallelismPerVertex.put(secondVertexId, 5);
         final List<String> validationErrors =
@@ -92,7 +92,7 @@ class JobResourceRequirementsTest {
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(firstVertexId, 1, 10)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 10);
         maxParallelismPerVertex.put(secondVertexId, 10);
         final List<String> validationErrors =
@@ -110,7 +110,7 @@ class JobResourceRequirementsTest {
                         .setParallelismForJobVertex(firstVertexId, 10, 9)
                         .setParallelismForJobVertex(secondVertexId, 10, 10)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 10);
         maxParallelismPerVertex.put(secondVertexId, 10);
         final List<String> validationErrors =
@@ -128,7 +128,7 @@ class JobResourceRequirementsTest {
                         .setParallelismForJobVertex(firstVertexId, 0, 10)
                         .setParallelismForJobVertex(secondVertexId, 1, 0)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 10);
         maxParallelismPerVertex.put(secondVertexId, 10);
         final List<String> validationErrors =
@@ -145,7 +145,7 @@ class JobResourceRequirementsTest {
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(firstVertexId, -1, -1)
                         .build();
-        final Map<JobVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
+        final Map<StreamVertexID, Integer> maxParallelismPerVertex = new HashMap<>();
         maxParallelismPerVertex.put(firstVertexId, 10);
         final List<String> validationErrors =
                 JobResourceRequirements.validate(jobResourceRequirements, maxParallelismPerVertex);
@@ -154,7 +154,7 @@ class JobResourceRequirementsTest {
 
     @Test
     void testWriteToJobGraphAndReadFromExecutionPlan() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
         final JobResourceRequirements jobResourceRequirements =
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(firstVertexId, 10, 9)
@@ -169,7 +169,7 @@ class JobResourceRequirementsTest {
 
     @Test
     void testReadNonExistentResourceRequirementsFromJobGraph() throws IOException {
-        assertThat(JobResourceRequirements.readFromExecutionPlan(JobGraphTestUtils.emptyJobGraph()))
+        assertThat(JobResourceRequirements.readFromExecutionPlan(StreamGraphTestUtils.emptyJobGraph()))
                 .isEmpty();
     }
 }

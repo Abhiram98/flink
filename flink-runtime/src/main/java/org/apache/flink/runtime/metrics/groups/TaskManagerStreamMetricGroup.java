@@ -39,26 +39,26 @@ import static org.apache.flink.util.Preconditions.checkState;
  * <p>Contains extra logic for adding Tasks ({@link TaskMetricGroup}).
  */
 @Internal
-public class TaskManagerJobMetricGroup extends JobMetricGroup<TaskManagerMetricGroup> {
+public class TaskManagerStreamMetricGroup extends StreamMetricGroup<TaskManagerMetricGroup> {
 
     /** Map from execution attempt ID (task identifier) to task metrics. */
     private final Map<ExecutionAttemptID, TaskMetricGroup> tasks = new HashMap<>();
 
     // ------------------------------------------------------------------------
 
-    public TaskManagerJobMetricGroup(
+    public TaskManagerStreamMetricGroup(
             MetricRegistry registry,
             TaskManagerMetricGroup parent,
-            JobID jobId,
-            @Nullable String jobName) {
+            JobID streamId,
+            @Nullable String streamName) {
         super(
                 registry,
                 parent,
-                jobId,
-                jobName,
+                streamId,
+                streamName,
                 registry.getScopeFormats()
-                        .getTaskManagerJobFormat()
-                        .formatScope(checkNotNull(parent), jobId, jobName));
+                        .getTaskManagerStreamFormat()
+                        .formatScope(checkNotNull(parent), streamId, streamName));
     }
 
     public final TaskManagerMetricGroup parent() {

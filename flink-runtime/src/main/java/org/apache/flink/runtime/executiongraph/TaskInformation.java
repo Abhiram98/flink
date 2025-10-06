@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.Preconditions;
 
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class TaskInformation implements Serializable {
     private static final long serialVersionUID = -9006218793155953789L;
 
     /** Job vertex id of the associated job vertex. */
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     /** Name of the task. */
     private final String taskName;
@@ -52,7 +52,7 @@ public class TaskInformation implements Serializable {
     private final Configuration taskConfiguration;
 
     public TaskInformation(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             String taskName,
             int numberOfSubtasks,
             int maxNumberOfSubtasks,
@@ -66,7 +66,7 @@ public class TaskInformation implements Serializable {
         this.taskConfiguration = Preconditions.checkNotNull(taskConfiguration);
     }
 
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 

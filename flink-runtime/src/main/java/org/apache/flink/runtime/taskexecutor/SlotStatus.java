@@ -96,7 +96,7 @@ public class SlotStatus implements Serializable {
      *
      * @return The job id if this slot is allocated, otherwise null
      */
-    public JobID getJobID() {
+    public JobID getStreamID() {
         return jobID;
     }
 

@@ -91,11 +91,11 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
     @Override
     public CompletableFuture<Void> allocateSlot(
             InstanceID instanceId,
-            JobID jobId,
+            JobID streamId,
             String targetAddress,
             ResourceProfile resourceProfile) {
         Preconditions.checkNotNull(instanceId);
-        Preconditions.checkNotNull(jobId);
+        Preconditions.checkNotNull(streamId);
         Preconditions.checkNotNull(targetAddress);
         Preconditions.checkNotNull(resourceProfile);
         checkStarted();
@@ -113,19 +113,19 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                 "Starting allocation of slot {} from {} for job {} with resource profile {}.",
                 allocationId,
                 resourceId,
-                jobId,
+                streamId,
                 resourceProfile);
 
         taskManagerTracker.notifySlotStatus(
-                allocationId, jobId, instanceId, resourceProfile, SlotState.PENDING);
-        resourceTracker.notifyAcquiredResource(jobId, resourceProfile);
+                allocationId, streamId, instanceId, resourceProfile, SlotState.PENDING);
+        resourceTracker.notifyAcquiredResource(streamId, resourceProfile);
         pendingSlotAllocations.add(allocationId);
 
         // RPC call to the task manager
         CompletableFuture<Acknowledge> requestFuture =
                 gateway.requestSlot(
                         SlotID.getDynamicSlotID(resourceId),
-                        jobId,
+                        streamId,
                         allocationId,
                         resourceProfile,
                         targetAddress,
@@ -142,7 +142,7 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                                         "Ignoring slot allocation update from task manager {} for allocation {} and job {}, because the allocation was already completed or cancelled.",
                                         instanceId,
                                         allocationId,
-                                        jobId);
+                                        streamId);
                                 returnedFuture.complete(null);
                                 return null;
                             }
@@ -159,10 +159,10 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                                 LOG.trace(
                                         "Completed allocation of allocation {} for job {}.",
                                         allocationId,
-                                        jobId);
+                                        streamId);
                                 taskManagerTracker.notifySlotStatus(
                                         allocationId,
-                                        jobId,
+                                        streamId,
                                         instanceId,
                                         resourceProfile,
                                         SlotState.ALLOCATED);
@@ -176,12 +176,12 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                                     LOG.warn(
                                             "Slot allocation for allocation {} for job {} failed.",
                                             allocationId,
-                                            jobId,
+                                            streamId,
                                             throwable);
-                                    resourceTracker.notifyLostResource(jobId, resourceProfile);
+                                    resourceTracker.notifyLostResource(streamId, resourceProfile);
                                     taskManagerTracker.notifySlotStatus(
                                             allocationId,
-                                            jobId,
+                                            streamId,
                                             instanceId,
                                             resourceProfile,
                                             SlotState.FREE);
@@ -211,10 +211,10 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
         if (slot.getState() == SlotState.PENDING) {
             pendingSlotAllocations.remove(allocationId);
         }
-        resourceTracker.notifyLostResource(slot.getJobId(), slot.getResourceProfile());
+        resourceTracker.notifyLostResource(slot.getStreamId(), slot.getResourceProfile());
         taskManagerTracker.notifySlotStatus(
                 allocationId,
-                slot.getJobId(),
+                slot.getStreamId(),
                 slot.getInstanceId(),
                 slot.getResourceProfile(),
                 SlotState.FREE);
@@ -253,11 +253,11 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                 LOG.info("Freeing slot {} by slot report.", slot.getAllocationId());
                 taskManagerTracker.notifySlotStatus(
                         slot.getAllocationId(),
-                        slot.getJobId(),
+                        slot.getStreamId(),
                         slot.getInstanceId(),
                         slot.getResourceProfile(),
                         SlotState.FREE);
-                resourceTracker.notifyLostResource(slot.getJobId(), slot.getResourceProfile());
+                resourceTracker.notifyLostResource(slot.getStreamId(), slot.getResourceProfile());
                 canApplyPreviousAllocations = false;
             }
         }
@@ -275,7 +275,7 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
 
     private boolean syncAllocatedSlotStatus(SlotStatus slotStatus, TaskManagerInfo taskManager) {
         final AllocationID allocationId = Preconditions.checkNotNull(slotStatus.getAllocationID());
-        final JobID jobId = Preconditions.checkNotNull(slotStatus.getJobID());
+        final JobID streamId = Preconditions.checkNotNull(slotStatus.getStreamID());
         final ResourceProfile resourceProfile =
                 Preconditions.checkNotNull(slotStatus.getResourceProfile());
 
@@ -287,7 +287,7 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                 pendingSlotAllocations.remove(slot.getAllocationId());
                 taskManagerTracker.notifySlotStatus(
                         slot.getAllocationId(),
-                        slot.getJobId(),
+                        slot.getStreamId(),
                         slot.getInstanceId(),
                         slot.getResourceProfile(),
                         SlotState.ALLOCATED);
@@ -299,24 +299,24 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                     "Duplicated allocation for " + allocationId);
             taskManagerTracker.notifySlotStatus(
                     allocationId,
-                    jobId,
+                    streamId,
                     taskManager.getInstanceId(),
                     resourceProfile,
                     SlotState.ALLOCATED);
-            resourceTracker.notifyAcquiredResource(jobId, resourceProfile);
+            resourceTracker.notifyAcquiredResource(streamId, resourceProfile);
             return false;
         }
     }
 
     @Override
-    public void freeInactiveSlots(JobID jobId) {
+    public void freeInactiveSlots(JobID streamId) {
         checkStarted();
         for (TaskManagerInfo taskManagerInfo :
-                taskManagerTracker.getTaskManagersWithAllocatedSlotsForJob(jobId)) {
+                taskManagerTracker.getTaskManagersWithAllocatedSlotsForStream(streamId)) {
             taskManagerInfo
                     .getTaskExecutorConnection()
                     .getTaskExecutorGateway()
-                    .freeInactiveSlots(jobId, taskManagerRequestTimeout);
+                    .freeInactiveSlots(streamId, taskManagerRequestTimeout);
         }
     }
 

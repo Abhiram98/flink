@@ -28,12 +28,12 @@ import org.apache.flink.configuration.UnmodifiableConfiguration;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testtasks.BlockingNoOpInvokable;
 import org.apache.flink.runtime.testtasks.FailingBlockingInvokable;
@@ -159,8 +159,8 @@ public class BlobsCleanupITCase extends TestLogger {
         final int numTasks = 2;
         final Deadline timeout = Deadline.fromNow(Duration.ofSeconds(30L));
 
-        final JobGraph jobGraph = createJobGraph(testCase, numTasks);
-        final JobID jid = jobGraph.getJobID();
+        final StreamGraph jobGraph = createJobGraph(testCase, numTasks);
+        final JobID jid = jobGraph.getStreamID();
 
         // upload a blob
         final File tempBlob = File.createTempFile("Required", ".jar");
@@ -180,7 +180,7 @@ public class BlobsCleanupITCase extends TestLogger {
         }
 
         final CompletableFuture<JobSubmissionResult> submissionFuture =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitStream(jobGraph);
 
         if (testCase == TestCase.JOB_SUBMISSION_FAILS) {
             try {
@@ -188,7 +188,7 @@ public class BlobsCleanupITCase extends TestLogger {
                 fail("Expected job submission failure.");
             } catch (ExecutionException e) {
                 assertThat(
-                        ExceptionUtils.findThrowable(e, JobSubmissionException.class).isPresent(),
+                        ExceptionUtils.findThrowable(e, StreamSubmissionException.class).isPresent(),
                         is(true));
             }
         } else {
@@ -196,7 +196,7 @@ public class BlobsCleanupITCase extends TestLogger {
 
             assertThat(jobSubmissionResult.getJobID(), is(jid));
 
-            final CompletableFuture<JobResult> resultFuture = miniCluster.requestJobResult(jid);
+            final CompletableFuture<StreamResult> resultFuture = miniCluster.requestStreamResult(jid);
 
             if (testCase == TestCase.JOB_FAILS) {
                 // fail a task so that the job is going to be recovered (we actually do not
@@ -205,18 +205,18 @@ public class BlobsCleanupITCase extends TestLogger {
 
                 // job will get restarted, BlobCache may re-download the BLOB if already deleted
                 // then the tasks will fail again and the restart strategy will finalise the job
-                final JobResult jobResult = resultFuture.get();
+                final StreamResult jobResult = resultFuture.get();
                 assertThat(jobResult.isSuccess(), is(false));
                 assertThat(jobResult.getApplicationStatus(), is(ApplicationStatus.FAILED));
             } else if (testCase == TestCase.JOB_IS_CANCELLED) {
 
                 miniCluster.cancelJob(jid);
 
-                final JobResult jobResult = resultFuture.get();
+                final StreamResult jobResult = resultFuture.get();
                 assertThat(jobResult.isSuccess(), is(false));
                 assertThat(jobResult.getApplicationStatus(), is(ApplicationStatus.CANCELED));
             } else {
-                final JobResult jobResult = resultFuture.get();
+                final StreamResult jobResult = resultFuture.get();
                 Throwable cause =
                         jobResult
                                 .getSerializedThrowable()
@@ -240,8 +240,8 @@ public class BlobsCleanupITCase extends TestLogger {
     }
 
     @Nonnull
-    private JobGraph createJobGraph(TestCase testCase, int numTasks) {
-        JobVertex source = new JobVertex("Source");
+    private StreamGraph createJobGraph(TestCase testCase, int numTasks) {
+        StreamVertex source = new StreamVertex("Source");
         if (testCase == TestCase.JOB_FAILS) {
             source.setInvokableClass(FailingBlockingInvokable.class);
         } else if (testCase == TestCase.JOB_IS_CANCELLED) {

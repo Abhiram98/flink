@@ -81,7 +81,7 @@ public final class PerJobMiniClusterFactory {
                         FunctionUtils.uncheckedFunction(
                                 submissionResult -> {
                                     org.apache.flink.client.ClientUtils
-                                            .waitUntilJobInitializationFinished(
+                                            .waitUntilStreamInitializationFinished(
                                                     () ->
                                                             miniCluster
                                                                     .getJobStatus(

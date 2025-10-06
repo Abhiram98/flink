@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.json;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.OptionalFailure;
 import org.apache.flink.util.SerializedThrowable;
 import org.apache.flink.util.SerializedValue;
@@ -43,11 +43,11 @@ import java.util.Map;
 import static org.apache.flink.util.Preconditions.checkState;
 
 /**
- * JSON deserializer for {@link JobResult}.
+ * JSON deserializer for {@link StreamResult}.
  *
  * @see JobResultSerializer
  */
-public class JobResultDeserializer extends StdDeserializer<JobResult> {
+public class JobResultDeserializer extends StdDeserializer<StreamResult> {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public class JobResultDeserializer extends StdDeserializer<JobResult> {
     private final SerializedValueDeserializer serializedValueDeserializer;
 
     public JobResultDeserializer() {
-        super(JobResult.class);
+        super(StreamResult.class);
         final JavaType objectSerializedValueType =
                 TypeFactory.defaultInstance()
                         .constructType(new TypeReference<SerializedValue<Object>>() {});
@@ -67,7 +67,7 @@ public class JobResultDeserializer extends StdDeserializer<JobResult> {
     }
 
     @Override
-    public JobResult deserialize(final JsonParser p, final DeserializationContext ctxt)
+    public StreamResult deserialize(final JsonParser p, final DeserializationContext ctxt)
             throws IOException {
         JobID jobId = null;
         ApplicationStatus applicationStatus = ApplicationStatus.UNKNOWN;
@@ -111,7 +111,7 @@ public class JobResultDeserializer extends StdDeserializer<JobResult> {
         }
 
         try {
-            return new JobResult.Builder()
+            return new StreamResult.Builder()
                     .jobId(jobId)
                     .applicationStatus(applicationStatus)
                     .netRuntime(netRuntime)
@@ -120,7 +120,7 @@ public class JobResultDeserializer extends StdDeserializer<JobResult> {
                     .build();
         } catch (final RuntimeException e) {
             throw new JsonMappingException(
-                    null, "Could not deserialize " + JobResult.class.getSimpleName(), e);
+                    null, "Could not deserialize " + StreamResult.class.getSimpleName(), e);
         }
     }
 

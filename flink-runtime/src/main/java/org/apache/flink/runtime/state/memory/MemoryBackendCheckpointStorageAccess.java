@@ -61,7 +61,7 @@ public class MemoryBackendCheckpointStorageAccess extends AbstractFsCheckpointSt
     /**
      * Creates a new MemoryBackendCheckpointStorage.
      *
-     * @param jobId The ID of the job writing the checkpoints.
+     * @param streamId The ID of the job writing the checkpoints.
      * @param checkpointsBaseDirectory The directory to write checkpoints to. May be null, in which
      *     case this storage does not support durable persistence.
      * @param defaultSavepointLocation The default savepoint directory, or null, if none is set.
@@ -71,14 +71,14 @@ public class MemoryBackendCheckpointStorageAccess extends AbstractFsCheckpointSt
      *     checkpoint directory cannot be created within that directory.
      */
     public MemoryBackendCheckpointStorageAccess(
-            JobID jobId,
+            JobID streamId,
             @Nullable Path checkpointsBaseDirectory,
             @Nullable Path defaultSavepointLocation,
             boolean createCheckpointSubDirs,
             int maxStateSize)
             throws IOException {
 
-        super(jobId, defaultSavepointLocation);
+        super(streamId, defaultSavepointLocation);
 
         checkArgument(maxStateSize > 0);
         this.maxStateSize = maxStateSize;
@@ -90,7 +90,7 @@ public class MemoryBackendCheckpointStorageAccess extends AbstractFsCheckpointSt
             this.fileSystem = checkpointsBaseDirectory.getFileSystem();
             this.checkpointsDirectory =
                     createCheckpointSubDirs
-                            ? getCheckpointDirectoryForJob(checkpointsBaseDirectory, jobId)
+                            ? getCheckpointDirectoryForStream(checkpointsBaseDirectory, streamId)
                             : checkpointsBaseDirectory;
         }
     }

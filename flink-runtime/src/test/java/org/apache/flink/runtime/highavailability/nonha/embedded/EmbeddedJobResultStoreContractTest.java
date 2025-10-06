@@ -18,18 +18,18 @@
 
 package org.apache.flink.runtime.highavailability.nonha.embedded;
 
-import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.highavailability.JobResultStoreContractTest;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStoreContractTest;
 
 import java.io.IOException;
 
 /**
- * Tests for the {@link EmbeddedJobResultStore} implementation of the {@link JobResultStore}'s
+ * Tests for the {@link EmbeddedJobResultStore} implementation of the {@link StreamResultStore}'s
  * contracts.
  */
-public class EmbeddedJobResultStoreContractTest implements JobResultStoreContractTest {
+public class EmbeddedJobResultStoreContractTest implements StreamResultStoreContractTest {
     @Override
-    public JobResultStore createJobResultStore() throws IOException {
+    public StreamResultStore createStreamResultStore() throws IOException {
         return new EmbeddedJobResultStore();
     }
 }

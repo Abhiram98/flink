@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -40,8 +40,8 @@ public class FailedCheckpointStatsTest {
         long triggerTimestamp = 10123;
         long failureTimestamp = triggerTimestamp + duration;
 
-        Map<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
-        JobVertexID jobVertexId = new JobVertexID();
+        Map<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
+        StreamVertexID jobVertexId = new StreamVertexID();
         taskStats.put(jobVertexId, new TaskStateStats(jobVertexId, 1));
 
         FailedCheckpointStats failed =
@@ -71,8 +71,8 @@ public class FailedCheckpointStatsTest {
         long triggerTimestamp = 10123;
         long failureTimestamp = triggerTimestamp + duration;
 
-        Map<JobVertexID, TaskStateStats> taskStats = new HashMap<>();
-        JobVertexID jobVertexId = new JobVertexID();
+        Map<StreamVertexID, TaskStateStats> taskStats = new HashMap<>();
+        StreamVertexID jobVertexId = new StreamVertexID();
         taskStats.put(jobVertexId, new TaskStateStats(jobVertexId, 1));
 
         FailedCheckpointStats failed =

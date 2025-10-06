@@ -40,7 +40,7 @@ import java.util.Map;
 @Internal
 public class TaskManagerMetricGroup extends ComponentMetricGroup<TaskManagerMetricGroup> {
 
-    private final Map<JobID, TaskManagerJobMetricGroup> jobs = new HashMap<>();
+    private final Map<JobID, TaskManagerStreamMetricGroup> jobs = new HashMap<>();
 
     private final String hostname;
 
@@ -80,14 +80,14 @@ public class TaskManagerMetricGroup extends ComponentMetricGroup<TaskManagerMetr
     //  job groups
     // ------------------------------------------------------------------------
 
-    public TaskManagerJobMetricGroup addJob(JobID jobId, String jobName) {
+    public TaskManagerStreamMetricGroup addJob(JobID jobId, String jobName) {
         Preconditions.checkNotNull(jobId);
         String resolvedJobName = jobName == null || jobName.isEmpty() ? jobId.toString() : jobName;
-        TaskManagerJobMetricGroup jobGroup;
+        TaskManagerStreamMetricGroup jobGroup;
         synchronized (this) { // synchronization isn't strictly necessary as of FLINK-24864
             jobGroup = jobs.get(jobId);
             if (jobGroup == null) {
-                jobGroup = new TaskManagerJobMetricGroup(registry, this, jobId, resolvedJobName);
+                jobGroup = new TaskManagerStreamMetricGroup(registry, this, jobId, resolvedJobName);
                 jobs.put(jobId, jobGroup);
             }
         }
@@ -95,13 +95,13 @@ public class TaskManagerMetricGroup extends ComponentMetricGroup<TaskManagerMetr
     }
 
     @VisibleForTesting
-    public TaskManagerJobMetricGroup getJobMetricsGroup(JobID jobId) {
+    public TaskManagerStreamMetricGroup getJobMetricsGroup(JobID jobId) {
         return jobs.get(jobId);
     }
 
     public void removeJobMetricsGroup(JobID jobId) {
         if (jobId != null) {
-            TaskManagerJobMetricGroup groupToClose;
+            TaskManagerStreamMetricGroup groupToClose;
             synchronized (this) { // synchronization isn't strictly necessary as of FLINK-24864
                 groupToClose = jobs.remove(jobId);
             }

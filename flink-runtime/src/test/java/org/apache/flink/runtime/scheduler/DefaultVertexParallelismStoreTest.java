@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,14 +31,14 @@ class DefaultVertexParallelismStoreTest {
     void testNotSet() {
         DefaultVertexParallelismStore store = new DefaultVertexParallelismStore();
 
-        assertThatThrownBy(() -> store.getParallelismInfo(new JobVertexID()))
+        assertThatThrownBy(() -> store.getParallelismInfo(new StreamVertexID()))
                 .withFailMessage("No parallelism information set for vertex")
                 .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void testSetInfo() {
-        JobVertexID id = new JobVertexID();
+        StreamVertexID id = new StreamVertexID();
         VertexParallelismInformation info = new MockVertexParallelismInfo();
         DefaultVertexParallelismStore store = new DefaultVertexParallelismStore();
 

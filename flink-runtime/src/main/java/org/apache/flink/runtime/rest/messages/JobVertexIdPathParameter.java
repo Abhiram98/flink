@@ -18,10 +18,10 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
-/** Path parameter specifying a {@link JobVertexID}. */
-public class JobVertexIdPathParameter extends MessagePathParameter<JobVertexID> {
+/** Path parameter specifying a {@link StreamVertexID}. */
+public class JobVertexIdPathParameter extends MessagePathParameter<StreamVertexID> {
 
     public static final String KEY = "vertexid";
 
@@ -30,12 +30,12 @@ public class JobVertexIdPathParameter extends MessagePathParameter<JobVertexID> 
     }
 
     @Override
-    protected JobVertexID convertFromString(String value) throws ConversionException {
-        return JobVertexID.fromHexString(value);
+    protected StreamVertexID convertFromString(String value) throws ConversionException {
+        return StreamVertexID.fromHexString(value);
     }
 
     @Override
-    protected String convertToString(JobVertexID value) {
+    protected String convertToString(StreamVertexID value) {
         return value.toString();
     }
 

@@ -42,7 +42,7 @@ import org.apache.flink.runtime.io.disk.iomanager.IOManagerAsync;
 import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManager;
@@ -158,7 +158,7 @@ class JvmExitOnFatalErrorTest {
 
                 final JobID jid = new JobID();
                 final AllocationID allocationID = new AllocationID();
-                final JobVertexID jobVertexId = new JobVertexID();
+                final StreamVertexID jobVertexId = new StreamVertexID();
                 final ExecutionAttemptID executionAttemptID = createExecutionAttemptId(jobVertexId);
                 final AllocationID slotAllocationId = new AllocationID();
 

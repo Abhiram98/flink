@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobmaster.event;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Map;
 
@@ -31,7 +31,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /** This class is used to record the initialization info of {@link ExecutionJobVertex}. */
 public class ExecutionJobVertexInitializedEvent implements JobEvent {
 
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     private final int parallelism;
 
@@ -39,7 +39,7 @@ public class ExecutionJobVertexInitializedEvent implements JobEvent {
     private final Map<IntermediateDataSetID, JobVertexInputInfo> jobVertexInputInfos;
 
     public ExecutionJobVertexInitializedEvent(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             int parallelism,
             Map<IntermediateDataSetID, JobVertexInputInfo> jobVertexInputInfos) {
         checkArgument(parallelism > 0);
@@ -52,7 +52,7 @@ public class ExecutionJobVertexInitializedEvent implements JobEvent {
         return parallelism;
     }
 
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 

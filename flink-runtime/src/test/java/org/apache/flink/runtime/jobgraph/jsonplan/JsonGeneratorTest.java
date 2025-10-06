@@ -19,11 +19,8 @@
 package org.apache.flink.runtime.jobgraph.jsonplan;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.operators.testutils.DummyInvokable;
 import org.apache.flink.util.jackson.JacksonMapperFactory;
 
@@ -45,21 +42,21 @@ public class JsonGeneratorTest {
     @Test
     public void testGeneratorWithoutAnyAttachements() {
         try {
-            JobVertex source1 = new JobVertex("source 1");
+            StreamVertex source1 = new StreamVertex("source 1");
 
-            JobVertex source2 = new JobVertex("source 2");
+            StreamVertex source2 = new StreamVertex("source 2");
             source2.setInvokableClass(DummyInvokable.class);
 
-            JobVertex source3 = new JobVertex("source 3");
+            StreamVertex source3 = new StreamVertex("source 3");
 
-            JobVertex intermediate1 = new JobVertex("intermediate 1");
-            JobVertex intermediate2 = new JobVertex("intermediate 2");
+            StreamVertex intermediate1 = new StreamVertex("intermediate 1");
+            StreamVertex intermediate2 = new StreamVertex("intermediate 2");
 
-            JobVertex join1 = new JobVertex("join 1");
-            JobVertex join2 = new JobVertex("join 2");
+            StreamVertex join1 = new StreamVertex("join 1");
+            StreamVertex join2 = new StreamVertex("join 2");
 
-            JobVertex sink1 = new JobVertex("sink 1");
-            JobVertex sink2 = new JobVertex("sink 2");
+            StreamVertex sink1 = new StreamVertex("sink 1");
+            StreamVertex sink2 = new StreamVertex("sink 2");
 
             intermediate1.connectNewDataSetAsInput(
                     source1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -81,8 +78,8 @@ public class JsonGeneratorTest {
             sink2.connectNewDataSetAsInput(
                     join1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            JobGraph jg =
-                    JobGraphTestUtils.batchJobGraph(
+            StreamGraph jg =
+                    StreamGraphTestUtils.batchJobGraph(
                             source1,
                             source2,
                             source3,
@@ -101,7 +98,7 @@ public class JsonGeneratorTest {
             JsonNode rootNode = m.readTree(plan);
 
             // core fields
-            assertEquals(new TextNode(jg.getJobID().toString()), rootNode.get("jid"));
+            assertEquals(new TextNode(jg.getStreamID().toString()), rootNode.get("jid"));
             assertEquals(new TextNode(jg.getName()), rootNode.get("name"));
             assertEquals(new TextNode(jg.getJobType().name()), rootNode.get("type"));
 
@@ -128,10 +125,10 @@ public class JsonGeneratorTest {
         }
     }
 
-    private void checkVertexExists(String vertexId, JobGraph graph) {
+    private void checkVertexExists(String vertexId, StreamGraph graph) {
         // validate that the vertex has a valid
-        JobVertexID id = JobVertexID.fromHexString(vertexId);
-        for (JobVertex vertex : graph.getVertices()) {
+        StreamVertexID id = StreamVertexID.fromHexString(vertexId);
+        for (StreamVertex vertex : graph.getVertices()) {
             if (vertex.getID().equals(id)) {
                 return;
             }

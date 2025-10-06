@@ -27,9 +27,9 @@ import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumerVertexGroup;
@@ -75,7 +75,7 @@ class DefaultExecutionTopologyTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        JobVertex[] jobVertices = new JobVertex[2];
+        StreamVertex[] jobVertices = new StreamVertex[2];
         int parallelism = 3;
         jobVertices[0] = createNoOpVertex(parallelism);
         jobVertices[1] = createNoOpVertex(parallelism);
@@ -106,7 +106,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testResultPartitionStateSupplier() throws Exception {
-        final JobVertex[] jobVertices = createJobVertices(BLOCKING);
+        final StreamVertex[] jobVertices = createJobVertices(BLOCKING);
         executionGraph = createExecutionGraph(EXECUTOR_RESOURCE.getExecutor(), jobVertices);
         adapter = DefaultExecutionTopology.fromExecutionGraph(executionGraph);
 
@@ -127,7 +127,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testGetVertexOrThrow() {
-        assertThatThrownBy(() -> adapter.getVertex(new ExecutionVertexID(new JobVertexID(), 0)))
+        assertThatThrownBy(() -> adapter.getVertex(new ExecutionVertexID(new StreamVertexID(), 0)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -156,8 +156,8 @@ class DefaultExecutionTopologyTest {
     @Test
     void testErrorIfCoLocatedTasksAreNotInSameRegion() {
         int parallelism = 3;
-        final JobVertex v1 = createNoOpVertex(parallelism);
-        final JobVertex v2 = createNoOpVertex(parallelism);
+        final StreamVertex v1 = createNoOpVertex(parallelism);
+        final StreamVertex v2 = createNoOpVertex(parallelism);
 
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
         v1.setSlotSharingGroup(slotSharingGroup);
@@ -170,7 +170,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testUpdateTopology() throws Exception {
-        final JobVertex[] jobVertices = createJobVertices(BLOCKING);
+        final StreamVertex[] jobVertices = createJobVertices(BLOCKING);
         executionGraph = createDynamicGraph(jobVertices);
         adapter = DefaultExecutionTopology.fromExecutionGraph(executionGraph);
 
@@ -190,7 +190,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testErrorIfUpdateTopologyWithNewVertexPipelinedConnectedToOldOnes() throws Exception {
-        final JobVertex[] jobVertices = createJobVertices(PIPELINED);
+        final StreamVertex[] jobVertices = createJobVertices(PIPELINED);
         executionGraph = createDynamicGraph(jobVertices);
         adapter = DefaultExecutionTopology.fromExecutionGraph(executionGraph);
 
@@ -210,7 +210,7 @@ class DefaultExecutionTopologyTest {
 
     @Test
     void testExistingRegionsAreNotAffectedDuringTopologyUpdate() throws Exception {
-        final JobVertex[] jobVertices = createJobVertices(BLOCKING);
+        final StreamVertex[] jobVertices = createJobVertices(BLOCKING);
         executionGraph = createDynamicGraph(jobVertices);
         adapter = DefaultExecutionTopology.fromExecutionGraph(executionGraph);
 
@@ -230,8 +230,8 @@ class DefaultExecutionTopologyTest {
         assertThat(regionNew).isSameAs(regionOld);
     }
 
-    private JobVertex[] createJobVertices(ResultPartitionType resultPartitionType) {
-        final JobVertex[] jobVertices = new JobVertex[2];
+    private StreamVertex[] createJobVertices(ResultPartitionType resultPartitionType) {
+        final StreamVertex[] jobVertices = new StreamVertex[2];
         final int parallelism = 3;
         jobVertices[0] = createNoOpVertex(parallelism);
         jobVertices[1] = createNoOpVertex(parallelism);
@@ -240,9 +240,9 @@ class DefaultExecutionTopologyTest {
         return jobVertices;
     }
 
-    private DefaultExecutionGraph createDynamicGraph(JobVertex... jobVertices) throws Exception {
+    private DefaultExecutionGraph createDynamicGraph(StreamVertex... jobVertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(new JobGraph(new JobID(), "TestJob", jobVertices))
+                .setJobGraph(new StreamGraph(new JobID(), "TestJob", jobVertices))
                 .buildDynamicGraph(EXECUTOR_RESOURCE.getExecutor());
     }
 

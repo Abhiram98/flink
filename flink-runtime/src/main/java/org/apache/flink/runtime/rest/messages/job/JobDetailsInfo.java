@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.JobPlanInfo;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.job.metrics.IOMetricsInfo;
@@ -303,7 +303,7 @@ public class JobDetailsInfo implements ResponseBody {
 
         @JsonProperty(FIELD_NAME_JOB_VERTEX_ID)
         @JsonSerialize(using = JobVertexIDSerializer.class)
-        private final JobVertexID jobVertexID;
+        private final StreamVertexID jobVertexID;
 
         @JsonProperty(FIELD_NAME_SLOT_SHARING_GROUP_ID)
         @JsonSerialize(using = SlotSharingGroupIDSerializer.class)
@@ -340,7 +340,7 @@ public class JobDetailsInfo implements ResponseBody {
         public JobVertexDetailsInfo(
                 @JsonDeserialize(using = JobVertexIDDeserializer.class)
                         @JsonProperty(FIELD_NAME_JOB_VERTEX_ID)
-                        JobVertexID jobVertexID,
+                StreamVertexID jobVertexID,
                 @JsonDeserialize(using = SlotSharingGroupIDDeserializer.class)
                         @JsonProperty(FIELD_NAME_SLOT_SHARING_GROUP_ID)
                         SlotSharingGroupId slotSharingGroupId,
@@ -368,7 +368,7 @@ public class JobDetailsInfo implements ResponseBody {
         }
 
         @JsonIgnore
-        public JobVertexID getJobVertexID() {
+        public StreamVertexID getJobVertexID() {
             return jobVertexID;
         }
 

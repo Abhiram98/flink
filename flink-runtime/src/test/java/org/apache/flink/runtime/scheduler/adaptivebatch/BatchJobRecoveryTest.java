@@ -45,12 +45,8 @@ import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTrackerIm
 import org.apache.flink.runtime.io.network.partition.PartitionNotFoundException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmaster.event.ExecutionVertexFinishedEvent;
 import org.apache.flink.runtime.jobmaster.event.FileSystemJobEventStore;
 import org.apache.flink.runtime.jobmaster.event.JobEvent;
@@ -67,15 +63,8 @@ import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingResultPartition;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingTopology;
-import org.apache.flink.runtime.shuffle.DefaultShuffleMetrics;
-import org.apache.flink.runtime.shuffle.JobShuffleContextImpl;
-import org.apache.flink.runtime.shuffle.NettyShuffleDescriptor;
-import org.apache.flink.runtime.shuffle.NettyShuffleMaster;
-import org.apache.flink.runtime.shuffle.PartitionWithMetrics;
-import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
-import org.apache.flink.runtime.shuffle.ShuffleMaster;
-import org.apache.flink.runtime.shuffle.ShuffleMasterContextImpl;
-import org.apache.flink.runtime.shuffle.ShuffleMetrics;
+import org.apache.flink.runtime.shuffle.*;
+import org.apache.flink.runtime.shuffle.StreamShuffleContextImpl;
 import org.apache.flink.runtime.source.coordinator.SourceCoordinator;
 import org.apache.flink.runtime.source.coordinator.SourceCoordinatorProvider;
 import org.apache.flink.runtime.source.event.ReaderRegistrationEvent;
@@ -160,9 +149,9 @@ public class BatchJobRecoveryTest {
     private static final int SOURCE_PARALLELISM = 5;
     private static final int MIDDLE_PARALLELISM = 5;
     private static final int DECIDED_SINK_PARALLELISM = 2;
-    private static final JobVertexID SOURCE_ID = new JobVertexID();
-    private static final JobVertexID MIDDLE_ID = new JobVertexID();
-    private static final JobVertexID SINK_ID = new JobVertexID();
+    private static final StreamVertexID SOURCE_ID = new StreamVertexID();
+    private static final StreamVertexID MIDDLE_ID = new StreamVertexID();
+    private static final StreamVertexID SINK_ID = new StreamVertexID();
     private static final JobID JOB_ID = new JobID();
 
     private SourceCoordinatorProvider<MockSourceSplit> provider;
@@ -312,8 +301,8 @@ public class BatchJobRecoveryTest {
     // should be restored to finished and their produced partitions should also be restored.
     @TestTemplate
     void testJobVertexUnFinishedAndOperatorCoordinatorNotSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = deserializeJobGraph(serializedJobGraph);
-        JobVertex jobVertex = jobGraph.findVertexByID(MIDDLE_ID);
+        StreamGraph jobGraph = deserializeJobGraph(serializedJobGraph);
+        StreamVertex jobVertex = jobGraph.findVertexByID(MIDDLE_ID);
         jobVertex.addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
@@ -423,8 +412,8 @@ public class BatchJobRecoveryTest {
     @TestTemplate
     void testJobVertexFinishedAndOperatorCoordinatorNotSupportBatchSnapshotAndPartitionNotFound()
             throws Exception {
-        JobGraph jobGraph = deserializeJobGraph(serializedJobGraph);
-        JobVertex jobVertex = jobGraph.findVertexByID(SOURCE_ID);
+        StreamGraph jobGraph = deserializeJobGraph(serializedJobGraph);
+        StreamVertex jobVertex = jobGraph.findVertexByID(SOURCE_ID);
         jobVertex.addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
@@ -572,7 +561,7 @@ public class BatchJobRecoveryTest {
     // Source (p=5) -- POINTWISE --> Middle (p=5) -- ALLTOALL --> Sink (p=2, decided at runtime)
     @TestTemplate
     void testRecoverDecidedParallelismFromTheSameJobGraphInstance() throws Exception {
-        JobGraph jobGraph = deserializeJobGraph(serializedJobGraph);
+        StreamGraph jobGraph = deserializeJobGraph(serializedJobGraph);
 
         AdaptiveBatchScheduler scheduler = createScheduler(jobGraph);
 
@@ -863,7 +852,7 @@ public class BatchJobRecoveryTest {
 
     private void registerPartitions(
             AdaptiveBatchScheduler scheduler,
-            Set<JobVertexID> unavailablePartitionsJobVertices,
+            Set<StreamVertexID> unavailablePartitionsJobVertices,
             Set<ExecutionVertexID> unavailablePartitionsExecutionVertices) {
         // register partitions
         ExecutionGraph executionGraph = scheduler.getExecutionGraph();
@@ -928,7 +917,7 @@ public class BatchJobRecoveryTest {
     }
 
     private static SourceCoordinator<?, ?> getInternalSourceCoordinator(
-            final ExecutionGraph executionGraph, final JobVertexID sourceID) throws Exception {
+            final ExecutionGraph executionGraph, final StreamVertexID sourceID) throws Exception {
         ExecutionJobVertex sourceJobVertex = executionGraph.getJobVertex(sourceID);
         OperatorCoordinatorHolder operatorCoordinatorHolder =
                 new ArrayList<>(sourceJobVertex.getOperatorCoordinators()).get(0);
@@ -954,7 +943,7 @@ public class BatchJobRecoveryTest {
     public static void transitionExecutionsState(
             final SchedulerBase scheduler,
             final ExecutionState state,
-            final JobVertexID jobVertexID) {
+            final StreamVertexID jobVertexID) {
         AdaptiveBatchSchedulerTest.transitionExecutionsState(
                 scheduler, state, scheduler.getExecutionJobVertex(jobVertexID).getJobVertex());
     }
@@ -973,21 +962,21 @@ public class BatchJobRecoveryTest {
      *
      * <p>Source has an operator coordinator.
      */
-    private JobGraph createDefaultJobGraph() throws IOException {
-        List<JobVertex> jobVertices = new ArrayList<>();
+    private StreamGraph createDefaultJobGraph() throws IOException {
+        List<StreamVertex> jobVertices = new ArrayList<>();
 
-        final JobVertex source = new JobVertex("source", SOURCE_ID);
+        final StreamVertex source = new StreamVertex("source", SOURCE_ID);
         source.setInvokableClass(NoOpInvokable.class);
         source.addOperatorCoordinator(new SerializedValue<>(provider));
         source.setParallelism(SOURCE_PARALLELISM);
         jobVertices.add(source);
 
-        final JobVertex middle = new JobVertex("middle", MIDDLE_ID);
+        final StreamVertex middle = new StreamVertex("middle", MIDDLE_ID);
         middle.setInvokableClass(NoOpInvokable.class);
         middle.setParallelism(MIDDLE_PARALLELISM);
         jobVertices.add(middle);
 
-        final JobVertex sink = new JobVertex("sink", SINK_ID);
+        final StreamVertex sink = new StreamVertex("sink", SINK_ID);
         sink.setInvokableClass(NoOpInvokable.class);
         jobVertices.add(sink);
 
@@ -996,16 +985,16 @@ public class BatchJobRecoveryTest {
         sink.connectNewDataSetAsInput(
                 middle, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        return new JobGraph(JOB_ID, "TestJob", jobVertices.toArray(new JobVertex[0]));
+        return new StreamGraph(JOB_ID, "TestJob", jobVertices.toArray(new StreamVertex[0]));
     }
 
     private static ExecutionVertex getExecutionVertex(
-            final JobVertexID jobVertexId, int subtask, final ExecutionGraph executionGraph) {
+            final StreamVertexID jobVertexId, int subtask, final ExecutionGraph executionGraph) {
         return getExecutionVertices(jobVertexId, executionGraph).get(subtask);
     }
 
     private static List<ExecutionVertex> getExecutionVertices(
-            final JobVertexID jobVertexId, final ExecutionGraph executionGraph) {
+            final StreamVertexID jobVertexId, final ExecutionGraph executionGraph) {
         checkState(executionGraph.getJobVertex(jobVertexId).isInitialized());
         return Arrays.asList(executionGraph.getJobVertex(jobVertexId).getTaskVertices());
     }
@@ -1018,7 +1007,7 @@ public class BatchJobRecoveryTest {
                 .collect(Collectors.toList());
     }
 
-    private AdaptiveBatchScheduler createScheduler(final JobGraph jobGraph) throws Exception {
+    private AdaptiveBatchScheduler createScheduler(final StreamGraph jobGraph) throws Exception {
         return createScheduler(
                 jobGraph,
                 jobEventStore,
@@ -1027,7 +1016,7 @@ public class BatchJobRecoveryTest {
     }
 
     private AdaptiveBatchScheduler createScheduler(
-            final JobGraph jobGraph, final Duration jobRecoverySnapshotMinPause) throws Exception {
+            final StreamGraph jobGraph, final Duration jobRecoverySnapshotMinPause) throws Exception {
         return createScheduler(
                 jobGraph,
                 jobEventStore,
@@ -1036,7 +1025,7 @@ public class BatchJobRecoveryTest {
     }
 
     private AdaptiveBatchScheduler createScheduler(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final JobEventStore jobEventStore,
             int defaultMaxParallelism,
             Duration jobRecoverySnapshotMinPause)
@@ -1051,10 +1040,10 @@ public class BatchJobRecoveryTest {
                                 (timeout, set) ->
                                         CompletableFuture.completedFuture(allPartitionWithMetrics))
                         .build();
-        shuffleMaster.registerJob(new JobShuffleContextImpl(jobGraph.getJobID(), jobMasterGateway));
+        shuffleMaster.registerJob(new StreamShuffleContextImpl(jobGraph.getStreamID(), jobMasterGateway));
         final JobMasterPartitionTracker partitionTracker =
                 new JobMasterPartitionTrackerImpl(
-                        jobGraph.getJobID(), shuffleMaster, ignored -> Optional.empty());
+                        jobGraph.getStreamID(), shuffleMaster, ignored -> Optional.empty());
 
         Configuration jobMasterConfig = new Configuration();
         jobMasterConfig.set(
@@ -1087,17 +1076,17 @@ public class BatchJobRecoveryTest {
         return schedulerBuilder.buildAdaptiveBatchJobScheduler(enableSpeculativeExecution);
     }
 
-    private byte[] serializeJobGraph(final JobGraph jobGraph) throws IOException {
+    private byte[] serializeJobGraph(final StreamGraph jobGraph) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream oss = new ObjectOutputStream(byteArrayOutputStream);
         oss.writeObject(jobGraph);
         return byteArrayOutputStream.toByteArray();
     }
 
-    private JobGraph deserializeJobGraph(final byte[] serializedJobGraph) throws Exception {
+    private StreamGraph deserializeJobGraph(final byte[] serializedJobGraph) throws Exception {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedJobGraph);
         ObjectInputStream ois = new ObjectInputStream(byteArrayInputStream);
-        return (JobGraph) ois.readObject();
+        return (StreamGraph) ois.readObject();
     }
 
     private static class TestingFileSystemJobEventStore extends FileSystemJobEventStore {

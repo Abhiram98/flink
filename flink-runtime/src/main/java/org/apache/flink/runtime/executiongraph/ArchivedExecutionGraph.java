@@ -27,8 +27,8 @@ import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
@@ -63,7 +63,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     private final String jobName;
 
     /** All job vertices that are part of this graph. */
-    private final Map<JobVertexID, ArchivedExecutionJobVertex> tasks;
+    private final Map<StreamVertexID, ArchivedExecutionJobVertex> tasks;
 
     /** All vertices, in the order in which they were created. * */
     private final List<ArchivedExecutionJobVertex> verticesInCreationOrder;
@@ -115,7 +115,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     public ArchivedExecutionGraph(
             JobID jobID,
             String jobName,
-            Map<JobVertexID, ArchivedExecutionJobVertex> tasks,
+            Map<StreamVertexID, ArchivedExecutionJobVertex> tasks,
             List<ArchivedExecutionJobVertex> verticesInCreationOrder,
             long[] stateTimestamps,
             JobStatus state,
@@ -188,13 +188,13 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     }
 
     @Override
-    public ArchivedExecutionJobVertex getJobVertex(JobVertexID id) {
+    public ArchivedExecutionJobVertex getJobVertex(StreamVertexID id) {
         return this.tasks.get(id);
     }
 
     @Override
-    public Map<JobVertexID, AccessExecutionJobVertex> getAllVertices() {
-        return Collections.<JobVertexID, AccessExecutionJobVertex>unmodifiableMap(this.tasks);
+    public Map<StreamVertexID, AccessExecutionJobVertex> getAllVertices() {
+        return Collections.<StreamVertexID, AccessExecutionJobVertex>unmodifiableMap(this.tasks);
     }
 
     @Override
@@ -321,7 +321,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
                 statusOverride == null || !statusOverride.isGloballyTerminalState(),
                 "Status override is only allowed for non-globally-terminal states.");
 
-        Map<JobVertexID, ArchivedExecutionJobVertex> archivedTasks = new HashMap<>();
+        Map<StreamVertexID, ArchivedExecutionJobVertex> archivedTasks = new HashMap<>();
         List<ArchivedExecutionJobVertex> archivedVerticesInCreationOrder = new ArrayList<>();
 
         for (ExecutionJobVertex task : executionGraph.getVerticesTopologically()) {
@@ -347,7 +347,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
         }
 
         return new ArchivedExecutionGraph(
-                executionGraph.getJobID(),
+                executionGraph.getStreamID(),
                 executionGraph.getJobName(),
                 archivedTasks,
                 archivedVerticesInCreationOrder,
@@ -400,11 +400,11 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
             @Nullable Throwable throwable,
             @Nullable JobCheckpointingSettings checkpointingSettings,
             long initializationTimestamp,
-            Iterable<JobVertex> jobVertices,
+            Iterable<StreamVertex> jobVertices,
             VertexParallelismStore initialParallelismStore) {
-        final Map<JobVertexID, ArchivedExecutionJobVertex> archivedJobVertices = new HashMap<>();
+        final Map<StreamVertexID, ArchivedExecutionJobVertex> archivedJobVertices = new HashMap<>();
         final List<ArchivedExecutionJobVertex> archivedVerticesInCreationOrder = new ArrayList<>();
-        for (JobVertex jobVertex : jobVertices) {
+        for (StreamVertex jobVertex : jobVertices) {
             final VertexParallelismInformation parallelismInfo =
                     initialParallelismStore.getParallelismInfo(jobVertex.getID());
 
@@ -439,7 +439,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
             String jobName,
             JobStatus jobStatus,
             JobType jobType,
-            Map<JobVertexID, ArchivedExecutionJobVertex> archivedTasks,
+            Map<StreamVertexID, ArchivedExecutionJobVertex> archivedTasks,
             List<ArchivedExecutionJobVertex> archivedVerticesInCreationOrder,
             @Nullable Throwable throwable,
             @Nullable JobCheckpointingSettings checkpointingSettings,

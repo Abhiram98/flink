@@ -64,7 +64,7 @@ public class NettyShuffleMaster implements ShuffleMaster<NettyShuffleDescriptor>
 
     @Nullable private final TieredInternalShuffleMaster tieredInternalShuffleMaster;
 
-    private final Map<JobID, JobShuffleContext> jobShuffleContexts = new HashMap<>();
+    private final Map<JobID, StreamShuffleContext> jobShuffleContexts = new HashMap<>();
 
     public NettyShuffleMaster(ShuffleMasterContext shuffleMasterContext) {
         Configuration conf = shuffleMasterContext.getConfiguration();
@@ -176,8 +176,8 @@ public class NettyShuffleMaster implements ShuffleMaster<NettyShuffleDescriptor>
     }
 
     @Override
-    public void registerJob(JobShuffleContext context) {
-        jobShuffleContexts.put(context.getJobId(), context);
+    public void registerJob(StreamShuffleContext context) {
+        jobShuffleContexts.put(context.getStreamId(), context);
         if (tieredInternalShuffleMaster != null) {
             tieredInternalShuffleMaster.registerJob(context);
         }

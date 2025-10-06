@@ -19,10 +19,10 @@
 package org.apache.flink.runtime.dispatcher;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 
 /**
- * A {@link DispatcherBootstrap} which submits the provided {@link JobGraph job graphs} for
+ * A {@link DispatcherBootstrap} which submits the provided {@link StreamGraph job graphs} for
  * execution upon dispatcher initialization.
  */
 @Internal

@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.DefaultCompletedCheckpointStoreUtils;
 import org.apache.flink.runtime.checkpoint.NoOpCheckpointStatsTracker;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.executiongraph.DefaultExecutionGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 
 import org.slf4j.Logger;
@@ -49,13 +49,13 @@ public final class SchedulerUtils {
     }
 
     public static CompletedCheckpointStore createCompletedCheckpointStoreIfCheckpointingIsEnabled(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             Configuration configuration,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Executor ioExecutor,
             Logger log)
             throws JobExecutionException {
-        final JobID jobId = jobGraph.getJobID();
+        final JobID jobId = jobGraph.getStreamID();
         if (DefaultExecutionGraphBuilder.isCheckpointingEnabled(jobGraph)) {
             try {
                 return createCompletedCheckpointStore(
@@ -95,9 +95,9 @@ public final class SchedulerUtils {
     }
 
     public static CheckpointIDCounter createCheckpointIDCounterIfCheckpointingIsEnabled(
-            JobGraph jobGraph, CheckpointRecoveryFactory checkpointRecoveryFactory)
+            StreamGraph jobGraph, CheckpointRecoveryFactory checkpointRecoveryFactory)
             throws JobExecutionException {
-        final JobID jobId = jobGraph.getJobID();
+        final JobID jobId = jobGraph.getStreamID();
         if (DefaultExecutionGraphBuilder.isCheckpointingEnabled(jobGraph)) {
             try {
                 return createCheckpointIdCounter(checkpointRecoveryFactory, jobId);
@@ -111,7 +111,7 @@ public final class SchedulerUtils {
     }
 
     public static CheckpointStatsTracker createCheckpointStatsTrackerIfCheckpointingIsEnabled(
-            JobGraph jobGraph, Supplier<CheckpointStatsTracker> checkpointStatsTrackerFactory) {
+            StreamGraph jobGraph, Supplier<CheckpointStatsTracker> checkpointStatsTrackerFactory) {
         if (DefaultExecutionGraphBuilder.isCheckpointingEnabled(jobGraph)) {
             return checkpointStatsTrackerFactory.get();
         } else {

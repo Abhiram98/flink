@@ -33,7 +33,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for the {@link JobDetails}. */
+/** Tests for the {@link StreamDetails}. */
 class JobDetailsTest {
     private static final String COMPATIBLE_JOB_DETAILS =
             "{"
@@ -84,8 +84,8 @@ class JobDetailsTest {
     private ObjectMapper objectMapper;
     private ObjectMapper flexibleObjectMapper;
 
-    final JobDetails expected =
-            new JobDetails(
+    final StreamDetails expected =
+            new StreamDetails(
                     JobID.fromHexString("7a7c3291accebd10b6be8d4f8c8d8dfc"),
                     "foobar",
                     1L,
@@ -107,23 +107,23 @@ class JobDetailsTest {
     void testJobDetailsMarshalling() throws JsonProcessingException {
         final JsonNode marshalled = objectMapper.valueToTree(expected);
 
-        final JobDetails unmarshalled = objectMapper.treeToValue(marshalled, JobDetails.class);
+        final StreamDetails unmarshalled = objectMapper.treeToValue(marshalled, StreamDetails.class);
 
         assertThat(unmarshalled).isEqualTo(expected);
     }
 
     @Test
     void testJobDetailsCompatibleUnmarshalling() throws IOException {
-        final JobDetails unmarshalled =
-                objectMapper.readValue(COMPATIBLE_JOB_DETAILS, JobDetails.class);
+        final StreamDetails unmarshalled =
+                objectMapper.readValue(COMPATIBLE_JOB_DETAILS, StreamDetails.class);
 
         assertThat(unmarshalled).isEqualTo(expected);
     }
 
     @Test
     void testJobDetailsCompatibleUnmarshallingSkipUnknown() throws IOException {
-        final JobDetails unmarshalled =
-                flexibleObjectMapper.readValue(UNKNOWN_FIELD_JOB_DETAILS, JobDetails.class);
+        final StreamDetails unmarshalled =
+                flexibleObjectMapper.readValue(UNKNOWN_FIELD_JOB_DETAILS, StreamDetails.class);
 
         assertThat(unmarshalled).isEqualTo(expected);
     }

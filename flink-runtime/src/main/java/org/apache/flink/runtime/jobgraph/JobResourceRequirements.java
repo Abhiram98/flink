@@ -110,11 +110,11 @@ public class JobResourceRequirements implements Serializable {
      */
     public static List<String> validate(
             JobResourceRequirements jobResourceRequirements,
-            Map<JobVertexID, Integer> maxParallelismPerVertex) {
+            Map<StreamVertexID, Integer> maxParallelismPerVertex) {
         final List<String> errors = new ArrayList<>();
-        final Set<JobVertexID> missingJobVertexIds =
+        final Set<StreamVertexID> missingJobVertexIds =
                 new HashSet<>(maxParallelismPerVertex.keySet());
-        for (JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
+        for (StreamVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
             missingJobVertexIds.remove(jobVertexId);
             final Optional<Integer> maybeMaxParallelism =
                     Optional.ofNullable(maxParallelismPerVertex.get(jobVertexId));
@@ -155,7 +155,7 @@ public class JobResourceRequirements implements Serializable {
                                 "Job vertex [%s] was not found in the JobGraph.", jobVertexId));
             }
         }
-        for (JobVertexID jobVertexId : missingJobVertexIds) {
+        for (StreamVertexID jobVertexId : missingJobVertexIds) {
             errors.add(
                     String.format(
                             "The request is incomplete, missing job vertex [%s] resource requirements.",
@@ -174,11 +174,11 @@ public class JobResourceRequirements implements Serializable {
 
     public static final class Builder {
 
-        private final Map<JobVertexID, JobVertexResourceRequirements> vertexResources =
+        private final Map<StreamVertexID, JobVertexResourceRequirements> vertexResources =
                 new HashMap<>();
 
         public Builder setParallelismForJobVertex(
-                JobVertexID jobVertexId, int lowerBound, int upperBound) {
+                StreamVertexID jobVertexId, int lowerBound, int upperBound) {
             vertexResources.put(
                     jobVertexId,
                     new JobVertexResourceRequirements(
@@ -191,15 +191,15 @@ public class JobResourceRequirements implements Serializable {
         }
     }
 
-    private final Map<JobVertexID, JobVertexResourceRequirements> vertexResources;
+    private final Map<StreamVertexID, JobVertexResourceRequirements> vertexResources;
 
     public JobResourceRequirements(
-            Map<JobVertexID, JobVertexResourceRequirements> vertexResources) {
+            Map<StreamVertexID, JobVertexResourceRequirements> vertexResources) {
         this.vertexResources =
                 Collections.unmodifiableMap(new HashMap<>(checkNotNull(vertexResources)));
     }
 
-    public JobVertexResourceRequirements.Parallelism getParallelism(JobVertexID jobVertexId) {
+    public JobVertexResourceRequirements.Parallelism getParallelism(StreamVertexID jobVertexId) {
         return Optional.ofNullable(vertexResources.get(jobVertexId))
                 .map(JobVertexResourceRequirements::getParallelism)
                 .orElseThrow(
@@ -208,11 +208,11 @@ public class JobResourceRequirements implements Serializable {
                                         "No requirement set for vertex " + jobVertexId));
     }
 
-    public Set<JobVertexID> getJobVertices() {
+    public Set<StreamVertexID> getJobVertices() {
         return vertexResources.keySet();
     }
 
-    public Map<JobVertexID, JobVertexResourceRequirements> getJobVertexParallelisms() {
+    public Map<StreamVertexID, JobVertexResourceRequirements> getJobVertexParallelisms() {
         return vertexResources;
     }
 

@@ -24,7 +24,7 @@ import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.dispatcher.cleanup.CleanupRunnerFactory;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
 import org.apache.flink.runtime.metrics.groups.JobManagerMetricGroup;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
@@ -64,7 +64,7 @@ public class DispatcherServices {
 
     private final ExecutionPlanWriter executionPlanWriter;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final JobManagerRunnerFactory jobManagerRunnerFactory;
 
@@ -87,7 +87,7 @@ public class DispatcherServices {
             DispatcherOperationCaches operationCaches,
             JobManagerMetricGroup jobManagerMetricGroup,
             ExecutionPlanWriter planWriter,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             JobManagerRunnerFactory jobManagerRunnerFactory,
             CleanupRunnerFactory cleanupRunnerFactory,
             Executor ioExecutor,
@@ -168,7 +168,7 @@ public class DispatcherServices {
         return executionPlanWriter;
     }
 
-    public JobResultStore getJobResultStore() {
+    public StreamResultStore getJobResultStore() {
         return jobResultStore;
     }
 

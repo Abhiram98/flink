@@ -33,7 +33,7 @@ public class JobVertexFlameGraphHeaders
 
     private static final String URL =
             "/jobs/:"
-                    + JobIDPathParameter.KEY
+                    + StreamIdPathParameter.KEY
                     + "/vertices/:"
                     + JobVertexIdPathParameter.KEY
                     + "/flamegraph";

@@ -18,8 +18,8 @@
 package org.apache.flink.streaming.api.graph;
 
 import org.apache.flink.api.common.functions.FilterFunction;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoMapFunction;
@@ -72,9 +72,9 @@ class SlotAllocationTest {
                 .print()
                 .disableChaining();
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        StreamGraph jobGraph = env.getStreamGraph().getJobGraph();
 
-        List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
         assertThat(vertices.get(0).getSlotSharingGroup())
                 .isEqualTo(vertices.get(3).getSlotSharingGroup())
@@ -114,9 +114,9 @@ class SlotAllocationTest {
         // this should inherit "group-1" now
         src3.union(src4).filter(DUMMY_FILTER);
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        StreamGraph jobGraph = env.getStreamGraph().getJobGraph();
 
-        List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
         // first pipeline
         assertThat(vertices.get(0).getSlotSharingGroup())
@@ -144,9 +144,9 @@ class SlotAllocationTest {
 
         // this should not inherit group but be in "default"
         src1.union(src2).filter(DUMMY_FILTER).slotSharingGroup("default");
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        StreamGraph jobGraph = env.getStreamGraph().getJobGraph();
 
-        List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
         assertThat(vertices.get(0).getSlotSharingGroup())
                 .isEqualTo(vertices.get(1).getSlotSharingGroup())
@@ -184,9 +184,9 @@ class SlotAllocationTest {
         // this should inherit "group-1" now
         src3.connect(src4).map(dummyCoMap);
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        StreamGraph jobGraph = env.getStreamGraph().getJobGraph();
 
-        List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
         // first pipeline
         assertThat(vertices.get(0).getSlotSharingGroup())

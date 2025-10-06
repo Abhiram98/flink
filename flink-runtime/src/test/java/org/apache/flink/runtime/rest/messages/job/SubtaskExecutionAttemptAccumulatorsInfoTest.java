@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.RestResponseMarshallingTestBase;
 import org.apache.flink.testutils.junit.extensions.parameterized.NoOpTestExtension;
 
@@ -50,7 +50,7 @@ class SubtaskExecutionAttemptAccumulatorsInfoTest
         userAccumulatorList.add(new UserAccumulator("name3", "type2", "value3"));
 
         final ExecutionAttemptID executionAttemptId =
-                createExecutionAttemptId(new JobVertexID(), 1, 2);
+                createExecutionAttemptId(new StreamVertexID(), 1, 2);
         return new SubtaskExecutionAttemptAccumulatorsInfo(
                 executionAttemptId.getSubtaskIndex(),
                 executionAttemptId.getAttemptNumber(),

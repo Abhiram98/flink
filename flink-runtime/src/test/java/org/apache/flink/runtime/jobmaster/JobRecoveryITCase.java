@@ -21,9 +21,9 @@ package org.apache.flink.runtime.jobmaster;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
@@ -65,23 +65,23 @@ class JobRecoveryITCase {
         runTaskFailureRecoveryTest(createjobGraph(true));
     }
 
-    private void runTaskFailureRecoveryTest(final JobGraph jobGraph) throws Exception {
+    private void runTaskFailureRecoveryTest(final StreamGraph jobGraph) throws Exception {
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
 
-        miniCluster.submitJob(jobGraph).get();
+        miniCluster.submitStream(jobGraph).get();
 
-        final CompletableFuture<JobResult> jobResultFuture =
-                miniCluster.requestJobResult(jobGraph.getJobID());
+        final CompletableFuture<StreamResult> jobResultFuture =
+                miniCluster.requestStreamResult(jobGraph.getStreamID());
 
         assertThat(jobResultFuture.get().isSuccess()).isTrue();
     }
 
-    private JobGraph createjobGraph(boolean slotSharingEnabled) throws IOException {
-        final JobVertex sender = new JobVertex("Sender");
+    private StreamGraph createjobGraph(boolean slotSharingEnabled) throws IOException {
+        final StreamVertex sender = new StreamVertex("Sender");
         sender.setParallelism(PARALLELISM);
         sender.setInvokableClass(TestingAbstractInvokables.Sender.class);
 
-        final JobVertex receiver = new JobVertex("Receiver");
+        final StreamVertex receiver = new StreamVertex("Receiver");
         receiver.setParallelism(PARALLELISM);
         receiver.setInvokableClass(FailingOnceReceiver.class);
         FailingOnceReceiver.reset();
@@ -95,7 +95,7 @@ class JobRecoveryITCase {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        JobGraph jobGraph =
+        StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(sender, receiver))
                         .setJobName(getClass().getSimpleName())

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -105,8 +105,8 @@ public class SubtaskExecutionAttemptAccumulatorsHandler
                             getMessageHeaders()
                                     .getTargetRestEndpointURL()
                                     .replace(
-                                            ':' + JobIDPathParameter.KEY,
-                                            graph.getJobID().toString())
+                                            ':' + StreamIdPathParameter.KEY,
+                                            graph.getStreamID().toString())
                                     .replace(
                                             ':' + JobVertexIdPathParameter.KEY,
                                             task.getJobVertexId().toString())
@@ -127,8 +127,8 @@ public class SubtaskExecutionAttemptAccumulatorsHandler
                                 getMessageHeaders()
                                         .getTargetRestEndpointURL()
                                         .replace(
-                                                ':' + JobIDPathParameter.KEY,
-                                                graph.getJobID().toString())
+                                                ':' + StreamIdPathParameter.KEY,
+                                                graph.getStreamID().toString())
                                         .replace(
                                                 ':' + JobVertexIdPathParameter.KEY,
                                                 task.getJobVertexId().toString())

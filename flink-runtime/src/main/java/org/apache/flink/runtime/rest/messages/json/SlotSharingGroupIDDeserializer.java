@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.json;
 
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonParser;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.DeserializationContext;
@@ -33,7 +33,7 @@ public class SlotSharingGroupIDDeserializer extends StdDeserializer<SlotSharingG
     private static final long serialVersionUID = -2908308366715321301L;
 
     protected SlotSharingGroupIDDeserializer() {
-        super(JobVertexID.class);
+        super(StreamVertexID.class);
     }
 
     @Override

@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.JobInformation;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.operators.BatchTask;
 import org.apache.flink.runtime.util.DefaultGroupCache;
@@ -65,7 +65,7 @@ class TaskDeploymentDescriptorTest {
     @TempDir Path temporaryFolder;
 
     private static final JobID jobID = new JobID();
-    private static final JobVertexID vertexID = new JobVertexID();
+    private static final StreamVertexID vertexID = new StreamVertexID();
     private static final ExecutionAttemptID execId = createExecutionAttemptId(vertexID);
     private static final AllocationID allocationId = new AllocationID();
     private static final String jobName = "job name";
@@ -123,14 +123,14 @@ class TaskDeploymentDescriptorTest {
 
         final TaskDeploymentDescriptor copy = CommonTestUtils.createCopySerializable(orig);
 
-        assertThat(orig.getJobInformation()).isNotSameAs(copy.getJobInformation());
+        assertThat(orig.getStreamInformation()).isNotSameAs(copy.getStreamInformation());
         assertThat(orig.getTaskInformation()).isNotSameAs(copy.getTaskInformation());
         assertThat(orig.getExecutionAttemptId()).isNotSameAs(copy.getExecutionAttemptId());
         assertThat(orig.getTaskRestore()).isNotSameAs(copy.getTaskRestore());
         assertThat(orig.getProducedPartitions()).isNotSameAs(copy.getProducedPartitions());
         assertThat(orig.getInputGates()).isNotSameAs(copy.getInputGates());
 
-        assertThat(orig.getJobInformation()).isEqualTo(copy.getJobInformation());
+        assertThat(orig.getStreamInformation()).isEqualTo(copy.getStreamInformation());
         assertThat(orig.getTaskInformation()).isEqualTo(copy.getTaskInformation());
         assertThat(orig.getExecutionAttemptId()).isEqualTo(copy.getExecutionAttemptId());
         assertThat(orig.getAllocationId()).isEqualTo(copy.getAllocationId());
@@ -151,7 +151,7 @@ class TaskDeploymentDescriptorTest {
                         new TaskDeploymentDescriptor.NonOffloaded<>(serializedJobInformation),
                         new TaskDeploymentDescriptor.Offloaded<>(new PermanentBlobKey()));
 
-        JobInformation actualJobInformation = taskDeploymentDescriptor.getJobInformation();
+        JobInformation actualJobInformation = taskDeploymentDescriptor.getStreamInformation();
         assertThat(actualJobInformation).isEqualTo(jobInformation);
 
         assertThatThrownBy(taskDeploymentDescriptor::getTaskInformation)

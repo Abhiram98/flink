@@ -24,7 +24,7 @@ import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.checkpoint.CheckpointMetrics;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.state.KeyGroupRange;
@@ -61,7 +61,7 @@ class CheckpointMessagesTest {
         OperatorSubtaskState subtaskState =
                 OperatorSubtaskState.builder()
                         .setManagedOperatorState(
-                                generatePartitionableStateHandle(new JobVertexID(), 0, 2, 8, false))
+                                generatePartitionableStateHandle(new StreamVertexID(), 0, 2, 8, false))
                         .setManagedKeyedState(
                                 generateKeyGroupState(
                                         keyGroupRange, Collections.singletonList(new MyHandle())))

@@ -67,15 +67,8 @@ import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
@@ -196,7 +189,7 @@ class JobMasterTest {
     private static final long heartbeatInterval = 1000L;
     private static final long heartbeatTimeout = 5_000_000L;
 
-    private static final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+    private static final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
 
     private static TestingRpcService rpcService;
 
@@ -298,7 +291,7 @@ class JobMasterTest {
             // request at interval time
             CompletableFuture<RegistrationResponse> registrationResponse =
                     jobMasterGateway.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             TaskManagerRegistrationInformation.create(
                                     taskExecutorGateway.getAddress(),
                                     unresolvedTaskManagerLocation,
@@ -356,7 +349,7 @@ class JobMasterTest {
             // request at interval time
             CompletableFuture<RegistrationResponse> registrationResponse =
                     jobMasterGateway.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             TaskManagerRegistrationInformation.create(
                                     taskExecutorGateway.getAddress(),
                                     unresolvedTaskManagerLocation,
@@ -370,7 +363,7 @@ class JobMasterTest {
                     disconnectedJobManagerFuture.get(
                             testingTimeout.toMillis(), TimeUnit.MILLISECONDS);
 
-            assertThat(disconnectedJobManager).isEqualTo(jobGraph.getJobID());
+            assertThat(disconnectedJobManager).isEqualTo(jobGraph.getStreamID());
         }
     }
 
@@ -427,7 +420,7 @@ class JobMasterTest {
 
         rpcService.registerGateway(taskExecutorGateway.getAddress(), taskExecutorGateway);
 
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
                         .withHeartbeatServices(new HeartbeatServicesImpl(5L, 1000L))
@@ -446,7 +439,7 @@ class JobMasterTest {
             // request at interval time
             CompletableFuture<RegistrationResponse> registrationResponse =
                     jobMasterGateway.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             TaskManagerRegistrationInformation.create(
                                     taskExecutorGateway.getAddress(),
                                     unresolvedTaskManagerLocation,
@@ -707,14 +700,14 @@ class JobMasterTest {
 
             assertThat(registrationInformation.f0).isEqualTo(jobMasterId);
             assertThat(registrationInformation.f1).isEqualTo(jmResourceId);
-            assertThat(registrationInformation.f2).isEqualTo(jobGraph.getJobID());
+            assertThat(registrationInformation.f2).isEqualTo(jobGraph.getStreamID());
 
             final JobID disconnectedJobManager =
                     disconnectedJobManagerFuture.get(
                             testingTimeout.toMillis(), TimeUnit.MILLISECONDS);
 
             // heartbeat timeout should trigger disconnect JobManager from ResourceManager
-            assertThat(disconnectedJobManager).isEqualTo(jobGraph.getJobID());
+            assertThat(disconnectedJobManager).isEqualTo(jobGraph.getStreamID());
 
             // the JobMaster should try to reconnect to the RM
             registrationAttempts.await();
@@ -783,7 +776,7 @@ class JobMasterTest {
                     50L);
 
             // heartbeat timeout should trigger disconnect JobManager from ResourceManager
-            assertThat(disconnectedJobManagerFuture.join()).isEqualTo(jobGraph.getJobID());
+            assertThat(disconnectedJobManagerFuture.join()).isEqualTo(jobGraph.getStreamID());
 
             // the JobMaster should try to reconnect to the RM
             registrationAttempts.await();
@@ -804,7 +797,7 @@ class JobMasterTest {
         // set savepoint settings
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath(savepointFile.getAbsolutePath(), true);
-        final JobGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
+        final StreamGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
 
         final StandaloneCompletedCheckpointStore completedCheckpointStore =
                 new StandaloneCompletedCheckpointStore(1);
@@ -827,7 +820,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMaster.getSelfGateway(JobMasterGateway.class),
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     new TestingTaskExecutorGatewayBuilder()
                             .setSubmitTaskConsumer(
                                     (taskDeploymentDescriptor, jobMasterId) -> {
@@ -860,13 +853,13 @@ class JobMasterTest {
         // set savepoint settings
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath("" + savepointFile.getAbsolutePath(), true);
-        final JobGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
+        final StreamGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
 
         final long checkpointId = 1L;
 
         final CompletedCheckpoint completedCheckpoint =
                 new CompletedCheckpoint(
-                        jobGraph.getJobID(),
+                        jobGraph.getStreamID(),
                         checkpointId,
                         1L,
                         1L,
@@ -1071,12 +1064,12 @@ class JobMasterTest {
         final InputSplitSource<TestingInputSplit> inputSplitSource =
                 new TestingInputSplitSource(allInputSplits);
 
-        JobVertex source = new JobVertex("source");
+        StreamVertex source = new StreamVertex("source");
         source.setParallelism(parallelism);
         source.setInputSplitSource(inputSplitSource);
         source.setInvokableClass(AbstractInvokable.class);
 
-        final JobGraph inputSplitJobGraph =
+        final StreamGraph inputSplitJobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(source).build();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(inputSplitJobGraph, 100, 0L);
 
@@ -1093,11 +1086,11 @@ class JobMasterTest {
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
             registerSlotsRequiredForJobExecution(
-                    jobMasterGateway, inputSplitJobGraph.getJobID(), parallelism);
+                    jobMasterGateway, inputSplitJobGraph.getStreamID(), parallelism);
 
             waitUntilAllExecutionsAreScheduledOrDeployed(jobMasterGateway);
 
-            final JobVertexID sourceId = source.getID();
+            final StreamVertexID sourceId = source.getID();
 
             final List<AccessExecution> executions = getExecutions(jobMasterGateway, sourceId);
             final ExecutionAttemptID initialAttemptId = executions.get(0).getAttemptId();
@@ -1147,7 +1140,7 @@ class JobMasterTest {
 
     @Nonnull
     private Supplier<SerializedInputSplit> getInputSplitSupplier(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             JobMasterGateway jobMasterGateway,
             ExecutionAttemptID initialAttemptId) {
         return () -> getInputSplit(jobMasterGateway, jobVertexID, initialAttemptId);
@@ -1170,7 +1163,7 @@ class JobMasterTest {
     }
 
     private static AccessExecution getFirstExecution(
-            final JobMasterGateway jobMasterGateway, final JobVertexID jobVertexId) {
+            final JobMasterGateway jobMasterGateway, final StreamVertexID jobVertexId) {
         final List<AccessExecution> executions = getExecutions(jobMasterGateway, jobVertexId);
 
         assertThat(executions.size()).isGreaterThanOrEqualTo(1);
@@ -1189,7 +1182,7 @@ class JobMasterTest {
     }
 
     private static List<AccessExecution> getExecutions(
-            final JobMasterGateway jobMasterGateway, final JobVertexID jobVertexId) {
+            final JobMasterGateway jobMasterGateway, final StreamVertexID jobVertexId) {
         final ArchivedExecutionGraph archivedExecutionGraph =
                 requestExecutionGraph(jobMasterGateway).getArchivedExecutionGraph();
 
@@ -1259,7 +1252,7 @@ class JobMasterTest {
 
     private static SerializedInputSplit getInputSplit(
             final JobMasterGateway jobMasterGateway,
-            final JobVertexID jobVertexId,
+            final StreamVertexID jobVertexId,
             final ExecutionAttemptID attemptId) {
 
         try {
@@ -1329,7 +1322,7 @@ class JobMasterTest {
      */
     @Test
     void testRequestPartitionState() throws Exception {
-        final JobGraph producerConsumerJobGraph = producerConsumerJobGraph();
+        final StreamGraph producerConsumerJobGraph = producerConsumerJobGraph();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(producerConsumerJobGraph, rpcService)
                         .withConfiguration(configuration)
@@ -1358,7 +1351,7 @@ class JobMasterTest {
                     registerSlotsAtJobMaster(
                             1,
                             jobMasterGateway,
-                            producerConsumerJobGraph.getJobID(),
+                            producerConsumerJobGraph.getStreamID(),
                             testingTaskExecutorGateway,
                             taskManagerLocation);
 
@@ -1471,7 +1464,7 @@ class JobMasterTest {
     @Test
     void testReleasingTaskExecutorIfNoMoreSlotsRegistered() throws Exception {
 
-        final JobGraph jobGraph = createSingleVertexJobWithRestartStrategy();
+        final StreamGraph jobGraph = createSingleVertexJobWithRestartStrategy();
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -1505,7 +1498,7 @@ class JobMasterTest {
                     registerSlotsAtJobMaster(
                             1,
                             jobMasterGateway,
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             testingTaskExecutorGateway,
                             taskManagerLocation);
 
@@ -1522,7 +1515,7 @@ class JobMasterTest {
             // we should free the slot and then disconnect from the TaskExecutor because we use no
             // longer slots from it
             assertThat(freedSlotFuture.get()).isEqualTo(allocationId);
-            assertThat(disconnectTaskExecutorFuture.get()).isEqualTo(jobGraph.getJobID());
+            assertThat(disconnectTaskExecutorFuture.get()).isEqualTo(jobGraph.getStreamID());
         }
     }
 
@@ -1531,7 +1524,7 @@ class JobMasterTest {
         final JobManagerSharedServices jobManagerSharedServices =
                 new TestingJobManagerSharedServicesBuilder().build();
 
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
 
         final LocalUnresolvedTaskManagerLocation taskManagerUnresolvedLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -1572,7 +1565,7 @@ class JobMasterTest {
                     registerSlotsAtJobMaster(
                             1,
                             jobMasterGateway,
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             testingTaskExecutorGateway,
                             taskManagerUnresolvedLocation);
 
@@ -1749,12 +1742,12 @@ class JobMasterTest {
 
             final CompletableFuture<RegistrationResponse> firstRegistrationResponse =
                     jobMaster.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             taskManagerRegistrationInformation,
                             testingTimeout);
             final CompletableFuture<RegistrationResponse> secondRegistrationResponse =
                     jobMaster.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             taskManagerRegistrationInformation,
                             testingTimeout);
 
@@ -1796,7 +1789,7 @@ class JobMasterTest {
 
             final CompletableFuture<RegistrationResponse> firstRegistrationResponse =
                     jobMaster.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             TaskManagerRegistrationInformation.create(
                                     firstTaskExecutorGateway.getAddress(),
                                     taskManagerLocation,
@@ -1807,7 +1800,7 @@ class JobMasterTest {
             final UUID secondTaskManagerSessionId = UUID.randomUUID();
             final CompletableFuture<RegistrationResponse> secondRegistrationResponse =
                     jobMaster.registerTaskManager(
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             TaskManagerRegistrationInformation.create(
                                     secondTaskExecutorGateway.getAddress(),
                                     taskManagerLocation,
@@ -1872,7 +1865,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     numberSlots,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     new TestingTaskExecutorGatewayBuilder()
                             .setAddress("firstTaskManager")
                             .createTestingTaskExecutorGateway(),
@@ -1896,7 +1889,7 @@ class JobMasterTest {
                             registerSlotsAtJobMaster(
                                     numberSlots,
                                     jobMasterGateway,
-                                    jobGraph.getJobID(),
+                                    jobGraph.getStreamID(),
                                     new TestingTaskExecutorGatewayBuilder()
                                             .setAddress("secondTaskManager")
                                             .createTestingTaskExecutorGateway(),
@@ -1907,10 +1900,10 @@ class JobMasterTest {
 
     @Test
     void testGetPartitionWithMetrics() throws Exception {
-        JobVertex jobVertex = new JobVertex("jobVertex");
+        StreamVertex jobVertex = new StreamVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertex);
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -1971,7 +1964,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway1,
                     new LocalUnresolvedTaskManagerLocation());
 
@@ -1993,7 +1986,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway2,
                     new LocalUnresolvedTaskManagerLocation());
 
@@ -2021,7 +2014,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway3,
                     new LocalUnresolvedTaskManagerLocation());
 
@@ -2037,7 +2030,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway4,
                     new LocalUnresolvedTaskManagerLocation());
 
@@ -2068,7 +2061,7 @@ class JobMasterTest {
             assertThat(releaseRequest.get())
                     .isEqualTo(
                             Tuple2.of(
-                                    jobGraph.getJobID(),
+                                    jobGraph.getStreamID(),
                                     Collections.singleton(descriptor3.getResultPartitionID())));
 
             // after partitions fetching finished and then register tm5
@@ -2087,7 +2080,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     1,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway5,
                     new LocalUnresolvedTaskManagerLocation());
 
@@ -2133,10 +2126,10 @@ class JobMasterTest {
 
     @Test
     void testBlockResourcesWillTriggerReleaseFreeSlots() throws Exception {
-        JobVertex jobVertex = new JobVertex("jobVertex");
+        StreamVertex jobVertex = new StreamVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(2);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertex);
 
         final LocalUnresolvedTaskManagerLocation taskManagerLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -2173,7 +2166,7 @@ class JobMasterTest {
                     registerSlotsAtJobMaster(
                             2,
                             jobMasterGateway,
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             testingTaskExecutorGateway,
                             taskManagerLocation);
 
@@ -2292,7 +2285,7 @@ class JobMasterTest {
 
             final JobResourceRequirements.Builder jobResourceRequirementsBuilder =
                     JobResourceRequirements.newBuilder();
-            for (JobVertex jobVertex : jobGraph.getVertices()) {
+            for (StreamVertex jobVertex : jobGraph.getVertices()) {
                 jobResourceRequirementsBuilder.setParallelismForJobVertex(jobVertex.getID(), 1, 2);
             }
 
@@ -2338,7 +2331,7 @@ class JobMasterTest {
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath(savepointFile.getAbsolutePath(), true);
         final int parallelism = 2;
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 createJobGraphWithCheckpointing(parallelism, savepointRestoreSettings);
 
         final StandaloneCompletedCheckpointStore completedCheckpointStore =
@@ -2364,7 +2357,7 @@ class JobMasterTest {
             registerSlotsAtJobMaster(
                     parallelism,
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     new TestingTaskExecutorGatewayBuilder()
                             .setAddress("firstTaskManager")
                             .createTestingTaskExecutorGateway(),
@@ -2416,7 +2409,7 @@ class JobMasterTest {
             HeartbeatServices heartbeatServices,
             BiConsumer<LocalUnresolvedTaskManagerLocation, JobMasterGateway> jobReachedRunningState)
             throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
         final JobMasterBuilder.TestingOnCompletionActions onCompletionActions =
                 new JobMasterBuilder.TestingOnCompletionActions();
 
@@ -2451,7 +2444,7 @@ class JobMasterTest {
                     registerSlotsAtJobMaster(
                             1,
                             jobMasterGateway,
-                            jobGraph.getJobID(),
+                            jobGraph.getStreamID(),
                             taskExecutorGateway,
                             taskManagerUnresolvedLocation);
             assertThat(slotOffers).hasSize(1);
@@ -2512,18 +2505,18 @@ class JobMasterTest {
                 .get();
     }
 
-    private JobGraph producerConsumerJobGraph() {
-        final JobVertex producer = new JobVertex("Producer");
+    private StreamGraph producerConsumerJobGraph() {
+        final StreamVertex producer = new StreamVertex("Producer");
         producer.setInvokableClass(NoOpInvokable.class);
         producer.setParallelism(1);
-        final JobVertex consumer = new JobVertex("Consumer");
+        final StreamVertex consumer = new StreamVertex("Consumer");
         consumer.setInvokableClass(NoOpInvokable.class);
         consumer.setParallelism(1);
 
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        return JobGraphTestUtils.batchJobGraph(producer, consumer);
+        return StreamGraphTestUtils.batchJobGraph(producer, consumer);
     }
 
     private File createSavepoint(long savepointId) throws IOException {
@@ -2532,14 +2525,14 @@ class JobMasterTest {
                 savepointId);
     }
 
-    private JobGraph createJobGraphWithCheckpointing(
+    private StreamGraph createJobGraphWithCheckpointing(
             SavepointRestoreSettings savepointRestoreSettings) {
         return createJobGraphWithCheckpointing(1, savepointRestoreSettings);
     }
 
-    private JobGraph createJobGraphWithCheckpointing(
+    private StreamGraph createJobGraphWithCheckpointing(
             int parallelism, SavepointRestoreSettings savepointRestoreSettings) {
-        final JobVertex source = new JobVertex("source");
+        final StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
         source.setParallelism(parallelism);
 
@@ -2547,8 +2540,8 @@ class JobMasterTest {
                 savepointRestoreSettings, source);
     }
 
-    private JobGraph createSingleVertexJobWithRestartStrategy() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+    private StreamGraph createSingleVertexJobWithRestartStrategy() throws IOException {
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, Integer.MAX_VALUE, 0L);
 

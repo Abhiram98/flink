@@ -23,7 +23,7 @@ import org.apache.flink.core.failure.FailureEnricher;
 import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
@@ -39,7 +39,7 @@ public class PartialDispatcherServicesWithJobPersistenceComponents
         extends PartialDispatcherServices {
 
     private final ExecutionPlanWriter executionPlanWriter;
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private PartialDispatcherServicesWithJobPersistenceComponents(
             Configuration configuration,
@@ -56,7 +56,7 @@ public class PartialDispatcherServicesWithJobPersistenceComponents
             DispatcherOperationCaches operationCaches,
             Collection<FailureEnricher> failureEnrichers,
             ExecutionPlanWriter executionPlanWriter,
-            JobResultStore jobResultStore) {
+            StreamResultStore jobResultStore) {
         super(
                 configuration,
                 highAvailabilityServices,
@@ -79,14 +79,14 @@ public class PartialDispatcherServicesWithJobPersistenceComponents
         return executionPlanWriter;
     }
 
-    public JobResultStore getJobResultStore() {
+    public StreamResultStore getJobResultStore() {
         return jobResultStore;
     }
 
     public static PartialDispatcherServicesWithJobPersistenceComponents from(
             PartialDispatcherServices partialDispatcherServices,
             ExecutionPlanWriter executionPlanWriter,
-            JobResultStore jobResultStore) {
+            StreamResultStore jobResultStore) {
         return new PartialDispatcherServicesWithJobPersistenceComponents(
                 partialDispatcherServices.getConfiguration(),
                 partialDispatcherServices.getHighAvailabilityServices(),

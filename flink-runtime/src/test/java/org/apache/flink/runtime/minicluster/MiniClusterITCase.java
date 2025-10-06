@@ -26,9 +26,9 @@ import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.Tasks.AgnosticBinaryReceiver;
 import org.apache.flink.runtime.jobmanager.Tasks.AgnosticReceiver;
 import org.apache.flink.runtime.jobmanager.Tasks.AgnosticTertiaryReceiver;
@@ -38,7 +38,7 @@ import org.apache.flink.runtime.jobmanager.Tasks.Forwarder;
 import org.apache.flink.runtime.jobmanager.Tasks.InstantiationErrorSender;
 import org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.TestingAbstractInvokables.Receiver;
 import org.apache.flink.runtime.jobmaster.TestingAbstractInvokables.Sender;
 import org.apache.flink.runtime.testtasks.BlockingNoOpInvokable;
@@ -151,12 +151,12 @@ class MiniClusterITCase {
 
     private static void tryRunningJobWithoutEnoughSlots(Configuration configuration)
             throws Exception {
-        final JobVertex vertex1 = new JobVertex("Test Vertex1");
+        final StreamVertex vertex1 = new StreamVertex("Test Vertex1");
         vertex1.setParallelism(1);
         vertex1.setMaxParallelism(1);
         vertex1.setInvokableClass(BlockingNoOpInvokable.class);
 
-        final JobVertex vertex2 = new JobVertex("Test Vertex2");
+        final StreamVertex vertex2 = new StreamVertex("Test Vertex2");
         vertex2.setParallelism(1);
         vertex2.setMaxParallelism(1);
         vertex2.setInvokableClass(BlockingNoOpInvokable.class);
@@ -164,7 +164,7 @@ class MiniClusterITCase {
         vertex2.connectNewDataSetAsInput(
                 vertex1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex1, vertex2);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(vertex1, vertex2);
 
         final MiniClusterConfiguration cfg =
                 new MiniClusterConfiguration.Builder()
@@ -203,18 +203,18 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(Sender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
             receiver.setParallelism(parallelism);
 
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -234,18 +234,18 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(Sender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(AgnosticReceiver.class);
             receiver.setParallelism(parallelism);
 
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -265,15 +265,15 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender1 = new JobVertex("Sender1");
+            final StreamVertex sender1 = new StreamVertex("Sender1");
             sender1.setInvokableClass(Sender.class);
             sender1.setParallelism(parallelism);
 
-            final JobVertex sender2 = new JobVertex("Sender2");
+            final StreamVertex sender2 = new StreamVertex("Sender2");
             sender2.setInvokableClass(Sender.class);
             sender2.setParallelism(2 * parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(AgnosticTertiaryReceiver.class);
             receiver.setParallelism(3 * parallelism);
 
@@ -282,8 +282,8 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender1, receiver, sender2);
+            final StreamGraph jobGraph =
+                    StreamGraphTestUtils.streamingStreamGraph(sender1, receiver, sender2);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -307,15 +307,15 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender1 = new JobVertex("Sender1");
+            final StreamVertex sender1 = new StreamVertex("Sender1");
             sender1.setInvokableClass(Sender.class);
             sender1.setParallelism(parallelism);
 
-            final JobVertex sender2 = new JobVertex("Sender2");
+            final StreamVertex sender2 = new StreamVertex("Sender2");
             sender2.setInvokableClass(Sender.class);
             sender2.setParallelism(2 * parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(AgnosticBinaryReceiver.class);
             receiver.setParallelism(3 * parallelism);
 
@@ -324,8 +324,8 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender1, receiver, sender2);
+            final StreamGraph jobGraph =
+                    StreamGraphTestUtils.streamingStreamGraph(sender1, receiver, sender2);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -345,15 +345,15 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(Sender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex forwarder = new JobVertex("Forwarder");
+            final StreamVertex forwarder = new StreamVertex("Forwarder");
             forwarder.setInvokableClass(Forwarder.class);
             forwarder.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(AgnosticReceiver.class);
             receiver.setParallelism(parallelism);
 
@@ -367,8 +367,8 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     forwarder, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph =
-                    JobGraphTestUtils.streamingJobGraph(sender, forwarder, receiver);
+            final StreamGraph jobGraph =
+                    StreamGraphTestUtils.streamingStreamGraph(sender, forwarder, receiver);
 
             miniCluster.executeJobBlocking(jobGraph);
         }
@@ -388,18 +388,18 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(ExceptionSender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
             receiver.setParallelism(parallelism);
 
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -428,7 +428,7 @@ class MiniClusterITCase {
             // expected failing sender is not deployed.
             final SlotSharingGroup group = new SlotSharingGroup();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(SometimesExceptionSender.class);
             sender.setParallelism(parallelism);
             sender.setSlotSharingGroup(group);
@@ -436,7 +436,7 @@ class MiniClusterITCase {
             // set failing senders
             SometimesExceptionSender.configFailingSenders(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
             receiver.setParallelism(parallelism);
             receiver.setSlotSharingGroup(group);
@@ -444,7 +444,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -468,18 +468,18 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(Sender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(ExceptionReceiver.class);
             receiver.setParallelism(parallelism);
 
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -503,18 +503,18 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(InstantiationErrorSender.class);
             sender.setParallelism(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
             receiver.setParallelism(parallelism);
 
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -543,7 +543,7 @@ class MiniClusterITCase {
             // expected failing sender is not deployed.
             final SlotSharingGroup group = new SlotSharingGroup();
 
-            final JobVertex sender = new JobVertex("Sender");
+            final StreamVertex sender = new StreamVertex("Sender");
             sender.setInvokableClass(SometimesInstantiationErrorSender.class);
             sender.setParallelism(parallelism);
             sender.setSlotSharingGroup(group);
@@ -551,7 +551,7 @@ class MiniClusterITCase {
             // set failing senders
             SometimesInstantiationErrorSender.configFailingSenders(parallelism);
 
-            final JobVertex receiver = new JobVertex("Receiver");
+            final StreamVertex receiver = new StreamVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
             receiver.setParallelism(parallelism);
             receiver.setSlotSharingGroup(group);
@@ -559,7 +559,7 @@ class MiniClusterITCase {
             receiver.connectNewDataSetAsInput(
                     sender, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender, receiver);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(sender, receiver);
 
             assertThatThrownBy(() -> miniCluster.executeJobBlocking(jobGraph))
                     .isInstanceOf(JobExecutionException.class)
@@ -583,7 +583,7 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex source = new JobVertex("Source");
+            final StreamVertex source = new StreamVertex("Source");
             source.setInvokableClass(WaitingNoOpInvokable.class);
             source.setParallelism(parallelism);
 
@@ -596,17 +596,17 @@ class MiniClusterITCase {
             sink.connectNewDataSetAsInput(
                     source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(source, sink);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(source, sink);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
-                    miniCluster.submitJob(jobGraph);
+                    miniCluster.submitStream(jobGraph);
 
-            final CompletableFuture<JobResult> jobResultFuture =
+            final CompletableFuture<StreamResult> jobResultFuture =
                     submissionFuture.thenCompose(
                             (JobSubmissionResult ignored) ->
-                                    miniCluster.requestJobResult(jobGraph.getJobID()));
+                                    miniCluster.requestStreamResult(jobGraph.getStreamID()));
 
-            jobResultFuture.get().toJobExecutionResult(getClass().getClassLoader());
+            jobResultFuture.get().toStreamExecutionResult(getClass().getClassLoader());
 
             assertThat(WaitOnFinalizeJobVertex.finalizedOnMaster).isTrue();
         }
@@ -626,25 +626,25 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex failingJobVertex = new OutOfMemoryInFinalizationJobVertex();
+            final StreamVertex failingJobVertex = new OutOfMemoryInFinalizationJobVertex();
             failingJobVertex.setInvokableClass(NoOpInvokable.class);
             failingJobVertex.setParallelism(parallelism);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(failingJobVertex);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
-                    miniCluster.submitJob(jobGraph);
+                    miniCluster.submitStream(jobGraph);
 
-            final CompletableFuture<JobResult> jobResultFuture =
+            final CompletableFuture<StreamResult> jobResultFuture =
                     submissionFuture.thenCompose(
                             (JobSubmissionResult ignored) ->
-                                    miniCluster.requestJobResult(jobGraph.getJobID()));
+                                    miniCluster.requestStreamResult(jobGraph.getStreamID()));
 
             assertThatThrownBy(
                             () ->
                                     jobResultFuture
                                             .get()
-                                            .toJobExecutionResult(getClass().getClassLoader()))
+                                            .toStreamExecutionResult(getClass().getClassLoader()))
                     .isInstanceOf(JobExecutionException.class)
                     .hasRootCauseInstanceOf(OutOfMemoryError.class)
                     .rootCause()
@@ -667,25 +667,25 @@ class MiniClusterITCase {
         try (final MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
 
-            final JobVertex failingJobVertex = new OutOfMemoryInInitializationVertex();
+            final StreamVertex failingJobVertex = new OutOfMemoryInInitializationVertex();
             failingJobVertex.setInvokableClass(NoOpInvokable.class);
             failingJobVertex.setParallelism(parallelism);
 
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(failingJobVertex);
 
             final CompletableFuture<JobSubmissionResult> submissionFuture =
-                    miniCluster.submitJob(jobGraph);
+                    miniCluster.submitStream(jobGraph);
 
-            final CompletableFuture<JobResult> jobResultFuture =
+            final CompletableFuture<StreamResult> jobResultFuture =
                     submissionFuture.thenCompose(
                             (JobSubmissionResult ignored) ->
-                                    miniCluster.requestJobResult(jobGraph.getJobID()));
+                                    miniCluster.requestStreamResult(jobGraph.getStreamID()));
 
             assertThatThrownBy(
                             () ->
                                     jobResultFuture
                                             .get()
-                                            .toJobExecutionResult(getClass().getClassLoader()))
+                                            .toStreamExecutionResult(getClass().getClassLoader()))
                     .isInstanceOf(JobExecutionException.class)
                     .hasRootCauseInstanceOf(OutOfMemoryError.class)
                     .rootCause()
@@ -697,20 +697,20 @@ class MiniClusterITCase {
     //  Utilities
     // ------------------------------------------------------------------------
 
-    private static JobGraph getSimpleJob(int parallelism) throws IOException {
-        final JobVertex task = new JobVertex("Test task");
+    private static StreamGraph getSimpleJob(int parallelism) throws IOException {
+        final StreamVertex task = new StreamVertex("Test task");
         task.setParallelism(parallelism);
         task.setMaxParallelism(parallelism);
         task.setInvokableClass(NoOpInvokable.class);
 
-        final JobGraph jg = JobGraphTestUtils.streamingJobGraph(task);
+        final StreamGraph jg = StreamGraphTestUtils.streamingStreamGraph(task);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jg, Integer.MAX_VALUE, 1000);
 
         return jg;
     }
 
-    private static class WaitOnFinalizeJobVertex extends JobVertex {
+    private static class WaitOnFinalizeJobVertex extends StreamVertex {
 
         private static final long serialVersionUID = -1179547322468530299L;
 
@@ -735,7 +735,7 @@ class MiniClusterITCase {
         }
     }
 
-    private static class OutOfMemoryInFinalizationJobVertex extends JobVertex {
+    private static class OutOfMemoryInFinalizationJobVertex extends StreamVertex {
 
         private OutOfMemoryInFinalizationJobVertex() {
             super("FailingInFinalization");
@@ -747,7 +747,7 @@ class MiniClusterITCase {
         }
     }
 
-    private static class OutOfMemoryInInitializationVertex extends JobVertex {
+    private static class OutOfMemoryInInitializationVertex extends StreamVertex {
 
         OutOfMemoryInInitializationVertex() {
             super("FailingInInitialization");

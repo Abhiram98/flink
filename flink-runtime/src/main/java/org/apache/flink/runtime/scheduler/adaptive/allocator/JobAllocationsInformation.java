@@ -22,7 +22,7 @@ import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
 
@@ -40,10 +40,10 @@ import static java.util.Collections.emptyMap;
 @Internal
 public class JobAllocationsInformation {
 
-    private final Map<JobVertexID, List<VertexAllocationInformation>> vertexAllocations;
+    private final Map<StreamVertexID, List<VertexAllocationInformation>> vertexAllocations;
 
     JobAllocationsInformation(
-            Map<JobVertexID, List<VertexAllocationInformation>> vertexAllocations) {
+            Map<StreamVertexID, List<VertexAllocationInformation>> vertexAllocations) {
         this.vertexAllocations = vertexAllocations;
     }
 
@@ -54,15 +54,15 @@ public class JobAllocationsInformation {
                         calculateAllocations(graph, StateSizeEstimates.fromGraph(graph)));
     }
 
-    public List<VertexAllocationInformation> getAllocations(JobVertexID jobVertexID) {
+    public List<VertexAllocationInformation> getAllocations(StreamVertexID jobVertexID) {
         return vertexAllocations.getOrDefault(jobVertexID, emptyList());
     }
 
-    private static Map<JobVertexID, List<VertexAllocationInformation>> calculateAllocations(
+    private static Map<StreamVertexID, List<VertexAllocationInformation>> calculateAllocations(
             ExecutionGraph graph, StateSizeEstimates stateSizeEstimates) {
-        final Map<JobVertexID, List<VertexAllocationInformation>> allocations = new HashMap<>();
+        final Map<StreamVertexID, List<VertexAllocationInformation>> allocations = new HashMap<>();
         for (ExecutionJobVertex vertex : graph.getVerticesTopologically()) {
-            JobVertexID jobVertexId = vertex.getJobVertexId();
+            StreamVertexID jobVertexId = vertex.getJobVertexId();
             for (ExecutionVertex executionVertex : vertex.getTaskVertices()) {
                 long stateSize = stateSizeEstimates.estimate(executionVertex.getID()).orElse(0L);
                 AllocationID allocationId =
@@ -93,13 +93,13 @@ public class JobAllocationsInformation {
     /** Information about the allocations of a single Job Vertex. */
     public static class VertexAllocationInformation {
         private final AllocationID allocationID;
-        private final JobVertexID jobVertexID;
+        private final StreamVertexID jobVertexID;
         private final KeyGroupRange keyGroupRange;
         public final long stateSizeInBytes;
 
         public VertexAllocationInformation(
                 AllocationID allocationID,
-                JobVertexID jobVertexID,
+                StreamVertexID jobVertexID,
                 KeyGroupRange keyGroupRange,
                 long stateSizeInBytes) {
             this.allocationID = allocationID;
@@ -112,7 +112,7 @@ public class JobAllocationsInformation {
             return allocationID;
         }
 
-        public JobVertexID getJobVertexID() {
+        public StreamVertexID getJobVertexID() {
             return jobVertexID;
         }
 

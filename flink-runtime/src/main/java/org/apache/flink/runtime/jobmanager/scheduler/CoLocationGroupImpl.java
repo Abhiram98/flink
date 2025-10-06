@@ -18,8 +18,8 @@
 
 package org.apache.flink.runtime.jobmanager.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.AbstractID;
 import org.apache.flink.util.Preconditions;
 
@@ -36,24 +36,24 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
 
     private final AbstractID id = new AbstractID();
 
-    private final List<JobVertex> vertices = new ArrayList<>();
+    private final List<StreamVertex> vertices = new ArrayList<>();
 
     // --------------------------------------------------------------------------------------------
 
-    public CoLocationGroupImpl(JobVertex... vertices) {
+    public CoLocationGroupImpl(StreamVertex... vertices) {
         Collections.addAll(this.vertices, vertices);
     }
 
     // --------------------------------------------------------------------------------------------
 
-    public void addVertex(JobVertex vertex) {
+    public void addVertex(StreamVertex vertex) {
         Preconditions.checkNotNull(vertex);
         this.vertices.add(vertex);
     }
 
     @Override
-    public List<JobVertexID> getVertexIds() {
-        return vertices.stream().map(JobVertex::getID).collect(ImmutableList.toImmutableList());
+    public List<StreamVertexID> getVertexIds() {
+        return vertices.stream().map(StreamVertex::getID).collect(ImmutableList.toImmutableList());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
     public void mergeInto(CoLocationGroupImpl other) {
         Preconditions.checkNotNull(other);
 
-        for (JobVertex v : this.vertices) {
+        for (StreamVertex v : this.vertices) {
             v.updateCoLocationGroup(other);
         }
 

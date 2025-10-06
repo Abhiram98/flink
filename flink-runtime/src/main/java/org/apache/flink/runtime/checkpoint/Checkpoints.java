@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.metadata.MetadataSerializer;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataSerializers;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataV5Serializer;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageLoader;
@@ -128,7 +128,7 @@ public class Checkpoints {
 
     public static CompletedCheckpoint loadAndValidateCheckpoint(
             JobID jobId,
-            Map<JobVertexID, ExecutionJobVertex> tasks,
+            Map<StreamVertexID, ExecutionJobVertex> tasks,
             CompletedCheckpointStorageLocation location,
             ClassLoader classLoader,
             boolean allowNonRestoredState,

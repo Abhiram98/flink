@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.checkpoint.channel;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.io.IOException;
 
@@ -49,8 +49,8 @@ interface ChannelStateWriteRequestExecutor {
     void submitPriority(ChannelStateWriteRequest r) throws Exception;
 
     /** Register subtask. */
-    void registerSubtask(JobVertexID jobVertexID, int subtaskIndex);
+    void registerSubtask(StreamVertexID jobVertexID, int subtaskIndex);
 
     /** Release the subtask. */
-    void releaseSubtask(JobVertexID jobVertexID, int subtaskIndex) throws IOException;
+    void releaseSubtask(StreamVertexID jobVertexID, int subtaskIndex) throws IOException;
 }

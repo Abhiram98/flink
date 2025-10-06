@@ -40,7 +40,7 @@ import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.memory.MemoryManager;
@@ -72,7 +72,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class DummyEnvironment implements Environment {
 
     private final JobInfo jobInfo = new JobInfoImpl(new JobID(), "DummyJob");
-    private final JobVertexID jobVertexId = new JobVertexID();
+    private final StreamVertexID jobVertexId = new StreamVertexID();
     private final JobType jobType = JobType.STREAMING;
     private final ExecutionAttemptID executionId;
     private final ExecutionConfig executionConfig = new ExecutionConfig();
@@ -136,7 +136,7 @@ public class DummyEnvironment implements Environment {
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 

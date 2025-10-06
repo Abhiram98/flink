@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricRegistryImpl;
 import org.apache.flink.runtime.metrics.MetricRegistryTestUtils;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -72,10 +72,10 @@ class TaskManagerGroupTest {
         final String jobName1 = "testjob";
         final String jobName2 = "anotherJob";
 
-        final JobVertexID vertex11 = new JobVertexID();
-        final JobVertexID vertex12 = new JobVertexID();
-        final JobVertexID vertex13 = new JobVertexID();
-        final JobVertexID vertex21 = new JobVertexID();
+        final StreamVertexID vertex11 = new StreamVertexID();
+        final StreamVertexID vertex12 = new StreamVertexID();
+        final StreamVertexID vertex13 = new StreamVertexID();
+        final StreamVertexID vertex21 = new StreamVertexID();
 
         final ExecutionAttemptID execution11 = createExecutionAttemptId(vertex11, 17, 0);
         final ExecutionAttemptID execution12 = createExecutionAttemptId(vertex12, 13, 1);
@@ -128,9 +128,9 @@ class TaskManagerGroupTest {
         final String jobName1 = "testjob";
         final String jobName2 = "anotherJob";
 
-        final JobVertexID vertex11 = new JobVertexID();
-        final JobVertexID vertex12 = new JobVertexID();
-        final JobVertexID vertex21 = new JobVertexID();
+        final StreamVertexID vertex11 = new StreamVertexID();
+        final StreamVertexID vertex12 = new StreamVertexID();
+        final StreamVertexID vertex21 = new StreamVertexID();
 
         final ExecutionAttemptID execution11 = createExecutionAttemptId(vertex11, 17, 0);
         final ExecutionAttemptID execution12 = createExecutionAttemptId(vertex12, 13, 1);

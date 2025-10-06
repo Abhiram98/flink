@@ -24,10 +24,10 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
 
 /** Headers for the log url retriever of JobManager. */
 public class JobManagerLogUrlHeaders
-        implements RuntimeMessageHeaders<EmptyRequestBody, LogUrlResponse, JobMessageParameters> {
+        implements RuntimeMessageHeaders<EmptyRequestBody, LogUrlResponse, StreamMessageParameters> {
     private static final JobManagerLogUrlHeaders INSTANCE = new JobManagerLogUrlHeaders();
 
-    private static final String URL = "/jobs/:" + JobIDPathParameter.KEY + "/jobmanager/log-url";
+    private static final String URL = "/jobs/:" + StreamIdPathParameter.KEY + "/jobmanager/log-url";
 
     private JobManagerLogUrlHeaders() {}
 
@@ -47,8 +47,8 @@ public class JobManagerLogUrlHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     @Override

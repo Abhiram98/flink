@@ -23,8 +23,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
@@ -66,8 +66,8 @@ class VertexFinishedStateCheckerTest {
     }
 
     private void testRestoringPartiallyFinishedChainsFails(boolean useUidHash) throws Exception {
-        final JobVertexID jobVertexID1 = new JobVertexID();
-        final JobVertexID jobVertexID2 = new JobVertexID();
+        final StreamVertexID jobVertexID1 = new StreamVertexID();
+        final StreamVertexID jobVertexID2 = new StreamVertexID();
         // The op1 has uidHash set.
         OperatorIDPair op1 =
                 OperatorIDPair.of(
@@ -106,10 +106,10 @@ class VertexFinishedStateCheckerTest {
 
     @Test
     void testAddingRunningOperatorBeforeFinishedOneFails() throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.ALL_RUNNING,
                 jobVertexID2,
@@ -127,10 +127,10 @@ class VertexFinishedStateCheckerTest {
 
     @Test
     void testAddingPartiallyFinishedOperatorBeforeFinishedOneFails() throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.PARTIALLY_FINISHED,
                 jobVertexID2,
@@ -149,10 +149,10 @@ class VertexFinishedStateCheckerTest {
     @Test
     void testAddingAllRunningOperatorBeforePartiallyFinishedOneWithAllToAllFails()
             throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.ALL_RUNNING,
                 jobVertexID2,
@@ -172,10 +172,10 @@ class VertexFinishedStateCheckerTest {
     @Test
     void testAddingPartiallyFinishedOperatorBeforePartiallyFinishedOneWithAllToAllFails()
             throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.PARTIALLY_FINISHED,
                 jobVertexID2,
@@ -196,10 +196,10 @@ class VertexFinishedStateCheckerTest {
     void
             testAddingPartiallyFinishedOperatorBeforePartiallyFinishedOneWithPointwiseAndAllToAllFails()
                     throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.PARTIALLY_FINISHED,
                 jobVertexID2,
@@ -220,10 +220,10 @@ class VertexFinishedStateCheckerTest {
 
     @Test
     void testAddingAllRunningOperatorBeforePartiallyFinishedOneFails() throws Exception {
-        JobVertexID jobVertexID2 = new JobVertexID();
+        StreamVertexID jobVertexID2 = new StreamVertexID();
 
         testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-                new JobVertexID(),
+                new StreamVertexID(),
                 "vert1",
                 VertexFinishedStateChecker.VertexFinishedState.ALL_RUNNING,
                 jobVertexID2,
@@ -241,10 +241,10 @@ class VertexFinishedStateCheckerTest {
     }
 
     private void testAddingOperatorsBeforePartiallyOrFullyFinishedOne(
-            JobVertexID firstVertexId,
+            StreamVertexID firstVertexId,
             String firstVertexName,
             VertexFinishedStateChecker.VertexFinishedState firstOperatorFinishedState,
-            JobVertexID secondVertexId,
+            StreamVertexID secondVertexId,
             String secondVertexName,
             VertexFinishedStateChecker.VertexFinishedState secondOperatorFinishedState,
             DistributionPattern[] distributionPatterns,
@@ -253,8 +253,8 @@ class VertexFinishedStateCheckerTest {
             throws Exception {
         OperatorIDPair op1 = OperatorIDPair.generatedIDOnly(new OperatorID());
         OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        JobVertex vertex1 = new JobVertex(firstVertexName, firstVertexId, singletonList(op1));
-        JobVertex vertex2 = new JobVertex(secondVertexName, secondVertexId, singletonList(op2));
+        StreamVertex vertex1 = new StreamVertex(firstVertexName, firstVertexId, singletonList(op1));
+        StreamVertex vertex2 = new StreamVertex(secondVertexName, secondVertexId, singletonList(op2));
         vertex1.setInvokableClass(NoOpInvokable.class);
         vertex2.setInvokableClass(NoOpInvokable.class);
 

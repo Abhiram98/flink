@@ -22,8 +22,8 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.InstantiationUtil;
@@ -66,7 +66,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
 
     private final File storageDir;
 
-    private final Cache<JobID, JobDetails> jobDetailsCache;
+    private final Cache<JobID, StreamDetails> jobDetailsCache;
 
     private final LoadingCache<JobID, ExecutionGraphInfo> executionGraphInfoCache;
 
@@ -107,7 +107,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
                         .expireAfterWrite(expirationTime.toMillis(), TimeUnit.MILLISECONDS)
                         .maximumSize(maximumCapacity)
                         .removalListener(
-                                (RemovalListener<JobID, JobDetails>)
+                                (RemovalListener<JobID, StreamDetails>)
                                         notification ->
                                                 deleteExecutionGraphFile(notification.getKey()))
                         .ticker(ticker)
@@ -202,25 +202,25 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
         // write the ArchivedExecutionGraph to disk
         storeExecutionGraphInfo(executionGraphInfo);
 
-        final JobDetails detailsForJob = JobDetails.createDetailsForJob(archivedExecutionGraph);
+        final StreamDetails detailsForJob = StreamDetails.createDetailsForJob(archivedExecutionGraph);
 
         jobDetailsCache.put(jobId, detailsForJob);
         executionGraphInfoCache.put(jobId, executionGraphInfo);
     }
 
     @Override
-    public JobsOverview getStoredJobsOverview() {
-        return new JobsOverview(0, numFinishedJobs, numCanceledJobs, numFailedJobs);
+    public StreamsOverview getStoredJobsOverview() {
+        return new StreamsOverview(0, numFinishedJobs, numCanceledJobs, numFailedJobs);
     }
 
     @Override
-    public Collection<JobDetails> getAvailableJobDetails() {
+    public Collection<StreamDetails> getAvailableJobDetails() {
         return jobDetailsCache.asMap().values();
     }
 
     @Nullable
     @Override
-    public JobDetails getAvailableJobDetails(JobID jobId) {
+    public StreamDetails getAvailableJobDetails(JobID jobId) {
         return jobDetailsCache.getIfPresent(jobId);
     }
 

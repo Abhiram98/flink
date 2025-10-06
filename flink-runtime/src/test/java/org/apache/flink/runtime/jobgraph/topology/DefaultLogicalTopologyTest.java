@@ -18,11 +18,8 @@
 
 package org.apache.flink.runtime.jobgraph.topology;
 
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.TestLogger;
 
@@ -46,7 +43,7 @@ import static org.junit.Assert.assertEquals;
 /** Unit tests for {@link DefaultLogicalTopology}. */
 public class DefaultLogicalTopologyTest extends TestLogger {
 
-    private JobGraph jobGraph;
+    private StreamGraph jobGraph;
 
     private DefaultLogicalTopology logicalTopology;
 
@@ -59,13 +56,13 @@ public class DefaultLogicalTopologyTest extends TestLogger {
     @Test
     public void testGetVertices() {
         // vertices from getVertices() should be topologically sorted
-        final Iterable<JobVertex> jobVertices =
+        final Iterable<StreamVertex> jobVertices =
                 jobGraph.getVerticesSortedTopologicallyFromSources();
         final Iterable<DefaultLogicalVertex> logicalVertices = logicalTopology.getVertices();
 
         assertEquals(Iterables.size(jobVertices), Iterables.size(logicalVertices));
 
-        final Iterator<JobVertex> jobVertexIterator = jobVertices.iterator();
+        final Iterator<StreamVertex> jobVertexIterator = jobVertices.iterator();
         final Iterator<DefaultLogicalVertex> logicalVertexIterator = logicalVertices.iterator();
         while (jobVertexIterator.hasNext()) {
             assertVertexAndConnectedResultsEquals(
@@ -78,8 +75,8 @@ public class DefaultLogicalTopologyTest extends TestLogger {
         assertEquals(2, IterableUtils.toStream(logicalTopology.getAllPipelinedRegions()).count());
     }
 
-    private JobGraph createJobGraph() {
-        final JobVertex[] jobVertices = new JobVertex[3];
+    private StreamGraph createJobGraph() {
+        final StreamVertex[] jobVertices = new StreamVertex[3];
         final int parallelism = 3;
         jobVertices[0] = createNoOpVertex("v1", parallelism);
         jobVertices[1] = createNoOpVertex("v2", parallelism);
@@ -87,11 +84,11 @@ public class DefaultLogicalTopologyTest extends TestLogger {
         jobVertices[1].connectNewDataSetAsInput(jobVertices[0], ALL_TO_ALL, PIPELINED);
         jobVertices[2].connectNewDataSetAsInput(jobVertices[1], ALL_TO_ALL, BLOCKING);
 
-        return JobGraphTestUtils.streamingJobGraph(jobVertices);
+        return StreamGraphTestUtils.streamingStreamGraph(jobVertices);
     }
 
     private static void assertVertexAndConnectedResultsEquals(
-            final JobVertex jobVertex, final DefaultLogicalVertex logicalVertex) {
+            final StreamVertex jobVertex, final DefaultLogicalVertex logicalVertex) {
 
         assertVertexInfoEquals(jobVertex, logicalVertex);
 

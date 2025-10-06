@@ -23,16 +23,13 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.rpc.TestingRpcService;
@@ -64,16 +61,16 @@ class JobMasterQueryableStateTest {
     private static TestingRpcService rpcService;
 
     private static final int PARALLELISM = 4;
-    private static final JobVertex JOB_VERTEX_1;
-    private static final JobVertex JOB_VERTEX_2;
-    private static final JobGraph JOB_GRAPH;
+    private static final StreamVertex JOB_VERTEX_1;
+    private static final StreamVertex JOB_VERTEX_2;
+    private static final StreamGraph JOB_GRAPH;
 
     static {
-        JOB_VERTEX_1 = new JobVertex("v1");
+        JOB_VERTEX_1 = new StreamVertex("v1");
         JOB_VERTEX_1.setParallelism(PARALLELISM);
         JOB_VERTEX_1.setInvokableClass(AbstractInvokable.class);
 
-        JOB_VERTEX_2 = new JobVertex("v2");
+        JOB_VERTEX_2 = new StreamVertex("v2");
         JOB_VERTEX_2.setParallelism(PARALLELISM);
         JOB_VERTEX_2.setInvokableClass(AbstractInvokable.class);
 
@@ -85,7 +82,7 @@ class JobMasterQueryableStateTest {
         JOB_VERTEX_1.setSlotSharingGroup(slotSharingGroup);
         JOB_VERTEX_2.setSlotSharingGroup(slotSharingGroup);
 
-        JOB_GRAPH = JobGraphTestUtils.streamingJobGraph(JOB_VERTEX_1, JOB_VERTEX_2);
+        JOB_GRAPH = StreamGraphTestUtils.streamingStreamGraph(JOB_VERTEX_1, JOB_VERTEX_2);
         JOB_GRAPH.setJobType(JobType.STREAMING);
     }
 
@@ -117,12 +114,12 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             assertThatThrownBy(
                             () ->
                                     jobMasterGateway
-                                            .requestKvStateLocation(JOB_GRAPH.getJobID(), "unknown")
+                                            .requestKvStateLocation(JOB_GRAPH.getStreamID(), "unknown")
                                             .get())
                     .satisfies(FlinkAssertions.anyCauseMatches(UnknownKvStateLocation.class));
         }
@@ -138,14 +135,14 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             assertThatThrownBy(
                             () ->
                                     jobMasterGateway
                                             .requestKvStateLocation(new JobID(), "unknown")
                                             .get())
-                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkJobNotFoundException.class));
+                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkStreamNotFoundException.class));
         }
     }
 
@@ -159,7 +156,7 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             // register an irrelevant KvState
             assertThatThrownBy(
@@ -167,9 +164,9 @@ class JobMasterQueryableStateTest {
                                     registerKvState(
                                             jobMasterGateway,
                                             new JobID(),
-                                            new JobVertexID(),
+                                            new StreamVertexID(),
                                             "any-name"))
-                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkJobNotFoundException.class));
+                    .satisfies(FlinkAssertions.anyCauseMatches(FlinkStreamNotFoundException.class));
         }
     }
 
@@ -181,7 +178,7 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             final String registrationName = "register-me";
             final KvStateID kvStateID = new KvStateID();
@@ -191,7 +188,7 @@ class JobMasterQueryableStateTest {
 
             jobMasterGateway
                     .notifyKvStateRegistered(
-                            JOB_GRAPH.getJobID(),
+                            JOB_GRAPH.getStreamID(),
                             JOB_VERTEX_1.getID(),
                             keyGroupRange,
                             registrationName,
@@ -201,10 +198,10 @@ class JobMasterQueryableStateTest {
 
             final KvStateLocation location =
                     jobMasterGateway
-                            .requestKvStateLocation(JOB_GRAPH.getJobID(), registrationName)
+                            .requestKvStateLocation(JOB_GRAPH.getStreamID(), registrationName)
                             .get();
 
-            assertThat(location.getJobId()).isEqualTo(JOB_GRAPH.getJobID());
+            assertThat(location.getJobId()).isEqualTo(JOB_GRAPH.getStreamID());
             assertThat(location.getJobVertexId()).isEqualTo(JOB_VERTEX_1.getID());
             assertThat(location.getNumKeyGroups()).isEqualTo(JOB_VERTEX_1.getMaxParallelism());
             assertThat(location.getNumRegisteredKeyGroups()).isOne();
@@ -226,7 +223,7 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             final String registrationName = "register-me";
             final KvStateID kvStateID = new KvStateID();
@@ -236,7 +233,7 @@ class JobMasterQueryableStateTest {
 
             jobMasterGateway
                     .notifyKvStateRegistered(
-                            JOB_GRAPH.getJobID(),
+                            JOB_GRAPH.getStreamID(),
                             JOB_VERTEX_1.getID(),
                             keyGroupRange,
                             registrationName,
@@ -246,7 +243,7 @@ class JobMasterQueryableStateTest {
 
             jobMasterGateway
                     .notifyKvStateUnregistered(
-                            JOB_GRAPH.getJobID(),
+                            JOB_GRAPH.getStreamID(),
                             JOB_VERTEX_1.getID(),
                             keyGroupRange,
                             registrationName)
@@ -256,7 +253,7 @@ class JobMasterQueryableStateTest {
                             () -> {
                                 jobMasterGateway
                                         .requestKvStateLocation(
-                                                JOB_GRAPH.getJobID(), registrationName)
+                                                JOB_GRAPH.getStreamID(), registrationName)
                                         .get();
                             })
                     .as("Expected to fail with an UnknownKvStateLocation.")
@@ -275,19 +272,19 @@ class JobMasterQueryableStateTest {
             final JobMasterGateway jobMasterGateway =
                     jobMaster.getSelfGateway(JobMasterGateway.class);
 
-            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getJobID());
+            registerSlotsRequiredForJobExecution(jobMasterGateway, JOB_GRAPH.getStreamID());
 
             // duplicate registration fails task
 
             final String registrationName = "duplicate-me";
 
             registerKvState(
-                    jobMasterGateway, JOB_GRAPH.getJobID(), JOB_VERTEX_1.getID(), registrationName);
+                    jobMasterGateway, JOB_GRAPH.getStreamID(), JOB_VERTEX_1.getID(), registrationName);
             assertThatThrownBy(
                             () ->
                                     registerKvState(
                                             jobMasterGateway,
-                                            JOB_GRAPH.getJobID(),
+                                            JOB_GRAPH.getStreamID(),
                                             JOB_VERTEX_2.getID(),
                                             registrationName))
                     .as("Expected to fail because of clashing registration message.")
@@ -329,7 +326,7 @@ class JobMasterQueryableStateTest {
     private static void registerKvState(
             KvStateRegistryGateway stateRegistryGateway,
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             String registrationName)
             throws UnknownHostException, ExecutionException, InterruptedException {
         stateRegistryGateway

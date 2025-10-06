@@ -23,7 +23,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.changelog.ChangelogStateBackendHandle;
 
@@ -68,7 +68,7 @@ public class ChangelogTaskLocalStateStore extends TaskLocalStateStoreImpl {
     public ChangelogTaskLocalStateStore(
             @Nonnull JobID jobID,
             @Nonnull AllocationID allocationID,
-            @Nonnull JobVertexID jobVertexID,
+            @Nonnull StreamVertexID jobVertexID,
             @Nonnegative int subtaskIndex,
             @Nonnull LocalRecoveryConfig localRecoveryConfig,
             @Nonnull Executor discardExecutor) {

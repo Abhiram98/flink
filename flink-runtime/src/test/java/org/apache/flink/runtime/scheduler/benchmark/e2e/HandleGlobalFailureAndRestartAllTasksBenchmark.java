@@ -22,9 +22,9 @@ import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.failover.FixedDelayRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlotProvider;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolUtils;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -84,7 +84,7 @@ public class HandleGlobalFailureAndRestartAllTasksBenchmark extends SchedulerEnd
     }
 
     private DefaultScheduler createScheduler(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             PhysicalSlotProvider physicalSlotProvider,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService executorService,
@@ -112,7 +112,7 @@ public class HandleGlobalFailureAndRestartAllTasksBenchmark extends SchedulerEnd
     private void offerSlots() {
         final int numberSlots =
                 StreamSupport.stream(jobGraph.getVertices().spliterator(), false)
-                        .mapToInt(JobVertex::getParallelism)
+                        .mapToInt(StreamVertex::getParallelism)
                         .sum();
 
         for (int i = 0; i < Math.ceil((double) numberSlots / SLOTS_PER_TASK_EXECUTOR); i++) {

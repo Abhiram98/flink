@@ -27,7 +27,7 @@ import org.apache.flink.runtime.blob.VoidPermanentBlobService;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.entrypoint.WorkingDirectory;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.taskexecutor.TaskExecutorResourceUtils;
 import org.apache.flink.runtime.taskexecutor.TaskManagerServices;
@@ -154,7 +154,7 @@ class TaskExecutorLocalStateStoresManagerTest {
     @Test
     void testLocalStateNoCreateDirWhenDisabledLocalBackupAndRecovery() throws Exception {
         JobID jobID = new JobID();
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         AllocationID allocationID = new AllocationID();
         int subtaskIdx = 23;
 
@@ -215,7 +215,7 @@ class TaskExecutorLocalStateStoresManagerTest {
             boolean localRecoveryEnabled, boolean localBackupEnabled) throws Exception {
 
         JobID jobID = new JobID();
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         AllocationID allocationID = new AllocationID();
         int subtaskIdx = 23;
 
@@ -379,7 +379,7 @@ class TaskExecutorLocalStateStoresManagerTest {
         final JobID jobId = new JobID();
         final AllocationID retainedAllocationId = new AllocationID();
         final AllocationID otherAllocationId = new AllocationID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
 
         // register local state stores
         taskExecutorLocalStateStoresManager.localStateStoreForSubtask(

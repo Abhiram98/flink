@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler.adaptive;
 
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
@@ -46,15 +46,15 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
     private static Collection<Object[]> data() {
         return Arrays.asList(
                 // default minimum and rescale to higher
-                new Object[] {1, JobVertex.MAX_PARALLELISM_DEFAULT, 128, 129, true},
+                new Object[] {1, StreamVertex.MAX_PARALLELISM_DEFAULT, 128, 129, true},
                 // test round up part 1 and rescale to lower
-                new Object[] {171, JobVertex.MAX_PARALLELISM_DEFAULT, 256, 42, false},
+                new Object[] {171, StreamVertex.MAX_PARALLELISM_DEFAULT, 256, 42, false},
                 // test round up part 2 and rescale to equal
-                new Object[] {172, JobVertex.MAX_PARALLELISM_DEFAULT, 512, 512, true},
+                new Object[] {172, StreamVertex.MAX_PARALLELISM_DEFAULT, 512, 512, true},
                 // test round up limit and rescale to equal
                 new Object[] {
                     UPPER_BOUND_MAX_PARALLELISM,
-                    JobVertex.MAX_PARALLELISM_DEFAULT,
+                    StreamVertex.MAX_PARALLELISM_DEFAULT,
                     UPPER_BOUND_MAX_PARALLELISM,
                     UPPER_BOUND_MAX_PARALLELISM,
                     true
@@ -83,7 +83,7 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
 
     @TestTemplate
     void testCreateStoreWithoutAdjustedParallelism() {
-        JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
+        StreamVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
         VertexParallelismStore store =
                 AdaptiveScheduler.computeReactiveModeVertexParallelismStore(
                         Collections.singleton(jobVertex),
@@ -102,7 +102,7 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
 
     @TestTemplate
     void testCreateStoreWithAdjustedParallelism() {
-        JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
+        StreamVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
         VertexParallelismStore store =
                 AdaptiveScheduler.computeReactiveModeVertexParallelismStore(
                         Collections.singleton(jobVertex),

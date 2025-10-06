@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.jobmanager;
 
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.function.SupplierWithException;
 
@@ -41,8 +41,8 @@ public class HaServicesJobPersistenceComponentFactory implements JobPersistenceC
     }
 
     @Override
-    public JobResultStore createJobResultStore() {
-        return create(highAvailabilityServices::getJobResultStore, JobResultStore.class);
+    public StreamResultStore createJobResultStore() {
+        return create(highAvailabilityServices::getJobResultStore, StreamResultStore.class);
     }
 
     private <T> T create(SupplierWithException<T, ? extends Exception> supplier, Class<T> clazz) {

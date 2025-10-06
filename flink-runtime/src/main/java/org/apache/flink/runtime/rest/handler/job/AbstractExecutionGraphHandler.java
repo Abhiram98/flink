@@ -19,15 +19,15 @@
 package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
@@ -51,7 +51,7 @@ import java.util.concurrent.Executor;
  * @param <M> job message parameter type
  */
 public abstract class AbstractExecutionGraphHandler<
-                R extends ResponseBody, M extends JobMessageParameters>
+                R extends ResponseBody, M extends StreamMessageParameters>
         extends AbstractRestHandler<RestfulGateway, EmptyRequestBody, R, M> {
 
     private final ExecutionGraphCache executionGraphCache;
@@ -75,10 +75,10 @@ public abstract class AbstractExecutionGraphHandler<
     protected CompletableFuture<R> handleRequest(
             @Nonnull HandlerRequest<EmptyRequestBody> request, @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
-        JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        JobID streamId = request.getPathParameter(StreamIdPathParameter.class);
 
         CompletableFuture<ExecutionGraphInfo> executionGraphFuture =
-                executionGraphCache.getExecutionGraphInfo(jobId, gateway);
+                executionGraphCache.getExecutionGraphInfo(streamId, gateway);
 
         return executionGraphFuture
                 .thenApplyAsync(
@@ -93,10 +93,10 @@ public abstract class AbstractExecutionGraphHandler<
                 .exceptionally(
                         throwable -> {
                             throwable = ExceptionUtils.stripCompletionException(throwable);
-                            if (throwable instanceof FlinkJobNotFoundException) {
+                            if (throwable instanceof FlinkStreamNotFoundException) {
                                 throw new CompletionException(
                                         new NotFoundException(
-                                                String.format("Job %s not found", jobId),
+                                                String.format("Job %s not found", streamId),
                                                 throwable));
                             } else {
                                 throw new CompletionException(throwable);

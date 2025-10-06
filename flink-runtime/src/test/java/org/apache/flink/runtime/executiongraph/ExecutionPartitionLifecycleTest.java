@@ -29,12 +29,8 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -256,8 +252,8 @@ class ExecutionPartitionLifecycleTest {
             TaskManagerGateway taskManagerGateway,
             ShuffleMaster<?> shuffleMaster)
             throws Exception {
-        final JobVertex producerVertex = createNoOpJobVertex();
-        final JobVertex consumerVertex = createNoOpJobVertex();
+        final StreamVertex producerVertex = createNoOpJobVertex();
+        final StreamVertex consumerVertex = createNoOpJobVertex();
         consumerVertex.connectNewDataSetAsInput(
                 producerVertex, DistributionPattern.ALL_TO_ALL, resultPartitionType);
 
@@ -271,7 +267,7 @@ class ExecutionPartitionLifecycleTest {
                                                 .withTaskManagerLocation(taskManagerLocation)
                                                 .build()));
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producerVertex, consumerVertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(producerVertex, consumerVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,
@@ -304,12 +300,12 @@ class ExecutionPartitionLifecycleTest {
                                 expectedIntermediateResultPartitionId)
                         .get();
         taskExecutorResourceId = taskManagerLocation.getResourceID();
-        jobId = executionGraph.getJobID();
+        jobId = executionGraph.getStreamID();
     }
 
     @Nonnull
-    private JobVertex createNoOpJobVertex() {
-        final JobVertex jobVertex = new JobVertex("Test vertex", new JobVertexID());
+    private StreamVertex createNoOpJobVertex() {
+        final StreamVertex jobVertex = new StreamVertex("Test vertex", new StreamVertexID());
         jobVertex.setInvokableClass(NoOpInvokable.class);
 
         return jobVertex;

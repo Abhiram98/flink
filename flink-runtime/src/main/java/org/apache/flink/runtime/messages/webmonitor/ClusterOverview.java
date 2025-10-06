@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  * Response to the {@link RequestStatusOverview} message, carrying a description of the Flink
  * cluster status.
  */
-public class ClusterOverview extends JobsOverview {
+public class ClusterOverview extends StreamsOverview {
 
     private static final long serialVersionUID = -729861859715105265L;
 
@@ -82,7 +82,7 @@ public class ClusterOverview extends JobsOverview {
         this.numSlotsFreeAndBlocked = numSlotsFreeAndBlocked == null ? 0 : numSlotsFreeAndBlocked;
     }
 
-    public ClusterOverview(ResourceOverview resourceOverview, JobsOverview jobsOverview) {
+    public ClusterOverview(ResourceOverview resourceOverview, StreamsOverview jobsOverview) {
         this(
                 resourceOverview.getNumberTaskManagers(),
                 resourceOverview.getNumberRegisteredSlots(),

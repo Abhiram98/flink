@@ -52,9 +52,9 @@ class JobManagerGroupTest {
         final String jobName1 = "testjob";
         final String jobName2 = "anotherJob";
 
-        JobManagerJobMetricGroup jmJobGroup11 = group.addJob(jid1, jobName1);
-        JobManagerJobMetricGroup jmJobGroup12 = group.addJob(jid1, jobName1);
-        JobManagerJobMetricGroup jmJobGroup21 = group.addJob(jid2, jobName2);
+        StreamManagerStreamMetricGroup jmJobGroup11 = group.addJob(jid1, jobName1);
+        StreamManagerStreamMetricGroup jmJobGroup12 = group.addJob(jid1, jobName1);
+        StreamManagerStreamMetricGroup jmJobGroup21 = group.addJob(jid2, jobName2);
 
         assertThat(jmJobGroup12).isEqualTo(jmJobGroup11);
 
@@ -87,8 +87,8 @@ class JobManagerGroupTest {
         final String jobName1 = "testjob";
         final String jobName2 = "anotherJob";
 
-        JobManagerJobMetricGroup jmJobGroup11 = group.addJob(jid1, jobName1);
-        JobManagerJobMetricGroup jmJobGroup21 = group.addJob(jid2, jobName2);
+        StreamManagerStreamMetricGroup jmJobGroup11 = group.addJob(jid1, jobName1);
+        StreamManagerStreamMetricGroup jmJobGroup21 = group.addJob(jid2, jobName2);
 
         group.close();
 

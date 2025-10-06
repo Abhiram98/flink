@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.job.metrics;
 
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
@@ -45,7 +45,7 @@ public final class JobVertexWatermarksHeaders
     @Override
     public String getTargetRestEndpointURL() {
         return "/jobs/:"
-                + JobIDPathParameter.KEY
+                + StreamIdPathParameter.KEY
                 + "/vertices/:"
                 + JobVertexIdPathParameter.KEY
                 + "/watermarks";

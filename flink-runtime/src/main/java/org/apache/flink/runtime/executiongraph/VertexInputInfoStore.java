@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class VertexInputInfoStore {
 
-    private final Map<JobVertexID, Map<IntermediateDataSetID, JobVertexInputInfo>>
+    private final Map<StreamVertexID, Map<IntermediateDataSetID, JobVertexInputInfo>>
             jobVertexInputInfos = new HashMap<>();
 
     /**
@@ -45,7 +45,7 @@ public class VertexInputInfoStore {
      * @param info the {@link JobVertexInputInfo} to put
      */
     public void put(
-            JobVertexID jobVertexId, IntermediateDataSetID resultId, JobVertexInputInfo info) {
+            StreamVertexID jobVertexId, IntermediateDataSetID resultId, JobVertexInputInfo info) {
         checkNotNull(jobVertexId);
         checkNotNull(resultId);
         checkNotNull(info);
@@ -70,7 +70,7 @@ public class VertexInputInfoStore {
      * @return the {@link JobVertexInputInfo} identified by the job vertex id and intermediate
      *     result id
      */
-    public JobVertexInputInfo get(JobVertexID jobVertexId, IntermediateDataSetID resultId) {
+    public JobVertexInputInfo get(StreamVertexID jobVertexId, IntermediateDataSetID resultId) {
         checkNotNull(jobVertexId);
         checkNotNull(resultId);
         return checkNotNull(jobVertexInputInfos.get(jobVertexId).get(resultId));

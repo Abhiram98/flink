@@ -34,10 +34,10 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.failover.ResultPartitionAvailabilityChecker;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
 import org.apache.flink.runtime.scheduler.InternalFailuresListener;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingTopology;
@@ -64,7 +64,7 @@ import java.util.concurrent.CompletableFuture;
  *   <li>The {@link ExecutionJobVertex} represents one vertex from the JobGraph (usually one
  *       operation like "map" or "join") during execution. It holds the aggregated state of all
  *       parallel subtasks. The ExecutionJobVertex is identified inside the graph by the {@link
- *       JobVertexID}, which it takes from the JobGraph's corresponding JobVertex.
+ *       StreamVertexID}, which it takes from the JobGraph's corresponding JobVertex.
  *   <li>The {@link ExecutionVertex} represents one parallel subtask. For each ExecutionJobVertex,
  *       there are as many ExecutionVertices as the parallelism. The ExecutionVertex is identified
  *       by the ExecutionJobVertex and the index of the parallel subtask
@@ -111,10 +111,10 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     Iterable<ExecutionVertex> getAllExecutionVertices();
 
     @Override
-    ExecutionJobVertex getJobVertex(JobVertexID id);
+    ExecutionJobVertex getJobVertex(StreamVertexID id);
 
     @Override
-    Map<JobVertexID, ExecutionJobVertex> getAllVertices();
+    Map<StreamVertexID, ExecutionJobVertex> getAllVertices();
 
     /**
      * Gets the number of restarts, including full restarts and fine grained restarts. If a recovery
@@ -153,7 +153,7 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     void setInternalTaskFailuresListener(InternalFailuresListener internalTaskFailuresListener);
 
     void attachJobGraph(
-            List<JobVertex> topologicallySorted, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException;
 
     void transitionToRunning();

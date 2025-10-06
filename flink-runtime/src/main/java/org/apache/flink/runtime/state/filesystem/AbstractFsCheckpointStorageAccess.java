@@ -210,7 +210,7 @@ public abstract class AbstractFsCheckpointStorageAccess implements CheckpointSto
      * @return The job's checkpoint directory, re
      * @throws UnsupportedOperationException Thrown, if no base checkpoint directory has been set.
      */
-    protected static Path getCheckpointDirectoryForJob(Path baseCheckpointPath, JobID jobId) {
+    protected static Path getCheckpointDirectoryForStream(Path baseCheckpointPath, JobID jobId) {
         return new Path(baseCheckpointPath, jobId.toString());
     }
 

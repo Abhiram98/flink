@@ -27,7 +27,7 @@ import java.util.concurrent.Executor;
 @PublicEvolving
 public interface JobStatusChangedListenerFactory {
 
-    JobStatusChangedListener createListener(Context context);
+    StreamStatusChangedListener createListener(Context context);
 
     @PublicEvolving
     interface Context {

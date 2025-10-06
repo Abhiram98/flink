@@ -20,9 +20,9 @@ package org.apache.flink.runtime.dispatcher;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.testutils.TestingUtils;
@@ -55,13 +55,13 @@ public class MemoryExecutionGraphInfoStoreITCase extends TestLogger {
                                 .build(),
                         new ScheduledExecutorServiceAdapter(EXECUTOR_RESOURCE.getExecutor()))) {
             miniCluster.start();
-            final JobVertex vertex = new JobVertex("blockingVertex");
+            final StreamVertex vertex = new StreamVertex("blockingVertex");
             // The adaptive scheduler expects that every vertex has a configured parallelism
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
-            miniCluster.submitJob(jobGraph);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(vertex);
+            miniCluster.submitStream(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }
     }

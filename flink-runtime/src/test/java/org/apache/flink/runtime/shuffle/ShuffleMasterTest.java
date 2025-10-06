@@ -24,9 +24,9 @@ import org.apache.flink.runtime.io.network.NettyShuffleServiceFactory;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
@@ -107,19 +107,19 @@ class ShuffleMasterTest {
                 .build();
     }
 
-    private JobGraph createJobGraph() throws Exception {
-        JobVertex source = new JobVertex("source");
+    private StreamGraph createJobGraph() throws Exception {
+        StreamVertex source = new StreamVertex("source");
         source.setParallelism(2);
         source.setInvokableClass(NoOpInvokable.class);
 
-        JobVertex sink = new JobVertex("sink");
+        StreamVertex sink = new StreamVertex("sink");
         sink.setParallelism(2);
         sink.setInvokableClass(NoOpInvokable.class);
 
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(source, sink);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 2, Duration.ofSeconds(2));
         return jobGraph;
     }
@@ -146,7 +146,7 @@ class ShuffleMasterTest {
 
         private final BlockingQueue<ResultPartitionID> partitions = new LinkedBlockingQueue<>();
 
-        private final AtomicReference<JobShuffleContext> jobContext = new AtomicReference<>();
+        private final AtomicReference<StreamShuffleContext> jobContext = new AtomicReference<>();
 
         private final boolean stopTrackingPartition;
 
@@ -173,7 +173,7 @@ class ShuffleMasterTest {
         }
 
         @Override
-        public void registerJob(JobShuffleContext context) {
+        public void registerJob(StreamShuffleContext context) {
             assertShuffleMasterAlive();
             assertThat(jobContext.compareAndSet(null, context)).isTrue();
             super.registerJob(context);

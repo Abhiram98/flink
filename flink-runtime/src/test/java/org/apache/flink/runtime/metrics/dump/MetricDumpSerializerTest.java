@@ -152,7 +152,7 @@ class MetricDumpSerializerTest {
         counters.put(
                 c3,
                 new Tuple2<>(
-                        new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+                        new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                                 "job-id", "tmid", "opName", "C"),
                         "c3"));
         meters.put(m1, new Tuple2<>(new QueryScopeInfo.JobQueryScopeInfo("jid", "C"), "c3"));
@@ -201,12 +201,12 @@ class MetricDumpSerializerTest {
                         case 3:
                             assertThat(counterDump.scopeInfo)
                                     .isInstanceOf(
-                                            QueryScopeInfo.JobManagerOperatorQueryScopeInfo.class);
+                                            QueryScopeInfo.StreamManagerOperatorQueryScopeInfo.class);
                             assertThat(counterDump.scopeInfo.scope).isEqualTo("C");
                             assertThat(counterDump.name).isEqualTo("c3");
-                            QueryScopeInfo.JobManagerOperatorQueryScopeInfo
+                            QueryScopeInfo.StreamManagerOperatorQueryScopeInfo
                                     jmOperatorQueryScopeInfo =
-                                            ((QueryScopeInfo.JobManagerOperatorQueryScopeInfo)
+                                            ((QueryScopeInfo.StreamManagerOperatorQueryScopeInfo)
                                                     counterDump.scopeInfo);
                             assertThat(jmOperatorQueryScopeInfo.jobID).isEqualTo("job-id");
                             assertThat(jmOperatorQueryScopeInfo.vertexID).isEqualTo("tmid");

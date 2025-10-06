@@ -18,18 +18,18 @@
 
 package org.apache.flink.runtime.rest.messages.json;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.DeserializationContext;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.KeyDeserializer;
 
 import java.io.IOException;
 
-/** Jackson deserializer for {@link JobVertexID}. */
+/** Jackson deserializer for {@link StreamVertexID}. */
 public class JobVertexIDKeyDeserializer extends KeyDeserializer {
 
     @Override
     public Object deserializeKey(String key, DeserializationContext ctxt) throws IOException {
-        return JobVertexID.fromHexString(key);
+        return StreamVertexID.fromHexString(key);
     }
 }

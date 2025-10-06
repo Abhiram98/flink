@@ -20,9 +20,9 @@ package org.apache.flink.runtime.highavailability.nonha.embedded;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.highavailability.AbstractThreadsafeJobResultStore;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.concurrent.Executors;
 
 import java.util.HashMap;
@@ -31,25 +31,25 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** A thread-safe in-memory implementation of the {@link JobResultStore}. */
+/** A thread-safe in-memory implementation of the {@link StreamResultStore}. */
 public class EmbeddedJobResultStore extends AbstractThreadsafeJobResultStore {
 
-    private final Map<JobID, JobResultEntry> dirtyJobResults = new HashMap<>();
+    private final Map<JobID, StreamResultEntry> dirtyJobResults = new HashMap<>();
 
-    private final Map<JobID, JobResultEntry> cleanJobResults = new HashMap<>();
+    private final Map<JobID, StreamResultEntry> cleanJobResults = new HashMap<>();
 
     public EmbeddedJobResultStore() {
         super(Executors.directExecutor());
     }
 
     @Override
-    public void createDirtyResultInternal(JobResultEntry jobResultEntry) {
-        dirtyJobResults.put(jobResultEntry.getJobId(), jobResultEntry);
+    public void createDirtyResultInternal(StreamResultEntry jobResultEntry) {
+        dirtyJobResults.put(jobResultEntry.getStreamId(), jobResultEntry);
     }
 
     @Override
     public void markResultAsCleanInternal(JobID jobId) throws NoSuchElementException {
-        final JobResultEntry jobResultEntry = dirtyJobResults.remove(jobId);
+        final StreamResultEntry jobResultEntry = dirtyJobResults.remove(jobId);
         if (jobResultEntry != null) {
             cleanJobResults.put(jobId, jobResultEntry);
         } else {
@@ -71,9 +71,9 @@ public class EmbeddedJobResultStore extends AbstractThreadsafeJobResultStore {
     }
 
     @Override
-    public Set<JobResult> getDirtyResultsInternal() {
+    public Set<StreamResult> getDirtyResultsInternal() {
         return dirtyJobResults.values().stream()
-                .map(JobResultEntry::getJobResult)
+                .map(StreamResultEntry::getJobResult)
                 .collect(Collectors.toSet());
     }
 }

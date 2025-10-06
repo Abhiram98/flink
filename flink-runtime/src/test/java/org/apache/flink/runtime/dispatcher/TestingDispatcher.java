@@ -29,11 +29,11 @@ import org.apache.flink.runtime.dispatcher.cleanup.TestingRetryStrategies;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.heartbeat.HeartbeatServicesImpl;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanWriter;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.metrics.groups.JobManagerMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
@@ -69,7 +69,7 @@ class TestingDispatcher extends Dispatcher {
             RpcService rpcService,
             DispatcherId fencingToken,
             Collection<ExecutionPlan> recoveredJobs,
-            Collection<JobResult> recoveredDirtyJobs,
+            Collection<StreamResult> recoveredDirtyJobs,
             Configuration configuration,
             HighAvailabilityServices highAvailabilityServices,
             GatewayRetriever<ResourceManagerGateway> resourceManagerGatewayRetriever,
@@ -77,7 +77,7 @@ class TestingDispatcher extends Dispatcher {
             BlobServer blobServer,
             FatalErrorHandler fatalErrorHandler,
             ExecutionPlanWriter executionPlanWriter,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             JobManagerMetricGroup jobManagerMetricGroup,
             @Nullable String metricServiceQueryAddress,
             Executor ioExecutor,
@@ -168,7 +168,7 @@ class TestingDispatcher extends Dispatcher {
     public static class Builder {
         private DispatcherId fencingToken = DispatcherId.generate();
         private Collection<ExecutionPlan> recoveredJobs = Collections.emptyList();
-        @Nullable private Collection<JobResult> recoveredDirtyJobs = null;
+        @Nullable private Collection<StreamResult> recoveredDirtyJobs = null;
         private HighAvailabilityServices highAvailabilityServices =
                 new TestingHighAvailabilityServices();
 
@@ -179,7 +179,7 @@ class TestingDispatcher extends Dispatcher {
         private HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 1000L);
 
         private ExecutionPlanWriter executionPlanWriter = NoOpExecutionPlanWriter.INSTANCE;
-        private JobResultStore jobResultStore = new EmbeddedJobResultStore();
+        private StreamResultStore jobResultStore = new EmbeddedJobResultStore();
 
         private Configuration configuration = new Configuration();
 
@@ -215,7 +215,7 @@ class TestingDispatcher extends Dispatcher {
             return this;
         }
 
-        public Builder setRecoveredDirtyJobs(@Nullable Collection<JobResult> recoveredDirtyJobs) {
+        public Builder setRecoveredDirtyJobs(@Nullable Collection<StreamResult> recoveredDirtyJobs) {
             this.recoveredDirtyJobs = recoveredDirtyJobs;
             return this;
         }
@@ -248,7 +248,7 @@ class TestingDispatcher extends Dispatcher {
             return this;
         }
 
-        public Builder setJobResultStore(JobResultStore jobResultStore) {
+        public Builder setJobResultStore(StreamResultStore jobResultStore) {
             this.jobResultStore = jobResultStore;
             return this;
         }

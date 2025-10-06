@@ -21,12 +21,12 @@ package org.apache.flink.runtime.rest.handler.job.metrics;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.metrics.Metric;
@@ -60,7 +60,7 @@ class JobVertexWatermarksHandlerTest {
 
     private static final JobID TEST_JOB_ID = new JobID();
 
-    private static final JobVertexID TEST_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID TEST_VERTEX_ID = new StreamVertexID();
 
     private MetricFetcher metricFetcher;
     private MetricStore.TaskMetricStore taskMetricStore;
@@ -91,7 +91,7 @@ class JobVertexWatermarksHandlerTest {
                         Mockito.mock(Executor.class));
 
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, TEST_JOB_ID.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, TEST_JOB_ID.toString());
         pathParameters.put(JobVertexIdPathParameter.KEY, TEST_VERTEX_ID.toString());
 
         request =

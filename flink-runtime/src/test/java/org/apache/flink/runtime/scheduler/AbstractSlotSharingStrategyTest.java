@@ -20,8 +20,8 @@ package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroupImpl;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -49,8 +49,8 @@ abstract class AbstractSlotSharingStrategyTest {
 
     protected TestingSchedulingTopology topology;
 
-    protected JobVertexID jobVertexId1;
-    protected JobVertexID jobVertexId2;
+    protected StreamVertexID jobVertexId1;
+    protected StreamVertexID jobVertexId2;
 
     protected SlotSharingGroup slotSharingGroup;
     protected SlotSharingGroup slotSharingGroup1;
@@ -59,8 +59,8 @@ abstract class AbstractSlotSharingStrategyTest {
     @BeforeEach
     protected void setup() {
         this.topology = new TestingSchedulingTopology();
-        this.jobVertexId1 = new JobVertexID();
-        this.jobVertexId2 = new JobVertexID();
+        this.jobVertexId1 = new StreamVertexID();
+        this.jobVertexId2 = new StreamVertexID();
         this.slotSharingGroup = new SlotSharingGroup();
         this.slotSharingGroup1 = new SlotSharingGroup();
         this.slotSharingGroup2 = new SlotSharingGroup();
@@ -103,7 +103,7 @@ abstract class AbstractSlotSharingStrategyTest {
     protected void renderTopology(
             TestingSchedulingTopology topology,
             List<TestingJobVertexInfo> mockedJobVertices,
-            List<Tuple2<JobVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos) {
+            List<Tuple2<StreamVertexID, List<TestingSchedulingExecutionVertex>>> jobVertexInfos) {
         for (TestingJobVertexInfo testingJobVertexInfo : mockedJobVertices) {
             List<TestingSchedulingExecutionVertex> tSEVs = new ArrayList<>();
             for (int subIndex = 0; subIndex < testingJobVertexInfo.parallelism; subIndex++) {
@@ -117,7 +117,7 @@ abstract class AbstractSlotSharingStrategyTest {
 
     /** Util class to represent the simple job vertex information. */
     protected static class TestingJobVertexInfo {
-        final JobVertex jobVertex = new JobVertex(null, new JobVertexID());
+        final StreamVertex jobVertex = new StreamVertex(null, new StreamVertexID());
         @Nonnull SlotSharingGroup slotSharingGroup;
         @Nullable CoLocationGroup coLocationGroup;
         int parallelism;

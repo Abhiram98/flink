@@ -24,7 +24,7 @@ import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.util.Preconditions;
 
@@ -49,7 +49,7 @@ public class TestingJobManagerRunner implements JobManagerRunner {
 
     private final CompletableFuture<JobManagerRunnerResult> resultFuture;
 
-    private final Supplier<JobDetails> jobDetailsFunction;
+    private final Supplier<StreamDetails> jobDetailsFunction;
 
     private final OneShotLatch closeAsyncCalledLatch = new OneShotLatch();
 
@@ -60,7 +60,7 @@ public class TestingJobManagerRunner implements JobManagerRunner {
             boolean blockingTermination,
             CompletableFuture<JobMasterGateway> jobMasterGatewayFuture,
             CompletableFuture<JobManagerRunnerResult> resultFuture,
-            Supplier<JobDetails> jobDetailsFunction) {
+            Supplier<StreamDetails> jobDetailsFunction) {
         this.jobId = jobId;
         this.blockingTermination = blockingTermination;
         this.jobMasterGatewayFuture = jobMasterGatewayFuture;
@@ -114,7 +114,7 @@ public class TestingJobManagerRunner implements JobManagerRunner {
     }
 
     @Override
-    public CompletableFuture<JobDetails> requestJobDetails(Duration timeout) {
+    public CompletableFuture<StreamDetails> requestJobDetails(Duration timeout) {
         return CompletableFuture.completedFuture(jobDetailsFunction.get());
     }
 
@@ -182,7 +182,7 @@ public class TestingJobManagerRunner implements JobManagerRunner {
         private CompletableFuture<JobMasterGateway> jobMasterGatewayFuture =
                 new CompletableFuture<>();
         private CompletableFuture<JobManagerRunnerResult> resultFuture = new CompletableFuture<>();
-        private Supplier<JobDetails> jobDetailsFunction =
+        private Supplier<StreamDetails> jobDetailsFunction =
                 () -> {
                     throw new UnsupportedOperationException();
                 };
@@ -214,7 +214,7 @@ public class TestingJobManagerRunner implements JobManagerRunner {
             return this;
         }
 
-        public Builder setJobDetailsFunction(Supplier<JobDetails> jobDetailsFunction) {
+        public Builder setJobDetailsFunction(Supplier<StreamDetails> jobDetailsFunction) {
             this.jobDetailsFunction = Preconditions.checkNotNull(jobDetailsFunction);
             return this;
         }

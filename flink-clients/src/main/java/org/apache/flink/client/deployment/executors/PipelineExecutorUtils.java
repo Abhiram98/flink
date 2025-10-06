@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.PipelineOptionsInternal;
-import org.apache.flink.core.execution.JobStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.streaming.runtime.execution.DefaultJobCreatedEvent;
@@ -57,7 +57,7 @@ public class PipelineExecutorUtils {
      * @param userClassloader the classloader which can load user classes.
      * @return the corresponding {@link JobGraph}.
      */
-    public static JobGraph getJobGraph(
+    public static JobGraph getStreamGraph(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull ClassLoader userClassloader)
@@ -98,10 +98,10 @@ public class PipelineExecutorUtils {
      * @param jobGraph jobGraph that contains job basic info
      * @param listeners the list of job status changed listeners
      */
-    public static void notifyJobStatusListeners(
+    public static void notifyStreamStatusListeners(
             @Nonnull final Pipeline pipeline,
             @Nonnull final JobGraph jobGraph,
-            List<JobStatusChangedListener> listeners) {
+            List<StreamStatusChangedListener> listeners) {
         RuntimeExecutionMode executionMode =
                 jobGraph.getJobConfiguration().get(ExecutionOptions.RUNTIME_MODE);
         listeners.forEach(

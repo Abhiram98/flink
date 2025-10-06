@@ -18,14 +18,14 @@
 
 package org.apache.flink.runtime.jobmanager.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.AbstractID;
 
 import java.util.List;
 
 /**
- * {@code CoLocationGroup} refers to a list of {@link JobVertex} instances, where the <i>i-th</i>
+ * {@code CoLocationGroup} refers to a list of {@link StreamVertex} instances, where the <i>i-th</i>
  * subtask of one vertex has to be executed on the same {@code TaskManager} as the <i>i-th</i>
  * subtask of all other {@code JobVertex} instances in the same group.
  *
@@ -42,11 +42,11 @@ public interface CoLocationGroup {
     AbstractID getId();
 
     /**
-     * Returns the IDs of the {@link JobVertex} instances participating in this group.
+     * Returns the IDs of the {@link StreamVertex} instances participating in this group.
      *
-     * @return The group's members represented by their {@link JobVertexID}s.
+     * @return The group's members represented by their {@link StreamVertexID}s.
      */
-    List<JobVertexID> getVertexIds();
+    List<StreamVertexID> getVertexIds();
 
     /**
      * Returns the {@link CoLocationConstraint} for a specific {@code subTaskIndex}.

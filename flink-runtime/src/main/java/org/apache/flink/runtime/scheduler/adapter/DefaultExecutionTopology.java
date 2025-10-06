@@ -25,12 +25,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.executiongraph.failover.SchedulingPipelinedRegionComputeUtil;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalPipelinedRegion;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalTopology;
 import org.apache.flink.runtime.jobgraph.topology.LogicalEdge;
@@ -85,7 +81,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
 
     private final Supplier<List<ExecutionVertexID>> sortedExecutionVertexIds;
 
-    private final Map<JobVertexID, DefaultLogicalPipelinedRegion>
+    private final Map<StreamVertexID, DefaultLogicalPipelinedRegion>
             logicalPipelinedRegionsByJobVertexId;
 
     /** Listeners that will be notified whenever the scheduling topology is updated. */
@@ -94,7 +90,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
     private DefaultExecutionTopology(
             Supplier<List<ExecutionVertexID>> sortedExecutionVertexIds,
             EdgeManager edgeManager,
-            Map<JobVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId) {
+            Map<StreamVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId) {
         this.sortedExecutionVertexIds = checkNotNull(sortedExecutionVertexIds);
         this.edgeManager = checkNotNull(edgeManager);
         this.logicalPipelinedRegionsByJobVertexId =
@@ -163,9 +159,9 @@ public class DefaultExecutionTopology implements SchedulingTopology {
         return edgeManager;
     }
 
-    private static Map<JobVertexID, DefaultLogicalPipelinedRegion>
+    private static Map<StreamVertexID, DefaultLogicalPipelinedRegion>
             computeLogicalPipelinedRegionsByJobVertexId(final ExecutionGraph executionGraph) {
-        List<JobVertex> topologicallySortedJobVertices =
+        List<StreamVertex> topologicallySortedJobVertices =
                 IterableUtils.toStream(executionGraph.getVerticesTopologically())
                         .map(ExecutionJobVertex::getJobVertex)
                         .collect(Collectors.toList());
@@ -175,7 +171,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                                 topologicallySortedJobVertices)
                         .getAllPipelinedRegions();
 
-        Map<JobVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId =
+        Map<StreamVertexID, DefaultLogicalPipelinedRegion> logicalPipelinedRegionsByJobVertexId =
                 new HashMap<>();
         for (DefaultLogicalPipelinedRegion logicalPipelinedRegion : logicalPipelinedRegions) {
             for (LogicalVertex vertex : logicalPipelinedRegion.getVertices()) {
@@ -192,7 +188,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
 
         checkNotNull(executionGraph, "execution graph can not be null");
 
-        final Set<JobVertexID> newJobVertexIds =
+        final Set<StreamVertexID> newJobVertexIds =
                 newlyInitializedJobVertices.stream()
                         .map(ExecutionJobVertex::getJobVertexId)
                         .collect(Collectors.toSet());
@@ -205,7 +201,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                 .map(JobEdge::getSource)
                 .filter(r -> r.getResultType().mustBePipelinedConsumed())
                 .map(IntermediateDataSet::getProducer)
-                .map(JobVertex::getID)
+                .map(StreamVertex::getID)
                 .forEach(id -> checkState(newJobVertexIds.contains(id)));
 
         final Iterable<ExecutionVertex> newExecutionVertices =

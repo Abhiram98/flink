@@ -19,11 +19,8 @@
 package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.executiongraph.failover.LogicalPipelinedRegionComputeUtil;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,16 +33,16 @@ import java.util.function.Function;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** Default implementation of {@link LogicalTopology}. It is an adapter of {@link JobGraph}. */
+/** Default implementation of {@link LogicalTopology}. It is an adapter of {@link StreamGraph}. */
 public class DefaultLogicalTopology implements LogicalTopology {
 
     private final List<DefaultLogicalVertex> verticesSorted;
 
-    private final Map<JobVertexID, DefaultLogicalVertex> idToVertexMap;
+    private final Map<StreamVertexID, DefaultLogicalVertex> idToVertexMap;
 
     private final Map<IntermediateDataSetID, DefaultLogicalResult> idToResultMap;
 
-    private DefaultLogicalTopology(final List<JobVertex> jobVertices) {
+    private DefaultLogicalTopology(final List<StreamVertex> jobVertices) {
         checkNotNull(jobVertices);
 
         this.verticesSorted = new ArrayList<>(jobVertices.size());
@@ -55,7 +52,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
         buildVerticesAndResults(jobVertices);
     }
 
-    public static DefaultLogicalTopology fromJobGraph(final JobGraph jobGraph) {
+    public static DefaultLogicalTopology fromJobGraph(final StreamGraph jobGraph) {
         checkNotNull(jobGraph);
 
         return fromTopologicallySortedJobVertices(
@@ -63,16 +60,16 @@ public class DefaultLogicalTopology implements LogicalTopology {
     }
 
     public static DefaultLogicalTopology fromTopologicallySortedJobVertices(
-            final List<JobVertex> jobVertices) {
+            final List<StreamVertex> jobVertices) {
         return new DefaultLogicalTopology(jobVertices);
     }
 
-    private void buildVerticesAndResults(final Iterable<JobVertex> topologicallySortedJobVertices) {
-        final Function<JobVertexID, DefaultLogicalVertex> vertexRetriever = this::getVertex;
+    private void buildVerticesAndResults(final Iterable<StreamVertex> topologicallySortedJobVertices) {
+        final Function<StreamVertexID, DefaultLogicalVertex> vertexRetriever = this::getVertex;
         final Function<IntermediateDataSetID, DefaultLogicalResult> resultRetriever =
                 this::getResult;
 
-        for (JobVertex jobVertex : topologicallySortedJobVertices) {
+        for (StreamVertex jobVertex : topologicallySortedJobVertices) {
             final DefaultLogicalVertex logicalVertex =
                     new DefaultLogicalVertex(jobVertex, resultRetriever);
             this.verticesSorted.add(logicalVertex);
@@ -91,7 +88,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
         return verticesSorted;
     }
 
-    public DefaultLogicalVertex getVertex(final JobVertexID vertexId) {
+    public DefaultLogicalVertex getVertex(final StreamVertexID vertexId) {
         return Optional.ofNullable(idToVertexMap.get(vertexId))
                 .orElseThrow(
                         () -> new IllegalArgumentException("can not find vertex: " + vertexId));

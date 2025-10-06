@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 
 import java.util.Collection;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 class TestJobInformation implements JobInformation {
 
-    private final Map<JobVertexID, VertexInformation> vertexIdToInformation;
+    private final Map<StreamVertexID, VertexInformation> vertexIdToInformation;
     private final Collection<SlotSharingGroup> slotSharingGroups;
 
     TestJobInformation(Collection<? extends VertexInformation> vertexIdToInformation) {
@@ -48,7 +48,7 @@ class TestJobInformation implements JobInformation {
     }
 
     @Override
-    public VertexInformation getVertexInformation(JobVertexID jobVertexId) {
+    public VertexInformation getVertexInformation(StreamVertexID jobVertexId) {
         return vertexIdToInformation.get(jobVertexId);
     }
 

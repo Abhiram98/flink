@@ -21,7 +21,7 @@ package org.apache.flink.runtime.metrics.groups;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for the {@link JobManagerOperatorMetricGroup}. */
+/** Tests for the {@link StreamManagerOperatorMetricGroup}. */
 class JobManagerOperatorGroupTest {
     private static final MetricRegistry registry = TestingMetricRegistry.builder().build();
 
@@ -43,20 +43,20 @@ class JobManagerOperatorGroupTest {
 
     @Test
     void addOperators() {
-        JobManagerJobMetricGroup jmJobGroup =
+        StreamManagerStreamMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(new JobID(), "myJobName");
 
-        final JobVertexID jobVertexId1 = new JobVertexID();
-        final JobVertexID jobVertexId2 = new JobVertexID();
+        final StreamVertexID jobVertexId1 = new StreamVertexID();
+        final StreamVertexID jobVertexId2 = new StreamVertexID();
         final OperatorID operatorId1 = new OperatorID();
         final OperatorID operatorId2 = new OperatorID();
 
-        JobManagerOperatorMetricGroup jmOperatorGroup11 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup11 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
-        JobManagerOperatorMetricGroup jmOperatorGroup12 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup12 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
-        JobManagerOperatorMetricGroup jmOperatorGroup21 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup21 =
                 jmJobGroup.getOrAddOperator(jobVertexId2, "taskName3", operatorId2, "opName3");
 
         assertThat(jmOperatorGroup11).isEqualTo(jmOperatorGroup12);
@@ -74,20 +74,20 @@ class JobManagerOperatorGroupTest {
 
     @Test
     void testCloseClosesAll() {
-        JobManagerJobMetricGroup jmJobGroup =
+        StreamManagerStreamMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "theHostName")
                         .addJob(new JobID(), "myJobName");
 
-        final JobVertexID jobVertexId1 = new JobVertexID();
-        final JobVertexID jobVertexId2 = new JobVertexID();
+        final StreamVertexID jobVertexId1 = new StreamVertexID();
+        final StreamVertexID jobVertexId2 = new StreamVertexID();
         final OperatorID operatorId1 = new OperatorID();
         final OperatorID operatorId2 = new OperatorID();
 
-        JobManagerOperatorMetricGroup jmOperatorGroup11 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup11 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
-        JobManagerOperatorMetricGroup jmOperatorGroup12 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup12 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
-        JobManagerOperatorMetricGroup jmOperatorGroup21 =
+        StreamManagerOperatorMetricGroup jmOperatorGroup21 =
                 jmJobGroup.getOrAddOperator(jobVertexId2, "taskName3", operatorId2, "opName3");
 
         assertThat(jmOperatorGroup11).isEqualTo(jmOperatorGroup12);
@@ -106,9 +106,9 @@ class JobManagerOperatorGroupTest {
     @Test
     void testGenerateScopeDefault() {
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
@@ -131,9 +131,9 @@ class JobManagerOperatorGroupTest {
                         .build();
 
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
@@ -169,9 +169,9 @@ class JobManagerOperatorGroupTest {
                         .build();
 
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
@@ -194,14 +194,14 @@ class JobManagerOperatorGroupTest {
     @Test
     void testCreateQueryServiceMetricInfo() {
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
 
-        QueryScopeInfo.JobManagerOperatorQueryScopeInfo info =
+        QueryScopeInfo.StreamManagerOperatorQueryScopeInfo info =
                 jmJobGroup.createQueryServiceMetricInfo(new DummyCharacterFilter());
         assertThat(info.scope).isEmpty();
         assertThat(info.jobID).isEqualTo(jobId.toString());

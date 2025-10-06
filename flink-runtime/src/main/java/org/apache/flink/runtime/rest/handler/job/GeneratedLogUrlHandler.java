@@ -22,7 +22,7 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.runtime.rest.handler.router.RoutedRequest;
 import org.apache.flink.runtime.rest.handler.util.HandlerUtils;
 import org.apache.flink.runtime.rest.messages.ErrorResponseBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.LogUrlResponse;
 import org.apache.flink.runtime.rest.messages.taskmanager.TaskManagerIdPathParameter;
 import org.apache.flink.util.Preconditions;
@@ -53,7 +53,7 @@ public class GeneratedLogUrlHandler extends SimpleChannelInboundHandler<RoutedRe
         try {
             Map<String, String> pathParams = routedRequest.getRouteResult().pathParams();
             final String taskManagerId = pathParams.get(TaskManagerIdPathParameter.KEY);
-            final String jobId = Preconditions.checkNotNull(pathParams.get(JobIDPathParameter.KEY));
+            final String jobId = Preconditions.checkNotNull(pathParams.get(StreamIdPathParameter.KEY));
             final LogUrlResponse response =
                     new LogUrlResponse(
                             generateLogUrl(

@@ -17,23 +17,23 @@
 
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 
 class TestVertexInformation implements JobInformation.VertexInformation {
 
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
     private final int minParallelism;
     private final int parallelism;
     private final SlotSharingGroup slotSharingGroup;
 
     TestVertexInformation(
-            JobVertexID jobVertexId, int parallelism, SlotSharingGroup slotSharingGroup) {
+            StreamVertexID jobVertexId, int parallelism, SlotSharingGroup slotSharingGroup) {
         this(jobVertexId, 1, parallelism, slotSharingGroup);
     }
 
     TestVertexInformation(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             int minParallelism,
             int parallelism,
             SlotSharingGroup slotSharingGroup) {
@@ -45,7 +45,7 @@ class TestVertexInformation implements JobInformation.VertexInformation {
     }
 
     @Override
-    public JobVertexID getJobVertexID() {
+    public StreamVertexID getJobVertexID() {
         return jobVertexId;
     }
 

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler.benchmark.deploying;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
 
 /**
@@ -36,7 +36,7 @@ public class DeployingDownstreamTasksInBatchJobBenchmark extends DeployingTasksB
     public void setup(JobConfiguration jobConfiguration) throws Exception {
         super.setup(jobConfiguration);
 
-        final JobVertex source = jobVertices.get(0);
+        final StreamVertex source = jobVertices.get(0);
 
         for (ExecutionVertex ev : executionGraph.getJobVertex(source.getID()).getTaskVertices()) {
             Execution execution = ev.getCurrentExecutionAttempt();
@@ -44,7 +44,7 @@ public class DeployingDownstreamTasksInBatchJobBenchmark extends DeployingTasksB
             execution.deploy();
         }
 
-        final JobVertex sink = jobVertices.get(1);
+        final StreamVertex sink = jobVertices.get(1);
 
         vertices = executionGraph.getJobVertex(sink.getID()).getTaskVertices();
     }

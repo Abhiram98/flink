@@ -16,20 +16,17 @@
  * limitations under the License.
  */
 
-package org.apache.flink.runtime.client;
+package org.apache.flink.core.execution;
 
-import org.apache.flink.api.common.JobID;
+import org.apache.flink.annotation.PublicEvolving;
 
-/** This exception denotes an error while submitting a job to the JobManager. */
-public class JobSubmissionException extends JobExecutionException {
+/**
+ * When job is created or its status is changed, Flink will generate job event and notify job status
+ * changed listener.
+ */
+@PublicEvolving
+public interface StreamStatusChangedListener {
 
-    private static final long serialVersionUID = 2818087325120827526L;
-
-    public JobSubmissionException(final JobID jobID, final String msg, final Throwable cause) {
-        super(jobID, msg, cause);
-    }
-
-    public JobSubmissionException(final JobID jobID, final String msg) {
-        super(jobID, msg);
-    }
+    /* Event will be fired when job status is changed. */
+    void onEvent(JobStatusChangedEvent event);
 }

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.query;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class KvStateLocationTest {
     @Test
     void testRegisterAndLookup() throws Exception {
         JobID jobId = new JobID();
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         int numKeyGroups = 123;
         int numRanges = 10;
         int fract = numKeyGroups / numRanges;

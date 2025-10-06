@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job;
 
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.json.JobResultDeserializer;
 import org.apache.flink.runtime.rest.messages.json.JobResultSerializer;
@@ -36,13 +36,13 @@ import javax.annotation.Nullable;
 import static java.util.Objects.requireNonNull;
 
 /**
- * {@link ResponseBody} that carries a {@link QueueStatus} and a {@link JobResult}.
+ * {@link ResponseBody} that carries a {@link QueueStatus} and a {@link StreamResult}.
  *
  * @see org.apache.flink.runtime.rest.handler.job.JobExecutionResultHandler
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobExecutionResultResponseBody
-        implements ResponseBody, AsynchronouslyCreatedResource<JobResult> {
+        implements ResponseBody, AsynchronouslyCreatedResource<StreamResult> {
 
     @JsonProperty(value = "status", required = true)
     private final QueueStatus status;
@@ -51,7 +51,7 @@ public class JobExecutionResultResponseBody
     @JsonSerialize(using = JobResultSerializer.class)
     @JsonDeserialize(using = JobResultDeserializer.class)
     @Nullable
-    private final JobResult jobExecutionResult;
+    private final StreamResult jobExecutionResult;
 
     @JsonCreator
     public JobExecutionResultResponseBody(
@@ -59,7 +59,7 @@ public class JobExecutionResultResponseBody
             @JsonProperty(value = "job-execution-result")
                     @JsonDeserialize(using = JobResultDeserializer.class)
                     @Nullable
-                    final JobResult jobExecutionResult) {
+                    final StreamResult jobExecutionResult) {
         this.status = requireNonNull(status);
         this.jobExecutionResult = jobExecutionResult;
     }
@@ -68,7 +68,7 @@ public class JobExecutionResultResponseBody
         return new JobExecutionResultResponseBody(QueueStatus.inProgress(), null);
     }
 
-    public static JobExecutionResultResponseBody created(final JobResult jobExecutionResult) {
+    public static JobExecutionResultResponseBody created(final StreamResult jobExecutionResult) {
         return new JobExecutionResultResponseBody(QueueStatus.completed(), jobExecutionResult);
     }
 
@@ -77,7 +77,7 @@ public class JobExecutionResultResponseBody
     }
 
     @Nullable
-    public JobResult getJobExecutionResult() {
+    public StreamResult getJobExecutionResult() {
         return jobExecutionResult;
     }
 
@@ -87,7 +87,7 @@ public class JobExecutionResultResponseBody
     }
 
     @Override
-    public JobResult resource() {
+    public StreamResult resource() {
         return jobExecutionResult;
     }
 }

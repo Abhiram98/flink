@@ -231,17 +231,17 @@ public abstract class QueryScopeInfo {
      * Container for the job manager operator scope. Stores the ID of the job/vertex and the name of
      * the operator.
      */
-    public static class JobManagerOperatorQueryScopeInfo extends QueryScopeInfo {
+    public static class StreamManagerOperatorQueryScopeInfo extends QueryScopeInfo {
         public final String jobID;
         public final String vertexID;
         public final String operatorName;
 
-        public JobManagerOperatorQueryScopeInfo(
+        public StreamManagerOperatorQueryScopeInfo(
                 String jobID, String vertexID, String operatorName) {
             this(jobID, vertexID, operatorName, "");
         }
 
-        public JobManagerOperatorQueryScopeInfo(
+        public StreamManagerOperatorQueryScopeInfo(
                 String jobID, String vertexID, String operatorName, String scope) {
             super(scope);
             this.jobID = jobID;
@@ -250,8 +250,8 @@ public abstract class QueryScopeInfo {
         }
 
         @Override
-        public JobManagerOperatorQueryScopeInfo copy(String additionalScope) {
-            return new JobManagerOperatorQueryScopeInfo(
+        public StreamManagerOperatorQueryScopeInfo copy(String additionalScope) {
+            return new StreamManagerOperatorQueryScopeInfo(
                     this.jobID, this.vertexID, this.operatorName, concatScopes(additionalScope));
         }
 

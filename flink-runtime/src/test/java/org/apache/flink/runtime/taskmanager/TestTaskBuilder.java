@@ -38,7 +38,7 @@ import org.apache.flink.runtime.filecache.FileCache;
 import org.apache.flink.runtime.io.disk.iomanager.IOManager;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
 import org.apache.flink.runtime.memory.MemoryManagerBuilder;
@@ -180,7 +180,7 @@ public final class TestTaskBuilder {
     }
 
     public Task build(Executor executor) throws Exception {
-        final JobVertexID jobVertexId = executionAttemptId.getJobVertexId();
+        final StreamVertexID jobVertexId = executionAttemptId.getJobVertexId();
 
         final SerializedValue<ExecutionConfig> serializedExecutionConfig =
                 new SerializedValue<>(executionConfig);

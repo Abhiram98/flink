@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.benchmark.failover;
 
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
@@ -40,8 +40,8 @@ public class RegionToRestartInBatchJobBenchmark extends FailoverBenchmarkBase {
     public void setup(JobConfiguration jobConfiguration) throws Exception {
         super.setup(jobConfiguration);
 
-        final JobVertex source = jobVertices.get(0);
-        final JobVertex sink = jobVertices.get(1);
+        final StreamVertex source = jobVertices.get(0);
+        final StreamVertex sink = jobVertices.get(1);
 
         final TestingLogicalSlotBuilder slotBuilder = new TestingLogicalSlotBuilder();
 

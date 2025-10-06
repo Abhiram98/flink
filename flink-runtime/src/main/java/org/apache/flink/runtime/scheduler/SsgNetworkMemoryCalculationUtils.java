@@ -28,11 +28,8 @@ import org.apache.flink.runtime.executiongraph.IndexRange;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
@@ -58,7 +55,7 @@ public class SsgNetworkMemoryCalculationUtils {
      */
     public static void enrichNetworkMemory(
             SlotSharingGroup ssg,
-            Function<JobVertexID, ExecutionJobVertex> ejvs,
+            Function<StreamVertexID, ExecutionJobVertex> ejvs,
             ShuffleMaster<?> shuffleMaster) {
 
         ResourceProfile original = ssg.getResourceProfile();
@@ -71,7 +68,7 @@ public class SsgNetworkMemoryCalculationUtils {
         }
 
         MemorySize networkMemory = MemorySize.ZERO;
-        for (JobVertexID jvId : ssg.getJobVertexIds()) {
+        for (StreamVertexID jvId : ssg.getJobVertexIds()) {
             ExecutionJobVertex ejv = ejvs.apply(jvId);
             TaskInputsOutputsDescriptor desc = buildTaskInputsOutputsDescriptor(ejv, ejvs);
             MemorySize requiredNetworkMemory = shuffleMaster.computeShuffleMemorySizeForTask(desc);
@@ -91,7 +88,7 @@ public class SsgNetworkMemoryCalculationUtils {
     }
 
     private static TaskInputsOutputsDescriptor buildTaskInputsOutputsDescriptor(
-            ExecutionJobVertex ejv, Function<JobVertexID, ExecutionJobVertex> ejvs) {
+            ExecutionJobVertex ejv, Function<StreamVertexID, ExecutionJobVertex> ejvs) {
 
         Map<IntermediateDataSetID, Integer> partitionReuseCount = getPartitionReuseCount(ejv);
         Map<IntermediateDataSetID, Integer> maxInputChannelNums = new HashMap<>();
@@ -107,7 +104,7 @@ public class SsgNetworkMemoryCalculationUtils {
             getMaxSubpartitionInfo(ejv, maxSubpartitionNums, partitionTypes, ejvs);
         }
 
-        JobVertex jv = ejv.getJobVertex();
+        StreamVertex jv = ejv.getJobVertex();
 
         return TaskInputsOutputsDescriptor.from(
                 jv.getNumberOfInputs(),
@@ -155,7 +152,7 @@ public class SsgNetworkMemoryCalculationUtils {
             ExecutionJobVertex ejv,
             Map<IntermediateDataSetID, Integer> maxSubpartitionNums,
             Map<IntermediateDataSetID, ResultPartitionType> partitionTypes,
-            Function<JobVertexID, ExecutionJobVertex> ejvs) {
+            Function<StreamVertexID, ExecutionJobVertex> ejvs) {
         List<IntermediateDataSet> producedDataSets = ejv.getJobVertex().getProducedDataSets();
 
         checkState(!ejv.getGraph().isDynamic(), "Only support non-dynamic graph.");

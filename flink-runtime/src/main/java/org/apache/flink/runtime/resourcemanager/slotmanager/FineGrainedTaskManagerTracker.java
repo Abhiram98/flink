@@ -192,7 +192,7 @@ public class FineGrainedTaskManagerTracker implements TaskManagerTracker {
                 .filter(
                         taskManager ->
                                 taskManager.getAllocatedSlots().values().stream()
-                                        .anyMatch(slot -> jobId.equals(slot.getJobId())))
+                                        .anyMatch(slot -> jobId.equals(slot.getStreamId())))
                 .collect(Collectors.toList());
     }
 

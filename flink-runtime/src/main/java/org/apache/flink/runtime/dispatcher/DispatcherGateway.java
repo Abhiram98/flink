@@ -42,7 +42,7 @@ public interface DispatcherGateway extends FencedRpcGateway<DispatcherId>, Restf
      * @param timeout RPC timeout
      * @return A future acknowledge if the submission succeeded
      */
-    CompletableFuture<Acknowledge> submitJob(
+    CompletableFuture<Acknowledge> submitStream(
             ExecutionPlan executionPlan, @RpcTimeout Duration timeout);
 
     CompletableFuture<Acknowledge> submitFailedJob(

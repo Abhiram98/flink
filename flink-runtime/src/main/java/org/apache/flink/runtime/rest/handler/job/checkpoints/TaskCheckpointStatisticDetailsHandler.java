@@ -26,12 +26,12 @@ import org.apache.flink.runtime.checkpoint.StatsSummary;
 import org.apache.flink.runtime.checkpoint.SubtaskStateStats;
 import org.apache.flink.runtime.checkpoint.TaskStateStats;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -90,7 +90,7 @@ public class TaskCheckpointStatisticDetailsHandler
             HandlerRequest<EmptyRequestBody> request, AbstractCheckpointStats checkpointStats)
             throws RestHandlerException {
 
-        final JobVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
 
         final TaskStateStats taskStatistics = checkpointStats.getTaskStateStats(jobVertexId);
 
@@ -117,7 +117,7 @@ public class TaskCheckpointStatisticDetailsHandler
                 String path =
                         getMessageHeaders()
                                 .getTargetRestEndpointURL()
-                                .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString())
+                                .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString())
                                 .replace(
                                         ':' + CheckpointIdPathParameter.KEY,
                                         String.valueOf(checkpoint.getCheckpointId()))

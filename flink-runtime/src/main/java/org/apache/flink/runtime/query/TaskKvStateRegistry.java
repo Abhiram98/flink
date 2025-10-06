@@ -20,7 +20,7 @@ package org.apache.flink.runtime.query;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.util.Preconditions;
@@ -38,12 +38,12 @@ public class TaskKvStateRegistry {
     private final JobID jobId;
 
     /** JobVertexID of the task. */
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     /** List of all registered KvState instances of this task. */
     private final List<KvStateInfo> registeredKvStates = new ArrayList<>();
 
-    TaskKvStateRegistry(KvStateRegistry registry, JobID jobId, JobVertexID jobVertexId) {
+    TaskKvStateRegistry(KvStateRegistry registry, JobID jobId, StreamVertexID jobVertexId) {
         this.registry = Preconditions.checkNotNull(registry, "KvStateRegistry");
         this.jobId = Preconditions.checkNotNull(jobId, "JobID");
         this.jobVertexId = Preconditions.checkNotNull(jobVertexId, "JobVertexID");

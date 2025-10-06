@@ -27,7 +27,7 @@ import org.apache.flink.api.common.accumulators.Accumulator;
 import org.apache.flink.api.common.accumulators.AccumulatorHelper;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.DefaultJobExecutionStatusEvent;
-import org.apache.flink.core.execution.JobStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.SimpleCounter;
@@ -55,15 +55,12 @@ import org.apache.flink.runtime.executiongraph.failover.ResultPartitionAvailabil
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertex.FinalizeOnMasterContext;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex.FinalizeOnMasterContext;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
@@ -158,7 +155,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     private boolean isStoppable = true;
 
     /** All job vertices that are part of this graph. */
-    private final Map<JobVertexID, ExecutionJobVertex> tasks;
+    private final Map<StreamVertexID, ExecutionJobVertex> tasks;
 
     /** All vertices, in the order in which they were created. * */
     private final List<ExecutionJobVertex> verticesInCreationOrder;
@@ -304,7 +301,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     private final TaskDeploymentDescriptorFactory taskDeploymentDescriptorFactory;
 
-    private final List<JobStatusChangedListener> jobStatusChangedListeners;
+    private final List<StreamStatusChangedListener> jobStatusChangedListeners;
 
     // --------------------------------------------------------------------------------------------
     //   Constructors
@@ -332,7 +329,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             List<JobStatusHook> jobStatusHooks,
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             TaskDeploymentDescriptorFactory taskDeploymentDescriptorFactory,
-            List<JobStatusChangedListener> jobStatusChangedListeners) {
+            List<StreamStatusChangedListener> jobStatusChangedListeners) {
 
         this.jobType = jobType;
         this.executionGraphId = new ExecutionGraphID();
@@ -499,7 +496,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
         checkpointCoordinatorTimer =
                 MdcUtils.scopeToJob(
-                        getJobID(),
+                        this.getStreamID(),
                         Executors.newSingleThreadScheduledExecutor(
                                 new DispatcherThreadFactory(
                                         Thread.currentThread().getThreadGroup(),
@@ -554,7 +551,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     private CheckpointPlanCalculator createCheckpointPlanCalculator(
             boolean enableCheckpointsAfterTasksFinish) {
         return new DefaultCheckpointPlanCalculator(
-                getJobID(),
+                this.getStreamID(),
                 new ExecutionGraphCheckpointPlanCalculatorContext(this),
                 getVerticesTopologically(),
                 enableCheckpointsAfterTasksFinish);
@@ -613,8 +610,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         return jsonPlan;
     }
 
-    @Override
-    public JobID getJobID() {
+    public JobID getStreamID() {
         return jobInformation.getJobId();
     }
 
@@ -671,12 +667,12 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public ExecutionJobVertex getJobVertex(JobVertexID id) {
+    public ExecutionJobVertex getJobVertex(StreamVertexID id) {
         return this.tasks.get(id);
     }
 
     @Override
-    public Map<JobVertexID, ExecutionJobVertex> getAllVertices() {
+    public Map<StreamVertexID, ExecutionJobVertex> getAllVertices() {
         return Collections.unmodifiableMap(this.tasks);
     }
 
@@ -840,7 +836,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     @Override
     public void attachJobGraph(
-            List<JobVertex> verticesToAttach, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> verticesToAttach, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
 
         assertRunningInJobMasterMainThread();
@@ -866,9 +862,9 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     /** Attach job vertices without initializing them. */
     private void attachJobVertices(
-            List<JobVertex> topologicallySorted, JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            List<StreamVertex> topologicallySorted, StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
-        for (JobVertex jobVertex : topologicallySorted) {
+        for (StreamVertex jobVertex : topologicallySorted) {
 
             if (jobVertex.isInputVertex() && !jobVertex.isStoppable()) {
                 this.isStoppable = false;
@@ -899,10 +895,10 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         }
     }
 
-    private void initializeJobVertices(List<JobVertex> topologicallySorted) throws JobException {
+    private void initializeJobVertices(List<StreamVertex> topologicallySorted) throws JobException {
         final long createTimestamp = System.currentTimeMillis();
 
-        for (JobVertex jobVertex : topologicallySorted) {
+        for (StreamVertex jobVertex : topologicallySorted) {
             final ExecutionJobVertex ejv = tasks.get(jobVertex.getID());
             initializeJobVertex(ejv, createTimestamp);
         }
@@ -952,7 +948,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     private boolean areJobVerticesAllInitialized(final SlotSharingGroup group) {
-        for (JobVertexID jobVertexId : group.getJobVertexIds()) {
+        for (StreamVertexID jobVertexId : group.getJobVertexIds()) {
             final ExecutionJobVertex jobVertex = getJobVertex(jobVertexId);
             checkNotNull(jobVertex, "Unknown job vertex %s", jobVertexId);
             if (!jobVertex.isInitialized()) {
@@ -1063,7 +1059,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                         }
 
                         onTerminalState(state);
-                        LOG.info("Job {} has been suspended.", getJobID());
+                        LOG.info("Job {} has been suspended.", this.getStreamID());
                     });
         } else {
             throw new IllegalStateException(
@@ -1108,7 +1104,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 return executionConfig.archive();
             }
         } catch (IOException | ClassNotFoundException e) {
-            LOG.error("Couldn't create ArchivedExecutionConfig for job {} ", getJobID(), e);
+            LOG.error("Couldn't create ArchivedExecutionConfig for job {} ", this.getStreamID(), e);
         }
         return null;
     }
@@ -1159,7 +1155,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             LOG.info(
                     "Job {} ({}) switched from state {} to {}.",
                     getJobName(),
-                    getJobID(),
+                    this.getStreamID(),
                     current,
                     newState,
                     error);
@@ -1344,7 +1340,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     private void onTerminalState(JobStatus status) {
-        LOG.debug("ExecutionGraph {} reached terminal state {}.", getJobID(), status);
+        LOG.debug("ExecutionGraph {} reached terminal state {}.", this.getStreamID(), status);
 
         try {
             CheckpointCoordinator coord = this.checkpointCoordinator;
@@ -1488,7 +1484,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 getSchedulingTopology().getResultPartition(resultPartitionId);
         final SchedulingExecutionVertex producer = schedulingResultPartition.getProducer();
         final ExecutionVertexID producerId = producer.getId();
-        final JobVertexID jobVertexId = producerId.getJobVertexId();
+        final StreamVertexID jobVertexId = producerId.getJobVertexId();
         final ExecutionJobVertex jobVertex = getJobVertex(jobVertexId);
         checkNotNull(jobVertex, "Unknown job vertex %s", jobVertexId);
 
@@ -1586,7 +1582,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 LOG.debug("Received accumulator result for unknown execution {}.", execID);
             }
         } catch (Exception e) {
-            LOG.error("Cannot update accumulators for job {}.", getJobID(), e);
+            LOG.error("Cannot update accumulators for job {}.", this.getStreamID(), e);
         }
     }
 
@@ -1608,7 +1604,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
             for (JobStatusListener listener : jobStatusListeners) {
                 try {
-                    listener.jobStatusChanges(getJobID(), newState, timestamp);
+                    listener.jobStatusChanges(this.getStreamID(), newState, timestamp);
                 } catch (Throwable t) {
                     LOG.warn("Error while notifying JobStatusListener", t);
                 }
@@ -1620,7 +1616,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                     listener ->
                             listener.onEvent(
                                     new DefaultJobExecutionStatusEvent(
-                                            getJobID(), getJobName(), oldState, newState, cause)));
+                                            this.getStreamID(), getJobName(), oldState, newState, cause)));
         }
     }
 
@@ -1680,7 +1676,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         CompletableFuture.runAsync(
                 () -> {
                     for (PermanentBlobKey blobKey : blobKeys) {
-                        blobWriter.deletePermanent(getJobID(), blobKey);
+                        blobWriter.deletePermanent(this.getStreamID(), blobKey);
                     }
                 },
                 ioExecutor);
@@ -1745,7 +1741,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     @Override
     public JobVertexInputInfo getJobVertexInputInfo(
-            JobVertexID jobVertexId, IntermediateDataSetID resultId) {
+            StreamVertexID jobVertexId, IntermediateDataSetID resultId) {
         return vertexInputInfoStore.get(jobVertexId, resultId);
     }
 

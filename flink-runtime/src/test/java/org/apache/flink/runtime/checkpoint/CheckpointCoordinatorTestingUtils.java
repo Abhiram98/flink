@@ -35,8 +35,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
@@ -102,7 +102,7 @@ import static org.mockito.Mockito.spy;
 public class CheckpointCoordinatorTestingUtils {
 
     public static OperatorStateHandle generatePartitionableStateHandle(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int index,
             int namedStates,
             int partitionsPerState,
@@ -130,7 +130,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     static ChainedStateHandle<OperatorStateHandle> generateChainedPartitionableStateHandle(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int index,
             int namedStates,
             int partitionsPerState,
@@ -236,7 +236,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static void verifyStateRestore(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             ExecutionJobVertex executionJobVertex,
             List<KeyGroupRange> keyGroupPartitions)
             throws Exception {
@@ -373,7 +373,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     static TaskStateSnapshot mockSubtaskState(
-            JobVertexID jobVertexID, int index, KeyGroupRange keyGroupRange) throws IOException {
+            StreamVertexID jobVertexID, int index, KeyGroupRange keyGroupRange) throws IOException {
 
         OperatorStateHandle partitionableState =
                 generatePartitionableStateHandle(jobVertexID, index, 2, 8, false);
@@ -395,7 +395,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static KeyGroupsStateHandle generateKeyGroupState(
-            JobVertexID jobVertexID, KeyGroupRange keyGroupPartition, boolean rawState)
+            StreamVertexID jobVertexID, KeyGroupRange keyGroupPartition, boolean rawState)
             throws IOException {
 
         List<Integer> testStatesLists = new ArrayList<>(keyGroupPartition.getNumberOfKeyGroups());
@@ -433,7 +433,7 @@ public class CheckpointCoordinatorTestingUtils {
 
     public static Tuple2<List<StateObject>, OperatorSubtaskState>
             generateSampleOperatorSubtaskState() throws IOException {
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         int index = 0;
         Random random = new Random();
         OperatorStateHandle managedOpHandle =
@@ -630,8 +630,8 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     static class CheckpointExecutionGraphBuilder {
-        private final List<JobVertex> sourceVertices = new ArrayList<>();
-        private final List<JobVertex> nonSourceVertices = new ArrayList<>();
+        private final List<StreamVertex> sourceVertices = new ArrayList<>();
+        private final List<StreamVertex> nonSourceVertices = new ArrayList<>();
         private DistributionPattern distributionPattern;
         private boolean transitToRunning;
         private TaskManagerGateway taskManagerGateway;
@@ -643,30 +643,30 @@ public class CheckpointCoordinatorTestingUtils {
             this.mainThreadExecutor = ComponentMainThreadExecutorServiceAdapter.forMainThread();
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id) {
+        public CheckpointExecutionGraphBuilder addJobVertex(StreamVertexID id) {
             return addJobVertex(id, true);
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id, boolean isSource) {
+        public CheckpointExecutionGraphBuilder addJobVertex(StreamVertexID id, boolean isSource) {
             return addJobVertex(id, 1, 32768, Collections.emptyList(), isSource);
         }
 
         public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id, int parallelism, int maxParallelism) {
+                StreamVertexID id, int parallelism, int maxParallelism) {
             return addJobVertex(id, parallelism, maxParallelism, Collections.emptyList(), true);
         }
 
         public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id,
+                StreamVertexID id,
                 int parallelism,
                 int maxParallelism,
                 List<OperatorIDPair> operators,
                 boolean isSource) {
 
-            JobVertex jobVertex =
+            StreamVertex jobVertex =
                     operators.size() == 0
-                            ? new JobVertex("anon", id)
-                            : new JobVertex("anon", id, operators);
+                            ? new StreamVertex("anon", id)
+                            : new StreamVertex("anon", id, operators);
             jobVertex.setParallelism(parallelism);
             jobVertex.setMaxParallelism(maxParallelism);
             jobVertex.setInvokableClass(NoOpInvokable.class);
@@ -674,7 +674,7 @@ public class CheckpointCoordinatorTestingUtils {
             return addJobVertex(jobVertex, isSource);
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertex jobVertex, boolean isSource) {
+        public CheckpointExecutionGraphBuilder addJobVertex(StreamVertex jobVertex, boolean isSource) {
             if (isSource) {
                 sourceVertices.add(jobVertex);
             } else {
@@ -709,20 +709,20 @@ public class CheckpointCoordinatorTestingUtils {
 
         ExecutionGraph build(ScheduledExecutorService executorService) throws Exception {
             // Lets connect source vertices and non-source vertices
-            for (JobVertex source : sourceVertices) {
-                for (JobVertex nonSource : nonSourceVertices) {
+            for (StreamVertex source : sourceVertices) {
+                for (StreamVertex nonSource : nonSourceVertices) {
                     nonSource.connectNewDataSetAsInput(
                             source, distributionPattern, ResultPartitionType.PIPELINED);
                 }
             }
 
-            List<JobVertex> allVertices = new ArrayList<>();
+            List<StreamVertex> allVertices = new ArrayList<>();
             allVertices.addAll(sourceVertices);
             allVertices.addAll(nonSourceVertices);
 
             ExecutionGraph executionGraph =
                     ExecutionGraphTestUtils.createExecutionGraph(
-                            executorService, allVertices.toArray(new JobVertex[0]));
+                            executorService, allVertices.toArray(new StreamVertex[0]));
             executionGraph.start(mainThreadExecutor);
 
             if (taskManagerGateway != null) {
@@ -873,7 +873,7 @@ public class CheckpointCoordinatorTestingUtils {
                 throws Exception {
             return build(
                     new CheckpointExecutionGraphBuilder()
-                            .addJobVertex(new JobVertexID())
+                            .addJobVertex(new StreamVertexID())
                             .build(executorService));
         }
 
@@ -881,13 +881,13 @@ public class CheckpointCoordinatorTestingUtils {
 
             DefaultCheckpointPlanCalculator checkpointPlanCalculator =
                     new DefaultCheckpointPlanCalculator(
-                            executionGraph.getJobID(),
+                            executionGraph.getStreamID(),
                             new ExecutionGraphCheckpointPlanCalculatorContext(executionGraph),
                             executionGraph.getVerticesTopologically(),
                             allowCheckpointsAfterTasksFinished);
 
             return new CheckpointCoordinator(
-                    executionGraph.getJobID(),
+                    executionGraph.getStreamID(),
                     checkpointCoordinatorConfiguration,
                     coordinatorsToCheckpoint,
                     checkpointIDCounter,

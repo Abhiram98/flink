@@ -22,7 +22,7 @@ import org.apache.flink.api.common.operators.MailboxExecutor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.core.plugin.PluginManager;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.TestLocalRecoveryConfig;
@@ -129,7 +129,7 @@ class StateChangelogStorageLoaderTest {
         public StateChangelogStorage<?> createStorage(
                 JobID jobID,
                 Configuration configuration,
-                TaskManagerJobMetricGroup metricGroup,
+                TaskManagerStreamMetricGroup metricGroup,
                 LocalRecoveryConfig localRecoveryConfig) {
             return new TestStateChangelogStorage();
         }

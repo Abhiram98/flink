@@ -30,12 +30,8 @@ import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationResult;
 import org.apache.flink.runtime.rest.handler.async.TriggerResponse;
 import org.apache.flink.runtime.rest.handler.job.AsynchronousJobOperationKey;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.RequestBody;
-import org.apache.flink.runtime.rest.messages.TriggerId;
-import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.savepoints.SavepointInfo;
 import org.apache.flink.runtime.rest.messages.job.savepoints.SavepointStatusHeaders;
 import org.apache.flink.runtime.rest.messages.job.savepoints.SavepointStatusMessageParameters;
@@ -134,7 +130,7 @@ public class SavepointHandlers {
         }
 
         protected AsynchronousJobOperationKey createOperationKey(final HandlerRequest<B> request) {
-            final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+            final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
             return AsynchronousJobOperationKey.of(
                     extractTriggerId(request.getRequestBody()).orElseGet(TriggerId::new), jobId);
         }
@@ -333,7 +329,7 @@ public class SavepointHandlers {
         protected AsynchronousJobOperationKey getOperationKey(
                 HandlerRequest<EmptyRequestBody> request) {
             final TriggerId triggerId = request.getPathParameter(TriggerIdPathParameter.class);
-            final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+            final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
             return AsynchronousJobOperationKey.of(triggerId, jobId);
         }
 

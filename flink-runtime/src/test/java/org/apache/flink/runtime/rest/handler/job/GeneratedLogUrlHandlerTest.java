@@ -28,23 +28,23 @@ class GeneratedLogUrlHandlerTest {
     @Test
     void testGenerateJobManagerLogUrl() {
         final String pattern = "http://localhost/<jobid>/log";
-        final String jobId = "jobid";
+        final String streamId = "jobid";
 
-        final String generatedUrl = GeneratedLogUrlHandler.generateLogUrl(pattern, jobId, null);
+        final String generatedUrl = GeneratedLogUrlHandler.generateLogUrl(pattern, streamId, null);
 
-        assertThat(generatedUrl).isEqualTo(pattern.replace("<jobid>", jobId));
+        assertThat(generatedUrl).isEqualTo(pattern.replace("<jobid>", streamId));
     }
 
     @Test
     void testGenerateTaskManagerLogUrl() {
         final String pattern = "http://localhost/<jobid>/tm/<tmid>/log";
-        final String jobId = "jobid";
+        final String streamId = "jobid";
         final String taskManagerId = "tmid";
 
         final String generatedUrl =
-                GeneratedLogUrlHandler.generateLogUrl(pattern, jobId, taskManagerId);
+                GeneratedLogUrlHandler.generateLogUrl(pattern, streamId, taskManagerId);
 
-        assertThat(pattern.replace("<jobid>", jobId).replace("<tmid>", taskManagerId))
+        assertThat(pattern.replace("<jobid>", streamId).replace("<tmid>", taskManagerId))
                 .isEqualTo(generatedUrl);
     }
 }

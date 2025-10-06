@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.blob.BlobWriter;
 import org.apache.flink.runtime.checkpoint.CheckpointIDCounter;
@@ -33,18 +33,18 @@ import org.apache.flink.runtime.checkpoint.CompletedCheckpointStore;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.checkpoint.hooks.MasterHooks;
 import org.apache.flink.runtime.client.JobExecutionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategy;
 import org.apache.flink.runtime.executiongraph.failover.partitionrelease.PartitionGroupReleaseStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 import org.apache.flink.runtime.state.CheckpointStorage;
@@ -69,12 +69,12 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
  * Utility class to encapsulate the logic of building an {@link DefaultExecutionGraph} from a {@link
- * JobGraph}.
+ * StreamGraph}.
  */
 public class DefaultExecutionGraphBuilder {
 
     public static DefaultExecutionGraph buildGraph(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             Configuration jobManagerConfig,
             ScheduledExecutorService futureExecutor,
             Executor ioExecutor,
@@ -98,13 +98,13 @@ public class DefaultExecutionGraphBuilder {
             ExecutionJobVertex.Factory executionJobVertexFactory,
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             boolean nonFinishedHybridPartitionShouldBeUnknown,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobExecutionException, JobException {
 
         checkNotNull(jobGraph, "job graph cannot be null");
 
         final String jobName = jobGraph.getName();
-        final JobID jobId = jobGraph.getJobID();
+        final JobID jobId = jobGraph.getStreamID();
         final JobType jobType = jobGraph.getJobType();
 
         final JobInformation jobInformation =
@@ -142,8 +142,8 @@ public class DefaultExecutionGraphBuilder {
             throw new JobException("Could not create the TaskDeploymentDescriptorFactory.", e);
         }
 
-        final List<JobStatusChangedListener> jobStatusChangedListeners =
-                JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+        final List<StreamStatusChangedListener> jobStatusChangedListeners =
+                StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                         classLoader, jobManagerConfig, ioExecutor);
 
         // create a new execution graph, if none exists so far
@@ -188,10 +188,10 @@ public class DefaultExecutionGraphBuilder {
         final long initMasterStart = System.nanoTime();
         log.info("Running initialization on master for job {} ({}).", jobName, jobId);
 
-        for (JobVertex vertex : jobGraph.getVertices()) {
+        for (StreamVertex vertex : jobGraph.getVertices()) {
             String executableClass = vertex.getInvokableClassName();
             if (executableClass == null || executableClass.isEmpty()) {
-                throw new JobSubmissionException(
+                throw new StreamSubmissionException(
                         jobId,
                         "The vertex "
                                 + vertex.getID()
@@ -220,7 +220,7 @@ public class DefaultExecutionGraphBuilder {
                 (System.nanoTime() - initMasterStart) / 1_000_000);
 
         // topologically sort the job vertices and attach the graph to the existing one
-        List<JobVertex> sortedTopology = jobGraph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> sortedTopology = jobGraph.getVerticesSortedTopologicallyFromSources();
         if (log.isDebugEnabled()) {
             log.debug(
                     "Adding {} vertices from job graph {} ({}).",
@@ -356,7 +356,7 @@ public class DefaultExecutionGraphBuilder {
         return executionGraph;
     }
 
-    public static boolean isCheckpointingEnabled(JobGraph jobGraph) {
+    public static boolean isCheckpointingEnabled(StreamGraph jobGraph) {
         return jobGraph.getCheckpointingSettings() != null;
     }
 

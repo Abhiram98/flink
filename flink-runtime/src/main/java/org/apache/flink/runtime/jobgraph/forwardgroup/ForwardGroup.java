@@ -20,8 +20,8 @@
 package org.apache.flink.runtime.jobgraph.forwardgroup;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,10 +39,10 @@ public class ForwardGroup {
 
     private int parallelism = ExecutionConfig.PARALLELISM_DEFAULT;
 
-    private int maxParallelism = JobVertex.MAX_PARALLELISM_DEFAULT;
-    private final Set<JobVertexID> jobVertexIds = new HashSet<>();
+    private int maxParallelism = StreamVertex.MAX_PARALLELISM_DEFAULT;
+    private final Set<StreamVertexID> jobVertexIds = new HashSet<>();
 
-    public ForwardGroup(final Set<JobVertex> jobVertices) {
+    public ForwardGroup(final Set<StreamVertex> jobVertices) {
         checkNotNull(jobVertices);
 
         Set<Integer> configuredParallelisms =
@@ -52,7 +52,7 @@ public class ForwardGroup {
                                     jobVertexIds.add(jobVertex.getID());
                                     return jobVertex.getParallelism() > 0;
                                 })
-                        .map(JobVertex::getParallelism)
+                        .map(StreamVertex::getParallelism)
                         .collect(Collectors.toSet());
 
         checkState(configuredParallelisms.size() <= 1);
@@ -62,7 +62,7 @@ public class ForwardGroup {
 
         Set<Integer> configuredMaxParallelisms =
                 jobVertices.stream()
-                        .map(JobVertex::getMaxParallelism)
+                        .map(StreamVertex::getMaxParallelism)
                         .filter(val -> val > 0)
                         .collect(Collectors.toSet());
 
@@ -102,7 +102,7 @@ public class ForwardGroup {
         return jobVertexIds.size();
     }
 
-    public Set<JobVertexID> getJobVertexIds() {
+    public Set<StreamVertexID> getJobVertexIds() {
         return jobVertexIds;
     }
 }

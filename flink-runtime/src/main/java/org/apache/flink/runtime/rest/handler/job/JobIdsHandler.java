@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.handler.job;
 
-import org.apache.flink.runtime.messages.webmonitor.JobIdsWithStatusOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamIdsWithStatusOverview;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -40,32 +40,31 @@ public class JobIdsHandler
         extends AbstractRestHandler<
                 RestfulGateway,
                 EmptyRequestBody,
-                JobIdsWithStatusOverview,
+        StreamIdsWithStatusOverview,
                 EmptyMessageParameters> {
 
     public JobIdsHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, JobIdsWithStatusOverview, EmptyMessageParameters>
+            MessageHeaders<EmptyRequestBody, StreamIdsWithStatusOverview, EmptyMessageParameters>
                     messageHeaders) {
         super(leaderRetriever, timeout, responseHeaders, messageHeaders);
     }
 
     @Override
-    protected CompletableFuture<JobIdsWithStatusOverview> handleRequest(
+    protected CompletableFuture<StreamIdsWithStatusOverview> handleRequest(
             @Nonnull HandlerRequest<EmptyRequestBody> request, @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
 
         return gateway.requestMultipleJobDetails(timeout)
                 .thenApply(
                         multipleJobDetails ->
-                                new JobIdsWithStatusOverview(
+                                new StreamIdsWithStatusOverview(
                                         multipleJobDetails.getJobs().stream()
                                                 .map(
                                                         jobDetails ->
-                                                                new JobIdsWithStatusOverview
-                                                                        .JobIdWithStatus(
+                                                                new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                                                         jobDetails.getJobId(),
                                                                         jobDetails.getStatus()))
                                                 .collect(Collectors.toList())));

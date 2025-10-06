@@ -23,13 +23,10 @@ import org.apache.flink.core.io.InputSplitAssigner;
 import org.apache.flink.core.io.InputSplitSource;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -56,7 +53,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * This class contains test concerning the correct conversion from {@link JobGraph} to {@link
+ * This class contains test concerning the correct conversion from {@link StreamGraph} to {@link
  * ExecutionGraph} objects. It also tests that {@link
  * VertexInputInfoComputationUtils#computeVertexInputInfoForAllToAll} builds {@link
  * DistributionPattern#ALL_TO_ALL} connections correctly.
@@ -66,16 +63,16 @@ class DefaultExecutionGraphConstructionTest {
     static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_RESOURCE =
             TestingUtils.defaultExecutorExtension();
 
-    private static final JobManagerJobMetricGroup JOB_MANAGER_JOB_METRIC_GROUP =
+    private static final StreamManagerStreamMetricGroup JOB_MANAGER_JOB_METRIC_GROUP =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
 
-    private ExecutionGraph createDefaultExecutionGraph(List<JobVertex> vertices) throws Exception {
+    private ExecutionGraph createDefaultExecutionGraph(List<StreamVertex> vertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
                 .setVertexParallelismStore(SchedulerBase.computeVertexParallelismStore(vertices))
                 .build(EXECUTOR_RESOURCE.getExecutor());
     }
 
-    private ExecutionGraph createDynamicExecutionGraph(List<JobVertex> vertices) throws Exception {
+    private ExecutionGraph createDynamicExecutionGraph(List<StreamVertex> vertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
                 .setVertexParallelismStore(SchedulerBase.computeVertexParallelismStore(vertices))
                 .buildDynamicGraph(EXECUTOR_RESOURCE.getExecutor());
@@ -83,9 +80,9 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testExecutionAttemptIdInTwoIdenticalJobsIsNotSame() throws Exception {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
 
         v1.setParallelism(5);
         v2.setParallelism(7);
@@ -95,7 +92,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.setInvokableClass(AbstractInvokable.class);
         v3.setInvokableClass(AbstractInvokable.class);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
 
         ExecutionGraph eg1 = createDefaultExecutionGraph(ordered);
         ExecutionGraph eg2 = createDefaultExecutionGraph(ordered);
@@ -124,11 +121,11 @@ class DefaultExecutionGraphConstructionTest {
      */
     @Test
     void testCreateSimpleGraphBipartite() throws Exception {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
-        JobVertex v4 = new JobVertex("vertex4");
-        JobVertex v5 = new JobVertex("vertex5");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
+        StreamVertex v4 = new StreamVertex("vertex4");
+        StreamVertex v5 = new StreamVertex("vertex5");
 
         v1.setParallelism(5);
         v2.setParallelism(7);
@@ -153,7 +150,7 @@ class DefaultExecutionGraphConstructionTest {
         v5.connectNewDataSetAsInput(
                 v3, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        List<JobVertex> ordered = new ArrayList<JobVertex>(Arrays.asList(v1, v2, v3, v4, v5));
+        List<StreamVertex> ordered = new ArrayList<StreamVertex>(Arrays.asList(v1, v2, v3, v4, v5));
 
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
@@ -162,11 +159,11 @@ class DefaultExecutionGraphConstructionTest {
 
     private void verifyTestGraph(
             ExecutionGraph eg,
-            JobVertex v1,
-            JobVertex v2,
-            JobVertex v3,
-            JobVertex v4,
-            JobVertex v5) {
+            StreamVertex v1,
+            StreamVertex v2,
+            StreamVertex v3,
+            StreamVertex v4,
+            StreamVertex v5) {
         ExecutionGraphTestUtils.verifyGeneratedExecutionJobVertex(
                 eg, v1, null, Collections.singletonList(v2));
         ExecutionGraphTestUtils.verifyGeneratedExecutionJobVertex(
@@ -181,11 +178,11 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testCannotConnectWrongOrder() throws Exception {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
-        JobVertex v4 = new JobVertex("vertex4");
-        JobVertex v5 = new JobVertex("vertex5");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
+        StreamVertex v4 = new StreamVertex("vertex4");
+        StreamVertex v5 = new StreamVertex("vertex5");
 
         v1.setParallelism(5);
         v2.setParallelism(7);
@@ -210,7 +207,7 @@ class DefaultExecutionGraphConstructionTest {
         v5.connectNewDataSetAsInput(
                 v3, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        List<JobVertex> ordered = new ArrayList<JobVertex>(Arrays.asList(v1, v2, v3, v5, v4));
+        List<StreamVertex> ordered = new ArrayList<StreamVertex>(Arrays.asList(v1, v2, v3, v5, v4));
 
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         assertThatThrownBy(() -> eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP))
@@ -229,11 +226,11 @@ class DefaultExecutionGraphConstructionTest {
         InputSplitSource<InputSplit> source2 =
                 new TestingInputSplitSource<>(emptySplits, assigner2);
 
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
-        JobVertex v4 = new JobVertex("vertex4");
-        JobVertex v5 = new JobVertex("vertex5");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
+        StreamVertex v4 = new StreamVertex("vertex4");
+        StreamVertex v5 = new StreamVertex("vertex5");
 
         v1.setParallelism(5);
         v2.setParallelism(7);
@@ -261,7 +258,7 @@ class DefaultExecutionGraphConstructionTest {
         v3.setInputSplitSource(source1);
         v5.setInputSplitSource(source2);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
 
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
@@ -272,9 +269,9 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testMultiConsumersForOneIntermediateResult() throws Exception {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
 
         IntermediateDataSetID dataSetId = new IntermediateDataSetID();
         v2.connectNewDataSetAsInput(
@@ -282,7 +279,7 @@ class DefaultExecutionGraphConstructionTest {
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING, dataSetId, false);
 
-        List<JobVertex> vertices = new ArrayList<>(Arrays.asList(v1, v2, v3));
+        List<StreamVertex> vertices = new ArrayList<>(Arrays.asList(v1, v2, v3));
         ExecutionGraph eg = createDefaultExecutionGraph(vertices);
         eg.attachJobGraph(vertices, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -311,8 +308,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testRegisterConsumedPartitionGroupToEdgeManager() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(2);
         v2.setParallelism(2);
@@ -320,7 +317,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -346,8 +343,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testPointWiseConsumedPartitionGroupPartitionFinished() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(4);
         v2.setParallelism(2);
@@ -355,7 +352,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -385,8 +382,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testAllToAllConsumedPartitionGroupPartitionFinished() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(2);
         v2.setParallelism(2);
@@ -394,7 +391,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDefaultExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -416,8 +413,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testDynamicGraphAllToAllConsumedPartitionGroupPartitionFinished() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(2);
         v2.setParallelism(2);
@@ -425,7 +422,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDynamicExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -454,8 +451,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testDynamicGraphPointWiseConsumedPartitionGroupPartitionFinished() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(4);
         v2.setParallelism(2);
@@ -463,7 +460,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDynamicExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 
@@ -499,8 +496,8 @@ class DefaultExecutionGraphConstructionTest {
 
     @Test
     void testAttachToDynamicGraph() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
 
         v1.setParallelism(2);
         v2.setParallelism(2);
@@ -508,7 +505,7 @@ class DefaultExecutionGraphConstructionTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
         ExecutionGraph eg = createDynamicExecutionGraph(ordered);
         eg.attachJobGraph(ordered, JOB_MANAGER_JOB_METRIC_GROUP);
 

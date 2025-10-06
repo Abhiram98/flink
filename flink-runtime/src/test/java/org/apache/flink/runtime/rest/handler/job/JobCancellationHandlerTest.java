@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.job;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.FlinkJobTerminatedWithoutCancellationException;
 import org.apache.flink.runtime.rest.RestMatchers;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -76,7 +76,7 @@ class JobCancellationHandlerTest {
     @Test
     void testErrorCodeForUnknownJob() throws Exception {
         testResponseCodeOnFailedDispatcherCancellationResponse(
-                jobId -> FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId)),
+                jobId -> FutureUtils.completedExceptionally(new FlinkStreamNotFoundException(jobId)),
                 HttpResponseStatus.NOT_FOUND);
     }
 

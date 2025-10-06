@@ -42,7 +42,7 @@ public class YarnCancelJobTerminationHeaders implements RestHandlerSpecification
             new YarnCancelJobTerminationHeaders();
 
     private static final String URL =
-            String.format("/jobs/:%s/yarn-cancel", JobIDPathParameter.KEY);
+            String.format("/jobs/:%s/yarn-cancel", StreamIdPathParameter.KEY);
 
     private YarnCancelJobTerminationHeaders() {}
 

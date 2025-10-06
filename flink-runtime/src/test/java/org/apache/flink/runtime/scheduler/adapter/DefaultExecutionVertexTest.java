@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler.adapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ResultPartitionState;
@@ -69,7 +69,7 @@ class DefaultExecutionVertexTest {
                         });
         producerVertex =
                 new DefaultExecutionVertex(
-                        new ExecutionVertexID(new JobVertexID(), 0),
+                        new ExecutionVertexID(new StreamVertexID(), 0),
                         Collections.singletonList(schedulingResultPartition),
                         stateSupplier,
                         Collections.emptyList(),
@@ -89,7 +89,7 @@ class DefaultExecutionVertexTest {
 
         consumerVertex =
                 new DefaultExecutionVertex(
-                        new ExecutionVertexID(new JobVertexID(), 0),
+                        new ExecutionVertexID(new StreamVertexID(), 0),
                         Collections.emptyList(),
                         stateSupplier,
                         consumedPartitionGroups,

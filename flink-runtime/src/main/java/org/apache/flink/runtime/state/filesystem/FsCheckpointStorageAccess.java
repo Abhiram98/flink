@@ -112,7 +112,7 @@ public class FsCheckpointStorageAccess extends AbstractFsCheckpointStorageAccess
         this.fileSystem = checkNotNull(fs);
         this.checkpointsDirectory =
                 createCheckpointSubDirs
-                        ? getCheckpointDirectoryForJob(checkpointBaseDirectory, jobId)
+                        ? getCheckpointDirectoryForStream(checkpointBaseDirectory, jobId)
                         : checkpointBaseDirectory;
         this.sharedStateDirectory = new Path(checkpointsDirectory, CHECKPOINT_SHARED_STATE_DIR);
         this.taskOwnedStateDirectory =

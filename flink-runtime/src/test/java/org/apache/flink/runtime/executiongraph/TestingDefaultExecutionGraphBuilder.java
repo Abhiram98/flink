@@ -35,9 +35,9 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptorFactory;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
@@ -68,7 +68,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;
     private JobMasterPartitionTracker partitionTracker = NoOpJobMasterPartitionTracker.INSTANCE;
     private Configuration jobMasterConfig = new Configuration();
-    private JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+    private StreamGraph jobGraph = StreamGraphTestUtils.emptyJobGraph();
     private CompletedCheckpointStore completedCheckpointStore =
             new StandaloneCompletedCheckpointStore(1);
     private CheckpointIDCounter checkpointIdCounter = new StandaloneCheckpointIDCounter();
@@ -82,7 +82,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private MarkPartitionFinishedStrategy markPartitionFinishedStrategy =
             ResultPartitionType::isBlockingOrBlockingPersistentResultPartition;
 
-    private Function<JobManagerJobMetricGroup, CheckpointStatsTracker>
+    private Function<StreamManagerStreamMetricGroup, CheckpointStatsTracker>
             checkpointStatsTrackerFactory = metricGroup -> NoOpCheckpointStatsTracker.INSTANCE;
 
     private boolean nonFinishedHybridPartitionShouldBeUnknown = false;
@@ -94,7 +94,7 @@ public class TestingDefaultExecutionGraphBuilder {
         return this;
     }
 
-    public TestingDefaultExecutionGraphBuilder setJobGraph(JobGraph jobGraph) {
+    public TestingDefaultExecutionGraphBuilder setJobGraph(StreamGraph jobGraph) {
         this.jobGraph = jobGraph;
         return this;
     }
@@ -174,7 +174,7 @@ public class TestingDefaultExecutionGraphBuilder {
     }
 
     public TestingDefaultExecutionGraphBuilder setCheckpointStatsTracker(
-            Function<JobManagerJobMetricGroup, CheckpointStatsTracker>
+            Function<StreamManagerStreamMetricGroup, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory) {
         this.checkpointStatsTrackerFactory = checkpointStatsTrackerFactory;
         return this;
@@ -183,7 +183,7 @@ public class TestingDefaultExecutionGraphBuilder {
     private DefaultExecutionGraph build(
             boolean isDynamicGraph, ScheduledExecutorService executorService)
             throws JobException, JobExecutionException {
-        final JobManagerJobMetricGroup metricGroup =
+        final StreamManagerStreamMetricGroup metricGroup =
                 UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
         return DefaultExecutionGraphBuilder.buildGraph(
                 jobGraph,

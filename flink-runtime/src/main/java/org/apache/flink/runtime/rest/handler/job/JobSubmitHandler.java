@@ -122,7 +122,7 @@ public final class JobSubmitHandler
 
         CompletableFuture<Acknowledge> jobSubmissionFuture =
                 finalizedExecutionPlanFuture.thenCompose(
-                        executionPlan -> gateway.submitJob(executionPlan, timeout));
+                        executionPlan -> gateway.submitStream(executionPlan, timeout));
 
         return jobSubmissionFuture.thenCombine(
                 executionPlanFuture,

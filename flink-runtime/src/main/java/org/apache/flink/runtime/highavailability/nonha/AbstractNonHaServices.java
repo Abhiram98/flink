@@ -23,7 +23,7 @@ import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.checkpoint.StandaloneCheckpointRecoveryFactory;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.StandaloneExecutionPlanStore;
@@ -43,7 +43,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 public abstract class AbstractNonHaServices implements HighAvailabilityServices {
     protected final Object lock = new Object();
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final VoidBlobStore voidBlobStore;
 
@@ -79,7 +79,7 @@ public abstract class AbstractNonHaServices implements HighAvailabilityServices 
     }
 
     @Override
-    public JobResultStore getJobResultStore() throws Exception {
+    public StreamResultStore getJobResultStore() throws Exception {
         synchronized (lock) {
             checkNotShutdown();
 

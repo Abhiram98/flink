@@ -23,8 +23,8 @@ import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -240,7 +240,7 @@ class ExecutionGraphSuspendTest {
                 new ManuallyTriggeredScheduledExecutor();
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.emptyJobGraph(),
+                                StreamGraphTestUtils.emptyJobGraph(),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setRestartBackoffTimeStrategy(
@@ -315,13 +315,13 @@ class ExecutionGraphSuspendTest {
 
     private static SchedulerBase createScheduler(TaskManagerGateway gateway, int parallelism)
             throws Exception {
-        final JobVertex vertex = new JobVertex("vertex");
+        final StreamVertex vertex = new StreamVertex("vertex");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(vertex),
+                                StreamGraphTestUtils.streamingStreamGraph(vertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

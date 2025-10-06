@@ -19,8 +19,8 @@
 package org.apache.flink.runtime.dispatcher;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 
 import javax.annotation.Nullable;
@@ -57,25 +57,25 @@ public interface ExecutionGraphInfoStore extends Closeable {
     void put(ExecutionGraphInfo executionGraphInfo) throws IOException;
 
     /**
-     * Return the {@link JobsOverview} for all stored/past jobs.
+     * Return the {@link StreamsOverview} for all stored/past jobs.
      *
      * @return Jobs overview for all stored/past jobs
      */
-    JobsOverview getStoredJobsOverview();
+    StreamsOverview getStoredJobsOverview();
 
     /**
-     * Return the collection of {@link JobDetails} of all currently stored jobs.
+     * Return the collection of {@link StreamDetails} of all currently stored jobs.
      *
      * @return Collection of job details of all currently stored jobs
      */
-    Collection<JobDetails> getAvailableJobDetails();
+    Collection<StreamDetails> getAvailableJobDetails();
 
     /**
-     * Return the {@link JobDetails}} for the given job.
+     * Return the {@link StreamDetails}} for the given job.
      *
-     * @param jobId identifying the job for which to retrieve the {@link JobDetails}
-     * @return {@link JobDetails} of the requested job or null if the job is not available
+     * @param jobId identifying the job for which to retrieve the {@link StreamDetails}
+     * @return {@link StreamDetails} of the requested job or null if the job is not available
      */
     @Nullable
-    JobDetails getAvailableJobDetails(JobID jobId);
+    StreamDetails getAvailableJobDetails(JobID jobId);
 }

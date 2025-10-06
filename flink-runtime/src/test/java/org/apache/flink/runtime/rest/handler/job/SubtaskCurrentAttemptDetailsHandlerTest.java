@@ -28,14 +28,14 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecution;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
 import org.apache.flink.runtime.executiongraph.IOMetrics;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcherImpl;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.SubtaskCurrentAttemptDetailsHeaders;
 import org.apache.flink.runtime.rest.messages.job.SubtaskExecutionAttemptDetailsInfo;
@@ -62,7 +62,7 @@ class SubtaskCurrentAttemptDetailsHandlerTest {
 
         // Prepare the execution graph.
         final JobID jobID = new JobID();
-        final JobVertexID jobVertexID = new JobVertexID();
+        final StreamVertexID jobVertexID = new StreamVertexID();
 
         // The testing subtask.
         final long deployingTs = System.currentTimeMillis() - 1024;
@@ -143,7 +143,7 @@ class SubtaskCurrentAttemptDetailsHandlerTest {
                         metricFetcher);
 
         final HashMap<String, String> receivedPathParameters = new HashMap<>(2);
-        receivedPathParameters.put(JobIDPathParameter.KEY, jobID.toString());
+        receivedPathParameters.put(StreamIdPathParameter.KEY, jobID.toString());
         receivedPathParameters.put(JobVertexIdPathParameter.KEY, jobVertexID.toString());
 
         final HandlerRequest<EmptyRequestBody> request =

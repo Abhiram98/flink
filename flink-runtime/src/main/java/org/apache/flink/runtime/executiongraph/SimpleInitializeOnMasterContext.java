@@ -19,11 +19,11 @@
 package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 
-/** A simple pojo based implementation of {@link JobVertex.InitializeOnMasterContext}. */
+/** A simple pojo based implementation of {@link StreamVertex.InitializeOnMasterContext}. */
 @Internal
-public final class SimpleInitializeOnMasterContext implements JobVertex.InitializeOnMasterContext {
+public final class SimpleInitializeOnMasterContext implements StreamVertex.InitializeOnMasterContext {
 
     private final ClassLoader loader;
     private final int executionParallelism;

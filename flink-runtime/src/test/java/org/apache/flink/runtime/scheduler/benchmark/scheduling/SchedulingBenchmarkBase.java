@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler.benchmark.scheduling;
 
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
 import org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkBase;
@@ -35,7 +35,7 @@ import static org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkUti
 public class SchedulingBenchmarkBase extends SchedulerBenchmarkBase {
 
     TestingSchedulerOperations schedulerOperations;
-    List<JobVertex> jobVertices;
+    List<StreamVertex> jobVertices;
     DefaultScheduler scheduler;
     ExecutionGraph executionGraph;
     SchedulingTopology schedulingTopology;

@@ -36,7 +36,7 @@ import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobmaster.event.ExecutionJobVertexInitializedEvent;
 import org.apache.flink.runtime.jobmaster.event.ExecutionVertexFinishedEvent;
@@ -91,7 +91,7 @@ public class DefaultBatchJobRecoveryHandler
     /** The timestamp (via {@link Clock#relativeTimeMillis()}) of the last snapshot. */
     private long lastSnapshotRelativeTime;
 
-    private final Set<JobVertexID> needToSnapshotJobVertices = new HashSet<>();
+    private final Set<StreamVertexID> needToSnapshotJobVertices = new HashSet<>();
 
     private static final ResourceID UNKNOWN_PRODUCER = ResourceID.generate();
 
@@ -111,7 +111,7 @@ public class DefaultBatchJobRecoveryHandler
      * the future, all other executions within the same vertex must also be restarted to ensure the
      * consistency and correctness of the state.
      */
-    private final Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
+    private final Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
 
     private final Duration previousWorkerRecoveryTimeout;
 
@@ -156,12 +156,12 @@ public class DefaultBatchJobRecoveryHandler
 
         // notify the shuffle master the recovery process has started and try to fetch partitions
         context.getShuffleMaster()
-                .notifyPartitionRecoveryStarted(context.getExecutionGraph().getJobID());
+                .notifyPartitionRecoveryStarted(context.getExecutionGraph().getStreamID());
 
         if (!jobEventManager.replay(this)) {
             log.warn(
                     "Fail to replay log for {}, will start the job as a new one.",
-                    context.getExecutionGraph().getJobID());
+                    context.getExecutionGraph().getStreamID());
             recoverFailed();
             return;
         }
@@ -210,11 +210,11 @@ public class DefaultBatchJobRecoveryHandler
     }
 
     private void restoreOperatorCoordinators(
-            Map<OperatorID, byte[]> snapshots, Map<OperatorID, JobVertexID> operatorToJobVertex)
+            Map<OperatorID, byte[]> snapshots, Map<OperatorID, StreamVertexID> operatorToJobVertex)
             throws Exception {
         for (Map.Entry<OperatorID, byte[]> entry : snapshots.entrySet()) {
             OperatorID operatorId = entry.getKey();
-            JobVertexID jobVertexId = checkNotNull(operatorToJobVertex.get(operatorId));
+            StreamVertexID jobVertexId = checkNotNull(operatorToJobVertex.get(operatorId));
             ExecutionJobVertex jobVertex = getExecutionJobVertex(jobVertexId);
             log.info("Restore operator coordinators of {} from job event.", jobVertex.getName());
 
@@ -288,7 +288,7 @@ public class DefaultBatchJobRecoveryHandler
 
         // transition states of all vertices
         for (ExecutionVertexFinishedEvent event : finishedEvents) {
-            JobVertexID jobVertexId = event.getExecutionVertexId().getJobVertexId();
+            StreamVertexID jobVertexId = event.getExecutionVertexId().getJobVertexId();
             ExecutionJobVertex jobVertex = context.getExecutionGraph().getJobVertex(jobVertexId);
             checkState(jobVertex.isInitialized());
 
@@ -324,7 +324,7 @@ public class DefaultBatchJobRecoveryHandler
         }
 
         // restore operator coordinator state if needed.
-        final Map<OperatorID, JobVertexID> operatorToJobVertex = new HashMap<>();
+        final Map<OperatorID, StreamVertexID> operatorToJobVertex = new HashMap<>();
         for (ExecutionJobVertex jobVertex : context.getExecutionGraph().getAllVertices().values()) {
             if (!jobVertex.isInitialized()) {
                 continue;
@@ -355,7 +355,7 @@ public class DefaultBatchJobRecoveryHandler
 
     @Override
     public void onExecutionJobVertexInitialization(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             int parallelism,
             Map<IntermediateDataSetID, JobVertexInputInfo> jobVertexInputInfos) {
         // write execution job vertex initialized event.
@@ -409,7 +409,7 @@ public class DefaultBatchJobRecoveryHandler
 
         final Map<OperatorID, CompletableFuture<byte[]>> snapshotFutures = new HashMap<>();
 
-        for (JobVertexID jobVertexId : needToSnapshotJobVertices) {
+        for (StreamVertexID jobVertexId : needToSnapshotJobVertices) {
             final ExecutionJobVertex jobVertex = checkNotNull(getExecutionJobVertex(jobVertexId));
 
             log.info(
@@ -509,7 +509,7 @@ public class DefaultBatchJobRecoveryHandler
                 }
             }
 
-            Set<JobVertexID> extraNeedToRestartJobVertices =
+            Set<StreamVertexID> extraNeedToRestartJobVertices =
                     verticesToRestart.stream()
                             .map(ExecutionVertexID::getJobVertexId)
                             .filter(jobVerticesWithUnRecoveredCoordinators::contains)
@@ -544,7 +544,7 @@ public class DefaultBatchJobRecoveryHandler
         String message =
                 String.format(
                         "Job %s recover failed from JM failover, fail global.",
-                        context.getExecutionGraph().getJobID());
+                        context.getExecutionGraph().getStreamID());
         log.warn(message);
         context.getExecutionGraph().transitionState(JobStatus.RECONCILING, JobStatus.RUNNING);
 
@@ -566,7 +566,7 @@ public class DefaultBatchJobRecoveryHandler
     private void recoverFinished() {
         log.info(
                 "Job {} successfully recovered from JM failover",
-                context.getExecutionGraph().getJobID());
+                context.getExecutionGraph().getStreamID());
 
         context.getExecutionGraph().transitionState(JobStatus.RECONCILING, JobStatus.RUNNING);
         checkExecutionGraphState();
@@ -727,7 +727,7 @@ public class DefaultBatchJobRecoveryHandler
         CompletableFuture<Collection<PartitionWithMetrics>> fetchPartitionsFuture =
                 context.getShuffleMaster()
                         .getPartitionWithMetrics(
-                                context.getExecutionGraph().getJobID(),
+                                context.getExecutionGraph().getStreamID(),
                                 previousWorkerRecoveryTimeout,
                                 partitionsToReserve);
 
@@ -825,7 +825,7 @@ public class DefaultBatchJobRecoveryHandler
                 .getTaskVertices()[executionVertexId.getSubtaskIndex()];
     }
 
-    private ExecutionJobVertex getExecutionJobVertex(final JobVertexID jobVertexId) {
+    private ExecutionJobVertex getExecutionJobVertex(final StreamVertexID jobVertexId) {
         return context.getExecutionGraph().getAllVertices().get(jobVertexId);
     }
 

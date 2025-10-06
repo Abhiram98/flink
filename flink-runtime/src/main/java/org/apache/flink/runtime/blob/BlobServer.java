@@ -589,9 +589,9 @@ public class BlobServer extends Thread
     }
 
     @Override
-    public PermanentBlobKey putPermanent(JobID jobId, byte[] value) throws IOException {
-        checkNotNull(jobId);
-        return (PermanentBlobKey) putBuffer(jobId, value, PERMANENT_BLOB);
+    public PermanentBlobKey putPermanent(JobID streamId, byte[] value) throws IOException {
+        checkNotNull(streamId);
+        return (PermanentBlobKey) putBuffer(streamId, value, PERMANENT_BLOB);
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.scheduler.DefaultOperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
@@ -125,7 +125,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                         context.getMainThreadExecutor());
                 final String updatedPlan =
                         JsonPlanGenerator.generatePlan(
-                                executionGraph.getJobID(),
+                                executionGraph.getStreamID(),
                                 executionGraph.getJobName(),
                                 JobType.STREAMING, // Adaptive scheduler works only with STREAMING
                                 // jobs
@@ -204,11 +204,11 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
         ComponentMainThreadExecutor getMainThreadExecutor();
 
         /**
-         * Gets the {@link JobManagerJobMetricGroup}.
+         * Gets the {@link StreamManagerStreamMetricGroup}.
          *
          * @return the metric group
          */
-        JobManagerJobMetricGroup getMetricGroup();
+        StreamManagerStreamMetricGroup getMetricGroup();
     }
 
     @FunctionalInterface

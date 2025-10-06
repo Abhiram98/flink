@@ -29,8 +29,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -168,8 +168,8 @@ class DefaultCheckpointPlanCalculatorTest {
     private void runWithNotRunningTask(
             boolean isRunningVertexSource, boolean isNotRunningVertexSource) throws Exception {
         for (ExecutionState notRunningState : complementOf(EnumSet.of(ExecutionState.RUNNING))) {
-            JobVertexID runningVertex = new JobVertexID();
-            JobVertexID notRunningVertex = new JobVertexID();
+            StreamVertexID runningVertex = new StreamVertexID();
+            StreamVertexID notRunningVertex = new StreamVertexID();
 
             ExecutionGraph graph =
                     new CheckpointExecutionGraphBuilder()
@@ -203,7 +203,7 @@ class DefaultCheckpointPlanCalculatorTest {
     }
 
     private void transitVertexToState(
-            ExecutionGraph graph, JobVertexID jobVertexID, ExecutionState state) {
+            ExecutionGraph graph, StreamVertexID jobVertexID, ExecutionState state) {
         Arrays.stream(graph.getJobVertex(jobVertexID).getTaskVertices())
                 .filter(vertex -> vertex.getJobvertexId().equals(jobVertexID))
                 .findFirst()
@@ -286,7 +286,7 @@ class DefaultCheckpointPlanCalculatorTest {
             List<VertexDeclaration> vertexDeclarations, List<EdgeDeclaration> edgeDeclarations)
             throws Exception {
 
-        JobVertex[] jobVertices = new JobVertex[vertexDeclarations.size()];
+        StreamVertex[] jobVertices = new StreamVertex[vertexDeclarations.size()];
         for (int i = 0; i < vertexDeclarations.size(); ++i) {
             jobVertices[i] =
                     ExecutionGraphTestUtils.createJobVertex(
@@ -314,7 +314,7 @@ class DefaultCheckpointPlanCalculatorTest {
                                         .transitionState(ExecutionState.RUNNING));
 
         for (int i = 0; i < vertexDeclarations.size(); ++i) {
-            JobVertexID jobVertexId = jobVertices[i].getID();
+            StreamVertexID jobVertexId = jobVertices[i].getID();
             vertexDeclarations
                     .get(i)
                     .finishedSubtaskIndices
@@ -332,7 +332,7 @@ class DefaultCheckpointPlanCalculatorTest {
 
     private DefaultCheckpointPlanCalculator createCheckpointPlanCalculator(ExecutionGraph graph) {
         return new DefaultCheckpointPlanCalculator(
-                graph.getJobID(),
+                graph.getStreamID(),
                 new ExecutionGraphCheckpointPlanCalculatorContext(graph),
                 graph.getVerticesTopologically(),
                 true);

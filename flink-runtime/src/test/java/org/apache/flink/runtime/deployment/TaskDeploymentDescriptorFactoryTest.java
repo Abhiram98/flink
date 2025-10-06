@@ -36,12 +36,8 @@ import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.executiongraph.MarkPartitionFinishedStrategy;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.scheduler.ClusterDatasetCorruptedException;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -194,12 +190,12 @@ class TaskDeploymentDescriptorFactoryTest {
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             Configuration jobMasterConfig)
             throws Exception {
-        final JobVertex v1 = createJobVertex("v1", PARALLELISM);
-        final JobVertex v2 = createJobVertex("v2", PARALLELISM);
+        final StreamVertex v1 = createJobVertex("v1", PARALLELISM);
+        final StreamVertex v2 = createJobVertex("v2", PARALLELISM);
 
         v2.connectNewDataSetAsInput(v1, DistributionPattern.ALL_TO_ALL, resultPartitionType);
 
-        final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
+        final List<StreamVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
 
         final ExecutionGraph executionGraph =
                 createExecutionGraph(
@@ -210,13 +206,13 @@ class TaskDeploymentDescriptorFactoryTest {
     }
 
     private Tuple2<ExecutionJobVertex, ExecutionJobVertex> buildExecutionGraph() throws Exception {
-        final JobVertex producer = createJobVertex("v1", PARALLELISM);
-        final JobVertex consumer = createJobVertex("v2", PARALLELISM);
+        final StreamVertex producer = createJobVertex("v1", PARALLELISM);
+        final StreamVertex consumer = createJobVertex("v2", PARALLELISM);
 
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.ALL_TO_ALL, ResultPartitionType.HYBRID_FULL);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,
@@ -233,8 +229,8 @@ class TaskDeploymentDescriptorFactoryTest {
 
     // ============== Utils ==============
 
-    private static JobVertex createJobVertex(String vertexName, int parallelism) {
-        JobVertex jobVertex = new JobVertex(vertexName);
+    private static StreamVertex createJobVertex(String vertexName, int parallelism) {
+        StreamVertex jobVertex = new StreamVertex(vertexName);
         jobVertex.setParallelism(parallelism);
         jobVertex.setInvokableClass(AbstractInvokable.class);
         return jobVertex;
@@ -242,13 +238,13 @@ class TaskDeploymentDescriptorFactoryTest {
 
     private static ExecutionGraph createExecutionGraph(
             final JobID jobId,
-            final List<JobVertex> jobVertices,
+            final List<StreamVertex> jobVertices,
             final BlobWriter blobWriter,
             final MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             final Configuration jobMasterConfig)
             throws JobException, JobExecutionException {
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)

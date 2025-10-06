@@ -23,7 +23,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobManagerOperatorMetricsHeaders;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobManagerOperatorMetricsMessageParameters;
@@ -57,7 +57,7 @@ public class JobManagerOperatorMetricsHandler
     protected MetricStore.ComponentMetricStore getComponentMetricStore(
             HandlerRequest<EmptyRequestBody> request, MetricStore metricStore) {
         return metricStore.getJobManagerOperatorMetricStore(
-                request.getPathParameter(JobIDPathParameter.class).toString(),
+                request.getPathParameter(StreamIdPathParameter.class).toString(),
                 request.getPathParameter(JobVertexIdPathParameter.class).toString());
     }
 }

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.highavailability;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.function.SupplierWithException;
@@ -38,8 +38,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/** An abstract class for threadsafe implementations of the {@link JobResultStore}. */
-public abstract class AbstractThreadsafeJobResultStore implements JobResultStore {
+/** An abstract class for threadsafe implementations of the {@link StreamResultStore}. */
+public abstract class AbstractThreadsafeJobResultStore implements StreamResultStore {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractThreadsafeJobResultStore.class);
@@ -53,14 +53,14 @@ public abstract class AbstractThreadsafeJobResultStore implements JobResultStore
     }
 
     @Override
-    public CompletableFuture<Void> createDirtyResultAsync(JobResultEntry jobResultEntry) {
-        return hasJobResultEntryAsync(jobResultEntry.getJobId())
+    public CompletableFuture<Void> createDirtyResultAsync(StreamResultEntry jobResultEntry) {
+        return hasStreamResultEntryAsync(jobResultEntry.getStreamId())
                 .thenAccept(
                         hasJobResultEntry ->
                                 Preconditions.checkState(
                                         !hasJobResultEntry,
                                         "Job result store already contains an entry for job %s",
-                                        jobResultEntry.getJobId()))
+                                        jobResultEntry.getStreamId()))
                 .thenCompose(
                         ignoredVoid ->
                                 withWriteLockAsync(
@@ -68,12 +68,12 @@ public abstract class AbstractThreadsafeJobResultStore implements JobResultStore
     }
 
     @GuardedBy("readWriteLock")
-    protected abstract void createDirtyResultInternal(JobResultEntry jobResultEntry)
+    protected abstract void createDirtyResultInternal(StreamResultEntry jobResultEntry)
             throws IOException;
 
     @Override
     public CompletableFuture<Void> markResultAsCleanAsync(JobID jobId) {
-        return hasCleanJobResultEntryAsync(jobId)
+        return hasCleanStreamResultEntryAsync(jobId)
                 .thenCompose(
                         hasCleanJobResultEntry -> {
                             if (hasCleanJobResultEntry) {
@@ -116,12 +116,12 @@ public abstract class AbstractThreadsafeJobResultStore implements JobResultStore
     protected abstract boolean hasCleanJobResultEntryInternal(JobID jobId) throws IOException;
 
     @Override
-    public Set<JobResult> getDirtyResults() throws IOException {
+    public Set<StreamResult> getDirtyResults() throws IOException {
         return withReadLock(this::getDirtyResultsInternal);
     }
 
     @GuardedBy("readWriteLock")
-    protected abstract Set<JobResult> getDirtyResultsInternal() throws IOException;
+    protected abstract Set<StreamResult> getDirtyResultsInternal() throws IOException;
 
     private CompletableFuture<Void> withWriteLockAsync(ThrowingRunnable<IOException> runnable) {
         return FutureUtils.runAsync(

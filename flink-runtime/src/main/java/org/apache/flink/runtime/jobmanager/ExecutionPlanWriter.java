@@ -40,20 +40,20 @@ public interface ExecutionPlanWriter extends LocallyCleanableResource, GloballyC
     /**
      * Persist {@link JobResourceRequirements job resource requirements} for the given job.
      *
-     * @param jobId job the given requirements belong to
-     * @param jobResourceRequirements requirements to persist
+     * @param streamId job the given requirements belong to
+     * @param streamResourceRequirements requirements to persist
      * @throws Exception in case we're not able to persist the requirements for some reason
      */
-    void putJobResourceRequirements(JobID jobId, JobResourceRequirements jobResourceRequirements)
+    void putStreamResourceRequirements(JobID streamId, JobResourceRequirements streamResourceRequirements)
             throws Exception;
 
     @Override
-    default CompletableFuture<Void> localCleanupAsync(JobID jobId, Executor executor) {
+    default CompletableFuture<Void> localCleanupAsync(JobID streamId, Executor executor) {
         return FutureUtils.completedVoidFuture();
     }
 
     @Override
-    default CompletableFuture<Void> globalCleanupAsync(JobID jobId, Executor executor) {
+    default CompletableFuture<Void> globalCleanupAsync(JobID streamId, Executor executor) {
         return FutureUtils.completedVoidFuture();
     }
 }

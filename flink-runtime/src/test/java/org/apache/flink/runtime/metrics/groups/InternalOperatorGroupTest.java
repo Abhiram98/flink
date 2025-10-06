@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.MetricRegistryImpl;
 import org.apache.flink.runtime.metrics.MetricRegistryTestUtils;
@@ -67,7 +67,7 @@ class InternalOperatorGroupTest {
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
-                        .addTask(createExecutionAttemptId(new JobVertexID(), 11, 0), "aTaskName");
+                        .addTask(createExecutionAttemptId(new StreamVertexID(), 11, 0), "aTaskName");
         InternalOperatorMetricGroup opGroup =
                 taskGroup.getOrAddOperator(new OperatorID(), "myOpName");
 
@@ -90,7 +90,7 @@ class InternalOperatorGroupTest {
         try {
             String tmID = "test-tm-id";
             JobID jid = new JobID();
-            JobVertexID vertexId = new JobVertexID();
+            StreamVertexID vertexId = new StreamVertexID();
             OperatorID operatorID = new OperatorID();
             String operatorName = "operatorName";
 
@@ -125,7 +125,7 @@ class InternalOperatorGroupTest {
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
-                        .addTask(createExecutionAttemptId(new JobVertexID(), 11, 0), "aTaskName");
+                        .addTask(createExecutionAttemptId(new StreamVertexID(), 11, 0), "aTaskName");
         InternalOperatorMetricGroup opGroup =
                 taskGroup.getOrAddOperator(new OperatorID(), "myOpName");
 
@@ -137,7 +137,7 @@ class InternalOperatorGroupTest {
     @Test
     void testVariables() {
         JobID jid = new JobID();
-        JobVertexID tid = new JobVertexID();
+        StreamVertexID tid = new StreamVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(tid, 11, 0);
         OperatorID oid = new OperatorID();
 
@@ -172,7 +172,7 @@ class InternalOperatorGroupTest {
     @Test
     void testCreateQueryServiceMetricInfo() {
         JobID jid = new JobID();
-        JobVertexID vid = new JobVertexID();
+        StreamVertexID vid = new StreamVertexID();
         ExecutionAttemptID eid = createExecutionAttemptId(vid, 4, 5);
         OperatorID oid = new OperatorID();
         TaskManagerMetricGroup tm =

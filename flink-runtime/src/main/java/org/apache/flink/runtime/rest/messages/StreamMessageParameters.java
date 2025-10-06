@@ -16,29 +16,23 @@
  * limitations under the License.
  */
 
-package org.apache.flink.runtime.highavailability;
+package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
-import org.apache.flink.util.Preconditions;
+import java.util.Collection;
+import java.util.Collections;
 
-/**
- * {@code JobResultEntry} is the entity managed by the {@link JobResultStore}. It collects
- * information about a globally terminated job (e.g. {@link JobResult}).
- */
-public class JobResultEntry {
+/** Message parameters which require a job path parameter. */
+public class StreamMessageParameters extends MessageParameters {
 
-    private final JobResult jobResult;
+    public final StreamIdPathParameter jobPathParameter = new StreamIdPathParameter();
 
-    public JobResultEntry(JobResult jobResult) {
-        this.jobResult = Preconditions.checkNotNull(jobResult);
+    @Override
+    public Collection<MessagePathParameter<?>> getPathParameters() {
+        return Collections.singleton(jobPathParameter);
     }
 
-    public JobResult getJobResult() {
-        return jobResult;
-    }
-
-    public JobID getJobId() {
-        return jobResult.getJobId();
+    @Override
+    public Collection<MessageQueryParameter<?>> getQueryParameters() {
+        return Collections.emptySet();
     }
 }

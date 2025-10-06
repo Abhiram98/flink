@@ -28,7 +28,7 @@ import org.apache.flink.metrics.Meter;
 import org.apache.flink.metrics.SimpleCounter;
 import org.apache.flink.metrics.util.TestHistogram;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
 import org.apache.flink.runtime.metrics.dump.MetricDumpSerialization;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.dump.TestingMetricQueryServiceGateway;
@@ -144,7 +144,7 @@ class MetricFetcherTest {
         counters.put(
                 c3,
                 new Tuple2<>(
-                        new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+                        new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                                 jobID.toString(), "taskid", "opname", "abc"),
                         "joc"));
         meters.put(
@@ -330,7 +330,7 @@ class MetricFetcherTest {
                         .setRequestMultipleJobDetailsSupplier(
                                 () ->
                                         CompletableFuture.completedFuture(
-                                                new MultipleJobsDetails(Collections.emptyList())))
+                                                new MultipleStreamsDetails(Collections.emptyList())))
                         .setRequestMetricQueryServiceGatewaysSupplier(
                                 () -> {
                                     if (requestMetricQueryServiceGatewaysCounter != null) {

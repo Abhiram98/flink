@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.PendingCheckpointStats;
 import org.apache.flink.runtime.checkpoint.SavepointType;
 import org.apache.flink.runtime.checkpoint.SnapshotType;
 import org.apache.flink.runtime.checkpoint.TaskStateStats;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.json.JobVertexIDKeyDeserializer;
 import org.apache.flink.runtime.rest.messages.json.JobVertexIDKeySerializer;
@@ -168,7 +168,7 @@ public class CheckpointStatistics implements ResponseBody {
 
     @JsonProperty(FIELD_NAME_TASKS)
     @JsonSerialize(keyUsing = JobVertexIDKeySerializer.class)
-    private final Map<JobVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask;
+    private final Map<StreamVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask;
 
     @JsonCreator
     private CheckpointStatistics(
@@ -189,7 +189,7 @@ public class CheckpointStatistics implements ResponseBody {
             @JsonProperty(FIELD_NAME_CHECKPOINT_TYPE) RestAPICheckpointType checkpointType,
             @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
                     @JsonProperty(FIELD_NAME_TASKS)
-                    Map<JobVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask) {
+                    Map<StreamVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask) {
         this.id = id;
         this.status = Preconditions.checkNotNull(status);
         this.savepoint = savepoint;
@@ -253,7 +253,7 @@ public class CheckpointStatistics implements ResponseBody {
     }
 
     @Nullable
-    public Map<JobVertexID, TaskCheckpointStatistics> getCheckpointStatisticsPerTask() {
+    public Map<StreamVertexID, TaskCheckpointStatistics> getCheckpointStatisticsPerTask() {
         return checkpointStatisticsPerTask;
     }
 
@@ -311,7 +311,7 @@ public class CheckpointStatistics implements ResponseBody {
             AbstractCheckpointStats checkpointStats, boolean includeTaskCheckpointStatistics) {
         Preconditions.checkNotNull(checkpointStats);
 
-        Map<JobVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask;
+        Map<StreamVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask;
 
         if (includeTaskCheckpointStatistics) {
             Collection<TaskStateStats> taskStateStats = checkpointStats.getAllTaskStateStats();
@@ -488,7 +488,7 @@ public class CheckpointStatistics implements ResponseBody {
                 @JsonProperty(FIELD_NAME_CHECKPOINT_TYPE) RestAPICheckpointType checkpointType,
                 @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
                         @JsonProperty(FIELD_NAME_TASKS)
-                        Map<JobVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask,
+                        Map<StreamVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask,
                 @JsonProperty(FIELD_NAME_EXTERNAL_PATH) @Nullable String externalPath,
                 @JsonProperty(FIELD_NAME_DISCARDED) boolean discarded) {
             super(
@@ -576,7 +576,7 @@ public class CheckpointStatistics implements ResponseBody {
                 @JsonProperty(FIELD_NAME_CHECKPOINT_TYPE) RestAPICheckpointType checkpointType,
                 @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
                         @JsonProperty(FIELD_NAME_TASKS)
-                        Map<JobVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask,
+                        Map<StreamVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask,
                 @JsonProperty(FIELD_NAME_FAILURE_TIMESTAMP) long failureTimestamp,
                 @JsonProperty(FIELD_NAME_FAILURE_MESSAGE) @Nullable String failureMessage) {
             super(
@@ -654,7 +654,7 @@ public class CheckpointStatistics implements ResponseBody {
                 @JsonProperty(FIELD_NAME_CHECKPOINT_TYPE) RestAPICheckpointType checkpointType,
                 @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
                         @JsonProperty(FIELD_NAME_TASKS)
-                        Map<JobVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask) {
+                        Map<StreamVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask) {
             super(
                     id,
                     status,

@@ -23,8 +23,8 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.JobPlanInfo;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -42,14 +42,14 @@ import java.util.concurrent.Executor;
 
 /** Handler serving the job execution plan. */
 public class JobPlanHandler
-        extends AbstractAccessExecutionGraphHandler<JobPlanInfo, JobMessageParameters>
+        extends AbstractAccessExecutionGraphHandler<JobPlanInfo, StreamMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
     public JobPlanHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> headers,
-            MessageHeaders<EmptyRequestBody, JobPlanInfo, JobMessageParameters> messageHeaders,
+            MessageHeaders<EmptyRequestBody, JobPlanInfo, StreamMessageParameters> messageHeaders,
             ExecutionGraphCache executionGraphCache,
             Executor executor) {
 
@@ -70,7 +70,7 @@ public class JobPlanHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString());
         return Collections.singleton(new ArchivedJson(path, json));
     }
 

@@ -29,7 +29,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
@@ -40,7 +40,7 @@ import org.apache.flink.runtime.rest.messages.JobExceptionsHeaders;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory.ExceptionInfo;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory.RootExceptionInfo;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.FailureLabelFilterParameter;
 import org.apache.flink.runtime.rest.messages.job.JobExceptionsMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.UpperLimitExceptionParameter;
@@ -454,9 +454,9 @@ class JobExceptionsHandlerTest {
                         new LocalTaskManagerLocation(),
                         Collections.emptySet()));
 
-        Map<JobVertexID, ArchivedExecutionJobVertex> tasks = new HashMap<>();
+        Map<StreamVertexID, ArchivedExecutionJobVertex> tasks = new HashMap<>();
         for (int i = 1; i < numTasks; i++) {
-            final JobVertexID jobVertexId = new JobVertexID();
+            final StreamVertexID jobVertexId = new StreamVertexID();
             final String taskName = "task name #" + i;
             final Exception otherCause = new Exception("Expected exception #" + i);
             final long otherFailureTimestamp = System.currentTimeMillis();
@@ -484,7 +484,7 @@ class JobExceptionsHandlerTest {
     }
 
     private static ArchivedExecutionJobVertex createArchivedExecutionJobVertex(
-            JobVertexID jobVertexID, String taskName, Exception cause, long failureTimestamp) {
+            StreamVertexID jobVertexID, String taskName, Exception cause, long failureTimestamp) {
         final StringifiedAccumulatorResult[] emptyAccumulators =
                 new StringifiedAccumulatorResult[0];
         final long[] timestamps = new long[ExecutionState.values().length];
@@ -566,7 +566,7 @@ class JobExceptionsHandlerTest {
     private static HandlerRequest<EmptyRequestBody> createRequest(
             JobID jobId, int size, List<String> failureLabels) throws HandlerRequestException {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, jobId.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, jobId.toString());
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(UpperLimitExceptionParameter.KEY, Collections.singletonList("" + size));
         if (!failureLabels.isEmpty()) {

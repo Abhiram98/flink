@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.handler.job.metrics;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class JobManagerOperatorMetricsHandlerTest
         extends MetricsHandlerTestBase<JobManagerOperatorMetricsHandler> {
     private static final String TEST_JOB_ID = new JobID().toString();
-    private static final String TEST_VERTEX_ID = new JobVertexID().toString();
+    private static final String TEST_VERTEX_ID = new StreamVertexID().toString();
     private static final String TEST_OPERATOR_NAME = "opname";
 
     @Override
@@ -40,7 +40,7 @@ public class JobManagerOperatorMetricsHandlerTest
 
     @Override
     QueryScopeInfo getQueryScopeInfo() {
-        return new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+        return new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                 TEST_JOB_ID, TEST_VERTEX_ID, TEST_OPERATOR_NAME);
     }
 

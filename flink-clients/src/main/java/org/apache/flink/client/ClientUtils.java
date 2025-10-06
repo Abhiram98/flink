@@ -121,7 +121,7 @@ public enum ClientUtils {
      *     job reaches the FAILED state.
      * @throws JobInitializationException If the initialization failed
      */
-    public static void waitUntilJobInitializationFinished(
+    public static void waitUntilStreamInitializationFinished(
             SupplierWithException<JobStatus, Exception> jobStatusSupplier,
             SupplierWithException<JobResult, Exception> jobResultSupplier,
             ClassLoader userCodeClassloader)

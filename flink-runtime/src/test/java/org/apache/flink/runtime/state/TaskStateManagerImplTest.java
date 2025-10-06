@@ -29,7 +29,7 @@ import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
 import org.apache.flink.runtime.state.changelog.inmemory.InMemoryStateChangelogStorage;
@@ -201,7 +201,7 @@ class TaskStateManagerImplTest {
             throws Exception {
         JobID jobID = new JobID(42L, 43L);
         AllocationID allocationID = new AllocationID(4711L, 23L);
-        JobVertexID jobVertexID = new JobVertexID(12L, 34L);
+        StreamVertexID jobVertexID = new StreamVertexID(12L, 34L);
         ExecutionAttemptID executionAttemptID = createExecutionAttemptId(jobVertexID);
         TestCheckpointResponder checkpointResponderMock = new TestCheckpointResponder();
 

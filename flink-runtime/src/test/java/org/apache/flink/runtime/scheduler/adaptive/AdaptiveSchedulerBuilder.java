@@ -34,13 +34,13 @@ import org.apache.flink.runtime.executiongraph.failover.NoRestartBackoffTimeStra
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.DefaultAllocatedSlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.DefaultDeclarativeSlotPool;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.DefaultExecutionGraphFactory;
@@ -63,7 +63,7 @@ import java.util.function.Function;
 public class AdaptiveSchedulerBuilder {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(300);
 
-    private final JobGraph jobGraph;
+    private final StreamGraph jobGraph;
 
     private final ComponentMainThreadExecutor mainThreadExecutor;
     private final ScheduledExecutorService executorService;
@@ -78,7 +78,7 @@ public class AdaptiveSchedulerBuilder {
     private DeclarativeSlotPool declarativeSlotPool;
     private Duration rpcTimeout = DEFAULT_TIMEOUT;
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
-    private JobManagerJobMetricGroup jobManagerJobMetricGroup =
+    private StreamManagerStreamMetricGroup jobManagerJobMetricGroup =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;
     private JobMasterPartitionTracker partitionTracker = NoOpJobMasterPartitionTracker.INSTANCE;
@@ -100,14 +100,14 @@ public class AdaptiveSchedulerBuilder {
     @Nullable
     private AdaptiveScheduler.StateTransitionManagerFactory stateTransitionManagerFactory = null;
 
-    private BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
+    private BiFunction<StreamManagerStreamMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
             checkpointStatsTrackerFactory =
                     (metricGroup, checkpointStatsListener) ->
                             new DefaultCheckpointStatsTracker(
                                     10, metricGroup, checkpointStatsListener);
 
     public AdaptiveSchedulerBuilder(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService executorService) {
         this.jobGraph = jobGraph;
@@ -115,7 +115,7 @@ public class AdaptiveSchedulerBuilder {
 
         this.declarativeSlotPool =
                 new DefaultDeclarativeSlotPool(
-                        jobGraph.getJobID(),
+                        jobGraph.getStreamID(),
                         new DefaultAllocatedSlotPool(),
                         ignored -> {},
                         DEFAULT_TIMEOUT,
@@ -171,7 +171,7 @@ public class AdaptiveSchedulerBuilder {
     }
 
     public AdaptiveSchedulerBuilder setJobManagerJobMetricGroup(
-            final JobManagerJobMetricGroup jobManagerJobMetricGroup) {
+            final StreamManagerStreamMetricGroup jobManagerJobMetricGroup) {
         this.jobManagerJobMetricGroup = jobManagerJobMetricGroup;
         return this;
     }
@@ -235,7 +235,7 @@ public class AdaptiveSchedulerBuilder {
     public AdaptiveSchedulerBuilder setCheckpointStatsTrackerFactory(
             @Nullable
                     BiFunction<
-                                    JobManagerJobMetricGroup,
+                            StreamManagerStreamMetricGroup,
                                     CheckpointStatsListener,
                                     CheckpointStatsTracker>
                             checkpointStatsTrackerFactory) {

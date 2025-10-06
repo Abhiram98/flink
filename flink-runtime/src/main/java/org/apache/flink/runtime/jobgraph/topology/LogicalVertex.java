@@ -18,13 +18,13 @@
 package org.apache.flink.runtime.jobgraph.topology;
 
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.topology.Vertex;
 
-/** Represents a vertex in {@link LogicalTopology}, i.e. {@link JobVertex}. */
+/** Represents a vertex in {@link LogicalTopology}, i.e. {@link StreamVertex}. */
 public interface LogicalVertex
-        extends Vertex<JobVertexID, IntermediateDataSetID, LogicalVertex, LogicalResult> {
+        extends Vertex<StreamVertexID, IntermediateDataSetID, LogicalVertex, LogicalResult> {
 
     /**
      * Get the input {@link LogicalEdge}s of the vertex.

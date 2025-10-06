@@ -36,12 +36,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Builder for the {@link JobGraph}. */
+/** Builder for the {@link StreamGraph}. */
 public class JobGraphBuilder {
 
     private final JobType jobType;
 
-    private final List<JobVertex> jobVertices = new ArrayList<>();
+    private final List<StreamVertex> jobVertices = new ArrayList<>();
 
     private final Map<String, DistributedCache.DistributedCacheEntry> userArtifacts =
             new HashMap<>();
@@ -69,12 +69,12 @@ public class JobGraphBuilder {
         return this;
     }
 
-    public JobGraphBuilder addJobVertices(Collection<? extends JobVertex> jobVerticesToAdd) {
+    public JobGraphBuilder addJobVertices(Collection<? extends StreamVertex> jobVerticesToAdd) {
         jobVertices.addAll(jobVerticesToAdd);
         return this;
     }
 
-    public JobGraphBuilder addJobVertex(JobVertex jobVertex) {
+    public JobGraphBuilder addJobVertex(StreamVertex jobVertex) {
         return addJobVertices(Collections.singleton(jobVertex));
     }
 
@@ -117,9 +117,9 @@ public class JobGraphBuilder {
         return this;
     }
 
-    public JobGraph build() {
-        final JobGraph jobGraph =
-                new JobGraph(jobId, jobName, jobVertices.toArray(new JobVertex[0]));
+    public StreamGraph build() {
+        final StreamGraph jobGraph =
+                new StreamGraph(jobId, jobName, jobVertices.toArray(new StreamVertex[0]));
 
         jobGraph.setJobType(jobType);
 

@@ -23,8 +23,8 @@ import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobResourceRequirementsBody;
 import org.apache.flink.runtime.rest.messages.job.JobResourceRequirementsHeaders;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -45,7 +45,7 @@ public class JobResourceRequirementsHandler
                 RestfulGateway,
                 EmptyRequestBody,
                 JobResourceRequirementsBody,
-                JobMessageParameters> {
+        StreamMessageParameters> {
 
     public JobResourceRequirementsHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
@@ -58,7 +58,7 @@ public class JobResourceRequirementsHandler
     protected CompletableFuture<JobResourceRequirementsBody> handleRequest(
             @Nonnull HandlerRequest<EmptyRequestBody> request, @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
-        final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         return gateway.requestJobResourceRequirements(jobId)
                 .thenApply(JobResourceRequirementsBody::new);
     }

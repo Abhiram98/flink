@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.scheduler;
 
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
@@ -45,15 +45,15 @@ class SchedulerBaseComputeVertexParallelismTest {
         return Arrays.asList(
 
                 // default minimum
-                new Object[] {1, JobVertex.MAX_PARALLELISM_DEFAULT, 128, 3, true},
+                new Object[] {1, StreamVertex.MAX_PARALLELISM_DEFAULT, 128, 3, true},
                 // test round up part 1
-                new Object[] {171, JobVertex.MAX_PARALLELISM_DEFAULT, 256, 42, true},
+                new Object[] {171, StreamVertex.MAX_PARALLELISM_DEFAULT, 256, 42, true},
                 // test round up part 2
-                new Object[] {172, JobVertex.MAX_PARALLELISM_DEFAULT, 512, 174, true},
+                new Object[] {172, StreamVertex.MAX_PARALLELISM_DEFAULT, 512, 174, true},
                 // test round up limit
                 new Object[] {
                     UPPER_BOUND_MAX_PARALLELISM,
-                    JobVertex.MAX_PARALLELISM_DEFAULT,
+                    StreamVertex.MAX_PARALLELISM_DEFAULT,
                     UPPER_BOUND_MAX_PARALLELISM,
                     UPPER_BOUND_MAX_PARALLELISM,
                     true
@@ -82,7 +82,7 @@ class SchedulerBaseComputeVertexParallelismTest {
 
     @TestTemplate
     void testMaxParallelismDefaulting() {
-        JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
+        StreamVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
         VertexParallelismStore store =
                 SchedulerBase.computeVertexParallelismStore(Collections.singleton(jobVertex));
 

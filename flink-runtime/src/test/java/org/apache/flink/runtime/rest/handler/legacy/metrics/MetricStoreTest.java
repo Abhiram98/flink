@@ -20,8 +20,8 @@ package org.apache.flink.runtime.rest.handler.legacy.metrics;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails.CurrentAttempts;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails.CurrentAttempts;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.dump.MetricDump;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -143,8 +143,8 @@ class MetricStoreTest {
         MetricStore metricStore = new MetricStore();
         assertThat(metricStore.getJobs()).isEmpty();
 
-        JobDetails jobDetail =
-                new JobDetails(
+        StreamDetails jobDetail =
+                new StreamDetails(
                         JOB_ID,
                         "jobname",
                         0,
@@ -180,8 +180,8 @@ class MetricStoreTest {
                         "taskid",
                         Collections.singletonMap(
                                 1, new CurrentAttempts(1, new HashSet<>(), false)));
-        JobDetails jobDetail =
-                new JobDetails(
+        StreamDetails jobDetail =
+                new StreamDetails(
                         JOB_ID,
                         "jobname",
                         0,
@@ -211,8 +211,8 @@ class MetricStoreTest {
                 Collections.singletonMap(
                         "taskid",
                         Collections.singletonMap(8, new CurrentAttempts(2, new HashSet<>(), true)));
-        JobDetails jobDetail =
-                new JobDetails(
+        StreamDetails jobDetail =
+                new StreamDetails(
                         JOB_ID,
                         "jobname",
                         0,
@@ -262,8 +262,8 @@ class MetricStoreTest {
                         "taskid",
                         Collections.singletonMap(
                                 8, new CurrentAttempts(1, currentAttempts, false)));
-        JobDetails jobDetail =
-                new JobDetails(
+        StreamDetails jobDetail =
+                new StreamDetails(
                         JOB_ID,
                         "jobname",
                         0,
@@ -352,8 +352,8 @@ class MetricStoreTest {
         MetricDump.CounterDump cd74 =
                 new MetricDump.CounterDump(speculativeOperator3, "metric7", 18);
 
-        QueryScopeInfo.JobManagerOperatorQueryScopeInfo jmOperator =
-                new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
+        QueryScopeInfo.StreamManagerOperatorQueryScopeInfo jmOperator =
+                new QueryScopeInfo.StreamManagerOperatorQueryScopeInfo(
                         JOB_ID.toString(), "taskid", "opname", "abc");
         MetricDump.CounterDump jmCd8 = new MetricDump.CounterDump(jmOperator, "metric8", 19);
         MetricDump.CounterDump jmCd9 = new MetricDump.CounterDump(jmOperator, "metric9", 20);

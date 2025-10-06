@@ -28,9 +28,9 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -69,7 +69,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testNoFinishedTaskButRatioIsZero() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
 
         final ExecutionTimeBasedSlowTaskDetector slowTaskDetector = createSlowTaskDetector(0, 1, 0);
@@ -83,8 +83,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testAllTasksInCreatedAndNoSlowTasks() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertex);
 
         // all tasks are in the CREATED state, which is not classified as slow tasks.
         final ExecutionGraph executionGraph =
@@ -104,7 +104,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testFinishedTaskNotExceedRatio() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
 
         final ExecutionTimeBasedSlowTaskDetector slowTaskDetector =
@@ -122,7 +122,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testFinishedTaskExceedRatio() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
 
         final ExecutionTimeBasedSlowTaskDetector slowTaskDetector =
@@ -142,7 +142,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testLargeLowerBound() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
 
         final ExecutionTimeBasedSlowTaskDetector slowTaskDetector =
@@ -162,7 +162,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testLargeMultiplier() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
 
         final ExecutionTimeBasedSlowTaskDetector slowTaskDetector =
@@ -184,8 +184,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testMultipleJobVertexFinishedTaskExceedRatio() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex1 = createNoOpVertex(parallelism);
-        final JobVertex jobVertex2 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex1 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex2 = createNoOpVertex(parallelism);
         jobVertex2.connectNewDataSetAsInput(
                 jobVertex1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex1, jobVertex2);
@@ -209,9 +209,9 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testFinishedTaskExceedRatioInDynamicGraph() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex1 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex1 = createNoOpVertex(parallelism);
         // create jobVertex2 and leave its parallelism unset
-        final JobVertex jobVertex2 = new JobVertex("vertex2");
+        final StreamVertex jobVertex2 = new StreamVertex("vertex2");
         jobVertex2.setInvokableClass(NoOpInvokable.class);
         jobVertex2.connectNewDataSetAsInput(
                 jobVertex1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
@@ -233,8 +233,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testBalancedInput() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex1 = createNoOpVertex(parallelism);
-        final JobVertex jobVertex2 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex1 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex2 = createNoOpVertex(parallelism);
         jobVertex2.connectNewDataSetAsInput(
                 jobVertex1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex1, jobVertex2);
@@ -262,8 +262,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testBalancedInputWithLargeLowerBound() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex1 = createNoOpVertex(parallelism);
-        final JobVertex jobVertex2 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex1 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex2 = createNoOpVertex(parallelism);
         jobVertex2.connectNewDataSetAsInput(
                 jobVertex1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex1, jobVertex2);
@@ -291,8 +291,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testUnbalancedInput() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex1 = createNoOpVertex(parallelism);
-        final JobVertex jobVertex2 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex1 = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex2 = createNoOpVertex(parallelism);
         jobVertex2.connectNewDataSetAsInput(
                 jobVertex1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex1, jobVertex2);
@@ -390,7 +390,7 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
     @Test
     void testHandleNotifySlowTasksException() throws Exception {
         final int parallelism = 3;
-        final JobVertex jobVertex = createNoOpVertex(parallelism);
+        final StreamVertex jobVertex = createNoOpVertex(parallelism);
         final ExecutionGraph executionGraph = createExecutionGraph(jobVertex);
         TestingFatalErrorHandler fatalErrorHandler = new TestingFatalErrorHandler();
 
@@ -411,8 +411,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
         assertThat(fatalErrorHandler.getException()).isEqualTo(exception);
     }
 
-    private ExecutionGraph createExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+    private ExecutionGraph createExecutionGraph(StreamVertex... jobVertices) throws Exception {
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertices);
 
         final SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
@@ -428,8 +428,8 @@ class ExecutionTimeBasedSlowTaskDetectorTest {
         return executionGraph;
     }
 
-    private ExecutionGraph createDynamicExecutionGraph(JobVertex... jobVertices) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertices);
+    private ExecutionGraph createDynamicExecutionGraph(StreamVertex... jobVertices) throws Exception {
+        final StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(jobVertices);
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

@@ -26,6 +26,8 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.taskmanager.Task;
 import org.apache.flink.util.FlinkException;
@@ -133,10 +135,10 @@ public abstract class AbstractInvokable
 
     /**
      * Returns the task configuration object which was attached to the original {@link
-     * org.apache.flink.runtime.jobgraph.JobVertex}.
+     * StreamVertex}.
      *
      * @return the task configuration object which was attached to the original {@link
-     *     org.apache.flink.runtime.jobgraph.JobVertex}
+     *     StreamVertex}
      */
     public final Configuration getTaskConfiguration() {
         return this.environment.getTaskConfiguration();
@@ -144,10 +146,10 @@ public abstract class AbstractInvokable
 
     /**
      * Returns the job configuration object which was attached to the original {@link
-     * org.apache.flink.runtime.jobgraph.JobGraph}.
+     * StreamGraph}.
      *
      * @return the job configuration object which was attached to the original {@link
-     *     org.apache.flink.runtime.jobgraph.JobGraph}
+     *     StreamGraph}
      */
     public Configuration getJobConfiguration() {
         return this.environment.getJobConfiguration();

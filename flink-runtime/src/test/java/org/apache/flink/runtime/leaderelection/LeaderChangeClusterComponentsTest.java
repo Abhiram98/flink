@@ -23,11 +23,11 @@ import org.apache.flink.api.common.JobSubmissionResult;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.utils.JobResultUtils;
 import org.apache.flink.runtime.minicluster.TestingMiniCluster;
 import org.apache.flink.runtime.minicluster.TestingMiniClusterConfiguration;
@@ -65,7 +65,7 @@ class LeaderChangeClusterComponentsTest {
 
     private static EmbeddedHaServicesWithLeadershipControl highAvailabilityServices;
 
-    private JobGraph jobGraph;
+    private StreamGraph jobGraph;
 
     private JobID jobId;
 
@@ -90,7 +90,7 @@ class LeaderChangeClusterComponentsTest {
     @BeforeEach
     void setup() {
         jobGraph = createJobGraph(PARALLELISM);
-        jobId = jobGraph.getJobID();
+        jobId = jobGraph.getStreamID();
     }
 
     @AfterAll
@@ -103,17 +103,17 @@ class LeaderChangeClusterComponentsTest {
     @Test
     void testReelectionOfDispatcher() throws Exception {
         final CompletableFuture<JobSubmissionResult> submissionFuture =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitStream(jobGraph);
 
         submissionFuture.get();
 
-        CompletableFuture<JobResult> jobResultFuture = miniCluster.requestJobResult(jobId);
+        CompletableFuture<StreamResult> jobResultFuture = miniCluster.requestStreamResult(jobId);
         // make sure requestJobResult was already processed by job master
         miniCluster.getJobStatus(jobId).get();
 
         highAvailabilityServices.revokeDispatcherLeadership().get();
 
-        JobResult jobResult = jobResultFuture.get();
+        StreamResult jobResult = jobResultFuture.get();
         assertThat(jobResult.getApplicationStatus()).isEqualTo(ApplicationStatus.UNKNOWN);
 
         highAvailabilityServices.grantDispatcherLeadership();
@@ -121,11 +121,11 @@ class LeaderChangeClusterComponentsTest {
         BlockingOperator.isBlocking = false;
 
         final CompletableFuture<JobSubmissionResult> submissionFuture2 =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitStream(jobGraph);
 
         submissionFuture2.get();
 
-        final CompletableFuture<JobResult> jobResultFuture2 = miniCluster.requestJobResult(jobId);
+        final CompletableFuture<StreamResult> jobResultFuture2 = miniCluster.requestStreamResult(jobId);
 
         jobResult = jobResultFuture2.get();
 
@@ -135,11 +135,11 @@ class LeaderChangeClusterComponentsTest {
     @Test
     void testReelectionOfJobMaster() throws Exception {
         final CompletableFuture<JobSubmissionResult> submissionFuture =
-                miniCluster.submitJob(jobGraph);
+                miniCluster.submitStream(jobGraph);
 
         submissionFuture.get();
 
-        CompletableFuture<JobResult> jobResultFuture = miniCluster.requestJobResult(jobId);
+        CompletableFuture<StreamResult> jobResultFuture = miniCluster.requestStreamResult(jobId);
 
         // need to wait until init is finished, so that the leadership revocation is possible
         CommonTestUtils.waitUntilJobManagerIsInitialized(
@@ -152,7 +152,7 @@ class LeaderChangeClusterComponentsTest {
 
         highAvailabilityServices.grantJobMasterLeadership(jobId);
 
-        JobResult jobResult = jobResultFuture.get();
+        StreamResult jobResult = jobResultFuture.get();
 
         JobResultUtils.assertSuccess(jobResult);
     }
@@ -183,13 +183,13 @@ class LeaderChangeClusterComponentsTest {
                 10L);
     }
 
-    private JobGraph createJobGraph(int parallelism) {
+    private StreamGraph createJobGraph(int parallelism) {
         BlockingOperator.isBlocking = true;
-        final JobVertex vertex = new JobVertex("blocking operator");
+        final StreamVertex vertex = new StreamVertex("blocking operator");
         vertex.setParallelism(parallelism);
         vertex.setInvokableClass(BlockingOperator.class);
 
-        return JobGraphTestUtils.streamingJobGraph(vertex);
+        return StreamGraphTestUtils.streamingStreamGraph(vertex);
     }
 
     /**

@@ -30,7 +30,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -1871,7 +1871,7 @@ public class CheckpointCoordinator {
      */
     public boolean restoreSavepoint(
             SavepointRestoreSettings restoreSettings,
-            Map<JobVertexID, ExecutionJobVertex> tasks,
+            Map<StreamVertexID, ExecutionJobVertex> tasks,
             ClassLoader userClassLoader)
             throws Exception {
 
@@ -2407,7 +2407,7 @@ public class CheckpointCoordinator {
             CheckpointPlan checkpointPlan,
             CheckpointProperties props,
             long checkpointTimestamp) {
-        Map<JobVertexID, Integer> vertices =
+        Map<StreamVertexID, Integer> vertices =
                 Stream.concat(
                                 checkpointPlan.getTasksToWaitFor().stream(),
                                 checkpointPlan.getFinishedTasks().stream())

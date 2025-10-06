@@ -18,7 +18,7 @@
 package org.apache.flink.runtime.checkpoint.channel;
 
 import org.apache.flink.runtime.checkpoint.CheckpointException;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageWorkerView;
 import org.apache.flink.util.function.SupplierWithException;
 
@@ -203,7 +203,7 @@ final class ChannelStateWriteRequestDispatcherImpl implements ChannelStateWriteR
     }
 
     private void failAndClearWriter(
-            JobVertexID jobVertexID, int subtaskIndex, Throwable throwable) {
+            StreamVertexID jobVertexID, int subtaskIndex, Throwable throwable) {
         if (writer == null) {
             return;
         }

@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.ResultPartitionBytes;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 
@@ -120,7 +120,7 @@ public interface BatchJobRecoveryContext {
      *     executions within the same job vertex must also be restarted to ensure the consistency
      *     and correctness of the state.
      */
-    void onRecoveringFinished(Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators);
+    void onRecoveringFinished(Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators);
 
     /** Notifies the recovery failed. */
     void onRecoveringFailed();

@@ -21,16 +21,13 @@ package org.apache.flink.runtime.rest.handler.job.checkpoints;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
 import org.apache.flink.util.ExceptionUtils;
@@ -55,7 +52,7 @@ import java.util.concurrent.Executor;
  */
 @Internal
 public abstract class AbstractCheckpointStatsHandler<
-                R extends ResponseBody, M extends JobMessageParameters>
+                R extends ResponseBody, M extends StreamMessageParameters>
         extends AbstractRestHandler<RestfulGateway, EmptyRequestBody, R, M> {
 
     private final Executor executor;
@@ -78,7 +75,7 @@ public abstract class AbstractCheckpointStatsHandler<
     protected CompletableFuture<R> handleRequest(
             @Nonnull HandlerRequest<EmptyRequestBody> request, @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
-        JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
 
         try {
             return checkpointStatsSnapshotCache
@@ -96,7 +93,7 @@ public abstract class AbstractCheckpointStatsHandler<
                     .exceptionally(
                             throwable -> {
                                 throwable = ExceptionUtils.stripCompletionException(throwable);
-                                if (throwable instanceof FlinkJobNotFoundException) {
+                                if (throwable instanceof FlinkStreamNotFoundException) {
                                     throw new CompletionException(
                                             new NotFoundException(
                                                     String.format("Job %s not found", jobId),

@@ -27,8 +27,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.messages.ThreadInfoSample;
 import org.apache.flink.runtime.resourcemanager.ResourceManagerGateway;
@@ -578,13 +578,13 @@ class VertexThreadInfoTrackerTest {
 
     private ExecutionJobVertex createExecutionJobVertex() {
         try {
-            JobVertex jobVertex = new JobVertex("testVertex");
+            StreamVertex jobVertex = new StreamVertex("testVertex");
             jobVertex.setParallelism(PARALLELISM);
             jobVertex.setInvokableClass(AbstractInvokable.class);
 
             final SchedulerBase scheduler =
                     createScheduler(
-                            JobGraphTestUtils.streamingJobGraph(jobVertex),
+                            StreamGraphTestUtils.streamingStreamGraph(jobVertex),
                             ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                             new DirectScheduledExecutorService());
             final ExecutionGraph eg = scheduler.getExecutionGraph();

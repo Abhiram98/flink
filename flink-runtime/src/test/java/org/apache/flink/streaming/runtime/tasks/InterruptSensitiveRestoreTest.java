@@ -44,7 +44,7 @@ import org.apache.flink.runtime.io.disk.iomanager.IOManager;
 import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManager;
@@ -229,7 +229,7 @@ class InterruptSensitiveRestoreTest {
                         .setRawKeyedState(new StateObjectCollection<>(keyedStateFromStream))
                         .build();
 
-        JobVertexID jobVertexID = new JobVertexID();
+        StreamVertexID jobVertexID = new StreamVertexID();
         OperatorID operatorID = OperatorID.fromJobVertexID(jobVertexID);
         streamConfig.setOperatorID(operatorID);
         TaskStateSnapshot stateSnapshot = new TaskStateSnapshot();

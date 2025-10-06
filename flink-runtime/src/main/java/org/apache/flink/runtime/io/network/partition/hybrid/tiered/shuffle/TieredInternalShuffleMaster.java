@@ -29,7 +29,7 @@ import org.apache.flink.runtime.io.network.partition.hybrid.tiered.storage.Tiere
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierMasterAgent;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierShuffleDescriptor;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierShuffleHandler;
-import org.apache.flink.runtime.shuffle.JobShuffleContext;
+import org.apache.flink.runtime.shuffle.StreamShuffleContext;
 import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
 import org.apache.flink.runtime.shuffle.ShuffleMasterContext;
 
@@ -62,11 +62,11 @@ public class TieredInternalShuffleMaster {
     }
 
     /**
-     * Registers the target job together with the corresponding {@link JobShuffleContext} to this
+     * Registers the target job together with the corresponding {@link StreamShuffleContext} to this
      * shuffle master.
      */
-    public void registerJob(JobShuffleContext context) {
-        tieredStorageMasterClient.registerJob(context.getJobId(), getTierShuffleHandler(context));
+    public void registerJob(StreamShuffleContext context) {
+        tieredStorageMasterClient.registerJob(context.getStreamId(), getTierShuffleHandler(context));
     }
 
     /**
@@ -94,7 +94,7 @@ public class TieredInternalShuffleMaster {
         tieredStorageMasterClient.close();
     }
 
-    private TierShuffleHandler getTierShuffleHandler(JobShuffleContext context) {
+    private TierShuffleHandler getTierShuffleHandler(StreamShuffleContext context) {
         return new TierShuffleHandler() {
             @Override
             public CompletableFuture<?> onReleasePartitions(

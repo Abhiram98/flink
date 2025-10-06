@@ -20,16 +20,12 @@ package org.apache.flink.runtime.rest.handler.job;
 
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
 
@@ -42,7 +38,7 @@ import java.util.concurrent.Executor;
 /**
  * Base class for request handlers whose response depends on a specific job vertex (defined via the
  * "{@link JobVertexIdPathParameter#KEY}" parameter) in a specific job, defined via (defined via the
- * "{@link JobIDPathParameter#KEY}" parameter).
+ * "{@link StreamIdPathParameter#KEY}" parameter).
  *
  * @param <R> the response type
  * @param <M> the message parameters type
@@ -83,7 +79,7 @@ public abstract class AbstractJobVertexHandler<
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
 
-        final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        final StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         final AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
         if (jobVertex == null) {

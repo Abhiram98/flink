@@ -20,17 +20,17 @@ package org.apache.flink.runtime.messages.webmonitor;
 
 /**
  * This message requests an overview of how many jobs are in which status. The response to this
- * message is a {@link JobsOverview} message.
+ * message is a {@link StreamsOverview} message.
  */
-public class RequestJobsOverview implements InfoMessage {
+public class RequestStreamsOverview implements InfoMessage {
 
     private static final long serialVersionUID = 3052933564788843275L;
 
     // ------------------------------------------------------------------------
 
-    private static final RequestJobsOverview INSTANCE = new RequestJobsOverview();
+    private static final RequestStreamsOverview INSTANCE = new RequestStreamsOverview();
 
-    public static RequestJobsOverview getInstance() {
+    public static RequestStreamsOverview getInstance() {
         return INSTANCE;
     }
 
@@ -38,23 +38,23 @@ public class RequestJobsOverview implements InfoMessage {
 
     @Override
     public int hashCode() {
-        return RequestJobsOverview.class.hashCode();
+        return RequestStreamsOverview.class.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && obj.getClass() == RequestJobsOverview.class;
+        return obj != null && obj.getClass() == RequestStreamsOverview.class;
     }
 
     @Override
     public String toString() {
-        return RequestJobsOverview.class.getSimpleName();
+        return RequestStreamsOverview.class.getSimpleName();
     }
 
     // ------------------------------------------------------------------------
 
     /** No external instantiation */
-    private RequestJobsOverview() {}
+    private RequestStreamsOverview() {}
 
     /** Preserve the singleton property by returning the singleton instance */
     private Object readResolve() {

@@ -20,9 +20,9 @@ package org.apache.flink.runtime.testutils;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.function.SupplierWithException;
 
@@ -33,41 +33,41 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
- * {@code TestingJobResultStore} is a {@link JobResultStore} implementation that can be used in
+ * {@code TestingJobResultStore} is a {@link StreamResultStore} implementation that can be used in
  * tests.
  */
-public class TestingJobResultStore implements JobResultStore {
+public class TestingJobResultStore implements StreamResultStore {
 
-    public static final JobResult DUMMY_JOB_RESULT = createSuccessfulJobResult(new JobID());
+    public static final StreamResult DUMMY_JOB_RESULT = createSuccessfulJobResult(new JobID());
 
-    public static JobResult createSuccessfulJobResult(JobID jobId) {
+    public static StreamResult createSuccessfulJobResult(JobID jobId) {
         return createJobResult(jobId, ApplicationStatus.SUCCEEDED);
     }
 
-    public static JobResult createJobResult(JobID jobId, ApplicationStatus applicationStatus) {
-        return new JobResult.Builder()
+    public static StreamResult createJobResult(JobID jobId, ApplicationStatus applicationStatus) {
+        return new StreamResult.Builder()
                 .jobId(jobId)
                 .applicationStatus(applicationStatus)
                 .netRuntime(1)
                 .build();
     }
 
-    private final Function<JobResultEntry, CompletableFuture<Void>> createDirtyResultConsumer;
+    private final Function<StreamResultEntry, CompletableFuture<Void>> createDirtyResultConsumer;
     private final Function<JobID, CompletableFuture<Void>> markResultAsCleanConsumer;
 
     private final Function<JobID, CompletableFuture<Boolean>> hasJobResultEntryFunction;
     private final Function<JobID, CompletableFuture<Boolean>> hasDirtyJobResultEntryFunction;
     private final Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction;
-    private final SupplierWithException<Set<JobResult>, ? extends IOException>
+    private final SupplierWithException<Set<StreamResult>, ? extends IOException>
             getDirtyResultsSupplier;
 
     private TestingJobResultStore(
-            Function<JobResultEntry, CompletableFuture<Void>> createDirtyResultConsumer,
+            Function<StreamResultEntry, CompletableFuture<Void>> createDirtyResultConsumer,
             Function<JobID, CompletableFuture<Void>> markResultAsCleanConsumer,
             Function<JobID, CompletableFuture<Boolean>> hasJobResultEntryFunction,
             Function<JobID, CompletableFuture<Boolean>> hasDirtyJobResultEntryFunction,
             Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction,
-            SupplierWithException<Set<JobResult>, ? extends IOException> getDirtyResultsSupplier) {
+            SupplierWithException<Set<StreamResult>, ? extends IOException> getDirtyResultsSupplier) {
         this.createDirtyResultConsumer = createDirtyResultConsumer;
         this.markResultAsCleanConsumer = markResultAsCleanConsumer;
         this.hasJobResultEntryFunction = hasJobResultEntryFunction;
@@ -77,7 +77,7 @@ public class TestingJobResultStore implements JobResultStore {
     }
 
     @Override
-    public CompletableFuture<Void> createDirtyResultAsync(JobResultEntry jobResultEntry) {
+    public CompletableFuture<Void> createDirtyResultAsync(StreamResultEntry jobResultEntry) {
         return createDirtyResultConsumer.apply(jobResultEntry);
     }
 
@@ -102,7 +102,7 @@ public class TestingJobResultStore implements JobResultStore {
     }
 
     @Override
-    public Set<JobResult> getDirtyResults() throws IOException {
+    public Set<StreamResult> getDirtyResults() throws IOException {
         return getDirtyResultsSupplier.get();
     }
 
@@ -113,7 +113,7 @@ public class TestingJobResultStore implements JobResultStore {
     /** {@code Builder} for instantiating {@code TestingJobResultStore} instances. */
     public static class Builder {
 
-        private Function<JobResultEntry, CompletableFuture<Void>> createDirtyResultConsumer =
+        private Function<StreamResultEntry, CompletableFuture<Void>> createDirtyResultConsumer =
                 jobResultEntry -> FutureUtils.completedVoidFuture();
         private Function<JobID, CompletableFuture<Void>> markResultAsCleanConsumer =
                 jobID -> FutureUtils.completedVoidFuture();
@@ -125,11 +125,11 @@ public class TestingJobResultStore implements JobResultStore {
         private Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction =
                 jobID -> CompletableFuture.completedFuture(false);
 
-        private SupplierWithException<Set<JobResult>, ? extends IOException>
+        private SupplierWithException<Set<StreamResult>, ? extends IOException>
                 getDirtyResultsSupplier = Collections::emptySet;
 
         public Builder withCreateDirtyResultConsumer(
-                Function<JobResultEntry, CompletableFuture<Void>> createDirtyResultConsumer) {
+                Function<StreamResultEntry, CompletableFuture<Void>> createDirtyResultConsumer) {
             this.createDirtyResultConsumer = createDirtyResultConsumer;
             return this;
         }
@@ -159,7 +159,7 @@ public class TestingJobResultStore implements JobResultStore {
         }
 
         public Builder withGetDirtyResultsSupplier(
-                SupplierWithException<Set<JobResult>, ? extends IOException>
+                SupplierWithException<Set<StreamResult>, ? extends IOException>
                         getDirtyResultsSupplier) {
             this.getDirtyResultsSupplier = getDirtyResultsSupplier;
             return this;

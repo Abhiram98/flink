@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adapter;
 
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ConsumerVertexGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ResultPartitionState;
@@ -83,7 +83,7 @@ class DefaultResultPartitionTest {
         assertThat(resultPartition.getConsumerVertexGroups()).isEmpty();
 
         // test update consumers
-        ExecutionVertexID executionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        ExecutionVertexID executionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         consumerVertexGroups.put(
                 resultPartition.getId(),
                 Collections.singletonList(

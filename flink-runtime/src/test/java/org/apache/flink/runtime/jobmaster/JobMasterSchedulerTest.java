@@ -28,12 +28,12 @@ import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.jobmaster.slotpool.TestingSlotPoolServiceBuilder;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.rpc.TestingRpcServiceExtension;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
@@ -73,7 +73,7 @@ class JobMasterSchedulerTest {
         try {
             final JobMaster jobMaster =
                     new JobMasterBuilder(
-                                    JobGraphTestUtils.emptyJobGraph(),
+                                    StreamGraphTestUtils.emptyJobGraph(),
                                     TESTING_RPC_SERVICE_EXTENSION.getTestingRpcService())
                             .withSlotPoolServiceSchedulerFactory(
                                     DefaultSlotPoolServiceSchedulerFactory.create(
@@ -104,7 +104,7 @@ class JobMasterSchedulerTest {
         @Override
         public SchedulerNG createInstance(
                 Logger log,
-                JobGraph jobGraph,
+                StreamGraph jobGraph,
                 Executor ioExecutor,
                 Configuration jobMasterConfiguration,
                 SlotPoolService slotPoolService,
@@ -113,7 +113,7 @@ class JobMasterSchedulerTest {
                 CheckpointRecoveryFactory checkpointRecoveryFactory,
                 Duration rpcTimeout,
                 BlobWriter blobWriter,
-                JobManagerJobMetricGroup jobManagerJobMetricGroup,
+                StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
                 Duration slotRequestTimeout,
                 ShuffleMaster<?> shuffleMaster,
                 JobMasterPartitionTracker partitionTracker,

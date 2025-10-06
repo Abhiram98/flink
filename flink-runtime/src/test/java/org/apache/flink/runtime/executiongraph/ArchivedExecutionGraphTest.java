@@ -29,11 +29,8 @@ import org.apache.flink.runtime.checkpoint.CompletedCheckpointStatsSummarySnapsh
 import org.apache.flink.runtime.checkpoint.StatsSummarySnapshot;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -78,11 +75,11 @@ public class ArchivedExecutionGraphTest {
         // Setup
         // -------------------------------------------------------------------------------------------------------------
 
-        JobVertexID v1ID = new JobVertexID();
-        JobVertexID v2ID = new JobVertexID();
+        StreamVertexID v1ID = new StreamVertexID();
+        StreamVertexID v2ID = new StreamVertexID();
 
-        JobVertex v1 = new JobVertex("v1", v1ID);
-        JobVertex v2 = new JobVertex("v2", v2ID);
+        StreamVertex v1 = new StreamVertex("v1", v1ID);
+        StreamVertex v2 = new StreamVertex("v2", v2ID);
 
         v1.setParallelism(1);
         v2.setParallelism(2);
@@ -110,7 +107,7 @@ public class ArchivedExecutionGraphTest {
         JobCheckpointingSettings checkpointingSettings =
                 new JobCheckpointingSettings(chkConfig, null);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(asList(v1, v2))
                         .setJobCheckpointingSettings(checkpointingSettings)
@@ -197,7 +194,7 @@ public class ArchivedExecutionGraphTest {
 
     @Test
     void testArchiveSparseWithVertices() {
-        final JobVertex jobVertex = new JobVertex("op");
+        final StreamVertex jobVertex = new StreamVertex("op");
         jobVertex.setParallelism(1);
 
         final int storedParallelism = 4;
@@ -255,7 +252,7 @@ public class ArchivedExecutionGraphTest {
         // ExecutionGraph
         // -------------------------------------------------------------------------------------------------------------
         assertThat(runtimeGraph.getJsonPlan()).isEqualTo(archivedGraph.getJsonPlan());
-        assertThat(runtimeGraph.getJobID()).isEqualTo(archivedGraph.getJobID());
+        assertThat(runtimeGraph.getStreamID()).isEqualTo(archivedGraph.getStreamID());
         assertThat(runtimeGraph.getJobName()).isEqualTo(archivedGraph.getJobName());
         assertThat(runtimeGraph.getState()).isEqualTo(archivedGraph.getState());
         assertThat(runtimeGraph.getFailureInfo().getExceptionAsString())
@@ -349,12 +346,12 @@ public class ArchivedExecutionGraphTest {
         // -------------------------------------------------------------------------------------------------------------
         // JobVertices
         // -------------------------------------------------------------------------------------------------------------
-        Map<JobVertexID, ? extends AccessExecutionJobVertex> runtimeVertices =
+        Map<StreamVertexID, ? extends AccessExecutionJobVertex> runtimeVertices =
                 runtimeGraph.getAllVertices();
-        Map<JobVertexID, ? extends AccessExecutionJobVertex> archivedVertices =
+        Map<StreamVertexID, ? extends AccessExecutionJobVertex> archivedVertices =
                 archivedGraph.getAllVertices();
 
-        for (Map.Entry<JobVertexID, ? extends AccessExecutionJobVertex> vertex :
+        for (Map.Entry<StreamVertexID, ? extends AccessExecutionJobVertex> vertex :
                 runtimeVertices.entrySet()) {
             compareExecutionJobVertex(vertex.getValue(), archivedVertices.get(vertex.getKey()));
         }

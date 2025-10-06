@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint.channel;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.fs.FileSystemSafetyNet;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.MdcUtils;
 import org.apache.flink.util.function.RunnableWithException;
@@ -355,7 +355,7 @@ class ChannelStateWriteRequestExecutorImpl implements ChannelStateWriteRequestEx
     }
 
     @Override
-    public void registerSubtask(JobVertexID jobVertexID, int subtaskIndex) {
+    public void registerSubtask(StreamVertexID jobVertexID, int subtaskIndex) {
         assert Thread.holdsLock(registerLock);
 
         SubtaskID subtaskID = SubtaskID.of(jobVertexID, subtaskIndex);
@@ -393,7 +393,7 @@ class ChannelStateWriteRequestExecutorImpl implements ChannelStateWriteRequestEx
     }
 
     @Override
-    public void releaseSubtask(JobVertexID jobVertexID, int subtaskIndex) throws IOException {
+    public void releaseSubtask(StreamVertexID jobVertexID, int subtaskIndex) throws IOException {
         synchronized (registerLock) {
             synchronized (lock) {
                 if (completeRegister()) {

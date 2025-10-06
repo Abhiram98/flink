@@ -21,8 +21,8 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.util.ManualTicker;
@@ -97,7 +97,7 @@ public class MemoryExecutionGraphInfoStoreTest extends TestLogger {
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
-        final JobsOverview expectedJobsOverview = JobsOverview.create(jobStatuses);
+        final StreamsOverview expectedJobsOverview = StreamsOverview.create(jobStatuses);
 
         try (final MemoryExecutionGraphInfoStore executionGraphInfoStore =
                 createMemoryExecutionGraphInfoStore()) {
@@ -118,7 +118,7 @@ public class MemoryExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> executionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(executionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(executionGraphInfos);
 
         try (final MemoryExecutionGraphInfoStore executionGraphInfoStore =
                 createMemoryExecutionGraphInfoStore()) {
@@ -209,7 +209,7 @@ public class MemoryExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> newExecutionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
 
         try (final MemoryExecutionGraphInfoStore executionGraphInfoStore =
                 createMemoryExecutionGraphInfoStore(Duration.ofHours(1L), maxCapacity)) {

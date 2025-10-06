@@ -51,19 +51,14 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategy;
 import org.apache.flink.runtime.executiongraph.failover.FailureHandlingResult;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalResult;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalTopology;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalVertex;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.scheduler.DefaultExecutionDeployer;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphFactory;
@@ -117,13 +112,13 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
     private final VertexParallelismAndInputInfosDecider vertexParallelismAndInputInfosDecider;
 
-    private final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId;
+    private final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId;
 
     private final Map<IntermediateDataSetID, BlockingResultInfo> blockingResultInfos;
 
     private final HybridPartitionDataConsumeConstraint hybridPartitionDataConsumeConstraint;
 
-    private final Map<JobVertexID, CompletableFuture<Integer>>
+    private final Map<StreamVertexID, CompletableFuture<Integer>>
             sourceParallelismFuturesByJobVertexId;
 
     private final SpeculativeExecutionHandler speculativeExecutionHandler;
@@ -134,13 +129,13 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
      * the future, all other executions within the same vertex must also be restarted to ensure the
      * consistency and correctness of the state.
      */
-    private Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
+    private Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators = new HashSet<>();
 
     private final BatchJobRecoveryHandler jobRecoveryHandler;
 
     public AdaptiveBatchScheduler(
             final Logger log,
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final Consumer<ComponentMainThreadExecutor> startUpAction,
@@ -148,7 +143,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             final ClassLoader userCodeLoader,
             final CheckpointsCleaner checkpointsCleaner,
             final CheckpointRecoveryFactory checkpointRecoveryFactory,
-            final JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            final StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             final SchedulingStrategyFactory schedulingStrategyFactory,
             final FailoverStrategy.Factory failoverStrategyFactory,
             final RestartBackoffTimeStrategy restartBackoffTimeStrategy,
@@ -166,7 +161,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             final int defaultMaxParallelism,
             final BlocklistOperations blocklistOperations,
             final HybridPartitionDataConsumeConstraint hybridPartitionDataConsumeConstraint,
-            final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId,
+            final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId,
             final BatchJobRecoveryHandler jobRecoveryHandler)
             throws Exception {
 
@@ -272,7 +267,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             Set<ExecutionVertexID> originalNeedToRestartVertices =
                     failureHandlingResult.getVerticesToRestart();
 
-            Set<JobVertexID> extraNeedToRestartJobVertices =
+            Set<StreamVertexID> extraNeedToRestartJobVertices =
                     originalNeedToRestartVertices.stream()
                             .map(ExecutionVertexID::getJobVertexId)
                             .filter(jobVerticesWithUnRecoveredCoordinators::contains)
@@ -681,7 +676,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             // the ordering of these elements received by the committer cannot be assured, which
             // would break the assumption that CommittableSummary is received before
             // CommittableWithLineage.
-            for (JobVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
+            for (StreamVertexID jobVertexId : forwardGroup.getJobVertexIds()) {
                 ExecutionJobVertex executionJobVertex = getExecutionJobVertex(jobVertexId);
                 if (!executionJobVertex.isParallelismDecided()) {
                     log.info(
@@ -846,7 +841,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
      */
     @VisibleForTesting
     public static VertexParallelismStore computeVertexParallelismStoreForDynamicGraph(
-            Iterable<JobVertex> vertices, int defaultMaxParallelism) {
+            Iterable<StreamVertex> vertices, int defaultMaxParallelism) {
         // Resets the JobVertices to their original parallelism after JM failover, maintaining
         // consistency between the job graph loaded from the file and the one in memory.
         resetDynamicParallelism(vertices);
@@ -867,8 +862,8 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
                 Function.identity());
     }
 
-    private static void resetDynamicParallelism(Iterable<JobVertex> vertices) {
-        for (JobVertex vertex : vertices) {
+    private static void resetDynamicParallelism(Iterable<StreamVertex> vertices) {
+        for (StreamVertex vertex : vertices) {
             if (vertex.isDynamicParallelism()) {
                 vertex.setParallelism(ExecutionConfig.PARALLELISM_DEFAULT);
             }
@@ -972,7 +967,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         }
 
         @Override
-        public void onRecoveringFinished(Set<JobVertexID> jobVerticesWithUnRecoveredCoordinators) {
+        public void onRecoveringFinished(Set<StreamVertexID> jobVerticesWithUnRecoveredCoordinators) {
             AdaptiveBatchScheduler.this.jobVerticesWithUnRecoveredCoordinators =
                     new HashSet<>(jobVerticesWithUnRecoveredCoordinators);
             tryComputeSourceParallelismThenRunAsync(

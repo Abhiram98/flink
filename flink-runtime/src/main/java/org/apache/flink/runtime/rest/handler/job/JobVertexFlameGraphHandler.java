@@ -24,12 +24,8 @@ import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.FlameGraphTypeQueryParameter;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexFlameGraphHeaders;
-import org.apache.flink.runtime.rest.messages.JobVertexFlameGraphParameters;
-import org.apache.flink.runtime.rest.messages.SubtaskIndexQueryParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
 import org.apache.flink.runtime.webmonitor.stats.VertexStatsTracker;
@@ -86,11 +82,11 @@ public class JobVertexFlameGraphHandler
         if (subtaskIndex == null) {
             threadInfoSample =
                     threadInfoOperatorTracker.getJobVertexStats(
-                            request.getPathParameter(JobIDPathParameter.class), jobVertex);
+                            request.getPathParameter(StreamIdPathParameter.class), jobVertex);
         } else {
             threadInfoSample =
                     threadInfoOperatorTracker.getExecutionVertexStats(
-                            request.getPathParameter(JobIDPathParameter.class),
+                            request.getPathParameter(StreamIdPathParameter.class),
                             jobVertex,
                             subtaskIndex);
         }

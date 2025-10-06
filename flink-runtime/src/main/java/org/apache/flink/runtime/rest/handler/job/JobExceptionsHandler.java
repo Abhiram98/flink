@@ -23,7 +23,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.job.FailureLabelFilterParameter;
@@ -114,7 +114,7 @@ public class JobExceptionsHandler
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
                         .replace(
-                                ':' + JobIDPathParameter.KEY,
+                                ':' + StreamIdPathParameter.KEY,
                                 executionGraphInfo.getJobId().toString());
         return Collections.singletonList(new ArchivedJson(path, json));
     }

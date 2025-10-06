@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.metrics.groups;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
@@ -39,9 +39,9 @@ class InternalOperatorCoordinatorGroupTest {
     @Test
     void testGenerateScopeDefault() {
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
@@ -57,9 +57,9 @@ class InternalOperatorCoordinatorGroupTest {
     @Test
     void testVariables() {
         final JobID jobId = new JobID();
-        final JobVertexID jobVertexId = new JobVertexID();
+        final StreamVertexID jobVertexId = new StreamVertexID();
         final OperatorID operatorId = new OperatorID();
-        JobManagerOperatorMetricGroup jmJobGroup =
+        StreamManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
                         .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");

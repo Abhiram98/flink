@@ -26,7 +26,7 @@ import org.apache.flink.runtime.externalresource.ExternalResourceInfoProvider;
 import org.apache.flink.runtime.io.disk.iomanager.IOManager;
 import org.apache.flink.runtime.io.disk.iomanager.IOManagerAsync;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.memory.MemoryManagerBuilder;
 import org.apache.flink.runtime.metrics.groups.TaskMetricGroup;
@@ -55,7 +55,7 @@ public class MockEnvironmentBuilder {
     private UserCodeClassLoader userCodeClassLoader =
             TestingUserCodeClassLoader.newBuilder().build();
     private JobID jobID = new JobID();
-    private JobVertexID jobVertexID = new JobVertexID();
+    private StreamVertexID jobVertexID = new StreamVertexID();
     private JobType jobType = JobType.STREAMING;
     private TaskMetricGroup taskMetricGroup =
             UnregisteredMetricGroups.createUnregisteredTaskMetricGroup();
@@ -144,7 +144,7 @@ public class MockEnvironmentBuilder {
         return this;
     }
 
-    public MockEnvironmentBuilder setJobVertexID(JobVertexID jobVertexID) {
+    public MockEnvironmentBuilder setJobVertexID(StreamVertexID jobVertexID) {
         this.jobVertexID = jobVertexID;
         return this;
     }

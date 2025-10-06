@@ -29,19 +29,19 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.dispatcher.cleanup.DispatcherResourceCleanerFactory;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingRetryStrategies;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.leaderelection.LeaderInformation;
 import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -129,8 +129,8 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
     @Test
     public void testCleanupThroughRetries() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
-        final JobID jobId = jobGraph.getJobID();
+        final StreamGraph jobGraph = createJobGraph();
+        final JobID jobId = jobGraph.getStreamID();
 
         // ExecutionPlanStore
         final AtomicInteger actualGlobalCleanupCallCount = new AtomicInteger();
@@ -185,7 +185,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
                 leaderElection.isLeader(UUID.randomUUID());
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        dispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+        dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
         waitForJobToFinish(confirmedLeaderInformation, dispatcherGateway, jobId);
 
@@ -195,22 +195,22 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph should be removed from ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 IsEmptyCollection.empty());
 
         CommonTestUtils.waitUntilCondition(
-                () -> haServices.getJobResultStore().hasJobResultEntryAsync(jobId).get());
+                () -> haServices.getJobResultStore().hasStreamResultEntryAsync(jobId).get());
     }
 
     @Test
     public void testCleanupNotCancellable() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
-        final JobID jobId = jobGraph.getJobID();
+        final StreamGraph jobGraph = createJobGraph();
+        final JobID jobId = jobGraph.getStreamID();
 
-        final JobResultStore jobResultStore = new EmbeddedJobResultStore();
+        final StreamResultStore jobResultStore = new EmbeddedJobResultStore();
         jobResultStore
                 .createDirtyResultAsync(
-                        new JobResultEntry(TestingJobResultStore.createSuccessfulJobResult(jobId)))
+                        new StreamResultEntry(TestingJobResultStore.createSuccessfulJobResult(jobId)))
                 .get();
         haServices.setJobResultStore(jobResultStore);
 
@@ -235,7 +235,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobResultStore should have this job still marked as dirty.",
-                haServices.getJobResultStore().hasDirtyJobResultEntryAsync(jobId).get(),
+                haServices.getJobResultStore().hasDirtyStreamResultEntryAsync(jobId).get(),
                 CoreMatchers.is(true));
 
         final DispatcherGateway dispatcherGateway =
@@ -250,13 +250,13 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
         jobManagerRunnerCleanupFuture.complete(null);
 
         CommonTestUtils.waitUntilCondition(
-                () -> haServices.getJobResultStore().hasCleanJobResultEntryAsync(jobId).get());
+                () -> haServices.getJobResultStore().hasCleanStreamResultEntryAsync(jobId).get());
     }
 
     @Test
     public void testCleanupAfterLeadershipChange() throws Exception {
-        final JobGraph jobGraph = createJobGraph();
-        final JobID jobId = jobGraph.getJobID();
+        final StreamGraph jobGraph = createJobGraph();
+        final JobID jobId = jobGraph.getStreamID();
 
         // Construct execution plan store.
         final AtomicInteger actualGlobalCleanupCallCount = new AtomicInteger();
@@ -300,7 +300,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
                 leaderElection.isLeader(UUID.randomUUID());
         final DispatcherGateway dispatcherGateway =
                 dispatcher.getSelfGateway(DispatcherGateway.class);
-        dispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+        dispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
         waitForJobToFinish(confirmedLeaderInformation, dispatcherGateway, jobId);
         firstCleanupTriggered.await();
@@ -316,12 +316,12 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph is still stored in the ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 equalTo(Collections.singleton(jobId)));
         assertThat(
                 "The JobResultStore should have this job marked as dirty.",
                 haServices.getJobResultStore().getDirtyResults().stream()
-                        .map(JobResult::getJobId)
+                        .map(StreamResult::getStreamId)
                         .collect(Collectors.toSet()),
                 equalTo(Collections.singleton(jobId)));
 
@@ -340,11 +340,11 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
 
         assertThat(
                 "The JobGraph is not stored in the ExecutionPlanStore.",
-                haServices.getExecutionPlanStore().getJobIds(),
+                haServices.getExecutionPlanStore().getStreamIds(),
                 IsEmptyCollection.empty());
         assertTrue(
                 "The JobResultStore has the job listed as clean.",
-                haServices.getJobResultStore().hasJobResultEntryAsync(jobId).get());
+                haServices.getJobResultStore().hasStreamResultEntryAsync(jobId).get());
 
         assertThat(successfulJobGraphCleanup.get(), equalTo(jobId));
 
@@ -371,12 +371,12 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
         awaitStatus(dispatcherGateway, jobId, JobStatus.FINISHED);
     }
 
-    private JobGraph createJobGraph() {
-        final JobVertex firstVertex = new JobVertex("first");
+    private StreamGraph createJobGraph() {
+        final StreamVertex firstVertex = new StreamVertex("first");
         firstVertex.setInvokableClass(NoOpInvokable.class);
         firstVertex.setParallelism(1);
 
-        final JobVertex secondVertex = new JobVertex("second");
+        final StreamVertex secondVertex = new StreamVertex("second");
         secondVertex.setInvokableClass(NoOpInvokable.class);
         secondVertex.setParallelism(1);
 

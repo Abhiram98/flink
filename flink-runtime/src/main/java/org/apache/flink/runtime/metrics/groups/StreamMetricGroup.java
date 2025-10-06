@@ -37,18 +37,18 @@ import java.util.Map;
  * @param <C> The type of the parent ComponentMetricGroup.
  */
 @Internal
-public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
+public abstract class StreamMetricGroup<C extends ComponentMetricGroup<C>>
         extends ComponentMetricGroup<C> {
 
     /** The ID of the job represented by this metrics group. */
-    protected final JobID jobId;
+    protected final JobID streamId;
 
     /** The name of the job represented by this metrics group. */
     @Nullable protected final String jobName;
 
     // ------------------------------------------------------------------------
 
-    protected JobMetricGroup(
+    protected StreamMetricGroup(
             MetricRegistry registry,
             C parent,
             JobID jobId,
@@ -56,12 +56,12 @@ public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
             String[] scope) {
         super(registry, scope, parent);
 
-        this.jobId = jobId;
+        this.streamId = jobId;
         this.jobName = jobName;
     }
 
     public JobID jobId() {
-        return jobId;
+        return streamId;
     }
 
     @Nullable
@@ -72,12 +72,12 @@ public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
     @Override
     protected QueryScopeInfo.JobQueryScopeInfo createQueryServiceMetricInfo(
             CharacterFilter filter) {
-        return new QueryScopeInfo.JobQueryScopeInfo(this.jobId.toString());
+        return new QueryScopeInfo.JobQueryScopeInfo(this.streamId.toString());
     }
 
     @Override
     public void addSpan(SpanBuilder spanBuilder) {
-        super.addSpan(spanBuilder.setAttribute("jobId", this.jobId.toString()));
+        super.addSpan(spanBuilder.setAttribute("jobId", this.streamId.toString()));
     }
 
     // ------------------------------------------------------------------------
@@ -86,7 +86,7 @@ public abstract class JobMetricGroup<C extends ComponentMetricGroup<C>>
 
     @Override
     protected void putVariables(Map<String, String> variables) {
-        variables.put(ScopeFormat.SCOPE_JOB_ID, jobId.toString());
+        variables.put(ScopeFormat.SCOPE_JOB_ID, streamId.toString());
         variables.put(ScopeFormat.SCOPE_JOB_NAME, jobName);
     }
 

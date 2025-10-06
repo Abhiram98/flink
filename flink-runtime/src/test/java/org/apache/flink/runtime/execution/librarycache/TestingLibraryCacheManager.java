@@ -37,8 +37,8 @@ public class TestingLibraryCacheManager implements LibraryCacheManager {
     }
 
     @Override
-    public LibraryCacheManager.ClassLoaderLease registerClassLoaderLease(JobID jobId) {
-        return registerOrRetainClassLoaderFunction.apply(jobId);
+    public LibraryCacheManager.ClassLoaderLease registerClassLoaderLease(JobID streamId) {
+        return registerOrRetainClassLoaderFunction.apply(streamId);
     }
 
     @Override

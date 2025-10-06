@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.api.graph;
 
 import org.apache.flink.api.dag.Transformation;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.streaming.api.operators.UdfStreamOperatorFactory;
 
 import org.apache.flink.shaded.guava32.com.google.common.hash.HashFunction;
@@ -55,7 +55,7 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
 
     /**
      * Returns a map with a hash for each {@link StreamNode} of the {@link StreamGraph}. The hash is
-     * used as the {@link JobVertexID} in order to identify nodes across job submissions if they
+     * used as the {@link StreamVertexID} in order to identify nodes across job submissions if they
      * didn't change.
      *
      * <p>The complete {@link StreamGraph} is traversed. The hash is either computed from the

@@ -28,18 +28,14 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecution;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionHistory;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
 import org.apache.flink.runtime.rest.handler.RestHandlerConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.FlameGraphTypeQueryParameter;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexFlameGraphParameters;
-import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
-import org.apache.flink.runtime.rest.messages.SubtaskIndexQueryParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.webmonitor.stats.VertexStatsTracker;
 import org.apache.flink.runtime.webmonitor.threadinfo.VertexFlameGraph;
 import org.apache.flink.runtime.webmonitor.threadinfo.VertexThreadInfoStats;
@@ -63,7 +59,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JobVertexFlameGraphHandlerTest {
 
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
 
     private static VertexThreadInfoStats taskThreadInfoStatsDefaultSample;
     private static JobVertexFlameGraphHandler handler;
@@ -155,7 +151,7 @@ class JobVertexFlameGraphHandlerTest {
     private HandlerRequest<EmptyRequestBody> generateJobVertexFlameGraphParameters(
             Integer subtaskIndex) throws HandlerRequestException {
         final HashMap<String, String> receivedPathParameters = new HashMap<>(2);
-        receivedPathParameters.put(JobIDPathParameter.KEY, JOB_ID.toString());
+        receivedPathParameters.put(StreamIdPathParameter.KEY, JOB_ID.toString());
         receivedPathParameters.put(JobVertexIdPathParameter.KEY, JOB_VERTEX_ID.toString());
 
         Map<String, List<String>> queryParams = new HashMap<>(2);

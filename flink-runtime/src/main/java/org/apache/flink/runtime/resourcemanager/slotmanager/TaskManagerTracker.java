@@ -86,7 +86,7 @@ interface TaskManagerTracker
      * @param jobId the job for which the task executors must have a slot
      * @return task managers with at least 1 slot for the job
      */
-    Collection<TaskManagerInfo> getTaskManagersWithAllocatedSlotsForJob(JobID jobId);
+    Collection<TaskManagerInfo> getTaskManagersWithAllocatedSlotsForStream(JobID jobId);
 
     // ---------------------------------------------------------------------------------------------
     // Slot status updates

@@ -19,12 +19,12 @@
 package org.apache.flink.runtime.rest.handler.job.metrics;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobVertexMetricsHeaders;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobVertexMetricsMessageParameters;
@@ -35,7 +35,7 @@ import java.time.Duration;
 import java.util.Map;
 
 /**
- * Handler that returns metrics given a {@link JobID} and {@link JobVertexID}.
+ * Handler that returns metrics given a {@link JobID} and {@link StreamVertexID}.
  *
  * @see MetricStore#getTaskMetricStore(String, String)
  * @deprecated This class is subsumed by {@link SubtaskMetricsHandler} and is only kept for
@@ -62,8 +62,8 @@ public class JobVertexMetricsHandler
     protected MetricStore.ComponentMetricStore getComponentMetricStore(
             HandlerRequest<EmptyRequestBody> request, MetricStore metricStore) {
 
-        final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
-        final JobVertexID vertexId = request.getPathParameter(JobVertexIdPathParameter.class);
+        final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
+        final StreamVertexID vertexId = request.getPathParameter(JobVertexIdPathParameter.class);
 
         return metricStore.getTaskMetricStore(jobId.toString(), vertexId.toString());
     }

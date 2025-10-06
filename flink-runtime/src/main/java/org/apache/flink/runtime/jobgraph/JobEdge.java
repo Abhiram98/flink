@@ -32,7 +32,7 @@ public class JobEdge implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
     /** The vertex connected to this edge. */
-    private final JobVertex target;
+    private final StreamVertex target;
 
     /** The distribution pattern that should be used for this job edge. */
     private final DistributionPattern distributionPattern;
@@ -75,7 +75,7 @@ public class JobEdge implements java.io.Serializable {
      */
     public JobEdge(
             IntermediateDataSet source,
-            JobVertex target,
+            StreamVertex target,
             DistributionPattern distributionPattern,
             boolean isBroadcast) {
         if (source == null || target == null || distributionPattern == null) {
@@ -102,7 +102,7 @@ public class JobEdge implements java.io.Serializable {
      *
      * @return The vertex connected to this edge.
      */
-    public JobVertex getTarget() {
+    public StreamVertex getTarget() {
         return target;
     }
 

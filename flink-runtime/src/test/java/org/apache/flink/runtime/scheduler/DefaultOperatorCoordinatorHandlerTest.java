@@ -25,8 +25,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.operators.coordination.TestingOperatorCoordinator;
 import org.apache.flink.testutils.TestingUtils;
@@ -53,7 +53,7 @@ class DefaultOperatorCoordinatorHandlerTest {
     @Test
     void testRegisterAndStartNewCoordinators() throws Exception {
 
-        final JobVertex[] jobVertices = createJobVertices(BLOCKING);
+        final StreamVertex[] jobVertices = createJobVertices(BLOCKING);
         OperatorID operatorId1 = OperatorID.fromJobVertexID(jobVertices[0].getID());
         OperatorID operatorId2 = OperatorID.fromJobVertexID(jobVertices[1].getID());
 
@@ -77,9 +77,9 @@ class DefaultOperatorCoordinatorHandlerTest {
         assertThat(handler.getCoordinatorMap().keySet()).contains(operatorId1, operatorId2);
     }
 
-    private JobVertex[] createJobVertices(ResultPartitionType resultPartitionType)
+    private StreamVertex[] createJobVertices(ResultPartitionType resultPartitionType)
             throws IOException {
-        final JobVertex[] jobVertices = new JobVertex[2];
+        final StreamVertex[] jobVertices = new StreamVertex[2];
         final int parallelism = 3;
         jobVertices[0] = createNoOpVertex(parallelism);
         jobVertices[1] = createNoOpVertex(parallelism);
@@ -98,9 +98,9 @@ class DefaultOperatorCoordinatorHandlerTest {
         return jobVertices;
     }
 
-    private DefaultExecutionGraph createDynamicGraph(JobVertex... jobVertices) throws Exception {
+    private DefaultExecutionGraph createDynamicGraph(StreamVertex... jobVertices) throws Exception {
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(new JobGraph(new JobID(), "TestJob", jobVertices))
+                .setJobGraph(new StreamGraph(new JobID(), "TestJob", jobVertices))
                 .buildDynamicGraph(EXECUTOR_EXTENSION.getExecutor());
     }
 }

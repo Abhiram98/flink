@@ -20,11 +20,11 @@ package org.apache.flink.runtime.rest.handler.job.metrics;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.dump.MetricDump;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.AggregatedSubtaskMetricsParameters;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -45,7 +45,7 @@ class AggregatingSubtasksMetricsHandlerTest
                 AggregatingSubtasksMetricsHandler, AggregatedSubtaskMetricsParameters> {
 
     private static final JobID JOB_ID = JobID.generate();
-    private static final JobVertexID TASK_ID = new JobVertexID();
+    private static final StreamVertexID TASK_ID = new StreamVertexID();
 
     @Override
     protected Tuple2<String, List<String>> getFilter() {
@@ -55,7 +55,7 @@ class AggregatingSubtasksMetricsHandlerTest
     @Override
     protected Map<String, String> getPathParameters() {
         Map<String, String> pathParameters = new HashMap<>(4);
-        pathParameters.put(JobIDPathParameter.KEY, JOB_ID.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, JOB_ID.toString());
         pathParameters.put(JobVertexIdPathParameter.KEY, TASK_ID.toString());
         return pathParameters;
     }

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import org.apache.flink.shaded.netty4.io.netty.buffer.ByteBuf;
@@ -61,7 +61,7 @@ public class ExecutionAttemptID implements java.io.Serializable {
         return executionVertexId;
     }
 
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return executionVertexId.getJobVertexId();
     }
 
@@ -116,6 +116,6 @@ public class ExecutionAttemptID implements java.io.Serializable {
 
     public static ExecutionAttemptID randomId() {
         return new ExecutionAttemptID(
-                new ExecutionGraphID(), new ExecutionVertexID(new JobVertexID(0, 0), 0), 0);
+                new ExecutionGraphID(), new ExecutionVertexID(new StreamVertexID(0, 0), 0), 0);
     }
 }

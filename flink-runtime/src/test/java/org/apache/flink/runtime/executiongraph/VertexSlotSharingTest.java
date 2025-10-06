@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -52,11 +52,11 @@ class VertexSlotSharingTest {
     @Test
     void testAssignSlotSharingGroup() {
         try {
-            JobVertex v1 = new JobVertex("v1");
-            JobVertex v2 = new JobVertex("v2");
-            JobVertex v3 = new JobVertex("v3");
-            JobVertex v4 = new JobVertex("v4");
-            JobVertex v5 = new JobVertex("v5");
+            StreamVertex v1 = new StreamVertex("v1");
+            StreamVertex v2 = new StreamVertex("v2");
+            StreamVertex v3 = new StreamVertex("v3");
+            StreamVertex v4 = new StreamVertex("v4");
+            StreamVertex v5 = new StreamVertex("v5");
 
             v1.setParallelism(4);
             v2.setParallelism(5);
@@ -83,7 +83,7 @@ class VertexSlotSharingTest {
             v4.setSlotSharingGroup(jg2);
             v5.setSlotSharingGroup(jg2);
 
-            List<JobVertex> vertices = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
+            List<StreamVertex> vertices = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
 
             ExecutionGraph eg =
                     TestingDefaultExecutionGraphBuilder.newBuilder()

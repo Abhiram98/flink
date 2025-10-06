@@ -20,7 +20,7 @@ package org.apache.flink.runtime.query;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.util.Preconditions;
@@ -43,7 +43,7 @@ public class KvStateLocation implements Serializable {
     private final JobID jobId;
 
     /** JobVertexID the KvState instances belong to. */
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     /** Number of key groups of the operator the KvState instances belong to. */
     private final int numKeyGroups;
@@ -71,7 +71,7 @@ public class KvStateLocation implements Serializable {
      * @param registrationName Name under which the KvState instances have been registered
      */
     public KvStateLocation(
-            JobID jobId, JobVertexID jobVertexId, int numKeyGroups, String registrationName) {
+            JobID jobId, StreamVertexID jobVertexId, int numKeyGroups, String registrationName) {
         this.jobId = Preconditions.checkNotNull(jobId, "JobID");
         this.jobVertexId = Preconditions.checkNotNull(jobVertexId, "JobVertexID");
         Preconditions.checkArgument(numKeyGroups >= 0, "Negative number of key groups");
@@ -95,7 +95,7 @@ public class KvStateLocation implements Serializable {
      *
      * @return JobVertexID the KvState instances belong to
      */
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 

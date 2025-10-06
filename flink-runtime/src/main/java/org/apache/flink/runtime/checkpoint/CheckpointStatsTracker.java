@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -77,7 +77,7 @@ public interface CheckpointStatsTracker {
      * @param checkpointId ID of the checkpoint.
      * @param triggerTimestamp Trigger timestamp of the checkpoint.
      * @param props The checkpoint properties.
-     * @param vertexToDop mapping of {@link JobVertexID} to DOP
+     * @param vertexToDop mapping of {@link StreamVertexID} to DOP
      * @return Tracker for statistics gathering or {@code null} if no stats were tracked.
      */
     @Nullable
@@ -85,7 +85,7 @@ public interface CheckpointStatsTracker {
             long checkpointId,
             long triggerTimestamp,
             CheckpointProperties props,
-            Map<JobVertexID, Integer> vertexToDop);
+            Map<StreamVertexID, Integer> vertexToDop);
 
     void reportFailedCheckpoint(FailedCheckpointStats failed);
 

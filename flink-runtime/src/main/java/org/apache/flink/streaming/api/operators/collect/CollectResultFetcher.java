@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeutils.base.array.BytePrimitiveArraySerial
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.runtime.dispatcher.UnavailableDispatcherOperationException;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.Preconditions;
@@ -134,7 +134,7 @@ public class CollectResultFetcher<T> {
                         LOG.debug(
                                 "The job execution has not started yet; cannot fetch results.", e);
                     } else if (ExceptionUtils.findThrowableWithMessage(
-                                    e, FlinkJobNotFoundException.class.getName())
+                                    e, FlinkStreamNotFoundException.class.getName())
                             .isPresent()) {
                         LOG.debug(
                                 "The job cannot be found. It is very likely that the job is not in a RUNNING state.",

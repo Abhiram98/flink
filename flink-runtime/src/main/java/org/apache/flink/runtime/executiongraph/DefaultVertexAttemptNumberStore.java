@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.Preconditions;
 
 import java.util.ArrayList;
@@ -28,10 +28,10 @@ import java.util.Map;
 
 /** Maintains the attempt number per subtask. */
 public class DefaultVertexAttemptNumberStore implements MutableVertexAttemptNumberStore {
-    private final Map<JobVertexID, List<Integer>> vertexSubtaskToAttemptCounts = new HashMap<>();
+    private final Map<StreamVertexID, List<Integer>> vertexSubtaskToAttemptCounts = new HashMap<>();
 
     @Override
-    public SubtaskAttemptNumberStore getAttemptCounts(JobVertexID vertexId) {
+    public SubtaskAttemptNumberStore getAttemptCounts(StreamVertexID vertexId) {
         return new DefaultSubtaskAttemptNumberStore(
                 Collections.unmodifiableList(
                         new ArrayList<>(
@@ -40,7 +40,7 @@ public class DefaultVertexAttemptNumberStore implements MutableVertexAttemptNumb
     }
 
     @Override
-    public void setAttemptCount(JobVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
+    public void setAttemptCount(StreamVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
         Preconditions.checkArgument(subtaskIndex >= 0);
         Preconditions.checkArgument(attemptNumber >= 0);
 

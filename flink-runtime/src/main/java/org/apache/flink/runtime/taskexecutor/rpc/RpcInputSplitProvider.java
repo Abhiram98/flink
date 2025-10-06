@@ -20,7 +20,7 @@ package org.apache.flink.runtime.taskexecutor.rpc;
 
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProviderException;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
@@ -34,13 +34,13 @@ import java.util.concurrent.TimeUnit;
 
 public class RpcInputSplitProvider implements InputSplitProvider {
     private final JobMasterGateway jobMasterGateway;
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
     private final ExecutionAttemptID executionAttemptID;
     private final Duration timeout;
 
     public RpcInputSplitProvider(
             JobMasterGateway jobMasterGateway,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             ExecutionAttemptID executionAttemptID,
             Duration timeout) {
         this.jobMasterGateway = Preconditions.checkNotNull(jobMasterGateway);

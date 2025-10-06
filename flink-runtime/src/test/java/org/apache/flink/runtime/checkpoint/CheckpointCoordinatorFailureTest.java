@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.channel.ResultSubpartitionInfo;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -76,7 +76,7 @@ class CheckpointCoordinatorFailureTest {
      */
     @Test
     void testFailingCompletedCheckpointStoreAdd() throws Exception {
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
 
         final ManuallyTriggeredScheduledExecutor manuallyTriggeredScheduledExecutor =
                 new ManuallyTriggeredScheduledExecutor();
@@ -151,7 +151,7 @@ class CheckpointCoordinatorFailureTest {
 
         AcknowledgeCheckpoint acknowledgeMessage =
                 new AcknowledgeCheckpoint(
-                        testGraph.getJobID(),
+                        testGraph.getStreamID(),
                         vertex.getCurrentExecutionAttempt().getAttemptId(),
                         checkpointId,
                         new CheckpointMetrics(),
@@ -192,7 +192,7 @@ class CheckpointCoordinatorFailureTest {
 
     private void testStoringFailureHandling(Exception failure, int expectedCleanupCalls)
             throws Exception {
-        final JobVertexID jobVertexID1 = new JobVertexID();
+        final StreamVertexID jobVertexID1 = new StreamVertexID();
 
         final ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -252,7 +252,7 @@ class CheckpointCoordinatorFailureTest {
         try {
             checkpointCoordinator.receiveAcknowledgeMessage(
                     new AcknowledgeCheckpoint(
-                            graph.getJobID(),
+                            graph.getStreamID(),
                             attemptId,
                             checkpointIDCounter.getLast(),
                             expectedReportedMetrics,

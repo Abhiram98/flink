@@ -21,7 +21,7 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
 import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.logger.NetworkActionsLogger;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.AbstractChannelStateHandle.StateContentMetaInfo;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
@@ -143,7 +143,7 @@ class ChannelStateCheckpointWriter {
     }
 
     void writeInput(
-            JobVertexID jobVertexID, int subtaskIndex, InputChannelInfo info, Buffer buffer) {
+            StreamVertexID jobVertexID, int subtaskIndex, InputChannelInfo info, Buffer buffer) {
         try {
             if (isDone()) {
                 return;
@@ -162,7 +162,7 @@ class ChannelStateCheckpointWriter {
     }
 
     void writeOutput(
-            JobVertexID jobVertexID, int subtaskIndex, ResultSubpartitionInfo info, Buffer buffer) {
+            StreamVertexID jobVertexID, int subtaskIndex, ResultSubpartitionInfo info, Buffer buffer) {
         try {
             if (isDone()) {
                 return;
@@ -200,7 +200,7 @@ class ChannelStateCheckpointWriter {
                 });
     }
 
-    void completeInput(JobVertexID jobVertexID, int subtaskIndex) throws Exception {
+    void completeInput(StreamVertexID jobVertexID, int subtaskIndex) throws Exception {
         if (isDone()) {
             return;
         }
@@ -208,7 +208,7 @@ class ChannelStateCheckpointWriter {
         tryFinishResult();
     }
 
-    void completeOutput(JobVertexID jobVertexID, int subtaskIndex) throws Exception {
+    void completeOutput(StreamVertexID jobVertexID, int subtaskIndex) throws Exception {
         if (isDone()) {
             return;
         }
@@ -284,7 +284,7 @@ class ChannelStateCheckpointWriter {
      * The throwable is just used for specific subtask that triggered the failure. Other subtasks
      * should fail by {@link CHANNEL_STATE_SHARED_STREAM_EXCEPTION}.
      */
-    public void fail(JobVertexID jobVertexID, int subtaskIndex, Throwable throwable) {
+    public void fail(StreamVertexID jobVertexID, int subtaskIndex, Throwable throwable) {
         if (isDone()) {
             return;
         }
@@ -326,7 +326,7 @@ class ChannelStateCheckpointWriter {
 
     @Nonnull
     private ChannelStatePendingResult getChannelStatePendingResult(
-            JobVertexID jobVertexID, int subtaskIndex) {
+            StreamVertexID jobVertexID, int subtaskIndex) {
         SubtaskID subtaskID = SubtaskID.of(jobVertexID, subtaskIndex);
         ChannelStatePendingResult pendingResult = pendingResults.get(subtaskID);
         checkNotNull(pendingResult, "The subtask[%s] is not registered yet", subtaskID);
@@ -337,15 +337,15 @@ class ChannelStateCheckpointWriter {
 /** A identification for subtask. */
 class SubtaskID {
 
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
     private final int subtaskIndex;
 
-    private SubtaskID(JobVertexID jobVertexID, int subtaskIndex) {
+    private SubtaskID(StreamVertexID jobVertexID, int subtaskIndex) {
         this.jobVertexID = jobVertexID;
         this.subtaskIndex = subtaskIndex;
     }
 
-    public JobVertexID getJobVertexID() {
+    public StreamVertexID getJobVertexID() {
         return jobVertexID;
     }
 
@@ -353,7 +353,7 @@ class SubtaskID {
         return subtaskIndex;
     }
 
-    public static SubtaskID of(JobVertexID jobVertexID, int subtaskIndex) {
+    public static SubtaskID of(StreamVertexID jobVertexID, int subtaskIndex) {
         return new SubtaskID(jobVertexID, subtaskIndex);
     }
 

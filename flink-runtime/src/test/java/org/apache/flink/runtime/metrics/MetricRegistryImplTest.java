@@ -295,7 +295,7 @@ class MetricRegistryImplTest {
         ScopeFormats scopeConfig = ScopeFormats.fromConfig(config);
 
         assertThat(scopeConfig.getTaskManagerFormat().format()).isEqualTo("A");
-        assertThat(scopeConfig.getTaskManagerJobFormat().format()).isEqualTo("B");
+        assertThat(scopeConfig.getTaskManagerStreamFormat().format()).isEqualTo("B");
         assertThat(scopeConfig.getTaskFormat().format()).isEqualTo("C");
         assertThat(scopeConfig.getOperatorFormat().format()).isEqualTo("D");
     }

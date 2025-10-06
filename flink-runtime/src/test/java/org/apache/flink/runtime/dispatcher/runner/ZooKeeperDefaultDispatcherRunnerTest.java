@@ -34,17 +34,17 @@ import org.apache.flink.runtime.dispatcher.SessionDispatcherFactory;
 import org.apache.flink.runtime.dispatcher.VoidHistoryServerArchivist;
 import org.apache.flink.runtime.heartbeat.TestingHeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServicesUtils;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServicesBuilder;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.JobPersistenceComponentFactory;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.leaderelection.LeaderElection;
 import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -198,7 +198,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                                 }
 
                                 @Override
-                                public JobResultStore createJobResultStore() {
+                                public StreamResultStore createJobResultStore() {
                                     return new EmbeddedJobResultStore();
                                 }
                             },
@@ -208,9 +208,9 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 // initial run
                 DispatcherGateway dispatcherGateway = grantLeadership(dispatcherLeaderElection);
 
-                final JobGraph jobGraph = createJobGraphWithBlobs();
-                LOG.info("Initial job submission {}.", jobGraph.getJobID());
-                dispatcherGateway.submitJob(jobGraph, TESTING_TIMEOUT).get();
+                final StreamGraph jobGraph = createJobGraphWithBlobs();
+                LOG.info("Initial job submission {}.", jobGraph.getStreamID());
+                dispatcherGateway.submitStream(jobGraph, TESTING_TIMEOUT).get();
 
                 dispatcherLeaderElection.notLeader();
 
@@ -218,14 +218,14 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 LOG.info("Re-grant leadership first time.");
                 dispatcherGateway = grantLeadership(dispatcherLeaderElection);
 
-                LOG.info("Cancel recovered job {}.", jobGraph.getJobID());
+                LOG.info("Cancel recovered job {}.", jobGraph.getStreamID());
                 // cancellation of the job should remove everything
-                final CompletableFuture<JobResult> jobResultFuture =
-                        dispatcherGateway.requestJobResult(jobGraph.getJobID(), TESTING_TIMEOUT);
-                dispatcherGateway.cancelJob(jobGraph.getJobID(), TESTING_TIMEOUT).get();
+                final CompletableFuture<StreamResult> jobResultFuture =
+                        dispatcherGateway.requestJobResult(jobGraph.getStreamID(), TESTING_TIMEOUT);
+                dispatcherGateway.cancelJob(jobGraph.getStreamID(), TESTING_TIMEOUT).get();
 
                 // a successful cancellation should eventually remove all job information
-                final JobResult jobResult = jobResultFuture.get();
+                final StreamResult jobResult = jobResultFuture.get();
 
                 assertThat(jobResult.getApplicationStatus()).isEqualTo(ApplicationStatus.CANCELED);
 
@@ -237,7 +237,7 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                                 curatorFrameworkWrapper.asCuratorFramework());
 
                 CommonTestUtils.waitUntilCondition(
-                        () -> submittedExecutionPlanStore.getJobIds().isEmpty(), 20L);
+                        () -> submittedExecutionPlanStore.getStreamIds().isEmpty(), 20L);
             }
         }
 
@@ -287,14 +287,14 @@ class ZooKeeperDefaultDispatcherRunnerTest {
                 .get();
     }
 
-    private JobGraph createJobGraphWithBlobs() throws IOException {
-        final JobVertex vertex = new JobVertex("test vertex");
+    private StreamGraph createJobGraphWithBlobs() throws IOException {
+        final StreamVertex vertex = new StreamVertex("test vertex");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(vertex);
         final PermanentBlobKey permanentBlobKey =
-                blobServer.putPermanent(jobGraph.getJobID(), new byte[256]);
+                blobServer.putPermanent(jobGraph.getStreamID(), new byte[256]);
         jobGraph.addUserJarBlobKey(permanentBlobKey);
 
         return jobGraph;

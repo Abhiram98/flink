@@ -25,9 +25,9 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.FixedDelayRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -63,8 +63,8 @@ class ExecutionGraphCoLocationRestartTest {
 
         final long timeout = 5000L;
 
-        JobVertex groupVertex = ExecutionGraphTestUtils.createNoOpVertex(NUM_TASKS);
-        JobVertex groupVertex2 = ExecutionGraphTestUtils.createNoOpVertex(NUM_TASKS);
+        StreamVertex groupVertex = ExecutionGraphTestUtils.createNoOpVertex(NUM_TASKS);
+        StreamVertex groupVertex2 = ExecutionGraphTestUtils.createNoOpVertex(NUM_TASKS);
         groupVertex2.connectNewDataSetAsInput(
                 groupVertex, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
@@ -74,7 +74,7 @@ class ExecutionGraphCoLocationRestartTest {
         groupVertex.setStrictlyCoLocatedWith(groupVertex2);
 
         // initiate and schedule job
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(groupVertex, groupVertex2);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(groupVertex, groupVertex2);
 
         final ManuallyTriggeredScheduledExecutorService delayExecutor =
                 new ManuallyTriggeredScheduledExecutorService();

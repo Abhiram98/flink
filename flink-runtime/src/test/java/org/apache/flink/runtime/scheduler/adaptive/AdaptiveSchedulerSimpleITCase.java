@@ -25,11 +25,11 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -78,31 +78,31 @@ class AdaptiveSchedulerSimpleITCase {
     @Test
     void testSchedulingOfSimpleJob() throws Exception {
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
-        final JobGraph jobGraph = createJobGraph();
+        final StreamGraph jobGraph = createJobGraph();
 
-        miniCluster.submitJob(jobGraph).join();
+        miniCluster.submitStream(jobGraph).join();
 
-        final JobResult jobResult = miniCluster.requestJobResult(jobGraph.getJobID()).join();
+        final StreamResult jobResult = miniCluster.requestStreamResult(jobGraph.getStreamID()).join();
 
         final JobExecutionResult jobExecutionResult =
-                jobResult.toJobExecutionResult(getClass().getClassLoader());
+                jobResult.toStreamExecutionResult(getClass().getClassLoader());
 
         assertThat(jobResult.isSuccess()).isTrue();
     }
 
-    private JobGraph createJobGraph() {
-        final JobVertex source = new JobVertex("Source");
+    private StreamGraph createJobGraph() {
+        final StreamVertex source = new StreamVertex("Source");
         source.setInvokableClass(NoOpInvokable.class);
         source.setParallelism(PARALLELISM);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
         sink.setParallelism(PARALLELISM);
 
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return StreamGraphTestUtils.streamingStreamGraph(source, sink);
     }
 
     @Test
@@ -110,33 +110,33 @@ class AdaptiveSchedulerSimpleITCase {
         final long timeInRestartingState = 10000L;
 
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
-        final JobVertex alwaysFailingOperator = new JobVertex("Always failing operator");
+        final StreamVertex alwaysFailingOperator = new StreamVertex("Always failing operator");
         alwaysFailingOperator.setInvokableClass(AlwaysFailingInvokable.class);
         alwaysFailingOperator.setParallelism(1);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(alwaysFailingOperator);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(alwaysFailingOperator);
         // configure a high delay between attempts: We'll stay in RESTARTING for 10 seconds.
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 jobGraph, Integer.MAX_VALUE, timeInRestartingState);
 
-        miniCluster.submitJob(jobGraph).join();
+        miniCluster.submitStream(jobGraph).join();
 
         // wait until we are in RESTARTING state
         CommonTestUtils.waitUntilCondition(
-                () -> miniCluster.getJobStatus(jobGraph.getJobID()).get() == JobStatus.RESTARTING);
+                () -> miniCluster.getJobStatus(jobGraph.getStreamID()).get() == JobStatus.RESTARTING);
 
         // now cancel while in RESTARTING state
-        miniCluster.cancelJob(jobGraph.getJobID()).get();
+        miniCluster.cancelJob(jobGraph.getStreamID()).get();
     }
 
     @Test
     void testGlobalFailoverIfTaskFails() throws Throwable {
         final MiniCluster miniCluster = MINI_CLUSTER_EXTENSION.getMiniCluster();
-        final JobGraph jobGraph = createOnceFailingJobGraph();
+        final StreamGraph jobGraph = createOnceFailingJobGraph();
 
-        miniCluster.submitJob(jobGraph).join();
+        miniCluster.submitStream(jobGraph).join();
 
-        final JobResult jobResult = miniCluster.requestJobResult(jobGraph.getJobID()).join();
+        final StreamResult jobResult = miniCluster.requestStreamResult(jobGraph.getStreamID()).join();
 
         if (!jobResult.isSuccess()) {
             throw jobResult
@@ -146,14 +146,14 @@ class AdaptiveSchedulerSimpleITCase {
         }
     }
 
-    private JobGraph createOnceFailingJobGraph() throws IOException {
-        final JobVertex onceFailingOperator = new JobVertex("Once failing operator");
+    private StreamGraph createOnceFailingJobGraph() throws IOException {
+        final StreamVertex onceFailingOperator = new StreamVertex("Once failing operator");
 
         OnceFailingInvokable.reset();
         onceFailingOperator.setInvokableClass(OnceFailingInvokable.class);
 
         onceFailingOperator.setParallelism(1);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(onceFailingOperator);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(onceFailingOperator);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
         return jobGraph;
     }

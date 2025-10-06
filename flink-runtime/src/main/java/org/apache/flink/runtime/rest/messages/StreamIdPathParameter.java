@@ -16,17 +16,31 @@
  * limitations under the License.
  */
 
-package org.apache.flink.runtime.messages;
+package org.apache.flink.runtime.rest.messages;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.util.FlinkException;
 
-/** Exception indicating that we could not find a Flink job with the given job ID. */
-public class FlinkJobNotFoundException extends FlinkException {
+/** Path parameter identifying jobs. */
+public class StreamIdPathParameter extends MessagePathParameter<JobID> {
 
-    private static final long serialVersionUID = 2294698055059659025L;
+    public static final String KEY = "jobid";
 
-    public FlinkJobNotFoundException(JobID jobId) {
-        super("Could not find Flink job (" + jobId + ')');
+    public StreamIdPathParameter() {
+        super(KEY);
+    }
+
+    @Override
+    protected JobID convertFromString(String value) {
+        return JobID.fromHexString(value);
+    }
+
+    @Override
+    protected String convertToString(JobID value) {
+        return value.toString();
+    }
+
+    @Override
+    public String getDescription() {
+        return "32-character hexadecimal string value that identifies a job.";
     }
 }

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
 
 import org.junit.jupiter.api.Test;
@@ -120,7 +120,7 @@ class DefaultVertexParallelismInfoTest {
     void canRescaleMaxDefault() {
         DefaultVertexParallelismInfo info = new DefaultVertexParallelismInfo(1, 1, ALWAYS_VALID);
 
-        assertThat(info.canRescaleMaxParallelism(JobVertex.MAX_PARALLELISM_DEFAULT)).isFalse();
+        assertThat(info.canRescaleMaxParallelism(StreamVertex.MAX_PARALLELISM_DEFAULT)).isFalse();
     }
 
     @Test

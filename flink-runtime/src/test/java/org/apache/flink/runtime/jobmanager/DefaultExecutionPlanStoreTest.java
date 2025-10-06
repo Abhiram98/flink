@@ -22,10 +22,10 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.testutils.FlinkMatchers;
 import org.apache.flink.runtime.checkpoint.TestingRetrievableStateStorageHelper;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.persistence.IntegerResourceVersion;
 import org.apache.flink.runtime.persistence.StateHandleStore;
 import org.apache.flink.runtime.persistence.TestingStateHandleStore;
@@ -69,7 +69,7 @@ import static org.junit.Assert.fail;
  */
 public class DefaultExecutionPlanStoreTest extends TestLogger {
 
-    private final ExecutionPlan testingExecutionPlan = JobGraphTestUtils.emptyJobGraph();
+    private final ExecutionPlan testingExecutionPlan = StreamGraphTestUtils.emptyJobGraph();
     private final long timeout = 100L;
 
     private TestingStateHandleStore.Builder<ExecutionPlan> builder;
@@ -269,7 +269,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
-        final Collection<JobID> jobIds = executionPlanStore.getJobIds();
+        final Collection<JobID> jobIds = executionPlanStore.getStreamIds();
         assertThat(jobIds, contains(existingJobIds.toArray()));
     }
 
@@ -417,13 +417,13 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final JobResourceRequirements jobResourceRequirements =
                 JobResourceRequirements.newBuilder()
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 1)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 1)
                         .build();
 
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
         executionPlanStore.putExecutionPlan(testingExecutionPlan);
-        executionPlanStore.putJobResourceRequirements(
+        executionPlanStore.putStreamResourceRequirements(
                 testingExecutionPlan.getJobID(), jobResourceRequirements);
 
         assertStoredRequirementsAre(
@@ -431,10 +431,10 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
 
         final JobResourceRequirements updatedJobResourceRequirements =
                 JobResourceRequirements.newBuilder()
-                        .setParallelismForJobVertex(new JobVertexID(), 1, 1)
+                        .setParallelismForJobVertex(new StreamVertexID(), 1, 1)
                         .build();
 
-        executionPlanStore.putJobResourceRequirements(
+        executionPlanStore.putStreamResourceRequirements(
                 testingExecutionPlan.getJobID(), updatedJobResourceRequirements);
 
         assertStoredRequirementsAre(
@@ -449,7 +449,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         final Optional<JobResourceRequirements> maybeRecovered =
                 JobResourceRequirements.readFromExecutionPlan(
                         Objects.requireNonNull(
-                                (JobGraph) executionPlanStore.recoverExecutionPlan(jobId)));
+                                (StreamGraph) executionPlanStore.recoverExecutionPlan(jobId)));
         Assertions.assertThat(maybeRecovered).get().isEqualTo(expected);
     }
 
@@ -466,7 +466,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        executionPlanStore.putJobResourceRequirements(
+                        executionPlanStore.putStreamResourceRequirements(
                                 new JobID(), JobResourceRequirements.empty()));
     }
 

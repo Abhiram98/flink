@@ -24,11 +24,8 @@ import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.DefaultJobExecutionStatusEvent;
-import org.apache.flink.core.execution.JobExecutionStatusEvent;
-import org.apache.flink.core.execution.JobStatusChangedEvent;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerFactory;
+import org.apache.flink.core.execution.*;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -246,13 +243,13 @@ public class JobStatusChangedListenerITCase extends TestLogger {
             implements JobStatusChangedListenerFactory {
 
         @Override
-        public JobStatusChangedListener createListener(Context context) {
+        public StreamStatusChangedListener createListener(Context context) {
             return new TestingJobStatusChangedListener();
         }
     }
 
     /** Testing job status changed listener. */
-    private static class TestingJobStatusChangedListener implements JobStatusChangedListener {
+    private static class TestingJobStatusChangedListener implements StreamStatusChangedListener {
 
         @Override
         public void onEvent(JobStatusChangedEvent event) {

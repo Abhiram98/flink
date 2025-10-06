@@ -19,10 +19,10 @@
 package org.apache.flink.runtime.dispatcher.runner;
 
 import org.apache.flink.runtime.dispatcher.DispatcherId;
-import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobmanager.ThrowingExecutionPlanWriter;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.Preconditions;
@@ -36,17 +36,17 @@ public class JobDispatcherLeaderProcess extends AbstractDispatcherLeaderProcess 
 
     private final DispatcherGatewayServiceFactory dispatcherGatewayServiceFactory;
 
-    @Nullable private final JobGraph jobGraph;
-    @Nullable private final JobResult recoveredDirtyJobResult;
+    @Nullable private final StreamGraph jobGraph;
+    @Nullable private final StreamResult recoveredDirtyJobResult;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     JobDispatcherLeaderProcess(
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherGatewayServiceFactory,
-            @Nullable JobGraph jobGraph,
-            @Nullable JobResult recoveredDirtyJobResult,
-            JobResultStore jobResultStore,
+            @Nullable StreamGraph jobGraph,
+            @Nullable StreamResult recoveredDirtyJobResult,
+            StreamResultStore jobResultStore,
             FatalErrorHandler fatalErrorHandler) {
         super(leaderSessionId, fatalErrorHandler);
         this.dispatcherGatewayServiceFactory = dispatcherGatewayServiceFactory;

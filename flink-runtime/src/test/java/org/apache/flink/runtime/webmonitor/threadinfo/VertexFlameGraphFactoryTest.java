@@ -20,7 +20,7 @@ package org.apache.flink.runtime.webmonitor.threadinfo;
 
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.messages.ThreadInfoSample;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
@@ -94,7 +94,7 @@ class VertexFlameGraphFactoryTest {
 
         ExecutionAttemptID executionAttemptID =
                 new ExecutionAttemptID(
-                        new ExecutionGraphID(), new ExecutionVertexID(new JobVertexID(), 0), 0);
+                        new ExecutionGraphID(), new ExecutionVertexID(new StreamVertexID(), 0), 0);
 
         Map<ExecutionAttemptID, Collection<ThreadInfoSample>> result = new HashMap<>();
         result.put(executionAttemptID, samples);

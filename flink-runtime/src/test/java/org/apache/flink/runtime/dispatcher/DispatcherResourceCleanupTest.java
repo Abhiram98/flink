@@ -27,15 +27,15 @@ import org.apache.flink.runtime.blob.BlobServer;
 import org.apache.flink.runtime.blob.BlobUtils;
 import org.apache.flink.runtime.blob.TestingBlobStoreBuilder;
 import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
-import org.apache.flink.runtime.client.JobSubmissionException;
+import org.apache.flink.runtime.client.StreamSubmissionException;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingResourceCleanerFactory;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
-import org.apache.flink.runtime.highavailability.JobResultEntry;
-import org.apache.flink.runtime.highavailability.JobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.highavailability.StreamResultEntry;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerSharedServices;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
@@ -110,7 +110,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     private JobID jobId;
 
-    private JobGraph jobGraph;
+    private StreamGraph jobGraph;
 
     private TestingDispatcher dispatcher;
 
@@ -128,8 +128,8 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Before
     public void setup() throws Exception {
-        jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
-        jobId = jobGraph.getJobID();
+        jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
+        jobId = jobGraph.getStreamID();
 
         globalCleanupFuture = new CompletableFuture<>();
         localCleanupFuture = new CompletableFuture<>();
@@ -247,7 +247,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
     }
 
     private CompletableFuture<Acknowledge> submitJob() {
-        return dispatcherGateway.submitJob(jobGraph, timeout);
+        return dispatcherGateway.submitStream(jobGraph, timeout);
     }
 
     private void submitJobAndWait() {
@@ -276,7 +276,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
             submissionFuture.get();
             fail("Job submission was expected to fail.");
         } catch (ExecutionException ee) {
-            assertThat(ee, containsCause(JobSubmissionException.class));
+            assertThat(ee, containsCause(StreamSubmissionException.class));
         }
 
         assertGlobalCleanupTriggered(jobId);
@@ -360,7 +360,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
     public void testJobBeingMarkedAsCleanAfterCleanup() throws Exception {
         final CompletableFuture<JobID> markAsCleanFuture = new CompletableFuture<>();
 
-        final JobResultStore jobResultStore =
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withMarkResultAsCleanConsumer(
                                 jobID -> {
@@ -432,7 +432,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         testingJobManagerRunner.getCloseAsyncCalledLatch().await();
 
         final CompletableFuture<Acknowledge> submissionFuture =
-                dispatcherGateway.submitJob(jobGraph, timeout);
+                dispatcherGateway.submitStream(jobGraph, timeout);
 
         try {
             submissionFuture.get(10L, TimeUnit.MILLISECONDS);
@@ -458,7 +458,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
                 startDispatcherAndSubmitJob();
 
         final CompletableFuture<Acknowledge> submissionFuture =
-                dispatcherGateway.submitJob(jobGraph, timeout);
+                dispatcherGateway.submitStream(jobGraph, timeout);
 
         try {
             try {
@@ -552,7 +552,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Test
     public void testFatalErrorIfJobCannotBeMarkedDirtyInJobResultStore() throws Exception {
-        final JobResultStore jobResultStore =
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withCreateDirtyResultConsumer(
                                 jobResult ->
@@ -582,8 +582,8 @@ public class DispatcherResourceCleanupTest extends TestLogger {
 
     @Test
     public void testErrorHandlingIfJobCannotBeMarkedAsCleanInJobResultStore() throws Exception {
-        final CompletableFuture<JobResultEntry> dirtyJobFuture = new CompletableFuture<>();
-        final JobResultStore jobResultStore =
+        final CompletableFuture<StreamResultEntry> dirtyJobFuture = new CompletableFuture<>();
+        final StreamResultStore jobResultStore =
                 TestingJobResultStore.builder()
                         .withCreateDirtyResultConsumer(
                                 jobResultEntry -> {
@@ -622,7 +622,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
             // expected
         }
 
-        assertThat(dirtyJobFuture.get().getJobId(), is(jobId));
+        assertThat(dirtyJobFuture.get().getStreamId(), is(jobId));
     }
 
     /** Tests that a failing {@link JobManagerRunner} will be properly cleaned up. */
@@ -648,7 +648,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         // submit and fail during job master runner construction
         queue.offer(Optional.of(testException));
         try {
-            dispatcherGateway.submitJob(jobGraph, Duration.ofMinutes(1)).get();
+            dispatcherGateway.submitStream(jobGraph, Duration.ofMinutes(1)).get();
             fail("A FlinkException is expected");
         } catch (Throwable expectedException) {
             assertThat(expectedException, containsCause(FlinkException.class));
@@ -660,7 +660,7 @@ public class DispatcherResourceCleanupTest extends TestLogger {
         // don't fail this time
         queue.offer(Optional.empty());
         // submit job again
-        dispatcherGateway.submitJob(jobGraph, Duration.ofMinutes(1L)).get();
+        dispatcherGateway.submitStream(jobGraph, Duration.ofMinutes(1L)).get();
         blockingJobManagerRunnerFactory.setJobStatus(JobStatus.RUNNING);
 
         // Ensure job is running

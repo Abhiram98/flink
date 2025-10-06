@@ -27,29 +27,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 
-/** Marshalling test for the {@link JobIdsWithStatusOverview} message. */
+/** Marshalling test for the {@link StreamIdsWithStatusOverview} message. */
 @ExtendWith(NoOpTestExtension.class)
 class JobIdsWithStatusOverviewTest
-        extends RestResponseMarshallingTestBase<JobIdsWithStatusOverview> {
+        extends RestResponseMarshallingTestBase<StreamIdsWithStatusOverview> {
 
     @Override
-    protected Class<JobIdsWithStatusOverview> getTestResponseClass() {
-        return JobIdsWithStatusOverview.class;
+    protected Class<StreamIdsWithStatusOverview> getTestResponseClass() {
+        return StreamIdsWithStatusOverview.class;
     }
 
     @Override
-    protected JobIdsWithStatusOverview getTestResponseInstance() {
-        return new JobIdsWithStatusOverview(
+    protected StreamIdsWithStatusOverview getTestResponseInstance() {
+        return new StreamIdsWithStatusOverview(
                 Arrays.asList(
-                        new JobIdsWithStatusOverview.JobIdWithStatus(
+                        new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                 JobID.generate(), JobStatus.RUNNING),
-                        new JobIdsWithStatusOverview.JobIdWithStatus(
+                        new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                 JobID.generate(), JobStatus.CANCELED),
-                        new JobIdsWithStatusOverview.JobIdWithStatus(
+                        new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                 JobID.generate(), JobStatus.CREATED),
-                        new JobIdsWithStatusOverview.JobIdWithStatus(
+                        new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                 JobID.generate(), JobStatus.FAILED),
-                        new JobIdsWithStatusOverview.JobIdWithStatus(
+                        new StreamIdsWithStatusOverview.StreamIdWithStatus(
                                 JobID.generate(), JobStatus.RESTARTING)));
     }
 }

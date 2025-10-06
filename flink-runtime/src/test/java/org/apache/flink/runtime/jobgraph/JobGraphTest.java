@@ -47,13 +47,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-/** Tests for {@link JobGraph}. */
+/** Tests for {@link StreamGraph}. */
 public class JobGraphTest extends TestLogger {
 
     @Test
     public void testSerialization() {
         try {
-            JobGraph jg = new JobGraph("The graph");
+            StreamGraph jg = new StreamGraph("The graph");
 
             // add some configuration values
             {
@@ -63,9 +63,9 @@ public class JobGraphTest extends TestLogger {
 
             // add some vertices
             {
-                JobVertex source1 = new JobVertex("source1");
-                JobVertex source2 = new JobVertex("source2");
-                JobVertex target = new JobVertex("target");
+                StreamVertex source1 = new StreamVertex("source1");
+                StreamVertex source2 = new StreamVertex("source2");
+                StreamVertex target = new StreamVertex("target");
                 target.connectNewDataSetAsInput(
                         source1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
                 target.connectNewDataSetAsInput(
@@ -77,15 +77,15 @@ public class JobGraphTest extends TestLogger {
             }
 
             // de-/serialize and compare
-            JobGraph copy = CommonTestUtils.createCopySerializable(jg);
+            StreamGraph copy = CommonTestUtils.createCopySerializable(jg);
 
             assertEquals(jg.getName(), copy.getName());
-            assertEquals(jg.getJobID(), copy.getJobID());
+            assertEquals(jg.getStreamID(), copy.getStreamID());
             assertEquals(jg.getJobConfiguration(), copy.getJobConfiguration());
             assertEquals(jg.getNumberOfVertices(), copy.getNumberOfVertices());
 
-            for (JobVertex vertex : copy.getVertices()) {
-                JobVertex original = jg.findVertexByID(vertex.getID());
+            for (StreamVertex vertex : copy.getVertices()) {
+                StreamVertex original = jg.findVertexByID(vertex.getID());
                 assertNotNull(original);
                 assertEquals(original.getName(), vertex.getName());
                 assertEquals(original.getNumberOfInputs(), vertex.getNumberOfInputs());
@@ -101,12 +101,12 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testTopologicalSort1() {
-        JobVertex source1 = new JobVertex("source1");
-        JobVertex source2 = new JobVertex("source2");
-        JobVertex target1 = new JobVertex("target1");
-        JobVertex target2 = new JobVertex("target2");
-        JobVertex intermediate1 = new JobVertex("intermediate1");
-        JobVertex intermediate2 = new JobVertex("intermediate2");
+        StreamVertex source1 = new StreamVertex("source1");
+        StreamVertex source2 = new StreamVertex("source2");
+        StreamVertex target1 = new StreamVertex("target1");
+        StreamVertex target2 = new StreamVertex("target2");
+        StreamVertex intermediate1 = new StreamVertex("intermediate1");
+        StreamVertex intermediate2 = new StreamVertex("intermediate2");
 
         target1.connectNewDataSetAsInput(
                 source1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -119,11 +119,11 @@ public class JobGraphTest extends TestLogger {
         intermediate1.connectNewDataSetAsInput(
                 source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        JobGraph graph =
-                JobGraphTestUtils.streamingJobGraph(
+        StreamGraph graph =
+                StreamGraphTestUtils.streamingStreamGraph(
                         source1, source2, intermediate1, intermediate2, target1, target2);
 
-        List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
+        List<StreamVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
         assertEquals(6, sorted.size());
 
@@ -139,13 +139,13 @@ public class JobGraphTest extends TestLogger {
     @Test
     public void testTopologicalSort2() {
         try {
-            JobVertex source1 = new JobVertex("source1");
-            JobVertex source2 = new JobVertex("source2");
-            JobVertex root = new JobVertex("root");
-            JobVertex l11 = new JobVertex("layer 1 - 1");
-            JobVertex l12 = new JobVertex("layer 1 - 2");
-            JobVertex l13 = new JobVertex("layer 1 - 3");
-            JobVertex l2 = new JobVertex("layer 2");
+            StreamVertex source1 = new StreamVertex("source1");
+            StreamVertex source2 = new StreamVertex("source2");
+            StreamVertex root = new StreamVertex("root");
+            StreamVertex l11 = new StreamVertex("layer 1 - 1");
+            StreamVertex l12 = new StreamVertex("layer 1 - 2");
+            StreamVertex l13 = new StreamVertex("layer 1 - 3");
+            StreamVertex l2 = new StreamVertex("layer 2");
 
             root.connectNewDataSetAsInput(
                     l13, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -170,9 +170,9 @@ public class JobGraphTest extends TestLogger {
             l13.connectNewDataSetAsInput(
                     source2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph graph =
-                    JobGraphTestUtils.streamingJobGraph(source1, source2, root, l11, l13, l12, l2);
-            List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
+            StreamGraph graph =
+                    StreamGraphTestUtils.streamingStreamGraph(source1, source2, root, l11, l13, l12, l2);
+            List<StreamVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
             assertEquals(7, sorted.size());
 
@@ -206,10 +206,10 @@ public class JobGraphTest extends TestLogger {
         //             ---------
 
         try {
-            JobVertex source = new JobVertex("source");
-            JobVertex op1 = new JobVertex("op4");
-            JobVertex op2 = new JobVertex("op2");
-            JobVertex op3 = new JobVertex("op3");
+            StreamVertex source = new StreamVertex("source");
+            StreamVertex op1 = new StreamVertex("op4");
+            StreamVertex op2 = new StreamVertex("op2");
+            StreamVertex op3 = new StreamVertex("op3");
 
             op1.connectNewDataSetAsInput(
                     source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -220,8 +220,8 @@ public class JobGraphTest extends TestLogger {
             op3.connectNewDataSetAsInput(
                     op2, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph graph = JobGraphTestUtils.streamingJobGraph(source, op1, op2, op3);
-            List<JobVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
+            StreamGraph graph = StreamGraphTestUtils.streamingStreamGraph(source, op1, op2, op3);
+            List<StreamVertex> sorted = graph.getVerticesSortedTopologicallyFromSources();
 
             assertEquals(4, sorted.size());
 
@@ -238,10 +238,10 @@ public class JobGraphTest extends TestLogger {
     @Test
     public void testTopoSortCyclicGraphNoSources() {
         try {
-            JobVertex v1 = new JobVertex("1");
-            JobVertex v2 = new JobVertex("2");
-            JobVertex v3 = new JobVertex("3");
-            JobVertex v4 = new JobVertex("4");
+            StreamVertex v1 = new StreamVertex("1");
+            StreamVertex v2 = new StreamVertex("2");
+            StreamVertex v3 = new StreamVertex("3");
+            StreamVertex v4 = new StreamVertex("4");
 
             v1.connectNewDataSetAsInput(
                     v4, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -252,7 +252,7 @@ public class JobGraphTest extends TestLogger {
             v4.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4);
+            StreamGraph jg = StreamGraphTestUtils.streamingStreamGraph(v1, v2, v3, v4);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -268,12 +268,12 @@ public class JobGraphTest extends TestLogger {
     @Test
     public void testTopoSortCyclicGraphIntermediateCycle() {
         try {
-            JobVertex source = new JobVertex("source");
-            JobVertex v1 = new JobVertex("1");
-            JobVertex v2 = new JobVertex("2");
-            JobVertex v3 = new JobVertex("3");
-            JobVertex v4 = new JobVertex("4");
-            JobVertex target = new JobVertex("target");
+            StreamVertex source = new StreamVertex("source");
+            StreamVertex v1 = new StreamVertex("1");
+            StreamVertex v2 = new StreamVertex("2");
+            StreamVertex v3 = new StreamVertex("3");
+            StreamVertex v4 = new StreamVertex("4");
+            StreamVertex target = new StreamVertex("target");
 
             v1.connectNewDataSetAsInput(
                     source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -288,7 +288,7 @@ public class JobGraphTest extends TestLogger {
             target.connectNewDataSetAsInput(
                     v3, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-            JobGraph jg = JobGraphTestUtils.streamingJobGraph(v1, v2, v3, v4, source, target);
+            StreamGraph jg = StreamGraphTestUtils.streamingStreamGraph(v1, v2, v3, v4, source, target);
             try {
                 jg.getVerticesSortedTopologicallyFromSources();
                 fail("Failed to raise error on topologically sorting cyclic graph.");
@@ -301,9 +301,9 @@ public class JobGraphTest extends TestLogger {
         }
     }
 
-    private static final void assertBefore(JobVertex v1, JobVertex v2, List<JobVertex> list) {
+    private static final void assertBefore(StreamVertex v1, StreamVertex v2, List<StreamVertex> list) {
         boolean seenFirst = false;
-        for (JobVertex v : list) {
+        for (StreamVertex v : list) {
             if (v == v1) {
                 seenFirst = true;
             } else if (v == v2) {
@@ -322,7 +322,7 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testSetUserArtifactBlobKey() throws IOException, ClassNotFoundException {
-        JobGraph jb = JobGraphTestUtils.emptyJobGraph();
+        StreamGraph jb = StreamGraphTestUtils.emptyJobGraph();
 
         final DistributedCache.DistributedCacheEntry[] entries = {
             new DistributedCache.DistributedCacheEntry("p1", true, true),
@@ -354,21 +354,21 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void checkpointingIsDisabledByDefaultForStreamingJobGraph() {
-        final JobGraph jobGraph = JobGraphBuilder.newStreamingJobGraphBuilder().build();
+        final StreamGraph jobGraph = JobGraphBuilder.newStreamingJobGraphBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
 
     @Test
     public void checkpointingIsDisabledByDefaultForBatchJobGraph() {
-        final JobGraph jobGraph = JobGraphBuilder.newBatchJobGraphBuilder().build();
+        final StreamGraph jobGraph = JobGraphBuilder.newBatchJobGraphBuilder().build();
 
         assertFalse(jobGraph.isCheckpointingEnabled());
     }
 
     @Test
     public void checkpointingIsEnabledIfIntervalIsqAndLegal() {
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(createCheckpointSettingsWithInterval(10))
                         .build();
@@ -378,7 +378,7 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void checkpointingIsDisabledIfIntervalIsMaxValue() {
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(
                                 createCheckpointSettingsWithInterval(Long.MAX_VALUE))
@@ -406,10 +406,10 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testGetSlotSharingGroups() {
-        final JobVertex v1 = new JobVertex("1");
-        final JobVertex v2 = new JobVertex("2");
-        final JobVertex v3 = new JobVertex("3");
-        final JobVertex v4 = new JobVertex("4");
+        final StreamVertex v1 = new StreamVertex("1");
+        final StreamVertex v2 = new StreamVertex("2");
+        final StreamVertex v3 = new StreamVertex("3");
+        final StreamVertex v4 = new StreamVertex("4");
 
         final SlotSharingGroup group1 = new SlotSharingGroup();
         v1.setSlotSharingGroup(group1);
@@ -419,7 +419,7 @@ public class JobGraphTest extends TestLogger {
         v3.setSlotSharingGroup(group2);
         v4.setSlotSharingGroup(group2);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();
@@ -429,17 +429,17 @@ public class JobGraphTest extends TestLogger {
 
     @Test
     public void testGetCoLocationGroups() {
-        final JobVertex v1 = new JobVertex("1");
-        final JobVertex v2 = new JobVertex("2");
-        final JobVertex v3 = new JobVertex("3");
-        final JobVertex v4 = new JobVertex("4");
+        final StreamVertex v1 = new StreamVertex("1");
+        final StreamVertex v2 = new StreamVertex("2");
+        final StreamVertex v3 = new StreamVertex("3");
+        final StreamVertex v4 = new StreamVertex("4");
 
         final SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
         v1.setSlotSharingGroup(slotSharingGroup);
         v2.setSlotSharingGroup(slotSharingGroup);
         v1.setStrictlyCoLocatedWith(v2);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3, v4))
                         .build();

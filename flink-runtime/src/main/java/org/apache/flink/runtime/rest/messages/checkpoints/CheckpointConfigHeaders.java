@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.checkpoints;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.job.checkpoints.CheckpointConfigHandler;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -29,7 +29,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
 /** Message headers for the {@link CheckpointConfigHandler}. */
 public class CheckpointConfigHeaders
         implements RuntimeMessageHeaders<
-                EmptyRequestBody, CheckpointConfigInfo, JobMessageParameters> {
+                EmptyRequestBody, CheckpointConfigInfo, StreamMessageParameters> {
 
     private static final CheckpointConfigHeaders INSTANCE = new CheckpointConfigHeaders();
 
@@ -53,8 +53,8 @@ public class CheckpointConfigHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     @Override

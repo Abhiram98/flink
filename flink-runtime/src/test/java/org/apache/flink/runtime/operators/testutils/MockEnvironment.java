@@ -43,7 +43,7 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.IteratorWrappingTestSingleInputGate;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.mailbox.SyncMailboxExecutor;
@@ -110,7 +110,7 @@ public class MockEnvironment implements Environment, AutoCloseable {
 
     private final List<ResultPartitionWriter> outputs;
 
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
 
     private final ExecutionAttemptID executionAttemptID;
 
@@ -153,7 +153,7 @@ public class MockEnvironment implements Environment, AutoCloseable {
     protected MockEnvironment(
             JobID jobID,
             String jobName,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             JobType jobType,
             String taskName,
             MockInputSplitProvider inputSplitProvider,
@@ -349,7 +349,7 @@ public class MockEnvironment implements Environment, AutoCloseable {
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexID;
     }
 

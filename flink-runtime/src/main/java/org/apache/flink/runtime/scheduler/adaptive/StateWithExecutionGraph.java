@@ -39,12 +39,12 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -142,7 +142,7 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     JobID getJobId() {
-        return executionGraph.getJobID();
+        return executionGraph.getStreamID();
     }
 
     protected OperatorCoordinatorHandler getOperatorCoordinatorHandler() {
@@ -192,7 +192,7 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
         return executionGraphHandler.requestNextInputSplit(vertexID, executionAttempt);
     }
 
@@ -265,18 +265,18 @@ abstract class StateWithExecutionGraph implements State {
     }
 
     KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
-            throws FlinkJobNotFoundException, UnknownKvStateLocation {
+            throws FlinkStreamNotFoundException, UnknownKvStateLocation {
         return kvStateHandler.requestKvStateLocation(jobId, registrationName);
     }
 
     void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
             InetSocketAddress kvStateServerAddress)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         kvStateHandler.notifyKvStateRegistered(
                 jobId,
                 jobVertexId,
@@ -288,10 +288,10 @@ abstract class StateWithExecutionGraph implements State {
 
     void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
-            throws FlinkJobNotFoundException {
+            throws FlinkStreamNotFoundException {
         kvStateHandler.notifyKvStateUnregistered(
                 jobId, jobVertexId, keyGroupRange, registrationName);
     }
@@ -306,7 +306,7 @@ abstract class StateWithExecutionGraph implements State {
         logger.info(
                 "Triggering {}savepoint for job {}.",
                 cancelJob ? "cancel-with-" : "",
-                executionGraph.getJobID());
+                executionGraph.getStreamID());
 
         if (cancelJob) {
             checkpointCoordinator.stopCheckpointScheduler();
@@ -326,7 +326,7 @@ abstract class StateWithExecutionGraph implements State {
                                 logger.info(
                                         "Savepoint stored in {}. Now cancelling {}.",
                                         path,
-                                        executionGraph.getJobID());
+                                        executionGraph.getStreamID());
                                 cancel();
                             }
                             return path;
@@ -337,7 +337,7 @@ abstract class StateWithExecutionGraph implements State {
     CompletableFuture<CompletedCheckpoint> triggerCheckpoint(CheckpointType checkpointType) {
         final CheckpointCoordinator checkpointCoordinator =
                 executionGraph.getCheckpointCoordinator();
-        final JobID jobID = executionGraph.getJobID();
+        final JobID jobID = executionGraph.getStreamID();
         if (checkpointCoordinator == null) {
             throw new IllegalStateException(String.format("Job %s is not a streaming job.", jobID));
         }

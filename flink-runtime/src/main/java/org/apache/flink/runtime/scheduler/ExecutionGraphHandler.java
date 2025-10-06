@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
@@ -145,9 +145,9 @@ public class ExecutionGraphHandler {
             String errorMessage =
                     "Received " + messageType + " message for job {} with no CheckpointCoordinator";
             if (executionGraph.getState() == JobStatus.RUNNING) {
-                log.error(errorMessage, executionGraph.getJobID());
+                log.error(errorMessage, executionGraph.getStreamID());
             } else {
-                log.debug(errorMessage, executionGraph.getJobID());
+                log.debug(errorMessage, executionGraph.getStreamID());
             }
         }
     }
@@ -197,7 +197,7 @@ public class ExecutionGraphHandler {
     }
 
     public SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
 
         final Execution execution = executionGraph.getRegisteredExecutions().get(executionAttempt);
         if (execution == null) {

@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.NotFoundException;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -34,7 +34,7 @@ import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.util.MutableIOMetrics;
 import org.apache.flink.runtime.rest.messages.AggregatedTaskDetailsInfo;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.JobVertexTaskManagersInfo;
@@ -97,8 +97,8 @@ public class JobVertexTaskManagersHandler
     protected JobVertexTaskManagersInfo handleRequest(
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
-        JobID jobID = request.getPathParameter(JobIDPathParameter.class);
-        JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
+        StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
         if (jobVertex == null) {
@@ -114,11 +114,11 @@ public class JobVertexTaskManagersHandler
         Collection<? extends AccessExecutionJobVertex> vertices = graph.getAllVertices().values();
         List<ArchivedJson> archive = new ArrayList<>(vertices.size());
         for (AccessExecutionJobVertex task : vertices) {
-            ResponseBody json = createJobVertexTaskManagersInfo(task, graph.getJobID(), null);
+            ResponseBody json = createJobVertexTaskManagersInfo(task, graph.getStreamID(), null);
             String path =
                     getMessageHeaders()
                             .getTargetRestEndpointURL()
-                            .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString())
+                            .replace(':' + StreamIdPathParameter.KEY, graph.getStreamID().toString())
                             .replace(
                                     ':' + JobVertexIdPathParameter.KEY,
                                     task.getJobVertexId().toString());

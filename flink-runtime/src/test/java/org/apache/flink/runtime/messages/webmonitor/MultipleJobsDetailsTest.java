@@ -33,10 +33,10 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for the {@link MultipleJobsDetails} class. */
+/** Tests for the {@link MultipleStreamsDetails} class. */
 class MultipleJobsDetailsTest {
 
-    /** Tests that we can un/marshal {@link MultipleJobsDetails} objects. */
+    /** Tests that we can un/marshal {@link MultipleStreamsDetails} objects. */
     @Test
     void testMultipleJobsDetailsMarshalling() throws JsonProcessingException {
         int[] verticesPerState = new int[ExecutionState.values().length];
@@ -45,8 +45,8 @@ class MultipleJobsDetailsTest {
             verticesPerState[i] = i;
         }
 
-        final JobDetails running =
-                new JobDetails(
+        final StreamDetails running =
+                new StreamDetails(
                         new JobID(),
                         "running",
                         1L,
@@ -57,8 +57,8 @@ class MultipleJobsDetailsTest {
                         verticesPerState,
                         9);
 
-        final JobDetails finished =
-                new JobDetails(
+        final StreamDetails finished =
+                new StreamDetails(
                         new JobID(),
                         "finished",
                         1L,
@@ -69,15 +69,15 @@ class MultipleJobsDetailsTest {
                         verticesPerState,
                         4);
 
-        final MultipleJobsDetails expected =
-                new MultipleJobsDetails(Arrays.asList(running, finished));
+        final MultipleStreamsDetails expected =
+                new MultipleStreamsDetails(Arrays.asList(running, finished));
 
         final ObjectMapper objectMapper = RestMapperUtils.getStrictObjectMapper();
 
         final JsonNode marshalled = objectMapper.valueToTree(expected);
 
-        final MultipleJobsDetails unmarshalled =
-                objectMapper.treeToValue(marshalled, MultipleJobsDetails.class);
+        final MultipleStreamsDetails unmarshalled =
+                objectMapper.treeToValue(marshalled, MultipleStreamsDetails.class);
 
         assertThat(unmarshalled).isEqualTo(expected);
     }

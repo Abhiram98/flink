@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.Preconditions;
 
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class LocalSnapshotDirectoryProviderImpl implements LocalSnapshotDirector
     @Nonnull private final JobID jobID;
 
     /** JobVertexID of the owning task. */
-    @Nonnull private final JobVertexID jobVertexID;
+    @Nonnull private final StreamVertexID jobVertexID;
 
     /** Index of the owning subtask. */
     @Nonnegative private final int subtaskIndex;
@@ -58,7 +58,7 @@ public class LocalSnapshotDirectoryProviderImpl implements LocalSnapshotDirector
     public LocalSnapshotDirectoryProviderImpl(
             File allocationBaseDir,
             @Nonnull JobID jobID,
-            @Nonnull JobVertexID jobVertexID,
+            @Nonnull StreamVertexID jobVertexID,
             @Nonnegative int subtaskIndex) {
         this(new File[] {allocationBaseDir}, jobID, jobVertexID, subtaskIndex);
     }
@@ -66,7 +66,7 @@ public class LocalSnapshotDirectoryProviderImpl implements LocalSnapshotDirector
     public LocalSnapshotDirectoryProviderImpl(
             @Nonnull File[] allocationBaseDirs,
             @Nonnull JobID jobID,
-            @Nonnull JobVertexID jobVertexID,
+            @Nonnull StreamVertexID jobVertexID,
             @Nonnegative int subtaskIndex) {
 
         Preconditions.checkArgument(allocationBaseDirs.length > 0);

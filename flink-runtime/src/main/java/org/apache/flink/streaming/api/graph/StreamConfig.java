@@ -28,7 +28,7 @@ import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.StateBackend;
@@ -573,7 +573,7 @@ public class StreamConfig implements Serializable {
 
     /**
      * Sets the job vertex level non-chained outputs. The given output list must have the same order
-     * with {@link JobVertex#getProducedDataSets()}.
+     * with {@link StreamVertex#getProducedDataSets()}.
      */
     public void setVertexNonChainedOutputs(List<NonChainedOutput> nonChainedOutputs) {
         toBeSerializedConfigObjects.put(VERTEX_NONCHAINED_OUTPUTS, nonChainedOutputs);

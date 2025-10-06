@@ -166,7 +166,7 @@ public interface HighAvailabilityServices
      * @return Store of finished job results
      * @throws Exception if job result store could not be created
      */
-    JobResultStore getJobResultStore() throws Exception;
+    StreamResultStore getJobResultStore() throws Exception;
 
     /**
      * Creates the BLOB store in which BLOBs are stored in a highly-available fashion.

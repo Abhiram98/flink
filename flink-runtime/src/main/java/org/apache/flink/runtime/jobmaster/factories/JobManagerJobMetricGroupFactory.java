@@ -18,19 +18,19 @@
 
 package org.apache.flink.runtime.jobmaster.factories;
 
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
 
 import javax.annotation.Nonnull;
 
-/** Factory interface for {@link JobManagerJobMetricGroup}. */
+/** Factory interface for {@link StreamManagerStreamMetricGroup}. */
 public interface JobManagerJobMetricGroupFactory {
 
     /**
-     * Create a new {@link JobManagerJobMetricGroup}.
+     * Create a new {@link StreamManagerStreamMetricGroup}.
      *
-     * @param executionPlan for which to create a new {@link JobManagerJobMetricGroup}.
-     * @return {@link JobManagerJobMetricGroup}
+     * @param executionPlan for which to create a new {@link StreamManagerStreamMetricGroup}.
+     * @return {@link StreamManagerStreamMetricGroup}
      */
-    JobManagerJobMetricGroup create(@Nonnull ExecutionPlan executionPlan);
+    StreamManagerStreamMetricGroup create(@Nonnull ExecutionPlan executionPlan);
 }

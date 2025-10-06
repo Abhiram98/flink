@@ -24,9 +24,9 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -188,7 +188,7 @@ class DefaultSchedulerCheckpointCoordinatorTest {
             CheckpointIDCounter counter, CompletedCheckpointStore store) throws Exception {
         final Duration timeout = Duration.ofDays(1L);
 
-        final JobVertex jobVertex = new JobVertex("MockVertex");
+        final StreamVertex jobVertex = new StreamVertex("MockVertex");
         jobVertex.setParallelism(1);
         jobVertex.setInvokableClass(AbstractInvokable.class);
 
@@ -200,7 +200,7 @@ class DefaultSchedulerCheckpointCoordinatorTest {
         final JobCheckpointingSettings checkpointingSettings =
                 new JobCheckpointingSettings(chkConfig, null);
 
-        final JobGraph jobGraph =
+        final StreamGraph jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertex(jobVertex)
                         .setJobCheckpointingSettings(checkpointingSettings)

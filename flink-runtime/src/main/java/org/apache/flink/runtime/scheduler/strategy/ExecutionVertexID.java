@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler.strategy;
 
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.topology.VertexID;
 
 import org.apache.flink.shaded.netty4.io.netty.buffer.ByteBuf;
@@ -36,20 +36,20 @@ public class ExecutionVertexID implements VertexID {
      * The size of the ID in byte. It is the sum of one JobVertexID type(jobVertexId) and one int
      * type(subtaskIndex).
      */
-    public static final int SIZE = JobVertexID.SIZE + 4;
+    public static final int SIZE = StreamVertexID.SIZE + 4;
 
-    private final JobVertexID jobVertexId;
+    private final StreamVertexID jobVertexId;
 
     private final int subtaskIndex;
 
-    public ExecutionVertexID(JobVertexID jobVertexId, int subtaskIndex) {
+    public ExecutionVertexID(StreamVertexID jobVertexId, int subtaskIndex) {
         checkArgument(subtaskIndex >= 0, "subtaskIndex must be greater than or equal to 0");
 
         this.jobVertexId = checkNotNull(jobVertexId);
         this.subtaskIndex = subtaskIndex;
     }
 
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertexId;
     }
 
@@ -63,7 +63,7 @@ public class ExecutionVertexID implements VertexID {
     }
 
     public static ExecutionVertexID fromByteBuf(ByteBuf buf) {
-        final JobVertexID jobVertexID = JobVertexID.fromByteBuf(buf);
+        final StreamVertexID jobVertexID = StreamVertexID.fromByteBuf(buf);
         final int subtaskIndex = buf.readInt();
         return new ExecutionVertexID(jobVertexID, subtaskIndex);
     }

@@ -31,13 +31,13 @@ public class TestingExecutionPlanListener implements ExecutionPlanStore.Executio
     private final List<JobID> removedExecutionPlans = new ArrayList<>();
 
     @Override
-    public void onAddedExecutionPlan(JobID jobId) {
-        addedExecutionPlans.add(jobId);
+    public void onAddedExecutionPlan(JobID streamId) {
+        addedExecutionPlans.add(streamId);
     }
 
     @Override
-    public void onRemovedExecutionPlan(JobID jobId) {
-        removedExecutionPlans.add(jobId);
+    public void onRemovedExecutionPlan(JobID streamId) {
+        removedExecutionPlans.add(streamId);
     }
 
     public List<JobID> getAddedExecutionPlans() {

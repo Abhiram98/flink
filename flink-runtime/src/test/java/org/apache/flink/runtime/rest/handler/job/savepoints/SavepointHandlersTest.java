@@ -29,7 +29,7 @@ import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationResult;
 import org.apache.flink.runtime.rest.handler.async.OperationResult;
 import org.apache.flink.runtime.rest.handler.job.AsynchronousJobOperationKey;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.TriggerId;
 import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.savepoints.SavepointInfo;
@@ -296,7 +296,7 @@ class SavepointHandlersTest {
         return HandlerRequest.resolveParametersAndCreate(
                 new SavepointTriggerRequestBody(targetDirectory, false, formatType, triggerId),
                 new SavepointTriggerMessageParameters(),
-                Collections.singletonMap(JobIDPathParameter.KEY, JOB_ID.toString()),
+                Collections.singletonMap(StreamIdPathParameter.KEY, JOB_ID.toString()),
                 Collections.emptyMap(),
                 Collections.emptyList());
     }
@@ -304,7 +304,7 @@ class SavepointHandlersTest {
     private static HandlerRequest<EmptyRequestBody> savepointStatusRequest(
             final TriggerId triggerId) throws HandlerRequestException {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, JOB_ID.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, JOB_ID.toString());
         pathParameters.put(TriggerIdPathParameter.KEY, triggerId.toString());
 
         return HandlerRequest.resolveParametersAndCreate(

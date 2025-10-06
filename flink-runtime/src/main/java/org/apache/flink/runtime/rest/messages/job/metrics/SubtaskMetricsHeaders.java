@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
 import org.apache.flink.runtime.rest.handler.job.metrics.SubtaskMetricsHandler;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
@@ -40,7 +40,7 @@ public final class SubtaskMetricsHeaders
     @Override
     public String getTargetRestEndpointURL() {
         return "/jobs/:"
-                + JobIDPathParameter.KEY
+                + StreamIdPathParameter.KEY
                 + "/vertices/:"
                 + JobVertexIdPathParameter.KEY
                 + "/subtasks/:"

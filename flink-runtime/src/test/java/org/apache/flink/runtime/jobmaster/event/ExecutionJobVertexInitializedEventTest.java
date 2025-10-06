@@ -22,7 +22,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.IndexRange;
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ class ExecutionJobVertexInitializedEventTest {
                         Collections.singletonList(
                                 new ExecutionVertexInputInfo(
                                         0, new IndexRange(0, 1), new IndexRange(0, 1)))));
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
 
         ExecutionJobVertexInitializedEvent event =
                 new ExecutionJobVertexInitializedEvent(

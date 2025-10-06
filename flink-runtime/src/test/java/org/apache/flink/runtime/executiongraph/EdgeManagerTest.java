@@ -21,9 +21,9 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -54,8 +54,8 @@ class EdgeManagerTest {
 
     @Test
     void testGetConsumedPartitionGroup() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
         ExecutionGraph eg = buildExecutionGraph(v1, v2, 2, 2, ALL_TO_ALL);
 
         ConsumedPartitionGroup groupRetrievedByDownstreamVertex =
@@ -101,8 +101,8 @@ class EdgeManagerTest {
             DistributionPattern distributionPattern,
             int[] expectedConsumers)
             throws Exception {
-        JobVertex producer = new JobVertex("producer");
-        JobVertex consumer = new JobVertex("consumer");
+        StreamVertex producer = new StreamVertex("producer");
+        StreamVertex consumer = new StreamVertex("consumer");
         ExecutionGraph eg =
                 buildExecutionGraph(
                         producer,
@@ -121,8 +121,8 @@ class EdgeManagerTest {
     }
 
     private ExecutionGraph buildExecutionGraph(
-            JobVertex producer,
-            JobVertex consumer,
+            StreamVertex producer,
+            StreamVertex consumer,
             int producerParallelism,
             int consumerParallelism,
             DistributionPattern distributionPattern)
@@ -136,7 +136,7 @@ class EdgeManagerTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.BLOCKING);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(producer, consumer);
         SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
                         jobGraph,

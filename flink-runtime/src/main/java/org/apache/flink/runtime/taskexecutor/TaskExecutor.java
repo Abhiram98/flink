@@ -79,7 +79,7 @@ import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.TaskThreadInfoResponse;
 import org.apache.flink.runtime.messages.ThreadInfoSample;
 import org.apache.flink.runtime.metrics.MetricNames;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskManagerMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskMetricGroup;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
@@ -659,7 +659,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
     public CompletableFuture<Acknowledge> submitTask(
             TaskDeploymentDescriptor tdd, JobMasterId jobMasterId, Duration timeout) {
 
-        final JobID jobId = tdd.getJobId();
+        final JobID jobId = tdd.getStreamId();
         // todo: consider adding task info
         try (MdcCloseable ignored = MdcUtils.withContext(MdcUtils.asContextData(jobId))) {
 
@@ -718,7 +718,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
             final JobInformation jobInformation;
             final TaskInformation taskInformation;
             try {
-                jobInformation = tdd.getJobInformation();
+                jobInformation = tdd.getStreamInformation();
                 taskInformation = tdd.getTaskInformation();
             } catch (IOException | ClassNotFoundException e) {
                 throw new TaskSubmissionException(
@@ -728,13 +728,13 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
             if (!jobId.equals(jobInformation.getJobId())) {
                 throw new TaskSubmissionException(
                         "Inconsistent job ID information inside TaskDeploymentDescriptor ("
-                                + tdd.getJobId()
+                                + tdd.getStreamId()
                                 + " vs. "
                                 + jobInformation.getJobId()
                                 + ")");
             }
 
-            TaskManagerJobMetricGroup jobGroup =
+            TaskManagerStreamMetricGroup jobGroup =
                     taskManagerMetricGroup.addJob(
                             jobInformation.getJobId(), jobInformation.getJobName());
 
@@ -876,7 +876,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                 task.startTaskThread();
 
                 setupResultPartitionBookkeeping(
-                        tdd.getJobId(), tdd.getProducedPartitions(), task.getTerminationFuture());
+                        tdd.getStreamId(), tdd.getProducedPartitions(), task.getTerminationFuture());
                 return CompletableFuture.completedFuture(Acknowledge.get());
             } else {
                 final String message =

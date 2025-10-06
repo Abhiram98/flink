@@ -19,7 +19,7 @@ package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
 import org.apache.flink.runtime.scheduler.adaptive.JobSchedulingPlan.SlotAssignment;
@@ -105,7 +105,7 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
         for (SlotSharingGroup slotSharingGroup : jobInformation.getSlotSharingGroups()) {
             allGroups.addAll(createExecutionSlotSharingGroups(vertexParallelism, slotSharingGroup));
         }
-        final Map<JobVertexID, Integer> parallelism = getParallelism(allGroups);
+        final Map<StreamVertexID, Integer> parallelism = getParallelism(allGroups);
         final PriorityQueue<AllocationScore> scores =
                 calculateScores(jobInformation, previousAllocations, allGroups, parallelism);
 
@@ -144,7 +144,7 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
             JobInformation jobInformation,
             JobAllocationsInformation previousAllocations,
             List<ExecutionSlotSharingGroup> allGroups,
-            Map<JobVertexID, Integer> parallelism) {
+            Map<StreamVertexID, Integer> parallelism) {
         // PQ orders the pairs (allocationID, groupID) by score, decreasing
         // the score is computed as the potential amount of state that would reside locally
         final PriorityQueue<AllocationScore> scores =
@@ -155,9 +155,9 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
         return scores;
     }
 
-    private static Map<JobVertexID, Integer> getParallelism(
+    private static Map<StreamVertexID, Integer> getParallelism(
             List<ExecutionSlotSharingGroup> groups) {
-        final Map<JobVertexID, Integer> parallelism = new HashMap<>();
+        final Map<StreamVertexID, Integer> parallelism = new HashMap<>();
         for (ExecutionSlotSharingGroup group : groups) {
             for (ExecutionVertexID evi : group.getContainedExecutionVertices()) {
                 parallelism.merge(evi.getJobVertexId(), 1, Integer::sum);
@@ -168,7 +168,7 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
 
     public Collection<AllocationScore> calculateScore(
             ExecutionSlotSharingGroup group,
-            Map<JobVertexID, Integer> parallelism,
+            Map<StreamVertexID, Integer> parallelism,
             JobInformation jobInformation,
             JobAllocationsInformation previousAllocations) {
         final Map<AllocationID, Long> score = new HashMap<>();

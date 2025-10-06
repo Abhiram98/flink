@@ -24,12 +24,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionHistory;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
-import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.SubtaskAttemptMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.SubtaskAttemptPathParameter;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -48,7 +44,7 @@ import java.util.concurrent.Executor;
  * "{@link SubtaskAttemptPathParameter#KEY}" of a specific subtask (defined via the "{@link
  * SubtaskIndexPathParameter#KEY}" in a specific job vertex, (defined via the "{@link
  * JobVertexIdPathParameter#KEY}" parameter) in a specific job, defined via (defined via the "{@link
- * JobIDPathParameter#KEY}" parameter).
+ * StreamIdPathParameter#KEY}" parameter).
  *
  * @param <R> the response type
  * @param <M> the message parameters type

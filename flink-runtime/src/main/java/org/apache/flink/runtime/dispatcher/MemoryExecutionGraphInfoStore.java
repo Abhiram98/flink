@@ -21,8 +21,8 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.util.ShutdownHookUtil;
 import org.apache.flink.util.concurrent.ScheduledExecutor;
@@ -110,32 +110,32 @@ public class MemoryExecutionGraphInfoStore implements ExecutionGraphInfoStore {
     }
 
     @Override
-    public JobsOverview getStoredJobsOverview() {
+    public StreamsOverview getStoredJobsOverview() {
         Collection<JobStatus> allJobStatus =
                 serializableExecutionGraphInfos.asMap().values().stream()
                         .map(ExecutionGraphInfo::getArchivedExecutionGraph)
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
-        return JobsOverview.create(allJobStatus);
+        return StreamsOverview.create(allJobStatus);
     }
 
     @Override
-    public Collection<JobDetails> getAvailableJobDetails() {
+    public Collection<StreamDetails> getAvailableJobDetails() {
         return serializableExecutionGraphInfos.asMap().values().stream()
                 .map(ExecutionGraphInfo::getArchivedExecutionGraph)
-                .map(JobDetails::createDetailsForJob)
+                .map(StreamDetails::createDetailsForJob)
                 .collect(Collectors.toList());
     }
 
     @Nullable
     @Override
-    public JobDetails getAvailableJobDetails(JobID jobId) {
+    public StreamDetails getAvailableJobDetails(JobID jobId) {
         final ExecutionGraphInfo archivedExecutionGraphInfo =
                 serializableExecutionGraphInfos.getIfPresent(jobId);
 
         if (archivedExecutionGraphInfo != null) {
-            return JobDetails.createDetailsForJob(
+            return StreamDetails.createDetailsForJob(
                     archivedExecutionGraphInfo.getArchivedExecutionGraph());
         } else {
             return null;

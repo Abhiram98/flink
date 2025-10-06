@@ -25,7 +25,7 @@ import java.util.Collections;
  * Request parameter for job accumulator's handler {@link
  * org.apache.flink.runtime.rest.handler.job.JobAccumulatorsHandler}.
  */
-public class JobAccumulatorsMessageParameters extends JobMessageParameters {
+public class JobAccumulatorsMessageParameters extends StreamMessageParameters {
 
     public final AccumulatorsIncludeSerializedValueQueryParameter
             includeSerializedAccumulatorsParameter =

@@ -38,10 +38,10 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * specific job, running on the JobManager.
  */
 @Internal
-public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGroup> {
-    private final Map<String, JobManagerOperatorMetricGroup> operators = new HashMap<>();
+public class StreamManagerStreamMetricGroup extends StreamMetricGroup<JobManagerMetricGroup> {
+    private final Map<String, StreamManagerOperatorMetricGroup> operators = new HashMap<>();
 
-    JobManagerJobMetricGroup(
+    StreamManagerStreamMetricGroup(
             MetricRegistry registry,
             JobManagerMetricGroup parent,
             JobID jobId,
@@ -60,7 +60,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
         return parent;
     }
 
-    public JobManagerOperatorMetricGroup getOrAddOperator(
+    public StreamManagerOperatorMetricGroup getOrAddOperator(
             AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
         final String truncatedOperatorName = getTruncatedOperatorName(operatorName);
 
@@ -72,7 +72,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
             return operators.computeIfAbsent(
                     key,
                     operator ->
-                            new JobManagerOperatorMetricGroup(
+                            new StreamManagerOperatorMetricGroup(
                                     this.registry,
                                     this,
                                     vertexId,

@@ -23,13 +23,13 @@ import org.apache.flink.runtime.executiongraph.AccessExecution;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -98,8 +98,8 @@ public class SubtaskExecutionAttemptDetailsHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecution execution)
             throws RestHandlerException {
 
-        final JobID jobID = request.getPathParameter(JobIDPathParameter.class);
-        final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
+        final JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
+        final StreamVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
 
         return SubtaskExecutionAttemptDetailsInfo.create(
                 execution, metricFetcher, jobID, jobVertexID, null);
@@ -114,13 +114,13 @@ public class SubtaskExecutionAttemptDetailsHandler
                 for (AccessExecution attempt : subtask.getCurrentExecutions()) {
                     ResponseBody curAttemptJson =
                             SubtaskExecutionAttemptDetailsInfo.create(
-                                    attempt, null, graph.getJobID(), task.getJobVertexId(), null);
+                                    attempt, null, graph.getStreamID(), task.getJobVertexId(), null);
                     String curAttemptPath =
                             getMessageHeaders()
                                     .getTargetRestEndpointURL()
                                     .replace(
-                                            ':' + JobIDPathParameter.KEY,
-                                            graph.getJobID().toString())
+                                            ':' + StreamIdPathParameter.KEY,
+                                            graph.getStreamID().toString())
                                     .replace(
                                             ':' + JobVertexIdPathParameter.KEY,
                                             task.getJobVertexId().toString())
@@ -140,15 +140,15 @@ public class SubtaskExecutionAttemptDetailsHandler
                                 SubtaskExecutionAttemptDetailsInfo.create(
                                         attempt,
                                         null,
-                                        graph.getJobID(),
+                                        graph.getStreamID(),
                                         task.getJobVertexId(),
                                         null);
                         String path =
                                 getMessageHeaders()
                                         .getTargetRestEndpointURL()
                                         .replace(
-                                                ':' + JobIDPathParameter.KEY,
-                                                graph.getJobID().toString())
+                                                ':' + StreamIdPathParameter.KEY,
+                                                graph.getStreamID().toString())
                                         .replace(
                                                 ':' + JobVertexIdPathParameter.KEY,
                                                 task.getJobVertexId().toString())

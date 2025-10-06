@@ -18,21 +18,21 @@
 
 package org.apache.flink.runtime.broadcast;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /**
  * An identifier for a {@link BroadcastVariableMaterialization} based on the task's {@link
- * JobVertexID}, broadcast variable name and iteration superstep.
+ * StreamVertexID}, broadcast variable name and iteration superstep.
  */
 public class BroadcastVariableKey {
 
-    private final JobVertexID vertexId;
+    private final StreamVertexID vertexId;
 
     private final String name;
 
     private final int superstep;
 
-    public BroadcastVariableKey(JobVertexID vertexId, String name, int superstep) {
+    public BroadcastVariableKey(StreamVertexID vertexId, String name, int superstep) {
         if (vertexId == null || name == null || superstep <= 0) {
             throw new IllegalArgumentException();
         }
@@ -44,7 +44,7 @@ public class BroadcastVariableKey {
 
     // ---------------------------------------------------------------------------------------------
 
-    public JobVertexID getVertexId() {
+    public StreamVertexID getVertexId() {
         return vertexId;
     }
 

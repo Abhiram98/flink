@@ -40,10 +40,10 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchScheduler;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchSchedulerFactory;
@@ -79,7 +79,7 @@ import static org.apache.flink.runtime.scheduler.SchedulerBase.computeVertexPara
 public class DefaultSchedulerBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultSchedulerBuilder.class);
 
-    private final JobGraph jobGraph;
+    private final StreamGraph jobGraph;
     private final ComponentMainThreadExecutor mainThreadExecutor;
 
     private Executor ioExecutor;
@@ -93,7 +93,7 @@ public class DefaultSchedulerBuilder {
             new StandaloneCheckpointRecoveryFactory();
     private Duration rpcTimeout = Duration.ofSeconds(300);
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
-    private JobManagerJobMetricGroup jobManagerJobMetricGroup =
+    private StreamManagerStreamMetricGroup jobManagerJobMetricGroup =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;
     private JobMasterPartitionTracker partitionTracker = NoOpJobMasterPartitionTracker.INSTANCE;
@@ -123,7 +123,7 @@ public class DefaultSchedulerBuilder {
     private BatchJobRecoveryHandler jobRecoveryHandler = new DummyBatchJobRecoveryHandler();
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService generalExecutorService) {
         this(
@@ -135,7 +135,7 @@ public class DefaultSchedulerBuilder {
     }
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ComponentMainThreadExecutor mainThreadExecutor,
             Executor ioExecutor,
             ScheduledExecutorService futureExecutor,
@@ -199,7 +199,7 @@ public class DefaultSchedulerBuilder {
     }
 
     public DefaultSchedulerBuilder setJobManagerJobMetricGroup(
-            JobManagerJobMetricGroup jobManagerJobMetricGroup) {
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup) {
         this.jobManagerJobMetricGroup = jobManagerJobMetricGroup;
         return this;
     }
@@ -408,11 +408,11 @@ public class DefaultSchedulerBuilder {
     }
 
     public static VertexParallelismAndInputInfosDecider createCustomParallelismDecider(
-            Function<JobVertexID, Integer> parallelismFunction) {
+            Function<StreamVertexID, Integer> parallelismFunction) {
         return new VertexParallelismAndInputInfosDecider() {
             @Override
             public ParallelismAndInputInfos decideParallelismAndInputInfosForVertex(
-                    JobVertexID jobVertexId,
+                    StreamVertexID jobVertexId,
                     List<BlockingResultInfo> consumedResults,
                     int vertexInitialParallelism,
                     int vertexMinParallelism,
@@ -431,7 +431,7 @@ public class DefaultSchedulerBuilder {
 
             @Override
             public int computeSourceParallelismUpperBound(
-                    JobVertexID jobVertexId, int maxParallelism) {
+                    StreamVertexID jobVertexId, int maxParallelism) {
                 return parallelismFunction.apply(jobVertexId);
             }
 

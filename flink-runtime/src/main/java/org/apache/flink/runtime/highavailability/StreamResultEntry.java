@@ -16,17 +16,29 @@
  * limitations under the License.
  */
 
-package org.apache.flink.core.execution;
+package org.apache.flink.runtime.highavailability;
 
-import org.apache.flink.annotation.PublicEvolving;
+import org.apache.flink.api.common.JobID;
+import org.apache.flink.runtime.jobmaster.StreamResult;
+import org.apache.flink.util.Preconditions;
 
 /**
- * When job is created or its status is changed, Flink will generate job event and notify job status
- * changed listener.
+ * {@code JobResultEntry} is the entity managed by the {@link StreamResultStore}. It collects
+ * information about a globally terminated job (e.g. {@link StreamResult}).
  */
-@PublicEvolving
-public interface JobStatusChangedListener {
+public class StreamResultEntry {
 
-    /* Event will be fired when job status is changed. */
-    void onEvent(JobStatusChangedEvent event);
+    private final StreamResult jobResult;
+
+    public StreamResultEntry(StreamResult jobResult) {
+        this.jobResult = Preconditions.checkNotNull(jobResult);
+    }
+
+    public StreamResult getJobResult() {
+        return jobResult;
+    }
+
+    public JobID getStreamId() {
+        return jobResult.getStreamId();
+    }
 }

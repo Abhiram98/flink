@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive.allocator;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
@@ -111,7 +111,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
                         minimumRequiredSlots,
                         slotSharingGroupMetaInfo);
 
-        final Map<JobVertexID, Integer> allVertexParallelism = new HashMap<>();
+        final Map<StreamVertexID, Integer> allVertexParallelism = new HashMap<>();
 
         for (SlotSharingGroup slotSharingGroup : jobInformation.getSlotSharingGroups()) {
             final List<JobInformation.VertexInformation> containedJobVertices =
@@ -119,7 +119,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
                             .map(jobInformation::getVertexInformation)
                             .collect(Collectors.toList());
 
-            final Map<JobVertexID, Integer> vertexParallelism =
+            final Map<StreamVertexID, Integer> vertexParallelism =
                     determineVertexParallelism(
                             containedJobVertices,
                             slotSharingGroupParallelism.get(
@@ -212,9 +212,9 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
                 .collect(Collectors.toList());
     }
 
-    private static Map<JobVertexID, Integer> determineVertexParallelism(
+    private static Map<StreamVertexID, Integer> determineVertexParallelism(
             Collection<JobInformation.VertexInformation> containedJobVertices, int availableSlots) {
-        final Map<JobVertexID, Integer> vertexParallelism = new HashMap<>();
+        final Map<StreamVertexID, Integer> vertexParallelism = new HashMap<>();
         for (JobInformation.VertexInformation jobVertex : containedJobVertices) {
             final int parallelism = Math.min(jobVertex.getParallelism(), availableSlots);
 

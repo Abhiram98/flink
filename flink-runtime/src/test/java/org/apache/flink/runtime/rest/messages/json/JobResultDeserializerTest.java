@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.json;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.util.jackson.JacksonMapperFactory;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,7 +40,7 @@ class JobResultDeserializerTest {
     @BeforeEach
     void setUp() {
         final SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(JobResult.class, new JobResultDeserializer());
+        simpleModule.addDeserializer(StreamResult.class, new JobResultDeserializer());
 
         objectMapper = JacksonMapperFactory.createObjectMapper();
         objectMapper.registerModule(simpleModule);
@@ -48,7 +48,7 @@ class JobResultDeserializerTest {
 
     @Test
     void testDeserialization() throws Exception {
-        final JobResult jobResult =
+        final StreamResult jobResult =
                 objectMapper.readValue(
                         "{\n"
                                 + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
@@ -56,9 +56,9 @@ class JobResultDeserializerTest {
                                 + "\t\"net-runtime\": 0,\n"
                                 + "\t\"unknownfield\": \"foobar\"\n"
                                 + "}",
-                        JobResult.class);
+                        StreamResult.class);
 
-        assertThat(jobResult.getJobId())
+        assertThat(jobResult.getStreamId())
                 .isEqualTo(JobID.fromHexString("1bb5e8c7df49938733b7c6a73678de6a"));
         assertThat(jobResult.getNetRuntime()).isZero();
         assertThat(jobResult.getAccumulatorResults().size()).isZero();
@@ -74,7 +74,7 @@ class JobResultDeserializerTest {
                                                 + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
                                                 + "\t\"net-runtime\": \"invalid\"\n"
                                                 + "}",
-                                        JobResult.class))
+                                        StreamResult.class))
                 .isInstanceOf(JsonMappingException.class)
                 .hasMessageContaining("Expected token VALUE_NUMBER_INT (was VALUE_STRING)");
     }
@@ -87,7 +87,7 @@ class JobResultDeserializerTest {
                                         "{\n"
                                                 + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\"\n"
                                                 + "}",
-                                        JobResult.class))
+                                        StreamResult.class))
                 .isInstanceOf(JsonMappingException.class)
                 .hasMessageContaining("Could not deserialize JobResult");
     }

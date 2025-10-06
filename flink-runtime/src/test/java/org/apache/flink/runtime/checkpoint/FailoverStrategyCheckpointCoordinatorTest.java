@@ -21,7 +21,7 @@ package org.apache.flink.runtime.checkpoint;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.testutils.TestingUtils;
@@ -63,7 +63,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
         final int maxConcurrentCheckpoints = ThreadLocalRandom.current().nextInt(10) + 1;
         ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
-                        .addJobVertex(new JobVertexID())
+                        .addJobVertex(new StreamVertexID())
                         .setTransitToRunning(false)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         CheckpointCoordinatorConfiguration checkpointCoordinatorConfiguration =
@@ -79,7 +79,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
                         0);
         CheckpointCoordinator checkpointCoordinator =
                 new CheckpointCoordinator(
-                        graph.getJobID(),
+                        graph.getStreamID(),
                         checkpointCoordinatorConfiguration,
                         Collections.emptyList(),
                         new StandaloneCheckpointIDCounter(),
@@ -90,7 +90,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
                         manualThreadExecutor,
                         mock(CheckpointFailureManager.class),
                         new DefaultCheckpointPlanCalculator(
-                                graph.getJobID(),
+                                graph.getStreamID(),
                                 new ExecutionGraphCheckpointPlanCalculatorContext(graph),
                                 graph.getVerticesTopologically(),
                                 false),

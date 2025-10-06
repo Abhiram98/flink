@@ -64,10 +64,10 @@ import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServic
 import org.apache.flink.runtime.highavailability.nonha.embedded.HaLeadershipControl;
 import org.apache.flink.runtime.io.network.partition.ClusterPartitionManager;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalService;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
@@ -1012,16 +1012,16 @@ public class MiniCluster implements AutoCloseableAsync {
      * @throws JobExecutionException Thrown if anything went amiss during initial job launch, or if
      *     the job terminally failed.
      */
-    public void runDetached(JobGraph job) throws JobExecutionException, InterruptedException {
+    public void runDetached(StreamGraph job) throws JobExecutionException, InterruptedException {
         checkNotNull(job, "job is null");
 
-        final CompletableFuture<JobSubmissionResult> submissionFuture = submitJob(job);
+        final CompletableFuture<JobSubmissionResult> submissionFuture = submitStream(job);
 
         try {
             submissionFuture.get();
         } catch (ExecutionException e) {
             throw new JobExecutionException(
-                    job.getJobID(), ExceptionUtils.stripExecutionException(e));
+                    job.getStreamID(), ExceptionUtils.stripExecutionException(e));
         }
     }
 
@@ -1034,35 +1034,35 @@ public class MiniCluster implements AutoCloseableAsync {
      * @throws JobExecutionException Thrown if anything went amiss during initial job launch, or if
      *     the job terminally failed.
      */
-    public JobExecutionResult executeJobBlocking(JobGraph job)
+    public JobExecutionResult executeJobBlocking(StreamGraph job)
             throws JobExecutionException, InterruptedException {
         checkNotNull(job, "job is null");
 
-        final CompletableFuture<JobSubmissionResult> submissionFuture = submitJob(job);
+        final CompletableFuture<JobSubmissionResult> submissionFuture = submitStream(job);
 
-        final CompletableFuture<JobResult> jobResultFuture =
+        final CompletableFuture<StreamResult> jobResultFuture =
                 submissionFuture.thenCompose(
-                        (JobSubmissionResult ignored) -> requestJobResult(job.getJobID()));
+                        (JobSubmissionResult ignored) -> requestStreamResult(job.getStreamID()));
 
-        final JobResult jobResult;
+        final StreamResult jobResult;
 
         try {
             jobResult = jobResultFuture.get();
         } catch (ExecutionException e) {
             throw new JobExecutionException(
-                    job.getJobID(),
+                    job.getStreamID(),
                     "Could not retrieve JobResult.",
                     ExceptionUtils.stripExecutionException(e));
         }
 
         try {
-            return jobResult.toJobExecutionResult(Thread.currentThread().getContextClassLoader());
+            return jobResult.toStreamExecutionResult(Thread.currentThread().getContextClassLoader());
         } catch (IOException | ClassNotFoundException e) {
-            throw new JobExecutionException(job.getJobID(), e);
+            throw new JobExecutionException(job.getStreamID(), e);
         }
     }
 
-    public CompletableFuture<JobSubmissionResult> submitJob(ExecutionPlan executionPlan) {
+    public CompletableFuture<JobSubmissionResult> submitStream(ExecutionPlan executionPlan) {
         // When MiniCluster uses the local RPC, the provided ExecutionPlan is passed directly to the
         // Dispatcher. This means that any mutations to the JG can affect the Dispatcher behaviour,
         // so we rather clone it to guard against this.
@@ -1079,7 +1079,7 @@ public class MiniCluster implements AutoCloseableAsync {
                         .thenCombine(
                                 dispatcherGatewayFuture,
                                 (Void ack, DispatcherGateway dispatcherGateway) ->
-                                        dispatcherGateway.submitJob(
+                                        dispatcherGateway.submitStream(
                                                 clonedExecutionPlan, rpcTimeout))
                         .thenCompose(Function.identity());
         return acknowledgeCompletableFuture.thenApply(
@@ -1102,7 +1102,7 @@ public class MiniCluster implements AutoCloseableAsync {
         }
     }
 
-    public CompletableFuture<JobResult> requestJobResult(JobID jobId) {
+    public CompletableFuture<StreamResult> requestStreamResult(JobID jobId) {
         return runDispatcherCommand(
                 dispatcherGateway ->
                         dispatcherGateway.requestJobResult(jobId, RpcUtils.INF_TIMEOUT));

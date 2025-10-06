@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint.channel;
 import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter.ChannelStateWriteResult;
 import org.apache.flink.runtime.io.AvailabilityProvider;
 import org.apache.flink.runtime.io.network.buffer.Buffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.util.CloseableIterator;
 import org.apache.flink.util.Preconditions;
@@ -51,7 +51,7 @@ abstract class ChannelStateWriteRequest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChannelStateWriteRequest.class);
 
-    private final JobVertexID jobVertexID;
+    private final StreamVertexID jobVertexID;
 
     private final int subtaskIndex;
 
@@ -60,14 +60,14 @@ abstract class ChannelStateWriteRequest {
     private final String name;
 
     public ChannelStateWriteRequest(
-            JobVertexID jobVertexID, int subtaskIndex, long checkpointId, String name) {
+            StreamVertexID jobVertexID, int subtaskIndex, long checkpointId, String name) {
         this.jobVertexID = jobVertexID;
         this.subtaskIndex = subtaskIndex;
         this.checkpointId = checkpointId;
         this.name = name;
     }
 
-    public final JobVertexID getJobVertexID() {
+    public final StreamVertexID getJobVertexID() {
         return jobVertexID;
     }
 
@@ -105,7 +105,7 @@ abstract class ChannelStateWriteRequest {
     abstract void cancel(Throwable cause) throws Exception;
 
     static CheckpointInProgressRequest completeInput(
-            JobVertexID jobVertexID, int subtaskIndex, long checkpointId) {
+            StreamVertexID jobVertexID, int subtaskIndex, long checkpointId) {
         return new CheckpointInProgressRequest(
                 "completeInput",
                 jobVertexID,
@@ -115,7 +115,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static CheckpointInProgressRequest completeOutput(
-            JobVertexID jobVertexID, int subtaskIndex, long checkpointId) {
+            StreamVertexID jobVertexID, int subtaskIndex, long checkpointId) {
         return new CheckpointInProgressRequest(
                 "completeOutput",
                 jobVertexID,
@@ -125,7 +125,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest write(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             InputChannelInfo info,
@@ -140,7 +140,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest write(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ResultSubpartitionInfo info,
@@ -155,7 +155,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest write(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ResultSubpartitionInfo info,
@@ -170,7 +170,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest buildFutureWriteRequest(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             String name,
@@ -213,7 +213,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest buildWriteRequest(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             String name,
@@ -244,7 +244,7 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest start(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ChannelStateWriteResult targetResult,
@@ -254,15 +254,15 @@ abstract class ChannelStateWriteRequest {
     }
 
     static ChannelStateWriteRequest abort(
-            JobVertexID jobVertexID, int subtaskIndex, long checkpointId, Throwable cause) {
+            StreamVertexID jobVertexID, int subtaskIndex, long checkpointId, Throwable cause) {
         return new CheckpointAbortRequest(jobVertexID, subtaskIndex, checkpointId, cause);
     }
 
-    static ChannelStateWriteRequest registerSubtask(JobVertexID jobVertexID, int subtaskIndex) {
+    static ChannelStateWriteRequest registerSubtask(StreamVertexID jobVertexID, int subtaskIndex) {
         return new SubtaskRegisterRequest(jobVertexID, subtaskIndex);
     }
 
-    static ChannelStateWriteRequest releaseSubtask(JobVertexID jobVertexID, int subtaskIndex) {
+    static ChannelStateWriteRequest releaseSubtask(StreamVertexID jobVertexID, int subtaskIndex) {
         return new SubtaskReleaseRequest(jobVertexID, subtaskIndex);
     }
 
@@ -281,7 +281,7 @@ final class CheckpointStartRequest extends ChannelStateWriteRequest {
     private final CheckpointStorageLocationReference locationReference;
 
     CheckpointStartRequest(
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ChannelStateWriteResult targetResult,
@@ -322,7 +322,7 @@ final class CheckpointInProgressRequest extends ChannelStateWriteRequest {
 
     CheckpointInProgressRequest(
             String name,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ThrowingConsumer<ChannelStateCheckpointWriter, Exception> action) {
@@ -331,7 +331,7 @@ final class CheckpointInProgressRequest extends ChannelStateWriteRequest {
 
     CheckpointInProgressRequest(
             String name,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ThrowingConsumer<ChannelStateCheckpointWriter, Exception> action,
@@ -341,7 +341,7 @@ final class CheckpointInProgressRequest extends ChannelStateWriteRequest {
 
     CheckpointInProgressRequest(
             String name,
-            JobVertexID jobVertexID,
+            StreamVertexID jobVertexID,
             int subtaskIndex,
             long checkpointId,
             ThrowingConsumer<ChannelStateCheckpointWriter, Exception> action,
@@ -385,7 +385,7 @@ final class CheckpointAbortRequest extends ChannelStateWriteRequest {
     private final Throwable throwable;
 
     public CheckpointAbortRequest(
-            JobVertexID jobVertexID, int subtaskIndex, long checkpointId, Throwable throwable) {
+            StreamVertexID jobVertexID, int subtaskIndex, long checkpointId, Throwable throwable) {
         super(jobVertexID, subtaskIndex, checkpointId, "Abort");
         this.throwable = throwable;
     }
@@ -405,7 +405,7 @@ final class CheckpointAbortRequest extends ChannelStateWriteRequest {
 
 final class SubtaskRegisterRequest extends ChannelStateWriteRequest {
 
-    public SubtaskRegisterRequest(JobVertexID jobVertexID, int subtaskIndex) {
+    public SubtaskRegisterRequest(StreamVertexID jobVertexID, int subtaskIndex) {
         super(jobVertexID, subtaskIndex, 0, "Register");
     }
 
@@ -415,7 +415,7 @@ final class SubtaskRegisterRequest extends ChannelStateWriteRequest {
 
 final class SubtaskReleaseRequest extends ChannelStateWriteRequest {
 
-    public SubtaskReleaseRequest(JobVertexID jobVertexID, int subtaskIndex) {
+    public SubtaskReleaseRequest(StreamVertexID jobVertexID, int subtaskIndex) {
         super(jobVertexID, subtaskIndex, 0, "Release");
     }
 

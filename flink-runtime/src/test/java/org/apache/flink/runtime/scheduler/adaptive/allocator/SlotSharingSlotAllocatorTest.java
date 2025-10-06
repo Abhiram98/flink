@@ -19,7 +19,7 @@ package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
@@ -66,11 +66,11 @@ class SlotSharingSlotAllocatorTest {
     private static final SlotSharingGroup slotSharingGroup1 = new SlotSharingGroup();
     private static final SlotSharingGroup slotSharingGroup2 = new SlotSharingGroup();
     private static final JobInformation.VertexInformation vertex1 =
-            new TestVertexInformation(new JobVertexID(), 4, slotSharingGroup1);
+            new TestVertexInformation(new StreamVertexID(), 4, slotSharingGroup1);
     private static final JobInformation.VertexInformation vertex2 =
-            new TestVertexInformation(new JobVertexID(), 2, slotSharingGroup1);
+            new TestVertexInformation(new StreamVertexID(), 2, slotSharingGroup1);
     private static final JobInformation.VertexInformation vertex3 =
-            new TestVertexInformation(new JobVertexID(), 3, slotSharingGroup2);
+            new TestVertexInformation(new StreamVertexID(), 3, slotSharingGroup2);
 
     @Test
     void testCalculateRequiredSlots() {
@@ -144,11 +144,11 @@ class SlotSharingSlotAllocatorTest {
                         DISABLE_LOCAL_RECOVERY);
         final SlotSharingGroup slotSharingGroup1 = new SlotSharingGroup();
         final JobInformation.VertexInformation vertex11 =
-                new TestVertexInformation(new JobVertexID(), 4, slotSharingGroup1);
+                new TestVertexInformation(new StreamVertexID(), 4, slotSharingGroup1);
         final JobInformation.VertexInformation vertex12 =
-                new TestVertexInformation(new JobVertexID(), 1, slotSharingGroup1);
+                new TestVertexInformation(new StreamVertexID(), 1, slotSharingGroup1);
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 2, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 2, new SlotSharingGroup());
 
         TestJobInformation testJobInformation =
                 new TestJobInformation(Arrays.asList(vertex11, vertex12, vertex2));
@@ -195,9 +195,9 @@ class SlotSharingSlotAllocatorTest {
                         TEST_IS_SLOT_FREE_FUNCTION,
                         DISABLE_LOCAL_RECOVERY);
         final JobInformation.VertexInformation vertex1 =
-                new TestVertexInformation(new JobVertexID(), 1, 8, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 1, 8, new SlotSharingGroup());
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 10, 10, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 10, 10, new SlotSharingGroup());
 
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
@@ -224,9 +224,9 @@ class SlotSharingSlotAllocatorTest {
                         TEST_IS_SLOT_FREE_FUNCTION,
                         DISABLE_LOCAL_RECOVERY);
         final JobInformation.VertexInformation vertex1 =
-                new TestVertexInformation(new JobVertexID(), 4, 4, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 4, 4, new SlotSharingGroup());
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 10, 10, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 10, 10, new SlotSharingGroup());
 
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
@@ -247,9 +247,9 @@ class SlotSharingSlotAllocatorTest {
                         DISABLE_LOCAL_RECOVERY);
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
         final JobInformation.VertexInformation vertex1 =
-                new TestVertexInformation(new JobVertexID(), 2, 2, slotSharingGroup);
+                new TestVertexInformation(new StreamVertexID(), 2, 2, slotSharingGroup);
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 8, 8, slotSharingGroup);
+                new TestVertexInformation(new StreamVertexID(), 8, 8, slotSharingGroup);
 
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
@@ -268,9 +268,9 @@ class SlotSharingSlotAllocatorTest {
                         TEST_IS_SLOT_FREE_FUNCTION,
                         DISABLE_LOCAL_RECOVERY);
         final JobInformation.VertexInformation vertex1 =
-                new TestVertexInformation(new JobVertexID(), 4, 10, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 4, 10, new SlotSharingGroup());
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 4, 10, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 4, 10, new SlotSharingGroup());
 
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
@@ -299,9 +299,9 @@ class SlotSharingSlotAllocatorTest {
                         TEST_IS_SLOT_FREE_FUNCTION,
                         DISABLE_LOCAL_RECOVERY);
         final JobInformation.VertexInformation vertex1 =
-                new TestVertexInformation(new JobVertexID(), 4, 4, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 4, 4, new SlotSharingGroup());
         final JobInformation.VertexInformation vertex2 =
-                new TestVertexInformation(new JobVertexID(), 10, 10, new SlotSharingGroup());
+                new TestVertexInformation(new StreamVertexID(), 10, 10, new SlotSharingGroup());
 
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
@@ -395,7 +395,7 @@ class SlotSharingSlotAllocatorTest {
      */
     @Test
     void testStickyAllocation() {
-        Map<JobVertexID, List<VertexAllocationInformation>> locality = new HashMap<>();
+        Map<StreamVertexID, List<VertexAllocationInformation>> locality = new HashMap<>();
 
         // previous allocation allocation1: v1, v2
         AllocationID allocation1 = new AllocationID();

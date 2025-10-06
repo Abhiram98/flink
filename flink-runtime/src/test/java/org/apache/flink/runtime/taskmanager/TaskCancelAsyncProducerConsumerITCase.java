@@ -31,9 +31,9 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -103,11 +103,11 @@ public class TaskCancelAsyncProducerConsumerITCase {
         Deadline deadline = Deadline.now().plus(Duration.ofMinutes(2));
 
         // Job with async producer and consumer
-        JobVertex producer = new JobVertex("AsyncProducer");
+        StreamVertex producer = new StreamVertex("AsyncProducer");
         producer.setParallelism(1);
         producer.setInvokableClass(AsyncProducer.class);
 
-        JobVertex consumer = new JobVertex("AsyncConsumer");
+        StreamVertex consumer = new StreamVertex("AsyncConsumer");
         consumer.setParallelism(1);
         consumer.setInvokableClass(AsyncConsumer.class);
         consumer.connectNewDataSetAsInput(
@@ -117,13 +117,13 @@ public class TaskCancelAsyncProducerConsumerITCase {
         producer.setSlotSharingGroup(slot);
         consumer.setSlotSharingGroup(slot);
 
-        JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(producer, consumer);
+        StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(producer, consumer);
 
         // Submit job and wait until running
         flink.runDetached(jobGraph);
 
         FutureUtils.retrySuccessfulWithDelay(
-                        () -> flink.getJobStatus(jobGraph.getJobID()),
+                        () -> flink.getJobStatus(jobGraph.getStreamID()),
                         Duration.ofMillis(10),
                         deadline,
                         status -> status == JobStatus.RUNNING,
@@ -172,12 +172,12 @@ public class TaskCancelAsyncProducerConsumerITCase {
         // Verify that async consumer is in blocking request
         assertTrue("Consumer thread is not blocked.", consumerWaiting);
 
-        flink.cancelJob(jobGraph.getJobID())
+        flink.cancelJob(jobGraph.getStreamID())
                 .get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS);
 
         // wait until the job is canceled
         FutureUtils.retrySuccessfulWithDelay(
-                        () -> flink.getJobStatus(jobGraph.getJobID()),
+                        () -> flink.getJobStatus(jobGraph.getStreamID()),
                         Duration.ofMillis(10),
                         deadline,
                         status -> status == JobStatus.CANCELED,

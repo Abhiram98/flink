@@ -31,13 +31,10 @@ import org.apache.flink.runtime.checkpoint.DefaultCompletedCheckpointStoreUtils;
 import org.apache.flink.runtime.dispatcher.JobCancellationFailedException;
 import org.apache.flink.runtime.dispatcher.UnavailableDispatcherOperationException;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobmaster.JobManagerRunner;
-import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
-import org.apache.flink.runtime.jobmaster.JobMaster;
-import org.apache.flink.runtime.jobmaster.JobMasterGateway;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.*;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.state.SharedStateRegistryFactory;
 import org.apache.flink.util.ExceptionUtils;
@@ -63,7 +60,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
     private static final Logger LOG =
             LoggerFactory.getLogger(CheckpointResourcesCleanupRunner.class);
 
-    private final JobResult jobResult;
+    private final StreamResult jobResult;
     private final CheckpointRecoveryFactory checkpointRecoveryFactory;
     private final CheckpointsCleaner checkpointsCleaner;
     private final SharedStateRegistryFactory sharedStateRegistryFactory;
@@ -76,7 +73,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
     private final CompletableFuture<JobManagerRunnerResult> resultFuture;
 
     public CheckpointResourcesCleanupRunner(
-            JobResult jobResult,
+            StreamResult jobResult,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             SharedStateRegistryFactory sharedStateRegistryFactory,
             Configuration jobManagerConfiguration,
@@ -174,7 +171,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
 
     @Override
     public JobID getJobID() {
-        return jobResult.getJobId();
+        return jobResult.getStreamId();
     }
 
     @Override
@@ -189,11 +186,11 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
     }
 
     @Override
-    public CompletableFuture<JobDetails> requestJobDetails(Duration timeout) {
+    public CompletableFuture<StreamDetails> requestJobDetails(Duration timeout) {
         return requestJob(timeout)
                 .thenApply(
                         executionGraphInfo ->
-                                JobDetails.createDetailsForJob(
+                                StreamDetails.createDetailsForJob(
                                         executionGraphInfo.getArchivedExecutionGraph()));
     }
 
@@ -215,15 +212,15 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
         return getJobStatus(jobResult);
     }
 
-    private static JobStatus getJobStatus(JobResult jobResult) {
+    private static JobStatus getJobStatus(StreamResult jobResult) {
         return jobResult.getApplicationStatus().deriveJobStatus();
     }
 
     private static ExecutionGraphInfo generateExecutionGraphInfo(
-            JobResult jobResult, long initializationTimestamp) {
+            StreamResult jobResult, long initializationTimestamp) {
         return new ExecutionGraphInfo(
                 ArchivedExecutionGraph.createSparseArchivedExecutionGraph(
-                        jobResult.getJobId(),
+                        jobResult.getStreamId(),
                         "unknown",
                         getJobStatus(jobResult),
                         null,

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.OptionalFailure;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.SerializedValue;
@@ -46,7 +46,7 @@ public class ArchivedExecutionGraphBuilder {
 
     private JobID jobID;
     private String jobName;
-    private Map<JobVertexID, ArchivedExecutionJobVertex> tasks;
+    private Map<StreamVertexID, ArchivedExecutionJobVertex> tasks;
     private List<ArchivedExecutionJobVertex> verticesInCreationOrder;
     private long[] stateTimestamps;
     private JobStatus state;
@@ -69,7 +69,7 @@ public class ArchivedExecutionGraphBuilder {
     }
 
     public ArchivedExecutionGraphBuilder setTasks(
-            Map<JobVertexID, ArchivedExecutionJobVertex> tasks) {
+            Map<StreamVertexID, ArchivedExecutionJobVertex> tasks) {
         this.tasks = tasks;
         return this;
     }

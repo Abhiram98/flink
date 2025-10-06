@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.DummyJobInformation;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.JobInformation;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.util.SerializedValue;
 
 import javax.annotation.Nullable;
@@ -55,7 +55,7 @@ public class TaskDeploymentDescriptorBuilder {
             throws IOException {
         TaskInformation taskInformation =
                 new TaskInformation(
-                        new JobVertexID(),
+                        new StreamVertexID(),
                         "test task",
                         1,
                         1,

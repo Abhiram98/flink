@@ -23,11 +23,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -58,9 +55,9 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
 
     @Test
     void testGetConsumedPartitionGroupsAndProducers() throws Exception {
-        final JobVertex producer1 = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex producer2 = ExecutionGraphTestUtils.createNoOpVertex(1);
-        final JobVertex consumer = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex producer1 = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex producer2 = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex consumer = ExecutionGraphTestUtils.createNoOpVertex(1);
         final IntermediateDataSet dataSet1 =
                 consumer.connectNewDataSetAsInput(
                                 producer1,
@@ -122,7 +119,7 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
     /** Tests that it will get empty task manager location if vertex is not scheduled. */
     @Test
     void testGetEmptyTaskManagerLocationIfVertexNotScheduled() throws Exception {
-        final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
 
         final ExecutionGraph eg =
                 ExecutionGraphTestUtils.createExecutionGraph(
@@ -140,7 +137,7 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
     /** Tests that it can get the task manager location in an Execution. */
     @Test
     void testGetTaskManagerLocationWhenScheduled() throws Exception {
-        final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
 
         final TestingLogicalSlot testingLogicalSlot =
                 new TestingLogicalSlotBuilder().createTestingLogicalSlot();
@@ -172,7 +169,7 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
      */
     @Test
     void testGetNonExistingExecutionVertexWillThrowException() throws Exception {
-        final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
+        final StreamVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
 
         final ExecutionGraph eg =
                 ExecutionGraphTestUtils.createExecutionGraph(
@@ -180,7 +177,7 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
         final ExecutionGraphToInputsLocationsRetrieverAdapter inputsLocationsRetriever =
                 new ExecutionGraphToInputsLocationsRetrieverAdapter(eg);
 
-        ExecutionVertexID invalidExecutionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        ExecutionVertexID invalidExecutionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         assertThatThrownBy(
                         () ->
                                 inputsLocationsRetriever.getTaskManagerLocation(

@@ -19,9 +19,9 @@
 package org.apache.flink.runtime.rest.handler.job.metrics;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
 
@@ -33,7 +33,7 @@ class SubtaskMetricsHandlerTestBase extends MetricsHandlerTestBase<SubtaskMetric
 
     private static final String TEST_JOB_ID = new JobID().toString();
 
-    private static final String TEST_VERTEX_ID = new JobVertexID().toString();
+    private static final String TEST_VERTEX_ID = new StreamVertexID().toString();
 
     private static final int TEST_SUBTASK_INDEX = 0;
 
@@ -53,7 +53,7 @@ class SubtaskMetricsHandlerTestBase extends MetricsHandlerTestBase<SubtaskMetric
     @Override
     Map<String, String> getPathParameters() {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, TEST_JOB_ID);
+        pathParameters.put(StreamIdPathParameter.KEY, TEST_JOB_ID);
         pathParameters.put(JobVertexIdPathParameter.KEY, TEST_VERTEX_ID);
         pathParameters.put(SubtaskIndexPathParameter.KEY, Integer.toString(TEST_SUBTASK_INDEX));
         return pathParameters;

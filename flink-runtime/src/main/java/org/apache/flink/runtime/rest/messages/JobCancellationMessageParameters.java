@@ -26,11 +26,11 @@ import java.util.Collections;
 /**
  * Parameters for job related REST handlers.
  *
- * <p>A job related REST handler always requires a {@link JobIDPathParameter}.
+ * <p>A job related REST handler always requires a {@link StreamIdPathParameter}.
  */
 public class JobCancellationMessageParameters extends MessageParameters {
 
-    private final JobIDPathParameter jobPathParameter = new JobIDPathParameter();
+    private final StreamIdPathParameter jobPathParameter = new StreamIdPathParameter();
     private final TerminationModeQueryParameter terminationModeQueryParameter =
             new TerminationModeQueryParameter();
 

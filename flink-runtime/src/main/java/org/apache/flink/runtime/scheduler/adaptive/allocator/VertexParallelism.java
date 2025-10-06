@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -33,23 +33,23 @@ import static org.apache.flink.util.Preconditions.checkArgument;
  * slotAssignments}, describing the parallelism each vertex could be scheduled with.
  */
 public class VertexParallelism {
-    private final Map<JobVertexID, Integer> parallelismForVertices;
+    private final Map<StreamVertexID, Integer> parallelismForVertices;
 
-    public VertexParallelism(Map<JobVertexID, Integer> parallelismForVertices) {
+    public VertexParallelism(Map<StreamVertexID, Integer> parallelismForVertices) {
         this.parallelismForVertices = parallelismForVertices;
     }
 
-    public int getParallelism(JobVertexID jobVertexId) {
+    public int getParallelism(StreamVertexID jobVertexId) {
         checkArgument(
                 parallelismForVertices.containsKey(jobVertexId), "Unknown vertex: " + jobVertexId);
         return parallelismForVertices.get(jobVertexId);
     }
 
-    public Optional<Integer> getParallelismOptional(JobVertexID jobVertexId) {
+    public Optional<Integer> getParallelismOptional(StreamVertexID jobVertexId) {
         return Optional.ofNullable(parallelismForVertices.get(jobVertexId));
     }
 
-    public Set<JobVertexID> getVertices() {
+    public Set<StreamVertexID> getVertices() {
         return Collections.unmodifiableSet(parallelismForVertices.keySet());
     }
 

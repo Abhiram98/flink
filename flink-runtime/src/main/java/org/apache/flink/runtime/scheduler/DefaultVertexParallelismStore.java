@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.JobVertexResourceRequirements;
 
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
         final DefaultVertexParallelismStore newVertexParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
-        for (final JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
+        for (final StreamVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
             final VertexParallelismInformation oldVertexParallelismInfo =
                     oldVertexParallelismStore.getParallelismInfo(jobVertexId);
             final JobVertexResourceRequirements.Parallelism parallelismSettings =
@@ -69,16 +69,16 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
         return changed ? Optional.of(newVertexParallelismStore) : Optional.empty();
     }
 
-    private final Map<JobVertexID, VertexParallelismInformation> vertexToParallelismInfo =
+    private final Map<StreamVertexID, VertexParallelismInformation> vertexToParallelismInfo =
             new HashMap<>();
 
     @Override
-    public void setParallelismInfo(JobVertexID vertexId, VertexParallelismInformation info) {
+    public void setParallelismInfo(StreamVertexID vertexId, VertexParallelismInformation info) {
         vertexToParallelismInfo.put(vertexId, info);
     }
 
     @Override
-    public VertexParallelismInformation getParallelismInfo(JobVertexID vertexId) {
+    public VertexParallelismInformation getParallelismInfo(StreamVertexID vertexId) {
         return Optional.ofNullable(vertexToParallelismInfo.get(vertexId))
                 .orElseThrow(
                         () ->

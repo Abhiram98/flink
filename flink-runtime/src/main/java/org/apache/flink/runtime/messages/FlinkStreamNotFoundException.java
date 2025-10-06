@@ -16,35 +16,17 @@
  * limitations under the License.
  */
 
-package org.apache.flink.runtime.jobgraph;
+package org.apache.flink.runtime.messages;
 
 import org.apache.flink.api.common.JobID;
+import org.apache.flink.util.FlinkException;
 
-import org.junit.Test;
+/** Exception indicating that we could not find a Flink job with the given job ID. */
+public class FlinkStreamNotFoundException extends FlinkException {
 
-import java.nio.ByteBuffer;
+    private static final long serialVersionUID = 2294698055059659025L;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-public class JobIdTest {
-
-    @Test
-    public void testConvertToByteBuffer() {
-        try {
-            JobID origID = new JobID();
-
-            byte[] bytes = origID.getBytes();
-            ByteBuffer buffer = ByteBuffer.wrap(bytes);
-
-            JobID copy1 = JobID.fromByteBuffer(buffer);
-            JobID copy2 = JobID.fromByteArray(bytes);
-
-            assertEquals(origID, copy1);
-            assertEquals(origID, copy2);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+    public FlinkStreamNotFoundException(JobID streamId) {
+        super("Could not find Flink job (" + streamId + ')');
     }
 }

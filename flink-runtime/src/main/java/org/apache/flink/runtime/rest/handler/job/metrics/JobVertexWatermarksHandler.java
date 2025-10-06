@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job.metrics;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -30,7 +30,7 @@ import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobVertexWatermarksHeaders;
 import org.apache.flink.runtime.rest.messages.job.metrics.Metric;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-/** Handler that returns the watermarks given a {@link JobID} and {@link JobVertexID}. */
+/** Handler that returns the watermarks given a {@link JobID} and {@link StreamVertexID}. */
 public class JobVertexWatermarksHandler
         extends AbstractJobVertexHandler<MetricCollectionResponseBody, JobVertexMessageParameters> {
 
@@ -73,7 +73,7 @@ public class JobVertexWatermarksHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecutionJobVertex jobVertex)
             throws RestHandlerException {
 
-        String jobID = request.getPathParameter(JobIDPathParameter.class).toString();
+        String jobID = request.getPathParameter(StreamIdPathParameter.class).toString();
         String taskID = jobVertex.getJobVertexId().toString();
 
         metricFetcher.update();

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import javax.annotation.Nullable;
 
@@ -64,7 +64,7 @@ public class CompletedCheckpointStats extends AbstractCheckpointStats {
             long triggerTimestamp,
             CheckpointProperties props,
             int totalSubtaskCount,
-            Map<JobVertexID, TaskStateStats> taskStats,
+            Map<StreamVertexID, TaskStateStats> taskStats,
             int numAcknowledgedSubtasks,
             long stateSize,
             long processedData,
@@ -111,7 +111,7 @@ public class CompletedCheckpointStats extends AbstractCheckpointStats {
             long triggerTimestamp,
             CheckpointProperties props,
             int totalSubtaskCount,
-            Map<JobVertexID, TaskStateStats> taskStats,
+            Map<StreamVertexID, TaskStateStats> taskStats,
             int numAcknowledgedSubtasks,
             long checkpointedSize,
             long stateSize,

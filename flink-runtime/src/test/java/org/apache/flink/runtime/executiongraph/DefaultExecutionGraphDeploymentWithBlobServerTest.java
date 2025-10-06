@@ -26,7 +26,7 @@ import org.apache.flink.runtime.blob.BlobStore;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.types.Either;
 import org.apache.flink.util.SerializedValue;
@@ -82,26 +82,26 @@ class DefaultExecutionGraphDeploymentWithBlobServerTest
     }
 
     @Override
-    protected void checkJobOffloaded(DefaultExecutionGraph eg) throws Exception {
-        TaskDeploymentDescriptor.MaybeOffloaded<JobInformation> serializedJobInformation =
-                eg.getTaskDeploymentDescriptorFactory().getSerializedJobInformation();
+    protected void checkStreamOffloaded(DefaultExecutionGraph eg) throws Exception {
+        TaskDeploymentDescriptor.MaybeOffloaded<JobInformation> serializedStreamInformation =
+                eg.getTaskDeploymentDescriptorFactory().getSerializedStreamInformation();
 
-        assertThat(serializedJobInformation).isInstanceOf(TaskDeploymentDescriptor.Offloaded.class);
+        assertThat(serializedStreamInformation).isInstanceOf(TaskDeploymentDescriptor.Offloaded.class);
         PermanentBlobKey blobKey =
-                ((TaskDeploymentDescriptor.Offloaded<JobInformation>) serializedJobInformation)
+                ((TaskDeploymentDescriptor.Offloaded<JobInformation>) serializedStreamInformation)
                         .serializedValueKey;
-        assertThatNoException().isThrownBy(() -> blobServer.getFile(eg.getJobID(), blobKey));
+        assertThatNoException().isThrownBy(() -> blobServer.getFile(eg.getStreamID(), blobKey));
     }
 
     @Override
-    protected void checkTaskOffloaded(ExecutionGraph eg, JobVertexID jobVertexId) throws Exception {
+    protected void checkTaskOffloaded(ExecutionGraph eg, StreamVertexID streamVertexId) throws Exception {
         Either<SerializedValue<TaskInformation>, PermanentBlobKey> taskInformationOrBlobKey =
-                eg.getJobVertex(jobVertexId).getTaskInformationOrBlobKey();
+                eg.getJobVertex(streamVertexId).getTaskInformationOrBlobKey();
 
         assertThat(taskInformationOrBlobKey.isRight()).isTrue();
 
         // must not throw:
-        blobServer.getFile(eg.getJobID(), taskInformationOrBlobKey.right());
+        blobServer.getFile(eg.getStreamID(), taskInformationOrBlobKey.right());
     }
 
     private class AssertBlobServer extends BlobServer {
@@ -111,8 +111,8 @@ class DefaultExecutionGraphDeploymentWithBlobServerTest
         }
 
         @Override
-        public PermanentBlobKey putPermanent(JobID jobId, byte[] value) throws IOException {
-            PermanentBlobKey key = super.putPermanent(jobId, value);
+        public PermanentBlobKey putPermanent(JobID streamId, byte[] value) throws IOException {
+            PermanentBlobKey key = super.putPermanent(streamId, value);
             // verify that we do not upload the same content more than once
             assertThat(seenHashes.add(key.getHash())).isTrue();
             return key;

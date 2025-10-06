@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationConstraint;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -78,9 +78,9 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
     private static class LocalInputPreferredExecutionSlotSharingGroupBuilder {
         private final SchedulingTopology topology;
 
-        private final Map<JobVertexID, SlotSharingGroup> slotSharingGroupMap;
+        private final Map<StreamVertexID, SlotSharingGroup> slotSharingGroupMap;
 
-        private final Map<JobVertexID, CoLocationGroup> coLocationGroupMap;
+        private final Map<StreamVertexID, CoLocationGroup> coLocationGroupMap;
 
         private final Map<ExecutionVertexID, ExecutionSlotSharingGroup>
                 executionSlotSharingGroupMap;
@@ -102,7 +102,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
          * <p>Here we use {@link LinkedHashSet} to reserve the order the same as the
          * SchedulingVertices are traversed.
          */
-        private final Map<JobVertexID, LinkedHashSet<ExecutionSlotSharingGroup>>
+        private final Map<StreamVertexID, LinkedHashSet<ExecutionSlotSharingGroup>>
                 availableGroupsForJobVertex;
 
         /**
@@ -135,14 +135,14 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
 
             this.slotSharingGroupMap = new HashMap<>();
             for (SlotSharingGroup slotSharingGroup : logicalSlotSharingGroups) {
-                for (JobVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
+                for (StreamVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
                     slotSharingGroupMap.put(jobVertexId, slotSharingGroup);
                 }
             }
 
             this.coLocationGroupMap = new HashMap<>();
             for (CoLocationGroup coLocationGroup : coLocationGroups) {
-                for (JobVertexID jobVertexId : coLocationGroup.getVertexIds()) {
+                for (StreamVertexID jobVertexId : coLocationGroup.getVertexIds()) {
                     coLocationGroupMap.put(jobVertexId, coLocationGroup);
                 }
             }
@@ -167,7 +167,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
          * <p>4. create a new group.
          */
         private Map<ExecutionVertexID, ExecutionSlotSharingGroup> build() {
-            final LinkedHashMap<JobVertexID, List<SchedulingExecutionVertex>> allVertices =
+            final LinkedHashMap<StreamVertexID, List<SchedulingExecutionVertex>> allVertices =
                     getExecutionVertices(topology);
 
             // loop on job vertices so that an execution vertex will not be added into a group
@@ -272,14 +272,14 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
         }
 
         private boolean inSameLogicalSlotSharingGroup(
-                final JobVertexID jobVertexId1, final JobVertexID jobVertexId2) {
+                final StreamVertexID jobVertexId1, final StreamVertexID jobVertexId2) {
 
             return Objects.equals(
                     getSlotSharingGroup(jobVertexId1).getSlotSharingGroupId(),
                     getSlotSharingGroup(jobVertexId2).getSlotSharingGroupId());
         }
 
-        private SlotSharingGroup getSlotSharingGroup(final JobVertexID jobVertexId) {
+        private SlotSharingGroup getSlotSharingGroup(final StreamVertexID jobVertexId) {
             // slot sharing group of a vertex would never be null in production
             return checkNotNull(slotSharingGroupMap.get(jobVertexId));
         }
@@ -339,7 +339,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
 
             // Once a new ExecutionSlotSharingGroup is created, it's available for all JobVertices
             // in this SlotSharingGroup
-            for (JobVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
+            for (StreamVertexID jobVertexId : slotSharingGroup.getJobVertexIds()) {
                 Set<ExecutionSlotSharingGroup> availableExecutionSlotSharingGroups =
                         availableGroupsForJobVertex.computeIfAbsent(
                                 jobVertexId, ignore -> new LinkedHashSet<>());
@@ -369,7 +369,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
 
         private LinkedHashSet<ExecutionSlotSharingGroup>
                 computeAllCandidateGroupsForConsumedPartitionGroup(
-                        JobVertexID consumerJobVertexId,
+                        StreamVertexID consumerJobVertexId,
                         ConsumedPartitionGroup consumedPartitionGroup) {
 
             // We tend to reserve the order of ExecutionSlotSharingGroups as they are traversed
@@ -377,7 +377,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
             final LinkedHashSet<ExecutionSlotSharingGroup> candidateExecutionSlotSharingGroups =
                     new LinkedHashSet<>();
 
-            JobVertexID producerJobVertexId =
+            StreamVertexID producerJobVertexId =
                     topology.getResultPartition(consumedPartitionGroup.getFirst())
                             .getProducer()
                             .getId()

@@ -30,25 +30,25 @@ import java.util.Objects;
 
 /**
  * An actor messages describing details of various jobs. This message is sent for example in
- * response to the {@link RequestJobDetails} message.
+ * response to the {@link RequestStreamDetails} message.
  */
-public class MultipleJobsDetails implements ResponseBody, Serializable {
+public class MultipleStreamsDetails implements ResponseBody, Serializable {
 
     private static final long serialVersionUID = -1526236139616019127L;
 
     public static final String FIELD_NAME_JOBS = "jobs";
 
     @JsonProperty(FIELD_NAME_JOBS)
-    private final Collection<JobDetails> jobs;
+    private final Collection<StreamDetails> jobs;
 
     @JsonCreator
-    public MultipleJobsDetails(@JsonProperty(FIELD_NAME_JOBS) Collection<JobDetails> jobs) {
+    public MultipleStreamsDetails(@JsonProperty(FIELD_NAME_JOBS) Collection<StreamDetails> jobs) {
         this.jobs = Preconditions.checkNotNull(jobs);
     }
 
     // ------------------------------------------------------------------------
 
-    public Collection<JobDetails> getJobs() {
+    public Collection<StreamDetails> getJobs() {
         return jobs;
     }
 
@@ -65,7 +65,7 @@ public class MultipleJobsDetails implements ResponseBody, Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MultipleJobsDetails that = (MultipleJobsDetails) o;
+        MultipleStreamsDetails that = (MultipleStreamsDetails) o;
         return Objects.equals(jobs, that.jobs);
     }
 

@@ -36,13 +36,13 @@ import org.apache.flink.runtime.dispatcher.TestingJobMasterServiceLeadershipRunn
 import org.apache.flink.runtime.dispatcher.TestingPartialDispatcherServices;
 import org.apache.flink.runtime.dispatcher.cleanup.CleanupRunnerFactory;
 import org.apache.flink.runtime.dispatcher.cleanup.TestingCleanupRunnerFactory;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
 import org.apache.flink.runtime.jobmanager.TestingJobPersistenceComponentFactory;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.jobmaster.TestingJobManagerRunner;
 import org.apache.flink.runtime.leaderelection.LeaderInformation;
 import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
@@ -91,7 +91,7 @@ class DefaultDispatcherRunnerITCase {
     public static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_RESOURCE =
             TestingUtils.defaultExecutorExtension();
 
-    private JobGraph jobGraph;
+    private StreamGraph jobGraph;
 
     private TestingLeaderElection dispatcherLeaderElection;
 
@@ -99,7 +99,7 @@ class DefaultDispatcherRunnerITCase {
 
     private ExecutionPlanStore executionPlanStore;
 
-    private JobResultStore jobResultStore;
+    private StreamResultStore jobResultStore;
 
     private PartialDispatcherServices partialDispatcherServices;
 
@@ -139,7 +139,7 @@ class DefaultDispatcherRunnerITCase {
             final DispatcherGateway firstDispatcherGateway =
                     electLeaderAndRetrieveGateway(firstLeaderSessionId);
 
-            firstDispatcherGateway.submitJob(jobGraph, TIMEOUT).get();
+            firstDispatcherGateway.submitStream(jobGraph, TIMEOUT).get();
 
             dispatcherLeaderElection.notLeader();
 
@@ -149,7 +149,7 @@ class DefaultDispatcherRunnerITCase {
 
             final Collection<JobID> jobIds = secondDispatcherGateway.listJobs(TIMEOUT).get();
 
-            assertThat(jobIds).containsExactly(jobGraph.getJobID());
+            assertThat(jobIds).containsExactly(jobGraph.getStreamID());
         }
     }
 
@@ -231,7 +231,7 @@ class DefaultDispatcherRunnerITCase {
                                 .get();
                 assertThatFuture(leaderGateway.listJobs(TIMEOUT))
                         .eventuallySucceeds()
-                        .isEqualTo(Collections.singleton(jobGraph.getJobID()));
+                        .isEqualTo(Collections.singleton(jobGraph.getStreamID()));
             }
         }
     }
@@ -252,7 +252,7 @@ class DefaultDispatcherRunnerITCase {
                 RpcService rpcService,
                 DispatcherId fencingToken,
                 Collection<ExecutionPlan> recoveredJobs,
-                Collection<JobResult> recoveredDirtyJobResults,
+                Collection<StreamResult> recoveredDirtyJobResults,
                 DispatcherBootstrapFactory dispatcherBootstrapFactory,
                 PartialDispatcherServicesWithJobPersistenceComponents
                         partialDispatcherServicesWithJobPersistenceComponents)
@@ -270,8 +270,8 @@ class DefaultDispatcherRunnerITCase {
         }
     }
 
-    private static JobGraph createJobGraph() {
-        return JobGraphTestUtils.singleNoOpJobGraph();
+    private static StreamGraph createJobGraph() {
+        return StreamGraphTestUtils.singleNoOpJobGraph();
     }
 
     private DispatcherRunner createDispatcherRunner() throws Exception {

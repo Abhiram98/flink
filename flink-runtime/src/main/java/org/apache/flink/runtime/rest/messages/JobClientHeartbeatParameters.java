@@ -26,7 +26,7 @@ import java.util.Collections;
 /** The parameter when the client reports heartbeat. */
 public class JobClientHeartbeatParameters extends MessageParameters {
 
-    private final JobIDPathParameter jobPathParameter = new JobIDPathParameter();
+    private final StreamIdPathParameter jobPathParameter = new StreamIdPathParameter();
 
     @Override
     public Collection<MessagePathParameter<?>> getPathParameters() {

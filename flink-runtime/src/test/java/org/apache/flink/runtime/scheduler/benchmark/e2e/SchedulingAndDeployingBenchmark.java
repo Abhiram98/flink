@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.benchmark.e2e;
 
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolUtils;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
@@ -58,7 +58,7 @@ public class SchedulingAndDeployingBenchmark extends SchedulerEndToEndBenchmarkB
                             final int numberSlots =
                                     StreamSupport.stream(
                                                     jobGraph.getVertices().spliterator(), false)
-                                            .mapToInt(JobVertex::getParallelism)
+                                            .mapToInt(StreamVertex::getParallelism)
                                             .sum();
                             SlotPoolUtils.tryOfferSlots(
                                     slotPool,

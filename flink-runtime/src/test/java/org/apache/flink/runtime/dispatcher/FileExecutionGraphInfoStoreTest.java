@@ -21,11 +21,11 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.messages.webmonitor.JobDetails;
-import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
+import org.apache.flink.runtime.messages.webmonitor.StreamDetails;
+import org.apache.flink.runtime.messages.webmonitor.StreamsOverview;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
@@ -113,7 +113,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
-        final JobsOverview expectedJobsOverview = JobsOverview.create(jobStatuses);
+        final StreamsOverview expectedJobsOverview = StreamsOverview.create(jobStatuses);
 
         final File rootDir = temporaryFolder.newFolder();
 
@@ -138,7 +138,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> executionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(executionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(executionGraphInfos);
 
         final File rootDir = temporaryFolder.newFolder();
 
@@ -304,7 +304,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
         final Collection<ExecutionGraphInfo> newExecutionGraphInfos =
                 generateTerminalExecutionGraphInfos(numberExecutionGraphs);
 
-        final Collection<JobDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
+        final Collection<StreamDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
 
         try (final FileExecutionGraphInfoStore executionGraphInfoStore =
                 new FileExecutionGraphInfoStore(
@@ -344,13 +344,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
                         rootDir,
                         new ScheduledExecutorServiceAdapter(EXECUTOR_RESOURCE.getExecutor()))) {
             miniCluster.start();
-            final JobVertex vertex = new JobVertex("blockingVertex");
+            final StreamVertex vertex = new StreamVertex("blockingVertex");
             // The adaptive scheduler expects that every vertex has a configured parallelism
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
-            miniCluster.submitJob(jobGraph);
+            final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(vertex);
+            miniCluster.submitStream(jobGraph);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }
     }

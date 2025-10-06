@@ -21,7 +21,7 @@ package org.apache.flink.runtime.metrics.groups;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
@@ -41,7 +41,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>Contains extra logic for adding operators.
  */
 @Internal
-public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGroup> {
+public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerStreamMetricGroup> {
 
     private final Map<String, InternalOperatorMetricGroup> operators = new HashMap<>();
 
@@ -54,7 +54,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
      */
     private final ExecutionAttemptID executionId;
 
-    protected final JobVertexID vertexId;
+    protected final StreamVertexID vertexId;
 
     private final String taskName;
 
@@ -66,7 +66,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
 
     TaskMetricGroup(
             MetricRegistry registry,
-            TaskManagerJobMetricGroup parent,
+            TaskManagerStreamMetricGroup parent,
             ExecutionAttemptID executionId,
             String taskName) {
         super(
@@ -95,7 +95,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
     //  properties
     // ------------------------------------------------------------------------
 
-    public final TaskManagerJobMetricGroup parent() {
+    public final TaskManagerStreamMetricGroup parent() {
         return parent;
     }
 
@@ -134,7 +134,7 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
     protected QueryScopeInfo.TaskQueryScopeInfo createQueryServiceMetricInfo(
             CharacterFilter filter) {
         return new QueryScopeInfo.TaskQueryScopeInfo(
-                this.parent.jobId.toString(),
+                this.parent.streamId.toString(),
                 String.valueOf(this.vertexId),
                 this.subtaskIndex,
                 this.attemptNumber);

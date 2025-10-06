@@ -35,14 +35,11 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.checkpoint.DeclineCheckpoint;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -65,7 +62,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interface for scheduling Flink jobs.
  *
- * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link JobGraph} when
+ * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link StreamGraph} when
  * instantiated.
  *
  * <p>Implementations can expect that methods will not be invoked concurrently. In fact, all
@@ -86,7 +83,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
     boolean updateTaskExecutionState(TaskExecutionStateTransition taskExecutionState);
 
     SerializedInputSplit requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException;
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException;
 
     ExecutionState requestPartitionState(
             IntermediateDataSetID intermediateResultId, ResultPartitionID resultPartitionId)
@@ -110,23 +107,23 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
     // ------------------------------------------------------------------------------------
 
     KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
-            throws UnknownKvStateLocation, FlinkJobNotFoundException;
+            throws UnknownKvStateLocation, FlinkStreamNotFoundException;
 
     void notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
             InetSocketAddress kvStateServerAddress)
-            throws FlinkJobNotFoundException;
+            throws FlinkStreamNotFoundException;
 
     void notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName)
-            throws FlinkJobNotFoundException;
+            throws FlinkStreamNotFoundException;
 
     // ------------------------------------------------------------------------
 

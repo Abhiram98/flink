@@ -23,9 +23,9 @@ import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.dispatcher.DispatcherId;
-import org.apache.flink.runtime.highavailability.JobResultStore;
+import org.apache.flink.runtime.highavailability.StreamResultStore;
 import org.apache.flink.runtime.jobmanager.ExecutionPlanStore;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.rpc.RpcUtils;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
@@ -58,7 +58,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private final ExecutionPlanStore executionPlanStore;
 
-    private final JobResultStore jobResultStore;
+    private final StreamResultStore jobResultStore;
 
     private final Executor ioExecutor;
 
@@ -68,7 +68,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherGatewayServiceFactory,
             ExecutionPlanStore executionPlanStore,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             Executor ioExecutor,
             FatalErrorHandler fatalErrorHandler) {
         super(leaderSessionId, fatalErrorHandler);
@@ -102,14 +102,14 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private void createDispatcherIfRunning(
             Collection<ExecutionPlan> executionPlans,
-            Collection<JobResult> recoveredDirtyJobResults) {
+            Collection<StreamResult> recoveredDirtyJobResults) {
         runIfStateIs(
                 State.RUNNING, () -> createDispatcher(executionPlans, recoveredDirtyJobResults));
     }
 
     private void createDispatcher(
             Collection<ExecutionPlan> executionPlans,
-            Collection<JobResult> recoveredDirtyJobResults) {
+            Collection<StreamResult> recoveredDirtyJobResults) {
 
         final DispatcherGatewayService dispatcherService =
                 dispatcherGatewayServiceFactory.create(
@@ -124,7 +124,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private CompletableFuture<Void>
             createDispatcherBasedOnRecoveredExecutionPlansAndRecoveredDirtyJobResults() {
-        final CompletableFuture<Collection<JobResult>> dirtyJobsFuture =
+        final CompletableFuture<Collection<StreamResult>> dirtyJobsFuture =
                 CompletableFuture.supplyAsync(this::getDirtyJobResultsIfRunning, ioExecutor);
 
         return dirtyJobsFuture
@@ -132,7 +132,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
                         dirtyJobs ->
                                 this.recoverJobsIfRunning(
                                         dirtyJobs.stream()
-                                                .map(JobResult::getJobId)
+                                                .map(StreamResult::getStreamId)
                                                 .collect(Collectors.toSet())),
                         ioExecutor)
                 .thenAcceptBoth(dirtyJobsFuture, this::createDispatcherIfRunning)
@@ -166,7 +166,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
 
     private Collection<JobID> getJobIds() {
         try {
-            return executionPlanStore.getJobIds();
+            return executionPlanStore.getStreamIds();
         } catch (Exception e) {
             throw new FlinkRuntimeException("Could not retrieve job ids of persisted jobs.", e);
         }
@@ -188,12 +188,12 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
         }
     }
 
-    private Collection<JobResult> getDirtyJobResultsIfRunning() {
+    private Collection<StreamResult> getDirtyJobResultsIfRunning() {
         return supplyUnsynchronizedIfRunning(this::getDirtyJobResults)
                 .orElse(Collections.emptyList());
     }
 
-    private Collection<JobResult> getDirtyJobResults() {
+    private Collection<StreamResult> getDirtyJobResults() {
         try {
             return jobResultStore.getDirtyResults();
         } catch (IOException e) {
@@ -221,8 +221,8 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
     // ------------------------------------------------------------
 
     @Override
-    public void onAddedExecutionPlan(JobID jobId) {
-        runIfStateIs(State.RUNNING, () -> handleAddedExecutionPlan(jobId));
+    public void onAddedExecutionPlan(JobID streamId) {
+        runIfStateIs(State.RUNNING, () -> handleAddedExecutionPlan(streamId));
     }
 
     private void handleAddedExecutionPlan(JobID jobId) {
@@ -251,7 +251,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
         final DispatcherGateway dispatcherGateway = getDispatcherGatewayInternal();
 
         return dispatcherGateway
-                .submitJob(executionPlan, RpcUtils.INF_TIMEOUT)
+                .submitStream(executionPlan, RpcUtils.INF_TIMEOUT)
                 .thenApply(FunctionUtils.nullFn())
                 .exceptionally(this::filterOutDuplicateJobSubmissionException);
     }
@@ -282,8 +282,8 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
     }
 
     @Override
-    public void onRemovedExecutionPlan(JobID jobId) {
-        runIfStateIs(State.RUNNING, () -> handleRemovedExecutionPlan(jobId));
+    public void onRemovedExecutionPlan(JobID streamId) {
+        runIfStateIs(State.RUNNING, () -> handleRemovedExecutionPlan(streamId));
     }
 
     private void handleRemovedExecutionPlan(JobID jobId) {
@@ -319,7 +319,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
             UUID leaderSessionId,
             DispatcherGatewayServiceFactory dispatcherFactory,
             ExecutionPlanStore executionPlanStore,
-            JobResultStore jobResultStore,
+            StreamResultStore jobResultStore,
             Executor ioExecutor,
             FatalErrorHandler fatalErrorHandler) {
         return new SessionDispatcherLeaderProcess(

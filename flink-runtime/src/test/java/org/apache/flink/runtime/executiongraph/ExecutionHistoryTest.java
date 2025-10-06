@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.runtime.accumulators.StringifiedAccumulatorResult;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class ExecutionHistoryTest {
     void testSizeLimit() {
         final ExecutionHistory history = new ExecutionHistory(2);
 
-        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         history.add(createArchivedExecution(createExecutionAttemptId(executionVertexId, 0)));
         history.add(createArchivedExecution(createExecutionAttemptId(executionVertexId, 1)));
         history.add(createArchivedExecution(createExecutionAttemptId(executionVertexId, 2)));
@@ -51,7 +51,7 @@ class ExecutionHistoryTest {
     void testValidateAttemptNumber() {
         final ExecutionHistory history = new ExecutionHistory(2);
 
-        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         history.add(createArchivedExecution(createExecutionAttemptId(executionVertexId, 3)));
 
         assertThat(history.isValidAttemptNumber(2)).isTrue();
@@ -63,7 +63,7 @@ class ExecutionHistoryTest {
     void testGetWithInvalidAttemptNumber() {
         final ExecutionHistory history = new ExecutionHistory(2);
 
-        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
+        final ExecutionVertexID executionVertexId = new ExecutionVertexID(new StreamVertexID(), 0);
         history.add(createArchivedExecution(createExecutionAttemptId(executionVertexId, 3)));
 
         assertThatThrownBy(() -> history.getHistoricalExecution(4))

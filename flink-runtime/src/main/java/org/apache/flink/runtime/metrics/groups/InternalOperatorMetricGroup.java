@@ -72,7 +72,7 @@ public class InternalOperatorMetricGroup extends ComponentMetricGroup<TaskMetric
     protected QueryScopeInfo.OperatorQueryScopeInfo createQueryServiceMetricInfo(
             CharacterFilter filter) {
         return new QueryScopeInfo.OperatorQueryScopeInfo(
-                this.parent.parent.jobId.toString(),
+                this.parent.parent.streamId.toString(),
                 this.parent.vertexId.toString(),
                 this.parent.subtaskIndex,
                 this.parent.attemptNumber(),

@@ -18,11 +18,8 @@
 
 package org.apache.flink.runtime.jobgraph.topology;
 
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.TestLogger;
 
@@ -48,9 +45,9 @@ public class DefaultLogicalResultTest extends TestLogger {
 
     private DefaultLogicalResult logicalResult;
 
-    private Map<JobVertexID, JobVertex> vertexMap;
+    private Map<StreamVertexID, StreamVertex> vertexMap;
 
-    private JobVertex producerVertex;
+    private StreamVertex producerVertex;
 
     @Before
     public void setUp() throws Exception {
@@ -78,7 +75,7 @@ public class DefaultLogicalResultTest extends TestLogger {
         producerVertex = createNoOpVertex(parallelism);
         vertexMap.put(producerVertex.getID(), producerVertex);
 
-        final JobVertex consumerVertex = createNoOpVertex(parallelism);
+        final StreamVertex consumerVertex = createNoOpVertex(parallelism);
         final JobEdge edge =
                 consumerVertex.connectNewDataSetAsInput(producerVertex, ALL_TO_ALL, PIPELINED);
         vertexMap.put(consumerVertex.getID(), consumerVertex);

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.executiongraph;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 /** Mutability extension to the {@link VertexAttemptNumberStore}. */
 public interface MutableVertexAttemptNumberStore extends VertexAttemptNumberStore {
@@ -29,5 +29,5 @@ public interface MutableVertexAttemptNumberStore extends VertexAttemptNumberStor
      * @param subtaskIndex subtask to set the attempt number for
      * @param attemptNumber attempt number to set
      */
-    void setAttemptCount(JobVertexID jobVertexId, int subtaskIndex, int attemptNumber);
+    void setAttemptCount(StreamVertexID jobVertexId, int subtaskIndex, int attemptNumber);
 }

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.metrics.groups;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.util.AbstractID;
@@ -48,7 +48,7 @@ public class UnregisteredMetricGroups {
         return new UnregisteredJobManagerMetricGroup();
     }
 
-    public static JobManagerJobMetricGroup createUnregisteredJobManagerJobMetricGroup() {
+    public static StreamManagerStreamMetricGroup createUnregisteredJobManagerJobMetricGroup() {
         return new UnregisteredJobManagerJobMetricGroup();
     }
 
@@ -56,7 +56,7 @@ public class UnregisteredMetricGroups {
         return new UnregisteredTaskManagerMetricGroup();
     }
 
-    public static TaskManagerJobMetricGroup createUnregisteredTaskManagerJobMetricGroup() {
+    public static TaskManagerStreamMetricGroup createUnregisteredTaskManagerJobMetricGroup() {
         return new UnregisteredTaskManagerJobMetricGroup();
     }
 
@@ -73,12 +73,12 @@ public class UnregisteredMetricGroups {
         return new UnregisteredOperatorMetricGroup(parent);
     }
 
-    public static JobManagerOperatorMetricGroup createUnregisteredJobManagerOperatorMetricGroup() {
+    public static StreamManagerOperatorMetricGroup createUnregisteredJobManagerOperatorMetricGroup() {
         return new UnregisteredJobMangerOperatorMetricGroup();
     }
 
-    private static JobManagerOperatorMetricGroup createUnregisteredJobManagerOperatorMetricGroup(
-            JobManagerJobMetricGroup parent) {
+    private static StreamManagerOperatorMetricGroup createUnregisteredJobManagerOperatorMetricGroup(
+            StreamManagerStreamMetricGroup parent) {
         return new UnregisteredJobMangerOperatorMetricGroup(parent);
     }
 
@@ -121,13 +121,13 @@ public class UnregisteredMetricGroups {
         }
 
         @Override
-        public JobManagerJobMetricGroup addJob(JobID jobId, String jobName) {
+        public StreamManagerStreamMetricGroup addJob(JobID jobId, String jobName) {
             return createUnregisteredJobManagerJobMetricGroup();
         }
     }
 
-    /** A safe drop-in replacement for {@link JobManagerJobMetricGroup}s. */
-    public static class UnregisteredJobManagerJobMetricGroup extends JobManagerJobMetricGroup {
+    /** A safe drop-in replacement for {@link StreamManagerStreamMetricGroup}s. */
+    public static class UnregisteredJobManagerJobMetricGroup extends StreamManagerStreamMetricGroup {
         private static final JobID DEFAULT_JOB_ID = new JobID(0, 0);
         private static final String DEFAULT_JOB_NAME = "UnregisteredJob";
 
@@ -140,7 +140,7 @@ public class UnregisteredMetricGroups {
         }
 
         @Override
-        public JobManagerOperatorMetricGroup getOrAddOperator(
+        public StreamManagerOperatorMetricGroup getOrAddOperator(
                 AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
             return createUnregisteredJobManagerOperatorMetricGroup(this);
         }
@@ -156,8 +156,8 @@ public class UnregisteredMetricGroups {
         }
     }
 
-    /** A safe drop-in replacement for {@link TaskManagerJobMetricGroup}s. */
-    public static class UnregisteredTaskManagerJobMetricGroup extends TaskManagerJobMetricGroup {
+    /** A safe drop-in replacement for {@link TaskManagerStreamMetricGroup}s. */
+    public static class UnregisteredTaskManagerJobMetricGroup extends TaskManagerStreamMetricGroup {
         private static final JobID DEFAULT_JOB_ID = new JobID(0, 0);
         private static final String DEFAULT_JOB_NAME = "UnregisteredJob";
 
@@ -209,10 +209,10 @@ public class UnregisteredMetricGroups {
         }
     }
 
-    /** A safe drop-in replacement for {@link JobManagerOperatorMetricGroup}s. */
+    /** A safe drop-in replacement for {@link StreamManagerOperatorMetricGroup}s. */
     public static class UnregisteredJobMangerOperatorMetricGroup
-            extends JobManagerOperatorMetricGroup {
-        private static final JobVertexID DEFAULT_VERTEX_ID = new JobVertexID();
+            extends StreamManagerOperatorMetricGroup {
+        private static final StreamVertexID DEFAULT_VERTEX_ID = new StreamVertexID();
         private static final String DEFAULT_TASK_NAME = "UnregisteredTask";
         private static final OperatorID DEFAULT_OPERATOR_ID = new OperatorID(0, 0);
         private static final String DEFAULT_OPERATOR_NAME = "UnregisteredOperator";
@@ -221,7 +221,7 @@ public class UnregisteredMetricGroups {
             this(new UnregisteredJobManagerJobMetricGroup());
         }
 
-        UnregisteredJobMangerOperatorMetricGroup(JobManagerJobMetricGroup parent) {
+        UnregisteredJobMangerOperatorMetricGroup(StreamManagerStreamMetricGroup parent) {
             super(
                     NoOpMetricRegistry.INSTANCE,
                     parent,

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.json;
 
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonGenerator;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.SerializerProvider;
@@ -26,17 +26,17 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ser.std.S
 
 import java.io.IOException;
 
-/** Jackson serializer for {@link JobVertexID} used as a key serializer. */
-public class JobVertexIDKeySerializer extends StdSerializer<JobVertexID> {
+/** Jackson serializer for {@link StreamVertexID} used as a key serializer. */
+public class JobVertexIDKeySerializer extends StdSerializer<StreamVertexID> {
 
     private static final long serialVersionUID = 2970050507628933522L;
 
     public JobVertexIDKeySerializer() {
-        super(JobVertexID.class);
+        super(StreamVertexID.class);
     }
 
     @Override
-    public void serialize(JobVertexID value, JsonGenerator gen, SerializerProvider provider)
+    public void serialize(StreamVertexID value, JsonGenerator gen, SerializerProvider provider)
             throws IOException {
         gen.writeFieldName(value.toString());
     }

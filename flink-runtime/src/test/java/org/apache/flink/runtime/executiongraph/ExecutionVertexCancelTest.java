@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -246,7 +246,7 @@ class ExecutionVertexCancelTest {
     void testSendCancelAndReceiveFail() throws Exception {
         final SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
-                        JobGraphTestUtils.streamingJobGraph(createNoOpVertex(10)),
+                        StreamGraphTestUtils.streamingStreamGraph(createNoOpVertex(10)),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         final ExecutionGraph graph = scheduler.getExecutionGraph();

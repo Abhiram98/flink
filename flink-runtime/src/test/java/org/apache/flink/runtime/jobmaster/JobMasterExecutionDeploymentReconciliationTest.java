@@ -28,8 +28,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.heartbeat.HeartbeatServices;
 import org.apache.flink.runtime.heartbeat.HeartbeatServicesImpl;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
 import org.apache.flink.runtime.leaderelection.TestingLeaderElection;
@@ -103,7 +103,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
 
         TestingExecutionDeploymentTrackerWrapper deploymentTrackerWrapper =
                 new TestingExecutionDeploymentTrackerWrapper();
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
         try (JobMaster jobMaster =
                 createAndStartJobMaster(onCompletionActions, deploymentTrackerWrapper, jobGraph)) {
             JobMasterGateway jobMasterGateway = jobMaster.getSelfGateway(JobMasterGateway.class);
@@ -120,7 +120,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
 
             registerTaskExecutorAndOfferSlots(
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway,
                     localUnresolvedTaskManagerLocation);
 
@@ -164,7 +164,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
     void testExecutionDeploymentReconciliationForPendingExecution() throws Exception {
         TestingExecutionDeploymentTrackerWrapper deploymentTrackerWrapper =
                 new TestingExecutionDeploymentTrackerWrapper();
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final StreamGraph jobGraph = StreamGraphTestUtils.singleNoOpJobGraph();
         try (JobMaster jobMaster = createAndStartJobMaster(deploymentTrackerWrapper, jobGraph)) {
             JobMasterGateway jobMasterGateway = jobMaster.getSelfGateway(JobMasterGateway.class);
             TESTING_RPC_SERVICE_EXTENSION
@@ -187,7 +187,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
 
             registerTaskExecutorAndOfferSlots(
                     jobMasterGateway,
-                    jobGraph.getJobID(),
+                    jobGraph.getStreamID(),
                     taskExecutorGateway,
                     localUnresolvedTaskManagerLocation);
 
@@ -210,7 +210,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
     }
 
     private JobMaster createAndStartJobMaster(
-            ExecutionDeploymentTracker executionDeploymentTracker, JobGraph jobGraph)
+            ExecutionDeploymentTracker executionDeploymentTracker, StreamGraph jobGraph)
             throws Exception {
         return createAndStartJobMaster(
                 new JobMasterBuilder.TestingOnCompletionActions(),
@@ -221,7 +221,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
     private JobMaster createAndStartJobMaster(
             OnCompletionActions onCompletionActions,
             ExecutionDeploymentTracker executionDeploymentTracker,
-            JobGraph jobGraph)
+            StreamGraph jobGraph)
             throws Exception {
 
         JobMaster jobMaster =

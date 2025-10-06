@@ -42,10 +42,10 @@ public interface LibraryCacheManager {
      * Registers a new class loader lease for the given jobId. The user code class loader for this
      * job will be valid as long as there exists a valid lease for this job.
      *
-     * @param jobId jobId for which to register a new class loader lease
+     * @param streamId jobId for which to register a new class loader lease
      * @return a new class loader lease for the given job
      */
-    ClassLoaderLease registerClassLoaderLease(JobID jobId);
+    ClassLoaderLease registerClassLoaderLease(JobID streamId);
 
     /**
      * Shuts the library cache manager down. Thereby it will close all open {@link ClassLoaderLease}

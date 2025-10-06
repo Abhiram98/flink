@@ -29,9 +29,9 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
@@ -61,8 +61,8 @@ class CachedShuffleDescriptorsTest {
 
     @Test
     void testCreateAndGet() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
         ExecutionGraph eg = buildExecutionGraph(v1, v2, 1, 1, ALL_TO_ALL);
 
         ExecutionJobVertex ejv1 = eg.getJobVertex(v1.getID());
@@ -98,8 +98,8 @@ class CachedShuffleDescriptorsTest {
 
     @Test
     void testMarkPartitionFinishAndSerialize() throws Exception {
-        JobVertex v1 = new JobVertex("source");
-        JobVertex v2 = new JobVertex("sink");
+        StreamVertex v1 = new StreamVertex("source");
+        StreamVertex v2 = new StreamVertex("sink");
         ExecutionGraph eg = buildExecutionGraph(v1, v2, 2, 1, ALL_TO_ALL);
 
         ExecutionJobVertex ejv1 = eg.getJobVertex(v1.getID());
@@ -188,8 +188,8 @@ class CachedShuffleDescriptorsTest {
     }
 
     private ExecutionGraph buildExecutionGraph(
-            JobVertex producer,
-            JobVertex consumer,
+            StreamVertex producer,
+            StreamVertex consumer,
             int producerParallelism,
             int consumerParallelism,
             DistributionPattern distributionPattern)
@@ -203,7 +203,7 @@ class CachedShuffleDescriptorsTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.HYBRID_FULL);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        StreamGraph jobGraph = StreamGraphTestUtils.batchJobGraph(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

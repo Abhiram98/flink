@@ -22,9 +22,9 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
- * This class contains tests that verify when rescaling a {@link JobGraph}, constructed {@link
+ * This class contains tests that verify when rescaling a {@link StreamGraph}, constructed {@link
  * ExecutionGraph}s are correct.
  */
 class DefaultExecutionGraphRescalingTest {
@@ -53,16 +53,16 @@ class DefaultExecutionGraphRescalingTest {
 
         final int initialParallelism = 5;
         final int maxParallelism = 10;
-        final JobVertex[] jobVertices =
+        final StreamVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertices);
 
         ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             assertThat(jv.getParallelism()).isEqualTo(initialParallelism);
         }
         verifyGeneratedExecutionGraphOfSimpleBitartiteJobGraph(eg, jobVertices);
@@ -71,7 +71,7 @@ class DefaultExecutionGraphRescalingTest {
 
         final int scaleDownParallelism = 1;
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             jv.setParallelism(scaleDownParallelism);
         }
 
@@ -80,7 +80,7 @@ class DefaultExecutionGraphRescalingTest {
                         .setJobGraph(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             assertThat(jv.getParallelism()).isOne();
         }
         verifyGeneratedExecutionGraphOfSimpleBitartiteJobGraph(eg, jobVertices);
@@ -89,7 +89,7 @@ class DefaultExecutionGraphRescalingTest {
 
         final int scaleUpParallelism = 10;
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             jv.setParallelism(scaleUpParallelism);
         }
 
@@ -98,14 +98,14 @@ class DefaultExecutionGraphRescalingTest {
                         .setJobGraph(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             assertThat(jv.getParallelism()).isEqualTo(scaleUpParallelism);
         }
         verifyGeneratedExecutionGraphOfSimpleBitartiteJobGraph(eg, jobVertices);
     }
 
     /**
-     * Verifies that building an {@link ExecutionGraph} from a {@link JobGraph} with parallelism
+     * Verifies that building an {@link ExecutionGraph} from a {@link StreamGraph} with parallelism
      * higher than the maximum parallelism fails.
      */
     @Test
@@ -115,11 +115,11 @@ class DefaultExecutionGraphRescalingTest {
 
         final int initialParallelism = 1;
         final int maxParallelism = 10;
-        final JobVertex[] jobVertices =
+        final StreamVertex[] jobVertices =
                 createVerticesForSimpleBipartiteJobGraph(initialParallelism, maxParallelism);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertices);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(jobVertices);
 
-        for (JobVertex jv : jobVertices) {
+        for (StreamVertex jv : jobVertices) {
             jv.setParallelism(maxParallelism + 1);
         }
 
@@ -136,17 +136,17 @@ class DefaultExecutionGraphRescalingTest {
         }
     }
 
-    private static JobVertex[] createVerticesForSimpleBipartiteJobGraph(
+    private static StreamVertex[] createVerticesForSimpleBipartiteJobGraph(
             int parallelism, int maxParallelism) {
-        JobVertex v1 = new JobVertex("vertex1");
-        JobVertex v2 = new JobVertex("vertex2");
-        JobVertex v3 = new JobVertex("vertex3");
-        JobVertex v4 = new JobVertex("vertex4");
-        JobVertex v5 = new JobVertex("vertex5");
+        StreamVertex v1 = new StreamVertex("vertex1");
+        StreamVertex v2 = new StreamVertex("vertex2");
+        StreamVertex v3 = new StreamVertex("vertex3");
+        StreamVertex v4 = new StreamVertex("vertex4");
+        StreamVertex v5 = new StreamVertex("vertex5");
 
-        JobVertex[] jobVertices = new JobVertex[] {v1, v2, v3, v4, v5};
+        StreamVertex[] jobVertices = new StreamVertex[] {v1, v2, v3, v4, v5};
 
-        for (JobVertex jobVertex : jobVertices) {
+        for (StreamVertex jobVertex : jobVertices) {
             jobVertex.setInvokableClass(AbstractInvokable.class);
             jobVertex.setParallelism(parallelism);
             jobVertex.setMaxParallelism(maxParallelism);
@@ -167,7 +167,7 @@ class DefaultExecutionGraphRescalingTest {
     }
 
     private static void verifyGeneratedExecutionGraphOfSimpleBitartiteJobGraph(
-            ExecutionGraph generatedExecutionGraph, JobVertex[] jobVertices) {
+            ExecutionGraph generatedExecutionGraph, StreamVertex[] jobVertices) {
 
         ExecutionGraphTestUtils.verifyGeneratedExecutionJobVertex(
                 generatedExecutionGraph,

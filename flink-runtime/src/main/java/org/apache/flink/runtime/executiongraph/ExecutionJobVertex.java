@@ -34,14 +34,11 @@ import org.apache.flink.runtime.blob.BlobWriter;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStore;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinatorHolder;
@@ -77,7 +74,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * An {@code ExecutionJobVertex} is part of the {@link ExecutionGraph}, and the peer to the {@link
- * JobVertex}.
+ * StreamVertex}.
  *
  * <p>The {@code ExecutionJobVertex} corresponds to a parallelized operation. It contains an {@link
  * ExecutionVertex} for each parallel instance of that operation.
@@ -92,7 +89,7 @@ public class ExecutionJobVertex
 
     private final InternalExecutionGraphAccessor graph;
 
-    private final JobVertex jobVertex;
+    private final StreamVertex jobVertex;
 
     @Nullable private ExecutionVertex[] taskVertices;
 
@@ -127,10 +124,10 @@ public class ExecutionJobVertex
     @VisibleForTesting
     public ExecutionJobVertex(
             InternalExecutionGraphAccessor graph,
-            JobVertex jobVertex,
+            StreamVertex jobVertex,
             VertexParallelismInformation parallelismInfo,
             CoordinatorStore coordinatorStore,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws JobException {
 
         if (graph == null || jobVertex == null) {
@@ -289,7 +286,7 @@ public class ExecutionJobVertex
             SerializedValue<OperatorCoordinator.Provider> provider,
             ClassLoader classLoader,
             CoordinatorStore coordinatorStore,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup)
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
             throws Exception {
         return OperatorCoordinatorHolder.create(
                 provider,
@@ -331,7 +328,7 @@ public class ExecutionJobVertex
         parallelismInfo.setParallelism(parallelism);
     }
 
-    public JobVertex getJobVertex() {
+    public StreamVertex getJobVertex() {
         return jobVertex;
     }
 
@@ -364,7 +361,7 @@ public class ExecutionJobVertex
     }
 
     @Override
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return jobVertex.getID();
     }
 
@@ -664,10 +661,10 @@ public class ExecutionJobVertex
     public static class Factory {
         ExecutionJobVertex createExecutionJobVertex(
                 InternalExecutionGraphAccessor graph,
-                JobVertex jobVertex,
+                StreamVertex jobVertex,
                 VertexParallelismInformation parallelismInfo,
                 CoordinatorStore coordinatorStore,
-                JobManagerJobMetricGroup jobManagerJobMetricGroup)
+                StreamManagerStreamMetricGroup jobManagerJobMetricGroup)
                 throws JobException {
             return new ExecutionJobVertex(
                     graph, jobVertex, parallelismInfo, coordinatorStore, jobManagerJobMetricGroup);

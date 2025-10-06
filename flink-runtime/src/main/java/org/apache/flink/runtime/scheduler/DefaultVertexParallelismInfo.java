@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
 import org.apache.flink.util.Preconditions;
 
@@ -140,7 +140,7 @@ public class DefaultVertexParallelismInfo implements VertexParallelismInformatio
     @Override
     public boolean canRescaleMaxParallelism(int desiredMaxParallelism) {
         // Technically a valid parallelism value, but one that cannot be rescaled to
-        if (desiredMaxParallelism == JobVertex.MAX_PARALLELISM_DEFAULT) {
+        if (desiredMaxParallelism == StreamVertex.MAX_PARALLELISM_DEFAULT) {
             return false;
         }
 

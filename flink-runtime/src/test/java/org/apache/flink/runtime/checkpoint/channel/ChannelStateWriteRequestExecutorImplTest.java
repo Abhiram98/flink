@@ -19,7 +19,7 @@ package org.apache.flink.runtime.checkpoint.channel;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.io.network.buffer.Buffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.util.ExceptionUtils;
@@ -50,7 +50,7 @@ import static org.assertj.core.api.Assertions.fail;
 class ChannelStateWriteRequestExecutorImplTest {
 
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
     private static final int SUBTASK_INDEX = 0;
 
     @Test
@@ -351,14 +351,14 @@ class ChannelStateWriteRequestExecutorImplTest {
         worker.submit(new TestWriteRequest(JOB_VERTEX_ID, SUBTASK_INDEX));
 
         assertThatThrownBy(
-                        () -> worker.submit(new TestWriteRequest(new JobVertexID(), SUBTASK_INDEX)))
+                        () -> worker.submit(new TestWriteRequest(new StreamVertexID(), SUBTASK_INDEX)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("is not yet registered.");
 
         assertThatThrownBy(
                         () ->
                                 worker.submitPriority(
-                                        new TestWriteRequest(new JobVertexID(), SUBTASK_INDEX)))
+                                        new TestWriteRequest(new StreamVertexID(), SUBTASK_INDEX)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("is not yet registered.");
     }
@@ -396,14 +396,14 @@ class ChannelStateWriteRequestExecutorImplTest {
         synchronized (registerLock) {
             for (int i = 0; i < maxSubtasksPerChannelStateFile; i++) {
                 assertThat(worker.isRegistering()).isTrue();
-                worker.registerSubtask(new JobVertexID(), SUBTASK_INDEX);
+                worker.registerSubtask(new StreamVertexID(), SUBTASK_INDEX);
             }
         }
         assertThat(worker.isRegistering()).isFalse();
         assertThatThrownBy(
                         () -> {
                             synchronized (registerLock) {
-                                worker.registerSubtask(new JobVertexID(), SUBTASK_INDEX);
+                                worker.registerSubtask(new StreamVertexID(), SUBTASK_INDEX);
                             }
                         })
                 .isInstanceOf(IllegalStateException.class)
@@ -452,7 +452,7 @@ class ChannelStateWriteRequestExecutorImplTest {
         assertThatThrownBy(
                         () -> {
                             synchronized (registerLock) {
-                                worker.registerSubtask(new JobVertexID(), SUBTASK_INDEX);
+                                worker.registerSubtask(new StreamVertexID(), SUBTASK_INDEX);
                             }
                         })
                 .isInstanceOf(IllegalStateException.class)
@@ -484,7 +484,7 @@ class ChannelStateWriteRequestExecutorImplTest {
         assertThatThrownBy(
                         () -> {
                             synchronized (registerLock) {
-                                worker.registerSubtask(new JobVertexID(), SUBTASK_INDEX);
+                                worker.registerSubtask(new StreamVertexID(), SUBTASK_INDEX);
                             }
                         })
                 .isInstanceOf(IllegalStateException.class)
@@ -496,12 +496,12 @@ class ChannelStateWriteRequestExecutorImplTest {
 
         @Nullable private final CompletableFuture<?> readyFuture;
 
-        public TestWriteRequest(JobVertexID jobVertexID, int subtaskIndex) {
+        public TestWriteRequest(StreamVertexID jobVertexID, int subtaskIndex) {
             this(jobVertexID, subtaskIndex, null);
         }
 
         public TestWriteRequest(
-                JobVertexID jobVertexID,
+                StreamVertexID jobVertexID,
                 int subtaskIndex,
                 @Nullable CompletableFuture<?> readyFuture) {
             super(jobVertexID, subtaskIndex, 0, "Test");

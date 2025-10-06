@@ -20,8 +20,8 @@ package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.messages.EmptyResponseBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -29,12 +29,12 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
 /** Headers for REST request to patch a job. */
 public class JobResourcesRequirementsUpdateHeaders
         implements RuntimeMessageHeaders<
-                JobResourceRequirementsBody, EmptyResponseBody, JobMessageParameters> {
+                JobResourceRequirementsBody, EmptyResponseBody, StreamMessageParameters> {
 
     public static final JobResourcesRequirementsUpdateHeaders INSTANCE =
             new JobResourcesRequirementsUpdateHeaders();
 
-    private static final String URL = "/jobs/:" + JobIDPathParameter.KEY + "/resource-requirements";
+    private static final String URL = "/jobs/:" + StreamIdPathParameter.KEY + "/resource-requirements";
 
     @Override
     public HttpMethodWrapper getHttpMethod() {
@@ -67,8 +67,8 @@ public class JobResourcesRequirementsUpdateHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     @Override

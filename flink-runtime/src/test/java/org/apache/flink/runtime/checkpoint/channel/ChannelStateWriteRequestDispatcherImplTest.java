@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter.ChannelSta
 import org.apache.flink.runtime.io.network.buffer.Buffer;
 import org.apache.flink.runtime.io.network.buffer.FreeingBufferRecycler;
 import org.apache.flink.runtime.io.network.buffer.NetworkBuffer;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ChannelStateWriteRequestDispatcherImplTest {
 
     private static final JobID JOB_ID = new JobID();
-    private static final JobVertexID JOB_VERTEX_ID = new JobVertexID();
+    private static final StreamVertexID JOB_VERTEX_ID = new StreamVertexID();
     private static final int SUBTASK_INDEX = 0;
 
     @Test
@@ -116,9 +116,9 @@ class ChannelStateWriteRequestDispatcherImplTest {
                         new ChannelStateSerializerImpl());
         ChannelStateWriteResult result = new ChannelStateWriteResult();
         processor.dispatch(ChannelStateWriteRequest.registerSubtask(JOB_VERTEX_ID, SUBTASK_INDEX));
-        JobVertexID newJobVertex = JOB_VERTEX_ID;
+        StreamVertexID newJobVertex = JOB_VERTEX_ID;
         if (isDifferentSubtask) {
-            newJobVertex = new JobVertexID();
+            newJobVertex = new StreamVertexID();
             processor.dispatch(
                     ChannelStateWriteRequest.registerSubtask(newJobVertex, SUBTASK_INDEX));
         }
@@ -158,9 +158,9 @@ class ChannelStateWriteRequestDispatcherImplTest {
                         () -> new JobManagerCheckpointStorage().createCheckpointStorage(JOB_ID),
                         new ChannelStateSerializerImpl());
         processor.dispatch(ChannelStateWriteRequest.registerSubtask(JOB_VERTEX_ID, SUBTASK_INDEX));
-        JobVertexID newJobVertex = JOB_VERTEX_ID;
+        StreamVertexID newJobVertex = JOB_VERTEX_ID;
         if (isDifferentSubtask) {
-            newJobVertex = new JobVertexID();
+            newJobVertex = new StreamVertexID();
             processor.dispatch(
                     ChannelStateWriteRequest.registerSubtask(newJobVertex, SUBTASK_INDEX));
         }

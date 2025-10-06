@@ -24,8 +24,8 @@ import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
@@ -39,13 +39,13 @@ import java.util.concurrent.CompletableFuture;
 /** Handler for requesting job status. */
 public class JobStatusHandler
         extends AbstractRestHandler<
-                RestfulGateway, EmptyRequestBody, JobStatusInfo, JobMessageParameters> {
+                RestfulGateway, EmptyRequestBody, JobStatusInfo, StreamMessageParameters> {
 
     public JobStatusHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, JobStatusInfo, JobMessageParameters> messageHeaders) {
+            MessageHeaders<EmptyRequestBody, JobStatusInfo, StreamMessageParameters> messageHeaders) {
         super(leaderRetriever, timeout, responseHeaders, messageHeaders);
     }
 
@@ -53,7 +53,7 @@ public class JobStatusHandler
     protected CompletableFuture<JobStatusInfo> handleRequest(
             @Nonnull HandlerRequest<EmptyRequestBody> request, @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
-        JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         return gateway.requestJobStatus(jobId, timeout).thenApply(JobStatusInfo::new);
     }
 }

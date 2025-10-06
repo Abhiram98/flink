@@ -27,14 +27,14 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Tests for the {@link FileSystemJobResultStore} implementation of the {@link JobResultStore}'s
+ * Tests for the {@link FileSystemJobResultStore} implementation of the {@link StreamResultStore}'s
  * contracts.
  */
-public class FileSystemJobResultStoreContractTest implements JobResultStoreContractTest {
+public class FileSystemJobResultStoreContractTest implements StreamResultStoreContractTest {
     @TempDir File temporaryFolder;
 
     @Override
-    public JobResultStore createJobResultStore() throws IOException {
+    public StreamResultStore createStreamResultStore() throws IOException {
         Path path = new Path(temporaryFolder.toURI());
         return new FileSystemJobResultStore(
                 path.getFileSystem(), path, false, Executors.directExecutor());

@@ -65,11 +65,8 @@ import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
@@ -219,8 +216,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void startScheduling() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
 
         createSchedulerAndStartScheduling(jobGraph);
 
@@ -233,7 +230,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testCorrectSettingOfInitializationTimestamp() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
@@ -254,8 +251,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void deployTasksOnlyWhenAllSlotRequestsAreFulfilled() throws Exception {
-        final JobGraph jobGraph = singleJobVertexJobGraph(4);
-        final JobVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
+        final StreamGraph jobGraph = singleJobVertexJobGraph(4);
+        final StreamVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
@@ -288,8 +285,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void scheduledVertexOrderFromSchedulingStrategyIsRespected() throws Exception {
-        final JobGraph jobGraph = singleJobVertexJobGraph(10);
-        final JobVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
+        final StreamGraph jobGraph = singleJobVertexJobGraph(10);
+        final StreamVertexID onlyJobVertexId = getOnlyJobVertex(jobGraph).getID();
 
         final List<ExecutionVertexID> desiredScheduleOrder =
                 Arrays.asList(
@@ -318,8 +315,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void restartAfterDeploymentFails() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
 
         testExecutionOperations.enableFailDeploy();
 
@@ -337,8 +334,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void restartFailedTask() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
@@ -363,7 +360,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void updateTaskExecutionStateReturnsFalseIfExecutionDoesNotExist() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
         final TaskExecutionState taskExecutionState =
@@ -374,7 +371,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void failJobIfCannotRestart() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         testRestartBackoffTimeStrategy.setCanRestart(false);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -399,7 +396,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void failJobIfNotEnoughResources() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         testRestartBackoffTimeStrategy.setCanRestart(false);
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
@@ -447,12 +444,12 @@ public class DefaultSchedulerTest {
     private void testRestartVerticesOnFailuresInScheduling(
             Consumer<ExecutionVertexID> actionsToTriggerTaskFailure) throws Exception {
         final int parallelism = 2;
-        final JobVertex v1 = createVertex("vertex1", parallelism);
-        final JobVertex v2 = createVertex("vertex2", parallelism);
+        final StreamVertex v1 = createVertex("vertex1", parallelism);
+        final StreamVertex v2 = createVertex("vertex2", parallelism);
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(v1, v2);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(v1, v2);
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
@@ -504,8 +501,8 @@ public class DefaultSchedulerTest {
     void skipDeploymentIfVertexVersionOutdated() {
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
-        final List<JobVertex> sortedJobVertices =
+        final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final List<StreamVertex> sortedJobVertices =
                 jobGraph.getVerticesSortedTopologicallyFromSources();
         final ExecutionVertexID sourceExecutionVertexId =
                 new ExecutionVertexID(sortedJobVertices.get(0).getID(), 0);
@@ -540,7 +537,7 @@ public class DefaultSchedulerTest {
     void releaseSlotIfVertexVersionOutdated() {
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         final ExecutionVertexID onlyExecutionVertexId =
                 new ExecutionVertexID(getOnlyJobVertex(jobGraph).getID(), 0);
 
@@ -554,7 +551,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void vertexIsResetBeforeRestarted() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
                 new TestSchedulingStrategy.Factory();
@@ -591,7 +588,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void scheduleOnlyIfVertexIsCreated() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         final TestSchedulingStrategy.Factory schedulingStrategyFactory =
                 new TestSchedulingStrategy.Factory();
@@ -623,8 +620,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void handleGlobalFailure() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
@@ -651,7 +648,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testRestoreVertexEndOfDataListener() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         enableCheckpointing(jobGraph, null, null, Long.MAX_VALUE - 1, true);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -679,8 +676,8 @@ public class DefaultSchedulerTest {
      */
     @Test
     void handleGlobalFailureWithLocalFailure() {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
         enableCheckpointing(jobGraph);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -742,7 +739,7 @@ public class DefaultSchedulerTest {
 
     private void assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
             Consumer<DefaultScheduler> callSchedulingOperation) {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         enableCheckpointing(jobGraph);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -762,7 +759,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void vertexIsNotAffectedByOutdatedDeployment() {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
 
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -796,7 +793,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void abortPendingCheckpointsWhenRestartingTasks() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         enableCheckpointing(jobGraph);
 
         final CountDownLatch checkpointTriggeredLatch = getCheckpointTriggeredLatch();
@@ -830,7 +827,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void restoreStateWhenRestartingTasks() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         enableCheckpointing(jobGraph);
 
         final CountDownLatch checkpointTriggeredLatch = getCheckpointTriggeredLatch();
@@ -871,7 +868,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testTriggerCheckpointAndCompletedAfterStore() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         enableCheckpointing(jobGraph);
 
         final CountDownLatch checkpointTriggeredLatch = getCheckpointTriggeredLatch();
@@ -926,7 +923,7 @@ public class DefaultSchedulerTest {
                     try {
                         final AcknowledgeCheckpoint acknowledgeCheckpoint =
                                 new AcknowledgeCheckpoint(
-                                        jobGraph.getJobID(), attemptId, checkpointId);
+                                        jobGraph.getStreamID(), attemptId, checkpointId);
                         checkpointCoordinator.receiveAcknowledgeMessage(
                                 acknowledgeCheckpoint, "Unknown location");
                     } catch (Exception e) {
@@ -940,8 +937,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void failGlobalWhenRestoringStateFails() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
         enableCheckpointing(jobGraph);
 
         final CountDownLatch checkpointTriggeredLatch = getCheckpointTriggeredLatch();
@@ -994,8 +991,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void failJobWillIncrementVertexVersions() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
         final ExecutionVertexID onlyExecutionVertexId =
                 new ExecutionVertexID(onlyJobVertex.getID(), 0);
 
@@ -1013,8 +1010,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void cancelJobWillIncrementVertexVersions() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
         final ExecutionVertexID onlyExecutionVertexId =
                 new ExecutionVertexID(onlyJobVertex.getID(), 0);
 
@@ -1029,8 +1026,8 @@ public class DefaultSchedulerTest {
 
     @Test
     void suspendJobWillIncrementVertexVersions() throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
-        final JobVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamVertex onlyJobVertex = getOnlyJobVertex(jobGraph);
         final ExecutionVertexID onlyExecutionVertexId =
                 new ExecutionVertexID(onlyJobVertex.getID(), 0);
 
@@ -1045,7 +1042,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void jobStatusIsRestartingIfOneVertexIsWaitingForRestart() {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
         final Iterator<ArchivedExecutionVertex> vertexIterator =
@@ -1079,7 +1076,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void cancelWhileRestartingShouldWaitForRunningTasks() {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
         final SchedulingTopology topology = scheduler.getSchedulingTopology();
 
@@ -1113,7 +1110,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void failureInfoIsSetAfterTaskFailure() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
         final ArchivedExecutionVertex onlyExecutionVertex =
@@ -1138,7 +1135,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void allocationIsCanceledWhenVertexIsFailedOrCanceled() throws Exception {
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
 
         final DefaultScheduler scheduler =
@@ -1183,7 +1180,7 @@ public class DefaultSchedulerTest {
     void pendingSlotRequestsOfVerticesToRestartWillNotBeFulfilledByReturnedSlots()
             throws Exception {
         final int parallelism = 10;
-        final JobGraph jobGraph = sourceSinkJobGraph(parallelism);
+        final StreamGraph jobGraph = sourceSinkJobGraph(parallelism);
         testExecutionSlotAllocator.disableAutoCompletePendingRequests();
         testExecutionSlotAllocator.enableCompletePendingRequestsWithReturnedSlots();
 
@@ -1232,7 +1229,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testExceptionHistoryWithGlobalFailOver() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
         final ExecutionAttemptID attemptId =
@@ -1271,7 +1268,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testExceptionHistoryWithRestartableFailure() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         final TaskManagerLocation taskManagerLocation = new LocalTaskManagerLocation();
         final TestingLogicalSlotBuilder logicalSlotBuilder = new TestingLogicalSlotBuilder();
@@ -1337,7 +1334,7 @@ public class DefaultSchedulerTest {
     /** Verify DefaultScheduler propagates Task failure labels as generated by Failure Enrichers. */
     @Test
     void testTaskFailureWithFailureEnricherLabels() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
         final TestingFailureEnricher testingFailureEnricher = new TestingFailureEnricher();
         final DefaultScheduler scheduler =
                 createSchedulerAndStartScheduling(
@@ -1449,7 +1446,7 @@ public class DefaultSchedulerTest {
         AtomicBoolean isNewAttempt = new AtomicBoolean(true);
         testRestartBackoffTimeStrategy.setIsNewAttempt(isNewAttempt::get);
 
-        final JobGraph jobGraph = singleJobVertexJobGraph(2);
+        final StreamGraph jobGraph = singleJobVertexJobGraph(2);
 
         final TaskManagerLocation taskManagerLocation = new LocalTaskManagerLocation();
         final TestingLogicalSlotBuilder logicalSlotBuilder = new TestingLogicalSlotBuilder();
@@ -1526,7 +1523,7 @@ public class DefaultSchedulerTest {
 
     @Test
     void testExceptionHistoryTruncation() {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         configuration.set(WebOptions.MAX_EXCEPTION_HISTORY_SIZE, 1);
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -1584,7 +1581,7 @@ public class DefaultSchedulerTest {
                                 })
                         .build();
 
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         final Configuration configuration = new Configuration();
         configuration.set(
@@ -1665,7 +1662,7 @@ public class DefaultSchedulerTest {
                                         .getShuffleDescriptor()
                                         .getResultPartitionID()));
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
 
         createSchedulerAndStartScheduling(jobGraph);
 
@@ -1681,7 +1678,7 @@ public class DefaultSchedulerTest {
     void testFailedProducedPartitionRegistration() {
         shuffleMaster.setAutoCompleteRegistration(false);
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
 
         createSchedulerAndStartScheduling(jobGraph);
 
@@ -1697,7 +1694,7 @@ public class DefaultSchedulerTest {
     void testDirectExceptionOnProducedPartitionRegistration() {
         shuffleMaster.setThrowExceptionalOnRegistration(true);
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
 
         createSchedulerAndStartScheduling(jobGraph);
 
@@ -1716,7 +1713,7 @@ public class DefaultSchedulerTest {
 
             shuffleMaster.setAutoCompleteRegistration(false);
 
-            final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+            final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
 
             timeout = Duration.ofMillis(1);
             createSchedulerAndStartScheduling(jobGraph, mainThreadExecutor);
@@ -1742,7 +1739,7 @@ public class DefaultSchedulerTest {
                                         .getShuffleDescriptor()
                                         .getResultPartitionID()));
 
-        final JobGraph jobGraph = nonParallelSourceSinkJobGraph();
+        final StreamGraph jobGraph = nonParallelSourceSinkJobGraph();
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
 
@@ -1770,7 +1767,7 @@ public class DefaultSchedulerTest {
         try {
             doTestCheckpointCleanerIsClosedAfterCheckpointServices(
                     (checkpointRecoveryFactory, checkpointCleaner) -> {
-                        final JobGraph jobGraph = singleJobVertexJobGraph(1);
+                        final StreamGraph jobGraph = singleJobVertexJobGraph(1);
                         enableCheckpointing(jobGraph);
                         try {
                             return new DefaultSchedulerBuilder(
@@ -1809,11 +1806,11 @@ public class DefaultSchedulerTest {
 
     @Test
     void testStartCheckpointOnlyAfterVertexWithBlockingEdgeFinished() {
-        final JobVertex source = new JobVertex("source");
+        final StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
-        final JobVertex map = new JobVertex("map");
+        final StreamVertex map = new StreamVertex("map");
         map.setInvokableClass(NoOpInvokable.class);
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
 
         sink.connectNewDataSetAsInput(
@@ -1821,7 +1818,7 @@ public class DefaultSchedulerTest {
         map.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(source, map, sink);
+        final StreamGraph jobGraph = StreamGraphTestUtils.streamingStreamGraph(source, map, sink);
         enableCheckpointing(jobGraph, null, null, Long.MAX_VALUE - 1, true);
 
         final DefaultScheduler scheduler = createSchedulerAndStartScheduling(jobGraph);
@@ -1864,7 +1861,7 @@ public class DefaultSchedulerTest {
 
     private void commonJobStatusHookTest(
             ExecutionState expectedExecutionState, JobStatus expectedJobStatus) throws Exception {
-        final JobGraph jobGraph = singleNonParallelJobVertexJobGraph();
+        final StreamGraph jobGraph = singleNonParallelJobVertexJobGraph();
 
         TestingJobStatusHook jobStatusHook = new TestingJobStatusHook();
 
@@ -1915,9 +1912,9 @@ public class DefaultSchedulerTest {
         waitForTermination(scheduler);
         final JobStatus jobStatus = scheduler.requestJobStatus();
         assertThat(jobStatus).isEqualTo(expectedJobStatus);
-        assertThat(onCreatedJobList).singleElement().isEqualTo(jobGraph.getJobID());
+        assertThat(onCreatedJobList).singleElement().isEqualTo(jobGraph.getStreamID());
 
-        assertThat(onCreatedJobList).singleElement().isEqualTo(jobGraph.getJobID());
+        assertThat(onCreatedJobList).singleElement().isEqualTo(jobGraph.getStreamID());
     }
 
     /**
@@ -2030,8 +2027,8 @@ public class DefaultSchedulerTest {
                                                 + executionAttemptId));
     }
 
-    private static JobVertex createVertex(String name, int parallelism) {
-        final JobVertex v = new JobVertex(name);
+    private static StreamVertex createVertex(String name, int parallelism) {
+        final StreamVertex v = new StreamVertex(name);
         v.setParallelism(parallelism);
         v.setInvokableClass(AbstractInvokable.class);
         return v;
@@ -2041,83 +2038,83 @@ public class DefaultSchedulerTest {
         scheduler.getJobTerminationFuture().get(TIMEOUT_MS, TimeUnit.MILLISECONDS);
     }
 
-    public static JobGraph singleNonParallelJobVertexJobGraph() {
+    public static StreamGraph singleNonParallelJobVertexJobGraph() {
         return singleJobVertexJobGraph(1);
     }
 
-    public static JobGraph singleNonParallelJobVertexJobGraphForBatch() {
+    public static StreamGraph singleNonParallelJobVertexJobGraphForBatch() {
         return singleJobVertexJobGraphForBatch(1);
     }
 
-    private static JobGraph singleJobVertexJobGraphForBatch(final int parallelism) {
-        final JobVertex vertex = new JobVertex("source");
+    private static StreamGraph singleJobVertexJobGraphForBatch(final int parallelism) {
+        final StreamVertex vertex = new StreamVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return JobGraphTestUtils.batchJobGraph(vertex);
+        return StreamGraphTestUtils.batchJobGraph(vertex);
     }
 
-    private static JobGraph singleJobVertexJobGraph(final int parallelism) {
-        final JobVertex vertex = new JobVertex("source");
+    private static StreamGraph singleJobVertexJobGraph(final int parallelism) {
+        final StreamVertex vertex = new StreamVertex("source");
         vertex.setInvokableClass(NoOpInvokable.class);
         vertex.setParallelism(parallelism);
-        return JobGraphTestUtils.streamingJobGraph(vertex);
+        return StreamGraphTestUtils.streamingStreamGraph(vertex);
     }
 
-    private static JobGraph nonParallelSourceSinkJobGraph() {
-        final JobVertex source = new JobVertex("source");
+    private static StreamGraph nonParallelSourceSinkJobGraph() {
+        final StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(NoOpInvokable.class);
 
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return StreamGraphTestUtils.streamingStreamGraph(source, sink);
     }
 
-    private static JobGraph sourceSinkJobGraph(final int parallelism) {
-        final JobVertex source = new JobVertex("source");
+    private static StreamGraph sourceSinkJobGraph(final int parallelism) {
+        final StreamVertex source = new StreamVertex("source");
         source.setParallelism(parallelism);
         source.setInvokableClass(NoOpInvokable.class);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setParallelism(parallelism);
         sink.setInvokableClass(NoOpInvokable.class);
 
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        return JobGraphTestUtils.streamingJobGraph(source, sink);
+        return StreamGraphTestUtils.streamingStreamGraph(source, sink);
     }
 
-    private static JobVertex getOnlyJobVertex(final JobGraph jobGraph) {
-        final List<JobVertex> sortedVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
+    private static StreamVertex getOnlyJobVertex(final StreamGraph jobGraph) {
+        final List<StreamVertex> sortedVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         Preconditions.checkState(sortedVertices.size() == 1);
         return sortedVertices.get(0);
     }
 
     private DefaultScheduler createSchedulerAndStartScheduling(
-            final JobGraph jobGraph, final Collection<FailureEnricher> failureEnrichers) {
+            final StreamGraph jobGraph, final Collection<FailureEnricher> failureEnrichers) {
         return createSchedulerAndStartScheduling(
                 jobGraph,
                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                 failureEnrichers);
     }
 
-    private DefaultScheduler createSchedulerAndStartScheduling(final JobGraph jobGraph) {
+    private DefaultScheduler createSchedulerAndStartScheduling(final StreamGraph jobGraph) {
         return createSchedulerAndStartScheduling(
                 jobGraph, ComponentMainThreadExecutorServiceAdapter.forMainThread());
     }
 
     private DefaultScheduler createSchedulerAndStartScheduling(
-            final JobGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor) {
+            final StreamGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor) {
         return createSchedulerAndStartScheduling(
                 jobGraph, mainThreadExecutor, Collections.emptySet());
     }
 
     private DefaultScheduler createSchedulerAndStartScheduling(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final Collection<FailureEnricher> failureEnrichers) {
 
@@ -2132,7 +2129,7 @@ public class DefaultSchedulerTest {
     }
 
     private DefaultScheduler createScheduler(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final SchedulingStrategyFactory schedulingStrategyFactory)
             throws Exception {
@@ -2142,7 +2139,7 @@ public class DefaultSchedulerTest {
     }
 
     private DefaultScheduler createScheduler(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final SchedulingStrategyFactory schedulingStrategyFactory,
             final FailoverStrategy.Factory failoverStrategyFactory)
@@ -2154,7 +2151,7 @@ public class DefaultSchedulerTest {
     }
 
     private DefaultScheduler createScheduler(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final SchedulingStrategyFactory schedulingStrategyFactory,
             final FailoverStrategy.Factory failoverStrategyFactory,
@@ -2168,12 +2165,12 @@ public class DefaultSchedulerTest {
     }
 
     private DefaultSchedulerBuilder createSchedulerBuilder(
-            final JobGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor) {
+            final StreamGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor) {
         return createSchedulerBuilder(jobGraph, mainThreadExecutor, Collections.emptySet());
     }
 
     private DefaultSchedulerBuilder createSchedulerBuilder(
-            final JobGraph jobGraph,
+            final StreamGraph jobGraph,
             final ComponentMainThreadExecutor mainThreadExecutor,
             final Collection<FailureEnricher> failureEnrichers) {
         return new DefaultSchedulerBuilder(

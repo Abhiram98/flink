@@ -39,7 +39,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -94,7 +94,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
 
     @Nonnull
     private final BiFunction<
-                    JobVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
+            StreamVertexID, ExecutionAttemptID, CompletableFuture<SerializedInputSplit>>
             requestNextInputSplitFunction;
 
     @Nonnull
@@ -165,13 +165,13 @@ public class TestingJobMasterGateway implements JobMasterGateway {
 
     @Nonnull
     private final Function<
-                    Tuple6<JobID, JobVertexID, KeyGroupRange, String, KvStateID, InetSocketAddress>,
+                    Tuple6<JobID, StreamVertexID, KeyGroupRange, String, KvStateID, InetSocketAddress>,
                     CompletableFuture<Acknowledge>>
             notifyKvStateRegisteredFunction;
 
     @Nonnull
     private final Function<
-                    Tuple4<JobID, JobVertexID, KeyGroupRange, String>,
+                    Tuple4<JobID, StreamVertexID, KeyGroupRange, String>,
                     CompletableFuture<Acknowledge>>
             notifyKvStateUnregisteredFunction;
 
@@ -218,7 +218,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
                             updateTaskExecutionStateFunction,
             @Nonnull
                     BiFunction<
-                                    JobVertexID,
+                            StreamVertexID,
                                     ExecutionAttemptID,
                                     CompletableFuture<SerializedInputSplit>>
                             requestNextInputSplitFunction,
@@ -284,7 +284,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
                     Function<
                                     Tuple6<
                                             JobID,
-                                            JobVertexID,
+                                            StreamVertexID,
                                             KeyGroupRange,
                                             String,
                                             KvStateID,
@@ -293,7 +293,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
                             notifyKvStateRegisteredFunction,
             @Nonnull
                     Function<
-                                    Tuple4<JobID, JobVertexID, KeyGroupRange, String>,
+                                    Tuple4<JobID, StreamVertexID, KeyGroupRange, String>,
                                     CompletableFuture<Acknowledge>>
                             notifyKvStateUnregisteredFunction,
             @Nonnull
@@ -382,7 +382,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
 
     @Override
     public CompletableFuture<SerializedInputSplit> requestNextInputSplit(
-            JobVertexID vertexID, ExecutionAttemptID executionAttempt) {
+            StreamVertexID vertexID, ExecutionAttemptID executionAttempt) {
         return requestNextInputSplitFunction.apply(vertexID, executionAttempt);
     }
 
@@ -526,7 +526,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
     @Override
     public CompletableFuture<Acknowledge> notifyKvStateRegistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName,
             KvStateID kvStateId,
@@ -544,7 +544,7 @@ public class TestingJobMasterGateway implements JobMasterGateway {
     @Override
     public CompletableFuture<Acknowledge> notifyKvStateUnregistered(
             JobID jobId,
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             KeyGroupRange keyGroupRange,
             String registrationName) {
         return notifyKvStateUnregisteredFunction.apply(

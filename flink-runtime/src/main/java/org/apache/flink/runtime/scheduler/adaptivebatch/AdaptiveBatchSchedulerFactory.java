@@ -40,11 +40,8 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategyFactoryL
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroupComputeUtil;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
@@ -55,7 +52,7 @@ import org.apache.flink.runtime.jobmaster.slotpool.PhysicalSlotProviderImpl;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotSelectionStrategy;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.scheduler.DefaultExecutionGraphFactory;
 import org.apache.flink.runtime.scheduler.DefaultExecutionOperations;
@@ -99,7 +96,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
@@ -108,7 +105,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,
             BlobWriter blobWriter,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             Duration slotRequestTimeout,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker partitionTracker,
@@ -145,7 +142,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                 "Using restart back off time strategy {} for {} ({}).",
                 restartBackoffTimeStrategy,
                 jobGraph.getName(),
-                jobGraph.getJobID());
+                jobGraph.getStreamID());
 
         final boolean isJobRecoveryEnabled =
                 jobMasterConfiguration.get(BatchExecutionOptions.JOB_RECOVERY_ENABLED)
@@ -154,7 +151,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         BatchJobRecoveryHandler jobRecoveryHandler;
         if (isJobRecoveryEnabled) {
             FileSystemJobEventStore jobEventStore =
-                    new FileSystemJobEventStore(jobGraph.getJobID(), jobMasterConfiguration);
+                    new FileSystemJobEventStore(jobGraph.getStreamID(), jobMasterConfiguration);
             JobEventManager jobEventManager = new JobEventManager(jobEventStore);
             jobRecoveryHandler =
                     new DefaultBatchJobRecoveryHandler(jobEventManager, jobMasterConfiguration);
@@ -195,7 +192,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     @VisibleForTesting
     public static AdaptiveBatchScheduler createScheduler(
             Logger log,
-            JobGraph jobGraph,
+            StreamGraph jobGraph,
             ExecutionConfig executionConfig,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
@@ -204,7 +201,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,
             BlobWriter blobWriter,
-            JobManagerJobMetricGroup jobManagerJobMetricGroup,
+            StreamManagerStreamMetricGroup jobManagerJobMetricGroup,
             ShuffleMaster<?> shuffleMaster,
             JobMasterPartitionTracker partitionTracker,
             ExecutionDeploymentTracker executionDeploymentTracker,
@@ -256,7 +253,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         int defaultMaxParallelism =
                 getDefaultMaxParallelism(jobMasterConfiguration, executionConfig);
 
-        final Map<JobVertexID, ForwardGroup> forwardGroupsByJobVertexId =
+        final Map<StreamVertexID, ForwardGroup> forwardGroupsByJobVertexId =
                 ForwardGroupComputeUtil.computeForwardGroupsAndCheckParallelism(
                         jobGraph.getVerticesSortedTopologicallyFromSources());
 
@@ -355,8 +352,8 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
         }
     }
 
-    private static void checkAllExchangesAreSupported(final JobGraph jobGraph) {
-        for (JobVertex jobVertex : jobGraph.getVertices()) {
+    private static void checkAllExchangesAreSupported(final StreamGraph jobGraph) {
+        for (StreamVertex jobVertex : jobGraph.getVertices()) {
             for (IntermediateDataSet dataSet : jobVertex.getProducedDataSets()) {
                 checkState(
                         dataSet.getResultType().isBlockingOrBlockingPersistentResultPartition()

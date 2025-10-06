@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.core.plugin.PluginManager;
-import org.apache.flink.runtime.metrics.groups.TaskManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.TaskManagerStreamMetricGroup;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.util.FlinkRuntimeException;
 
@@ -90,7 +90,7 @@ public class StateChangelogStorageLoader {
     public static StateChangelogStorage<?> load(
             JobID jobID,
             Configuration configuration,
-            TaskManagerJobMetricGroup metricGroup,
+            TaskManagerStreamMetricGroup metricGroup,
             LocalRecoveryConfig localRecoveryConfig)
             throws IOException {
         final String identifier =

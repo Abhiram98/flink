@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph.failover;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalTopology;
 import org.apache.flink.runtime.jobgraph.topology.LogicalVertex;
 
@@ -47,9 +47,9 @@ class LogicalPipelinedRegionComputeUtilTest {
      */
     @Test
     void testIsolatedVertices() {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
 
         Set<Set<LogicalVertex>> regions = computePipelinedRegions(v1, v2, v3);
 
@@ -81,9 +81,9 @@ class LogicalPipelinedRegionComputeUtilTest {
             ResultPartitionType resultPartitionType2,
             int numOfRegions,
             int... regionSizes) {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
 
         v2.connectNewDataSetAsInput(v1, DistributionPattern.ALL_TO_ALL, resultPartitionType1);
         v3.connectNewDataSetAsInput(v2, DistributionPattern.POINTWISE, resultPartitionType2);
@@ -109,10 +109,10 @@ class LogicalPipelinedRegionComputeUtilTest {
      */
     @Test
     void testTwoInputsMergesIntoOne() {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
-        JobVertex v4 = new JobVertex("v4");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
+        StreamVertex v4 = new StreamVertex("v4");
 
         v3.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
@@ -142,10 +142,10 @@ class LogicalPipelinedRegionComputeUtilTest {
      */
     @Test
     void testOneInputSplitsIntoTwo() {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
-        JobVertex v4 = new JobVertex("v4");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
+        StreamVertex v4 = new StreamVertex("v4");
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
@@ -178,10 +178,10 @@ class LogicalPipelinedRegionComputeUtilTest {
      */
     @Test
     void testDiamondWithMixedPipelinedAndBlockingEdges() {
-        JobVertex v1 = new JobVertex("v1");
-        JobVertex v2 = new JobVertex("v2");
-        JobVertex v3 = new JobVertex("v3");
-        JobVertex v4 = new JobVertex("v4");
+        StreamVertex v1 = new StreamVertex("v1");
+        StreamVertex v2 = new StreamVertex("v2");
+        StreamVertex v3 = new StreamVertex("v3");
+        StreamVertex v4 = new StreamVertex("v4");
 
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
@@ -197,7 +197,7 @@ class LogicalPipelinedRegionComputeUtilTest {
         checkRegionSize(regions, 1, 4);
     }
 
-    private static Set<Set<LogicalVertex>> computePipelinedRegions(JobVertex... vertices) {
+    private static Set<Set<LogicalVertex>> computePipelinedRegions(StreamVertex... vertices) {
         DefaultLogicalTopology topology =
                 DefaultLogicalTopology.fromTopologicallySortedJobVertices(Arrays.asList(vertices));
         return LogicalPipelinedRegionComputeUtil.computePipelinedRegions(topology.getVertices());

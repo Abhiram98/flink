@@ -29,11 +29,11 @@ import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.dispatcher.TriggerSavepointMode;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobmaster.JobResult;
+import org.apache.flink.runtime.jobmaster.StreamResult;
 import org.apache.flink.runtime.messages.Acknowledge;
-import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
+import org.apache.flink.runtime.messages.FlinkStreamNotFoundException;
 import org.apache.flink.runtime.messages.webmonitor.ClusterOverview;
-import org.apache.flink.runtime.messages.webmonitor.MultipleJobsDetails;
+import org.apache.flink.runtime.messages.webmonitor.MultipleStreamsDetails;
 import org.apache.flink.runtime.metrics.dump.MetricQueryService;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -69,12 +69,12 @@ public interface RestfulGateway extends RpcGateway {
 
     /**
      * Requests the {@link ArchivedExecutionGraph} for the given jobId. If there is no such graph,
-     * then the future is completed with a {@link FlinkJobNotFoundException}.
+     * then the future is completed with a {@link FlinkStreamNotFoundException}.
      *
      * @param jobId identifying the job whose {@link ArchivedExecutionGraph} is requested
      * @param timeout for the asynchronous operation
      * @return Future containing the {@link ArchivedExecutionGraph} for the given jobId, otherwise
-     *     {@link FlinkJobNotFoundException}
+     *     {@link FlinkStreamNotFoundException}
      */
     default CompletableFuture<ArchivedExecutionGraph> requestJob(
             JobID jobId, @RpcTimeout Duration timeout) {
@@ -85,12 +85,12 @@ public interface RestfulGateway extends RpcGateway {
     /**
      * Requests the {@link ExecutionGraphInfo} containing additional information besides the {@link
      * ArchivedExecutionGraph}. If there is no such graph, then the future is completed with a
-     * {@link FlinkJobNotFoundException}.
+     * {@link FlinkStreamNotFoundException}.
      *
      * @param jobId identifying the job whose {@link ExecutionGraphInfo} is requested
      * @param timeout for the asynchronous operation
      * @return Future containing the {@link ExecutionGraphInfo} for the given jobId, otherwise
-     *     {@link FlinkJobNotFoundException}
+     *     {@link FlinkStreamNotFoundException}
      */
     CompletableFuture<ExecutionGraphInfo> requestExecutionGraphInfo(
             JobID jobId, @RpcTimeout Duration timeout);
@@ -106,13 +106,13 @@ public interface RestfulGateway extends RpcGateway {
             JobID jobId, @RpcTimeout Duration timeout);
 
     /**
-     * Requests the {@link JobResult} of a job specified by the given jobId.
+     * Requests the {@link StreamResult} of a job specified by the given jobId.
      *
-     * @param jobId identifying the job for which to retrieve the {@link JobResult}.
+     * @param jobId identifying the job for which to retrieve the {@link StreamResult}.
      * @param timeout for the asynchronous operation
-     * @return Future which is completed with the job's {@link JobResult} once the job has finished
+     * @return Future which is completed with the job's {@link StreamResult} once the job has finished
      */
-    CompletableFuture<JobResult> requestJobResult(JobID jobId, @RpcTimeout Duration timeout);
+    CompletableFuture<StreamResult> requestJobResult(JobID jobId, @RpcTimeout Duration timeout);
 
     /**
      * Requests job details currently being executed on the Flink cluster.
@@ -120,7 +120,7 @@ public interface RestfulGateway extends RpcGateway {
      * @param timeout for the asynchronous operation
      * @return Future containing the job details
      */
-    CompletableFuture<MultipleJobsDetails> requestMultipleJobDetails(@RpcTimeout Duration timeout);
+    CompletableFuture<MultipleStreamsDetails> requestMultipleJobDetails(@RpcTimeout Duration timeout);
 
     /**
      * Requests the cluster status overview.

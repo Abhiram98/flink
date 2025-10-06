@@ -62,7 +62,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointableTask;
 import org.apache.flink.runtime.jobgraph.tasks.CoordinatedTask;
@@ -166,7 +166,7 @@ public class Task
     private final JobType jobType;
 
     /** The vertex in the JobGraph whose code the task executes. */
-    private final JobVertexID vertexId;
+    private final StreamVertexID vertexId;
 
     /** The execution attempt of the parallel subtask. */
     private final ExecutionAttemptID executionId;
@@ -447,7 +447,7 @@ public class Task
         return jobId;
     }
 
-    public JobVertexID getJobVertexId() {
+    public StreamVertexID getJobVertexId() {
         return vertexId;
     }
 

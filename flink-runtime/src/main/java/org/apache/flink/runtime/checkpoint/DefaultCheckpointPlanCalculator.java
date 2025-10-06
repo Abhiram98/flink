@@ -28,7 +28,7 @@ import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,7 +182,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
         // First collect the task running status into BitSet so that we could
         // do JobVertex level judgement for some vertices and avoid time-consuming
         // access to volatile isFinished flag of Execution.
-        Map<JobVertexID, BitSet> taskRunningStatusByVertex = collectTaskRunningStatus();
+        Map<StreamVertexID, BitSet> taskRunningStatusByVertex = collectTaskRunningStatus();
 
         List<Execution> tasksToTrigger = new ArrayList<>();
         List<Execution> tasksToWaitFor = new ArrayList<>();
@@ -241,7 +241,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
     }
 
     private boolean someTasksMustBeTriggered(
-            Map<JobVertexID, BitSet> runningTasksByVertex, List<JobEdge> prevJobEdges) {
+            Map<StreamVertexID, BitSet> runningTasksByVertex, List<JobEdge> prevJobEdges) {
 
         for (JobEdge jobEdge : prevJobEdges) {
             DistributionPattern distributionPattern = jobEdge.getDistributionPattern();
@@ -280,7 +280,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
     private boolean hasRunningPrecedentTasks(
             ExecutionVertex vertex,
             List<JobEdge> prevJobEdges,
-            Map<JobVertexID, BitSet> taskRunningStatusByVertex) {
+            Map<StreamVertexID, BitSet> taskRunningStatusByVertex) {
 
         InternalExecutionGraphAccessor executionGraphAccessor = vertex.getExecutionGraphAccessor();
 
@@ -311,8 +311,8 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
      * @return The task running status for each job vertex.
      */
     @VisibleForTesting
-    Map<JobVertexID, BitSet> collectTaskRunningStatus() {
-        Map<JobVertexID, BitSet> runningStatusByVertex = new HashMap<>();
+    Map<StreamVertexID, BitSet> collectTaskRunningStatus() {
+        Map<StreamVertexID, BitSet> runningStatusByVertex = new HashMap<>();
 
         for (ExecutionJobVertex vertex : jobVerticesInTopologyOrder) {
             BitSet runningTasks = new BitSet(vertex.getTaskVertices().length);

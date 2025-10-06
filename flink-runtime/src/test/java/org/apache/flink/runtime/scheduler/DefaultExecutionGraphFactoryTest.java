@@ -37,13 +37,13 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.TestUtils;
-import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
+import org.apache.flink.runtime.metrics.groups.StreamManagerStreamMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.shuffle.ShuffleTestUtils;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
@@ -96,7 +96,7 @@ class DefaultExecutionGraphFactoryTest {
 
     @Test
     void testRestoringModifiedJobFromSavepointFails() throws Exception {
-        final JobGraph jobGraphWithNewOperator = createJobGraphWithSavepoint(false, 42L, 1);
+        final StreamGraph jobGraphWithNewOperator = createJobGraphWithSavepoint(false, 42L, 1);
 
         final ExecutionGraphFactory executionGraphFactory = createExecutionGraphFactory();
 
@@ -127,7 +127,7 @@ class DefaultExecutionGraphFactoryTest {
     void testRestoringModifiedJobFromSavepointWithAllowNonRestoredStateSucceeds() throws Exception {
         // create savepoint data
         final long savepointId = 42L;
-        final JobGraph jobGraphWithNewOperator = createJobGraphWithSavepoint(true, savepointId, 1);
+        final StreamGraph jobGraphWithNewOperator = createJobGraphWithSavepoint(true, savepointId, 1);
 
         final ExecutionGraphFactory executionGraphFactory = createExecutionGraphFactory();
 
@@ -156,10 +156,10 @@ class DefaultExecutionGraphFactoryTest {
     @Test
     void testCheckpointStatsTrackerUpdatedWithNewParallelism() throws Exception {
         final long savepointId = 42L;
-        final JobGraph jobGraphWithParallelism2 = createJobGraphWithSavepoint(true, savepointId, 2);
+        final StreamGraph jobGraphWithParallelism2 = createJobGraphWithSavepoint(true, savepointId, 2);
 
         List<Span> spans = new ArrayList<>();
-        final JobManagerJobMetricGroup jobManagerJobMetricGroup =
+        final StreamManagerStreamMetricGroup jobManagerJobMetricGroup =
                 new UnregisteredMetricGroups.UnregisteredJobManagerJobMetricGroup() {
                     @Override
                     public void addSpan(SpanBuilder spanBuilder) {
@@ -217,7 +217,7 @@ class DefaultExecutionGraphFactoryTest {
     }
 
     private ExecutionGraphFactory createExecutionGraphFactory(
-            JobManagerJobMetricGroup metricGroup) {
+            StreamManagerStreamMetricGroup metricGroup) {
         return new DefaultExecutionGraphFactory(
                 new Configuration(),
                 ClassLoader.getSystemClassLoader(),
@@ -232,7 +232,7 @@ class DefaultExecutionGraphFactoryTest {
     }
 
     @Nonnull
-    private JobGraph createJobGraphWithSavepoint(
+    private StreamGraph createJobGraphWithSavepoint(
             boolean allowNonRestoredState, long savepointId, int parallelism) throws IOException {
         // create savepoint data
         final OperatorID operatorID = new OperatorID();
@@ -245,7 +245,7 @@ class DefaultExecutionGraphFactoryTest {
                         savepointFile.getAbsolutePath(), allowNonRestoredState);
 
         // create a new operator
-        final JobVertex jobVertex = new JobVertex("New operator");
+        final StreamVertex jobVertex = new StreamVertex("New operator");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(parallelism);
 

@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** An actor message with a detailed overview of the current status of a job. */
-public class JobDetails implements Serializable {
+public class StreamDetails implements Serializable {
 
     private static final long serialVersionUID = -3391462110304948766L;
 
@@ -93,7 +93,7 @@ public class JobDetails implements Serializable {
     private final Map<String, Map<Integer, CurrentAttempts>> currentExecutionAttempts;
 
     @JsonCreator
-    public JobDetails(
+    public StreamDetails(
             @JsonProperty(FIELD_NAME_JOB_ID) @JsonDeserialize(using = JobIDDeserializer.class)
                     JobID jobId,
             @JsonProperty(FIELD_NAME_JOB_NAME) String jobName,
@@ -116,7 +116,7 @@ public class JobDetails implements Serializable {
     }
 
     @VisibleForTesting
-    public JobDetails(
+    public StreamDetails(
             JobID jobId,
             String jobName,
             long startTime,
@@ -139,7 +139,7 @@ public class JobDetails implements Serializable {
                 new HashMap<>());
     }
 
-    public JobDetails(
+    public StreamDetails(
             JobID jobId,
             String jobName,
             long startTime,
@@ -166,7 +166,7 @@ public class JobDetails implements Serializable {
         this.currentExecutionAttempts = checkNotNull(currentExecutionAttempts);
     }
 
-    public static JobDetails createDetailsForJob(AccessExecutionGraph job) {
+    public static StreamDetails createDetailsForJob(AccessExecutionGraph job) {
         JobStatus status = job.getState();
 
         long started = job.getStatusTimestamp(JobStatus.INITIALIZING);
@@ -205,8 +205,8 @@ public class JobDetails implements Serializable {
 
         lastChanged = Math.max(lastChanged, finished);
 
-        return new JobDetails(
-                job.getJobID(),
+        return new StreamDetails(
+                job.getStreamID(),
                 job.getJobName(),
                 started,
                 finished,
@@ -300,8 +300,8 @@ public class JobDetails implements Serializable {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (o != null && o.getClass() == JobDetails.class) {
-            JobDetails that = (JobDetails) o;
+        } else if (o != null && o.getClass() == StreamDetails.class) {
+            StreamDetails that = (StreamDetails) o;
 
             return this.endTime == that.endTime
                     && this.lastUpdateTime == that.lastUpdateTime

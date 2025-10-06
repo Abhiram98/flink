@@ -16,23 +16,20 @@
  * limitations under the License.
  */
 
-package org.apache.flink.runtime.rest.messages;
+package org.apache.flink.runtime.client;
 
-import java.util.Collection;
-import java.util.Collections;
+import org.apache.flink.api.common.JobID;
 
-/** Message parameters which require a job path parameter. */
-public class JobMessageParameters extends MessageParameters {
+/** This exception denotes an error while submitting a job to the JobManager. */
+public class StreamSubmissionException extends JobExecutionException {
 
-    public final JobIDPathParameter jobPathParameter = new JobIDPathParameter();
+    private static final long serialVersionUID = 2818087325120827526L;
 
-    @Override
-    public Collection<MessagePathParameter<?>> getPathParameters() {
-        return Collections.singleton(jobPathParameter);
+    public StreamSubmissionException(final JobID streamId, final String msg, final Throwable cause) {
+        super(streamId, msg, cause);
     }
 
-    @Override
-    public Collection<MessageQueryParameter<?>> getQueryParameters() {
-        return Collections.emptySet();
+    public StreamSubmissionException(final JobID streamId, final String msg) {
+        super(streamId, msg);
     }
 }

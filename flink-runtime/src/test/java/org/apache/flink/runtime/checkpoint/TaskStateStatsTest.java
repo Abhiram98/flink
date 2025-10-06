@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ class TaskStateStatsTest {
     }
 
     private void test(boolean serialize) throws Exception {
-        JobVertexID jobVertexId = new JobVertexID();
+        StreamVertexID jobVertexId = new StreamVertexID();
         SubtaskStateStats[] subtasks = new SubtaskStateStats[7];
 
         TaskStateStats taskStats = new TaskStateStats(jobVertexId, subtasks.length);

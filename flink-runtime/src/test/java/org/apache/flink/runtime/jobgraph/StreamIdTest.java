@@ -16,22 +16,35 @@
  * limitations under the License.
  */
 
-package org.apache.flink.client.deployment.application.executors;
+package org.apache.flink.runtime.jobgraph;
 
-import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.core.execution.JobClient;
 
-/** An interface to be implemented by {@link JobClient} suppliers. */
-@Internal
-public interface EmbeddedJobClientCreator {
+import org.junit.Test;
 
-    /**
-     * Creates a {@link JobClient} that is adequate for the context in which the job is executed.
-     *
-     * @param jobId the job id of the job associated with the returned client.
-     * @param userCodeClassloader the class loader to deserialize user code.
-     * @return the job client.
-     */
-    JobClient getJobClient(final JobID jobId, final ClassLoader userCodeClassloader);
+import java.nio.ByteBuffer;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class StreamIdTest {
+
+    @Test
+    public void testConvertToByteBuffer() {
+        try {
+            JobID origID = new JobID();
+
+            byte[] bytes = origID.getBytes();
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+            JobID copy1 = JobID.fromByteBuffer(buffer);
+            JobID copy2 = JobID.fromByteArray(bytes);
+
+            assertEquals(origID, copy1);
+            assertEquals(origID, copy2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 }

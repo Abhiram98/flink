@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job.coordination;
 
 import org.apache.flink.runtime.rest.handler.job.coordination.ClientCoordinationHandler;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageParameters;
 import org.apache.flink.runtime.rest.messages.MessagePathParameter;
 import org.apache.flink.runtime.rest.messages.MessageQueryParameter;
@@ -32,7 +32,7 @@ import java.util.Collections;
 /** {@link MessageParameters} for {@link ClientCoordinationHandler}. */
 public class ClientCoordinationMessageParameters extends MessageParameters {
 
-    public final JobIDPathParameter jobPathParameter = new JobIDPathParameter();
+    public final StreamIdPathParameter jobPathParameter = new StreamIdPathParameter();
     public final OperatorUidPathParameter operatorUidPathParameter = new OperatorUidPathParameter();
 
     @Override

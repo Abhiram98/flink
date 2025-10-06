@@ -23,7 +23,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
@@ -42,7 +42,7 @@ import java.util.concurrent.Executor;
  * @param <M> the message parameter type
  */
 public abstract class AbstractAccessExecutionGraphHandler<
-                R extends ResponseBody, M extends JobMessageParameters>
+                R extends ResponseBody, M extends StreamMessageParameters>
         extends AbstractExecutionGraphHandler<R, M> {
 
     protected AbstractAccessExecutionGraphHandler(

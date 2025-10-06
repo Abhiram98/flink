@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.benchmark.failover;
 
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
 import org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkBase;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingTopology;
@@ -33,8 +33,8 @@ import static org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkUti
 /** The base class of benchmarks related to failover. */
 public class FailoverBenchmarkBase extends SchedulerBenchmarkBase {
 
-    JobVertex source;
-    List<JobVertex> jobVertices;
+    StreamVertex source;
+    List<StreamVertex> jobVertices;
 
     ExecutionGraph executionGraph;
     SchedulingTopology schedulingTopology;

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler.adaptivebatch;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.ParallelismAndInputInfos;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.StreamVertexID;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public interface VertexParallelismAndInputInfosDecider {
      * @return the parallelism and vertex input infos.
      */
     ParallelismAndInputInfos decideParallelismAndInputInfosForVertex(
-            JobVertexID jobVertexId,
+            StreamVertexID jobVertexId,
             List<BlockingResultInfo> consumedResults,
             int vertexInitialParallelism,
             int vertexMinParallelism,
@@ -59,7 +59,7 @@ public interface VertexParallelismAndInputInfosDecider {
      * @param maxParallelism The max parallelism of the job vertex.
      * @return the upper bound parallelism for the source vertex.
      */
-    int computeSourceParallelismUpperBound(JobVertexID jobVertexId, int maxParallelism);
+    int computeSourceParallelismUpperBound(StreamVertexID jobVertexId, int maxParallelism);
 
     /**
      * Get the average size of data volume to expect each task instance to process.

@@ -33,8 +33,8 @@ public enum NoOpExecutionPlanWriter implements ExecutionPlanWriter {
     }
 
     @Override
-    public void putJobResourceRequirements(
-            JobID jobId, JobResourceRequirements jobResourceRequirements) {
+    public void putStreamResourceRequirements(
+            JobID streamId, JobResourceRequirements streamResourceRequirements) {
         // No-op.
     }
 }

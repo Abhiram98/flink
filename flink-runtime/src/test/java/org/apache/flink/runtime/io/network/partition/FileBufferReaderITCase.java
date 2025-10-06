@@ -27,9 +27,9 @@ import org.apache.flink.runtime.io.network.api.reader.RecordReader;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.StreamGraph;
+import org.apache.flink.runtime.jobgraph.StreamGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.StreamVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -124,23 +124,23 @@ class FileBufferReaderITCase {
         try (final MiniCluster miniCluster = new MiniCluster(miniClusterConfiguration)) {
             miniCluster.start();
 
-            final JobGraph jobGraph = createJobGraph();
+            final StreamGraph jobGraph = createJobGraph();
 
             // the job needs to complete without throwing an exception
             miniCluster.executeJobBlocking(jobGraph);
         }
     }
 
-    private static JobGraph createJobGraph() {
+    private static StreamGraph createJobGraph() {
         final SlotSharingGroup group1 = new SlotSharingGroup();
         final SlotSharingGroup group2 = new SlotSharingGroup();
 
-        final JobVertex source = new JobVertex("source");
+        final StreamVertex source = new StreamVertex("source");
         source.setInvokableClass(TestSourceInvokable.class);
         source.setParallelism(parallelism);
         source.setSlotSharingGroup(group1);
 
-        final JobVertex sink = new JobVertex("sink");
+        final StreamVertex sink = new StreamVertex("sink");
         sink.setInvokableClass(TestSinkInvokable.class);
         sink.setParallelism(parallelism);
         sink.setSlotSharingGroup(group2);
@@ -148,7 +148,7 @@ class FileBufferReaderITCase {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        return JobGraphTestUtils.batchJobGraph(source, sink);
+        return StreamGraphTestUtils.batchJobGraph(source, sink);
     }
 
     /**

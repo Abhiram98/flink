@@ -29,8 +29,8 @@ import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
+import org.apache.flink.core.execution.StreamStatusChangedListener;
+import org.apache.flink.core.execution.StreamStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
@@ -71,14 +71,14 @@ public class AbstractSessionClusterExecutor<
 
     private final ClientFactory clusterClientFactory;
     private final Configuration configuration;
-    private final List<JobStatusChangedListener> jobStatusChangedListeners;
+    private final List<StreamStatusChangedListener> jobStatusChangedListeners;
 
     public AbstractSessionClusterExecutor(
             @Nonnull final ClientFactory clusterClientFactory, Configuration configuration) {
         this.clusterClientFactory = checkNotNull(clusterClientFactory);
         this.configuration = configuration;
         this.jobStatusChangedListeners =
-                JobStatusChangedListenerUtils.createJobStatusChangedListeners(
+                StreamStatusChangedListenerUtils.createStreamStatusChangedListeners(
                         Thread.currentThread().getContextClassLoader(),
                         configuration,
                         executorService);
@@ -91,7 +91,7 @@ public class AbstractSessionClusterExecutor<
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
         final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+                PipelineExecutorUtils.getStreamGraph(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {
@@ -106,7 +106,7 @@ public class AbstractSessionClusterExecutor<
                     .thenApplyAsync(
                             FunctionUtils.uncheckedFunction(
                                     jobId -> {
-                                        ClientUtils.waitUntilJobInitializationFinished(
+                                        ClientUtils.waitUntilStreamInitializationFinished(
                                                 () -> clusterClient.getJobStatus(jobId).get(),
                                                 () -> clusterClient.requestJobResult(jobId).get(),
                                                 userCodeClassloader);
@@ -122,7 +122,7 @@ public class AbstractSessionClusterExecutor<
                     .whenCompleteAsync(
                             (jobClient, throwable) -> {
                                 if (throwable == null) {
-                                    PipelineExecutorUtils.notifyJobStatusListeners(
+                                    PipelineExecutorUtils.notifyStreamStatusListeners(
                                             pipeline, jobGraph, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(
