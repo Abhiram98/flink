@@ -41,7 +41,7 @@ public class YarnStopJobTerminationHeaders implements RestHandlerSpecification {
     private static final YarnStopJobTerminationHeaders INSTANCE =
             new YarnStopJobTerminationHeaders();
 
-    private static final String URL = String.format("/jobs/:%s/yarn-stop", JobIDPathParameter.KEY);
+    private static final String URL = String.format("/jobs/:%s/yarn-stop", StreamIdPathParameter.KEY);
 
     private YarnStopJobTerminationHeaders() {}
 

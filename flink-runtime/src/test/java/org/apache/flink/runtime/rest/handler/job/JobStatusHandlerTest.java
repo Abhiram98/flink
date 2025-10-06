@@ -24,8 +24,8 @@ import org.apache.flink.runtime.messages.webmonitor.JobStatusInfo;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobStatusInfoHeaders;
 import org.apache.flink.runtime.webmonitor.TestingRestfulGateway;
 import org.apache.flink.testutils.TestingUtils;
@@ -67,11 +67,11 @@ class JobStatusHandlerTest {
     private static HandlerRequest<EmptyRequestBody> createRequest(JobID jobId)
             throws HandlerRequestException {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, jobId.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, jobId.toString());
 
         return HandlerRequest.resolveParametersAndCreate(
                 EmptyRequestBody.getInstance(),
-                new JobMessageParameters(),
+                new StreamMessageParameters(),
                 pathParameters,
                 Collections.emptyMap(),
                 Collections.emptyList());

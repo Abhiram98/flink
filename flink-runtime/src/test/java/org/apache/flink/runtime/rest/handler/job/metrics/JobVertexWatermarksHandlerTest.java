@@ -26,7 +26,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.metrics.Metric;
@@ -91,7 +91,7 @@ class JobVertexWatermarksHandlerTest {
                         Mockito.mock(Executor.class));
 
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, TEST_JOB_ID.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, TEST_JOB_ID.toString());
         pathParameters.put(JobVertexIdPathParameter.KEY, TEST_VERTEX_ID.toString());
 
         request =

@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /** Message parameters for job vertex REST handlers. */
-public class JobVertexMessageParameters extends JobMessageParameters {
+public class JobVertexMessageParameters extends StreamMessageParameters {
 
     public final JobVertexIdPathParameter jobVertexIdPathParameter = new JobVertexIdPathParameter();
 

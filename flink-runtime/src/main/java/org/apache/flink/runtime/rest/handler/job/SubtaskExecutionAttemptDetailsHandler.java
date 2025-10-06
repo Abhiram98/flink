@@ -29,7 +29,7 @@ import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
@@ -98,7 +98,7 @@ public class SubtaskExecutionAttemptDetailsHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecution execution)
             throws RestHandlerException {
 
-        final JobID jobID = request.getPathParameter(JobIDPathParameter.class);
+        final JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
         final JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
 
         return SubtaskExecutionAttemptDetailsInfo.create(
@@ -119,7 +119,7 @@ public class SubtaskExecutionAttemptDetailsHandler
                             getMessageHeaders()
                                     .getTargetRestEndpointURL()
                                     .replace(
-                                            ':' + JobIDPathParameter.KEY,
+                                            ':' + StreamIdPathParameter.KEY,
                                             graph.getJobID().toString())
                                     .replace(
                                             ':' + JobVertexIdPathParameter.KEY,
@@ -147,7 +147,7 @@ public class SubtaskExecutionAttemptDetailsHandler
                                 getMessageHeaders()
                                         .getTargetRestEndpointURL()
                                         .replace(
-                                                ':' + JobIDPathParameter.KEY,
+                                                ':' + StreamIdPathParameter.KEY,
                                                 graph.getJobID().toString())
                                         .replace(
                                                 ':' + JobVertexIdPathParameter.KEY,

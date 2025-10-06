@@ -31,7 +31,7 @@ public class TaskManagerLogUrlHeaders
 
     private static final String URL =
             "/jobs/:"
-                    + JobIDPathParameter.KEY
+                    + StreamIdPathParameter.KEY
                     + "/taskmanagers/:"
                     + TaskManagerIdPathParameter.KEY
                     + "/log-url";

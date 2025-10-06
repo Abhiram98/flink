@@ -25,7 +25,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
 
 /** Message headers for the {@link JobConfigHandler}. */
 public class JobConfigHeaders
-        implements RuntimeMessageHeaders<EmptyRequestBody, JobConfigInfo, JobMessageParameters> {
+        implements RuntimeMessageHeaders<EmptyRequestBody, JobConfigInfo, StreamMessageParameters> {
 
     private static final JobConfigHeaders INSTANCE = new JobConfigHeaders();
 
@@ -49,8 +49,8 @@ public class JobConfigHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     @Override

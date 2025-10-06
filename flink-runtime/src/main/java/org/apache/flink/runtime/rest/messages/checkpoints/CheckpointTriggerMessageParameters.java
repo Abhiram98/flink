@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.checkpoints;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageParameters;
 import org.apache.flink.runtime.rest.messages.MessagePathParameter;
 import org.apache.flink.runtime.rest.messages.MessageQueryParameter;
@@ -29,7 +29,7 @@ import java.util.Collections;
 /** The parameters for triggering a checkpoint. */
 public class CheckpointTriggerMessageParameters extends MessageParameters {
 
-    public final JobIDPathParameter jobID = new JobIDPathParameter();
+    public final StreamIdPathParameter jobID = new StreamIdPathParameter();
 
     @Override
     public Collection<MessagePathParameter<?>> getPathParameters() {

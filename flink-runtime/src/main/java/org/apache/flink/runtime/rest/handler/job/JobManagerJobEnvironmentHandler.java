@@ -21,11 +21,8 @@ package org.apache.flink.runtime.rest.handler.job;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.EnvironmentInfo;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobManagerJobEnvironmentHeaders;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -45,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
 /** Handler which serves the jobmanager's environment variables of a specific job. */
 public class JobManagerJobEnvironmentHandler
         extends AbstractRestHandler<
-                RestfulGateway, EmptyRequestBody, EnvironmentInfo, JobMessageParameters>
+                RestfulGateway, EmptyRequestBody, EnvironmentInfo, StreamMessageParameters>
         implements JsonArchivist {
     private final EnvironmentInfo environmentInfo;
 
@@ -53,7 +50,7 @@ public class JobManagerJobEnvironmentHandler
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, EnvironmentInfo, JobMessageParameters>
+            MessageHeaders<EmptyRequestBody, EnvironmentInfo, StreamMessageParameters>
                     messageHeaders) {
         super(leaderRetriever, timeout, responseHeaders, messageHeaders);
 
@@ -75,7 +72,7 @@ public class JobManagerJobEnvironmentHandler
                         JobManagerJobEnvironmentHeaders.getInstance()
                                 .getTargetRestEndpointURL()
                                 .replace(
-                                        ':' + JobIDPathParameter.KEY,
+                                        ':' + StreamIdPathParameter.KEY,
                                         executionGraphInfo.getJobId().toString()),
                         environmentInfo));
     }

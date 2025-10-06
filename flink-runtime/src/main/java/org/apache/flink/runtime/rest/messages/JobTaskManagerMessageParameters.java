@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /** Message parameters which require a job path parameter and a TaskManager id path parameter. */
-public class JobTaskManagerMessageParameters extends JobMessageParameters {
+public class JobTaskManagerMessageParameters extends StreamMessageParameters {
     public final TaskManagerIdPathParameter taskManagerIdParameter =
             new TaskManagerIdPathParameter();
 

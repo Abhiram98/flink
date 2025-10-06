@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.ResponseBody;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointIdPathParameter;
@@ -76,7 +76,7 @@ public abstract class AbstractCheckpointHandler<
             HandlerRequest<EmptyRequestBody> request,
             CheckpointStatsSnapshot checkpointStatsSnapshot)
             throws RestHandlerException {
-        JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         final long checkpointId = request.getPathParameter(CheckpointIdPathParameter.class);
 
         if (checkpointStatsSnapshot != null) {

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.checkpoints;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationStatusMessageHeaders;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -36,7 +36,7 @@ public class CheckpointStatusHeaders
     private static final String URL =
             String.format(
                     "/jobs/:%s/checkpoints/:%s",
-                    JobIDPathParameter.KEY, TriggerIdPathParameter.KEY);
+                    StreamIdPathParameter.KEY, TriggerIdPathParameter.KEY);
 
     private CheckpointStatusHeaders() {}
 

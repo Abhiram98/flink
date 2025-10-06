@@ -32,7 +32,7 @@ public class JobVertexBackPressureHeaders
 
     private static final String URL =
             "/jobs/:"
-                    + JobIDPathParameter.KEY
+                    + StreamIdPathParameter.KEY
                     + "/vertices/:"
                     + JobVertexIdPathParameter.KEY
                     + "/backpressure";

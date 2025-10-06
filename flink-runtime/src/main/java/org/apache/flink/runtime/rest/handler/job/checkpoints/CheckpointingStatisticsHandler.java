@@ -28,12 +28,8 @@ import org.apache.flink.runtime.checkpoint.RestoredCheckpointStats;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.ErrorResponseBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointStatistics;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointingStatistics;
 import org.apache.flink.runtime.rest.messages.checkpoints.StatsSummaryDto;
@@ -57,14 +53,14 @@ import java.util.concurrent.Executor;
 
 /** Handler which serves the checkpoint statistics. */
 public class CheckpointingStatisticsHandler
-        extends AbstractCheckpointStatsHandler<CheckpointingStatistics, JobMessageParameters>
+        extends AbstractCheckpointStatsHandler<CheckpointingStatistics, StreamMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
     public CheckpointingStatisticsHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, CheckpointingStatistics, JobMessageParameters>
+            MessageHeaders<EmptyRequestBody, CheckpointingStatistics, StreamMessageParameters>
                     messageHeaders,
             Cache<JobID, CompletableFuture<CheckpointStatsSnapshot>> checkpointStatsSnapshotCache,
             Executor executor) {
@@ -97,7 +93,7 @@ public class CheckpointingStatisticsHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
         return Collections.singletonList(new ArchivedJson(path, json));
     }
 

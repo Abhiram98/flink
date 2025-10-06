@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.job.savepoints.stop;
 
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationTriggerMessageHeaders;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.savepoints.SavepointTriggerMessageParameters;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -33,7 +33,7 @@ public class StopWithSavepointTriggerHeaders
     private static final StopWithSavepointTriggerHeaders INSTANCE =
             new StopWithSavepointTriggerHeaders();
 
-    private static final String URL = String.format("/jobs/:%s/stop", JobIDPathParameter.KEY);
+    private static final String URL = String.format("/jobs/:%s/stop", StreamIdPathParameter.KEY);
 
     private StopWithSavepointTriggerHeaders() {}
 

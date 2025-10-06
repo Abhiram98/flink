@@ -30,12 +30,8 @@ import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.util.MutableIOMetrics;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.JobPlanInfo;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.runtime.rest.messages.job.metrics.IOMetricsInfo;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -57,7 +53,7 @@ import java.util.concurrent.Executor;
 
 /** Handler returning the details for the specified job. */
 public class JobDetailsHandler
-        extends AbstractAccessExecutionGraphHandler<JobDetailsInfo, JobMessageParameters>
+        extends AbstractAccessExecutionGraphHandler<JobDetailsInfo, StreamMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
     private final MetricFetcher metricFetcher;
@@ -66,7 +62,7 @@ public class JobDetailsHandler
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, JobDetailsInfo, JobMessageParameters> messageHeaders,
+            MessageHeaders<EmptyRequestBody, JobDetailsInfo, StreamMessageParameters> messageHeaders,
             ExecutionGraphCache executionGraphCache,
             Executor executor,
             MetricFetcher metricFetcher) {
@@ -95,7 +91,7 @@ public class JobDetailsHandler
         String path =
                 getMessageHeaders()
                         .getTargetRestEndpointURL()
-                        .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
         return Collections.singleton(new ArchivedJson(path, json));
     }
 

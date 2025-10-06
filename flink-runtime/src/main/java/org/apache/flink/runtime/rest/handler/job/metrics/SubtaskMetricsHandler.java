@@ -24,7 +24,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.SubtaskMetricsHeaders;
@@ -63,7 +63,7 @@ public class SubtaskMetricsHandler extends AbstractMetricsHandler<SubtaskMetrics
     protected MetricStore.ComponentMetricStore getComponentMetricStore(
             HandlerRequest<EmptyRequestBody> request, MetricStore metricStore) {
 
-        final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         final JobVertexID vertexId = request.getPathParameter(JobVertexIdPathParameter.class);
         final int subtaskIndex = request.getPathParameter(SubtaskIndexPathParameter.class);
 

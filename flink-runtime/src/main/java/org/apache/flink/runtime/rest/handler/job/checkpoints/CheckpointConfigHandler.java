@@ -25,12 +25,8 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.job.AbstractAccessExecutionGraphHandler;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.ErrorResponseBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.ResponseBody;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointConfigHeaders;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointConfigInfo;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -49,14 +45,14 @@ import java.util.concurrent.Executor;
 
 /** Handler which serves the checkpoint configuration. */
 public class CheckpointConfigHandler
-        extends AbstractAccessExecutionGraphHandler<CheckpointConfigInfo, JobMessageParameters>
+        extends AbstractAccessExecutionGraphHandler<CheckpointConfigInfo, StreamMessageParameters>
         implements OnlyExecutionGraphJsonArchivist {
 
     public CheckpointConfigHandler(
             GatewayRetriever<? extends RestfulGateway> leaderRetriever,
             Duration timeout,
             Map<String, String> responseHeaders,
-            MessageHeaders<EmptyRequestBody, CheckpointConfigInfo, JobMessageParameters>
+            MessageHeaders<EmptyRequestBody, CheckpointConfigInfo, StreamMessageParameters>
                     messageHeaders,
             ExecutionGraphCache executionGraphCache,
             Executor executor) {
@@ -88,7 +84,7 @@ public class CheckpointConfigHandler
         String path =
                 CheckpointConfigHeaders.getInstance()
                         .getTargetRestEndpointURL()
-                        .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString());
+                        .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString());
         return Collections.singletonList(new ArchivedJson(path, response));
     }
 

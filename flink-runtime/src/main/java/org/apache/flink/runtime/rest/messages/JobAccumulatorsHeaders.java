@@ -30,7 +30,7 @@ public class JobAccumulatorsHeaders
 
     private static final JobAccumulatorsHeaders INSTANCE = new JobAccumulatorsHeaders();
 
-    public static final String URL = "/jobs" + "/:" + JobIDPathParameter.KEY + "/accumulators";
+    public static final String URL = "/jobs" + "/:" + StreamIdPathParameter.KEY + "/accumulators";
 
     private JobAccumulatorsHeaders() {}
 

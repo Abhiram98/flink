@@ -24,7 +24,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.AggregatedSubtaskMetricsHeaders;
 import org.apache.flink.runtime.rest.messages.job.metrics.AggregatedSubtaskMetricsParameters;
@@ -73,7 +73,7 @@ public class AggregatingSubtasksMetricsHandler
     @Override
     Collection<? extends MetricStore.ComponentMetricStore> getStores(
             MetricStore store, HandlerRequest<EmptyRequestBody> request) {
-        JobID jobID = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
         JobVertexID taskID = request.getPathParameter(JobVertexIdPathParameter.class);
 
         Collection<String> subtaskRanges =

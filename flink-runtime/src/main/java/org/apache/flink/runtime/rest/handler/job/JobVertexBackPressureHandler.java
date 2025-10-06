@@ -29,7 +29,7 @@ import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore.Componen
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore.SubtaskMetricStore;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore.TaskMetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexBackPressureInfo;
 import org.apache.flink.runtime.rest.messages.JobVertexBackPressureInfo.SubtaskBackPressureInfo;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
@@ -75,7 +75,7 @@ public class JobVertexBackPressureHandler
             throws RestHandlerException {
         metricFetcher.update();
 
-        final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         final JobVertexID jobVertexId = request.getPathParameter(JobVertexIdPathParameter.class);
 
         TaskMetricStore taskMetricStore =

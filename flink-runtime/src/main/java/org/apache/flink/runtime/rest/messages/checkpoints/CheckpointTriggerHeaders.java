@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.messages.checkpoints;
 
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationTriggerMessageHeaders;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -32,7 +32,7 @@ public class CheckpointTriggerHeaders
     private static final CheckpointTriggerHeaders INSTANCE = new CheckpointTriggerHeaders();
 
     private static final String URL =
-            String.format("/jobs/:%s/checkpoints", JobIDPathParameter.KEY);
+            String.format("/jobs/:%s/checkpoints", StreamIdPathParameter.KEY);
 
     private CheckpointTriggerHeaders() {}
 

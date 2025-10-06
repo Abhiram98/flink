@@ -18,21 +18,29 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import java.util.Collection;
-import java.util.Collections;
+import org.apache.flink.api.common.JobID;
 
-/** Message parameters which require a job path parameter. */
-public class JobMessageParameters extends MessageParameters {
+/** Path parameter identifying jobs. */
+public class StreamIdPathParameter extends MessagePathParameter<JobID> {
 
-    public final JobIDPathParameter jobPathParameter = new JobIDPathParameter();
+    public static final String KEY = "jobid";
 
-    @Override
-    public Collection<MessagePathParameter<?>> getPathParameters() {
-        return Collections.singleton(jobPathParameter);
+    public StreamIdPathParameter() {
+        super(KEY);
     }
 
     @Override
-    public Collection<MessageQueryParameter<?>> getQueryParameters() {
-        return Collections.emptySet();
+    protected JobID convertFromString(String value) {
+        return JobID.fromHexString(value);
+    }
+
+    @Override
+    protected String convertToString(JobID value) {
+        return value.toString();
+    }
+
+    @Override
+    public String getDescription() {
+        return "32-character hexadecimal string value that identifies a job.";
     }
 }

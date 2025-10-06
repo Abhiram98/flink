@@ -27,8 +27,8 @@ import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointingStatistics;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointingStatisticsHeaders;
@@ -95,8 +95,8 @@ class AbstractCheckpointStatsHandlerTest {
             HandlerRequest<EmptyRequestBody> request =
                     HandlerRequest.resolveParametersAndCreate(
                             EmptyRequestBody.getInstance(),
-                            new JobMessageParameters(),
-                            Collections.singletonMap(JobIDPathParameter.KEY, JOB_ID.toString()),
+                            new StreamMessageParameters(),
+                            Collections.singletonMap(StreamIdPathParameter.KEY, JOB_ID.toString()),
                             Collections.emptyMap(),
                             Collections.emptyList());
 
@@ -154,8 +154,8 @@ class AbstractCheckpointStatsHandlerTest {
             HandlerRequest<EmptyRequestBody> request =
                     HandlerRequest.resolveParametersAndCreate(
                             EmptyRequestBody.getInstance(),
-                            new JobMessageParameters(),
-                            Collections.singletonMap(JobIDPathParameter.KEY, JOB_ID.toString()),
+                            new StreamMessageParameters(),
+                            Collections.singletonMap(StreamIdPathParameter.KEY, JOB_ID.toString()),
                             Collections.emptyMap(),
                             Collections.emptyList());
 
@@ -193,8 +193,8 @@ class AbstractCheckpointStatsHandlerTest {
             HandlerRequest<EmptyRequestBody> request =
                     HandlerRequest.resolveParametersAndCreate(
                             EmptyRequestBody.getInstance(),
-                            new JobMessageParameters(),
-                            Collections.singletonMap(JobIDPathParameter.KEY, JOB_ID.toString()),
+                            new StreamMessageParameters(),
+                            Collections.singletonMap(StreamIdPathParameter.KEY, JOB_ID.toString()),
                             Collections.emptyMap(),
                             Collections.emptyList());
 
@@ -229,7 +229,7 @@ class AbstractCheckpointStatsHandlerTest {
     }
 
     private static class RecordingCheckpointStatsHandler
-            extends AbstractCheckpointStatsHandler<CheckpointingStatistics, JobMessageParameters> {
+            extends AbstractCheckpointStatsHandler<CheckpointingStatistics, StreamMessageParameters> {
 
         private final CheckpointingStatistics returnValue;
         private CheckpointStatsSnapshot storedCheckpointStats;
@@ -238,7 +238,7 @@ class AbstractCheckpointStatsHandlerTest {
                 GatewayRetriever<? extends RestfulGateway> leaderRetriever,
                 Duration timeout,
                 Map<String, String> responseHeaders,
-                MessageHeaders<EmptyRequestBody, CheckpointingStatistics, JobMessageParameters>
+                MessageHeaders<EmptyRequestBody, CheckpointingStatistics, StreamMessageParameters>
                         messageHeaders,
                 Cache<JobID, CompletableFuture<CheckpointStatsSnapshot>>
                         checkpointStatsSnapshotCache,
@@ -269,7 +269,7 @@ class AbstractCheckpointStatsHandlerTest {
     }
 
     private static class ThrowingCheckpointStatsHandler
-            extends AbstractCheckpointStatsHandler<CheckpointingStatistics, JobMessageParameters> {
+            extends AbstractCheckpointStatsHandler<CheckpointingStatistics, StreamMessageParameters> {
 
         private final RestHandlerException exception;
 
@@ -277,7 +277,7 @@ class AbstractCheckpointStatsHandlerTest {
                 GatewayRetriever<? extends RestfulGateway> leaderRetriever,
                 Duration timeout,
                 Map<String, String> responseHeaders,
-                MessageHeaders<EmptyRequestBody, CheckpointingStatistics, JobMessageParameters>
+                MessageHeaders<EmptyRequestBody, CheckpointingStatistics, StreamMessageParameters>
                         messageHeaders,
                 Cache<JobID, CompletableFuture<CheckpointStatsSnapshot>>
                         checkpointStatsSnapshotCache,

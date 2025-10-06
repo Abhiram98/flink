@@ -34,7 +34,7 @@ import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.util.MutableIOMetrics;
 import org.apache.flink.runtime.rest.messages.AggregatedTaskDetailsInfo;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.JobVertexTaskManagersInfo;
@@ -97,7 +97,7 @@ public class JobVertexTaskManagersHandler
     protected JobVertexTaskManagersInfo handleRequest(
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws RestHandlerException {
-        JobID jobID = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
         JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
@@ -118,7 +118,7 @@ public class JobVertexTaskManagersHandler
             String path =
                     getMessageHeaders()
                             .getTargetRestEndpointURL()
-                            .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString())
+                            .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString())
                             .replace(
                                     ':' + JobVertexIdPathParameter.KEY,
                                     task.getJobVertexId().toString());

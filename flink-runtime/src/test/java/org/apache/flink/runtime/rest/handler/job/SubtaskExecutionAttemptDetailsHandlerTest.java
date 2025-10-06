@@ -37,7 +37,7 @@ import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcherImpl;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
 import org.apache.flink.runtime.rest.messages.job.SubtaskAttemptMessageParameters;
@@ -146,7 +146,7 @@ class SubtaskExecutionAttemptDetailsHandlerTest {
                         metricFetcher);
 
         final HashMap<String, String> receivedPathParameters = new HashMap<>(4);
-        receivedPathParameters.put(JobIDPathParameter.KEY, jobID.toString());
+        receivedPathParameters.put(StreamIdPathParameter.KEY, jobID.toString());
         receivedPathParameters.put(JobVertexIdPathParameter.KEY, jobVertexId.toString());
         receivedPathParameters.put(SubtaskIndexPathParameter.KEY, Integer.toString(subtaskIndex));
         receivedPathParameters.put(SubtaskAttemptPathParameter.KEY, Integer.toString(attempt));

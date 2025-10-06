@@ -40,7 +40,7 @@ import org.apache.flink.runtime.rest.messages.JobExceptionsHeaders;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory.ExceptionInfo;
 import org.apache.flink.runtime.rest.messages.JobExceptionsInfoWithHistory.RootExceptionInfo;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.FailureLabelFilterParameter;
 import org.apache.flink.runtime.rest.messages.job.JobExceptionsMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.UpperLimitExceptionParameter;
@@ -566,7 +566,7 @@ class JobExceptionsHandlerTest {
     private static HandlerRequest<EmptyRequestBody> createRequest(
             JobID jobId, int size, List<String> failureLabels) throws HandlerRequestException {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, jobId.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, jobId.toString());
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(UpperLimitExceptionParameter.KEY, Collections.singletonList("" + size));
         if (!failureLabels.isEmpty()) {

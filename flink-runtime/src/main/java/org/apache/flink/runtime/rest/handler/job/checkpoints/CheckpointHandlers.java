@@ -28,7 +28,7 @@ import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationResult;
 import org.apache.flink.runtime.rest.handler.async.TriggerResponse;
 import org.apache.flink.runtime.rest.handler.job.AsynchronousJobOperationKey;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.TriggerId;
 import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
 import org.apache.flink.runtime.rest.messages.checkpoints.CheckpointInfo;
@@ -128,7 +128,7 @@ public class CheckpointHandlers {
 
         private static AsynchronousJobOperationKey createOperationKey(
                 final HandlerRequest<CheckpointTriggerRequestBody> request) {
-            final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+            final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
             return AsynchronousJobOperationKey.of(
                     request.getRequestBody().getTriggerId().orElseGet(TriggerId::new), jobId);
         }
@@ -234,7 +234,7 @@ public class CheckpointHandlers {
         private static AsynchronousJobOperationKey getOperationKey(
                 HandlerRequest<EmptyRequestBody> request) {
             final TriggerId triggerId = request.getPathParameter(TriggerIdPathParameter.class);
-            final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+            final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
             return AsynchronousJobOperationKey.of(triggerId, jobId);
         }
 

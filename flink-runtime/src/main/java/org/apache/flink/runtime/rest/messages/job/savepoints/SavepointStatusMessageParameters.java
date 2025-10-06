@@ -18,11 +18,8 @@
 
 package org.apache.flink.runtime.rest.messages.job.savepoints;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.MessageParameters;
-import org.apache.flink.runtime.rest.messages.MessagePathParameter;
-import org.apache.flink.runtime.rest.messages.MessageQueryParameter;
-import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +28,7 @@ import java.util.Collections;
 /** The parameters for triggering a savepoint. */
 public class SavepointStatusMessageParameters extends MessageParameters {
 
-    public final JobIDPathParameter jobIdPathParameter = new JobIDPathParameter();
+    public final StreamIdPathParameter jobIdPathParameter = new StreamIdPathParameter();
 
     public final TriggerIdPathParameter triggerIdPathParameter = new TriggerIdPathParameter();
 

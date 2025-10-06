@@ -27,11 +27,8 @@ import org.apache.flink.runtime.rest.handler.HandlerRequestException;
 import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionConfigBuilder;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobConfigHeaders;
-import org.apache.flink.runtime.rest.messages.JobConfigInfo;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.util.concurrent.Executors;
 
@@ -91,11 +88,11 @@ class JobConfigHandlerTest {
     private HandlerRequest<EmptyRequestBody> createRequest(JobID jobId)
             throws HandlerRequestException {
         final Map<String, String> pathParameters = new HashMap<>();
-        pathParameters.put(JobIDPathParameter.KEY, jobId.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, jobId.toString());
 
         return HandlerRequest.resolveParametersAndCreate(
                 EmptyRequestBody.getInstance(),
-                new JobMessageParameters(),
+                new StreamMessageParameters(),
                 pathParameters,
                 Collections.emptyMap(),
                 Collections.emptyList());

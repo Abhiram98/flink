@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 
 /**
@@ -47,7 +47,7 @@ public class JobManagerOperatorMetricsHeaders
     @Override
     public String getTargetRestEndpointURL() {
         return "/jobs/:"
-                + JobIDPathParameter.KEY
+                + StreamIdPathParameter.KEY
                 + "/vertices/:"
                 + JobVertexIdPathParameter.KEY
                 + "/jm-operator-metrics";

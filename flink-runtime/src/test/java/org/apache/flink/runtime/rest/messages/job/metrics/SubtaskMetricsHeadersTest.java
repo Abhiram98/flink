@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
 
@@ -36,7 +36,7 @@ public class SubtaskMetricsHeadersTest {
         assertThat(subtaskMetricsHeaders.getTargetRestEndpointURL())
                 .isEqualTo(
                         "/jobs/:"
-                                + JobIDPathParameter.KEY
+                                + StreamIdPathParameter.KEY
                                 + "/vertices/:"
                                 + JobVertexIdPathParameter.KEY
                                 + "/subtasks/:"

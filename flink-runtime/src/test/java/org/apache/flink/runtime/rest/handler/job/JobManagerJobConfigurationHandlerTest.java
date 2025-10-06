@@ -23,7 +23,7 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.messages.ConfigurationInfo;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobManagerJobConfigurationHeaders;
 import org.apache.flink.runtime.webmonitor.TestingRestfulGateway;
 import org.apache.flink.testutils.TestingUtils;
@@ -54,7 +54,7 @@ class JobManagerJobConfigurationHandlerTest {
                 handler.handleRequest(
                                 HandlerRequest.resolveParametersAndCreate(
                                         EmptyRequestBody.getInstance(),
-                                        new JobMessageParameters(),
+                                        new StreamMessageParameters(),
                                         Collections.emptyMap(),
                                         Collections.emptyMap(),
                                         Collections.emptyList()),

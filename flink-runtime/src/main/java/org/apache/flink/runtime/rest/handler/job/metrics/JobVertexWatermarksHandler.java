@@ -30,7 +30,7 @@ import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricStore;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.metrics.JobVertexWatermarksHeaders;
 import org.apache.flink.runtime.rest.messages.job.metrics.Metric;
@@ -73,7 +73,7 @@ public class JobVertexWatermarksHandler
             HandlerRequest<EmptyRequestBody> request, AccessExecutionJobVertex jobVertex)
             throws RestHandlerException {
 
-        String jobID = request.getPathParameter(JobIDPathParameter.class).toString();
+        String jobID = request.getPathParameter(StreamIdPathParameter.class).toString();
         String taskID = jobVertex.getJobVertexId().toString();
 
         metricFetcher.update();

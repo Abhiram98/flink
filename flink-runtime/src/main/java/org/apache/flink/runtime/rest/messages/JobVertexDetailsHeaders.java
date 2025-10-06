@@ -31,7 +31,7 @@ public class JobVertexDetailsHeaders
     private static final JobVertexDetailsHeaders INSTANCE = new JobVertexDetailsHeaders();
 
     public static final String URL =
-            "/jobs/:" + JobIDPathParameter.KEY + "/vertices/:" + JobVertexIdPathParameter.KEY;
+            "/jobs/:" + StreamIdPathParameter.KEY + "/vertices/:" + JobVertexIdPathParameter.KEY;
 
     @Override
     public Class<EmptyRequestBody> getRequestClass() {

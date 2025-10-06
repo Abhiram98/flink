@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.job.savepoints;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationStatusMessageHeaders;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.TriggerIdPathParameter;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -35,7 +35,7 @@ public class SavepointStatusHeaders
 
     private static final String URL =
             String.format(
-                    "/jobs/:%s/savepoints/:%s", JobIDPathParameter.KEY, TriggerIdPathParameter.KEY);
+                    "/jobs/:%s/savepoints/:%s", StreamIdPathParameter.KEY, TriggerIdPathParameter.KEY);
 
     private SavepointStatusHeaders() {}
 

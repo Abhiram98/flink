@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessagePathParameter;
 
@@ -30,7 +30,7 @@ import java.util.Collections;
 public class AggregatedSubtaskMetricsParameters
         extends AbstractAggregatedMetricsParameters<SubtasksFilterQueryParameter> {
 
-    private final JobIDPathParameter jobId = new JobIDPathParameter();
+    private final StreamIdPathParameter jobId = new StreamIdPathParameter();
     private final JobVertexIdPathParameter vertexId = new JobVertexIdPathParameter();
 
     public AggregatedSubtaskMetricsParameters() {

@@ -34,12 +34,8 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.HandlerRequestException;
 import org.apache.flink.runtime.rest.handler.RestHandlerConfiguration;
 import org.apache.flink.runtime.rest.handler.legacy.DefaultExecutionGraphCache;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.FlameGraphTypeQueryParameter;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexFlameGraphParameters;
-import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
-import org.apache.flink.runtime.rest.messages.SubtaskIndexQueryParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.webmonitor.stats.VertexStatsTracker;
 import org.apache.flink.runtime.webmonitor.threadinfo.VertexFlameGraph;
 import org.apache.flink.runtime.webmonitor.threadinfo.VertexThreadInfoStats;
@@ -155,7 +151,7 @@ class JobVertexFlameGraphHandlerTest {
     private HandlerRequest<EmptyRequestBody> generateJobVertexFlameGraphParameters(
             Integer subtaskIndex) throws HandlerRequestException {
         final HashMap<String, String> receivedPathParameters = new HashMap<>(2);
-        receivedPathParameters.put(JobIDPathParameter.KEY, JOB_ID.toString());
+        receivedPathParameters.put(StreamIdPathParameter.KEY, JOB_ID.toString());
         receivedPathParameters.put(JobVertexIdPathParameter.KEY, JOB_VERTEX_ID.toString());
 
         Map<String, List<String>> queryParams = new HashMap<>(2);

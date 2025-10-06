@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.job;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.messages.ConfigurationInfo;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -32,7 +32,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
  */
 public class JobManagerJobConfigurationHeaders
         implements RuntimeMessageHeaders<
-                EmptyRequestBody, ConfigurationInfo, JobMessageParameters> {
+                EmptyRequestBody, ConfigurationInfo, StreamMessageParameters> {
     private static final JobManagerJobConfigurationHeaders INSTANCE =
             new JobManagerJobConfigurationHeaders();
 
@@ -66,8 +66,8 @@ public class JobManagerJobConfigurationHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     public static JobManagerJobConfigurationHeaders getInstance() {

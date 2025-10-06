@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.AccessExecutionVertex;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
@@ -84,7 +84,7 @@ public class SubtasksTimesHandler
             String path =
                     getMessageHeaders()
                             .getTargetRestEndpointURL()
-                            .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString())
+                            .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString())
                             .replace(
                                     ':' + JobVertexIdPathParameter.KEY,
                                     task.getJobVertexId().toString());

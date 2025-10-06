@@ -29,7 +29,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.legacy.ExecutionGraphCache;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexDetailsInfo;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexMessageParameters;
@@ -81,7 +81,7 @@ public class JobVertexDetailsHandler
     protected JobVertexDetailsInfo handleRequest(
             HandlerRequest<EmptyRequestBody> request, AccessExecutionGraph executionGraph)
             throws NotFoundException {
-        JobID jobID = request.getPathParameter(JobIDPathParameter.class);
+        JobID jobID = request.getPathParameter(StreamIdPathParameter.class);
         JobVertexID jobVertexID = request.getPathParameter(JobVertexIdPathParameter.class);
         AccessExecutionJobVertex jobVertex = executionGraph.getJobVertex(jobVertexID);
 
@@ -102,7 +102,7 @@ public class JobVertexDetailsHandler
             String path =
                     getMessageHeaders()
                             .getTargetRestEndpointURL()
-                            .replace(':' + JobIDPathParameter.KEY, graph.getJobID().toString())
+                            .replace(':' + StreamIdPathParameter.KEY, graph.getJobID().toString())
                             .replace(
                                     ':' + JobVertexIdPathParameter.KEY,
                                     task.getJobVertexId().toString());

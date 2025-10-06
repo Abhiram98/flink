@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.job;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
 import org.apache.flink.runtime.rest.messages.EnvironmentInfo;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
@@ -31,7 +31,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
  * org.apache.flink.runtime.rest.handler.job.JobManagerJobEnvironmentHandler}.
  */
 public class JobManagerJobEnvironmentHeaders
-        implements RuntimeMessageHeaders<EmptyRequestBody, EnvironmentInfo, JobMessageParameters> {
+        implements RuntimeMessageHeaders<EmptyRequestBody, EnvironmentInfo, StreamMessageParameters> {
     private static final JobManagerJobEnvironmentHeaders INSTANCE =
             new JobManagerJobEnvironmentHeaders();
 
@@ -65,8 +65,8 @@ public class JobManagerJobEnvironmentHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     public static JobManagerJobEnvironmentHeaders getInstance() {

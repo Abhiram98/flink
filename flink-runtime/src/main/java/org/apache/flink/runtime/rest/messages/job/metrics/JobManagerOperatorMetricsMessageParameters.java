@@ -19,11 +19,8 @@
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
-import org.apache.flink.runtime.rest.messages.MessageParameters;
-import org.apache.flink.runtime.rest.messages.MessagePathParameter;
-import org.apache.flink.runtime.rest.messages.MessageQueryParameter;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +33,7 @@ import java.util.Collections;
 @Internal
 public class JobManagerOperatorMetricsMessageParameters extends MessageParameters {
 
-    private final JobIDPathParameter jobIDPathParameter = new JobIDPathParameter();
+    private final StreamIdPathParameter jobIDPathParameter = new StreamIdPathParameter();
     private final JobVertexIdPathParameter jobVertexIDPathParameter =
             new JobVertexIdPathParameter();
 

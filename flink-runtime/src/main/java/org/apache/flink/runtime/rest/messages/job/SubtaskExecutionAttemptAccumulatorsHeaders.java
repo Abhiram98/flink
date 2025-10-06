@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.job;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.job.SubtaskExecutionAttemptAccumulatorsHandler;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
 import org.apache.flink.runtime.rest.messages.SubtaskIndexPathParameter;
@@ -41,7 +41,7 @@ public class SubtaskExecutionAttemptAccumulatorsHeaders
     public static final String URL =
             String.format(
                     "/jobs/:%s/vertices/:%s/subtasks/:%s/attempts/:%s/accumulators",
-                    JobIDPathParameter.KEY,
+                    StreamIdPathParameter.KEY,
                     JobVertexIdPathParameter.KEY,
                     SubtaskIndexPathParameter.KEY,
                     SubtaskAttemptPathParameter.KEY);

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.handler.legacy.utils.ArchivedExecutionGraphBuilder;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
+import org.apache.flink.runtime.rest.messages.StreamMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.JobExecutionResultResponseBody;
 import org.apache.flink.runtime.rest.messages.queue.QueueStatus;
 import org.apache.flink.runtime.webmonitor.TestingRestfulGateway;
@@ -69,7 +69,7 @@ class JobExecutionResultHandlerTest {
         testRequest =
                 HandlerRequest.resolveParametersAndCreate(
                         EmptyRequestBody.getInstance(),
-                        new JobMessageParameters(),
+                        new StreamMessageParameters(),
                         Collections.singletonMap("jobid", TEST_JOB_ID.toString()),
                         Collections.emptyMap(),
                         Collections.emptyList());

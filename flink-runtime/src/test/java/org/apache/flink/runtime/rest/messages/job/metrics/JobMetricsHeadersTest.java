@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages.job.metrics;
 
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ class JobMetricsHeadersTest {
     @Test
     void testUrl() {
         assertThat(jobMetricsHeaders.getTargetRestEndpointURL())
-                .isEqualTo("/jobs/:" + JobIDPathParameter.KEY + "/metrics");
+                .isEqualTo("/jobs/:" + StreamIdPathParameter.KEY + "/metrics");
     }
 
     @Test

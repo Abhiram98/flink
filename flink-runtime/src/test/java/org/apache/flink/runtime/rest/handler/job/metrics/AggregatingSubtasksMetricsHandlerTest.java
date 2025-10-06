@@ -24,7 +24,7 @@ import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.metrics.dump.MetricDump;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.rest.handler.legacy.metrics.MetricFetcher;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.JobVertexIdPathParameter;
 import org.apache.flink.runtime.rest.messages.job.metrics.AggregatedSubtaskMetricsParameters;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -55,7 +55,7 @@ class AggregatingSubtasksMetricsHandlerTest
     @Override
     protected Map<String, String> getPathParameters() {
         Map<String, String> pathParameters = new HashMap<>(4);
-        pathParameters.put(JobIDPathParameter.KEY, JOB_ID.toString());
+        pathParameters.put(StreamIdPathParameter.KEY, JOB_ID.toString());
         pathParameters.put(JobVertexIdPathParameter.KEY, TASK_ID.toString());
         return pathParameters;
     }

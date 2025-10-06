@@ -20,11 +20,8 @@ package org.apache.flink.runtime.rest.messages.job;
 
 import org.apache.flink.runtime.messages.webmonitor.JobStatusInfo;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
-import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
-import org.apache.flink.runtime.rest.messages.JobMessageParameters;
-import org.apache.flink.runtime.rest.messages.MessageHeaders;
-import org.apache.flink.runtime.rest.messages.RuntimeMessageHeaders;
+import org.apache.flink.runtime.rest.messages.*;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -32,7 +29,7 @@ import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseSt
  * {@link MessageHeaders} for {@link org.apache.flink.runtime.rest.handler.job.JobStatusHandler}.
  */
 public class JobStatusInfoHeaders
-        implements RuntimeMessageHeaders<EmptyRequestBody, JobStatusInfo, JobMessageParameters> {
+        implements RuntimeMessageHeaders<EmptyRequestBody, JobStatusInfo, StreamMessageParameters> {
     private static final JobStatusInfoHeaders INSTANCE = new JobStatusInfoHeaders();
 
     @Override
@@ -51,8 +48,8 @@ public class JobStatusInfoHeaders
     }
 
     @Override
-    public JobMessageParameters getUnresolvedMessageParameters() {
-        return new JobMessageParameters();
+    public StreamMessageParameters getUnresolvedMessageParameters() {
+        return new StreamMessageParameters();
     }
 
     @Override
@@ -62,7 +59,7 @@ public class JobStatusInfoHeaders
 
     @Override
     public String getTargetRestEndpointURL() {
-        return "/jobs/:" + JobIDPathParameter.KEY + "/status";
+        return "/jobs/:" + StreamIdPathParameter.KEY + "/status";
     }
 
     public static JobStatusInfoHeaders getInstance() {

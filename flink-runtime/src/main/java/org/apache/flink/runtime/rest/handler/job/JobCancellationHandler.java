@@ -28,7 +28,7 @@ import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
 import org.apache.flink.runtime.rest.messages.EmptyResponseBody;
 import org.apache.flink.runtime.rest.messages.JobCancellationMessageParameters;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 import org.apache.flink.runtime.rest.messages.MessageHeaders;
 import org.apache.flink.runtime.rest.messages.TerminationModeQueryParameter;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -72,7 +72,7 @@ public class JobCancellationHandler
     public CompletableFuture<EmptyResponseBody> handleRequest(
             HandlerRequest<EmptyRequestBody> request, RestfulGateway gateway)
             throws RestHandlerException {
-        final JobID jobId = request.getPathParameter(JobIDPathParameter.class);
+        final JobID jobId = request.getPathParameter(StreamIdPathParameter.class);
         final List<TerminationModeQueryParameter.TerminationMode> terminationModes =
                 request.getQueryParameter(TerminationModeQueryParameter.class);
         final TerminationModeQueryParameter.TerminationMode terminationMode;

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.handler.job.rescaling;
 import org.apache.flink.runtime.rest.HttpMethodWrapper;
 import org.apache.flink.runtime.rest.handler.async.AsynchronousOperationTriggerMessageHeaders;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
-import org.apache.flink.runtime.rest.messages.JobIDPathParameter;
+import org.apache.flink.runtime.rest.messages.StreamIdPathParameter;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -32,7 +32,7 @@ public class RescalingTriggerHeaders
 
     private static final RescalingTriggerHeaders INSTANCE = new RescalingTriggerHeaders();
 
-    private static final String URL = String.format("/jobs/:%s/rescaling", JobIDPathParameter.KEY);
+    private static final String URL = String.format("/jobs/:%s/rescaling", StreamIdPathParameter.KEY);
 
     private RescalingTriggerHeaders() {}
 
