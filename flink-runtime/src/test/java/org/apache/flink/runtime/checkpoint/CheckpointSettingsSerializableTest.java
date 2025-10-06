@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
@@ -87,18 +87,18 @@ class CheckpointSettingsSerializableTest {
                         new SerializedValue<>(new CustomCheckpointStorage(outOfClassPath)),
                         serHooks);
 
-        final JobGraph jobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder()
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                         .setJobCheckpointingSettings(checkpointingSettings)
                         .build();
 
         // to serialize/deserialize the job graph to see if the behavior is correct under
         // distributed execution
-        final JobGraph copy = CommonTestUtils.createCopySerializable(jobGraph);
+        final ExecutionPlan copy = CommonTestUtils.createCopySerializable(jobGraph);
 
         final ExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(copy)
+                        .setExecutionPlan(copy)
                         .setUserClassLoader(classLoader)
                         .build(EXECUTOR_EXTENSION.getExecutor());
 

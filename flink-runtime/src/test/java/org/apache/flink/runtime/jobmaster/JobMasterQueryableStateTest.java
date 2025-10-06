@@ -23,11 +23,8 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
@@ -66,7 +63,7 @@ class JobMasterQueryableStateTest {
     private static final int PARALLELISM = 4;
     private static final JobVertex JOB_VERTEX_1;
     private static final JobVertex JOB_VERTEX_2;
-    private static final JobGraph JOB_GRAPH;
+    private static final ExecutionPlan JOB_GRAPH;
 
     static {
         JOB_VERTEX_1 = new JobVertex("v1");
@@ -85,7 +82,7 @@ class JobMasterQueryableStateTest {
         JOB_VERTEX_1.setSlotSharingGroup(slotSharingGroup);
         JOB_VERTEX_2.setSlotSharingGroup(slotSharingGroup);
 
-        JOB_GRAPH = JobGraphTestUtils.streamingJobGraph(JOB_VERTEX_1, JOB_VERTEX_2);
+        JOB_GRAPH = ExecutionPlanTestUtils.streamingExecutionPlan(JOB_VERTEX_1, JOB_VERTEX_2);
         JOB_GRAPH.setJobType(JobType.STREAMING);
     }
 

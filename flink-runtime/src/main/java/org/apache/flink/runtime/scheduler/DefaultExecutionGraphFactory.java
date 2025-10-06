@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionStateUpdateListener;
 import org.apache.flink.runtime.executiongraph.MarkPartitionFinishedStrategy;
 import org.apache.flink.runtime.executiongraph.VertexAttemptNumberStore;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTrackerDeploymentListenerAdapter;
@@ -126,7 +126,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
     @Override
     public ExecutionGraph createAndRestoreExecutionGraph(
-            JobGraph jobGraph,
+            ExecutionPlan executionPlan,
             CompletedCheckpointStore completedCheckpointStore,
             CheckpointsCleaner checkpointsCleaner,
             CheckpointIDCounter checkpointIdCounter,
@@ -151,7 +151,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
         final ExecutionGraph newExecutionGraph =
                 DefaultExecutionGraphBuilder.buildGraph(
-                        jobGraph,
+                        executionPlan,
                         configuration,
                         futureExecutor,
                         ioExecutor,
@@ -187,7 +187,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
 
                 // check whether we can restore from a savepoint
                 tryRestoreExecutionGraphFromSavepoint(
-                        newExecutionGraph, jobGraph.getSavepointRestoreSettings());
+                        newExecutionGraph, executionPlan.getSavepointRestoreSettings());
             }
         }
 

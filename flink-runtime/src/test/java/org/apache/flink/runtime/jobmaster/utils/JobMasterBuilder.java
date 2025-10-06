@@ -29,7 +29,7 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.PartitionTrackerFactory;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentReconciler;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
@@ -64,7 +64,7 @@ public class JobMasterBuilder {
 
     private Configuration configuration = new Configuration();
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan executionPlan;
     private final RpcService rpcService;
 
     private JobMasterId jobMasterId = JobMasterId.generate();
@@ -96,7 +96,7 @@ public class JobMasterBuilder {
 
     private BlocklistHandler.Factory blocklistHandlerFactory = new NoOpBlocklistHandler.Factory();
 
-    public JobMasterBuilder(JobGraph jobGraph, RpcService rpcService) {
+    public JobMasterBuilder(ExecutionPlan executionPlan, RpcService rpcService) {
         TestingHighAvailabilityServices testingHighAvailabilityServices =
                 new TestingHighAvailabilityServices();
         testingHighAvailabilityServices.setCheckpointRecoveryFactory(
@@ -107,7 +107,7 @@ public class JobMasterBuilder {
         testingHighAvailabilityServices.setResourceManagerLeaderRetriever(rmLeaderRetrievalService);
 
         this.highAvailabilityServices = testingHighAvailabilityServices;
-        this.jobGraph = jobGraph;
+        this.executionPlan = executionPlan;
         this.rpcService = rpcService;
     }
 
@@ -197,12 +197,12 @@ public class JobMasterBuilder {
                 jobMasterId,
                 jobMasterConfiguration,
                 jmResourceId,
-                jobGraph,
+                executionPlan,
                 highAvailabilityServices,
                 slotPoolServiceSchedulerFactory != null
                         ? slotPoolServiceSchedulerFactory
                         : DefaultSlotPoolServiceSchedulerFactory.fromConfiguration(
-                                configuration, jobGraph.getJobType(), jobGraph.isDynamic()),
+                                configuration, executionPlan.getJobType(), executionPlan.isDynamic()),
                 jobManagerSharedServices != null
                         ? jobManagerSharedServices
                         : new TestingJobManagerSharedServicesBuilder().build(),

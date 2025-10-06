@@ -27,8 +27,8 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
@@ -78,32 +78,32 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
     @Test
     public void testNoSlotSharingAndBlockingResultSender() throws Exception {
         // Sender with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM);
-        submitJobGraphAndWait(jobGraph);
+        ExecutionPlan executionPlan = createTestExecutionPlan(JOB_NAME, PARALLELISM * 2, PARALLELISM);
+        submitExecutionPlanAndWait(executionPlan);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultReceiver() throws Exception {
         // Receiver with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM, PARALLELISM * 2);
-        submitJobGraphAndWait(jobGraph);
+        ExecutionPlan executionPlan = createTestExecutionPlan(JOB_NAME, PARALLELISM, PARALLELISM * 2);
+        submitExecutionPlanAndWait(executionPlan);
     }
 
     @Test
     public void testNoSlotSharingAndBlockingResultBoth() throws Exception {
         // Both sender and receiver with higher parallelism than available slots
-        JobGraph jobGraph = createTestJobGraph(JOB_NAME, PARALLELISM * 2, PARALLELISM * 2);
-        submitJobGraphAndWait(jobGraph);
+        ExecutionPlan executionPlan = createTestExecutionPlan(JOB_NAME, PARALLELISM * 2, PARALLELISM * 2);
+        submitExecutionPlanAndWait(executionPlan);
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    private void submitJobGraphAndWait(final JobGraph jobGraph)
+    private void submitExecutionPlanAndWait(final ExecutionPlan executionPlan)
             throws JobExecutionException, InterruptedException {
-        MINI_CLUSTER_RESOURCE.getMiniCluster().executeJobBlocking(jobGraph);
+        MINI_CLUSTER_RESOURCE.getMiniCluster().executeJobBlocking(executionPlan);
     }
 
-    private JobGraph createTestJobGraph(
+    private ExecutionPlan createTestExecutionPlan(
             String jobName, int senderParallelism, int receiverParallelism) {
 
         // The sender and receiver invokable logic ensure that each subtask gets the expected data
@@ -124,7 +124,7 @@ public class SlotCountExceedingParallelismTest extends TestLogger {
         receiver.connectNewDataSetAsInput(
                 sender, DistributionPattern.ALL_TO_ALL, ResultPartitionType.BLOCKING);
 
-        return JobGraphBuilder.newBatchJobGraphBuilder()
+        return ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                 .setJobName(jobName)
                 .addJobVertices(Arrays.asList(sender, receiver))
                 .build();

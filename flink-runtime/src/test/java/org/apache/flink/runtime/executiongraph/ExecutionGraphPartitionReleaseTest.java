@@ -24,8 +24,8 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -242,7 +242,7 @@ class ExecutionGraphPartitionReleaseTest {
             final JobMasterPartitionTracker partitionTracker, final JobVertex... vertices)
             throws Exception {
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(vertices);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(vertices);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,

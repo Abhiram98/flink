@@ -67,15 +67,8 @@ import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
@@ -196,7 +189,7 @@ class JobMasterTest {
     private static final long heartbeatInterval = 1000L;
     private static final long heartbeatTimeout = 5_000_000L;
 
-    private static final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+    private static final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
     private static TestingRpcService rpcService;
 
@@ -427,7 +420,7 @@ class JobMasterTest {
 
         rpcService.registerGateway(taskExecutorGateway.getAddress(), taskExecutorGateway);
 
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
                         .withHeartbeatServices(new HeartbeatServicesImpl(5L, 1000L))
@@ -804,7 +797,7 @@ class JobMasterTest {
         // set savepoint settings
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath(savepointFile.getAbsolutePath(), true);
-        final JobGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
+        final ExecutionPlan jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
 
         final StandaloneCompletedCheckpointStore completedCheckpointStore =
                 new StandaloneCompletedCheckpointStore(1);
@@ -860,7 +853,7 @@ class JobMasterTest {
         // set savepoint settings
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath("" + savepointFile.getAbsolutePath(), true);
-        final JobGraph jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
+        final ExecutionPlan jobGraph = createJobGraphWithCheckpointing(savepointRestoreSettings);
 
         final long checkpointId = 1L;
 
@@ -1076,8 +1069,8 @@ class JobMasterTest {
         source.setInputSplitSource(inputSplitSource);
         source.setInvokableClass(AbstractInvokable.class);
 
-        final JobGraph inputSplitJobGraph =
-                JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(source).build();
+        final ExecutionPlan inputSplitJobGraph =
+                ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(source).build();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(inputSplitJobGraph, 100, 0L);
 
         try (final JobMaster jobMaster =
@@ -1329,7 +1322,7 @@ class JobMasterTest {
      */
     @Test
     void testRequestPartitionState() throws Exception {
-        final JobGraph producerConsumerJobGraph = producerConsumerJobGraph();
+        final ExecutionPlan producerConsumerJobGraph = producerConsumerJobGraph();
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(producerConsumerJobGraph, rpcService)
                         .withConfiguration(configuration)
@@ -1471,7 +1464,7 @@ class JobMasterTest {
     @Test
     void testReleasingTaskExecutorIfNoMoreSlotsRegistered() throws Exception {
 
-        final JobGraph jobGraph = createSingleVertexJobWithRestartStrategy();
+        final ExecutionPlan jobGraph = createSingleVertexJobWithRestartStrategy();
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -1531,7 +1524,7 @@ class JobMasterTest {
         final JobManagerSharedServices jobManagerSharedServices =
                 new TestingJobManagerSharedServicesBuilder().build();
 
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         final LocalUnresolvedTaskManagerLocation taskManagerUnresolvedLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -1910,7 +1903,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)
@@ -2136,7 +2129,7 @@ class JobMasterTest {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(2);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         final LocalUnresolvedTaskManagerLocation taskManagerLocation =
                 new LocalUnresolvedTaskManagerLocation();
@@ -2338,7 +2331,7 @@ class JobMasterTest {
         final SavepointRestoreSettings savepointRestoreSettings =
                 SavepointRestoreSettings.forPath(savepointFile.getAbsolutePath(), true);
         final int parallelism = 2;
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 createJobGraphWithCheckpointing(parallelism, savepointRestoreSettings);
 
         final StandaloneCompletedCheckpointStore completedCheckpointStore =
@@ -2416,7 +2409,7 @@ class JobMasterTest {
             HeartbeatServices heartbeatServices,
             BiConsumer<LocalUnresolvedTaskManagerLocation, JobMasterGateway> jobReachedRunningState)
             throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         final JobMasterBuilder.TestingOnCompletionActions onCompletionActions =
                 new JobMasterBuilder.TestingOnCompletionActions();
 
@@ -2512,7 +2505,7 @@ class JobMasterTest {
                 .get();
     }
 
-    private JobGraph producerConsumerJobGraph() {
+    private ExecutionPlan producerConsumerJobGraph() {
         final JobVertex producer = new JobVertex("Producer");
         producer.setInvokableClass(NoOpInvokable.class);
         producer.setParallelism(1);
@@ -2523,7 +2516,7 @@ class JobMasterTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        return JobGraphTestUtils.batchJobGraph(producer, consumer);
+        return ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
     }
 
     private File createSavepoint(long savepointId) throws IOException {
@@ -2532,12 +2525,12 @@ class JobMasterTest {
                 savepointId);
     }
 
-    private JobGraph createJobGraphWithCheckpointing(
+    private ExecutionPlan createJobGraphWithCheckpointing(
             SavepointRestoreSettings savepointRestoreSettings) {
         return createJobGraphWithCheckpointing(1, savepointRestoreSettings);
     }
 
-    private JobGraph createJobGraphWithCheckpointing(
+    private ExecutionPlan createJobGraphWithCheckpointing(
             int parallelism, SavepointRestoreSettings savepointRestoreSettings) {
         final JobVertex source = new JobVertex("source");
         source.setInvokableClass(NoOpInvokable.class);
@@ -2547,8 +2540,8 @@ class JobMasterTest {
                 savepointRestoreSettings, source);
     }
 
-    private JobGraph createSingleVertexJobWithRestartStrategy() throws IOException {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+    private ExecutionPlan createSingleVertexJobWithRestartStrategy() throws IOException {
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, Integer.MAX_VALUE, 0L);
 

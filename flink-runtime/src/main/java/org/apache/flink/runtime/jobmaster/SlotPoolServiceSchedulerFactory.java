@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPoolFactory;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
@@ -76,7 +76,7 @@ public interface SlotPoolServiceSchedulerFactory {
      */
     SchedulerNG createScheduler(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Executor ioExecutor,
             Configuration configuration,
             SlotPoolService slotPoolService,

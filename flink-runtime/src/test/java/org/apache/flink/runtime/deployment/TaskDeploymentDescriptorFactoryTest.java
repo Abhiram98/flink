@@ -36,12 +36,8 @@ import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.executiongraph.MarkPartitionFinishedStrategy;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.scheduler.ClusterDatasetCorruptedException;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -216,7 +212,7 @@ class TaskDeploymentDescriptorFactoryTest {
         consumer.connectNewDataSetAsInput(
                 producer, DistributionPattern.ALL_TO_ALL, ResultPartitionType.HYBRID_FULL);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
                                 jobGraph,
@@ -248,15 +244,15 @@ class TaskDeploymentDescriptorFactoryTest {
             final Configuration jobMasterConfig)
             throws JobException, JobExecutionException {
 
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder()
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                         .setJobId(jobId)
                         .addJobVertices(jobVertices)
                         .build();
 
         return TestingDefaultExecutionGraphBuilder.newBuilder()
                 .setJobMasterConfig(jobMasterConfig)
-                .setJobGraph(jobGraph)
+                .setExecutionPlan(jobGraph)
                 .setBlobWriter(blobWriter)
                 .setMarkPartitionFinishedStrategy(markPartitionFinishedStrategy)
                 .build(EXECUTOR_RESOURCE.getExecutor());

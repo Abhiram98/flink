@@ -30,7 +30,6 @@ import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.InstantiationUtil;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.SerializedValue;
@@ -65,7 +64,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>The JobGraph defines the job-wide configuration settings, while each vertex and intermediate
  * result define the characteristics of the concrete operation and intermediate data.
  */
-public class JobGraph implements ExecutionPlan {
+public class ExecutionPlan implements org.apache.flink.streaming.api.graph.ExecutionPlan {
 
     private static final long serialVersionUID = 1L;
 
@@ -133,7 +132,7 @@ public class JobGraph implements ExecutionPlan {
      *
      * @param jobName The name of the job.
      */
-    public JobGraph(String jobName) {
+    public ExecutionPlan(String jobName) {
         this(null, jobName);
     }
 
@@ -145,7 +144,7 @@ public class JobGraph implements ExecutionPlan {
      * @param jobId The id of the job. A random ID is generated, if {@code null} is passed.
      * @param jobName The name of the job.
      */
-    public JobGraph(@Nullable JobID jobId, String jobName) {
+    public ExecutionPlan(@Nullable JobID jobId, String jobName) {
         this.jobID = jobId == null ? new JobID() : jobId;
         this.jobName = jobName == null ? "(unnamed job)" : jobName;
 
@@ -166,7 +165,7 @@ public class JobGraph implements ExecutionPlan {
      * @param jobName The name of the job.
      * @param vertices The vertices to add to the graph.
      */
-    public JobGraph(@Nullable JobID jobId, String jobName, JobVertex... vertices) {
+    public ExecutionPlan(@Nullable JobID jobId, String jobName, JobVertex... vertices) {
         this(jobId, jobName);
 
         for (JobVertex vertex : vertices) {
@@ -548,7 +547,7 @@ public class JobGraph implements ExecutionPlan {
     }
 
     /**
-     * Adds the given jar files to the {@link JobGraph} via {@link JobGraph#addJar}.
+     * Adds the given jar files to the {@link ExecutionPlan} via {@link ExecutionPlan#addJar}.
      *
      * @param jarFilesToAttach a list of the {@link URL URLs} of the jar files to attach to the
      *     jobgraph.

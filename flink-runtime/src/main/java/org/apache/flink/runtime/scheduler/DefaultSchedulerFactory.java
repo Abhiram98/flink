@@ -34,7 +34,7 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategyFactoryL
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPool;
 import org.apache.flink.runtime.jobmaster.slotpool.SlotPoolService;
@@ -59,7 +59,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             final Logger log,
-            final JobGraph jobGraph,
+            final ExecutionPlan executionPlan,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final SlotPoolService slotPoolService,
@@ -91,22 +91,22 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
 
         final DefaultSchedulerComponents schedulerComponents =
                 createSchedulerComponents(
-                        jobGraph.getJobType(),
-                        jobGraph.isApproximateLocalRecoveryEnabled(),
+                        executionPlan.getJobType(),
+                        executionPlan.isApproximateLocalRecoveryEnabled(),
                         jobMasterConfiguration,
                         slotPool,
                         slotRequestTimeout);
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
-                                jobGraph.getJobConfiguration(),
+                                executionPlan.getJobConfiguration(),
                                 jobMasterConfiguration,
-                                jobGraph.isCheckpointingEnabled())
+                                executionPlan.isCheckpointingEnabled())
                         .create();
         log.info(
                 "Using restart back off time strategy {} for {} ({}).",
                 restartBackoffTimeStrategy,
-                jobGraph.getName(),
-                jobGraph.getJobID());
+                executionPlan.getName(),
+                executionPlan.getJobID());
 
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(
@@ -127,7 +127,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
 
         return new DefaultScheduler(
                 log,
-                jobGraph,
+                executionPlan,
                 ioExecutor,
                 jobMasterConfiguration,
                 schedulerComponents.getStartUpAction(),
@@ -156,7 +156,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                 executionGraphFactory,
                 shuffleMaster,
                 rpcTimeout,
-                computeVertexParallelismStore(jobGraph),
+                computeVertexParallelismStore(executionPlan),
                 new DefaultExecutionDeployer.Factory());
     }
 

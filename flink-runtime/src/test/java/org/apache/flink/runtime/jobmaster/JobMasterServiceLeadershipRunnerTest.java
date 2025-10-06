@@ -29,8 +29,8 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedJobResultStore;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.factories.JobMasterServiceProcessFactory;
 import org.apache.flink.runtime.jobmaster.factories.TestingJobMasterServiceProcessFactory;
@@ -81,7 +81,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
     private static final Duration TESTING_TIMEOUT = Duration.ofSeconds(10);
 
-    private static JobGraph jobGraph;
+    private static ExecutionPlan jobGraph;
 
     private TestingLeaderElection leaderElection;
 
@@ -94,7 +94,7 @@ class JobMasterServiceLeadershipRunnerTest {
 
         final JobVertex jobVertex = new JobVertex("Test vertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
-        jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex);
     }
 
     @BeforeEach

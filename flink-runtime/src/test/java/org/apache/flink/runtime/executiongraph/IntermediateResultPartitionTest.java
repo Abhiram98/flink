@@ -21,12 +21,8 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
@@ -267,8 +263,8 @@ public class IntermediateResultPartitionTest {
         v3.connectNewDataSetAsInput(
                 v1, distributionPattern, ResultPartitionType.BLOCKING, dataSetId, false);
 
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder()
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3))
                         .build();
 
@@ -276,7 +272,7 @@ public class IntermediateResultPartitionTest {
 
         TestingDefaultExecutionGraphBuilder builder =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .setJobMasterConfig(configuration)
                         .setVertexParallelismStore(
                                 computeVertexParallelismStoreConsideringDynamicGraph(
@@ -323,7 +319,7 @@ public class IntermediateResultPartitionTest {
 
         ScheduledExecutorService executorService = new DirectScheduledExecutorService();
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink1, sink2);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(source, sink1, sink2);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

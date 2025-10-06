@@ -29,12 +29,8 @@ import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTrack
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -271,10 +267,10 @@ class ExecutionPartitionLifecycleTest {
                                                 .withTaskManagerLocation(taskManagerLocation)
                                                 .build()));
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producerVertex, consumerVertex);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(producerVertex, consumerVertex);
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

@@ -36,12 +36,8 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
@@ -155,13 +151,13 @@ class DefaultExecutionGraphDeploymentTest {
         v4.connectNewDataSetAsInput(
                 v2, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(v1, v2, v3, v4);
-        final JobID jobId = jobGraph.getJobID();
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2, v3, v4);
+        final JobID jobId = executionPlan.getJobID();
 
         DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
         DefaultExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(executionPlan)
                         .setBlobWriter(blobWriter)
                         .build(executor);
 
@@ -445,7 +441,7 @@ class DefaultExecutionGraphDeploymentTest {
         v2.connectNewDataSetAsInput(
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
-        final JobGraph graph = JobGraphTestUtils.batchJobGraph(v1, v2);
+        final ExecutionPlan graph = ExecutionPlanTestUtils.batchExecutionPlan(v1, v2);
 
         DirectScheduledExecutorService directExecutor = new DirectScheduledExecutorService();
 
@@ -513,7 +509,7 @@ class DefaultExecutionGraphDeploymentTest {
         // execution graph that executes actions synchronously
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(v1, v2),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(v1, v2),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -593,13 +589,13 @@ class DefaultExecutionGraphDeploymentTest {
         final RpcTaskManagerGateway taskManagerGateway =
                 new RpcTaskManagerGateway(taskExecutorGateway, JobMasterId.generate());
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sourceVertex, sinkVertex);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(sourceVertex, sinkVertex);
 
         final TestingPhysicalSlotProvider physicalSlotProvider =
                 TestingPhysicalSlotProvider.createWithoutImmediatePhysicalSlotCreation();
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                jobGraph,
+                        executionPlan,
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_EXTENSION.getExecutor())
                         .setExecutionSlotAllocatorFactory(
@@ -649,8 +645,8 @@ class DefaultExecutionGraphDeploymentTest {
     }
 
     private ExecutionGraph createExecutionGraph(Configuration configuration) throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
-        jobGraph.setSnapshotSettings(
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.emptyExecutionPlan();
+        executionPlan.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         new CheckpointCoordinatorConfiguration(
                                 100,
@@ -665,7 +661,7 @@ class DefaultExecutionGraphDeploymentTest {
                         null));
 
         return TestingDefaultExecutionGraphBuilder.newBuilder()
-                .setJobGraph(jobGraph)
+                .setExecutionPlan(executionPlan)
                 .setJobMasterConfig(configuration)
                 .setBlobWriter(blobWriter)
                 .build(EXECUTOR_EXTENSION.getExecutor());

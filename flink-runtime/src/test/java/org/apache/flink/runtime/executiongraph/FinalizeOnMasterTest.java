@@ -20,7 +20,7 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertex.FinalizeOnMasterContext;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -62,7 +62,7 @@ class FinalizeOnMasterTest {
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        JobGraphTestUtils.streamingJobGraph(vertex1, vertex2),
+                        ExecutionPlanTestUtils.streamingExecutionPlan(vertex1, vertex2),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();
@@ -91,7 +91,7 @@ class FinalizeOnMasterTest {
 
         final SchedulerBase scheduler =
                 createScheduler(
-                        JobGraphTestUtils.streamingJobGraph(vertex),
+                        ExecutionPlanTestUtils.streamingExecutionPlan(vertex),
                         ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                         EXECUTOR_RESOURCE.getExecutor());
         scheduler.startScheduling();

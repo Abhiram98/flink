@@ -30,8 +30,8 @@ import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -115,7 +115,7 @@ public class AdaptiveSchedulerClusterITCase {
     @Test
     void testAutomaticScaleDownInCaseOfLostSlots() throws Exception {
         final MiniCluster miniCluster = internalMiniClusterExtension.getMiniCluster();
-        final JobGraph jobGraph = createBlockingJobGraph(PARALLELISM);
+        final ExecutionPlan jobGraph = createBlockingJobGraph(PARALLELISM);
 
         miniCluster.submitJob(jobGraph).join();
         final CompletableFuture<JobResult> resultFuture =
@@ -144,7 +144,7 @@ public class AdaptiveSchedulerClusterITCase {
         final MiniCluster miniCluster = internalMiniClusterExtension.getMiniCluster();
         int initialInstanceCount = NUMBER_SLOTS_PER_TASK_MANAGER * NUMBER_TASK_MANAGERS;
         int targetInstanceCount = initialInstanceCount + NUMBER_SLOTS_PER_TASK_MANAGER;
-        final JobGraph jobGraph = createBlockingJobGraph(targetInstanceCount);
+        final ExecutionPlan jobGraph = createBlockingJobGraph(targetInstanceCount);
 
         log.info(
                 "Submitting job with parallelism of "
@@ -176,7 +176,7 @@ public class AdaptiveSchedulerClusterITCase {
         jobVertex.setInvokableClass(CheckpointingNoOpInvokable.class);
         jobVertex.setParallelism(PARALLELISM);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(jobVertex);
         jobGraph.setSnapshotSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder()
@@ -265,14 +265,14 @@ public class AdaptiveSchedulerClusterITCase {
         }
     }
 
-    private JobGraph createBlockingJobGraph(int parallelism) throws IOException {
+    private ExecutionPlan createBlockingJobGraph(int parallelism) throws IOException {
         final JobVertex blockingOperator = new JobVertex("Blocking operator", JOB_VERTEX_ID);
 
         blockingOperator.setInvokableClass(OnceBlockingNoOpInvokable.class);
 
         blockingOperator.setParallelism(parallelism);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(blockingOperator);
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(blockingOperator);
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(jobGraph, 1, 0L);
 

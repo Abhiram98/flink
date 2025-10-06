@@ -21,8 +21,8 @@ package org.apache.flink.runtime.dispatcher;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.messages.webmonitor.JobsOverview;
@@ -78,13 +78,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
      */
     @Test
     public void testPut() throws IOException {
-        assertPutJobGraphWithStatus(JobStatus.FINISHED);
+        assertPutExecutionPlanWithStatus(JobStatus.FINISHED);
     }
 
     /** Tests that a SUSPENDED job can be persisted. */
     @Test
     public void testPutSuspendedJob() throws IOException {
-        assertPutJobGraphWithStatus(JobStatus.SUSPENDED);
+        assertPutExecutionPlanWithStatus(JobStatus.SUSPENDED);
     }
 
     /** Tests that null is returned if we request an unknown JobID. */
@@ -349,13 +349,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(vertex);
-            miniCluster.submitJob(jobGraph);
+            final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
+            miniCluster.submitJob(executionPlan);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }
     }
 
-    private void assertPutJobGraphWithStatus(JobStatus jobStatus) throws IOException {
+    private void assertPutExecutionPlanWithStatus(JobStatus jobStatus) throws IOException {
         final ExecutionGraphInfo dummyExecutionGraphInfo =
                 new ExecutionGraphInfo(
                         new ArchivedExecutionGraphBuilder().setState(jobStatus).build());

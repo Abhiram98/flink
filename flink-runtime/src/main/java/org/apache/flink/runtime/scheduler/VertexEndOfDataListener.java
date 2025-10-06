@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 
@@ -33,7 +33,7 @@ import java.util.Set;
 
 /**
  * Records the end of data event of each task, and allows for checking whether all tasks of a {@link
- * JobGraph} have reached the end of data.
+ * ExecutionPlan} have reached the end of data.
  */
 public class VertexEndOfDataListener {
     private final ExecutionGraph executionGraph;

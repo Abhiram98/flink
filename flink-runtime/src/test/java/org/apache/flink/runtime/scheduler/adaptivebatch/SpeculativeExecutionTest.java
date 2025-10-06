@@ -38,8 +38,8 @@ import org.apache.flink.runtime.io.network.partition.PartitionNotFoundException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.DefaultExecutionOperations;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -80,7 +80,7 @@ import java.util.stream.Stream;
 import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.completeCancellingForAllVertices;
 import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.createNoOpVertex;
 import static org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder.createCustomParallelismDecider;
-import static org.apache.flink.runtime.scheduler.DefaultSchedulerTest.singleNonParallelJobVertexJobGraphForBatch;
+import static org.apache.flink.runtime.scheduler.DefaultSchedulerTest.singleNonParallelJobVertexExecutionPlanForBatch;
 import static org.apache.flink.runtime.scheduler.SchedulerTestingUtils.createCanceledTaskExecutionState;
 import static org.apache.flink.runtime.scheduler.SchedulerTestingUtils.createFailedTaskExecutionState;
 import static org.apache.flink.runtime.scheduler.SchedulerTestingUtils.createFinishedTaskExecutionState;
@@ -362,12 +362,12 @@ class SpeculativeExecutionTest {
         final JobVertex source = createNoOpVertex("source", 1);
         final JobVertex sink = createNoOpVertex("sink", -1);
         sink.connectNewDataSetAsInput(source, DistributionPattern.ALL_TO_ALL, resultPartitionType);
-        final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink);
+        final ExecutionPlan executionPlan = ExecutionPlanTestUtils.batchExecutionPlan(source, sink);
 
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();
         final AdaptiveBatchScheduler scheduler =
-                createSchedulerBuilder(jobGraph, mainThreadExecutor)
+                createSchedulerBuilder(executionPlan, mainThreadExecutor)
                         .setVertexParallelismAndInputInfosDecider(createCustomParallelismDecider(3))
                         .buildAdaptiveBatchJobScheduler(true);
         mainThreadExecutor.execute(scheduler::startScheduling);
@@ -467,15 +467,15 @@ class SpeculativeExecutionTest {
     }
 
     private AdaptiveBatchScheduler createSchedulerAndStartScheduling() {
-        return createSchedulerAndStartScheduling(singleNonParallelJobVertexJobGraphForBatch());
+        return createSchedulerAndStartScheduling(singleNonParallelJobVertexExecutionPlanForBatch());
     }
 
-    private AdaptiveBatchScheduler createSchedulerAndStartScheduling(final JobGraph jobGraph) {
+    private AdaptiveBatchScheduler createSchedulerAndStartScheduling(final ExecutionPlan executionPlan) {
         final ComponentMainThreadExecutor mainThreadExecutor =
                 ComponentMainThreadExecutorServiceAdapter.forMainThread();
 
         try {
-            final AdaptiveBatchScheduler scheduler = createScheduler(jobGraph, mainThreadExecutor);
+            final AdaptiveBatchScheduler scheduler = createScheduler(executionPlan, mainThreadExecutor);
             mainThreadExecutor.execute(scheduler::startScheduling);
             return scheduler;
         } catch (Exception e) {
@@ -484,20 +484,20 @@ class SpeculativeExecutionTest {
     }
 
     private AdaptiveBatchScheduler createScheduler(
-            final JobGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor)
+            final ExecutionPlan executionPlan, final ComponentMainThreadExecutor mainThreadExecutor)
             throws Exception {
-        return createSchedulerBuilder(jobGraph, mainThreadExecutor)
+        return createSchedulerBuilder(executionPlan, mainThreadExecutor)
                 .buildAdaptiveBatchJobScheduler(true);
     }
 
     private DefaultSchedulerBuilder createSchedulerBuilder(
-            final JobGraph jobGraph, final ComponentMainThreadExecutor mainThreadExecutor) {
+            final ExecutionPlan executionPlan, final ComponentMainThreadExecutor mainThreadExecutor) {
         // disable periodical slow task detection to avoid affecting the designed testing process
         final Configuration configuration = new Configuration();
         configuration.set(SlowTaskDetectorOptions.CHECK_INTERVAL, Duration.ofDays(1));
 
         return new DefaultSchedulerBuilder(
-                        jobGraph, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
+                executionPlan, mainThreadExecutor, EXECUTOR_RESOURCE.getExecutor())
                 .setBlocklistOperations(testBlocklistOperations)
                 .setExecutionOperations(testExecutionOperations)
                 .setFutureExecutor(futureExecutor)

@@ -23,8 +23,8 @@ import org.apache.flink.api.common.time.Deadline;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -346,7 +346,7 @@ public class ExecutionGraphTestUtils {
 
         DefaultExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(JobGraphTestUtils.streamingJobGraph(vertices))
+                        .setExecutionPlan(ExecutionPlanTestUtils.streamingExecutionPlan(vertices))
                         .setRpcTimeout(timeout)
                         .build(executor);
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
@@ -415,7 +415,7 @@ public class ExecutionGraphTestUtils {
     public static ExecutionJobVertex getExecutionJobVertex(
             JobVertex jobVertex, ScheduledExecutorService executor) throws Exception {
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(jobVertex);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

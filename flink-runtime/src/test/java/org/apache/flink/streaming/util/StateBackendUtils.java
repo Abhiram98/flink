@@ -23,7 +23,7 @@ import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -99,7 +99,7 @@ public class StateBackendUtils {
      * @param stateBackend The StateBackend to set for the execution environment.
      * @return The JobGraph representing the configured job.
      */
-    public static JobGraph configureStateBackendAndGetJobGraph(
+    public static ExecutionPlan configureStateBackendAndGetJobGraph(
             StreamExecutionEnvironment env, StateBackend stateBackend) {
         StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setStateBackend(stateBackend);
@@ -116,7 +116,7 @@ public class StateBackendUtils {
      * @param jobId The JobID to associate with the JobGraph.
      * @return The JobGraph representing the configured job.
      */
-    public static JobGraph configureStateBackendAndGetJobGraph(
+    public static ExecutionPlan configureStateBackendAndGetJobGraph(
             StreamExecutionEnvironment env,
             StateBackend stateBackend,
             ClassLoader userClassLoader,

@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.JobStatusListener;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategyFactoryLoader;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobmaster.ExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.slotpool.DeclarativeSlotPool;
@@ -60,7 +60,7 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
     @Override
     public SchedulerNG createInstance(
             Logger log,
-            JobGraph jobGraph,
+            ExecutionPlan executionPlan,
             Executor ioExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
@@ -90,15 +90,15 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
                                                 "The AdaptiveScheduler requires a DeclarativeSlotPool."));
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
-                                jobGraph.getJobConfiguration(),
+                                executionPlan.getJobConfiguration(),
                                 jobMasterConfiguration,
-                                jobGraph.isCheckpointingEnabled())
+                                executionPlan.isCheckpointingEnabled())
                         .create();
         log.info(
                 "Using restart back off time strategy {} for {} ({}).",
                 restartBackoffTimeStrategy,
-                jobGraph.getName(),
-                jobGraph.getJobID());
+                executionPlan.getName(),
+                executionPlan.getJobID());
 
         final SlotSharingSlotAllocator slotAllocator =
                 createSlotSharingSlotAllocator(
@@ -120,9 +120,9 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
 
         return new AdaptiveScheduler(
                 AdaptiveScheduler.Settings.of(
-                        jobMasterConfiguration, jobGraph.getCheckpointingSettings()),
-                jobGraph,
-                JobResourceRequirements.readFromExecutionPlan(jobGraph).orElse(null),
+                        jobMasterConfiguration, executionPlan.getCheckpointingSettings()),
+                executionPlan,
+                JobResourceRequirements.readFromExecutionPlan(executionPlan).orElse(null),
                 jobMasterConfiguration,
                 declarativeSlotPool,
                 slotAllocator,

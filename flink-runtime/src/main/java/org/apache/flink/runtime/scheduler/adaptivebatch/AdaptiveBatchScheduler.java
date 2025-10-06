@@ -51,13 +51,8 @@ import org.apache.flink.runtime.executiongraph.failover.FailoverStrategy;
 import org.apache.flink.runtime.executiongraph.failover.FailureHandlingResult;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalResult;
@@ -140,7 +135,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
     public AdaptiveBatchScheduler(
             final Logger log,
-            final JobGraph jobGraph,
+            final ExecutionPlan executionPlan,
             final Executor ioExecutor,
             final Configuration jobMasterConfiguration,
             final Consumer<ComponentMainThreadExecutor> startUpAction,
@@ -172,7 +167,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
         super(
                 log,
-                jobGraph,
+                executionPlan,
                 ioExecutor,
                 jobMasterConfiguration,
                 startUpAction,
@@ -195,10 +190,10 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
                 shuffleMaster,
                 rpcTimeout,
                 computeVertexParallelismStoreForDynamicGraph(
-                        jobGraph.getVertices(), defaultMaxParallelism),
+                        executionPlan.getVertices(), defaultMaxParallelism),
                 new DefaultExecutionDeployer.Factory());
 
-        this.logicalTopology = DefaultLogicalTopology.fromJobGraph(jobGraph);
+        this.logicalTopology = DefaultLogicalTopology.fromExecutionPlan(executionPlan);
 
         this.vertexParallelismAndInputInfosDecider =
                 checkNotNull(vertexParallelismAndInputInfosDecider);
@@ -768,7 +763,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         // job vertices
         jobVertex.getJobVertex().setDynamicParallelism(parallelism);
         try {
-            getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
+            getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getExecutionPlan()));
         } catch (Throwable t) {
             log.warn("Cannot create JSON plan for job", t);
             // give the graph an empty plan

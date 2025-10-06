@@ -24,8 +24,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.testutils.TestingUtils;
@@ -234,11 +234,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -298,11 +298,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -371,11 +371,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -435,11 +435,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -468,11 +468,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -513,11 +513,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v3, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -569,11 +569,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v1, DistributionPattern.POINTWISE, ResultPartitionType.BLOCKING);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4, v5));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();
@@ -605,11 +605,11 @@ class PipelinedRegionSchedulingStrategyTest {
                 v3, DistributionPattern.POINTWISE, ResultPartitionType.HYBRID_SELECTIVE);
 
         final List<JobVertex> ordered = new ArrayList<>(Arrays.asList(v1, v2, v3, v4));
-        final JobGraph jobGraph =
-                JobGraphBuilder.newBatchJobGraphBuilder().addJobVertices(ordered).build();
+        final ExecutionPlan jobGraph =
+                ExecutionPlanBuilder.newBatchExecutionPlanBuilder().addJobVertices(ordered).build();
         final ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         final SchedulingTopology schedulingTopology = executionGraph.getSchedulingTopology();

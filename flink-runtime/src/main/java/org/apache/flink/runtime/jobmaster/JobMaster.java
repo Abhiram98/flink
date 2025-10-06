@@ -54,11 +54,8 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.PartitionTrackerFactory;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.factories.JobManagerJobMetricGroupFactory;
@@ -102,7 +99,6 @@ import org.apache.flink.runtime.taskmanager.TaskExecutionState;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation.ResolutionMode;
 import org.apache.flink.runtime.taskmanager.UnresolvedTaskManagerLocation;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.FlinkRuntimeException;
@@ -142,7 +138,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * JobMaster implementation. The job master is responsible for the execution of a single {@link
- * ExecutionPlan}.
+ * org.apache.flink.streaming.api.graph.ExecutionPlan}.
  *
  * <p>It offers the following methods as part of its rpc interface to interact with the JobMaster
  * remotely:
@@ -163,7 +159,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     private final ResourceID resourceId;
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
 
     private final Duration rpcTimeout;
 
@@ -255,7 +251,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
             JobMasterId jobMasterId,
             JobMasterConfiguration jobMasterConfiguration,
             ResourceID resourceId,
-            ExecutionPlan executionPlan,
+            org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
             HighAvailabilityServices highAvailabilityService,
             SlotPoolServiceSchedulerFactory slotPoolServiceSchedulerFactory,
             JobManagerSharedServices jobManagerSharedServices,
@@ -321,7 +317,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         final String jobName = executionPlan.getName();
         final JobID jid = executionPlan.getJobID();
 
-        this.jobGraph = (JobGraph) executionPlan;
+        this.jobGraph = (ExecutionPlan) executionPlan;
 
         log.info("Initializing job '{}' ({}).", jobName, jid);
 

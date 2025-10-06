@@ -30,8 +30,8 @@ import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
 import org.apache.flink.runtime.executiongraph.failover.FailureHandlingResult;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.taskmanager.TaskExecutionState;
@@ -71,12 +71,12 @@ class FailureHandlingResultSnapshotTest {
 
     @BeforeEach
     void setup() throws JobException, JobExecutionException {
-        final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+        final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
         jobGraph.getVertices().forEach(v -> v.setParallelism(3));
 
         executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
         executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
     }

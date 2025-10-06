@@ -23,7 +23,7 @@ import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
@@ -240,7 +240,7 @@ class ExecutionGraphSuspendTest {
                 new ManuallyTriggeredScheduledExecutor();
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.emptyJobGraph(),
+                                ExecutionPlanTestUtils.emptyExecutionPlan(),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setRestartBackoffTimeStrategy(
@@ -321,7 +321,7 @@ class ExecutionGraphSuspendTest {
 
         final SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(
-                                JobGraphTestUtils.streamingJobGraph(vertex),
+                                ExecutionPlanTestUtils.streamingExecutionPlan(vertex),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setExecutionSlotAllocatorFactory(

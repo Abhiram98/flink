@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 
 import javax.annotation.Nonnull;
@@ -40,32 +40,32 @@ import java.util.List;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * {@link JobGraphRetriever} implementation which retrieves the {@link JobGraph} from a file on
+ * {@link JobGraphRetriever} implementation which retrieves the {@link ExecutionPlan} from a file on
  * disk.
  */
-public class FileJobGraphRetriever extends AbstractUserClassPathJobGraphRetriever {
+public class FileExecutionPlanRetriever extends AbstractUserClassPathExecutionPlanRetriever {
 
     @Internal
-    public static final ConfigOption<String> JOB_GRAPH_FILE_PATH =
+    public static final ConfigOption<String> EXECUTION_PLAN_FILE_PATH =
             ConfigOptions.key("internal.jobgraph-path").stringType().defaultValue("job.graph");
 
-    @Nonnull private final String jobGraphFile;
+    @Nonnull private final String executionPlanFile;
 
-    public FileJobGraphRetriever(@Nonnull String jobGraphFile, @Nullable File usrLibDir)
+    public FileExecutionPlanRetriever(@Nonnull String executionPlanFile, @Nullable File usrLibDir)
             throws IOException {
         super(usrLibDir);
-        this.jobGraphFile = jobGraphFile;
+        this.executionPlanFile = executionPlanFile;
     }
 
     @Override
-    public JobGraph retrieveJobGraph(Configuration configuration) throws FlinkException {
-        final File fp = new File(jobGraphFile);
+    public ExecutionPlan retrieveExecutionPlan(Configuration configuration) throws FlinkException {
+        final File fp = new File(executionPlanFile);
 
         try (FileInputStream input = new FileInputStream(fp);
                 ObjectInputStream obInput = new ObjectInputStream(input)) {
-            final JobGraph jobGraph = (JobGraph) obInput.readObject();
-            addUserClassPathsToJobGraph(jobGraph);
-            return jobGraph;
+            final ExecutionPlan executionPlan = (ExecutionPlan) obInput.readObject();
+            addUserClassPathsToExecutionPlan(executionPlan);
+            return executionPlan;
         } catch (FileNotFoundException e) {
             throw new FlinkException("Could not find the JobGraph file.", e);
         } catch (ClassNotFoundException | IOException e) {
@@ -73,19 +73,19 @@ public class FileJobGraphRetriever extends AbstractUserClassPathJobGraphRetrieve
         }
     }
 
-    private void addUserClassPathsToJobGraph(JobGraph jobGraph) {
+    private void addUserClassPathsToExecutionPlan(ExecutionPlan executionPlan) {
         final List<URL> classPaths = new ArrayList<>();
 
-        if (jobGraph.getClasspaths() != null) {
-            classPaths.addAll(jobGraph.getClasspaths());
+        if (executionPlan.getClasspaths() != null) {
+            classPaths.addAll(executionPlan.getClasspaths());
         }
         classPaths.addAll(getUserClassPaths());
-        jobGraph.setClasspaths(classPaths);
+        executionPlan.setClasspaths(classPaths);
     }
 
-    public static FileJobGraphRetriever createFrom(
+    public static FileExecutionPlanRetriever createFrom(
             Configuration configuration, @Nullable File usrLibDir) throws IOException {
         checkNotNull(configuration, "configuration");
-        return new FileJobGraphRetriever(configuration.get(JOB_GRAPH_FILE_PATH), usrLibDir);
+        return new FileExecutionPlanRetriever(configuration.get(EXECUTION_PLAN_FILE_PATH), usrLibDir);
     }
 }

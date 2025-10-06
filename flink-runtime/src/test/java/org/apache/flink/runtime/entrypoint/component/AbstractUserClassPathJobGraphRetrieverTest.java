@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.entrypoint.component;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.FileUtilsTest;
 import org.apache.flink.util.TestLogger;
@@ -38,18 +38,18 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/** Tests for the {@link AbstractUserClassPathJobGraphRetriever}. */
+/** Tests for the {@link AbstractUserClassPathExecutionPlanRetriever}. */
 public class AbstractUserClassPathJobGraphRetrieverTest extends TestLogger {
 
     @Rule public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static class TestJobGraphRetriever extends AbstractUserClassPathJobGraphRetriever {
+    private static class TestJobGraphRetriever extends AbstractUserClassPathExecutionPlanRetriever {
         TestJobGraphRetriever(File jobDir) throws IOException {
             super(jobDir);
         }
 
         @Override
-        public JobGraph retrieveJobGraph(Configuration configuration) {
+        public ExecutionPlan retrieveExecutionPlan(Configuration configuration) {
             throw new UnsupportedOperationException("This method should not be called.");
         }
     }

@@ -40,7 +40,7 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
@@ -79,7 +79,7 @@ import static org.apache.flink.runtime.scheduler.SchedulerBase.computeVertexPara
 public class DefaultSchedulerBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultSchedulerBuilder.class);
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan executionPlan;
     private final ComponentMainThreadExecutor mainThreadExecutor;
 
     private Executor ioExecutor;
@@ -123,11 +123,11 @@ public class DefaultSchedulerBuilder {
     private BatchJobRecoveryHandler jobRecoveryHandler = new DummyBatchJobRecoveryHandler();
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            ExecutionPlan executionPlan,
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService generalExecutorService) {
         this(
-                jobGraph,
+                executionPlan,
                 mainThreadExecutor,
                 generalExecutorService,
                 generalExecutorService,
@@ -135,12 +135,12 @@ public class DefaultSchedulerBuilder {
     }
 
     public DefaultSchedulerBuilder(
-            JobGraph jobGraph,
+            ExecutionPlan executionPlan,
             ComponentMainThreadExecutor mainThreadExecutor,
             Executor ioExecutor,
             ScheduledExecutorService futureExecutor,
             ScheduledExecutor delayExecutor) {
-        this.jobGraph = jobGraph;
+        this.executionPlan = executionPlan;
         this.mainThreadExecutor = mainThreadExecutor;
         this.ioExecutor = ioExecutor;
         this.futureExecutor = futureExecutor;
@@ -303,7 +303,7 @@ public class DefaultSchedulerBuilder {
     public DefaultScheduler build() throws Exception {
         return new DefaultScheduler(
                 log,
-                jobGraph,
+                executionPlan,
                 ioExecutor,
                 jobMasterConfiguration,
                 componentMainThreadExecutor -> {},
@@ -325,7 +325,7 @@ public class DefaultSchedulerBuilder {
                 createExecutionGraphFactory(false),
                 shuffleMaster,
                 rpcTimeout,
-                computeVertexParallelismStore(jobGraph),
+                computeVertexParallelismStore(executionPlan),
                 executionDeployerFactory);
     }
 
@@ -352,8 +352,8 @@ public class DefaultSchedulerBuilder {
 
         return AdaptiveBatchSchedulerFactory.createScheduler(
                 log,
-                jobGraph,
-                jobGraph.getSerializedExecutionConfig().deserializeValue(userCodeLoader),
+                executionPlan,
+                executionPlan.getSerializedExecutionConfig().deserializeValue(userCodeLoader),
                 ioExecutor,
                 jobMasterConfiguration,
                 futureExecutor,

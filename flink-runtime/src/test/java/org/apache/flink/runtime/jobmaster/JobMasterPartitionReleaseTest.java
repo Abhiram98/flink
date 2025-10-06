@@ -34,8 +34,8 @@ import org.apache.flink.runtime.highavailability.TestingHighAvailabilityServices
 import org.apache.flink.runtime.io.network.partition.AbstractPartitionTrackerTest;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.io.network.partition.TestingJobMasterPartitionTracker;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobmaster.utils.JobMasterBuilder;
 import org.apache.flink.runtime.leaderretrieval.SettableLeaderRetrievalService;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -240,9 +240,9 @@ class JobMasterPartitionReleaseTest {
 
             HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 5_000_000L);
 
-            final JobGraph jobGraph = JobGraphTestUtils.singleNoOpJobGraph();
+            final ExecutionPlan executionPlan = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
             jobMaster =
-                    new JobMasterBuilder(jobGraph, rpcService)
+                    new JobMasterBuilder(executionPlan, rpcService)
                             .withConfiguration(configuration)
                             .withHighAvailabilityServices(haServices)
                             .withFatalErrorHandler(fatalErrorHandler)
@@ -253,7 +253,7 @@ class JobMasterPartitionReleaseTest {
             jobMaster.start();
 
             registerTaskExecutorAtJobMaster(
-                    rpcService, getJobMasterGateway(), jobGraph.getJobID(), taskExecutorGateway);
+                    rpcService, getJobMasterGateway(), executionPlan.getJobID(), taskExecutorGateway);
         }
 
         private void registerTaskExecutorAtJobMaster(

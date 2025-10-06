@@ -20,8 +20,8 @@ package org.apache.flink.runtime.executiongraph;
 
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.scheduler.DefaultSchedulerBuilder;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
@@ -48,8 +48,8 @@ class ExecutionGraphFinishTest {
     @Test
     void testJobFinishes() throws Exception {
 
-        JobGraph jobGraph =
-                JobGraphTestUtils.streamingJobGraph(
+        ExecutionPlan jobGraph =
+                ExecutionPlanTestUtils.streamingExecutionPlan(
                         ExecutionGraphTestUtils.createJobVertex("Task1", 2, NoOpInvokable.class),
                         ExecutionGraphTestUtils.createJobVertex("Task2", 2, NoOpInvokable.class));
 

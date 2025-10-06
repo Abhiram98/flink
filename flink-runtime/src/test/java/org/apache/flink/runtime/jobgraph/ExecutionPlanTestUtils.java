@@ -22,34 +22,34 @@ import org.apache.flink.runtime.testtasks.NoOpInvokable;
 
 import java.util.Arrays;
 
-/** Utilities for creating {@link JobGraph JobGraphs} for testing purposes. */
-public class JobGraphTestUtils {
+/** Utilities for creating {@link ExecutionPlan JobGraphs} for testing purposes. */
+public class ExecutionPlanTestUtils {
 
-    public static JobGraph emptyJobGraph() {
-        return JobGraphBuilder.newStreamingJobGraphBuilder().build();
+    public static ExecutionPlan emptyExecutionPlan() {
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder().build();
     }
 
-    public static JobGraph singleNoOpJobGraph() {
+    public static ExecutionPlan singleNoOpExecutionPlan() {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(NoOpInvokable.class);
         jobVertex.setParallelism(1);
 
-        return JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder().addJobVertex(jobVertex).build();
     }
 
-    public static JobGraph streamingJobGraph(JobVertex... jobVertices) {
-        return JobGraphBuilder.newStreamingJobGraphBuilder()
+    public static ExecutionPlan streamingExecutionPlan(JobVertex... jobVertices) {
+        return ExecutionPlanBuilder.newStreamingJobGraphBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    public static JobGraph batchJobGraph(JobVertex... jobVertices) {
-        return JobGraphBuilder.newBatchJobGraphBuilder()
+    public static ExecutionPlan batchExecutionPlan(JobVertex... jobVertices) {
+        return ExecutionPlanBuilder.newBatchExecutionPlanBuilder()
                 .addJobVertices(Arrays.asList(jobVertices))
                 .build();
     }
 
-    private JobGraphTestUtils() {
+    private ExecutionPlanTestUtils() {
         throw new UnsupportedOperationException("This class should never be instantiated.");
     }
 }

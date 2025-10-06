@@ -21,8 +21,8 @@ package org.apache.flink.runtime.executiongraph;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
@@ -136,7 +136,7 @@ class EdgeManagerTest {
         consumer.connectNewDataSetAsInput(
                 producer, distributionPattern, ResultPartitionType.BLOCKING);
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(producer, consumer);
+        ExecutionPlan jobGraph = ExecutionPlanTestUtils.batchExecutionPlan(producer, consumer);
         SchedulerBase scheduler =
                 SchedulerTestingUtils.createScheduler(
                         jobGraph,

@@ -32,12 +32,8 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.jobmaster.TestingLogicalSlotBuilder;
 import org.apache.flink.runtime.operators.BatchTask;
@@ -176,13 +172,13 @@ class DefaultExecutionGraphDeploymentWithSmallBlobCacheSizeLimitTest
                             ResultPartitionType.BLOCKING);
         }
 
-        final JobGraph jobGraph =
-                JobGraphTestUtils.batchJobGraph(vertices.toArray(new JobVertex[0]));
+        final ExecutionPlan executionPlan =
+                ExecutionPlanTestUtils.batchExecutionPlan(vertices.toArray(new JobVertex[0]));
 
         final DirectScheduledExecutorService executor = new DirectScheduledExecutorService();
         final DefaultExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
-                        .setJobGraph(jobGraph)
+                        .setExecutionPlan(executionPlan)
                         .setBlobWriter(blobWriter)
                         .build(executor);
 
