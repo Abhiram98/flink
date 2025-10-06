@@ -78,13 +78,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
      */
     @Test
     public void testPut() throws IOException {
-        assertPutJobGraphWithStatus(JobStatus.FINISHED);
+        assertPutExecutionPlanWithStatus(JobStatus.FINISHED);
     }
 
     /** Tests that a SUSPENDED job can be persisted. */
     @Test
     public void testPutSuspendedJob() throws IOException {
-        assertPutJobGraphWithStatus(JobStatus.SUSPENDED);
+        assertPutExecutionPlanWithStatus(JobStatus.SUSPENDED);
     }
 
     /** Tests that null is returned if we request an unknown JobID. */
@@ -349,13 +349,13 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
             vertex.setParallelism(1);
             vertex.setInvokableClass(
                     ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.class);
-            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
-            miniCluster.submitJob(jobGraph);
+            final ExecutionPlan executionPlan = ExecutionPlanTestUtils.streamingExecutionPlan(vertex);
+            miniCluster.submitJob(executionPlan);
             ExecutionGraphInfoStoreTestUtils.SignallingBlockingNoOpInvokable.LATCH.await();
         }
     }
 
-    private void assertPutJobGraphWithStatus(JobStatus jobStatus) throws IOException {
+    private void assertPutExecutionPlanWithStatus(JobStatus jobStatus) throws IOException {
         final ExecutionGraphInfo dummyExecutionGraphInfo =
                 new ExecutionGraphInfo(
                         new ArchivedExecutionGraphBuilder().setState(jobStatus).build());
