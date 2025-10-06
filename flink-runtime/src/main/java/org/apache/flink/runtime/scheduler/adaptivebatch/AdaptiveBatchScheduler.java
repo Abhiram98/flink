@@ -763,7 +763,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         // job vertices
         jobVertex.getJobVertex().setDynamicParallelism(parallelism);
         try {
-            getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
+            getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getExecutionPlan()));
         } catch (Throwable t) {
             log.warn("Cannot create JSON plan for job", t);
             // give the graph an empty plan

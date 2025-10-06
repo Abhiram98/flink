@@ -529,12 +529,12 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
 
         @Override
         public Set<SlotSharingGroup> getLogicalSlotSharingGroups() {
-            return getJobGraph().getSlotSharingGroups();
+            return getExecutionPlan().getSlotSharingGroups();
         }
 
         @Override
         public Set<CoLocationGroup> getCoLocationGroups() {
-            return getJobGraph().getCoLocationGroups();
+            return getExecutionPlan().getCoLocationGroups();
         }
 
         @Override
