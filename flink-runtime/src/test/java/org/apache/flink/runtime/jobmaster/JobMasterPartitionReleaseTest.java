@@ -240,9 +240,9 @@ class JobMasterPartitionReleaseTest {
 
             HeartbeatServices heartbeatServices = new HeartbeatServicesImpl(1000L, 5_000_000L);
 
-            final ExecutionPlan jobGraph = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
+            final ExecutionPlan executionPlan = ExecutionPlanTestUtils.singleNoOpExecutionPlan();
             jobMaster =
-                    new JobMasterBuilder(jobGraph, rpcService)
+                    new JobMasterBuilder(executionPlan, rpcService)
                             .withConfiguration(configuration)
                             .withHighAvailabilityServices(haServices)
                             .withFatalErrorHandler(fatalErrorHandler)
@@ -253,7 +253,7 @@ class JobMasterPartitionReleaseTest {
             jobMaster.start();
 
             registerTaskExecutorAtJobMaster(
-                    rpcService, getJobMasterGateway(), jobGraph.getJobID(), taskExecutorGateway);
+                    rpcService, getJobMasterGateway(), executionPlan.getJobID(), taskExecutorGateway);
         }
 
         private void registerTaskExecutorAtJobMaster(
