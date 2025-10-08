@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link LatencyTrackingAggregatingState}. */
+/** Tests for {@link MetricsTrackingAggregatingState}. */
 class LatencyTrackingAggregatingStateTest extends LatencyTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
@@ -82,12 +82,12 @@ class LatencyTrackingAggregatingStateTest extends LatencyTrackingStateTestBase<I
     void testLatencyTrackingAggregatingState() throws Exception {
         AbstractKeyedStateBackend<Integer> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            LatencyTrackingAggregatingState<Integer, VoidNamespace, Long, Long, Long>
+            MetricsTrackingAggregatingState<Integer, VoidNamespace, Long, Long, Long>
                     latencyTrackingState =
-                            (LatencyTrackingAggregatingState)
+                            (MetricsTrackingAggregatingState)
                                     createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            LatencyTrackingAggregatingState.AggregatingStateLatencyMetrics
+            MetricsTrackingAggregatingState.AggregatingStateLatencyMetrics
                     latencyTrackingStateMetric =
                             latencyTrackingState.getLatencyTrackingStateMetric();
 
