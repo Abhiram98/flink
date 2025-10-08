@@ -214,7 +214,7 @@ public class ExecutionOptions {
     @Experimental
     @Documentation.ExcludeFromDocumentation(
             "This is an experimental option, internal use only for now.")
-    public static final ConfigOption<Integer> ASYNC_STATE_BUFFER_SIZE =
+    public static final ConfigOption<Integer> ASYNC_STATE_ACTIVE_BUFFER_SIZE =
             ConfigOptions.key("execution.async-state.buffer-size")
                     .intType()
                     .defaultValue(1000)
@@ -226,7 +226,7 @@ public class ExecutionOptions {
 
     /**
      * The timeout of buffer triggering in milliseconds. If the buffer has not reached the {@link
-     * #ASYNC_STATE_BUFFER_SIZE} within 'buffer-timeout' milliseconds, a trigger will perform
+     * #ASYNC_STATE_ACTIVE_BUFFER_SIZE} within 'buffer-timeout' milliseconds, a trigger will perform
      * actively.
      */
     @Experimental
