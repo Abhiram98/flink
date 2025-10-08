@@ -112,7 +112,7 @@ public class OperatorSnapshotUtil {
                     state.getResultSubpartitionState();
             dos.writeInt(inputChannelStateHandles.size());
             for (OutputStateHandle resultSubpartitionStateHandle : resultSubpartitionStateHandles) {
-                MetadataV3Serializer.INSTANCE.serializeResultSubpartitionStateHandle(
+                MetadataV3Serializer.INSTANCE.serializeOutputStateHandle(
                         resultSubpartitionStateHandle, dos);
             }
 
@@ -183,7 +183,7 @@ public class OperatorSnapshotUtil {
             final StateObjectCollection<OutputStateHandle> resultSubpartitionStateHandles =
                     v == MetadataV3Serializer.VERSION
                             ? MetadataV3Serializer.INSTANCE
-                                    .deserializeResultSubpartitionStateHandle(dis)
+                                    .deserializeOutputStateHandle(dis)
                             : StateObjectCollection.empty();
 
             return OperatorSubtaskState.builder()
