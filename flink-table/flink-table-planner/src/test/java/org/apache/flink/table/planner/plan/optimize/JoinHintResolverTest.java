@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** A test class for {@link JoinHintsResolver}. */
+/** A test class for {@link QueryHintsResolver}. */
 public class JoinHintResolverTest extends JoinHintTestBase {
 
     // use any join hint for test
@@ -95,7 +95,7 @@ public class JoinHintResolverTest extends JoinHintTestBase {
     }
 
     private List<RelNode> resolveJoinHint(List<RelNode> relNodes) {
-        JoinHintsResolver joinHintResolver = new JoinHintsResolver();
+        QueryHintsResolver joinHintResolver = new QueryHintsResolver();
         return joinHintResolver.resolve(relNodes);
     }
 }
