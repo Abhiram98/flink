@@ -133,11 +133,11 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         env.execute("Bootstrap");
     }
 
-    private void validateBootstrap(StateBackend backend, String savepointPath) throws Exception {
+    private void validateBootstrap(StateBackend configuration, String savepointPath) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        if (backend != null) {
-            env.setStateBackend(backend);
+        if (configuration != null) {
+            env.setStateBackend(configuration);
         }
 
         DataStream<Account> stream =
@@ -185,10 +185,10 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         env.execute("Modifying");
     }
 
-    private void validateModification(StateBackend backend, String savepointPath) throws Exception {
+    private void validateModification(StateBackend configuration, String savepointPath) throws Exception {
         StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getExecutionEnvironment();
-        if (backend != null) {
-            sEnv.setStateBackend(backend);
+        if (configuration != null) {
+            sEnv.setStateBackend(configuration);
         }
 
         DataStream<Account> stream =
