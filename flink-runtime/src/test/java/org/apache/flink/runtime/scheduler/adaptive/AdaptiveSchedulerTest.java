@@ -2208,7 +2208,7 @@ public class AdaptiveSchedulerTest {
                 scalingStabilizationTimeout);
 
         final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
-        assertThat(settings.getScalingIntervalMin()).isEqualTo(scalingIntervalMin);
+        assertThat(settings.getExecutingCooldownTimeout()).isEqualTo(scalingIntervalMin);
         assertThat(settings.getScalingResourceStabilizationTimeout())
                 .isEqualTo(scalingStabilizationTimeout);
     }
