@@ -177,7 +177,7 @@ public class OperatorSnapshotUtil {
 
             final StateObjectCollection<InputStateHandle> inputChannelStateHandles =
                     v == MetadataV3Serializer.VERSION
-                            ? MetadataV3Serializer.deserializeInputChannelStateHandle(dis)
+                            ? MetadataV3Serializer.deserializeInputStateHandle(dis)
                             : StateObjectCollection.empty();
 
             final StateObjectCollection<OutputStateHandle> resultSubpartitionStateHandles =
