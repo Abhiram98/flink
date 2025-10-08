@@ -165,12 +165,12 @@ class JMFailoverITCase {
 
     @Test
     void testRecoverFromJMFailover() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph streamGraph = prepareEnvAndGetJobGraph();
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until sink is running.
         tryWaitUntilCondition(() -> StubRecordSink.attemptIds.size() > 0);
@@ -188,17 +188,17 @@ class JMFailoverITCase {
 
     @Test
     void testSourceNotAllFinished() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph streamGraph = prepareEnvAndGetJobGraph();
 
         // blocking source 0
         SourceTail.blockSubTasks(0);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until source is running.
         tryWaitUntilCondition(() -> SourceTail.attemptIds.size() == SOURCE_PARALLELISM);
 
-        JobVertex source = jobGraph.getVerticesSortedTopologicallyFromSources().get(0);
+        JobVertex source = streamGraph.getVerticesSortedTopologicallyFromSources().get(0);
         while (true) {
             AccessExecutionGraph executionGraph = flinkCluster.getExecutionGraph(jobId).get();
             long finishedTasks =
@@ -228,12 +228,12 @@ class JMFailoverITCase {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT, Duration.ZERO);
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(configuration);
+        JobGraph streamGraph = prepareEnvAndGetJobGraph(configuration);
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until sink is running.
         tryWaitUntilCondition(() -> StubRecordSink.attemptIds.size() > 0);
@@ -251,12 +251,12 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundTwice() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph streamGraph = prepareEnvAndGetJobGraph();
 
         // blocking map 0 and map 1.
         StubMapFunction.blockSubTasks(0, 1);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until map deploying, which indicates all source finished.
         tryWaitUntilCondition(() -> StubMapFunction.attemptIds.size() > 0);
@@ -286,12 +286,12 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorNotSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(false);
+        JobGraph streamGraph = prepareEnvAndGetJobGraph(false);
 
         // blocking all map task
         StubMapFunction2.blockSubTasks(0, 1, 2, 3);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until map deploying, which indicates all source finished.
         tryWaitUntilCondition(() -> StubMapFunction2.attemptIds.size() > 0);
@@ -312,12 +312,12 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        JobGraph streamGraph = prepareEnvAndGetJobGraph();
 
         // blocking map 0.
         StubMapFunction.blockSubTasks(0);
 
-        JobID jobId = flinkCluster.submitJob(jobGraph).get().getJobID();
+        JobID jobId = flinkCluster.submitJob(streamGraph).get().getJobID();
 
         // wait until map deploying, which indicates all source finished.
         tryWaitUntilCondition(() -> StubMapFunction.attemptIds.size() > 0);
@@ -371,8 +371,8 @@ class JMFailoverITCase {
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         return operatorCoordinatorsSupportsBatchSnapshot
-                ? createJobGraph(env, methodName)
-                : createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
+                ? createStreamGraph(env, methodName)
+                : createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
     }
 
     private TestingMiniClusterConfiguration getMiniClusterConfiguration(Configuration config)
@@ -446,7 +446,7 @@ class JMFailoverITCase {
                 new File(flinkConfiguration.get(CoreOptions.TMP_DIRS)));
     }
 
-    private JobGraph createJobGraph(StreamExecutionEnvironment env, String jobName) {
+    private JobGraph createStreamGraph(StreamExecutionEnvironment env, String jobName) {
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
                 new TupleTypeInfo<>(BasicTypeInfo.INT_TYPE_INFO, BasicTypeInfo.INT_TYPE_INFO);
 
@@ -471,7 +471,7 @@ class JMFailoverITCase {
         return StreamingJobGraphGenerator.createJobGraph(streamGraph);
     }
 
-    private JobGraph createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
+    private JobGraph createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
             StreamExecutionEnvironment env, String jobName) throws Exception {
 
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
