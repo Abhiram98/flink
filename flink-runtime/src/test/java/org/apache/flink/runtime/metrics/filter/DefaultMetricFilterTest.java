@@ -95,7 +95,7 @@ class DefaultMetricFilterTest {
                 MetricOptions.REPORTER_INCLUDES, Arrays.asList("include1:*:*", "include2.*:*:*"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Collections.emptyList());
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "name", "include1")).isTrue();
         assertThat(metricFilter.filter(COUNTER, "name", "include1.bar")).isFalse();
@@ -109,7 +109,7 @@ class DefaultMetricFilterTest {
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:name:*"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Collections.emptyList());
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "name", "bar")).isTrue();
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isFalse();
@@ -121,7 +121,7 @@ class DefaultMetricFilterTest {
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:*:counter"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Collections.emptyList());
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isTrue();
         assertThat(metricFilter.filter(METER, "foo", "bar")).isFalse();
@@ -133,7 +133,7 @@ class DefaultMetricFilterTest {
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:*:*"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Arrays.asList("include1", "include2.*"));
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "name", "include1")).isFalse();
         assertThat(metricFilter.filter(COUNTER, "name", "include1.bar")).isTrue();
@@ -147,7 +147,7 @@ class DefaultMetricFilterTest {
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:*:*"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Arrays.asList("*:faa*", "*:foo"));
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "name", "bar")).isTrue();
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isFalse();
@@ -161,7 +161,7 @@ class DefaultMetricFilterTest {
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:*:*"));
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Arrays.asList("*:*:meter"));
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isTrue();
         assertThat(metricFilter.filter(METER, "foo", "bar")).isFalse();
@@ -172,7 +172,7 @@ class DefaultMetricFilterTest {
         Configuration configuration = new Configuration();
         configuration.set(MetricOptions.REPORTER_EXCLUDES, Arrays.asList("*:*:meter"));
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "hello")).isTrue();
         assertThat(metricFilter.filter(METER, "foo", "hello")).isFalse();
@@ -183,7 +183,7 @@ class DefaultMetricFilterTest {
         Configuration configuration = new Configuration();
         configuration.set(MetricOptions.REPORTER_INCLUDES, Arrays.asList("*:*:*"));
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isTrue();
     }
@@ -192,7 +192,7 @@ class DefaultMetricFilterTest {
     void testFromConfigurationAllDefault() {
         Configuration configuration = new Configuration();
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isTrue();
         assertThat(metricFilter.filter(METER, "foo", "bar")).isTrue();
@@ -206,7 +206,7 @@ class DefaultMetricFilterTest {
         configuration.setString(
                 MetricOptions.REPORTER_EXCLUDES.key(), "*:foo,bar:meter;*:foo,bar:gauge");
 
-        final MetricFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
+        final ReporterFilter metricFilter = DefaultMetricFilter.fromConfiguration(configuration);
 
         assertThat(metricFilter.filter(COUNTER, "foo", "bar")).isTrue();
         assertThat(metricFilter.filter(METER, "foo", "bar")).isFalse();

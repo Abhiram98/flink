@@ -20,10 +20,10 @@ package org.apache.flink.runtime.metrics.filter;
 import org.apache.flink.metrics.Metric;
 
 /** A filter for metrics. */
-public interface MetricFilter {
+public interface ReporterFilter {
 
     /** Filter that accepts every metric. */
-    MetricFilter NO_OP_FILTER = (metric, name, scope) -> true;
+    ReporterFilter NO_OP_FILTER = (metric, name, scope) -> true;
 
     /**
      * Filters a given metric.
