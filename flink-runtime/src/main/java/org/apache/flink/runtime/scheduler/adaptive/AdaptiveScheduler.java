@@ -274,7 +274,7 @@ public class AdaptiveScheduler
                                 + "Please use the configuration option {} and {} to control the sensitivity of a scaling operation.",
                         JobManagerOptions.MIN_PARALLELISM_INCREASE.key(),
                         JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN.key(),
-                        JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT.key());
+                        JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT.key());
             }
 
             return new Settings(
@@ -288,7 +288,7 @@ public class AdaptiveScheduler
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
                     scalingIntervalMin,
                     configuration.get(
-                            JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
+                            JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
                             MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTriggerDefault),
                     rescaleOnFailedCheckpointsCount);
