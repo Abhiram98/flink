@@ -57,20 +57,20 @@ public class ClearJoinHintsOnUnmatchedNodesShuttle extends RelHomogeneousShuttle
         if (other instanceof Hintable) {
             List<RelHint> originHints = ((Hintable) other).getHints();
             // 1. classify the hints and separate out the join hints
-            List<RelHint> joinHints =
+            List<RelHint> queryHints =
                     originHints.stream()
                             .filter(h -> JoinStrategy.isJoinStrategy(h.hintName))
                             .collect(Collectors.toList());
 
             List<RelHint> remainHints = new ArrayList<>(originHints);
-            remainHints.removeAll(joinHints);
+            remainHints.removeAll(queryHints);
 
             // 2. use hintStrategyTable#apply to determine whether the join hint can be attached
             // to the current node
             // If it cannot be attached, it means that the join hint on the current node needs to
             // be removed.
-            List<RelHint> hintsCanApply = hintStrategyTable.apply(joinHints, other);
-            if (hintsCanApply.size() != joinHints.size()) {
+            List<RelHint> hintsCanApply = hintStrategyTable.apply(queryHints, other);
+            if (hintsCanApply.size() != queryHints.size()) {
                 hintsCanApply.addAll(remainHints);
                 // As a result, the remaining hints will be attached.
                 other = ((Hintable) other).withHints(hintsCanApply);

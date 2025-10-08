@@ -55,7 +55,7 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
     private final Set<RelHint> validHints = new HashSet<>();
 
     // hintName -> hintOptions -> whether this option has been checked
-    private final Map<String, Map<String, Boolean>> allOptionsInJoinHints = new HashMap<>();
+    private final Map<String, Map<String, Boolean>> allOptionsInQueryHints = new HashMap<>();
 
     /**
      * Resolves and validates join hints in the given {@link RelNode} list, an {@link
@@ -94,7 +94,7 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
                 String lookupTable = conf.get(LOOKUP_TABLE);
 
                 // add options about this hint for finally checking
-                initOptionInfoAboutJoinHintsForCheck(
+                initOptionInfoAboutQueryHintsForCheck(
                         hint.hintName, Collections.singletonList(lookupTable));
 
                 assert null != lookupTable;
@@ -106,7 +106,7 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
             } else if (JoinStrategy.isJoinStrategy(hint.hintName)) {
                 allHints.add(trimInheritPath(hint));
                 // add options about this hint for finally checking
-                initOptionInfoAboutJoinHintsForCheck(hint.hintName, hint.listOptions);
+                initOptionInfoAboutQueryHintsForCheck(hint.hintName, hint.listOptions);
 
                 // the declared table name or query block name is replaced by
                 // JoinStrategy#LEFT_INPUT or JoinStrategy#RIGHT_INPUT
@@ -134,8 +134,8 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
 
         RelNode newNode = super.visitChildren(biRel);
 
-        List<RelHint> oldJoinHints = FlinkHints.getAllJoinHints(oldHints);
-        if (!oldJoinHints.isEmpty()) {
+        List<RelHint> oldQueryHints = FlinkHints.getAllJoinHints(oldHints);
+        if (!oldQueryHints.isEmpty()) {
             // replace the table name as LEFT or RIGHT
             return ((Hintable) newNode).withHints(newHints);
         }
@@ -149,7 +149,7 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
             List<String> listOptions,
             String hintName) {
 
-        // update info about 'allOptionsInJoinHints' for checking finally
+        // update info about 'allOptionsInQueryHints' for checking finally
         updateInfoForOptionCheck(hintName, leftName);
         updateInfoForOptionCheck(hintName, rightName);
 
@@ -190,8 +190,8 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
                         + "input tables or views: %s";
         StringBuilder errorMsgSb = new StringBuilder();
         AtomicBoolean containsInvalidOptions = new AtomicBoolean(false);
-        for (String hintName : allOptionsInJoinHints.keySet()) {
-            Map<String, Boolean> optionCheckedStatus = allOptionsInJoinHints.get(hintName);
+        for (String hintName : allOptionsInQueryHints.keySet()) {
+            Map<String, Boolean> optionCheckedStatus = allOptionsInQueryHints.get(hintName);
             errorMsgSb.append("\n");
             errorMsgSb.append(
                     String.format(
@@ -299,9 +299,9 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
         return true;
     }
 
-    private void initOptionInfoAboutJoinHintsForCheck(String hintName, List<String> definedTables) {
-        if (allOptionsInJoinHints.containsKey(hintName)) {
-            Map<String, Boolean> optionCheckedStatus = allOptionsInJoinHints.get(hintName);
+    private void initOptionInfoAboutQueryHintsForCheck(String hintName, List<String> definedTables) {
+        if (allOptionsInQueryHints.containsKey(hintName)) {
+            Map<String, Boolean> optionCheckedStatus = allOptionsInQueryHints.get(hintName);
             definedTables.forEach(
                     table -> {
                         if (!optionCheckedStatus.containsKey(table)) {
@@ -310,7 +310,7 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
                         }
                     });
         } else {
-            allOptionsInJoinHints.put(
+            allOptionsInQueryHints.put(
                     hintName,
                     new HashSet<>(definedTables)
                             .stream()
@@ -321,11 +321,11 @@ public class JoinHintsResolver extends JoinHintsRelShuttle {
 
     private void updateInfoForOptionCheck(String hintName, Optional<String> tableName) {
         if (tableName.isPresent()) {
-            Map<String, Boolean> optionMapper = allOptionsInJoinHints.get(hintName);
+            Map<String, Boolean> optionMapper = allOptionsInQueryHints.get(hintName);
             for (String option : optionMapper.keySet()) {
                 if (matchIdentifier(option, tableName.get())) {
                     // if the hint has not been checked before, update it
-                    allOptionsInJoinHints.get(hintName).put(option, true);
+                    allOptionsInQueryHints.get(hintName).put(option, true);
                 }
             }
         }

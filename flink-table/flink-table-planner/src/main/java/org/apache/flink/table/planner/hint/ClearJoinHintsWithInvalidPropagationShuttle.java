@@ -69,7 +69,7 @@ public class ClearJoinHintsWithInvalidPropagationShuttle extends JoinHintsRelShu
             return super.visit(biRel);
         }
 
-        List<RelHint> joinHintsFromOuterQueryBlock =
+        List<RelHint> queryHintsFromOuterQueryBlock =
                 hints.stream()
                         .filter(
                                 hint ->
@@ -81,15 +81,15 @@ public class ClearJoinHintsWithInvalidPropagationShuttle extends JoinHintsRelShu
                                                         > firstAliasHint.get().inheritPath.size())
                         .collect(Collectors.toList());
 
-        if (joinHintsFromOuterQueryBlock.isEmpty()) {
+        if (queryHintsFromOuterQueryBlock.isEmpty()) {
             return super.visit(biRel);
         }
 
         RelNode newJoin = biRel;
         ClearOuterJoinHintShuttle clearOuterJoinHintShuttle;
 
-        for (RelHint outerJoinHint : joinHintsFromOuterQueryBlock) {
-            clearOuterJoinHintShuttle = new ClearOuterJoinHintShuttle(outerJoinHint);
+        for (RelHint outerQueryHint : queryHintsFromOuterQueryBlock) {
+            clearOuterJoinHintShuttle = new ClearOuterJoinHintShuttle(outerQueryHint);
             newJoin = newJoin.accept(clearOuterJoinHintShuttle);
         }
 

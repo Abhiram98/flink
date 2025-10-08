@@ -141,9 +141,9 @@ class RelTreeWriterImpl(
     if (withJoinHint) {
       rel match {
         case _: Join | _: Correlate =>
-          val joinHints = FlinkHints.getAllJoinHints(rel.asInstanceOf[Hintable].getHints)
-          if (joinHints.nonEmpty) {
-            printValues.add(Pair.of("joinHints", RelExplainUtil.hintsToString(joinHints)))
+          val queryHints = FlinkHints.getAllJoinHints(rel.asInstanceOf[Hintable].getHints)
+          if (queryHints.nonEmpty) {
+            printValues.add(Pair.of("joinHints", RelExplainUtil.hintsToString(queryHints)))
           }
         case _ => // ignore
       }
