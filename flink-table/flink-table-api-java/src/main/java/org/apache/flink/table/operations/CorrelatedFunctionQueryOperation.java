@@ -31,7 +31,7 @@ import java.util.Map;
 
 /** Describes a relational operation that was created from applying a {@link TableFunction}. */
 @Internal
-public class CalculatedQueryOperation implements QueryOperation {
+public class CorrelatedFunctionQueryOperation implements QueryOperation {
 
     public static final String INPUT_ALIAS = "$$T_LAT";
 
@@ -39,7 +39,7 @@ public class CalculatedQueryOperation implements QueryOperation {
     private final List<ResolvedExpression> arguments;
     private final ResolvedSchema resolvedSchema;
 
-    public CalculatedQueryOperation(
+    public CorrelatedFunctionQueryOperation(
             ContextResolvedFunction resolvedFunction,
             List<ResolvedExpression> arguments,
             ResolvedSchema resolvedSchema) {
