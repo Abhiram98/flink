@@ -41,7 +41,7 @@ import static org.apache.flink.table.types.logical.utils.LogicalTypeCasts.suppor
  * literal before is not a literal anymore in this call context.
  */
 @Internal
-public final class AdaptedCallContext implements CallContext {
+public final class CastCallContext implements CallContext {
 
     private final CallContext originalContext;
 
@@ -49,7 +49,7 @@ public final class AdaptedCallContext implements CallContext {
 
     private List<DataType> expectedArguments;
 
-    public AdaptedCallContext(CallContext originalContext, @Nullable DataType outputDataType) {
+    public CastCallContext(CallContext originalContext, @Nullable DataType outputDataType) {
         this.originalContext = originalContext;
         this.expectedArguments = originalContext.getArgumentDataTypes();
         this.outputDataType = outputDataType;
