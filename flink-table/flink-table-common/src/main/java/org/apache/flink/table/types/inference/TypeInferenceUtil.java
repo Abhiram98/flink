@@ -26,7 +26,7 @@ import org.apache.flink.table.functions.FunctionDefinition;
 import org.apache.flink.table.functions.TableSemantics;
 import org.apache.flink.table.functions.UserDefinedFunctionHelper;
 import org.apache.flink.table.types.DataType;
-import org.apache.flink.table.types.inference.utils.AdaptedCallContext;
+import org.apache.flink.table.types.inference.utils.CastCallContext;
 import org.apache.flink.table.types.inference.utils.UnknownCallContext;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 
@@ -124,7 +124,7 @@ public final class TypeInferenceUtil {
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final CastCallContext adaptedCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
@@ -457,14 +457,14 @@ public final class TypeInferenceUtil {
         return stringBuilder.toString();
     }
 
-    private static AdaptedCallContext inferInputTypes(
+    private static CastCallContext inferInputTypes(
             TypeInference typeInference,
             CallContext callContext,
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
-                new AdaptedCallContext(callContext, outputType);
+        final CastCallContext adaptedCallContext =
+                new CastCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
         final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
