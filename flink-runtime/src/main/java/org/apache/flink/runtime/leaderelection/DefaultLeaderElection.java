@@ -43,7 +43,7 @@ class DefaultLeaderElection implements LeaderElection {
     }
 
     @Override
-    public void confirmLeadership(UUID leaderSessionID, String leaderAddress) {
+    public void confirmLeadershipAsync(UUID leaderSessionID, String leaderAddress) {
         parentService.confirmLeadership(componentId, leaderSessionID, leaderAddress);
     }
 

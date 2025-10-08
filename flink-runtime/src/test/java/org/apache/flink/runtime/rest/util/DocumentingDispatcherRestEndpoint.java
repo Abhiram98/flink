@@ -93,7 +93,7 @@ public class DocumentingDispatcherRestEndpoint extends DispatcherRestEndpoint
         public void startLeaderElection(LeaderContender contender) {}
 
         @Override
-        public void confirmLeadership(UUID leaderSessionID, String leaderAddress) {}
+        public void confirmLeadershipAsync(UUID leaderSessionID, String leaderAddress) {}
 
         @Override
         public boolean hasLeadership(UUID leaderSessionId) {
