@@ -64,7 +64,7 @@ class Executing extends StateWithExecutionGraph
 
     private final RescalingController sufficientResourcesController;
     private final RescalingController desiredResourcesController;
-    private final RescaleManager rescaleManager;
+    private final RescaleManager stateTransitionManager;
     private final int rescaleOnFailedCheckpointCount;
     // null indicates that there was no change event observed, yet
     @Nullable private AtomicInteger failedCheckpointCountdown;
@@ -96,7 +96,7 @@ class Executing extends StateWithExecutionGraph
         this.sufficientResourcesController = new EnforceParallelismChangeRescalingController();
         this.desiredResourcesController =
                 new EnforceMinimalIncreaseRescalingController(minParallelismChangeForRescale);
-        this.rescaleManager = rescaleManagerFactory.create(this, lastRescale);
+        this.stateTransitionManager = rescaleManagerFactory.create(this, lastRescale);
 
         Preconditions.checkArgument(
                 rescaleOnFailedCheckpointCount > 0,
@@ -110,8 +110,8 @@ class Executing extends StateWithExecutionGraph
         context.runIfState(
                 this,
                 () -> {
-                    rescaleManager.onChange();
-                    rescaleManager.onTrigger();
+                    stateTransitionManager.onChange();
+                    stateTransitionManager.onTrigger();
                 },
                 Duration.ZERO);
     }
@@ -212,13 +212,13 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public void onNewResourcesAvailable() {
-        rescaleManager.onChange();
+        stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
     public void onNewResourceRequirements() {
-        rescaleManager.onChange();
+        stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
@@ -236,7 +236,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     private void triggerPotentialRescale() {
-        rescaleManager.onTrigger();
+        stateTransitionManager.onTrigger();
         this.failedCheckpointCountdown = null;
     }
 

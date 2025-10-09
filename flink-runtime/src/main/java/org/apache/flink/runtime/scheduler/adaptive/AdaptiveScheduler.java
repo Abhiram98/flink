@@ -349,7 +349,7 @@ public class AdaptiveScheduler
     }
 
     private final Settings settings;
-    private final RescaleManager.Factory rescaleManagerFactory;
+    private final RescaleManager.Factory stateTransitionManagerFactory;
 
     private final JobGraph jobGraph;
 
@@ -455,7 +455,7 @@ public class AdaptiveScheduler
     @VisibleForTesting
     AdaptiveScheduler(
             Settings settings,
-            RescaleManager.Factory rescaleManagerFactory,
+            RescaleManager.Factory stateTransitionManagerFactory,
             BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory,
             JobGraph jobGraph,
@@ -480,7 +480,7 @@ public class AdaptiveScheduler
         assertPreconditions(jobGraph);
 
         this.settings = settings;
-        this.rescaleManagerFactory = rescaleManagerFactory;
+        this.stateTransitionManagerFactory = stateTransitionManagerFactory;
 
         this.jobGraph = jobGraph;
         this.jobInfo = new JobInfoImpl(jobGraph.getJobID(), jobGraph.getName());
@@ -1175,7 +1175,7 @@ public class AdaptiveScheduler
                         this,
                         userCodeClassLoader,
                         failureCollection,
-                        rescaleManagerFactory,
+                        stateTransitionManagerFactory,
                         settings.getMinParallelismChangeForDesiredRescale(),
                         settings.getRescaleOnFailedCheckpointCount()));
     }

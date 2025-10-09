@@ -606,7 +606,7 @@ class ExecutingTest {
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .build(EXECUTOR_EXTENSION.getExecutor());
         private OperatorCoordinatorHandler operatorCoordinatorHandler;
-        private RescaleManager.Factory rescaleManagerFactory =
+        private RescaleManager.Factory stateTransitionManagerFactory =
                 TestingRescaleManager.Factory.noOpFactory();
         private int rescaleOnFailedCheckpointCount = 1;
 
@@ -626,8 +626,8 @@ class ExecutingTest {
         }
 
         public ExecutingStateBuilder setRescaleManagerFactory(
-                RescaleManager.Factory rescaleManagerFactory) {
-            this.rescaleManagerFactory = rescaleManagerFactory;
+                RescaleManager.Factory stateTransitionManagerFactory) {
+            this.stateTransitionManagerFactory = stateTransitionManagerFactory;
             return this;
         }
 
@@ -649,7 +649,7 @@ class ExecutingTest {
                         ctx,
                         ClassLoader.getSystemClassLoader(),
                         new ArrayList<>(),
-                        rescaleManagerFactory,
+                        stateTransitionManagerFactory,
                         1,
                         rescaleOnFailedCheckpointCount,
                         // will be ignored by the TestingRescaleManager.Factory
