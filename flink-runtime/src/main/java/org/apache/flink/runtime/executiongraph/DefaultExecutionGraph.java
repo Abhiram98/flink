@@ -623,7 +623,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan;
     }
 

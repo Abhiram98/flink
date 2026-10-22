@@ -58,7 +58,7 @@ public class JobPlanInfo implements ResponseBody {
     }
 
     @JsonIgnore
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan.json;
     }
 

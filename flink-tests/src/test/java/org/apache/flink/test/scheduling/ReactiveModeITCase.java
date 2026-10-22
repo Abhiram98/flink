@@ -141,7 +141,7 @@ public class ReactiveModeITCase extends TestLogger {
 
         assertThat(
                         OBJECT_MAPPER
-                                .readTree(archivedExecutionGraph.getJsonPlan())
+                                .readTree(archivedExecutionGraph.getPlan())
                                 .findValues("parallelism"))
                 .allMatch(n -> n.asInt() == initialParallelism);
 
@@ -163,7 +163,7 @@ public class ReactiveModeITCase extends TestLogger {
 
         assertThat(
                         OBJECT_MAPPER
-                                .readTree(archivedExecutionGraph.getJsonPlan())
+                                .readTree(archivedExecutionGraph.getPlan())
                                 .findValues("parallelism"))
                 .allMatch(n -> n.asInt() == rescaledParallelism);
     }

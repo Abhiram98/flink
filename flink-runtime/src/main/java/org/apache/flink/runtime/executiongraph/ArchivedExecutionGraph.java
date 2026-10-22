@@ -166,7 +166,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan;
     }
 
@@ -374,7 +374,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
                 statusOverride == null ? executionGraph.getState() : statusOverride,
                 executionGraph.getJobType(),
                 executionGraph.getFailureInfo(),
-                executionGraph.getJsonPlan(),
+                executionGraph.getPlan(),
                 executionGraph.getAccumulatorResultsStringified(),
                 serializedUserAccumulators,
                 executionGraph.getArchivedExecutionConfig(),

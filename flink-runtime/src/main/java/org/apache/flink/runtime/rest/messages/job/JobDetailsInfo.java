@@ -295,7 +295,7 @@ public class JobDetailsInfo implements ResponseBody {
     }
 
     @JsonIgnore
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan.toString();
     }
 

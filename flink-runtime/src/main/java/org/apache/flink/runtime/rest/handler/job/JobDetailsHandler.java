@@ -160,7 +160,7 @@ public class JobDetailsHandler
                 timestamps,
                 jobVertexInfos,
                 jobVerticesPerStateMap,
-                new JobPlanInfo.RawJson(executionGraph.getJsonPlan()),
+                new JobPlanInfo.RawJson(executionGraph.getPlan()),
                 streamGraphJson,
                 executionGraph.getPendingOperatorCount());
     }

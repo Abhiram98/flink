@@ -461,7 +461,7 @@ public class AdaptiveSchedulerTest {
 
         assertThat(
                         JacksonMapperFactory.createObjectMapper()
-                                .readTree(executionGraph.getJsonPlan())
+                                .readTree(executionGraph.getPlan())
                                 .get("nodes")
                                 .size())
                 .isOne();

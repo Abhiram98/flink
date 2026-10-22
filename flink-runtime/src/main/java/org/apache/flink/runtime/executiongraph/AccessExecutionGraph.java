@@ -45,7 +45,7 @@ public interface AccessExecutionGraph extends JobStatusProvider {
      *
      * @return job plan as a JSON string
      */
-    String getJsonPlan();
+    String getPlan();
 
     /**
      * Returns the stream graph as a JSON string.
