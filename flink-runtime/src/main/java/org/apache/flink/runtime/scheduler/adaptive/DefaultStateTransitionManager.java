@@ -35,7 +35,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 /**
- * {@code DefaultRescaleManager} manages triggering the next rescaling based on when the previous
+ * {@code DefaultStateTransitionManager} manages triggering the next rescaling based on when the previous
  * rescale operation happened and the available resources. It handles the event based on the
  * following phases (in that order):
  *
@@ -54,9 +54,9 @@ import java.util.function.Supplier;
  * @see Executing
  */
 @NotThreadSafe
-public class DefaultRescaleManager implements RescaleManager {
+public class DefaultStateTransitionManager implements StateTransitionManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultStateTransitionManager.class);
 
     private final Temporal initializationTime;
     private final Supplier<Temporal> clock;
@@ -64,7 +64,7 @@ public class DefaultRescaleManager implements RescaleManager {
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
-    private final RescaleManager.Context rescaleContext;
+    private final StateTransitionManager.Context rescaleContext;
 
     private boolean rescaleScheduled = false;
 
@@ -81,9 +81,9 @@ public class DefaultRescaleManager implements RescaleManager {
      */
     private CompletableFuture<Void> triggerFuture;
 
-    DefaultRescaleManager(
+    DefaultStateTransitionManager(
             Temporal initializationTime,
-            RescaleManager.Context rescaleContext,
+            StateTransitionManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -97,10 +97,10 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     @VisibleForTesting
-    DefaultRescaleManager(
+    DefaultStateTransitionManager(
             Temporal initializationTime,
             Supplier<Temporal> clock,
-            RescaleManager.Context rescaleContext,
+            StateTransitionManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -191,7 +191,7 @@ public class DefaultRescaleManager implements RescaleManager {
         }
     }
 
-    public static class Factory implements RescaleManager.Factory {
+    public static class Factory implements StateTransitionManager.Factory {
 
         private final Duration scalingIntervalMin;
         @Nullable private final Duration scalingIntervalMax;
@@ -220,8 +220,8 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
-            return new DefaultRescaleManager(
+        public DefaultStateTransitionManager create(Context rescaleContext, Instant lastRescale) {
+            return new DefaultStateTransitionManager(
                     lastRescale,
                     rescaleContext,
                     scalingIntervalMin,

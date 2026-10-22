@@ -21,8 +21,8 @@ package org.apache.flink.runtime.scheduler.adaptive;
 import java.time.Duration;
 import java.time.Instant;
 
-/** The {@code RescaleManager} decides on whether rescaling should happen or not. */
-public interface RescaleManager {
+/** The {@code StateTransitionManager} decides on whether rescaling should happen or not. */
+public interface StateTransitionManager {
 
     /** Is called if the environment changed in a way that a rescaling could be considered. */
     void onChange();
@@ -34,7 +34,7 @@ public interface RescaleManager {
     void onTrigger();
 
     /**
-     * The interface that can be used by the {@code RescaleManager} to communicate with the
+     * The interface that can be used by the {@code StateTransitionManager} to communicate with the
      * underlying system.
      */
     interface Context {
@@ -58,13 +58,13 @@ public interface RescaleManager {
         void scheduleOperation(Runnable callback, Duration delay);
     }
 
-    /** Interface for creating {@code RescaleManager} instances. */
+    /** Interface for creating {@code StateTransitionManager} instances. */
     interface Factory {
 
         /**
-         * Creates a {@code RescaleManager} instance for the given {@code rescaleContext} and
+         * Creates a {@code StateTransitionManager} instance for the given {@code rescaleContext} and
          * previous rescale time.
          */
-        RescaleManager create(Context rescaleContext, Instant lastRescale);
+        StateTransitionManager create(Context rescaleContext, Instant lastRescale);
     }
 }

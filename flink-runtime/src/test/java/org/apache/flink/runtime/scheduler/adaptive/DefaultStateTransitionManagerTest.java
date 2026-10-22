@@ -37,7 +37,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class DefaultRescaleManagerTest {
+class DefaultStateTransitionManagerTest {
 
     @Test
     void testProperConfiguration() throws ConfigurationException {
@@ -51,10 +51,10 @@ class DefaultRescaleManagerTest {
         configuration.set(
                 JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTrigger);
 
-        final DefaultRescaleManager testInstance =
-                DefaultRescaleManager.Factory.fromSettings(
+        final DefaultStateTransitionManager testInstance =
+                DefaultStateTransitionManager.Factory.fromSettings(
                                 AdaptiveScheduler.Settings.of(configuration))
-                        .create(TestingRescaleManagerContext.stableContext(), Instant.now());
+                        .create(TestingStateTransitionManagerContext.stableContext(), Instant.now());
         assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
         assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
@@ -63,10 +63,10 @@ class DefaultRescaleManagerTest {
     @Test
     void testInvalidConfiguration() {
         final Duration cooldownThreshold = Duration.ofMinutes(2);
-        final TestingRescaleManagerContext ctx = TestingRescaleManagerContext.stableContext();
+        final TestingStateTransitionManagerContext ctx = TestingStateTransitionManagerContext.stableContext();
         assertThatThrownBy(
                         () ->
-                                new DefaultRescaleManager(
+                                new DefaultStateTransitionManager(
                                         Instant.now(),
                                         ctx,
                                         cooldownThreshold,
@@ -78,26 +78,26 @@ class DefaultRescaleManagerTest {
     @Test
     void triggerWithoutChangeEventNoopInCooldownPhase() {
         triggerWithoutChangeEventNoop(
-                TestingRescaleManagerContext::createTestInstanceInCooldownPhase);
+                TestingStateTransitionManagerContext::createTestInstanceInCooldownPhase);
     }
 
     @Test
     void triggerWithoutChangeEventNoopInSoftRescalingPhase() {
         triggerWithoutChangeEventNoop(
-                TestingRescaleManagerContext::createTestInstanceInSoftRescalePhase);
+                TestingStateTransitionManagerContext::createTestInstanceInSoftRescalePhase);
     }
 
     @Test
     void triggerWithoutChangeEventNoopInHardRescalingPhase() {
         triggerWithoutChangeEventNoop(
-                TestingRescaleManagerContext::createTestInstanceInHardRescalePhase);
+                TestingStateTransitionManagerContext::createTestInstanceInHardRescalePhase);
     }
 
     private void triggerWithoutChangeEventNoop(
-            Function<TestingRescaleManagerContext, DefaultRescaleManager> testInstanceCreator) {
-        final TestingRescaleManagerContext ctx =
-                TestingRescaleManagerContext.stableContext().withDesiredRescaling();
-        final DefaultRescaleManager testInstance = testInstanceCreator.apply(ctx);
+            Function<TestingStateTransitionManagerContext, DefaultStateTransitionManager> testInstanceCreator) {
+        final TestingStateTransitionManagerContext ctx =
+                TestingStateTransitionManagerContext.stableContext().withDesiredRescaling();
+        final DefaultStateTransitionManager testInstance = testInstanceCreator.apply(ctx);
 
         testInstance.onTrigger();
 
@@ -110,9 +110,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testDesiredChangeEventDuringCooldown() {
-        final TestingRescaleManagerContext softScalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withDesiredRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext softScalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withDesiredRescaling();
+        final DefaultStateTransitionManager testInstance =
                 softScalePossibleCtx.createTestInstanceInCooldownPhase();
 
         testInstance.onChange();
@@ -130,9 +130,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testDesiredChangeEventInSoftRescalePhase() {
-        final TestingRescaleManagerContext desiredRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withDesiredRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext desiredRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withDesiredRescaling();
+        final DefaultStateTransitionManager testInstance =
                 desiredRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
         testInstance.onChange();
@@ -146,9 +146,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testDesiredChangeEventInHardRescalePhase() {
-        final TestingRescaleManagerContext desiredRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withDesiredRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext desiredRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withDesiredRescaling();
+        final DefaultStateTransitionManager testInstance =
                 desiredRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
         testInstance.onChange();
@@ -162,9 +162,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testNoRescaleInCooldownPhase() {
-        final TestingRescaleManagerContext noRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext noRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext();
+        final DefaultStateTransitionManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInCooldownPhase();
 
         testInstance.onChange();
@@ -191,9 +191,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testNoRescaleInSoftRescalePhase() {
-        final TestingRescaleManagerContext noRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext noRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext();
+        final DefaultStateTransitionManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
         testInstance.onChange();
@@ -216,9 +216,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testNoResaleInHardRescalePhase() {
-        final TestingRescaleManagerContext noRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext noRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext();
+        final DefaultStateTransitionManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
         testInstance.onChange();
@@ -237,9 +237,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testSufficientChangeInCooldownPhase() {
-        final TestingRescaleManagerContext hardRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext hardRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInCooldownPhase();
 
         testInstance.onChange();
@@ -261,9 +261,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testSufficientChangeInSoftRescalePhase() {
-        final TestingRescaleManagerContext hardRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext hardRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
         testInstance.onChange();
@@ -281,9 +281,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testSufficientChangeInHardRescalePhase() {
-        final TestingRescaleManagerContext hardRescalePossibleCtx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance =
+        final TestingStateTransitionManagerContext hardRescalePossibleCtx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
         testInstance.onChange();
@@ -297,9 +297,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testSufficientChangeInCooldownWithSubsequentDesiredChangeInSoftRescalePhase() {
-        final TestingRescaleManagerContext ctx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance = ctx.createTestInstanceInCooldownPhase();
+        final TestingStateTransitionManagerContext ctx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance = ctx.createTestInstanceInCooldownPhase();
 
         testInstance.onChange();
 
@@ -328,9 +328,9 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testSufficientChangeWithSubsequentDesiredChangeInSoftRescalePhase() {
-        final TestingRescaleManagerContext ctx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
+        final TestingStateTransitionManagerContext ctx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
 
         testInstance.onChange();
 
@@ -359,9 +359,9 @@ class DefaultRescaleManagerTest {
     @Test
     void
             testRevokedSufficientChangeInSoftRescalePhaseWithSubsequentSufficientChangeInHardRescalingPhase() {
-        final TestingRescaleManagerContext ctx =
-                TestingRescaleManagerContext.stableContext().withSufficientRescaling();
-        final DefaultRescaleManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
+        final TestingStateTransitionManagerContext ctx =
+                TestingStateTransitionManagerContext.stableContext().withSufficientRescaling();
+        final DefaultStateTransitionManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
 
         testInstance.onChange();
 
@@ -415,8 +415,8 @@ class DefaultRescaleManagerTest {
 
     @Test
     void testRevokedChangeInHardRescalingPhaseCausesWithSubsequentSufficientChange() {
-        final TestingRescaleManagerContext ctx = TestingRescaleManagerContext.stableContext();
-        final DefaultRescaleManager testInstance = ctx.createTestInstanceInHardRescalePhase();
+        final TestingStateTransitionManagerContext ctx = TestingStateTransitionManagerContext.stableContext();
+        final DefaultStateTransitionManager testInstance = ctx.createTestInstanceInHardRescalePhase();
 
         testInstance.onChange();
 
@@ -438,7 +438,7 @@ class DefaultRescaleManagerTest {
         assertFinalStateWithRescale(ctx);
     }
 
-    private static void assertIntermediateStateWithoutRescale(TestingRescaleManagerContext ctx) {
+    private static void assertIntermediateStateWithoutRescale(TestingStateTransitionManagerContext ctx) {
         assertThat(ctx.rescaleWasTriggered())
                 .as("The rescale should not have been triggered, yet.")
                 .isFalse();
@@ -447,7 +447,7 @@ class DefaultRescaleManagerTest {
                 .isTrue();
     }
 
-    private static void assertFinalStateWithRescale(TestingRescaleManagerContext ctx) {
+    private static void assertFinalStateWithRescale(TestingStateTransitionManagerContext ctx) {
         assertThat(ctx.rescaleWasTriggered())
                 .as("The rescale should have been triggered already.")
                 .isTrue();
@@ -457,10 +457,10 @@ class DefaultRescaleManagerTest {
     }
 
     /**
-     * {@code TestingRescaleManagerContext} provides methods for adjusting the elapsed time and for
+     * {@code TestingStateTransitionManagerContext} provides methods for adjusting the elapsed time and for
      * adjusting the available resources for rescaling.
      */
-    private static class TestingRescaleManagerContext implements RescaleManager.Context {
+    private static class TestingStateTransitionManagerContext implements StateTransitionManager.Context {
 
         // default configuration values to allow for easy transitioning between the phases
         private static final Duration SCALING_MIN = Duration.ofHours(1);
@@ -482,11 +482,11 @@ class DefaultRescaleManagerTest {
         // Context creation
         // ///////////////////////////////////////////////
 
-        public static TestingRescaleManagerContext stableContext() {
-            return new TestingRescaleManagerContext();
+        public static TestingStateTransitionManagerContext stableContext() {
+            return new TestingStateTransitionManagerContext();
         }
 
-        private TestingRescaleManagerContext() {
+        private TestingStateTransitionManagerContext() {
             // no rescaling is enabled by default
             revertAnyParallelismImprovements();
         }
@@ -496,7 +496,7 @@ class DefaultRescaleManagerTest {
             this.hasDesiredResources = false;
         }
 
-        public TestingRescaleManagerContext withDesiredRescaling() {
+        public TestingStateTransitionManagerContext withDesiredRescaling() {
             // having desired resources should also mean that the sufficient resources are met
             this.hasSufficientResources = true;
             this.hasDesiredResources = true;
@@ -504,7 +504,7 @@ class DefaultRescaleManagerTest {
             return this;
         }
 
-        public TestingRescaleManagerContext withSufficientRescaling() {
+        public TestingStateTransitionManagerContext withSufficientRescaling() {
             this.hasSufficientResources = true;
             this.hasDesiredResources = false;
 
@@ -512,7 +512,7 @@ class DefaultRescaleManagerTest {
         }
 
         // ///////////////////////////////////////////////
-        // RescaleManager.Context interface methods
+        // StateTransitionManager.Context interface methods
         // ///////////////////////////////////////////////
 
         @Override
@@ -546,26 +546,26 @@ class DefaultRescaleManagerTest {
         // ///////////////////////////////////////////////
 
         /**
-         * Creates the {@code DefaultRescaleManager} test instance and transitions into a period in
+         * Creates the {@code DefaultStateTransitionManager} test instance and transitions into a period in
          * time where the instance is in cooldown phase.
          */
-        public DefaultRescaleManager createTestInstanceInCooldownPhase() {
+        public DefaultStateTransitionManager createTestInstanceInCooldownPhase() {
             return createTestInstance(this::transitionIntoCooldownTimeframe);
         }
 
         /**
-         * Creates the {@code DefaultRescaleManager} test instance and transitions into a period in
+         * Creates the {@code DefaultStateTransitionManager} test instance and transitions into a period in
          * time where the instance is in soft-rescaling phase.
          */
-        public DefaultRescaleManager createTestInstanceInSoftRescalePhase() {
+        public DefaultStateTransitionManager createTestInstanceInSoftRescalePhase() {
             return createTestInstance(this::transitionIntoSoftScalingTimeframe);
         }
 
         /**
-         * Creates the {@code DefaultRescaleManager} test instance and transitions into a period in
+         * Creates the {@code DefaultStateTransitionManager} test instance and transitions into a period in
          * time where the instance is in hard-rescaling phase.
          */
-        public DefaultRescaleManager createTestInstanceInHardRescalePhase() {
+        public DefaultStateTransitionManager createTestInstanceInHardRescalePhase() {
             return createTestInstance(this::transitionIntoHardScalingTimeframe);
         }
 
@@ -573,9 +573,9 @@ class DefaultRescaleManagerTest {
          * Initializes the test instance and sets the context's elapsed time based on the passed
          * callback.
          */
-        private DefaultRescaleManager createTestInstance(Runnable timeTransitioning) {
-            final DefaultRescaleManager testInstance =
-                    new DefaultRescaleManager(
+        private DefaultStateTransitionManager createTestInstance(Runnable timeTransitioning) {
+            final DefaultStateTransitionManager testInstance =
+                    new DefaultStateTransitionManager(
                             initializationTime,
                             // clock that returns the time based on the configured elapsedTime
                             () -> Objects.requireNonNull(initializationTime).plus(elapsedTime),
@@ -589,7 +589,7 @@ class DefaultRescaleManagerTest {
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
-                            TestingRescaleManagerContext.this.triggerOutdatedTasks();
+                            TestingStateTransitionManagerContext.this.triggerOutdatedTasks();
                         }
 
                         @Override
@@ -598,7 +598,7 @@ class DefaultRescaleManagerTest {
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
-                            TestingRescaleManagerContext.this.triggerOutdatedTasks();
+                            TestingStateTransitionManagerContext.this.triggerOutdatedTasks();
                         }
                     };
 
