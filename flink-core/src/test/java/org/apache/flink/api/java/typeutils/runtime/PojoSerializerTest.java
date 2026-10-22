@@ -530,10 +530,10 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
         // instantiate new PojoSerializer, with new execution config that has the subclass
         // registrations
-        ExecutionConfig newExecutionConfig = new ExecutionConfig();
-        newExecutionConfig.registerPojoType(SubTestUserClassA.class);
-        newExecutionConfig.registerPojoType(SubTestUserClassB.class);
-        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(newExecutionConfig);
+        ExecutionConfig serializerConfig = new ExecutionConfig();
+        serializerConfig.registerPojoType(SubTestUserClassA.class);
+        serializerConfig.registerPojoType(SubTestUserClassB.class);
+        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(serializerConfig);
 
         // read configuration from bytes
         try (ByteArrayInputStream in = new ByteArrayInputStream(serializedConfig)) {

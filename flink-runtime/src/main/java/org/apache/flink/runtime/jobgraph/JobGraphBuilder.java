@@ -80,9 +80,9 @@ public class JobGraphBuilder {
         return this;
     }
 
-    public JobGraphBuilder setExecutionConfig(ExecutionConfig newExecutionConfig)
+    public JobGraphBuilder setExecutionConfig(ExecutionConfig serializerConfig)
             throws IOException {
-        this.serializedExecutionConfig = new SerializedValue<ExecutionConfig>(newExecutionConfig);
+        this.serializedExecutionConfig = new SerializedValue<ExecutionConfig>(serializerConfig);
         return this;
     }
 

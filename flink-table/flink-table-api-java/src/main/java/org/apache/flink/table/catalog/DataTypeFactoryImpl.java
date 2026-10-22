@@ -130,47 +130,47 @@ final class DataTypeFactoryImpl implements DataTypeFactory {
     private static Supplier<ExecutionConfig> createSerializerExecutionConfig(
             ClassLoader classLoader, ReadableConfig config, ExecutionConfig executionConfig) {
         return () -> {
-            final ExecutionConfig newExecutionConfig = new ExecutionConfig();
+            final ExecutionConfig serializerConfig = new ExecutionConfig();
 
             if (executionConfig != null) {
                 if (executionConfig.isForceKryoEnabled()) {
-                    newExecutionConfig.enableForceKryo();
+                    serializerConfig.enableForceKryo();
                 }
 
                 if (executionConfig.isForceAvroEnabled()) {
-                    newExecutionConfig.enableForceAvro();
+                    serializerConfig.enableForceAvro();
                 }
 
                 executionConfig
                         .getDefaultKryoSerializers()
                         .forEach(
                                 (c, s) ->
-                                        newExecutionConfig.addDefaultKryoSerializer(
+                                        serializerConfig.addDefaultKryoSerializer(
                                                 c, s.getSerializer()));
 
                 executionConfig
                         .getDefaultKryoSerializerClasses()
-                        .forEach(newExecutionConfig::addDefaultKryoSerializer);
+                        .forEach(serializerConfig::addDefaultKryoSerializer);
 
                 executionConfig
                         .getRegisteredKryoTypes()
-                        .forEach(newExecutionConfig::registerKryoType);
+                        .forEach(serializerConfig::registerKryoType);
 
                 executionConfig
                         .getRegisteredTypesWithKryoSerializerClasses()
-                        .forEach(newExecutionConfig::registerTypeWithKryoSerializer);
+                        .forEach(serializerConfig::registerTypeWithKryoSerializer);
 
                 executionConfig
                         .getRegisteredTypesWithKryoSerializers()
                         .forEach(
                                 (c, s) ->
-                                        newExecutionConfig.registerTypeWithKryoSerializer(
+                                        serializerConfig.registerTypeWithKryoSerializer(
                                                 c, s.getSerializer()));
             }
 
-            newExecutionConfig.configure(config, classLoader);
+            serializerConfig.configure(config, classLoader);
 
-            return newExecutionConfig;
+            return serializerConfig;
         };
     }
 
