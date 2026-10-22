@@ -34,7 +34,7 @@ public class RefreshMaterializedTableRequestBody implements RequestBody {
 
     private static final String FIELD_NAME_IS_PERIODIC = "isPeriodic";
     private static final String FIELD_NAME_SCHEDULE_TIME = "scheduleTime";
-    private static final String FIELD_NAME_DYNAMIC_OPTIONS = "dynamicOptions";
+    private static final String FIELD_NAME_INIT_CONFIG = "initConfig";
     private static final String FIELD_NAME_STATIC_PARTITIONS = "staticPartitions";
     private static final String FIELD_NAME_EXECUTION_CONFIG = "executionConfig";
 
@@ -45,9 +45,9 @@ public class RefreshMaterializedTableRequestBody implements RequestBody {
     @Nullable
     private final String scheduleTime;
 
-    @JsonProperty(FIELD_NAME_DYNAMIC_OPTIONS)
+    @JsonProperty(FIELD_NAME_INIT_CONFIG)
     @Nullable
-    private final Map<String, String> dynamicOptions;
+    private final Map<String, String> initConfig;
 
     @JsonProperty(FIELD_NAME_STATIC_PARTITIONS)
     @Nullable
@@ -61,14 +61,14 @@ public class RefreshMaterializedTableRequestBody implements RequestBody {
     public RefreshMaterializedTableRequestBody(
             @JsonProperty(FIELD_NAME_IS_PERIODIC) boolean isPeriodic,
             @Nullable @JsonProperty(FIELD_NAME_SCHEDULE_TIME) String scheduleTime,
-            @Nullable @JsonProperty(FIELD_NAME_DYNAMIC_OPTIONS) Map<String, String> dynamicOptions,
+            @Nullable @JsonProperty(FIELD_NAME_INIT_CONFIG) Map<String, String> initConfig,
             @Nullable @JsonProperty(FIELD_NAME_STATIC_PARTITIONS)
                     Map<String, String> staticPartitions,
             @Nullable @JsonProperty(FIELD_NAME_EXECUTION_CONFIG)
                     Map<String, String> executionConfig) {
         this.isPeriodic = isPeriodic;
         this.scheduleTime = scheduleTime;
-        this.dynamicOptions = dynamicOptions;
+        this.initConfig = initConfig;
         this.staticPartitions = staticPartitions;
         this.executionConfig = executionConfig;
     }
@@ -83,8 +83,8 @@ public class RefreshMaterializedTableRequestBody implements RequestBody {
     }
 
     @Nullable
-    public Map<String, String> getDynamicOptions() {
-        return dynamicOptions;
+    public Map<String, String> getInitConfig() {
+        return initConfig;
     }
 
     @Nullable

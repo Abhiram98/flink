@@ -233,7 +233,7 @@ public class MaterializedTableManager {
                 handle,
                 catalogMaterializedTable,
                 tableIdentifier,
-                op.getDynamicOptions(),
+                op.getInitConfig(),
                 restorePath);
 
         return ResultFetcher.fromTableResult(handle, TABLE_RESULT_OK, false);
@@ -244,7 +244,7 @@ public class MaterializedTableManager {
             OperationHandle handle,
             CatalogMaterializedTable catalogMaterializedTable,
             ObjectIdentifier materializedTableIdentifier,
-            Map<String, String> dynamicOptions,
+            Map<String, String> initConfig,
             Optional<String> restorePath) {
         // Set job name, runtime mode, checkpoint interval
         // TODO: Set minibatch related optimization options.
@@ -264,7 +264,7 @@ public class MaterializedTableManager {
                 getInsertStatement(
                         materializedTableIdentifier,
                         catalogMaterializedTable.getDefinitionQuery(),
-                        dynamicOptions);
+                        initConfig);
         try {
             // submit flink streaming job
             ResultFetcher resultFetcher =
@@ -342,7 +342,7 @@ public class MaterializedTableManager {
             OperationHandle handle,
             ObjectIdentifier materializedTableIdentifier,
             Map<String, String> staticPartitions,
-            Map<String, String> dynamicOptions,
+            Map<String, String> initConfig,
             boolean isPeriodic,
             @Nullable String scheduleTime) {
         ResolvedCatalogMaterializedTable materializedTable =
@@ -375,7 +375,7 @@ public class MaterializedTableManager {
                         materializedTableIdentifier,
                         materializedTable.getDefinitionQuery(),
                         refreshPartitions,
-                        dynamicOptions);
+                        initConfig);
 
         try {
             LOG.debug(
@@ -489,14 +489,14 @@ public class MaterializedTableManager {
             ObjectIdentifier tableIdentifier,
             String definitionQuery,
             Map<String, String> partitionSpec,
-            Map<String, String> dynamicOptions) {
-        String tableIdentifierWithDynamicOptions =
-                generateTableWithDynamicOptions(tableIdentifier, dynamicOptions);
+            Map<String, String> initConfig) {
+        String tableIdentifierWithInitConfig =
+                generateTableWithInitConfig(tableIdentifier, initConfig);
         StringBuilder insertStatement =
                 new StringBuilder(
                         String.format(
                                 "INSERT OVERWRITE %s\n  SELECT * FROM (%s)",
-                                tableIdentifierWithDynamicOptions, definitionQuery));
+                                tableIdentifierWithInitConfig, definitionQuery));
         if (!partitionSpec.isEmpty()) {
             insertStatement.append("\n  WHERE ");
             insertStatement.append(
@@ -661,21 +661,21 @@ public class MaterializedTableManager {
     protected static String getInsertStatement(
             ObjectIdentifier materializedTableIdentifier,
             String definitionQuery,
-            Map<String, String> dynamicOptions) {
+            Map<String, String> initConfig) {
 
         return String.format(
                 "INSERT INTO %s\n%s",
-                generateTableWithDynamicOptions(materializedTableIdentifier, dynamicOptions),
+                generateTableWithInitConfig(materializedTableIdentifier, initConfig),
                 definitionQuery);
     }
 
-    private static String generateTableWithDynamicOptions(
-            ObjectIdentifier objectIdentifier, Map<String, String> dynamicOptions) {
+    private static String generateTableWithInitConfig(
+            ObjectIdentifier objectIdentifier, Map<String, String> initConfig) {
         StringBuilder builder = new StringBuilder(objectIdentifier.asSerializableString());
 
-        if (!dynamicOptions.isEmpty()) {
+        if (!initConfig.isEmpty()) {
             String hints =
-                    dynamicOptions.entrySet().stream()
+                    initConfig.entrySet().stream()
                             .map(e -> String.format("'%s'='%s'", e.getKey(), e.getValue()))
                             .collect(Collectors.joining(", "));
             builder.append(String.format(" /*+ OPTIONS(%s) */", hints));

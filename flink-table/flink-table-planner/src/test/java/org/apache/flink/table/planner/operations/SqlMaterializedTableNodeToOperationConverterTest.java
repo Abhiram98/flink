@@ -317,7 +317,7 @@ public class SqlMaterializedTableNodeToOperationConverterTest
         final String sql2 = "ALTER MATERIALIZED TABLE mtbl1 RESUME WITH ('k1' = 'v1')";
         Operation operation2 = parse(sql2);
         assertThat(operation2).isInstanceOf(AlterMaterializedTableResumeOperation.class);
-        assertThat(((AlterMaterializedTableResumeOperation) operation2).getDynamicOptions())
+        assertThat(((AlterMaterializedTableResumeOperation) operation2).getInitConfig())
                 .containsEntry("k1", "v1");
         assertThat(operation2.asSummaryString())
                 .isEqualTo("ALTER MATERIALIZED TABLE builtin.default.mtbl1 RESUME WITH (k1: [v1])");

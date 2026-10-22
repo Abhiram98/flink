@@ -29,16 +29,16 @@ import java.util.Map;
 @Internal
 public class AlterMaterializedTableResumeOperation extends AlterMaterializedTableOperation {
 
-    private final Map<String, String> dynamicOptions;
+    private final Map<String, String> initConfig;
 
     public AlterMaterializedTableResumeOperation(
             ObjectIdentifier tableIdentifier, Map<String, String> options) {
         super(tableIdentifier);
-        this.dynamicOptions = options;
+        this.initConfig = options;
     }
 
-    public Map<String, String> getDynamicOptions() {
-        return dynamicOptions;
+    public Map<String, String> getInitConfig() {
+        return initConfig;
     }
 
     @Override
@@ -54,9 +54,9 @@ public class AlterMaterializedTableResumeOperation extends AlterMaterializedTabl
                         String.format(
                                 "ALTER MATERIALIZED TABLE %s RESUME",
                                 tableIdentifier.asSummaryString()));
-        if (!dynamicOptions.isEmpty()) {
+        if (!initConfig.isEmpty()) {
             builder.append(
-                    String.format(" WITH (%s)", OperationUtils.formatProperties(dynamicOptions)));
+                    String.format(" WITH (%s)", OperationUtils.formatProperties(initConfig)));
         }
         return builder.toString();
     }

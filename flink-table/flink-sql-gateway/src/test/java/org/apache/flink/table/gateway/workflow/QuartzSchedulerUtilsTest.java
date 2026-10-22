@@ -44,9 +44,9 @@ public class QuartzSchedulerUtilsTest {
     @Test
     void testJsonSerDe() {
         String identifier = ObjectIdentifier.of("a", "b", "c").asSerializableString();
-        Map<String, String> dynamicOptions = new HashMap<>();
-        dynamicOptions.put("k1", "v1");
-        dynamicOptions.put("k2", "v2");
+        Map<String, String> initConfig = new HashMap<>();
+        initConfig.put("k1", "v1");
+        initConfig.put("k2", "v2");
 
         Map<String, String> executionConfig = new HashMap<>();
         executionConfig.put("k3", "v3");
@@ -55,7 +55,7 @@ public class QuartzSchedulerUtilsTest {
         String scheduleTime = "2023-04-04 20:00:00";
         String url = "http://localhost:8083";
         WorkflowInfo expected =
-                new WorkflowInfo(identifier, dynamicOptions, executionConfig, scheduleTime, url);
+                new WorkflowInfo(identifier, initConfig, executionConfig, scheduleTime, url);
 
         WorkflowInfo serde = fromJson(toJson(expected), WorkflowInfo.class);
         assertThat(serde).isEqualTo(expected);

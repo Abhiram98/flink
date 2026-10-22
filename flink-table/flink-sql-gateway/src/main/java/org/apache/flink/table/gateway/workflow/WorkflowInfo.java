@@ -36,7 +36,7 @@ public class WorkflowInfo {
 
     private final String materializedTableIdentifier;
 
-    private final Map<String, String> dynamicOptions;
+    private final Map<String, String> initConfig;
     private final Map<String, String> executionConfig;
 
     private final @Nullable String customSchedulerTime;
@@ -46,12 +46,12 @@ public class WorkflowInfo {
     @JsonCreator
     public WorkflowInfo(
             @JsonProperty("materializedTableIdentifier") String materializedTableIdentifier,
-            @JsonProperty("dynamicOptions") Map<String, String> dynamicOptions,
+            @JsonProperty("initConfig") Map<String, String> initConfig,
             @JsonProperty("executionConfig") Map<String, String> executionConfig,
             @JsonProperty("customSchedulerTime") @Nullable String customSchedulerTime,
             @JsonProperty("restEndpointUrl") String restEndpointUrl) {
         this.materializedTableIdentifier = materializedTableIdentifier;
-        this.dynamicOptions = dynamicOptions;
+        this.initConfig = initConfig;
         this.executionConfig = executionConfig;
         this.customSchedulerTime = customSchedulerTime;
         this.restEndpointUrl = restEndpointUrl;
@@ -61,8 +61,8 @@ public class WorkflowInfo {
         return materializedTableIdentifier;
     }
 
-    public Map<String, String> getDynamicOptions() {
-        return dynamicOptions;
+    public Map<String, String> getInitConfig() {
+        return initConfig;
     }
 
     public Map<String, String> getExecutionConfig() {
@@ -88,7 +88,7 @@ public class WorkflowInfo {
         }
         WorkflowInfo that = (WorkflowInfo) o;
         return Objects.equals(materializedTableIdentifier, that.materializedTableIdentifier)
-                && Objects.equals(dynamicOptions, that.dynamicOptions)
+                && Objects.equals(initConfig, that.initConfig)
                 && Objects.equals(executionConfig, that.executionConfig)
                 && Objects.equals(customSchedulerTime, that.customSchedulerTime)
                 && Objects.equals(restEndpointUrl, that.restEndpointUrl);
@@ -98,7 +98,7 @@ public class WorkflowInfo {
     public int hashCode() {
         return Objects.hash(
                 materializedTableIdentifier,
-                dynamicOptions,
+                initConfig,
                 executionConfig,
                 customSchedulerTime,
                 restEndpointUrl);
@@ -110,8 +110,8 @@ public class WorkflowInfo {
                 + "materializedTableIdentifier='"
                 + materializedTableIdentifier
                 + '\''
-                + ", dynamicOptions="
-                + dynamicOptions
+                + ", initConfig="
+                + initConfig
                 + ", executionConfig="
                 + executionConfig
                 + ", customSchedulerTime='"

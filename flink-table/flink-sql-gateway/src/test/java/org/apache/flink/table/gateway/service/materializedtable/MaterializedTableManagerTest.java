@@ -80,13 +80,13 @@ class MaterializedTableManagerTest {
     }
 
     @Test
-    void testGenerateInsertStatementWithDynamicOptions() {
+    void testGenerateInsertStatementWithInitConfig() {
         ObjectIdentifier materializedTableIdentifier =
                 ObjectIdentifier.of("catalog", "database", "table");
         String definitionQuery = "SELECT * FROM source_table";
-        Map<String, String> dynamicOptions = new HashMap<>();
-        dynamicOptions.put("option1", "value1");
-        dynamicOptions.put("option2", "value2");
+        Map<String, String> initConfig = new HashMap<>();
+        initConfig.put("option1", "value1");
+        initConfig.put("option2", "value2");
 
         String expectedStatement =
                 "INSERT INTO `catalog`.`database`.`table` "
@@ -95,7 +95,7 @@ class MaterializedTableManagerTest {
 
         String actualStatement =
                 MaterializedTableManager.getInsertStatement(
-                        materializedTableIdentifier, definitionQuery, dynamicOptions);
+                        materializedTableIdentifier, definitionQuery, initConfig);
         assertThat(actualStatement).isEqualTo(expectedStatement);
     }
 

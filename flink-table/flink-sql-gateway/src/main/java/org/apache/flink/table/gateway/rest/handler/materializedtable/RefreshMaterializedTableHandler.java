@@ -71,7 +71,7 @@ public class RefreshMaterializedTableHandler
                     request.getPathParameter(MaterializedTableIdentifierPathParameter.class);
             boolean isPeriodic = request.getRequestBody().isPeriodic();
             String scheduleTime = request.getRequestBody().getScheduleTime();
-            Map<String, String> dynamicOptions = request.getRequestBody().getDynamicOptions();
+            Map<String, String> initConfig = request.getRequestBody().getInitConfig();
             Map<String, String> staticPartitions = request.getRequestBody().getStaticPartitions();
             Map<String, String> executionConfig = request.getRequestBody().getExecutionConfig();
             OperationHandle operationHandle =
@@ -80,7 +80,7 @@ public class RefreshMaterializedTableHandler
                             materializedTableIdentifier,
                             isPeriodic,
                             scheduleTime,
-                            dynamicOptions == null ? Collections.emptyMap() : dynamicOptions,
+                            initConfig == null ? Collections.emptyMap() : initConfig,
                             staticPartitions == null ? Collections.emptyMap() : staticPartitions,
                             executionConfig == null ? Collections.emptyMap() : executionConfig);
 
