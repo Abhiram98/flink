@@ -90,7 +90,7 @@ class AbstractLatencyTrackState<
 
     @Override
     public void clear() {
-        if (latencyTrackingStateMetric.trackLatencyOnClear()) {
+        if (latencyTrackingStateMetric.trackMetricsOnClear()) {
             trackLatency(original::clear, StateLatencyMetricBase.STATE_CLEAR_LATENCY);
         } else {
             original.clear();

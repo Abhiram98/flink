@@ -55,7 +55,7 @@ class LatencyTrackingValueState<K, N, T>
 
     @Override
     public T value() throws IOException {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (latencyTrackingStateMetric.trackMetricsOnGet()) {
             return trackLatencyWithIOException(
                     () -> original.value(), ValueStateLatencyMetrics.VALUE_STATE_GET_LATENCY);
         } else {
@@ -65,7 +65,7 @@ class LatencyTrackingValueState<K, N, T>
 
     @Override
     public void update(T value) throws IOException {
-        if (latencyTrackingStateMetric.trackLatencyOnUpdate()) {
+        if (latencyTrackingStateMetric.trackMetricsOnUpdate()) {
             trackLatencyWithIOException(
                     () -> original.update(value),
                     ValueStateLatencyMetrics.VALUE_STATE_UPDATE_LATENCY);
@@ -98,12 +98,12 @@ class LatencyTrackingValueState<K, N, T>
             return updateCount;
         }
 
-        private boolean trackLatencyOnGet() {
+        private boolean trackMetricsOnGet() {
             getCount = loopUpdateCounter(getCount);
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnUpdate() {
+        private boolean trackMetricsOnUpdate() {
             updateCount = loopUpdateCounter(updateCount);
             return updateCount == 1;
         }

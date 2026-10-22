@@ -56,7 +56,7 @@ class LatencyTrackingListState<K, N, T>
 
     @Override
     public Iterable<T> get() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (latencyTrackingStateMetric.trackMetricsOnGet()) {
             return trackLatencyWithException(
                     () -> original.get(), ListStateLatencyMetrics.LIST_STATE_GET_LATENCY);
         } else {
@@ -66,7 +66,7 @@ class LatencyTrackingListState<K, N, T>
 
     @Override
     public void add(T value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAdd()) {
+        if (latencyTrackingStateMetric.trackMetricsOnAdd()) {
             trackLatencyWithException(
                     () -> original.add(value), ListStateLatencyMetrics.LIST_STATE_ADD_LATENCY);
         } else {
@@ -86,7 +86,7 @@ class LatencyTrackingListState<K, N, T>
 
     @Override
     public void update(List<T> values) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnUpdate()) {
+        if (latencyTrackingStateMetric.trackMetricsOnUpdate()) {
             trackLatencyWithException(
                     () -> original.update(values),
                     ListStateLatencyMetrics.LIST_STATE_UPDATE_LATENCY);
@@ -97,7 +97,7 @@ class LatencyTrackingListState<K, N, T>
 
     @Override
     public void addAll(List<T> values) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAddAll()) {
+        if (latencyTrackingStateMetric.trackMetricsOnAddAll()) {
             trackLatencyWithException(
                     () -> original.addAll(values),
                     ListStateLatencyMetrics.LIST_STATE_ADD_ALL_LATENCY);
@@ -108,7 +108,7 @@ class LatencyTrackingListState<K, N, T>
 
     @Override
     public void mergeNamespaces(N target, Collection<N> sources) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnMergeNamespace()) {
+        if (latencyTrackingStateMetric.trackMetricsOnMergeNamespace()) {
             trackLatencyWithException(
                     () -> original.mergeNamespaces(target, sources),
                     ListStateLatencyMetrics.LIST_STATE_MERGE_NAMESPACES_LATENCY);
@@ -160,27 +160,27 @@ class LatencyTrackingListState<K, N, T>
             return mergeNamespaceCount;
         }
 
-        private boolean trackLatencyOnGet() {
+        private boolean trackMetricsOnGet() {
             getCount = loopUpdateCounter(getCount);
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnAdd() {
+        private boolean trackMetricsOnAdd() {
             addCount = loopUpdateCounter(addCount);
             return addCount == 1;
         }
 
-        private boolean trackLatencyOnAddAll() {
+        private boolean trackMetricsOnAddAll() {
             addAllCount = loopUpdateCounter(addAllCount);
             return addAllCount == 1;
         }
 
-        private boolean trackLatencyOnUpdate() {
+        private boolean trackMetricsOnUpdate() {
             updateCount = loopUpdateCounter(updateCount);
             return updateCount == 1;
         }
 
-        private boolean trackLatencyOnMergeNamespace() {
+        private boolean trackMetricsOnMergeNamespace() {
             mergeNamespaceCount = loopUpdateCounter(mergeNamespaceCount);
             return mergeNamespaceCount == 1;
         }

@@ -57,7 +57,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public UV get(UK key) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (latencyTrackingStateMetric.trackMetricsOnGet()) {
             return trackLatencyWithException(
                     () -> original.get(key), MapStateLatencyMetrics.MAP_STATE_GET_LATENCY);
         } else {
@@ -67,7 +67,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public void put(UK key, UV value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnPut()) {
+        if (latencyTrackingStateMetric.trackMetricsOnPut()) {
             trackLatencyWithException(
                     () -> original.put(key, value), MapStateLatencyMetrics.MAP_STATE_PUT_LATENCY);
         } else {
@@ -77,7 +77,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public void putAll(Map<UK, UV> map) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnPutAll()) {
+        if (latencyTrackingStateMetric.trackMetricsOnPutAll()) {
             trackLatencyWithException(
                     () -> original.putAll(map), MapStateLatencyMetrics.MAP_STATE_PUT_ALL_LATENCY);
         } else {
@@ -87,7 +87,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public void remove(UK key) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnRemove()) {
+        if (latencyTrackingStateMetric.trackMetricsOnRemove()) {
             trackLatencyWithException(
                     () -> original.remove(key), MapStateLatencyMetrics.MAP_STATE_REMOVE_LATENCY);
         } else {
@@ -97,7 +97,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public boolean contains(UK key) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnContains()) {
+        if (latencyTrackingStateMetric.trackMetricsOnContains()) {
             return trackLatencyWithException(
                     () -> original.contains(key),
                     MapStateLatencyMetrics.MAP_STATE_CONTAINS_LATENCY);
@@ -108,7 +108,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterable<Map.Entry<UK, UV>> entries() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnEntriesInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnEntriesInit()) {
             return trackLatencyWithException(
                     () -> new IterableWrapper<>(original.entries()),
                     MapStateLatencyMetrics.MAP_STATE_ENTRIES_INIT_LATENCY);
@@ -119,7 +119,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterable<UK> keys() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnKeysInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnKeysInit()) {
             return trackLatencyWithException(
                     () -> new IterableWrapper<>(original.keys()),
                     MapStateLatencyMetrics.MAP_STATE_KEYS_INIT_LATENCY);
@@ -130,7 +130,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterable<UV> values() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnValuesInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnValuesInit()) {
             return trackLatencyWithException(
                     () -> new IterableWrapper<>(original.values()),
                     MapStateLatencyMetrics.MAP_STATE_VALUES_INIT_LATENCY);
@@ -141,7 +141,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterator<Map.Entry<UK, UV>> iterator() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnIteratorInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnIteratorInit()) {
             return trackLatencyWithException(
                     () -> new IteratorWrapper<>(original.iterator()),
                     MapStateLatencyMetrics.MAP_STATE_ITERATOR_INIT_LATENCY);
@@ -152,7 +152,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public boolean isEmpty() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnIsEmpty()) {
+        if (latencyTrackingStateMetric.trackMetricsOnIsEmpty()) {
             return trackLatencyWithException(
                     () -> original.isEmpty(), MapStateLatencyMetrics.MAP_STATE_IS_EMPTY_LATENCY);
         } else {
@@ -182,7 +182,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
         @Override
         public boolean hasNext() {
-            if (latencyTrackingStateMetric.trackLatencyOnIteratorHasNext()) {
+            if (latencyTrackingStateMetric.trackMetricsOnIteratorHasNext()) {
                 return trackLatency(
                         iterator::hasNext,
                         MapStateLatencyMetrics.MAP_STATE_ITERATOR_HAS_NEXT_LATENCY);
@@ -193,7 +193,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
         @Override
         public E next() {
-            if (latencyTrackingStateMetric.trackLatencyOnIteratorNext()) {
+            if (latencyTrackingStateMetric.trackMetricsOnIteratorNext()) {
                 return trackLatency(
                         iterator::next, MapStateLatencyMetrics.MAP_STATE_ITERATOR_NEXT_LATENCY);
             } else {
@@ -203,7 +203,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
         @Override
         public void remove() {
-            if (latencyTrackingStateMetric.trackLatencyOnIteratorRemove()) {
+            if (latencyTrackingStateMetric.trackMetricsOnIteratorRemove()) {
                 trackLatency(
                         iterator::remove, MapStateLatencyMetrics.MAP_STATE_ITERATOR_REMOVE_LATENCY);
             } else {
@@ -309,67 +309,67 @@ class LatencyTrackingMapState<K, N, UK, UV>
             return iteratorNextCount;
         }
 
-        private boolean trackLatencyOnGet() {
+        private boolean trackMetricsOnGet() {
             getCount = loopUpdateCounter(getCount);
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnPut() {
+        private boolean trackMetricsOnPut() {
             putCount = loopUpdateCounter(putCount);
             return putCount == 1;
         }
 
-        private boolean trackLatencyOnPutAll() {
+        private boolean trackMetricsOnPutAll() {
             putAllCount = loopUpdateCounter(putAllCount);
             return putAllCount == 1;
         }
 
-        private boolean trackLatencyOnRemove() {
+        private boolean trackMetricsOnRemove() {
             removeCount = loopUpdateCounter(removeCount);
             return removeCount == 1;
         }
 
-        private boolean trackLatencyOnContains() {
+        private boolean trackMetricsOnContains() {
             containsCount = loopUpdateCounter(containsCount);
             return containsCount == 1;
         }
 
-        private boolean trackLatencyOnEntriesInit() {
+        private boolean trackMetricsOnEntriesInit() {
             entriesInitCount = loopUpdateCounter(entriesInitCount);
             return entriesInitCount == 1;
         }
 
-        private boolean trackLatencyOnKeysInit() {
+        private boolean trackMetricsOnKeysInit() {
             keysInitCount = loopUpdateCounter(keysInitCount);
             return keysInitCount == 1;
         }
 
-        private boolean trackLatencyOnValuesInit() {
+        private boolean trackMetricsOnValuesInit() {
             valuesInitCount = loopUpdateCounter(valuesInitCount);
             return valuesInitCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorInit() {
+        private boolean trackMetricsOnIteratorInit() {
             iteratorInitCount = loopUpdateCounter(iteratorInitCount);
             return iteratorInitCount == 1;
         }
 
-        private boolean trackLatencyOnIsEmpty() {
+        private boolean trackMetricsOnIsEmpty() {
             isEmptyCount = loopUpdateCounter(isEmptyCount);
             return isEmptyCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorHasNext() {
+        private boolean trackMetricsOnIteratorHasNext() {
             iteratorHasNextCount = loopUpdateCounter(iteratorHasNextCount);
             return iteratorHasNextCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorNext() {
+        private boolean trackMetricsOnIteratorNext() {
             iteratorNextCount = loopUpdateCounter(iteratorNextCount);
             return iteratorNextCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorRemove() {
+        private boolean trackMetricsOnIteratorRemove() {
             iteratorRemoveCount = loopUpdateCounter(iteratorRemoveCount);
             return iteratorRemoveCount == 1;
         }

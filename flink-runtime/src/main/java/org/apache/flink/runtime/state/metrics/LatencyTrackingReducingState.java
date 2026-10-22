@@ -55,7 +55,7 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public T get() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (latencyTrackingStateMetric.trackMetricsOnGet()) {
             return trackLatencyWithException(
                     () -> original.get(), ReducingStateLatencyMetrics.REDUCING_STATE_GET_LATENCY);
         } else {
@@ -65,7 +65,7 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public void add(T value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAdd()) {
+        if (latencyTrackingStateMetric.trackMetricsOnAdd()) {
             trackLatencyWithException(
                     () -> original.add(value),
                     ReducingStateLatencyMetrics.REDUCING_STATE_ADD_LATENCY);
@@ -86,7 +86,7 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public void mergeNamespaces(N target, Collection<N> sources) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnMergeNamespace()) {
+        if (latencyTrackingStateMetric.trackMetricsOnMergeNamespace()) {
             trackLatencyWithException(
                     () -> original.mergeNamespaces(target, sources),
                     ReducingStateLatencyMetrics.REDUCING_STATE_MERGE_NAMESPACES_LATENCY);
@@ -126,17 +126,17 @@ class LatencyTrackingReducingState<K, N, T>
             return mergeNamespaceCount;
         }
 
-        private boolean trackLatencyOnGet() {
+        private boolean trackMetricsOnGet() {
             getCount = loopUpdateCounter(getCount);
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnAdd() {
+        private boolean trackMetricsOnAdd() {
             addCount = loopUpdateCounter(addCount);
             return addCount == 1;
         }
 
-        private boolean trackLatencyOnMergeNamespace() {
+        private boolean trackMetricsOnMergeNamespace() {
             mergeNamespaceCount = loopUpdateCounter(mergeNamespaceCount);
             return mergeNamespaceCount == 1;
         }
