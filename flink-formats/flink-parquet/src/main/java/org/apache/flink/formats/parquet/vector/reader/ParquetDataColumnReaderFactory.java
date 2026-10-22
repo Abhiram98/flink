@@ -71,8 +71,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public boolean readBoolean(int id) {
-            return dict.decodeToBoolean(id);
+        public boolean readBoolean(int identifier) {
+            return dict.decodeToBoolean(identifier);
         }
 
         @Override
@@ -81,8 +81,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public byte[] readBytes(int id) {
-            return dict.decodeToBinary(id).getBytesUnsafe();
+        public byte[] readBytes(int identifier) {
+            return dict.decodeToBinary(identifier).getBytesUnsafe();
         }
 
         @Override
@@ -91,8 +91,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public float readFloat(int id) {
-            return dict.decodeToFloat(id);
+        public float readFloat(int identifier) {
+            return dict.decodeToFloat(identifier);
         }
 
         @Override
@@ -101,8 +101,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public double readDouble(int id) {
-            return dict.decodeToDouble(id);
+        public double readDouble(int identifier) {
+            return dict.decodeToDouble(identifier);
         }
 
         @Override
@@ -111,7 +111,7 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public TimestampData readTimestamp(int id) {
+        public TimestampData readTimestamp(int identifier) {
             throw new RuntimeException("Unsupported operation");
         }
 
@@ -121,13 +121,13 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public int readInteger(int id) {
-            return dict.decodeToInt(id);
+        public int readInteger(int identifier) {
+            return dict.decodeToInt(identifier);
         }
 
         @Override
-        public long readLong(int id) {
-            return dict.decodeToLong(id);
+        public long readLong(int identifier) {
+            return dict.decodeToLong(identifier);
         }
 
         @Override
@@ -141,8 +141,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public int readSmallInt(int id) {
-            return dict.decodeToInt(id);
+        public int readSmallInt(int identifier) {
+            return dict.decodeToInt(identifier);
         }
 
         @Override
@@ -151,8 +151,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public int readTinyInt(int id) {
-            return dict.decodeToInt(id);
+        public int readTinyInt(int identifier) {
+            return dict.decodeToInt(identifier);
         }
 
         @Override
@@ -194,8 +194,8 @@ public final class ParquetDataColumnReaderFactory {
         }
 
         @Override
-        public TimestampData readTimestamp(int id) {
-            return convert(dict.decodeToBinary(id));
+        public TimestampData readTimestamp(int identifier) {
+            return convert(dict.decodeToBinary(identifier));
         }
 
         @Override

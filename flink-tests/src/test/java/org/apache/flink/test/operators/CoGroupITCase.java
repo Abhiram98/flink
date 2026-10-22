@@ -836,19 +836,19 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
                 Iterable<Tuple5<Integer, Long, Integer, String, Long>> second,
                 Collector<Tuple2<Integer, Integer>> out) {
             int sum = 0;
-            int id = 0;
+            int identifier = 0;
 
             for (Tuple5<Integer, Long, Integer, String, Long> element : first) {
                 sum += element.f2;
-                id = element.f0;
+                identifier = element.f0;
             }
 
             for (Tuple5<Integer, Long, Integer, String, Long> element : second) {
                 sum += element.f2;
-                id = element.f0;
+                identifier = element.f0;
             }
 
-            out.collect(new Tuple2<Integer, Integer>(id, sum));
+            out.collect(new Tuple2<Integer, Integer>(identifier, sum));
         }
     }
 
@@ -895,19 +895,19 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
                 throws Exception {
 
             long sum = 0;
-            int id = 0;
+            int identifier = 0;
 
             for (Tuple5<Integer, Long, Integer, String, Long> element : first) {
                 sum += element.f0;
-                id = element.f2;
+                identifier = element.f2;
             }
 
             for (CustomType element : second) {
-                id = element.myInt;
+                identifier = element.myInt;
                 sum += element.myLong;
             }
 
-            out.collect(new Tuple3<Integer, Long, String>(id, sum, "test"));
+            out.collect(new Tuple3<Integer, Long, String>(identifier, sum, "test"));
         }
     }
 
@@ -1007,19 +1007,19 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
                 Iterable<Tuple5<Integer, Long, Integer, String, Long>> second,
                 Collector<Tuple3<Integer, Integer, Integer>> out) {
             int sum = 0;
-            int id = 0;
+            int identifier = 0;
 
             for (Tuple5<Integer, Long, Integer, String, Long> element : first) {
                 sum += element.f2;
-                id = element.f0;
+                identifier = element.f0;
             }
 
             for (Tuple5<Integer, Long, Integer, String, Long> element : second) {
                 sum += element.f2;
-                id = element.f0;
+                identifier = element.f0;
             }
 
-            out.collect(new Tuple3<Integer, Integer, Integer>(id, sum, broadcast));
+            out.collect(new Tuple3<Integer, Integer, Integer>(identifier, sum, broadcast));
         }
     }
 

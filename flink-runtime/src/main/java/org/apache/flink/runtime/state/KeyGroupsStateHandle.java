@@ -82,7 +82,7 @@ public class KeyGroupsStateHandle implements StreamStateHandle, KeyedStateHandle
     }
 
     /**
-     * @param keyGroupId the id of a key-group. the id must be contained in the range of this
+     * @param keyGroupId the identifier of a key-group. the identifier must be contained in the range of this
      *     handle.
      * @return offset to the position of data for the provided key-group in the stream referenced by
      *     this state handle

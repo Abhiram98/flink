@@ -42,7 +42,7 @@ public class CepOperatorTestUtilities {
 
         @Override
         public Integer getKey(Event value) throws Exception {
-            return value.getId();
+            return value.getIdentifier();
         }
     }
 

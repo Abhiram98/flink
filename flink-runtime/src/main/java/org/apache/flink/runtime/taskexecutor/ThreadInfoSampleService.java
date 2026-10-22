@@ -52,7 +52,7 @@ class ThreadInfoSampleService implements Closeable {
      * Returns a future that completes with a given number of thread info samples for a set of task
      * threads.
      *
-     * @param threads the map key is thread id, the map value is the ExecutionAttemptID.
+     * @param threads the map key is thread identifier, the map value is the ExecutionAttemptID.
      * @param requestParams Parameters of the sampling request.
      * @return A future containing the stack trace samples.
      */

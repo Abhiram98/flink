@@ -65,7 +65,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
- * A request handler that provides the details of a job vertex, including id, name, and the runtime
+ * A request handler that provides the details of a job vertex, including identifier, name, and the runtime
  * and metrics of all its subtasks aggregated by TaskManager.
  */
 public class JobVertexTaskManagersHandler

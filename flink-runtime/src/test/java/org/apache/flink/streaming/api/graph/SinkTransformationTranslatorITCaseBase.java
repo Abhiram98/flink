@@ -193,12 +193,12 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
 
         // verify src node
         final StreamEdge srcOutEdge = src.getOutEdges().get(0);
-        assertThat(srcOutEdge.getTargetId()).isEqualTo(dest.getId());
+        assertThat(srcOutEdge.getTargetId()).isEqualTo(dest.getIdentifier());
         assertThat(src.getTypeSerializerOut()).isInstanceOf(srcOutTypeInfo);
 
         // verify dest node input
         final StreamEdge destInputEdge = dest.getInEdges().get(0);
-        assertThat(destInputEdge.getTargetId()).isEqualTo(dest.getId());
+        assertThat(destInputEdge.getTargetId()).isEqualTo(dest.getIdentifier());
         assertThat(dest.getTypeSerializersIn()[0]).isInstanceOf(srcOutTypeInfo);
 
         // make sure 2 sink operators have different names/uid

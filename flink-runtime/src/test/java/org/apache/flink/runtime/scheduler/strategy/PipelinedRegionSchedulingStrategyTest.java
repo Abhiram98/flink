@@ -154,7 +154,7 @@ class PipelinedRegionSchedulingStrategyTest {
         final Set<ExecutionVertexID> verticesToRestart =
                 Stream.of(source, map1, map2, map3, sink)
                         .flatMap(List::stream)
-                        .map(TestingSchedulingExecutionVertex::getId)
+                        .map(TestingSchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet());
 
         schedulingStrategy.restartTasks(verticesToRestart);
@@ -178,14 +178,14 @@ class PipelinedRegionSchedulingStrategyTest {
 
         final TestingSchedulingExecutionVertex upstream1 = map3.get(0);
         upstream1.getProducedResults().iterator().next().markFinished();
-        schedulingStrategy.onExecutionStateChange(upstream1.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(upstream1.getIdentifier(), ExecutionState.FINISHED);
 
         // sinks' inputs are not all consumable yet so they are not scheduled
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(6);
 
         final TestingSchedulingExecutionVertex upstream2 = map3.get(1);
         upstream2.getProducedResults().iterator().next().markFinished();
-        schedulingStrategy.onExecutionStateChange(upstream2.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(upstream2.getIdentifier(), ExecutionState.FINISHED);
 
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(8);
 
@@ -318,7 +318,7 @@ class PipelinedRegionSchedulingStrategyTest {
         schedulingTopology
                 .getPipelinedRegionOfVertex(v31.getID())
                 .getVertices()
-                .forEach(vertex -> region1.add(vertex.getId()));
+                .forEach(vertex -> region1.add(vertex.getIdentifier()));
         assertThat(region1).hasSize(5);
 
         final ExecutionVertex v32 = executionGraph.getJobVertex(v3.getID()).getTaskVertices()[1];
@@ -327,7 +327,7 @@ class PipelinedRegionSchedulingStrategyTest {
         schedulingTopology
                 .getPipelinedRegionOfVertex(v32.getID())
                 .getVertices()
-                .forEach(vertex -> region2.add(vertex.getId()));
+                .forEach(vertex -> region2.add(vertex.getIdentifier()));
         assertThat(region2).hasSize(4);
 
         // Test whether region 1 is scheduled correctly
@@ -391,7 +391,7 @@ class PipelinedRegionSchedulingStrategyTest {
         schedulingTopology
                 .getPipelinedRegionOfVertex(v31.getID())
                 .getVertices()
-                .forEach(vertex -> region1.add(vertex.getId()));
+                .forEach(vertex -> region1.add(vertex.getIdentifier()));
         assertThat(region1).hasSize(5);
 
         final ExecutionVertex v32 = executionGraph.getJobVertex(v3.getID()).getTaskVertices()[1];
@@ -400,7 +400,7 @@ class PipelinedRegionSchedulingStrategyTest {
         schedulingTopology
                 .getPipelinedRegionOfVertex(v32.getID())
                 .getVertices()
-                .forEach(vertex -> region2.add(vertex.getId()));
+                .forEach(vertex -> region2.add(vertex.getIdentifier()));
         assertThat(region2).hasSize(4);
 
         startScheduling(schedulingTopology);

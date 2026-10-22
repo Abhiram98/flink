@@ -52,7 +52,7 @@ public interface FileMergingSnapshotManager extends Closeable {
      * <pre>
      * The layout of checkpoint directory:
      * /user-defined-checkpoint-dir
-     *     /{job-id} (checkpointBaseDir)
+     *     /{job-identifier} (checkpointBaseDir)
      *         |
      *         + --shared/
      *             |
@@ -201,7 +201,7 @@ public interface FileMergingSnapshotManager extends Closeable {
     /**
      * Restore and re-register the SegmentFileStateHandles into FileMergingSnapshotManager.
      *
-     * @param checkpointId the restored checkpoint id.
+     * @param checkpointId the restored checkpoint identifier.
      * @param subtaskKey the subtask key identifying the subtask.
      * @param stateHandles the restored segment file handles.
      */
@@ -209,7 +209,7 @@ public interface FileMergingSnapshotManager extends Closeable {
             long checkpointId, SubtaskKey subtaskKey, Stream<SegmentFileStateHandle> stateHandles);
 
     /**
-     * A key identifies a subtask. A subtask can be identified by the operator id, subtask index and
+     * A key identifies a subtask. A subtask can be identified by the operator identifier, subtask index and
      * the parallelism. Note that this key should be consistent across job attempts.
      */
     final class SubtaskKey {

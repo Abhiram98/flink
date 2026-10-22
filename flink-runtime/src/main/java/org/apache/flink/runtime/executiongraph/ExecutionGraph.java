@@ -111,7 +111,7 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     Iterable<ExecutionVertex> getAllExecutionVertices();
 
     @Override
-    ExecutionJobVertex getJobVertex(JobVertexID id);
+    ExecutionJobVertex getJobVertex(JobVertexID identifier);
 
     @Override
     Map<JobVertexID, ExecutionJobVertex> getAllVertices();
@@ -130,10 +130,10 @@ public interface ExecutionGraph extends AccessExecutionGraph {
      * Gets the intermediate result partition by the given partition ID, or throw an exception if
      * the partition is not found.
      *
-     * @param id of the intermediate result partition
+     * @param identifier of the intermediate result partition
      * @return intermediate result partition
      */
-    IntermediateResultPartition getResultPartitionOrThrow(final IntermediateResultPartitionID id);
+    IntermediateResultPartition getResultPartitionOrThrow(final IntermediateResultPartitionID identifier);
 
     /**
      * Merges all accumulator results from the tasks previously executed in the Executions.

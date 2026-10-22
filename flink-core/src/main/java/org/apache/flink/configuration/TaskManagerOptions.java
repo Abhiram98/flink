@@ -348,7 +348,7 @@ public class TaskManagerOptions {
      */
     @Documentation.Section(Documentation.Sections.ALL_TASK_MANAGER)
     public static final ConfigOption<String> TASK_MANAGER_RESOURCE_ID =
-            key("taskmanager.resource-id")
+            key("taskmanager.resource-identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(

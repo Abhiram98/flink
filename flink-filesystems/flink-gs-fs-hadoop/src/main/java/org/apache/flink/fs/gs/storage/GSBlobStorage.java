@@ -69,7 +69,7 @@ public interface GSBlobStorage {
     List<GSBlobIdentifier> list(String bucketName, String prefix);
 
     /**
-     * Copies from a source blob id to a target blob id. Does not delete the source blob.
+     * Copies from a source blob identifier to a target blob identifier. Does not delete the source blob.
      *
      * @param sourceBlobIdentifier The source blob identifier
      * @param targetBlobIdentifier The target glob identifier

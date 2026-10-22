@@ -777,7 +777,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
         if (!jobGraph.getJobID().equals(jobId)) {
             log.debug(
-                    "Rejecting TaskManager registration attempt because of wrong job id {}.",
+                    "Rejecting TaskManager registration attempt because of wrong job identifier {}.",
                     jobId);
             return CompletableFuture.completedFuture(
                     new JMTMRegistrationRejection(
@@ -804,7 +804,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         if (taskManagerRegistration != null) {
             if (taskManagerRegistration.getSessionId().equals(sessionId)) {
                 log.debug(
-                        "Ignoring registration attempt of TaskManager {} with the same session id {}.",
+                        "Ignoring registration attempt of TaskManager {} with the same session identifier {}.",
                         taskManagerId,
                         sessionId);
                 final RegistrationResponse response = new JMTMRegistrationSuccess(resourceId);
@@ -814,7 +814,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
                         taskManagerId,
                         new FlinkException(
                                 String.format(
-                                        "A registered TaskManager %s re-registered with a new session id. This indicates a restart of the TaskManager. Closing the old connection.",
+                                        "A registered TaskManager %s re-registered with a new session identifier. This indicates a restart of the TaskManager. Closing the old connection.",
                                         taskManagerId)));
             }
         }
@@ -1132,7 +1132,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         startJobMasterServices();
 
         log.info(
-                "Starting execution of job '{}' ({}) under job master id {}.",
+                "Starting execution of job '{}' ({}) under job master identifier {}.",
                 jobGraph.getName(),
                 jobGraph.getJobID(),
                 getFencingToken());
@@ -1302,7 +1302,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
             @Nullable String newResourceManagerAddress,
             @Nullable ResourceManagerId resourceManagerId) {
         if (newResourceManagerAddress != null) {
-            // the contract is: address == null <=> id == null
+            // the contract is: address == null <=> identifier == null
             checkNotNull(resourceManagerId);
             return new ResourceManagerAddress(newResourceManagerAddress, resourceManagerId);
         } else {
@@ -1351,7 +1351,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
                         resourceManagerConnection.getTargetLeaderId(), resourceManagerId)) {
 
             log.info(
-                    "JobManager successfully registered at ResourceManager, leader id: {}.",
+                    "JobManager successfully registered at ResourceManager, leader identifier: {}.",
                     resourceManagerId);
 
             final ResourceManagerGateway resourceManagerGateway =
@@ -1605,7 +1605,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         public void notifyHeartbeatTimeout(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "Heartbeat of TaskManager with id %s timed out.",
+                            "Heartbeat of TaskManager with identifier %s timed out.",
                             resourceID.getStringWithMetadata());
 
             log.info(message);
@@ -1621,7 +1621,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "TaskManager with id %s is no longer reachable.",
+                            "TaskManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
 
             log.info(message);
@@ -1655,7 +1655,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         public void notifyHeartbeatTimeout(final ResourceID resourceId) {
             final String message =
                     String.format(
-                            "The heartbeat of ResourceManager with id %s timed out.",
+                            "The heartbeat of ResourceManager with identifier %s timed out.",
                             resourceId.getStringWithMetadata());
             log.info(message);
 
@@ -1676,7 +1676,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "ResourceManager with id %s is no longer reachable.",
+                            "ResourceManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 

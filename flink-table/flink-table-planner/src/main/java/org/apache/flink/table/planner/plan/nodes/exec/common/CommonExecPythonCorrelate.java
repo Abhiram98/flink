@@ -80,7 +80,7 @@ public abstract class CommonExecPythonCorrelate extends ExecNodeBase<RowData>
     private final RexCall invocation;
 
     public CommonExecPythonCorrelate(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             FlinkJoinType joinType,
@@ -88,7 +88,7 @@ public abstract class CommonExecPythonCorrelate extends ExecNodeBase<RowData>
             List<InputProperty> inputProperties,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         checkArgument(inputProperties.size() == 1);
         this.joinType = joinType;
         this.invocation = invocation;

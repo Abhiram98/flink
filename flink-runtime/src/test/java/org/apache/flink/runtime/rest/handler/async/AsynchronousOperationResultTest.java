@@ -72,7 +72,7 @@ public class AsynchronousOperationResultTest
     protected void assertOriginalEqualsToUnmarshalled(
             AsynchronousOperationResult<TriggerId> expected,
             AsynchronousOperationResult<TriggerId> actual) {
-        assertThat(actual.queueStatus().getId()).isEqualTo(expected.queueStatus().getId());
+        assertThat(actual.queueStatus().getIdentifier()).isEqualTo(expected.queueStatus().getIdentifier());
         assertThat(actual.resource()).isEqualTo(expected.resource());
     }
 }

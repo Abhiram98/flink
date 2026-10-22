@@ -313,18 +313,18 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
             if (yarnApplicationIdString == null) {
                 throw new FlinkException(
                         "Yarn properties file found but doesn't contain a "
-                                + "Yarn application id. Please delete the file at "
+                                + "Yarn application identifier. Please delete the file at "
                                 + yarnPropertiesLocation.getAbsolutePath());
             }
 
             try {
-                // try converting id to ApplicationId
+                // try converting identifier to ApplicationId
                 yarnApplicationIdFromYarnProperties =
                         ApplicationId.fromString(yarnApplicationIdString);
             } catch (Exception e) {
                 throw new FlinkException(
                         "YARN properties contain an invalid entry for "
-                                + "application id: "
+                                + "application identifier: "
                                 + yarnApplicationIdString
                                 + ". Please delete the file at "
                                 + yarnPropertiesLocation.getAbsolutePath(),

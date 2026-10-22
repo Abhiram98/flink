@@ -93,7 +93,7 @@ public class OperatorSubtaskState implements CompositeStateHandle {
 
     /**
      * The subpartitions mappings per partition set when the output operator for a partition was
-     * rescaled. The key is the partition id and the value contains all subtask indexes of the
+     * rescaled. The key is the partition identifier and the value contains all subtask indexes of the
      * output operator before rescaling. Note that this field is only set by {@link
      * StateAssignmentOperation} and will not be persisted in the checkpoint itself as it can only
      * be calculated if the post-recovery scale factor is known.

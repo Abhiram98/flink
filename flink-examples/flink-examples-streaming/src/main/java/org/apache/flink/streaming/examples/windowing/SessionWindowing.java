@@ -81,7 +81,7 @@ public class SessionWindowing {
                                 .withTimestampAssigner((event, timestamp) -> event.f1),
                         "Generated data source");
 
-        // We create sessions for each id with max timeout of 3 time units
+        // We create sessions for each identifier with max timeout of 3 time units
         DataStream<Tuple3<String, Long, Integer>> aggregated =
                 source.keyBy(value -> value.f0)
                         .window(EventTimeSessionWindows.withGap(Duration.ofMillis(3L)))

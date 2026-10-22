@@ -51,7 +51,7 @@ class ExecNodeGraphJsonSerializerTest {
                                                 FlinkVersion.v1_18,
                                                 Collections.singletonList(new NoAnnotationNode()))))
                 .hasMessageContaining(
-                        "Can not serialize ExecNode with id: 10. Missing type, this is a bug, please file a ticket");
+                        "Can not serialize ExecNode with identifier: 10. Missing type, this is a bug, please file a ticket");
     }
 
     private static class NoAnnotationNode extends ExecNodeBase<RowData> {

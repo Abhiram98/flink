@@ -618,7 +618,7 @@ public class DefaultBatchJobRecoveryHandler
                                         ShuffleDescriptor shuffleDescriptor =
                                                 partitionAndMetric.getPartition();
 
-                                        // we cannot get the producer id when using remote shuffle
+                                        // we cannot get the producer identifier when using remote shuffle
                                         ResourceID producerTaskExecutorId = UNKNOWN_PRODUCER;
                                         if (shuffleDescriptor
                                                 .storesLocalResourcesOn()

@@ -153,7 +153,7 @@ class MetricDumpSerializerTest {
                 c3,
                 new Tuple2<>(
                         new QueryScopeInfo.JobManagerOperatorQueryScopeInfo(
-                                "job-id", "tmid", "opName", "C"),
+                                "job-identifier", "tmid", "opName", "C"),
                         "c3"));
         meters.put(m1, new Tuple2<>(new QueryScopeInfo.JobQueryScopeInfo("jid", "C"), "c3"));
         gauges.put(
@@ -208,7 +208,7 @@ class MetricDumpSerializerTest {
                                     jmOperatorQueryScopeInfo =
                                             ((QueryScopeInfo.JobManagerOperatorQueryScopeInfo)
                                                     counterDump.scopeInfo);
-                            assertThat(jmOperatorQueryScopeInfo.jobID).isEqualTo("job-id");
+                            assertThat(jmOperatorQueryScopeInfo.jobID).isEqualTo("job-identifier");
                             assertThat(jmOperatorQueryScopeInfo.vertexID).isEqualTo("tmid");
                             assertThat(jmOperatorQueryScopeInfo.operatorName).isEqualTo("opName");
                             counters.remove(c3);

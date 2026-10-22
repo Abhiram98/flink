@@ -242,9 +242,9 @@ public class StreamTaskTest {
         assertThatThrownBy(
                         () ->
                                 testSyncSavepointWithEndInput(
-                                        (task, id) ->
+                                        (task, identifier) ->
                                                 task.abortCheckpointOnBarrier(
-                                                        id,
+                                                        identifier,
                                                         new CheckpointException(
                                                                 UNKNOWN_TASK_CHECKPOINT_NOTIFICATION_FAILURE)),
                                         SavepointType.suspend(SavepointFormatType.CANONICAL),
@@ -258,9 +258,9 @@ public class StreamTaskTest {
         assertThatThrownBy(
                         () ->
                                 testSyncSavepointWithEndInput(
-                                        (task, id) ->
+                                        (task, identifier) ->
                                                 task.abortCheckpointOnBarrier(
-                                                        id,
+                                                        identifier,
                                                         new CheckpointException(
                                                                 UNKNOWN_TASK_CHECKPOINT_NOTIFICATION_FAILURE)),
                                         SavepointType.terminate(SavepointFormatType.CANONICAL),
@@ -2406,7 +2406,7 @@ public class StreamTaskTest {
         ThreadInspectingTask(Environment env) throws Exception {
             super(env);
             Thread currentThread = Thread.currentThread();
-            taskThreadId = currentThread.getId();
+            taskThreadId = currentThread.getIdentifier();
             taskClassLoader = currentThread.getContextClassLoader();
         }
 
@@ -2450,7 +2450,7 @@ public class StreamTaskTest {
         private void checkTaskThreadInfo() {
             Thread currentThread = Thread.currentThread();
             checkState(
-                    taskThreadId == currentThread.getId(),
+                    taskThreadId == currentThread.getIdentifier(),
                     "Task's method was called in non task thread.");
             checkState(
                     taskClassLoader == currentThread.getContextClassLoader(),

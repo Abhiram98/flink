@@ -111,8 +111,8 @@ class AbstractAsynchronousOperationHandlersTest {
                         .handleRequest(statusOperationRequest(triggerId), DUMMY_GATEWAY)
                         .get();
 
-        assertThat(operationResult.queueStatus().getId())
-                .isEqualTo(QueueStatus.inProgress().getId());
+        assertThat(operationResult.queueStatus().getIdentifier())
+                .isEqualTo(QueueStatus.inProgress().getIdentifier());
 
         // complete the operation
         acknowledgeFuture.complete(Acknowledge.get());
@@ -122,8 +122,8 @@ class AbstractAsynchronousOperationHandlersTest {
                         .handleRequest(statusOperationRequest(triggerId), DUMMY_GATEWAY)
                         .get();
 
-        assertThat(operationResult.queueStatus().getId())
-                .isEqualTo(QueueStatus.completed().getId());
+        assertThat(operationResult.queueStatus().getIdentifier())
+                .isEqualTo(QueueStatus.completed().getIdentifier());
 
         assertThat(operationResult.resource().value).isEqualTo(Acknowledge.get());
     }
@@ -147,15 +147,15 @@ class AbstractAsynchronousOperationHandlersTest {
                         .handleRequest(statusOperationRequest(triggerId), DUMMY_GATEWAY)
                         .get();
 
-        assertThat(operationResult.queueStatus().getId())
-                .isEqualTo(QueueStatus.completed().getId());
+        assertThat(operationResult.queueStatus().getIdentifier())
+                .isEqualTo(QueueStatus.completed().getIdentifier());
 
         final OperationResult resource = operationResult.resource();
         assertThat(resource.throwable).isEqualTo(testException);
     }
 
     /**
-     * Tests that an querying an unknown trigger id will return an exceptionally completed future.
+     * Tests that an querying an unknown trigger identifier will return an exceptionally completed future.
      */
     @Test
     void testUnknownTriggerId() throws Exception {

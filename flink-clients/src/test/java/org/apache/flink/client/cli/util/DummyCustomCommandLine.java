@@ -34,7 +34,7 @@ public class DummyCustomCommandLine implements CustomCommandLine {
     }
 
     @Override
-    public String getId() {
+    public String getIdentifier() {
         return DummyClusterClientFactory.ID;
     }
 

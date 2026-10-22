@@ -53,21 +53,21 @@ public abstract class CheckpointCommitter implements Serializable {
     /**
      * Internally used to set the job ID after instantiation.
      *
-     * @param id
+     * @param identifier
      * @throws Exception
      */
-    public void setJobId(String id) throws Exception {
-        this.jobId = id;
+    public void setJobId(String identifier) throws Exception {
+        this.jobId = identifier;
     }
 
     /**
      * Internally used to set the operator ID after instantiation.
      *
-     * @param id
+     * @param identifier
      * @throws Exception
      */
-    public void setOperatorId(String id) throws Exception {
-        this.operatorId = id;
+    public void setOperatorId(String identifier) throws Exception {
+        this.operatorId = identifier;
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class CheckpointCommitter implements Serializable {
      * Mark the given checkpoint as completed in the resource.
      *
      * @param subtaskIdx the index of the subtask responsible for committing the checkpoint.
-     * @param checkpointID the id of the checkpoint to be committed.
+     * @param checkpointID the identifier of the checkpoint to be committed.
      * @throws Exception
      */
     public abstract void commitCheckpoint(int subtaskIdx, long checkpointID) throws Exception;
@@ -106,7 +106,7 @@ public abstract class CheckpointCommitter implements Serializable {
      * Checked the resource whether the given checkpoint was committed completely.
      *
      * @param subtaskIdx the index of the subtask responsible for committing the checkpoint.
-     * @param checkpointID the id of the checkpoint we are interested in.
+     * @param checkpointID the identifier of the checkpoint we are interested in.
      * @return true if the checkpoint was committed completely, false otherwise
      * @throws Exception
      */

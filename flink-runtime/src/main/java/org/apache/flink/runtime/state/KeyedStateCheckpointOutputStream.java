@@ -66,7 +66,7 @@ public final class KeyedStateCheckpointOutputStream
 
     /**
      * User code can call this method to signal that it begins to write a new key group with the
-     * given key group id. This id must be within the {@link KeyGroupsList} provided by the stream.
+     * given key group identifier. This identifier must be within the {@link KeyGroupsList} provided by the stream.
      * Each key-group can only be started once and is considered final/immutable as soon as this
      * method is called again.
      */
@@ -79,8 +79,8 @@ public final class KeyedStateCheckpointOutputStream
     }
 
     /**
-     * Returns true, if the key group with the given id was already started. The key group might not
-     * yet be finished, if it's id is equal to the return value of {@link #getCurrentKeyGroup()}.
+     * Returns true, if the key group with the given identifier was already started. The key group might not
+     * yet be finished, if it's identifier is equal to the return value of {@link #getCurrentKeyGroup()}.
      */
     public boolean isKeyGroupAlreadyStarted(int keyGroupId) {
         return NO_OFFSET_SET != keyGroupRangeOffsets.getKeyGroupOffset(keyGroupId);

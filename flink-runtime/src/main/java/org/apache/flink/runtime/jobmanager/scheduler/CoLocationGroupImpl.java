@@ -34,7 +34,7 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
 
     private static final long serialVersionUID = -2605819490401895297L;
 
-    private final AbstractID id = new AbstractID();
+    private final AbstractID identifier = new AbstractID();
 
     private final List<JobVertex> vertices = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
 
     @Override
     public CoLocationConstraint getLocationConstraint(int subTaskIndex) {
-        return new CoLocationConstraint(id, subTaskIndex);
+        return new CoLocationConstraint(identifier, subTaskIndex);
     }
 
     public void mergeInto(CoLocationGroupImpl other) {
@@ -76,7 +76,7 @@ public class CoLocationGroupImpl implements CoLocationGroup, java.io.Serializabl
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public AbstractID getId() {
-        return id;
+    public AbstractID getIdentifier() {
+        return identifier;
     }
 }

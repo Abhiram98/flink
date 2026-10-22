@@ -56,8 +56,8 @@ class RegionPartitionGroupReleaseStrategyTest {
         final List<TestingSchedulingResultPartition> resultPartitions =
                 testingSchedulingTopology.connectPointwise(producers, consumers).finish();
 
-        final ExecutionVertexID onlyConsumerVertexId = consumers.get(0).getId();
-        final IntermediateResultPartitionID onlyResultPartitionId = resultPartitions.get(0).getId();
+        final ExecutionVertexID onlyConsumerVertexId = consumers.get(0).getIdentifier();
+        final IntermediateResultPartitionID onlyResultPartitionId = resultPartitions.get(0).getIdentifier();
 
         final RegionPartitionGroupReleaseStrategy regionPartitionGroupReleaseStrategy =
                 new RegionPartitionGroupReleaseStrategy(testingSchedulingTopology);
@@ -84,10 +84,10 @@ class RegionPartitionGroupReleaseStrategyTest {
                 .withResultPartitionType(ResultPartitionType.PIPELINED)
                 .finish();
 
-        final ExecutionVertexID onlyIntermediateVertexId = intermediateVertices.get(0).getId();
-        final ExecutionVertexID onlySinkVertexId = sinkVertices.get(0).getId();
+        final ExecutionVertexID onlyIntermediateVertexId = intermediateVertices.get(0).getIdentifier();
+        final ExecutionVertexID onlySinkVertexId = sinkVertices.get(0).getIdentifier();
         final IntermediateResultPartitionID onlySourceResultPartitionId =
-                sourceResultPartitions.get(0).getId();
+                sourceResultPartitions.get(0).getIdentifier();
 
         final RegionPartitionGroupReleaseStrategy regionPartitionGroupReleaseStrategy =
                 new RegionPartitionGroupReleaseStrategy(testingSchedulingTopology);
@@ -106,7 +106,7 @@ class RegionPartitionGroupReleaseStrategyTest {
                 testingSchedulingTopology.addExecutionVertices().withParallelism(2).finish();
         testingSchedulingTopology.connectAllToAll(producers, consumers).finish();
 
-        final ExecutionVertexID consumerVertex1 = consumers.get(0).getId();
+        final ExecutionVertexID consumerVertex1 = consumers.get(0).getIdentifier();
 
         final RegionPartitionGroupReleaseStrategy regionPartitionGroupReleaseStrategy =
                 new RegionPartitionGroupReleaseStrategy(testingSchedulingTopology);
@@ -124,8 +124,8 @@ class RegionPartitionGroupReleaseStrategyTest {
                 testingSchedulingTopology.addExecutionVertices().withParallelism(2).finish();
         testingSchedulingTopology.connectAllToAll(producers, consumers).finish();
 
-        final ExecutionVertexID consumerVertex1 = consumers.get(0).getId();
-        final ExecutionVertexID consumerVertex2 = consumers.get(1).getId();
+        final ExecutionVertexID consumerVertex1 = consumers.get(0).getIdentifier();
+        final ExecutionVertexID consumerVertex2 = consumers.get(1).getIdentifier();
 
         final RegionPartitionGroupReleaseStrategy regionPartitionGroupReleaseStrategy =
                 new RegionPartitionGroupReleaseStrategy(testingSchedulingTopology);
@@ -155,23 +155,23 @@ class RegionPartitionGroupReleaseStrategyTest {
         final RegionPartitionGroupReleaseStrategy regionPartitionReleaseStrategy =
                 new RegionPartitionGroupReleaseStrategy(testingSchedulingTopology);
 
-        regionPartitionReleaseStrategy.vertexFinished(ev1.getId());
+        regionPartitionReleaseStrategy.vertexFinished(ev1.getIdentifier());
 
         final TestingSchedulingExecutionVertex ev2 = testingSchedulingTopology.newExecutionVertex();
         testingSchedulingTopology.connect(ev1, ev2, ResultPartitionType.BLOCKING);
 
         regionPartitionReleaseStrategy.notifySchedulingTopologyUpdated(
-                testingSchedulingTopology, Collections.singletonList(ev2.getId()));
+                testingSchedulingTopology, Collections.singletonList(ev2.getIdentifier()));
 
         // this check ensures that existing region views are not affected
-        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev1.getId())).isTrue();
+        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev1.getIdentifier())).isTrue();
 
-        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev2.getId())).isFalse();
+        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev2.getIdentifier())).isFalse();
 
         List<IntermediateResultPartitionID> releasablePartitions =
-                getReleasablePartitions(regionPartitionReleaseStrategy, ev2.getId());
-        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev2.getId())).isTrue();
+                getReleasablePartitions(regionPartitionReleaseStrategy, ev2.getIdentifier());
+        assertThat(regionPartitionReleaseStrategy.isRegionOfVertexFinished(ev2.getIdentifier())).isTrue();
         assertThat(releasablePartitions)
-                .contains(ev1.getProducedResults().iterator().next().getId());
+                .contains(ev1.getProducedResults().iterator().next().getIdentifier());
     }
 }

@@ -74,9 +74,9 @@ class MultiInputTestOperator extends AbstractStreamOperatorV2<TestDataElement>
         this.inputs =
                 IntStream.rangeClosed(1, numInputs)
                         .mapToObj(
-                                id ->
+                                identifier ->
                                         new TestEventInput(
-                                                id,
+                                                identifier,
                                                 eventQueue,
                                                 output,
                                                 operatorId,
@@ -164,7 +164,7 @@ class MultiInputTestOperator extends AbstractStreamOperatorV2<TestDataElement>
     }
 
     private static class TestEventInput implements Input<TestDataElement> {
-        private final int id;
+        private final int identifier;
         private final TestEventQueue eventQueue;
         private final Output<StreamRecord<TestDataElement>> output;
         private final String operatorId;
@@ -174,7 +174,7 @@ class MultiInputTestOperator extends AbstractStreamOperatorV2<TestDataElement>
         private final int attemptNumber;
 
         public TestEventInput(
-                int id,
+                int identifier,
                 TestEventQueue eventQueue,
                 Output<StreamRecord<TestDataElement>> output,
                 String operatorId,
@@ -182,7 +182,7 @@ class MultiInputTestOperator extends AbstractStreamOperatorV2<TestDataElement>
                 int attemptNumber,
                 Map<String, OperatorFinishedEvent.LastVertexDataInfo> lastDataReceived,
                 AtomicLong lastDataSent) {
-            this.id = id;
+            this.identifier = identifier;
             this.eventQueue = eventQueue;
             this.output = output;
             this.operatorId = operatorId;
@@ -210,7 +210,7 @@ class MultiInputTestOperator extends AbstractStreamOperatorV2<TestDataElement>
         public void processWatermark(Watermark mark) throws Exception {
             eventQueue.add(
                     new WatermarkReceivedEvent(
-                            operatorId, subtaskIndex, attemptNumber, mark.getTimestamp(), id));
+                            operatorId, subtaskIndex, attemptNumber, mark.getTimestamp(), identifier));
             output.emitWatermark(mark);
         }
 

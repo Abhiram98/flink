@@ -139,25 +139,25 @@ class CheckpointCoordinatorRestoringTest {
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder();
         for (TestingVertex vertex : vertices) {
             builder.addJobVertex(
-                    vertex.getId(), vertex.getParallelism(), vertex.getMaxParallelism());
+                    vertex.getIdentifier(), vertex.getParallelism(), vertex.getMaxParallelism());
         }
         return builder.build(EXECUTOR_RESOURCE.getExecutor());
     }
 
     private static class TestingVertex {
 
-        private final JobVertexID id;
+        private final JobVertexID identifier;
         private final int parallelism;
         private final int maxParallelism;
 
-        private TestingVertex(JobVertexID id, int parallelism, int maxParallelism) {
-            this.id = id;
+        private TestingVertex(JobVertexID identifier, int parallelism, int maxParallelism) {
+            this.identifier = identifier;
             this.parallelism = parallelism;
             this.maxParallelism = maxParallelism;
         }
 
-        public JobVertexID getId() {
-            return id;
+        public JobVertexID getIdentifier() {
+            return identifier;
         }
 
         public int getParallelism() {
@@ -218,7 +218,7 @@ class CheckpointCoordinatorRestoringTest {
         // acknowledge checkpoints from all vertex partitions
         for (TestingVertex vertex : vertices) {
             final ExecutionJobVertex executionVertex =
-                    Objects.requireNonNull(executionGraph.getJobVertex(vertex.getId()));
+                    Objects.requireNonNull(executionGraph.getJobVertex(vertex.getIdentifier()));
             acknowledgeCheckpoint(coordinator, executionGraph, executionVertex, checkpointId);
         }
 
@@ -251,7 +251,7 @@ class CheckpointCoordinatorRestoringTest {
 
         final Set<ExecutionJobVertex> executionVertices =
                 vertices.stream()
-                        .map(TestingVertex::getId)
+                        .map(TestingVertex::getIdentifier)
                         .map(executionGraph::getJobVertex)
                         .collect(Collectors.toSet());
         assertThat(coordinator.restoreLatestCheckpointedStateToAll(executionVertices, false))
@@ -660,16 +660,16 @@ class CheckpointCoordinatorRestoringTest {
         Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
 
         // prepare vertex1 state
-        for (Tuple2<JobVertexID, OperatorID> id : Arrays.asList(id1, id2)) {
-            OperatorState taskState = new OperatorState(id.f1, parallelism1, maxParallelism1);
-            operatorStates.put(id.f1, taskState);
+        for (Tuple2<JobVertexID, OperatorID> identifier : Arrays.asList(id1, id2)) {
+            OperatorState taskState = new OperatorState(identifier.f1, parallelism1, maxParallelism1);
+            operatorStates.put(identifier.f1, taskState);
             for (int index = 0; index < taskState.getParallelism(); index++) {
                 OperatorSubtaskState subtaskState =
                         OperatorSubtaskState.builder()
                                 .setManagedOperatorState(
-                                        generatePartitionableStateHandle(id.f0, index, 2, 8, false))
+                                        generatePartitionableStateHandle(identifier.f0, index, 2, 8, false))
                                 .setRawOperatorState(
-                                        generatePartitionableStateHandle(id.f0, index, 2, 8, true))
+                                        generatePartitionableStateHandle(identifier.f0, index, 2, 8, true))
                                 .build();
                 taskState.putState(index, subtaskState);
             }
@@ -680,9 +680,9 @@ class CheckpointCoordinatorRestoringTest {
         List<List<ChainedStateHandle<OperatorStateHandle>>> expectedRawOperatorStates =
                 new ArrayList<>();
         // prepare vertex2 state
-        for (Tuple2<JobVertexID, OperatorID> id : Arrays.asList(id3, id4)) {
-            OperatorState operatorState = new OperatorState(id.f1, parallelism2, maxParallelism2);
-            operatorStates.put(id.f1, operatorState);
+        for (Tuple2<JobVertexID, OperatorID> identifier : Arrays.asList(id3, id4)) {
+            OperatorState operatorState = new OperatorState(identifier.f1, parallelism2, maxParallelism2);
+            operatorStates.put(identifier.f1, operatorState);
             List<ChainedStateHandle<OperatorStateHandle>> expectedManagedOperatorState =
                     new ArrayList<>();
             List<ChainedStateHandle<OperatorStateHandle>> expectedRawOperatorState =
@@ -693,16 +693,16 @@ class CheckpointCoordinatorRestoringTest {
             for (int index = 0; index < operatorState.getParallelism(); index++) {
                 final OperatorSubtaskState.Builder stateBuilder = OperatorSubtaskState.builder();
                 OperatorStateHandle subManagedOperatorState =
-                        generateChainedPartitionableStateHandle(id.f0, index, 2, 8, false).get(0);
+                        generateChainedPartitionableStateHandle(identifier.f0, index, 2, 8, false).get(0);
                 OperatorStateHandle subRawOperatorState =
-                        generateChainedPartitionableStateHandle(id.f0, index, 2, 8, true).get(0);
-                if (id.f0.equals(id3.f0)) {
+                        generateChainedPartitionableStateHandle(identifier.f0, index, 2, 8, true).get(0);
+                if (identifier.f0.equals(id3.f0)) {
                     stateBuilder.setManagedKeyedState(
-                            generateKeyGroupState(id.f0, keyGroupPartitions2.get(index), false));
+                            generateKeyGroupState(identifier.f0, keyGroupPartitions2.get(index), false));
                 }
-                if (id.f0.equals(id3.f0)) {
+                if (identifier.f0.equals(id3.f0)) {
                     stateBuilder.setRawKeyedState(
-                            generateKeyGroupState(id.f0, keyGroupPartitions2.get(index), true));
+                            generateKeyGroupState(identifier.f0, keyGroupPartitions2.get(index), true));
                 }
 
                 expectedManagedOperatorState.add(

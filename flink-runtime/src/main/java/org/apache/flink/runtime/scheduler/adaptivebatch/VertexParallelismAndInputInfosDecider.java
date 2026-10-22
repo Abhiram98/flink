@@ -35,7 +35,7 @@ public interface VertexParallelismAndInputInfosDecider {
     /**
      * Decide the parallelism and {@link JobVertexInputInfo}s for this job vertex.
      *
-     * @param jobVertexId The job vertex id
+     * @param jobVertexId The job vertex identifier
      * @param consumedResults The information of consumed blocking results
      * @param vertexInitialParallelism The initial parallelism of the job vertex. If it's a positive
      *     number, it will be respected. If it's not set(equals to {@link
@@ -55,7 +55,7 @@ public interface VertexParallelismAndInputInfosDecider {
     /**
      * Compute source parallelism upper bound for the source vertex.
      *
-     * @param jobVertexId The job vertex id
+     * @param jobVertexId The job vertex identifier
      * @param maxParallelism The max parallelism of the job vertex.
      * @return the upper bound parallelism for the source vertex.
      */

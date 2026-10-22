@@ -982,7 +982,7 @@ public class AutoRescalingITCase extends TestLogger {
                 checkCorrectRestore[getRuntimeContext().getTaskInfo().getIndexOfThisSubtask()] =
                         counter;
                 context.getRestoredCheckpointId()
-                        .ifPresent((id) -> checkCorrectSnapshot = checkCorrectSnapshots.get(id));
+                        .ifPresent((identifier) -> checkCorrectSnapshot = checkCorrectSnapshots.get(identifier));
             }
         }
     }

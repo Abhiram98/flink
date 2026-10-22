@@ -303,8 +303,8 @@ public class SchedulerTestingUtils {
 
     private static ExecutionJobVertex getJobVertex(
             DefaultScheduler scheduler, JobVertexID jobVertexId) {
-        final ExecutionVertexID id = new ExecutionVertexID(jobVertexId, 0);
-        return scheduler.getExecutionVertex(id).getJobVertex();
+        final ExecutionVertexID identifier = new ExecutionVertexID(jobVertexId, 0);
+        return scheduler.getExecutionVertex(identifier).getJobVertex();
     }
 
     public static ExecutionAttemptID getAttemptId(

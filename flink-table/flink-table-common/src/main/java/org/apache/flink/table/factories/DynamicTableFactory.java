@@ -91,8 +91,8 @@ public interface DynamicTableFactory extends Factory {
          * purposes, and rely on user input for uniquely identifying a "table instance".
          *
          * <p>For example, when implementing a Kafka source using consumer groups, the user should
-         * provide the consumer group id manually rather than using this identifier as the consumer
-         * group id, so the offset tracking remains stable even if this table is anonymous, or it's
+         * provide the consumer group identifier manually rather than using this identifier as the consumer
+         * group identifier, so the offset tracking remains stable even if this table is anonymous, or it's
          * moved to another {@link Catalog}.
          *
          * <p>Note that for anonymous tables {@link ObjectIdentifier#asSerializableString()} will

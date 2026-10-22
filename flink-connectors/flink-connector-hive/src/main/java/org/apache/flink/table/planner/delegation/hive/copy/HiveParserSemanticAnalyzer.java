@@ -267,23 +267,23 @@ public class HiveParserSemanticAnalyzer {
     }
 
     public void doPhase1QBExpr(
-            HiveParserASTNode ast, HiveParserQBExpr qbexpr, String id, String alias)
+            HiveParserASTNode ast, HiveParserQBExpr qbexpr, String identifier, String alias)
             throws SemanticException {
-        doPhase1QBExpr(ast, qbexpr, id, alias, false);
+        doPhase1QBExpr(ast, qbexpr, identifier, alias, false);
     }
 
     @SuppressWarnings("nls")
     public void doPhase1QBExpr(
             HiveParserASTNode ast,
             HiveParserQBExpr qbexpr,
-            String id,
+            String identifier,
             String alias,
             boolean insideView)
             throws SemanticException {
 
         assert (ast.getToken() != null);
         if (ast.getToken().getType() == HiveASTParser.TOK_QUERY) {
-            HiveParserQB qb = new HiveParserQB(id, alias, true);
+            HiveParserQB qb = new HiveParserQB(identifier, alias, true);
             qb.setInsideView(insideView);
             HiveParserBaseSemanticAnalyzer.Phase1Ctx ctx1 = initPhase1Ctx();
             doPhase1(ast, qb, ctx1, null);
@@ -319,7 +319,7 @@ public class HiveParserSemanticAnalyzer {
             doPhase1QBExpr(
                     (HiveParserASTNode) ast.getChild(0),
                     qbexpr1,
-                    id + SUBQUERY_TAG_1,
+                    identifier + SUBQUERY_TAG_1,
                     alias + SUBQUERY_TAG_1,
                     insideView);
             qbexpr.setQBExpr1(qbexpr1);
@@ -330,7 +330,7 @@ public class HiveParserSemanticAnalyzer {
             doPhase1QBExpr(
                     (HiveParserASTNode) ast.getChild(1),
                     qbexpr2,
-                    id + SUBQUERY_TAG_2,
+                    identifier + SUBQUERY_TAG_2,
                     alias + SUBQUERY_TAG_2,
                     insideView);
             qbexpr.setQBExpr2(qbexpr2);
@@ -701,7 +701,7 @@ public class HiveParserSemanticAnalyzer {
         // Recursively do the first phase of semantic analysis for the subquery
         HiveParserQBExpr qbexpr = new HiveParserQBExpr(alias);
 
-        doPhase1QBExpr(subqref, qbexpr, qb.getId(), alias, qb.isInsideView());
+        doPhase1QBExpr(subqref, qbexpr, qb.getIdentifier(), alias, qb.isInsideView());
 
         // If the alias is already there then we have a conflict
         if (qb.exists(alias)) {
@@ -730,7 +730,7 @@ public class HiveParserSemanticAnalyzer {
             HiveParserASTNode cteQry = (HiveParserASTNode) cte.getChild(0);
             String alias = unescapeIdentifier(cte.getChild(1).getText());
 
-            String qName = qb.getId() == null ? "" : qb.getId() + ":";
+            String qName = qb.getIdentifier() == null ? "" : qb.getIdentifier() + ":";
             qName += alias.toLowerCase();
 
             if (aliasToCTEs.containsKey(qName)) {
@@ -748,15 +748,15 @@ public class HiveParserSemanticAnalyzer {
      * - views may refer to other views.
      *
      * The scoping rules we use are: to search for a CTE from the current HiveParserQB outwards. In order to
-     * disambiguate between CTES are different levels we qualify(prefix) them with the id of the HiveParserQB
+     * disambiguate between CTES are different levels we qualify(prefix) them with the identifier of the HiveParserQB
      * they appear in when adding them to the <code>aliasToCTEs</code> map.
      *
      */
     private HiveParserBaseSemanticAnalyzer.CTEClause findCTEFromName(
             HiveParserQB qb, String cteName) {
         StringBuilder qId = new StringBuilder();
-        if (qb.getId() != null) {
-            qId.append(qb.getId());
+        if (qb.getIdentifier() != null) {
+            qId.append(qb.getIdentifier());
         }
 
         while (qId.length() > 0) {
@@ -789,7 +789,7 @@ public class HiveParserSemanticAnalyzer {
         HiveParserBaseSemanticAnalyzer.CTEClause cte = findCTEFromName(qb, cteName);
         HiveParserASTNode cteQryNode = cte.cteNode;
         HiveParserQBExpr cteQBExpr = new HiveParserQBExpr(cteAlias);
-        doPhase1QBExpr(cteQryNode, cteQBExpr, qb.getId(), cteAlias);
+        doPhase1QBExpr(cteQryNode, cteQBExpr, qb.getIdentifier(), cteAlias);
         qb.rewriteCTEToSubq(cteAlias, cteName, cteQBExpr);
     }
 
@@ -1448,7 +1448,7 @@ public class HiveParserSemanticAnalyzer {
                     continue;
                 }
                 cte.qbExpr = new HiveParserQBExpr(cteName);
-                doPhase1QBExpr(cte.cteNode, cte.qbExpr, qb.getId(), cteName);
+                doPhase1QBExpr(cte.cteNode, cte.qbExpr, qb.getIdentifier(), cteName);
 
                 ctesExpanded.add(cteName);
                 gatherCTEReferences(cte.qbExpr, cte);
@@ -1791,7 +1791,7 @@ public class HiveParserSemanticAnalyzer {
             throw new SemanticException(e.getMessage(), e);
         }
         HiveParserQBExpr qbexpr = new HiveParserQBExpr(alias);
-        doPhase1QBExpr(viewTree, qbexpr, qb.getId(), alias, true);
+        doPhase1QBExpr(viewTree, qbexpr, qb.getIdentifier(), alias, true);
         // if skip authorization, skip checking;
         // if it is inside a view, skip checking;
         // if authorization flag is not enabled, skip checking.

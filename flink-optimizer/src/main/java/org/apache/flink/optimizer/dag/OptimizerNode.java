@@ -113,7 +113,7 @@ public abstract class OptimizerNode
 
     private long minimalMemoryPerSubTask = -1;
 
-    protected int id = -1; // the id for this node.
+    protected int identifier = -1; // the identifier for this node.
 
     protected int costWeight = 1; // factor to weight the costs for dynamic paths
 
@@ -149,7 +149,7 @@ public abstract class OptimizerNode
         this.parallelism = toCopy.parallelism;
         this.minimalMemoryPerSubTask = toCopy.minimalMemoryPerSubTask;
 
-        this.id = toCopy.id;
+        this.identifier = toCopy.identifier;
         this.costWeight = toCopy.costWeight;
         this.onDynamicPath = toCopy.onDynamicPath;
     }
@@ -298,26 +298,26 @@ public abstract class OptimizerNode
     }
 
     /**
-     * Gets the ID of this node. If the id has not yet been set, this method returns -1;
+     * Gets the ID of this node. If the identifier has not yet been set, this method returns -1;
      *
-     * @return This node's id, or -1, if not yet set.
+     * @return This node's identifier, or -1, if not yet set.
      */
-    public int getId() {
-        return this.id;
+    public int getIdentifier() {
+        return this.identifier;
     }
 
     /**
      * Sets the ID of this node.
      *
-     * @param id The id for this node.
+     * @param identifier The identifier for this node.
      */
-    public void initId(int id) {
-        if (id <= 0) {
+    public void initId(int identifier) {
+        if (identifier <= 0) {
             throw new IllegalArgumentException();
         }
 
-        if (this.id == -1) {
-            this.id = id;
+        if (this.identifier == -1) {
+            this.identifier = identifier;
         } else {
             throw new IllegalStateException("Id has already been initialized.");
         }
@@ -1070,13 +1070,13 @@ public abstract class OptimizerNode
         // and eliminates duplicates
         while (index1 >= 0 || index2 >= 0) {
             int id1 = -1;
-            int id2 = index2 >= 0 ? child2open.get(index2).getBranchingNode().getId() : -1;
+            int id2 = index2 >= 0 ? child2open.get(index2).getBranchingNode().getIdentifier() : -1;
 
-            while (index1 >= 0 && (id1 = child1open.get(index1).getBranchingNode().getId()) > id2) {
+            while (index1 >= 0 && (id1 = child1open.get(index1).getBranchingNode().getIdentifier()) > id2) {
                 result.add(child1open.get(index1));
                 index1--;
             }
-            while (index2 >= 0 && (id2 = child2open.get(index2).getBranchingNode().getId()) > id1) {
+            while (index2 >= 0 && (id2 = child2open.get(index2).getBranchingNode().getIdentifier()) > id1) {
                 result.add(child2open.get(index2));
                 index2--;
             }

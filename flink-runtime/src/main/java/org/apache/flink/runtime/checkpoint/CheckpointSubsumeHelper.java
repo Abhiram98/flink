@@ -59,7 +59,7 @@ class CheckpointSubsumeHelper {
         while (checkpoints.size() > numRetain && iterator.hasNext()) {
             CompletedCheckpoint next = iterator.next();
             if (canSubsume(next, latest, latestNotSavepoint)) {
-                // always return the subsumed checkpoint with larger checkpoint id.
+                // always return the subsumed checkpoint with larger checkpoint identifier.
                 if (!lastSubsumedCheckpoint.isPresent()
                         || next.getCheckpointID()
                                 > lastSubsumedCheckpoint.get().getCheckpointID()) {

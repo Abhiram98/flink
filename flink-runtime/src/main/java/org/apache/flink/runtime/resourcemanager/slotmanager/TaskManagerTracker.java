@@ -49,7 +49,7 @@ interface TaskManagerTracker
             ResourceProfile defaultSlotResourceProfile);
 
     /**
-     * Unregister a task manager with the given instance id.
+     * Unregister a task manager with the given instance identifier.
      *
      * @param instanceId of the task manager
      */

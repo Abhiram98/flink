@@ -1146,7 +1146,7 @@ public class SqlToRelConverter {
         if (p != null) {
             assert p.r instanceof Filter;
             Filter f = (Filter) p.r;
-            r = LogicalFilter.create(f.getInput(), f.getCondition(), ImmutableSet.of(p.id));
+            r = LogicalFilter.create(f.getInput(), f.getCondition(), ImmutableSet.of(p.identifier));
         } else {
             r = filter;
         }
@@ -2467,12 +2467,12 @@ public class SqlToRelConverter {
             case EXTEND:
                 call = (SqlCall) from;
                 final SqlNode operand0 = call.getOperandList().get(0);
-                final SqlIdentifier id =
+                final SqlIdentifier identifier =
                         operand0.getKind() == SqlKind.TABLE_REF
                                 ? ((SqlCall) operand0).operand(0)
                                 : (SqlIdentifier) operand0;
                 SqlNodeList extendedColumns = (SqlNodeList) call.getOperandList().get(1);
-                convertIdentifier(bb, id, extendedColumns, null, null);
+                convertIdentifier(bb, identifier, extendedColumns, null, null);
                 return;
 
             case SNAPSHOT:
@@ -2614,10 +2614,10 @@ public class SqlToRelConverter {
                     }
 
                     @Override
-                    public RexNode visit(SqlIdentifier id) {
-                        assert id.isSimple();
-                        patternVarsSet.add(id.getSimple());
-                        return rexBuilder.makeLiteral(id.getSimple());
+                    public RexNode visit(SqlIdentifier identifier) {
+                        assert identifier.isSimple();
+                        patternVarsSet.add(identifier.getSimple());
+                        return rexBuilder.makeLiteral(identifier.getSimple());
                     }
 
                     @Override
@@ -2661,10 +2661,10 @@ public class SqlToRelConverter {
             List<SqlNode> operands = ((SqlCall) afterMatch).getOperandList();
             SqlOperator operator = ((SqlCall) afterMatch).getOperator();
             assert operands.size() == 1;
-            SqlIdentifier id = (SqlIdentifier) operands.get(0);
-            assert patternVarsSet.contains(id.getSimple())
-                    : id.getSimple() + " not defined in pattern";
-            RexNode rex = rexBuilder.makeLiteral(id.getSimple());
+            SqlIdentifier identifier = (SqlIdentifier) operands.get(0);
+            assert patternVarsSet.contains(identifier.getSimple())
+                    : identifier.getSimple() + " not defined in pattern";
+            RexNode rex = rexBuilder.makeLiteral(identifier.getSimple());
             after =
                     rexBuilder.makeCall(
                             validator().getUnknownType(), operator, ImmutableList.of(rex));
@@ -2864,11 +2864,11 @@ public class SqlToRelConverter {
 
     private void convertIdentifier(
             Blackboard bb,
-            SqlIdentifier id,
+            SqlIdentifier identifier,
             @Nullable SqlNodeList extendedColumns,
             @Nullable SqlNodeList tableHints,
             @Nullable SchemaVersion schemaVersion) {
-        final SqlValidatorNamespace fromNamespace = getNamespace(id).resolve();
+        final SqlValidatorNamespace fromNamespace = getNamespace(identifier).resolve();
         if (fromNamespace.getNode() != null) {
             convertFrom(bb, fromNamespace.getNode());
             return;
@@ -3082,7 +3082,7 @@ public class SqlToRelConverter {
             if (!joinCond.isAlwaysTrue()) {
                 final RelFactories.FilterFactory factory = RelFactories.DEFAULT_FILTER_FACTORY;
                 final RexCorrelVariable rexCorrel =
-                        (RexCorrelVariable) rexBuilder.makeCorrel(leftRel.getRowType(), p.id);
+                        (RexCorrelVariable) rexBuilder.makeCorrel(leftRel.getRowType(), p.identifier);
                 final RexAccessShuttle shuttle = new RexAccessShuttle(rexBuilder, rexCorrel);
 
                 // Replace outer RexInputRef with RexFieldAccess,
@@ -3093,7 +3093,7 @@ public class SqlToRelConverter {
             }
 
             return LogicalCorrelate.create(
-                    leftRel, innerRel, ImmutableList.of(), p.id, requiredCols, joinType);
+                    leftRel, innerRel, ImmutableList.of(), p.identifier, requiredCols, joinType);
         }
 
         final RelNode node =
@@ -4240,11 +4240,11 @@ public class SqlToRelConverter {
             }
         } else {
             for (int i = 0; i < targetColumnList.size(); i++) {
-                SqlIdentifier id = (SqlIdentifier) targetColumnList.get(i);
+                SqlIdentifier identifier = (SqlIdentifier) targetColumnList.get(i);
                 RelDataTypeField field =
                         SqlValidatorUtil.getTargetField(
-                                tableRowType, typeFactory, id, catalogReader, targetTable);
-                assert field != null : "column " + id.toString() + " not found";
+                                tableRowType, typeFactory, identifier, catalogReader, targetTable);
+                assert field != null : "column " + identifier.toString() + " not found";
                 targetColumnNames.add(field.getName());
             }
         }
@@ -4316,11 +4316,11 @@ public class SqlToRelConverter {
         final List<String> targetColumnNameList = new ArrayList<>();
         final RelDataType targetRowType = targetTable.getRowType();
         for (SqlNode node : call.getTargetColumnList()) {
-            SqlIdentifier id = (SqlIdentifier) node;
+            SqlIdentifier identifier = (SqlIdentifier) node;
             RelDataTypeField field =
                     SqlValidatorUtil.getTargetField(
-                            targetRowType, typeFactory, id, catalogReader, targetTable);
-            assert field != null : "column " + id.toString() + " not found";
+                            targetRowType, typeFactory, identifier, catalogReader, targetTable);
+            assert field != null : "column " + identifier.toString() + " not found";
             targetColumnNameList.add(field.getName());
         }
 
@@ -4355,11 +4355,11 @@ public class SqlToRelConverter {
         SqlUpdate updateCall = call.getUpdateCall();
         if (updateCall != null) {
             for (SqlNode targetColumn : updateCall.getTargetColumnList()) {
-                SqlIdentifier id = (SqlIdentifier) targetColumn;
+                SqlIdentifier identifier = (SqlIdentifier) targetColumn;
                 RelDataTypeField field =
                         SqlValidatorUtil.getTargetField(
-                                targetRowType, typeFactory, id, catalogReader, targetTable);
-                assert field != null : "column " + id.toString() + " not found";
+                                targetRowType, typeFactory, identifier, catalogReader, targetTable);
+                assert field != null : "column " + identifier.toString() + " not found";
                 targetColumnNameList.add(field.getName());
             }
         }
@@ -4480,7 +4480,7 @@ public class SqlToRelConverter {
         if (e0.left instanceof RexCorrelVariable) {
             assert e instanceof RexFieldAccess;
             final RexNode prev =
-                    bb.mapCorrelateToRex.put(((RexCorrelVariable) e0.left).id, (RexFieldAccess) e);
+                    bb.mapCorrelateToRex.put(((RexCorrelVariable) e0.left).identifier, (RexFieldAccess) e);
             assert prev == null;
         }
         return e;
@@ -5650,8 +5650,8 @@ public class SqlToRelConverter {
         }
 
         @Override
-        public RexNode visit(SqlIdentifier id) {
-            return convertIdentifier(this, id);
+        public RexNode visit(SqlIdentifier identifier) {
+            return convertIdentifier(this, identifier);
         }
 
         @Override
@@ -5857,7 +5857,7 @@ public class SqlToRelConverter {
         }
 
         @Override
-        public Void visit(SqlIdentifier id) {
+        public Void visit(SqlIdentifier identifier) {
             return null;
         }
 
@@ -6098,8 +6098,8 @@ public class SqlToRelConverter {
                     SqlNode operand = sqlNodes.get(i);
                     // special case for COUNT(*):  delete the *
                     if (operand instanceof SqlIdentifier) {
-                        SqlIdentifier id = (SqlIdentifier) operand;
-                        if (id.isStar()) {
+                        SqlIdentifier identifier = (SqlIdentifier) operand;
+                        if (identifier.isStar()) {
                             assert call.operandCount() == 1;
                             assert args.isEmpty();
                             break;
@@ -6612,13 +6612,13 @@ public class SqlToRelConverter {
 
     /** Use of a row as a correlating variable by a given relational expression. */
     private static class CorrelationUse {
-        private final CorrelationId id;
+        private final CorrelationId identifier;
         private final ImmutableBitSet requiredColumns;
         /** The relational expression that uses the variable. */
         private final RelNode r;
 
-        CorrelationUse(CorrelationId id, ImmutableBitSet requiredColumns, RelNode r) {
-            this.id = id;
+        CorrelationUse(CorrelationId identifier, ImmutableBitSet requiredColumns, RelNode r) {
+            this.identifier = identifier;
             this.requiredColumns = requiredColumns;
             this.r = r;
         }

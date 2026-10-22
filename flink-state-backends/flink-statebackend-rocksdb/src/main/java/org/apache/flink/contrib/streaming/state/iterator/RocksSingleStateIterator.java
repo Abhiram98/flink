@@ -24,7 +24,7 @@ import org.apache.flink.util.IOUtils;
 import javax.annotation.Nonnull;
 
 /**
- * Wraps a RocksDB iterator to cache it's current key and assigns an id for the key/value state to
+ * Wraps a RocksDB iterator to cache it's current key and assigns an identifier for the key/value state to
  * the iterator. Used by {@link RocksStatesPerKeyGroupMergeIterator}.
  */
 class RocksSingleStateIterator implements SingleStateIterator {

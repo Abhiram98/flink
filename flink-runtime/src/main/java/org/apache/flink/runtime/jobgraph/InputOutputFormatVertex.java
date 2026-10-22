@@ -48,9 +48,9 @@ public class InputOutputFormatVertex extends JobVertex {
     }
 
     public InputOutputFormatVertex(
-            String name, JobVertexID id, List<OperatorIDPair> operatorIDPairs) {
+            String name, JobVertexID identifier, List<OperatorIDPair> operatorIDPairs) {
 
-        super(name, id, operatorIDPairs);
+        super(name, identifier, operatorIDPairs);
     }
 
     @Override

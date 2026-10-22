@@ -111,7 +111,7 @@ public class FlinkStatement extends BaseStatement {
 
     /**
      * Execute a sql statement. Notice that the <code>INSERT</code> statement in Flink would return
-     * job id as result set.
+     * job identifier as result set.
      *
      * @param sql any SQL statement
      * @return True if there is result set for the statement.

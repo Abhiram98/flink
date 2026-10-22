@@ -117,7 +117,7 @@ public abstract class CommonExecSink extends ExecNodeBase<Object>
     protected boolean sinkParallelismConfigured;
 
     protected CommonExecSink(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             DynamicTableSinkSpec tableSinkSpec,
@@ -126,7 +126,7 @@ public abstract class CommonExecSink extends ExecNodeBase<Object>
             List<InputProperty> inputProperties,
             LogicalType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.tableSinkSpec = tableSinkSpec;
         this.inputChangelogMode = inputChangelogMode;
         this.isBounded = isBounded;

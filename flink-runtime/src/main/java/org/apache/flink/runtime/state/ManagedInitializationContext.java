@@ -41,7 +41,7 @@ public interface ManagedInitializationContext {
     }
 
     /**
-     * Returns id of the restored checkpoint, if state was restored from the snapshot of a previous
+     * Returns identifier of the restored checkpoint, if state was restored from the snapshot of a previous
      * execution.
      */
     OptionalLong getRestoredCheckpointId();

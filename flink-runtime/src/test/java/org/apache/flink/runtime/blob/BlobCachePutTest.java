@@ -222,8 +222,8 @@ class BlobCachePutTest {
      * Uploads two byte arrays for different jobs into the server via the {@link BlobCacheService}.
      * File transfers should be successful.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferSuccessfulGet(
@@ -335,8 +335,8 @@ class BlobCachePutTest {
      * <p>Note that high-availability uploads of streams is currently only possible at the {@link
      * BlobServer}.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      */
     private void testPutStreamTransientSuccessfulGet(@Nullable JobID jobId1, @Nullable JobID jobId2)
             throws IOException, InterruptedException {
@@ -441,8 +441,8 @@ class BlobCachePutTest {
      * <p>Note that high-availability uploads of streams is currently only possible at the {@link
      * BlobServer}.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      */
     private void testPutChunkedStreamTransientSuccessfulGet(
             @Nullable JobID jobId1, @Nullable JobID jobId2)
@@ -543,7 +543,7 @@ class BlobCachePutTest {
      * Uploads a byte array to a server which cannot create any files via the {@link
      * BlobCacheService}. File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFails(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -596,7 +596,7 @@ class BlobCachePutTest {
      * Uploads a byte array to a server which cannot create incoming files via the {@link
      * BlobCacheService}. File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFailsIncoming(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -660,7 +660,7 @@ class BlobCachePutTest {
      * Uploads a byte array to a server which cannot create files via the {@link BlobCacheService}.
      * File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFailsStore(@Nullable final JobID jobId, BlobKey.BlobType blobType)

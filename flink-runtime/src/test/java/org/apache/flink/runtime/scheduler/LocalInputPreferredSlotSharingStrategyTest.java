@@ -92,12 +92,12 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                         topology, Sets.newHashSet(slotSharingGroup), Collections.emptySet());
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(3);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getId()).getExecutionVertexIds())
-                .contains(ev11.getId(), ev21.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getId()).getExecutionVertexIds())
-                .contains(ev22.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev23.getId()).getExecutionVertexIds())
-                .contains(ev12.getId(), ev23.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getIdentifier()).getExecutionVertexIds())
+                .contains(ev11.getIdentifier(), ev21.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getIdentifier()).getExecutionVertexIds())
+                .contains(ev22.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev23.getIdentifier()).getExecutionVertexIds())
+                .contains(ev12.getIdentifier(), ev23.getIdentifier());
     }
 
     private void createTwoExeVerticesPerJv1AndJv2(SlotSharingGroup sharingGroup) {
@@ -140,10 +140,10 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                 getSlotSharingStrategy(
                         topology, Sets.newHashSet(slotSharingGroup), Collections.emptySet());
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(2);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getId()).getExecutionVertexIds())
-                .contains(ev11.getId(), ev21.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getId()).getExecutionVertexIds())
-                .contains(ev12.getId(), ev22.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getIdentifier()).getExecutionVertexIds())
+                .contains(ev11.getIdentifier(), ev21.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getIdentifier()).getExecutionVertexIds())
+                .contains(ev12.getIdentifier(), ev22.getIdentifier());
     }
 
     @Test
@@ -172,21 +172,21 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
         assertThat(executionVertices1).hasSameSizeAs(executionVertices2);
         for (int i = 0; i < executionVertices1.size(); i++) {
             ExecutionSlotSharingGroup executionSlotSharingGroup =
-                    strategy.getExecutionSlotSharingGroup(executionVertices1.get(i).getId());
+                    strategy.getExecutionSlotSharingGroup(executionVertices1.get(i).getIdentifier());
             assertThat(executionSlotSharingGroup)
                     .isEqualTo(
                             strategy.getExecutionSlotSharingGroup(
-                                    executionVertices2.get(i).getId()));
+                                    executionVertices2.get(i).getIdentifier()));
         }
 
         List<TestingSchedulingExecutionVertex> executionVertices3 = jobVertexInfos.get(3).f1;
         List<TestingSchedulingExecutionVertex> executionVertices4 = jobVertexInfos.get(4).f1;
         assertThat(executionVertices3).hasSameSizeAs(executionVertices4);
         for (int i = 0; i < executionVertices3.size(); i++) {
-            assertThat(strategy.getExecutionSlotSharingGroup(executionVertices3.get(i).getId()))
+            assertThat(strategy.getExecutionSlotSharingGroup(executionVertices3.get(i).getIdentifier()))
                     .isEqualTo(
                             strategy.getExecutionSlotSharingGroup(
-                                    executionVertices4.get(i).getId()));
+                                    executionVertices4.get(i).getIdentifier()));
         }
     }
 
@@ -198,10 +198,10 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                         topology, Sets.newHashSet(slotSharingGroup), Collections.emptySet());
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(2);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getId()).getExecutionVertexIds())
-                .contains(ev11.getId(), ev21.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev12.getId()).getExecutionVertexIds())
-                .contains(ev12.getId(), ev22.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getIdentifier()).getExecutionVertexIds())
+                .contains(ev11.getIdentifier(), ev21.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev12.getIdentifier()).getExecutionVertexIds())
+                .contains(ev12.getIdentifier(), ev22.getIdentifier());
     }
 
     @Test
@@ -222,14 +222,14 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                         Collections.emptySet());
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(4);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getId()).getExecutionVertexIds())
-                .contains(ev11.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev12.getId()).getExecutionVertexIds())
-                .contains(ev12.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getId()).getExecutionVertexIds())
-                .contains(ev21.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getId()).getExecutionVertexIds())
-                .contains(ev22.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getIdentifier()).getExecutionVertexIds())
+                .contains(ev11.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev12.getIdentifier()).getExecutionVertexIds())
+                .contains(ev12.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev21.getIdentifier()).getExecutionVertexIds())
+                .contains(ev21.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev22.getIdentifier()).getExecutionVertexIds())
+                .contains(ev22.getIdentifier());
     }
 
     /**
@@ -295,23 +295,23 @@ class LocalInputPreferredSlotSharingStrategyTest extends AbstractSlotSharingStra
                                 Collections.emptySet());
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(1);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev1.getId()).getExecutionVertexIds())
-                .contains(ev1.getId(), ev2.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev2.getId()).getExecutionVertexIds())
-                .contains(ev1.getId(), ev2.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev1.getIdentifier()).getExecutionVertexIds())
+                .contains(ev1.getIdentifier(), ev2.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev2.getIdentifier()).getExecutionVertexIds())
+                .contains(ev1.getIdentifier(), ev2.getIdentifier());
 
         // add new job vertices and notify scheduling topology updated
         TestingSchedulingExecutionVertex ev3 = topology.newExecutionVertex(jobVertexId3, 0);
         topology.connect(ev2, ev3, ResultPartitionType.BLOCKING);
-        strategy.notifySchedulingTopologyUpdated(topology, Collections.singletonList(ev3.getId()));
+        strategy.notifySchedulingTopologyUpdated(topology, Collections.singletonList(ev3.getIdentifier()));
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(2);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev1.getId()).getExecutionVertexIds())
-                .contains(ev1.getId(), ev2.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev2.getId()).getExecutionVertexIds())
-                .contains(ev1.getId(), ev2.getId());
-        assertThat(strategy.getExecutionSlotSharingGroup(ev3.getId()).getExecutionVertexIds())
-                .contains(ev3.getId());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev1.getIdentifier()).getExecutionVertexIds())
+                .contains(ev1.getIdentifier(), ev2.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev2.getIdentifier()).getExecutionVertexIds())
+                .contains(ev1.getIdentifier(), ev2.getIdentifier());
+        assertThat(strategy.getExecutionSlotSharingGroup(ev3.getIdentifier()).getExecutionVertexIds())
+                .contains(ev3.getIdentifier());
     }
 
     private static JobVertex createJobVertex(

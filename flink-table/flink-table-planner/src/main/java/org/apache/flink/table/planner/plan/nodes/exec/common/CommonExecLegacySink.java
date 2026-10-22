@@ -69,7 +69,7 @@ public abstract class CommonExecLegacySink<T> extends ExecNodeBase<T>
     protected final boolean isStreaming;
 
     public CommonExecLegacySink(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             TableSink<T> tableSink,
@@ -80,7 +80,7 @@ public abstract class CommonExecLegacySink<T> extends ExecNodeBase<T>
             LogicalType outputType,
             String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 Collections.singletonList(inputProperty),

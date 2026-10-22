@@ -94,7 +94,7 @@ public class FileDataIndexSpilledRegionManagerImpl<T extends FileDataIndexRegion
     private final int regionGroupSizeInBytes;
 
     /**
-     * This consumer is used to load region to cache. The first parameter is subpartition id, and
+     * This consumer is used to load region to cache. The first parameter is subpartition identifier, and
      * second parameter is the region to load.
      */
     private final BiConsumer<Integer, T> cacheRegionConsumer;

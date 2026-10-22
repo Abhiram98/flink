@@ -228,7 +228,7 @@ public class SimpleExecutionSlotAllocator implements ExecutionSlotAllocator {
                             executionVertexId -> Optional.empty(), context);
             return new SimpleExecutionSlotAllocator(
                     slotProvider,
-                    id -> context.getResourceProfile(id.getExecutionVertexId()),
+                    identifier -> context.getResourceProfile(identifier.getExecutionVertexId()),
                     preferredLocationsRetriever,
                     slotWillBeOccupiedIndefinitely);
         }

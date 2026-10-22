@@ -31,7 +31,7 @@ import org.apache.flink.table.data.RowData;
 /**
  * A stream operator that emits mini-batch marker in a given period. This mini-batch assigner works
  * in processing time, which means the mini-batch marker is generated in the given period using the
- * processing time. The downstream operators will trigger mini-batch once the received mini-batch id
+ * processing time. The downstream operators will trigger mini-batch once the received mini-batch identifier
  * advanced.
  *
  * <p>NOTE: currently, we use {@link Watermark} to represents the mini-batch marker.

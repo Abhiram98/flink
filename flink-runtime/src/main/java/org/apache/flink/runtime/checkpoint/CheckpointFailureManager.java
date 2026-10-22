@@ -85,7 +85,7 @@ public class CheckpointFailureManager {
      * @param checkpointProperties the checkpoint properties in order to determinate which handle
      *     strategy can be used.
      * @param exception the checkpoint exception.
-     * @param executionAttemptID the execution attempt id, as a safe guard.
+     * @param executionAttemptID the execution attempt identifier, as a safe guard.
      * @param job the JobID.
      * @param pendingCheckpointStats the pending checkpoint statistics.
      * @param statsTracker the tracker for checkpoint statistics.
@@ -156,10 +156,10 @@ public class CheckpointFailureManager {
      * Handle job level checkpoint exception with a handler callback.
      *
      * @param exception the checkpoint exception.
-     * @param checkpointId the failed checkpoint id used to count the continuous failure number
-     *     based on checkpoint id sequence. In trigger phase, we may not get the checkpoint id when
-     *     the failure happens before the checkpoint id generation. In this case, it will be
-     *     specified a negative latest generated checkpoint id as a special flag.
+     * @param checkpointId the failed checkpoint identifier used to count the continuous failure number
+     *     based on checkpoint identifier sequence. In trigger phase, we may not get the checkpoint identifier when
+     *     the failure happens before the checkpoint identifier generation. In this case, it will be
+     *     specified a negative latest generated checkpoint identifier as a special flag.
      */
     void handleJobLevelCheckpointException(
             CheckpointProperties checkpointProperties,
@@ -174,11 +174,11 @@ public class CheckpointFailureManager {
      * Handle task level checkpoint exception with a handler callback.
      *
      * @param pendingCheckpoint the failed checkpoint used to count the continuous failure number
-     *     based on checkpoint id sequence. In trigger phase, we may not get the checkpoint id when
-     *     the failure happens before the checkpoint id generation. In this case, it will be
-     *     specified a negative latest generated checkpoint id as a special flag.
+     *     based on checkpoint identifier sequence. In trigger phase, we may not get the checkpoint identifier when
+     *     the failure happens before the checkpoint identifier generation. In this case, it will be
+     *     specified a negative latest generated checkpoint identifier as a special flag.
      * @param exception the checkpoint exception.
-     * @param executionAttemptID the execution attempt id, as a safe guard.
+     * @param executionAttemptID the execution attempt identifier, as a safe guard.
      */
     void handleTaskLevelCheckpointException(
             PendingCheckpoint pendingCheckpoint,
@@ -268,8 +268,8 @@ public class CheckpointFailureManager {
     /**
      * Handle checkpoint success.
      *
-     * @param checkpointId the failed checkpoint id used to count the continuous failure number
-     *     based on checkpoint id sequence.
+     * @param checkpointId the failed checkpoint identifier used to count the continuous failure number
+     *     based on checkpoint identifier sequence.
      */
     public void handleCheckpointSuccess(long checkpointId) {
         if (checkpointId > lastSucceededCheckpointId) {
@@ -304,7 +304,7 @@ public class CheckpointFailureManager {
          * Fails the whole job graph due to task failure.
          *
          * @param cause The reason why the job is cancelled.
-         * @param failingTask The id of the failing task attempt to prevent failing the job multiple
+         * @param failingTask The identifier of the failing task attempt to prevent failing the job multiple
          *     times.
          */
         void failJobDueToTaskFailure(final Throwable cause, final ExecutionAttemptID failingTask);

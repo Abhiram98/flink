@@ -48,19 +48,19 @@ public class OutputTag<T> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    private final String id;
+    private final String identifier;
 
     private final TypeInformation<T> typeInfo;
 
     /**
-     * Creates a new named {@code OutputTag} with the given id.
+     * Creates a new named {@code OutputTag} with the given identifier.
      *
-     * @param id The id of the created {@code OutputTag}.
+     * @param identifier The identifier of the created {@code OutputTag}.
      */
-    public OutputTag(String id) {
-        Preconditions.checkNotNull(id, "OutputTag id cannot be null.");
-        Preconditions.checkArgument(!id.isEmpty(), "OutputTag id must not be empty.");
-        this.id = id;
+    public OutputTag(String identifier) {
+        Preconditions.checkNotNull(identifier, "OutputTag identifier cannot be null.");
+        Preconditions.checkArgument(!identifier.isEmpty(), "OutputTag identifier must not be empty.");
+        this.identifier = identifier;
 
         try {
             this.typeInfo = TypeExtractor.createTypeInfo(this, OutputTag.class, getClass(), 0);
@@ -74,15 +74,15 @@ public class OutputTag<T> implements Serializable {
     }
 
     /**
-     * Creates a new named {@code OutputTag} with the given id and output {@link TypeInformation}.
+     * Creates a new named {@code OutputTag} with the given identifier and output {@link TypeInformation}.
      *
-     * @param id The id of the created {@code OutputTag}.
+     * @param identifier The identifier of the created {@code OutputTag}.
      * @param typeInfo The {@code TypeInformation} for the side output.
      */
-    public OutputTag(String id, TypeInformation<T> typeInfo) {
-        Preconditions.checkNotNull(id, "OutputTag id cannot be null.");
-        Preconditions.checkArgument(!id.isEmpty(), "OutputTag id must not be empty.");
-        this.id = id;
+    public OutputTag(String identifier, TypeInformation<T> typeInfo) {
+        Preconditions.checkNotNull(identifier, "OutputTag identifier cannot be null.");
+        Preconditions.checkArgument(!identifier.isEmpty(), "OutputTag identifier must not be empty.");
+        this.identifier = identifier;
         this.typeInfo = Preconditions.checkNotNull(typeInfo, "TypeInformation cannot be null.");
     }
 
@@ -93,8 +93,8 @@ public class OutputTag<T> implements Serializable {
 
     // ------------------------------------------------------------------------
 
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public TypeInformation<T> getTypeInfo() {
@@ -112,16 +112,16 @@ public class OutputTag<T> implements Serializable {
             return false;
         }
         OutputTag other = (OutputTag) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.identifier, other.identifier);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return identifier.hashCode();
     }
 
     @Override
     public String toString() {
-        return "OutputTag(" + getTypeInfo() + ", " + id + ")";
+        return "OutputTag(" + getTypeInfo() + ", " + identifier + ")";
     }
 }

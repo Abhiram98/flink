@@ -59,7 +59,7 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
      * didn't change.
      *
      * <p>The complete {@link StreamGraph} is traversed. The hash is either computed from the
-     * transformation's user-specified id (see {@link Transformation#getUid()}) or generated in a
+     * transformation's user-specified identifier (see {@link Transformation#getUid()}) or generated in a
      * deterministic way.
      *
      * <p>The generated hash is deterministic with respect to:
@@ -70,7 +70,7 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
      *   <li>input nodes hashes
      * </ul>
      *
-     * @return A map from {@link StreamNode#id} to hash as 16-byte array.
+     * @return A map from {@link StreamNode#identifier} to hash as 16-byte array.
      */
     @Override
     public Map<Integer, byte[]> traverseStreamGraphAndGenerateHashes(StreamGraph streamGraph) {
@@ -117,14 +117,14 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
                 for (StreamEdge outEdge : currentNode.getOutEdges()) {
                     StreamNode child = streamGraph.getTargetVertex(outEdge);
 
-                    if (!visited.contains(child.getId())) {
+                    if (!visited.contains(child.getIdentifier())) {
                         remaining.add(child);
-                        visited.add(child.getId());
+                        visited.add(child.getIdentifier());
                     }
                 }
             } else {
                 // We will revisit this later.
-                visited.remove(currentNode.getId());
+                visited.remove(currentNode.getIdentifier());
             }
         }
 
@@ -168,7 +168,7 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
             byte[] hash =
                     generateDeterministicHash(node, hasher, hashes, isChainingEnabled, streamGraph);
 
-            if (hashes.put(node.getId(), hash) != null) {
+            if (hashes.put(node.getIdentifier(), hash) != null) {
                 // Sanity check
                 throw new IllegalStateException(
                         "Unexpected state. Tried to add node hash "
@@ -192,7 +192,7 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
                 }
             }
 
-            if (hashes.put(node.getId(), hash) != null) {
+            if (hashes.put(node.getIdentifier(), hash) != null) {
                 // Sanity check
                 throw new IllegalStateException(
                         "Unexpected state. Tried to add node hash "
@@ -270,8 +270,8 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
                             + "' for node "
                             + "'"
                             + node.toString()
-                            + "' {id: "
-                            + node.getId()
+                            + "' {identifier: "
+                            + node.getIdentifier()
                             + ", "
                             + "parallelism: "
                             + node.getParallelism()
@@ -288,15 +288,15 @@ public class StreamGraphHasherV2 implements StreamGraphHasher {
      * Applies the {@link Hasher} to the {@link StreamNode} . The hasher encapsulates the current
      * state of the hash.
      *
-     * <p>The specified ID is local to this node. We cannot use the {@link StreamNode#id}, because
+     * <p>The specified ID is local to this node. We cannot use the {@link StreamNode#identifier}, because
      * it is incremented in a static counter. Therefore, the IDs for identical jobs will otherwise
      * be different.
      */
-    private void generateNodeLocalHash(Hasher hasher, int id) {
+    private void generateNodeLocalHash(Hasher hasher, int identifier) {
         // This resolves conflicts for otherwise identical source nodes. BUT
         // the generated hash codes depend on the ordering of the nodes in the
         // stream graph.
-        hasher.putInt(id);
+        hasher.putInt(identifier);
     }
 
     private boolean isChainable(

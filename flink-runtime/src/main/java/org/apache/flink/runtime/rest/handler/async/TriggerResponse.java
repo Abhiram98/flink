@@ -27,7 +27,7 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonPro
 
 /** Response to the triggering of an asynchronous operation. */
 public class TriggerResponse implements ResponseBody {
-    private static final String FIELD_NAME_REQUEST_ID = "request-id";
+    private static final String FIELD_NAME_REQUEST_ID = "request-identifier";
 
     @JsonProperty(FIELD_NAME_REQUEST_ID)
     private final TriggerId triggerId;

@@ -402,7 +402,7 @@ public class HiveLookupJoinITCase {
         batchEnv.executeSql(
                 String.format(
                         "create table value_source(x string, p as proctime()) with ("
-                                + "'connector' = 'values', 'data-id' = '%s', 'bounded'='true')",
+                                + "'connector' = 'values', 'data-identifier' = '%s', 'bounded'='true')",
                         dataId));
         batchEnv.executeSql("insert overwrite columnar_table select x from value_source").await();
         TableImpl flinkTable =

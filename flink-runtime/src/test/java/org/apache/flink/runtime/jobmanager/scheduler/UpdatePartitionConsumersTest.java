@@ -188,7 +188,7 @@ public class UpdatePartitionConsumersTest extends TestLogger {
                     final PartitionInfo partitionInfo = partitionInfoList.get(0);
                     assertThat(
                             partitionInfo.getIntermediateDataSetID(),
-                            equalTo(v3.getProducedDataSets().get(0).getId()));
+                            equalTo(v3.getProducedDataSets().get(0).getIdentifier()));
                     assertThat(
                             partitionInfo.getShuffleDescriptor(),
                             instanceOf(NettyShuffleDescriptor.class));

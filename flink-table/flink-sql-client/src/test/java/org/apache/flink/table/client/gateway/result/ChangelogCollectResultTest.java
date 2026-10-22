@@ -51,7 +51,7 @@ class ChangelogCollectResultTest {
         ChangelogCollectResult changelogResult =
                 new ChangelogCollectResult(
                         new StatementResult(
-                                ResolvedSchema.of(Column.physical("id", DataTypes.INT())),
+                                ResolvedSchema.of(Column.physical("identifier", DataTypes.INT())),
                                 data,
                                 true,
                                 ResultKind.SUCCESS_WITH_CONTENT,

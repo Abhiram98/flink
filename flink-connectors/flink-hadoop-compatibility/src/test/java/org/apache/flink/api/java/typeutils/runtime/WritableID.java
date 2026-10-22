@@ -68,9 +68,9 @@ public class WritableID implements WritableComparable<WritableID> {
             return false;
         }
 
-        WritableID id = (WritableID) o;
+        WritableID identifier = (WritableID) o;
 
-        return !(uuid != null ? !uuid.equals(id.uuid) : id.uuid != null);
+        return !(uuid != null ? !uuid.equals(identifier.uuid) : identifier.uuid != null);
     }
 
     @Override

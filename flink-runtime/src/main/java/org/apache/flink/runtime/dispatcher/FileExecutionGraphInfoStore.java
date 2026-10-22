@@ -151,7 +151,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
             return executionGraphInfoCache.get(jobId);
         } catch (ExecutionException e) {
             LOG.debug(
-                    "Could not load archived execution graph information for job id {}.", jobId, e);
+                    "Could not load archived execution graph information for job identifier {}.", jobId, e);
             return null;
         }
     }

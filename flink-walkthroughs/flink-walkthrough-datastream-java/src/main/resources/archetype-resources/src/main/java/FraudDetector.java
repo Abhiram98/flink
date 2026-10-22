@@ -41,7 +41,7 @@ public class FraudDetector extends KeyedProcessFunction<Long, Transaction, Alert
 			Collector<Alert> collector) throws Exception {
 
 		Alert alert = new Alert();
-		alert.setId(transaction.getAccountId());
+		alert.setIdentifier(transaction.getAccountId());
 
 		collector.collect(alert);
 	}

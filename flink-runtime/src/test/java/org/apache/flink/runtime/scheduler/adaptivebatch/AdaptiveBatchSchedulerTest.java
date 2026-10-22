@@ -410,7 +410,7 @@ class AdaptiveBatchSchedulerTest {
     private BlockingResultInfo getBlockingResultInfo(
             AdaptiveBatchScheduler scheduler, JobVertex jobVertex) {
         return scheduler.getBlockingResultInfo(
-                getOnlyElement(jobVertex.getProducedDataSets()).getId());
+                getOnlyElement(jobVertex.getProducedDataSets()).getIdentifier());
     }
 
     private void checkAggregatedInputDataBytesIsCalculated(
@@ -513,7 +513,7 @@ class AdaptiveBatchSchedulerTest {
     }
 
     private JobGraph createBrokenJobGraph() {
-        // this will break the JobGraph by using the same dataset id twice
+        // this will break the JobGraph by using the same dataset identifier twice
         return createJobGraph(true);
     }
 

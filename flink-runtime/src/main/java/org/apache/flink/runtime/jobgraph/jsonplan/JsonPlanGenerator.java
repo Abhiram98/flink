@@ -102,7 +102,7 @@ public class JsonPlanGenerator {
 
                 // write the core properties
                 JobVertexID vertexID = vertex.getID();
-                gen.writeStringField("id", vertexID.toString());
+                gen.writeStringField("identifier", vertexID.toString());
                 gen.writeNumberField(
                         "parallelism",
                         vertexParallelism
@@ -131,7 +131,7 @@ public class JsonPlanGenerator {
 
                         gen.writeStartObject();
                         gen.writeNumberField("num", inputNum);
-                        gen.writeStringField("id", predecessor.getID().toString());
+                        gen.writeStringField("identifier", predecessor.getID().toString());
 
                         if (shipStrategy != null) {
                             gen.writeStringField("ship_strategy", shipStrategy);

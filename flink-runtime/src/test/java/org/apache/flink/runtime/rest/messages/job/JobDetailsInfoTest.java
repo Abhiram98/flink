@@ -50,7 +50,7 @@ class JobDetailsInfoTest extends RestResponseMarshallingTestBase<JobDetailsInfo>
     protected JobDetailsInfo getTestResponseInstance() throws Exception {
         final Random random = new Random();
         final int numJobVertexDetailsInfos = 4;
-        final String jsonPlan = "{\"id\":\"1234\"}";
+        final String jsonPlan = "{\"identifier\":\"1234\"}";
 
         final Map<JobStatus, Long> timestamps = new HashMap<>(JobStatus.values().length);
         final Collection<JobDetailsInfo.JobVertexDetailsInfo> jobVertexInfos =

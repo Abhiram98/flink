@@ -156,9 +156,9 @@ class DefaultInputConsumableDeciderTest {
         HashSet<ExecutionVertexID> scheduledVertices = new HashSet<>();
         DefaultInputConsumableDecider inputConsumableDecider =
                 createDefaultInputConsumableDecider(scheduledVertices, topology);
-        scheduledVertices.add(producers.get(0).getId());
+        scheduledVertices.add(producers.get(0).getIdentifier());
         HashSet<ExecutionVertexID> vertexToDeploy = new HashSet<>();
-        vertexToDeploy.add(producers.get(1).getId());
+        vertexToDeploy.add(producers.get(1).getIdentifier());
 
         assertThat(
                         inputConsumableDecider.isInputConsumable(
@@ -195,7 +195,7 @@ class DefaultInputConsumableDeciderTest {
 
         DefaultInputConsumableDecider inputConsumableDecider =
                 createDefaultInputConsumableDecider(
-                        Collections.singleton(producers2.get(0).getId()), topology);
+                        Collections.singleton(producers2.get(0).getIdentifier()), topology);
 
         assertThat(
                         inputConsumableDecider.isInputConsumable(

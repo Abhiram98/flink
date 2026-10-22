@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DefaultLeaderElectionTest {
 
-    private static final String DEFAULT_TEST_COMPONENT_ID = "test-component-id";
+    private static final String DEFAULT_TEST_COMPONENT_ID = "test-component-identifier";
 
     @Test
     void testContenderRegistration() throws Exception {

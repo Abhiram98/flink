@@ -742,7 +742,7 @@ class JobMasterServiceLeadershipRunnerTest {
                                     return CompletableFuture.completedFuture(null);
                                 })
                         .build();
-        final String componentId = "random-component-id";
+        final String componentId = "random-component-identifier";
         final LeaderElection leaderElection =
                 defaultLeaderElectionService.createLeaderElection(componentId);
         try (final JobMasterServiceLeadershipRunner jobManagerRunner =

@@ -119,7 +119,7 @@ class SavepointHandlersTest {
                         .handleRequest(savepointStatusRequest(triggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(savepointResponseBody.queueStatus().getId()).isEqualTo(QueueStatus.Id.COMPLETED);
+        assertThat(savepointResponseBody.queueStatus().getIdentifier()).isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(savepointResponseBody.resource()).isNotNull();
         assertThat(savepointResponseBody.resource().getLocation())
                 .isEqualTo(COMPLETED_SAVEPOINT_EXTERNAL_POINTER);
@@ -200,7 +200,7 @@ class SavepointHandlersTest {
                         .handleRequest(savepointStatusRequest(triggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(savepointResponseBody.queueStatus().getId()).isEqualTo(QueueStatus.Id.COMPLETED);
+        assertThat(savepointResponseBody.queueStatus().getIdentifier()).isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(savepointResponseBody.resource()).isNotNull();
         assertThat(savepointResponseBody.resource().getFailureCause()).isNotNull();
         final Throwable savepointError =
@@ -246,7 +246,7 @@ class SavepointHandlersTest {
                                 savepointStatusRequest(providedTriggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(savepointResponseBody.queueStatus().getId()).isEqualTo(QueueStatus.Id.COMPLETED);
+        assertThat(savepointResponseBody.queueStatus().getIdentifier()).isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(savepointResponseBody.resource()).isNotNull();
         assertThat(savepointResponseBody.resource().getLocation())
                 .isEqualTo(COMPLETED_SAVEPOINT_EXTERNAL_POINTER);

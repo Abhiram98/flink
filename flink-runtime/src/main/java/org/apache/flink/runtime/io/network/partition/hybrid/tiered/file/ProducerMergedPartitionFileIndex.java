@@ -110,7 +110,7 @@ public class ProducerMergedPartitionFileIndex {
     /**
      * Get the subpartition's {@link FixedSizeRegion} containing the specific buffer index.
      *
-     * @param subpartitionId the subpartition id
+     * @param subpartitionId the subpartition identifier
      * @param bufferIndex the buffer index
      * @return the region containing the buffer index, or return emtpy if the region is not found.
      */
@@ -186,7 +186,7 @@ public class ProducerMergedPartitionFileIndex {
 
     /** Represents a buffer to be flushed. */
     static class FlushedBuffer {
-        /** The subpartition id that the buffer belongs to. */
+        /** The subpartition identifier that the buffer belongs to. */
         private final int subpartitionId;
 
         /** The buffer index within the subpartition. */

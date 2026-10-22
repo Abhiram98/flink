@@ -119,8 +119,8 @@ public class QueryOperationSqlExecutionTest implements TableTestProgramRunner {
                         s -> {
                             final List<Row> data = new ArrayList<>(s.dataBeforeRestore);
                             data.addAll(s.dataAfterRestore);
-                            final String id = TestValuesTableFactory.registerData(data);
-                            connectorOptions.put("data-id", id);
+                            final String identifier = TestValuesTableFactory.registerData(data);
+                            connectorOptions.put("data-identifier", identifier);
                             s.apply(env, connectorOptions);
                         });
         program.getSetupSinkTestSteps().forEach(s -> s.apply(env, connectorOptions));

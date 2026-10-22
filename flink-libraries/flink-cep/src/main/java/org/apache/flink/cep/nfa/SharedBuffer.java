@@ -283,8 +283,8 @@ public class SharedBuffer<V> {
                             ValueTimeWrapper.deserialize(valueSerializer, source);
                     EventId eventId = values.get(wrapper);
                     if (eventId == null) {
-                        int id = totalEventsPerTimestamp.computeIfAbsent(wrapper.timestamp, k -> 0);
-                        eventId = new EventId(id, wrapper.timestamp);
+                        int identifier = totalEventsPerTimestamp.computeIfAbsent(wrapper.timestamp, k -> 0);
+                        eventId = new EventId(identifier, wrapper.timestamp);
                         values.put(wrapper, eventId);
                         valuesWithIds.put(eventId, new Lockable<>(wrapper.value, 1));
                         totalEventsPerTimestamp.computeIfPresent(

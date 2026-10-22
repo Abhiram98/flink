@@ -37,7 +37,7 @@ public interface SupportsHandleExecutionAttemptSourceEvent {
      * SplitEnumerator#handleSourceEvent(int, SourceEvent)} but is aware of the subtask execution
      * attempt who sent this event.
      *
-     * @param subtaskId the subtask id of the source reader who sent the source event.
+     * @param subtaskId the subtask identifier of the source reader who sent the source event.
      * @param attemptNumber the attempt number of the source reader who sent the source event.
      * @param sourceEvent the source event from the source reader.
      */

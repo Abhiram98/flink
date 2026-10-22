@@ -59,7 +59,7 @@ public class GSFileSystemOptions {
                     .withDescription(
                             "This option can be used to improve performance due to hotspotting "
                                     + "issues on GCS. If this is enabled, entropy in the form of "
-                                    + "temporary object id will be injected in the beginning of "
+                                    + "temporary object identifier will be injected in the beginning of "
                                     + "gcs path of the temporary objects. The final object path "
                                     + "remains unchanged.");
 

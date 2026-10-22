@@ -75,12 +75,12 @@ public class RemoteStorageScanner implements Runnable {
             Executors.newScheduledThreadPool(
                     1, new ExecutorThreadFactory("remote storage scanner"));
 
-    /** The key is partition id and subpartition id, the value is required segment id. */
+    /** The key is partition identifier and subpartition identifier, the value is required segment identifier. */
     private final Map<Tuple2<TieredStoragePartitionId, TieredStorageSubpartitionId>, Integer>
             requiredSegmentIds;
 
     /**
-     * The key is partition id and subpartition id, the value is max id of written segment files in
+     * The key is partition identifier and subpartition identifier, the value is max identifier of written segment files in
      * the subpartition.
      */
     private final Map<Tuple2<TieredStoragePartitionId, TieredStorageSubpartitionId>, Integer>
@@ -130,16 +130,16 @@ public class RemoteStorageScanner implements Runnable {
     /**
      * Watch the segment for a specific subpartition in the {@link RemoteStorageScanner}.
      *
-     * <p>If a segment with a larger or equal id already exists, the current segment won't be
+     * <p>If a segment with a larger or equal identifier already exists, the current segment won't be
      * watched.
      *
-     * <p>If a segment with a smaller segment id is still being watched, the current segment will
+     * <p>If a segment with a smaller segment identifier is still being watched, the current segment will
      * replace it because the smaller segment should have been consumed. This method ensures that
      * only one segment file can be watched for each subpartition.
      *
-     * @param partitionId is the id of partition.
-     * @param subpartitionId is the id of subpartition.
-     * @param segmentId is the id of segment.
+     * @param partitionId is the identifier of partition.
+     * @param subpartitionId is the identifier of subpartition.
+     * @param segmentId is the identifier of segment.
      */
     public void watchSegment(
             TieredStoragePartitionId partitionId,
@@ -196,7 +196,7 @@ public class RemoteStorageScanner implements Runnable {
                 } else {
                     // The segment should be watched again because it's not found.
                     // If the segment belongs to other tiers and has been consumed, the segment will
-                    // be replaced by newly watched segment with larger segment id. This logic is
+                    // be replaced by newly watched segment with larger segment identifier. This logic is
                     // ensured by the method {@code watchSegment}.
                     scanMaxSegmentId(partitionId, subpartitionId);
                 }
@@ -222,11 +222,11 @@ public class RemoteStorageScanner implements Runnable {
     // ------------------------------------------------------------------------
 
     /**
-     * Scan the max segment id of segment files for the specific partition and subpartition. The max
-     * segment id can be obtained from a file named by max segment id.
+     * Scan the max segment identifier of segment files for the specific partition and subpartition. The max
+     * segment identifier can be obtained from a file named by max segment identifier.
      *
-     * @param partitionId the partition id.
-     * @param subpartitionId the subpartition id.
+     * @param partitionId the partition identifier.
+     * @param subpartitionId the subpartition identifier.
      */
     private void scanMaxSegmentId(
             TieredStoragePartitionId partitionId, TieredStorageSubpartitionId subpartitionId) {

@@ -61,7 +61,7 @@ class RouterTest {
         RouteResult<String> routed = router.route(GET, "/articles/123");
         assertThat(routed.target()).isEqualTo("show");
         assertThat(routed.pathParams()).hasSize(1);
-        assertThat(routed.pathParams().get("id")).isEqualTo("123");
+        assertThat(routed.pathParams().get("identifier")).isEqualTo("123");
     }
 
     @Test
@@ -87,7 +87,7 @@ class RouterTest {
         RouteResult<String> routed2 = router.route(GET, "/articles/123");
         assertThat(routed2.target()).isEqualTo("show");
         assertThat(routed2.pathParams()).hasSize(1);
-        assertThat(routed2.pathParams().get("id")).isEqualTo("123");
+        assertThat(routed2.pathParams().get("identifier")).isEqualTo("123");
 
         RouteResult<String> routed3 = router.route(GET, "/notfound");
         assertThat(routed3.target()).isEqualTo("404");
@@ -135,7 +135,7 @@ class RouterTest {
         Router<Class<? extends Action>> router =
                 new Router<Class<? extends Action>>()
                         .addRoute(GET, "/articles", Index.class)
-                        .addRoute(GET, "/articles/:id", Show.class);
+                        .addRoute(GET, "/articles/:identifier", Show.class);
 
         RouteResult<Class<? extends Action>> routed1 = router.route(GET, "/articles");
         RouteResult<Class<? extends Action>> routed2 = router.route(GET, "/articles/123");
@@ -155,11 +155,11 @@ class RouterTest {
                     .addGet("/articles/new", "new")
                     .addGet("/articles/overview", "overview")
                     .addGet("/articles/overview/detailed", "detailed")
-                    .addGet("/articles/:id", "show")
-                    .addGet("/articles/:id/:format", "show")
+                    .addGet("/articles/:identifier", "show")
+                    .addGet("/articles/:identifier/:format", "show")
                     .addPost("/articles", "post")
-                    .addPatch("/articles/:id", "patch")
-                    .addDelete("/articles/:id", "delete")
+                    .addPatch("/articles/:identifier", "patch")
+                    .addDelete("/articles/:identifier", "delete")
                     .addAny("/anyMethod", "anyMethod")
                     .addGet("/download/:*", "download")
                     .notFound("404");

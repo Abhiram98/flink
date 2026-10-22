@@ -126,7 +126,7 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
         Assert.assertTrue(neighborsJoin.getInput2().getTempMode().isCached());
 
         Assert.assertEquals(
-                ShipStrategyType.PARTITION_HASH, cogroup.getInput1().getShipStrategy()); // min id
+                ShipStrategyType.PARTITION_HASH, cogroup.getInput1().getShipStrategy()); // min identifier
         Assert.assertEquals(
                 ShipStrategyType.FORWARD, cogroup.getInput2().getShipStrategy()); // solution set
 

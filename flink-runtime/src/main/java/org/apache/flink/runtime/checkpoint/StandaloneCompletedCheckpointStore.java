@@ -120,10 +120,10 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
 
         findLowest(checkpoints)
                 .ifPresent(
-                        id ->
+                        identifier ->
                                 checkpointsCleaner.cleanSubsumedCheckpoints(
-                                        id,
-                                        getSharedStateRegistry().unregisterUnusedState(id),
+                                        identifier,
+                                        getSharedStateRegistry().unregisterUnusedState(identifier),
                                         postCleanup,
                                         ioExecutor));
 

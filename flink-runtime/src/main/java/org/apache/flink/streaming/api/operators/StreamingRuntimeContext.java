@@ -151,7 +151,7 @@ public class StreamingRuntimeContext extends AbstractRuntimeUDFContext {
      *
      * <p>This operation is currently only supported in Streaming (DataStream) contexts.
      *
-     * @return String representation of the operator's unique id.
+     * @return String representation of the operator's unique identifier.
      */
     public String getOperatorUniqueID() {
         return operatorUniqueID;

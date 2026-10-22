@@ -74,8 +74,8 @@ import java.util.TreeMap;
  *       +- Reused(reference_id=[2])
  * </pre>
  *
- * <p>Note that the first hash join needs to read all results from the hash aggregate whose reuse id
- * is 1 before reading the results from the hash aggregate whose reuse id is 2, while the second
+ * <p>Note that the first hash join needs to read all results from the hash aggregate whose reuse identifier
+ * is 1 before reading the results from the hash aggregate whose reuse identifier is 2, while the second
  * hash join requires the opposite. This physical plan will thus cause a deadlock.
  *
  * <p>This class maintains a topological graph in which an edge pointing from vertex A to vertex B

@@ -46,11 +46,11 @@ public interface TestOperatorLifecycleValidator {
         }
         eventsByOperator.forEach(
                 (operatorIdAndIndex, operatorEvents) -> {
-                    String id = operatorIdAndIndex.f0;
-                    if (testJob.operatorsWithLifecycleTracking.contains(id)) {
+                    String identifier = operatorIdAndIndex.f0;
+                    if (testJob.operatorsWithLifecycleTracking.contains(identifier)) {
                         for (TestOperatorLifecycleValidator validator : validators) {
                             validator.validateOperatorLifecycle(
-                                    testJob, id, operatorIdAndIndex.f1, operatorEvents);
+                                    testJob, identifier, operatorIdAndIndex.f1, operatorEvents);
                         }
                     }
                 });

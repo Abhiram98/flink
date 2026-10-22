@@ -290,7 +290,7 @@ public class DefaultJobGraphStore<R extends ResourceVersion<R>>
             throw new CompletionException(
                     new FlinkException(
                             String.format(
-                                    "Could not remove job graph with job id %s from %s.",
+                                    "Could not remove job graph with job identifier %s from %s.",
                                     jobId, jobGraphStateHandleStore)));
         }
     }
@@ -356,7 +356,7 @@ public class DefaultJobGraphStore<R extends ResourceVersion<R>>
                 jobIds.add(jobGraphStoreUtil.nameToJobID(name));
             } catch (Exception exception) {
                 LOG.warn(
-                        "Could not parse job id from {}. This indicates a malformed name.",
+                        "Could not parse job identifier from {}. This indicates a malformed name.",
                         name,
                         exception);
             }

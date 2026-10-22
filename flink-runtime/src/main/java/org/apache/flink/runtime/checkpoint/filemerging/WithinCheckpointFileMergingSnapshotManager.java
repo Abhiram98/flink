@@ -35,19 +35,19 @@ public class WithinCheckpointFileMergingSnapshotManager extends FileMergingSnaps
     /**
      * For WITHIN_BOUNDARY mode, physical files are NOT shared among multiple checkpoints. This map
      * contains all physical files that are still writable and not occupied by a writer. The key of
-     * this map is checkpoint id, which collectively determine the physical file pool to be reused.
+     * this map is checkpoint identifier, which collectively determine the physical file pool to be reused.
      */
     private final Map<Long, PhysicalFilePool> writablePhysicalFilePool;
 
     public WithinCheckpointFileMergingSnapshotManager(
-            String id,
+            String identifier,
             long maxFileSize,
             PhysicalFilePool.Type filePoolType,
             float maxSpaceAmplification,
             Executor ioExecutor,
             MetricGroup metricGroup) {
         // currently there is no file size limit For WITHIN_BOUNDARY mode
-        super(id, maxFileSize, filePoolType, maxSpaceAmplification, ioExecutor, metricGroup);
+        super(identifier, maxFileSize, filePoolType, maxSpaceAmplification, ioExecutor, metricGroup);
         writablePhysicalFilePool = new HashMap<>();
     }
 

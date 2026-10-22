@@ -76,12 +76,12 @@ public class SharedObjectsExtension implements BeforeEachCallback, AfterEachCall
      * Identifier of the SharedObjects used to retrieve the original instance during
      * deserialization.
      */
-    private final int id;
+    private final int identifier;
     /** All registered objects for the current test case. The objects are purged upon completion. */
     private final transient Map<SharedReference<?>, Object> objects = new ConcurrentHashMap<>();
 
-    private SharedObjectsExtension(int id) {
-        this.id = id;
+    private SharedObjectsExtension(int identifier) {
+        this.identifier = identifier;
     }
 
     /**
@@ -105,20 +105,20 @@ public class SharedObjectsExtension implements BeforeEachCallback, AfterEachCall
      * only access the object through the returned {@link SharedReference}.
      */
     public <T> SharedReference<T> add(T object) {
-        SharedReference<T> tag = new SharedObjectsExtension.DefaultTag<>(id, objects.size());
+        SharedReference<T> tag = new SharedObjectsExtension.DefaultTag<>(identifier, objects.size());
         objects.put(tag, object);
         return tag;
     }
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        INSTANCES.put(id, this);
+        INSTANCES.put(identifier, this);
     }
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
         objects.clear();
-        INSTANCES.remove(id);
+        INSTANCES.remove(identifier);
     }
 
     @SuppressWarnings("unchecked")
@@ -139,12 +139,12 @@ public class SharedObjectsExtension implements BeforeEachCallback, AfterEachCall
             return false;
         }
         SharedObjectsExtension that = (SharedObjectsExtension) o;
-        return id == that.id;
+        return identifier == that.identifier;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(identifier);
     }
 
     private static class DefaultTag<T> implements SharedReference<T> {

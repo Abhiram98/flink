@@ -67,7 +67,7 @@ public class SlotStatus implements Serializable {
     /**
      * Get the unique identification of this slot.
      *
-     * @return The slot id
+     * @return The slot identifier
      */
     public SlotID getSlotID() {
         return slotID;
@@ -83,18 +83,18 @@ public class SlotStatus implements Serializable {
     }
 
     /**
-     * Get the allocation id of this slot.
+     * Get the allocation identifier of this slot.
      *
-     * @return The allocation id if this slot is allocated, otherwise null
+     * @return The allocation identifier if this slot is allocated, otherwise null
      */
     public AllocationID getAllocationID() {
         return allocationID;
     }
 
     /**
-     * Get the job id of the slot allocated for.
+     * Get the job identifier of the slot allocated for.
      *
-     * @return The job id if this slot is allocated, otherwise null
+     * @return The job identifier if this slot is allocated, otherwise null
      */
     public JobID getJobID() {
         return jobID;

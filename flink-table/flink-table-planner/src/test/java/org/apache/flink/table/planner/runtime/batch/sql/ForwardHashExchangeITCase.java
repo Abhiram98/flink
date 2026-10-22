@@ -49,7 +49,7 @@ class ForwardHashExchangeITCase extends BatchTestBase {
                         + "  c string\n"
                         + ") WITH (\n"
                         + "  'connector' = 'values',\n"
-                        + "  'data-id' = '"
+                        + "  'data-identifier' = '"
                         + testDataId
                         + "',\n"
                         + "  'bounded' = 'true'\n"

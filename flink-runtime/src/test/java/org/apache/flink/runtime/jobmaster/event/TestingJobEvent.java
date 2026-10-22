@@ -27,25 +27,25 @@ public class TestingJobEvent implements JobEvent {
     public static final int TYPE_ID = 99999;
 
     /** Field to distinguish two TestingJobEvent. */
-    private final int id;
+    private final int identifier;
 
     private final byte[] arr;
 
-    public TestingJobEvent(int id) {
-        this.id = id;
+    public TestingJobEvent(int identifier) {
+        this.identifier = identifier;
         this.arr = new byte[2000];
         new Random(0).nextBytes(arr);
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof TestingJobEvent) {
             TestingJobEvent other = (TestingJobEvent) obj;
-            return other.id == id && Arrays.equals(other.arr, arr);
+            return other.identifier == identifier && Arrays.equals(other.arr, arr);
         } else {
             return false;
         }
@@ -58,6 +58,6 @@ public class TestingJobEvent implements JobEvent {
 
     @Override
     public String toString() {
-        return "TestingJobEvent(id=" + id + ")";
+        return "TestingJobEvent(identifier=" + identifier + ")";
     }
 }

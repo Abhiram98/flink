@@ -288,12 +288,12 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
                     assignment
                             .assignment()
                             .forEach(
-                                    (id, splits) -> {
-                                        if (!registeredReaders.containsKey(id)) {
+                                    (identifier, splits) -> {
+                                        if (!registeredReaders.containsKey(identifier)) {
                                             throw new IllegalArgumentException(
                                                     String.format(
                                                             "Cannot assign splits %s to subtask %d because the subtask is not registered.",
-                                                            splits, id));
+                                                            splits, identifier));
                                         }
                                     });
 
@@ -448,7 +448,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     /**
      * Behavior of SourceCoordinatorContext on checkpoint.
      *
-     * @param checkpointId The id of the ongoing checkpoint.
+     * @param checkpointId The identifier of the ongoing checkpoint.
      */
     void onCheckpoint(long checkpointId) throws Exception {
         assignmentTracker.onCheckpoint(checkpointId);
@@ -457,7 +457,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     /**
      * Register a source reader.
      *
-     * @param subtaskId the subtask id of the source reader.
+     * @param subtaskId the subtask identifier of the source reader.
      * @param attemptNumber the attempt number of the source reader.
      * @param location the location of the source reader.
      */
@@ -477,7 +477,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     /**
      * Unregister a source reader.
      *
-     * @param subtaskId the subtask id of the source reader.
+     * @param subtaskId the subtask identifier of the source reader.
      * @param attemptNumber the attempt number of the source reader.
      */
     void unregisterSourceReader(int subtaskId, int attemptNumber) {
@@ -494,7 +494,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     /**
      * Get the split to put back. This only happens when a source reader subtask has failed.
      *
-     * @param subtaskId the failed subtask id.
+     * @param subtaskId the failed subtask identifier.
      * @param restoredCheckpointId the checkpoint that the task is recovered to.
      * @return A list of splits that needs to be added back to the {@link SplitEnumerator}.
      */
@@ -506,7 +506,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     /**
      * Invoked when a successful checkpoint has been taken.
      *
-     * @param checkpointId the id of the successful checkpoint.
+     * @param checkpointId the identifier of the successful checkpoint.
      */
     void onCheckpointComplete(long checkpointId) {
         assignmentTracker.onCheckpointComplete(checkpointId);

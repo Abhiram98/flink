@@ -174,8 +174,8 @@ public class NettyShuffleEnvironment
     }
 
     @VisibleForTesting
-    public Optional<Collection<SingleInputGate>> getInputGate(InputGateID id) {
-        return Optional.ofNullable(inputGatesById.get(id));
+    public Optional<Collection<SingleInputGate>> getInputGate(InputGateID identifier) {
+        return Optional.ofNullable(inputGatesById.get(identifier));
     }
 
     @Override
@@ -275,20 +275,20 @@ public class NettyShuffleEnvironment
                                 igdd,
                                 partitionProducerStateProvider,
                                 inputChannelMetrics);
-                InputGateID id =
+                InputGateID identifier =
                         new InputGateID(
                                 igdd.getConsumedResultId(), ownerContext.getExecutionAttemptID());
                 Set<SingleInputGate> inputGateSet =
                         inputGatesById.computeIfAbsent(
-                                id, ignored -> ConcurrentHashMap.newKeySet());
+                                identifier, ignored -> ConcurrentHashMap.newKeySet());
                 inputGateSet.add(inputGate);
-                inputGatesById.put(id, inputGateSet);
+                inputGatesById.put(identifier, inputGateSet);
                 inputGate
                         .getCloseFuture()
                         .thenRun(
                                 () ->
                                         inputGatesById.computeIfPresent(
-                                                id,
+                                                identifier,
                                                 (key, value) -> {
                                                     value.remove(inputGate);
                                                     if (value.isEmpty()) {
@@ -330,8 +330,8 @@ public class NettyShuffleEnvironment
             throws IOException, InterruptedException {
         IntermediateDataSetID intermediateResultPartitionID =
                 partitionInfo.getIntermediateDataSetID();
-        InputGateID id = new InputGateID(intermediateResultPartitionID, consumerID);
-        Set<SingleInputGate> inputGates = inputGatesById.get(id);
+        InputGateID identifier = new InputGateID(intermediateResultPartitionID, consumerID);
+        Set<SingleInputGate> inputGates = inputGatesById.get(identifier);
         if (inputGates == null || inputGates.isEmpty()) {
             return false;
         }

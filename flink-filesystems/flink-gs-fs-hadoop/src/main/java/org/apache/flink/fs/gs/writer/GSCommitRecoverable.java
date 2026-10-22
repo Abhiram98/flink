@@ -38,7 +38,7 @@ class GSCommitRecoverable implements RecoverableWriter.CommitRecoverable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GSCommitRecoverable.class);
 
-    /** The blob id to which the recoverable write operation is writing. */
+    /** The blob identifier to which the recoverable write operation is writing. */
     public final GSBlobIdentifier finalBlobIdentifier;
 
     /**

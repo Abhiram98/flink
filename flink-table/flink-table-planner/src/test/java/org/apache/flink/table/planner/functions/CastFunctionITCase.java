@@ -115,7 +115,7 @@ public class CastFunctionITCase extends BuiltInFunctionTestBase {
 
     @Override
     Configuration getConfiguration() {
-        return super.getConfiguration().set(TableConfigOptions.LOCAL_TIME_ZONE, TEST_TZ.getId());
+        return super.getConfiguration().set(TableConfigOptions.LOCAL_TIME_ZONE, TEST_TZ.getIdentifier());
     }
 
     @Override

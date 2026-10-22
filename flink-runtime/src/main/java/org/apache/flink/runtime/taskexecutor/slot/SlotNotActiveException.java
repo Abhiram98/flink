@@ -27,6 +27,6 @@ public class SlotNotActiveException extends Exception {
     private static final long serialVersionUID = 4305837511564584L;
 
     public SlotNotActiveException(JobID jobId, AllocationID allocationId) {
-        super("No active slot for job " + jobId + " with allocation id " + allocationId + '.');
+        super("No active slot for job " + jobId + " with allocation identifier " + allocationId + '.');
     }
 }

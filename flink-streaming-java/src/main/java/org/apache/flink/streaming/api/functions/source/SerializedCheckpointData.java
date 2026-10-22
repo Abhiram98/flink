@@ -125,8 +125,8 @@ class SerializedCheckpointData implements java.io.Serializable {
             outputBuffer.clear();
             Set<T> checkpointIds = checkpoint.f1;
 
-            for (T id : checkpointIds) {
-                serializer.serialize(id, outputBuffer);
+            for (T identifier : checkpointIds) {
+                serializer.serialize(identifier, outputBuffer);
             }
 
             serializedCheckpoints[pos++] =

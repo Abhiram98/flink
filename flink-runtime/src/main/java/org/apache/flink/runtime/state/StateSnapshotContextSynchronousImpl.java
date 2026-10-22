@@ -33,7 +33,7 @@ import java.util.concurrent.RunnableFuture;
 /** This class is a default implementation for StateSnapshotContext. */
 public class StateSnapshotContextSynchronousImpl implements StateSnapshotContext {
 
-    /** Checkpoint id of the snapshot. */
+    /** Checkpoint identifier of the snapshot. */
     private final long checkpointId;
 
     /** Checkpoint timestamp of the snapshot. */

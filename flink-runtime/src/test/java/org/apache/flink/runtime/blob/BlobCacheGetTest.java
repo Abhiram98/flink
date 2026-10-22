@@ -192,7 +192,7 @@ class BlobCacheGetTest {
      * Retrieves a BLOB via a {@link BlobCacheService} which cannot create incoming files. File
      * transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testGetFailsIncoming(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -290,7 +290,7 @@ class BlobCacheGetTest {
      * Retrieves a BLOB via a {@link BlobCacheService} which cannot create the final storage file.
      * File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testGetFailsStore(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -420,7 +420,7 @@ class BlobCacheGetTest {
      * fail even if the file is not deletable on the {@link BlobServer}, e.g. via restricting the
      * permissions.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      */
     private void testGetTransientRemoteDeleteFails(@Nullable final JobID jobId) throws IOException {
         assumeThat(OperatingSystem.isWindows()).as("setWritable doesn't work on Windows").isFalse();

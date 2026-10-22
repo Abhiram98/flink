@@ -129,7 +129,7 @@ public class CompletedCheckpointTest {
         assertThat(CompletedCheckpoint.checkpointsMatch(checkpoints1, checkpoints2)).isTrue();
     }
 
-    /** Verify that both JobID and checkpoint id are taken into account when comparing. */
+    /** Verify that both JobID and checkpoint identifier are taken into account when comparing. */
     @Test
     void testCompareCheckpointsWithSameJobID() {
         JobID jobID = new JobID();
@@ -169,7 +169,7 @@ public class CompletedCheckpointTest {
         assertThat(CompletedCheckpoint.checkpointsMatch(checkpoints1, checkpoints2)).isFalse();
     }
 
-    /** Verify that both JobID and checkpoint id are taken into account when comparing. */
+    /** Verify that both JobID and checkpoint identifier are taken into account when comparing. */
     @Test
     void testCompareCheckpointsWithSameCheckpointId() {
         JobID jobID1 = new JobID();

@@ -65,7 +65,7 @@ class TaskMetricGroupTest {
     void testGenerateScopeDefault() {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
@@ -73,10 +73,10 @@ class TaskMetricGroupTest {
 
         assertThat(taskGroup.getScopeComponents())
                 .containsExactly(
-                        "theHostName", "taskmanager", "test-tm-id", "myJobName", "aTaskName", "13");
+                        "theHostName", "taskmanager", "test-tm-identifier", "myJobName", "aTaskName", "13");
 
         assertThat(taskGroup.getMetricIdentifier("name"))
-                .isEqualTo("theHostName.taskmanager.test-tm-id.myJobName.aTaskName.13.name");
+                .isEqualTo("theHostName.taskmanager.test-tm-identifier.myJobName.aTaskName.13.name");
     }
 
     @Test
@@ -94,17 +94,17 @@ class TaskMetricGroupTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(jid, "myJobName").addTask(executionId, "aTaskName");
 
         assertThat(taskGroup.getScopeComponents())
                 .containsExactly(
-                        "test-tm-id", jid.toString(), vertexId.toString(), executionId.toString());
+                        "test-tm-identifier", jid.toString(), vertexId.toString(), executionId.toString());
 
         assertThat(taskGroup.getMetricIdentifier("name"))
-                .isEqualTo(String.format("test-tm-id.%s.%s.%s.name", jid, vertexId, executionId));
+                .isEqualTo(String.format("test-tm-identifier.%s.%s.%s.name", jid, vertexId, executionId));
         registry.closeAsync().get();
     }
 
@@ -119,7 +119,7 @@ class TaskMetricGroupTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName").addTask(executionId, "aTaskName");
@@ -128,14 +128,14 @@ class TaskMetricGroupTest {
                 .containsExactly(
                         "theHostName",
                         "taskmanager",
-                        "test-tm-id",
+                        "test-tm-identifier",
                         "myJobName",
                         executionId.toString(),
                         "13");
 
         assertThat(taskGroup.getMetricIdentifier("name"))
                 .isEqualTo(
-                        "theHostName.taskmanager.test-tm-id.myJobName." + executionId + ".13.name");
+                        "theHostName.taskmanager.test-tm-identifier.myJobName." + executionId + ".13.name");
         registry.closeAsync().get();
     }
 
@@ -146,7 +146,7 @@ class TaskMetricGroupTest {
         ExecutionAttemptID eid = createExecutionAttemptId(vid, 4, 5);
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         TaskMetricGroup task = tm.addJob(jid, "jobname").addTask(eid, "taskName");
 
@@ -190,7 +190,7 @@ class TaskMetricGroupTest {
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         TaskMetricGroup taskMetricGroup =
                 tm.addJob(new JobID(), "jobname").addTask(createExecutionAttemptId(), "task");

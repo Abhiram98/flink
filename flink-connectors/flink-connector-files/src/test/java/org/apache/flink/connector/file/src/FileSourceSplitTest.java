@@ -32,7 +32,7 @@ class FileSourceSplitTest {
         assertThatThrownBy(
                         () ->
                                 new FileSourceSplit(
-                                        "id",
+                                        "identifier",
                                         new Path("file:/some/random/path"),
                                         0,
                                         10,

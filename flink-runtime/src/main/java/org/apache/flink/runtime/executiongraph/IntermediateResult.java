@@ -47,7 +47,7 @@ public class IntermediateResult {
 
     private final IntermediateDataSet intermediateDataSet;
 
-    private final IntermediateDataSetID id;
+    private final IntermediateDataSetID identifier;
 
     private final ExecutionJobVertex producer;
 
@@ -81,7 +81,7 @@ public class IntermediateResult {
             ResultPartitionType resultType) {
 
         this.intermediateDataSet = checkNotNull(intermediateDataSet);
-        this.id = checkNotNull(intermediateDataSet.getId());
+        this.identifier = checkNotNull(intermediateDataSet.getIdentifier());
 
         this.producer = checkNotNull(producer);
 
@@ -122,8 +122,8 @@ public class IntermediateResult {
         partitionsAssigned++;
     }
 
-    public IntermediateDataSetID getId() {
-        return id;
+    public IntermediateDataSetID getIdentifier() {
+        return identifier;
     }
 
     public ExecutionJobVertex getProducer() {
@@ -305,6 +305,6 @@ public class IntermediateResult {
 
     @Override
     public String toString() {
-        return "IntermediateResult " + id.toString();
+        return "IntermediateResult " + identifier.toString();
     }
 }

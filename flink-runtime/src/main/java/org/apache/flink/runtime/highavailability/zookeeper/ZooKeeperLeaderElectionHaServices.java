@@ -47,13 +47,13 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  *      |            |       /resource_manager/connection_info
  *      |            |       /dispatcher/connection_info
  *      |            |       /rest_server/connection_info
- *      |            |       /job-id-1/connection_info
- *      |            |       /job-id-2/connection_info
+ *      |            |       /job-identifier-1/connection_info
+ *      |            |       /job-identifier-2/connection_info
  *      |            |
  *      |            |
- *      |            +jobgraphs/job-id-1
- *      |            |         /job-id-2
- *      |            +jobs/job-id-1/checkpoints/latest
+ *      |            +jobgraphs/job-identifier-1
+ *      |            |         /job-identifier-2
+ *      |            +jobs/job-identifier-1/checkpoints/latest
  *      |                 |                    /latest-1
  *      |                 |                    /latest-2
  *      |                 |       /checkpoint_id_counter

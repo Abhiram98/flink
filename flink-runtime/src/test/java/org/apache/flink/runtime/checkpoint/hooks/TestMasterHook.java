@@ -34,23 +34,23 @@ public class TestMasterHook implements MasterTriggerRestoreHook<String> {
 
     private static final String DEFAULT_STATE = "default";
 
-    private final String id;
+    private final String identifier;
 
     private int restoreCount = 0;
 
     private boolean failOnRestore = false;
 
-    private TestMasterHook(String id) {
-        this.id = checkNotNull(id);
+    private TestMasterHook(String identifier) {
+        this.identifier = checkNotNull(identifier);
     }
 
-    public static TestMasterHook fromId(String id) {
-        return new TestMasterHook(id);
+    public static TestMasterHook fromId(String identifier) {
+        return new TestMasterHook(identifier);
     }
 
     @Override
     public String getIdentifier() {
-        return id;
+        return identifier;
     }
 
     @Override

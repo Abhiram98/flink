@@ -65,8 +65,8 @@ public class ClusterClientServiceLoaderTest {
                 serviceLoaderUnderTest.getClusterClientFactory(config);
         assertThat(factory).isNotNull();
 
-        final Integer id = factory.getClusterId(config);
-        assertThat(id).isEqualTo(VALID_ID);
+        final Integer identifier = factory.getClusterId(config);
+        assertThat(identifier).isEqualTo(VALID_ID);
     }
 
     @Test

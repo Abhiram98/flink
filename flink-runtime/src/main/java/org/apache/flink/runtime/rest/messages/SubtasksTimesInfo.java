@@ -34,13 +34,13 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /** Response type of the {@link SubtasksTimesHandler}. */
 public class SubtasksTimesInfo implements ResponseBody {
 
-    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ID = "identifier";
     public static final String FIELD_NAME_NAME = "name";
     public static final String FIELD_NAME_NOW = "now";
     public static final String FIELD_NAME_SUBTASKS = "subtasks";
 
     @JsonProperty(FIELD_NAME_ID)
-    private final String id;
+    private final String identifier;
 
     @JsonProperty(FIELD_NAME_NAME)
     private final String name;
@@ -53,19 +53,19 @@ public class SubtasksTimesInfo implements ResponseBody {
 
     @JsonCreator
     public SubtasksTimesInfo(
-            @JsonProperty(FIELD_NAME_ID) String id,
+            @JsonProperty(FIELD_NAME_ID) String identifier,
             @JsonProperty(FIELD_NAME_NAME) String name,
             @JsonProperty(FIELD_NAME_NOW) long now,
             @JsonProperty(FIELD_NAME_SUBTASKS) List<SubtaskTimeInfo> subtasks) {
-        this.id = checkNotNull(id);
+        this.identifier = checkNotNull(identifier);
         this.name = checkNotNull(name);
         this.now = now;
         this.subtasks = checkNotNull(subtasks);
     }
 
     @JsonIgnore
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     @JsonIgnore
@@ -94,7 +94,7 @@ public class SubtasksTimesInfo implements ResponseBody {
         }
 
         SubtasksTimesInfo that = (SubtasksTimesInfo) o;
-        return Objects.equals(id, that.id)
+        return Objects.equals(identifier, that.identifier)
                 && Objects.equals(name, that.name)
                 && now == that.now
                 && Objects.equals(subtasks, that.subtasks);
@@ -102,7 +102,7 @@ public class SubtasksTimesInfo implements ResponseBody {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, now, subtasks);
+        return Objects.hash(identifier, name, now, subtasks);
     }
 
     // ---------------------------------------------------------------------------------

@@ -28,7 +28,7 @@ public interface FileDataIndexSpilledRegionManager<T extends FileDataIndexRegion
     /**
      * Write this region to index file. If target region already spilled, overwrite it.
      *
-     * @param subpartition the subpartition id of this region.
+     * @param subpartition the subpartition identifier of this region.
      * @param region the region to be spilled to index file.
      */
     void appendOrOverwriteRegion(int subpartition, T region) throws IOException;
@@ -36,7 +36,7 @@ public interface FileDataIndexSpilledRegionManager<T extends FileDataIndexRegion
     /**
      * Find the region contains target bufferIndex and belong to target subpartition.
      *
-     * @param subpartition the subpartition id that target region belong to.
+     * @param subpartition the subpartition identifier that target region belong to.
      * @param bufferIndex the buffer index that target region contains.
      * @param loadToCache whether to load the found region into the cache.
      * @return if target region can be founded, return it's offset in index file. Otherwise, return

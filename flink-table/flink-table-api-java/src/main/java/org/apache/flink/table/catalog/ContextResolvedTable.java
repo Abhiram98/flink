@@ -209,12 +209,12 @@ public final class ContextResolvedTable {
             }
         }
 
-        int id = uniqueId.incrementAndGet();
+        int identifier = uniqueId.incrementAndGet();
         if (hint == null) {
-            return "*anonymous$" + id + "*";
+            return "*anonymous$" + identifier + "*";
         }
 
-        return "*anonymous_" + hint + "$" + id + "*";
+        return "*anonymous_" + hint + "$" + identifier + "*";
     }
 
     @Override

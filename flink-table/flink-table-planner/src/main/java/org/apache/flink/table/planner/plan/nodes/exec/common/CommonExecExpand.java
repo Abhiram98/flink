@@ -59,7 +59,7 @@ public abstract class CommonExecExpand extends ExecNodeBase<RowData>
     private final boolean retainHeader;
 
     public CommonExecExpand(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             List<List<RexNode>> projects,
@@ -67,7 +67,7 @@ public abstract class CommonExecExpand extends ExecNodeBase<RowData>
             List<InputProperty> inputProperties,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         checkArgument(inputProperties.size() == 1);
         this.projects = checkNotNull(projects);
         checkArgument(

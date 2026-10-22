@@ -104,7 +104,7 @@ public class JsonRowSerializationSchemaTest {
         String[] jsons =
                 new String[] {
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\"}",
-                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\", \"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\"}, "
+                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\", \"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\"}, "
                             + "\"ids\":[1, 2, 3]}",
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\"}",
                 };
@@ -112,7 +112,7 @@ public class JsonRowSerializationSchemaTest {
         String[] expected =
                 new String[] {
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":null,\"ids\":null}",
-                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\"},"
+                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\"},"
                             + "\"ids\":[1,2,3]}",
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":null,\"ids\":null}",
                 };
@@ -121,7 +121,7 @@ public class JsonRowSerializationSchemaTest {
                 Types.ROW_NAMED(
                         new String[] {"svt", "ops", "ids"},
                         Types.STRING,
-                        Types.ROW_NAMED(new String[] {"id"}, Types.STRING),
+                        Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING),
                         Types.PRIMITIVE_ARRAY(Types.INT));
         JsonRowDeserializationSchema deserializationSchema =
                 new JsonRowDeserializationSchema.Builder(schema).build();
@@ -191,7 +191,7 @@ public class JsonRowSerializationSchemaTest {
                         "{"
                                 + "    type: 'object',"
                                 + "    properties: {"
-                                + "         id: { type: 'integer' },"
+                                + "         identifier: { type: 'integer' },"
                                 + "         idNumber: { type: 'number' },"
                                 + "         idOrNull: { type: ['integer', 'null'] },"
                                 + "         name: { type: 'string' },"

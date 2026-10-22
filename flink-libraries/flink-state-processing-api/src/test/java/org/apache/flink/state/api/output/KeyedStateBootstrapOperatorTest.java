@@ -119,7 +119,7 @@ public class KeyedStateBootstrapOperatorTest {
             throws Exception {
         KeyedOneInputStreamOperatorTestHarness<Long, Long, T> harness =
                 new KeyedOneInputStreamOperatorTestHarness<>(
-                        bootstrapOperator, id -> id, Types.LONG, 128, 1, 0);
+                        bootstrapOperator, identifier -> identifier, Types.LONG, 128, 1, 0);
 
         harness.setStateBackend(new RocksDBStateBackend(folder.newFolder().toURI()));
         if (state != null) {

@@ -149,7 +149,7 @@ public class TypeInfoFactoryTest {
         // field outerEither
         assertThat(pojoTypeWithAnnotation.getTypeAt(1) instanceof EitherTypeInfo).isTrue();
         assertThat(pojoTypeWithoutAnnotation.getTypeAt(1) instanceof GenericTypeInfo).isTrue();
-        // field id: type info from field annotation that overrides the class annotation:
+        // field identifier: type info from field annotation that overrides the class annotation:
         assertThat(pojoTypeWithAnnotation.getTypeAt(0)).isEqualTo(LONG_TYPE_INFO);
         assertThat(pojoTypeWithoutAnnotation.getTypeAt(0)).isEqualTo(INT_TYPE_INFO);
 
@@ -163,7 +163,7 @@ public class TypeInfoFactoryTest {
         EitherTypeInfo eti = (EitherTypeInfo) tiPojo.getTypeAt(1);
         assertThat(eti.getLeftType()).isEqualTo(BOOLEAN_TYPE_INFO);
         assertThat(eti.getRightType()).isEqualTo(STRING_TYPE_INFO);
-        // field id: type info from field annotation that overrides the class annotation:
+        // field identifier: type info from field annotation that overrides the class annotation:
         assertThat(tiPojo.getTypeAt(0)).isEqualTo(LONG_TYPE_INFO);
     }
 
@@ -565,12 +565,12 @@ public class TypeInfoFactoryTest {
         public OuterEither<A, B> outerEither;
 
         @TypeInfo(IntLikeTypeInfoFactory2.class)
-        public IntLike id;
+        public IntLike identifier;
     }
 
     public static class WithoutFieldTypeInfoAnnotation<A, B> {
         public OuterEither<A, B> outerEither;
-        public IntLike id;
+        public IntLike identifier;
     }
 
     public static class WithFieldTypeInfoAnnotationMapper<T>

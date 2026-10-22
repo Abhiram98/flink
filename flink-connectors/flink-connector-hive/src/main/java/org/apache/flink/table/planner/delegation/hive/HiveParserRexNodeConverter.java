@@ -281,8 +281,8 @@ public class HiveParserRexNodeConverter {
     }
 
     private RexNode convertColumn(ExprNodeColumnDesc col) throws SemanticException {
-        // if this is co-rrelated we need to make RexCorrelVariable(with id and type)
-        // id and type should be retrieved from outerRR
+        // if this is co-rrelated we need to make RexCorrelVariable(with identifier and type)
+        // identifier and type should be retrieved from outerRR
         InputCtx ic = getInputCtx(col);
         if (ic == null) {
             // we have correlated column, build data type from outer rr

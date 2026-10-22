@@ -63,7 +63,7 @@ class InternalOperatorGroupTest {
     void testGenerateScopeDefault() throws Exception {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
@@ -73,10 +73,10 @@ class InternalOperatorGroupTest {
 
         assertThat(opGroup.getScopeComponents())
                 .containsExactly(
-                        "theHostName", "taskmanager", "test-tm-id", "myJobName", "myOpName", "11");
+                        "theHostName", "taskmanager", "test-tm-identifier", "myJobName", "myOpName", "11");
 
         assertThat(opGroup.getMetricIdentifier("name"))
-                .isEqualTo("theHostName.taskmanager.test-tm-id.myJobName.myOpName.11.name");
+                .isEqualTo("theHostName.taskmanager.test-tm-identifier.myJobName.myOpName.11.name");
     }
 
     @Test
@@ -88,7 +88,7 @@ class InternalOperatorGroupTest {
         MetricRegistryImpl registry =
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
         try {
-            String tmID = "test-tm-id";
+            String tmID = "test-tm-identifier";
             JobID jid = new JobID();
             JobVertexID vertexId = new JobVertexID();
             OperatorID operatorID = new OperatorID();
@@ -121,7 +121,7 @@ class InternalOperatorGroupTest {
     void testIOMetricGroupInstantiation() throws Exception {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup =
                 tmGroup.addJob(new JobID(), "myJobName")
@@ -143,7 +143,7 @@ class InternalOperatorGroupTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
 
         TaskMetricGroup taskGroup = tmGroup.addJob(jid, "myJobName").addTask(eid, "aTaskName");
         InternalOperatorMetricGroup opGroup = taskGroup.getOrAddOperator(oid, "myOpName");
@@ -151,7 +151,7 @@ class InternalOperatorGroupTest {
         Map<String, String> variables = opGroup.getAllVariables();
 
         testVariable(variables, ScopeFormat.SCOPE_HOST, "theHostName");
-        testVariable(variables, ScopeFormat.SCOPE_TASKMANAGER_ID, "test-tm-id");
+        testVariable(variables, ScopeFormat.SCOPE_TASKMANAGER_ID, "test-tm-identifier");
         testVariable(variables, ScopeFormat.SCOPE_JOB_ID, jid.toString());
         testVariable(variables, ScopeFormat.SCOPE_JOB_NAME, "myJobName");
         testVariable(variables, ScopeFormat.SCOPE_TASK_VERTEX_ID, tid.toString());
@@ -177,7 +177,7 @@ class InternalOperatorGroupTest {
         OperatorID oid = new OperatorID();
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         TaskMetricGroup task = tm.addJob(jid, "jobname").addTask(eid, "taskName");
         InternalOperatorMetricGroup operator = task.getOrAddOperator(oid, "operator");

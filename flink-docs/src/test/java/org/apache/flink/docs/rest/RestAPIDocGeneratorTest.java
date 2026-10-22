@@ -76,7 +76,7 @@ class RestAPIDocGeneratorTest {
                 .isEqualTo(
                         "{\n"
                                 + "  \"type\" : \"object\",\n"
-                                + "  \"id\" : \"urn:jsonschema:org:apache:flink:docs:rest:RestAPIDocGeneratorTest:TestAdditionalFields\",\n"
+                                + "  \"identifier\" : \"urn:jsonschema:org:apache:flink:docs:rest:RestAPIDocGeneratorTest:TestAdditionalFields\",\n"
                                 + "  \"additionalProperties\" : {\n"
                                 + "    \"type\" : \"string\"\n"
                                 + "  }\n"

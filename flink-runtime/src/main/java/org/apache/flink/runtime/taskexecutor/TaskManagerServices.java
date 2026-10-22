@@ -557,7 +557,7 @@ public class TaskManagerServices {
                                     path, totalSpaceGb, usableSpaceGb, usablePercentage));
                 }
             } else {
-                throw new IllegalArgumentException("Temporary file directory #$id is null.");
+                throw new IllegalArgumentException("Temporary file directory #$identifier is null.");
             }
         }
     }

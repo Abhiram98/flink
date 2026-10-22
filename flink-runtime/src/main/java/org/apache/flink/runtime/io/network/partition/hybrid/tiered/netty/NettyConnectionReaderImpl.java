@@ -35,7 +35,7 @@ public class NettyConnectionReaderImpl implements NettyConnectionReader {
     /** The provider to provide the input channel. */
     private final Supplier<InputChannel> inputChannelProvider;
 
-    /** The last required segment id. */
+    /** The last required segment identifier. */
     private final Map<Integer, Integer> lastRequiredSegmentIds = new HashMap<>();
 
     public NettyConnectionReaderImpl(Supplier<InputChannel> inputChannelProvider) {
@@ -58,7 +58,7 @@ public class NettyConnectionReaderImpl implements NettyConnectionReader {
             try {
                 inputChannelProvider.get().notifyRequiredSegmentId(subpartitionId, segmentId);
             } catch (IOException e) {
-                ExceptionUtils.rethrow(e, "Failed to notify required segment id");
+                ExceptionUtils.rethrow(e, "Failed to notify required segment identifier");
             }
         }
         Optional<InputChannel.BufferAndAvailability> bufferAndAvailability = Optional.empty();

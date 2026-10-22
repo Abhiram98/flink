@@ -31,16 +31,16 @@ import java.util.Objects;
 
 /** Composite key for events in {@link SharedBuffer}. */
 public class EventId implements Comparable<EventId> {
-    private final int id;
+    private final int identifier;
     private final long timestamp;
 
-    public EventId(int id, long timestamp) {
-        this.id = id;
+    public EventId(int identifier, long timestamp) {
+        this.identifier = identifier;
         this.timestamp = timestamp;
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     public long getTimestamp() {
@@ -48,7 +48,7 @@ public class EventId implements Comparable<EventId> {
     }
 
     public static final Comparator<EventId> COMPARATOR =
-            Comparator.comparingLong(EventId::getTimestamp).thenComparingInt(EventId::getId);
+            Comparator.comparingLong(EventId::getTimestamp).thenComparingInt(EventId::getIdentifier);
 
     @Override
     public boolean equals(Object o) {
@@ -59,17 +59,17 @@ public class EventId implements Comparable<EventId> {
             return false;
         }
         EventId eventId = (EventId) o;
-        return id == eventId.id && timestamp == eventId.timestamp;
+        return identifier == eventId.identifier && timestamp == eventId.timestamp;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timestamp);
+        return Objects.hash(identifier, timestamp);
     }
 
     @Override
     public String toString() {
-        return "EventId{" + "id=" + id + ", timestamp=" + timestamp + '}';
+        return "EventId{" + "identifier=" + identifier + ", timestamp=" + timestamp + '}';
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EventId implements Comparable<EventId> {
 
         @Override
         public EventId copy(EventId from) {
-            return new EventId(from.id, from.timestamp);
+            return new EventId(from.identifier, from.timestamp);
         }
 
         @Override
@@ -113,16 +113,16 @@ public class EventId implements Comparable<EventId> {
 
         @Override
         public void serialize(EventId record, DataOutputView target) throws IOException {
-            target.writeInt(record.id);
+            target.writeInt(record.identifier);
             target.writeLong(record.timestamp);
         }
 
         @Override
         public EventId deserialize(DataInputView source) throws IOException {
-            int id = source.readInt();
+            int identifier = source.readInt();
             long timestamp = source.readLong();
 
-            return new EventId(id, timestamp);
+            return new EventId(identifier, timestamp);
         }
 
         @Override

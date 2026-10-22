@@ -439,7 +439,7 @@ public class StickyAllocationAndLocalRecoveryTestJob {
         /** Name and subtask index of the task. */
         final String taskNameWithSubtask;
 
-        /** The current allocation id of this task. */
+        /** The current allocation identifier of this task. */
         final String allocationId;
 
         MapperSchedulingAndFailureInfo(

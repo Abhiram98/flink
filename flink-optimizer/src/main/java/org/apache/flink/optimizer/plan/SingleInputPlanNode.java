@@ -138,10 +138,10 @@ public class SingleInputPlanNode extends PlanNode {
      * Sets the key field indexes for the specified driver comparator.
      *
      * @param keys The key field indexes for the specified driver comparator.
-     * @param id The ID of the driver comparator.
+     * @param identifier The ID of the driver comparator.
      */
-    public void setDriverKeyInfo(FieldList keys, int id) {
-        this.setDriverKeyInfo(keys, getTrueArray(keys.size()), id);
+    public void setDriverKeyInfo(FieldList keys, int identifier) {
+        this.setDriverKeyInfo(keys, getTrueArray(keys.size()), identifier);
     }
 
     /**
@@ -149,57 +149,57 @@ public class SingleInputPlanNode extends PlanNode {
      *
      * @param keys The key field indexes for the specified driver comparator.
      * @param sortOrder The key sort order for the specified driver comparator.
-     * @param id The ID of the driver comparator.
+     * @param identifier The ID of the driver comparator.
      */
-    public void setDriverKeyInfo(FieldList keys, boolean[] sortOrder, int id) {
-        if (id < 0 || id >= driverKeys.length) {
+    public void setDriverKeyInfo(FieldList keys, boolean[] sortOrder, int identifier) {
+        if (identifier < 0 || identifier >= driverKeys.length) {
             throw new CompilerException(
-                    "Invalid id for driver key information. DriverStrategy requires only "
+                    "Invalid identifier for driver key information. DriverStrategy requires only "
                             + super.getDriverStrategy().getNumRequiredComparators()
                             + " comparators.");
         }
-        this.driverKeys[id] = keys;
-        this.driverSortOrders[id] = sortOrder;
+        this.driverKeys[identifier] = keys;
+        this.driverSortOrders[identifier] = sortOrder;
     }
 
     /**
      * Gets the key field indexes for the specified driver comparator.
      *
-     * @param id The id of the driver comparator for which the key field indexes are requested.
+     * @param identifier The identifier of the driver comparator for which the key field indexes are requested.
      * @return The key field indexes of the specified driver comparator.
      */
-    public FieldList getKeys(int id) {
-        return this.driverKeys[id];
+    public FieldList getKeys(int identifier) {
+        return this.driverKeys[identifier];
     }
 
     /**
      * Gets the sort order for the specified driver comparator.
      *
-     * @param id The id of the driver comparator for which the sort order is requested.
+     * @param identifier The identifier of the driver comparator for which the sort order is requested.
      * @return The sort order of the specified driver comparator.
      */
-    public boolean[] getSortOrders(int id) {
-        return driverSortOrders[id];
+    public boolean[] getSortOrders(int identifier) {
+        return driverSortOrders[identifier];
     }
 
     /**
      * Gets the specified comparator from this PlanNode.
      *
-     * @param id The ID of the requested comparator.
+     * @param identifier The ID of the requested comparator.
      * @return The specified comparator.
      */
-    public TypeComparatorFactory<?> getComparator(int id) {
-        return comparators[id];
+    public TypeComparatorFactory<?> getComparator(int identifier) {
+        return comparators[identifier];
     }
 
     /**
      * Sets the specified comparator for this PlanNode.
      *
      * @param comparator The comparator to set.
-     * @param id The ID of the comparator to set.
+     * @param identifier The ID of the comparator to set.
      */
-    public void setComparator(TypeComparatorFactory<?> comparator, int id) {
-        this.comparators[id] = comparator;
+    public void setComparator(TypeComparatorFactory<?> comparator, int identifier) {
+        this.comparators[identifier] = comparator;
     }
 
     // --------------------------------------------------------------------------------------------

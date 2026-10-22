@@ -66,7 +66,7 @@ public class HeapDoubleVector extends AbstractHeapVector implements WritableDoub
         if (rowId + count > vector.length || srcIndex + count * 8L > src.length) {
             throw new IndexOutOfBoundsException(
                     String.format(
-                            "Index out of bounds, row id is %s, count is %s, binary src index is %s, binary"
+                            "Index out of bounds, row identifier is %s, count is %s, binary src index is %s, binary"
                                     + " length is %s, double array src index is %s, double array length is %s.",
                             rowId, count, srcIndex, src.length, rowId, vector.length));
         }

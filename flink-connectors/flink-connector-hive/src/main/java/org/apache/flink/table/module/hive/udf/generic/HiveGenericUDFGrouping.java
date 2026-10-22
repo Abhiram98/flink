@@ -45,7 +45,7 @@ import org.apache.hadoop.io.LongWritable;
         value =
                 "_FUNC_(a, b) - Indicates whether a specified column expression in "
                         + "is aggregated or not. Returns 1 for aggregated or 0 for not aggregated. ",
-        extended = "a is the grouping id, b is the index we want to extract")
+        extended = "a is the grouping identifier, b is the index we want to extract")
 @UDFType(deterministic = true)
 public class HiveGenericUDFGrouping extends GenericUDF {
 

@@ -299,7 +299,7 @@ class SharedSlot implements SlotOwner, PhysicalSlot.Payload {
     private String getLogicalSlotString(
             SlotRequestId logicalSlotRequestId, ExecutionVertexID executionVertexId) {
         return String.format(
-                "logical slot (%s) for execution vertex (id %s) from the physical slot (%s)",
+                "logical slot (%s) for execution vertex (identifier %s) from the physical slot (%s)",
                 logicalSlotRequestId, executionVertexId, physicalSlotRequestId);
     }
 

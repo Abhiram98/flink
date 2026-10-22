@@ -161,7 +161,7 @@ class CatalogStatisticsTest {
                         .optimize(
                                 TableTestUtil.toRelNode(
                                         tEnv.sqlQuery(
-                                                "select id, name from PartT where part1 = 'A'")));
+                                                "select identifier, name from PartT where part1 = 'A'")));
         FlinkRelMetadataQuery mq =
                 FlinkRelMetadataQuery.reuseOrCreate(t1.getCluster().getMetadataQuery());
         assertThat(mq.getRowCount(t1)).isEqualTo(200.0);
@@ -197,7 +197,7 @@ class CatalogStatisticsTest {
                         .optimize(
                                 TableTestUtil.toRelNode(
                                         tEnv.sqlQuery(
-                                                "select id, name from PartT where part1 = 'A'")));
+                                                "select identifier, name from PartT where part1 = 'A'")));
         FlinkRelMetadataQuery mq =
                 FlinkRelMetadataQuery.reuseOrCreate(t1.getCluster().getMetadataQuery());
         assertThat(mq.getRowCount(t1)).isEqualTo(100_000_000);
@@ -226,7 +226,7 @@ class CatalogStatisticsTest {
                         .optimize(
                                 TableTestUtil.toRelNode(
                                         tEnv.sqlQuery(
-                                                "select id, name from PartT where part1 = 'A'")));
+                                                "select identifier, name from PartT where part1 = 'A'")));
         FlinkRelMetadataQuery mq =
                 FlinkRelMetadataQuery.reuseOrCreate(t1.getCluster().getMetadataQuery());
         assertThat(mq.getRowCount(t1)).isEqualTo(200.0);
@@ -254,7 +254,7 @@ class CatalogStatisticsTest {
                         .optimize(
                                 TableTestUtil.toRelNode(
                                         tEnv.sqlQuery(
-                                                "select id, name from PartT where part1 = 'A'")));
+                                                "select identifier, name from PartT where part1 = 'A'")));
         FlinkRelMetadataQuery mq =
                 FlinkRelMetadataQuery.reuseOrCreate(t1.getCluster().getMetadataQuery());
         assertThat(mq.getRowCount(t1)).isEqualTo(200.0);
@@ -304,7 +304,7 @@ class CatalogStatisticsTest {
                 new CatalogColumnStatisticsDataString(152L, 43.5D, 20L, 0L);
         Map<String, CatalogColumnStatisticsDataBase> colStatsMap = new HashMap<>();
         colStatsMap.put(
-                "id",
+                "identifier",
                 unknown
                         ? new CatalogColumnStatisticsDataLong(null, null, null, null)
                         : longColStats);

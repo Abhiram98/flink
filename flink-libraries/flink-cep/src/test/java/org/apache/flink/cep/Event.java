@@ -29,10 +29,10 @@ import java.util.Objects;
 public class Event {
     private String name;
     private double price;
-    private int id;
+    private int identifier;
 
-    public Event(int id, String name, double price) {
-        this.id = id;
+    public Event(int identifier, String name, double price) {
+        this.identifier = identifier;
         this.name = name;
         this.price = price;
     }
@@ -41,8 +41,8 @@ public class Event {
         return price;
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     public String getName() {
@@ -51,7 +51,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event(" + id + ", " + name + ", " + price + ")";
+        return "Event(" + identifier + ", " + name + ", " + price + ")";
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Event {
         if (obj instanceof Event) {
             Event other = (Event) obj;
 
-            return name.equals(other.name) && price == other.price && id == other.id;
+            return name.equals(other.name) && price == other.price && identifier == other.identifier;
         } else {
             return false;
         }
@@ -67,7 +67,7 @@ public class Event {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, id);
+        return Objects.hash(name, price, identifier);
     }
 
     public static TypeSerializer<Event> createTypeSerializer() {

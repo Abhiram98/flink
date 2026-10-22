@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** Information about leader including the confirmed leader session id and leader address. */
+/** Information about leader including the confirmed leader session identifier and leader address. */
 public class LeaderInformation implements Serializable {
 
     private static final long serialVersionUID = 1L;

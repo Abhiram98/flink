@@ -34,7 +34,7 @@ import java.util.List;
  *
  * <pre>{@code
  * CREATE TABLE inventory (
- *   id INT,
+ *   identifier INT,
  *   name STRING,
  *   amount INT,
  *   price DOUBLE,

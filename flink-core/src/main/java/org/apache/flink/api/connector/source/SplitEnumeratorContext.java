@@ -44,15 +44,15 @@ public interface SplitEnumeratorContext<SplitT extends SourceSplit> {
     SplitEnumeratorMetricGroup metricGroup();
 
     /**
-     * Send a source event to a source reader. The source reader is identified by its subtask id.
+     * Send a source event to a source reader. The source reader is identified by its subtask identifier.
      *
-     * @param subtaskId the subtask id of the source reader to send this event to.
+     * @param subtaskId the subtask identifier of the source reader to send this event to.
      * @param event the source event to send.
      */
     void sendEventToSourceReader(int subtaskId, SourceEvent event);
 
     /**
-     * Send a source event to a source reader. The source reader is identified by its subtask id and
+     * Send a source event to a source reader. The source reader is identified by its subtask identifier and
      * attempt number. It is similar to {@link #sendEventToSourceReader(int, SourceEvent)} but it is
      * aware of the subtask execution attempt to send this event to.
      *
@@ -61,7 +61,7 @@ public interface SplitEnumeratorContext<SplitT extends SourceSplit> {
      * multiple concurrent execution attempts, e.g. if speculative execution is enabled. Otherwise
      * an error will be thrown when the split enumerator tries to send a custom source event.
      *
-     * @param subtaskId the subtask id of the source reader to send this event to.
+     * @param subtaskId the subtask identifier of the source reader to send this event to.
      * @param attemptNumber the attempt number of the source reader to send this event to.
      * @param event the source event to send.
      */
@@ -79,7 +79,7 @@ public interface SplitEnumeratorContext<SplitT extends SourceSplit> {
     int currentParallelism();
 
     /**
-     * Get the currently registered readers. The mapping is from subtask id to the reader info.
+     * Get the currently registered readers. The mapping is from subtask identifier to the reader info.
      *
      * <p>Note that if a subtask has multiple concurrent attempts, the map will contain the earliest
      * attempt of that subtask. This is for compatibility purpose. It's recommended to use {@link
@@ -91,7 +91,7 @@ public interface SplitEnumeratorContext<SplitT extends SourceSplit> {
 
     /**
      * Get the currently registered readers of all the subtask attempts. The mapping is from subtask
-     * id to a map which maps an attempt to its reader info.
+     * identifier to a map which maps an attempt to its reader info.
      *
      * @return the currently registered readers.
      */

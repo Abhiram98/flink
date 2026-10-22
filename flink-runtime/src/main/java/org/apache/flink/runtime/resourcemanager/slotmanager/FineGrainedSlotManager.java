@@ -105,7 +105,7 @@ public class FineGrainedSlotManager implements SlotManager {
 
     private final Set<JobID> unfulfillableJobs = new HashSet<>();
 
-    /** ResourceManager's id. */
+    /** ResourceManager's identifier. */
     @Nullable private ResourceManagerId resourceManagerId;
 
     /** Executor for future callbacks which have to be "synchronized". */
@@ -195,7 +195,7 @@ public class FineGrainedSlotManager implements SlotManager {
     // ---------------------------------------------------------------------------------------------
 
     /**
-     * Starts the slot manager with the given leader id and resource manager actions.
+     * Starts the slot manager with the given leader identifier and resource manager actions.
      *
      * @param newResourceManagerId to use for communication with the task managers
      * @param newMainThreadExecutor to use to run code in the ResourceManager's main thread
@@ -346,7 +346,7 @@ public class FineGrainedSlotManager implements SlotManager {
                 taskExecutorConnection.getResourceID(),
                 taskExecutorConnection.getInstanceID());
 
-        // we identify task managers by their instance id
+        // we identify task managers by their instance identifier
         if (taskManagerTracker
                 .getRegisteredTaskManager(taskExecutorConnection.getInstanceID())
                 .isPresent()) {
@@ -532,7 +532,7 @@ public class FineGrainedSlotManager implements SlotManager {
     }
 
     /**
-     * Reports the current slot allocations for a task manager identified by the given instance id.
+     * Reports the current slot allocations for a task manager identified by the given instance identifier.
      *
      * @param instanceId identifying the task manager for which to report the slot status
      * @param slotReport containing the status for all of its slots
@@ -551,7 +551,7 @@ public class FineGrainedSlotManager implements SlotManager {
             return true;
         } else {
             LOG.debug(
-                    "Received slot report for unknown task manager with instance id {}. Ignoring this report.",
+                    "Received slot report for unknown task manager with instance identifier {}. Ignoring this report.",
                     instanceId);
 
             return false;
@@ -560,7 +560,7 @@ public class FineGrainedSlotManager implements SlotManager {
 
     /**
      * Free the given slot from the given allocation. If the slot is still allocated by the given
-     * allocation id, then the slot will be freed.
+     * allocation identifier, then the slot will be freed.
      *
      * @param slotId identifying the slot to free, will be ignored
      * @param allocationId with which the slot is presumably allocated

@@ -105,13 +105,13 @@ public class MemberFieldRewriter implements CodeRewriter {
     private static class MemberField {
         String oldName;
         String type;
-        int id;
+        int identifier;
         String init;
 
-        MemberField(String oldName, String type, int id, String init) {
+        MemberField(String oldName, String type, int identifier, String init) {
             this.oldName = oldName;
             this.type = type;
-            this.id = id;
+            this.identifier = identifier;
             this.init = init;
         }
     }
@@ -185,9 +185,9 @@ public class MemberFieldRewriter implements CodeRewriter {
 
             StackElement classInfo = classStack.peek();
             Integer typeCount = classInfo.typeCounts.get(type);
-            int id = typeCount == null ? 0 : typeCount;
-            classInfo.typeCounts.put(type, id + 1);
-            classInfo.fields.add(new MemberField(fieldName, type, id, init));
+            int identifier = typeCount == null ? 0 : typeCount;
+            classInfo.typeCounts.put(type, identifier + 1);
+            classInfo.fields.add(new MemberField(fieldName, type, identifier, init));
 
             rewriter.delete(ctx.getParent().start, ctx.getParent().stop);
             fieldCount++;
@@ -228,7 +228,7 @@ public class MemberFieldRewriter implements CodeRewriter {
 
             boolean hasInit = false;
             for (MemberField field : classStack.peek().fields) {
-                String newName = typeFieldNames.get(field.type) + "[" + field.id + "]";
+                String newName = typeFieldNames.get(field.type) + "[" + field.identifier + "]";
                 replaceMap.put(field.oldName, newName);
                 if (field.init.length() == 0) {
                     continue;

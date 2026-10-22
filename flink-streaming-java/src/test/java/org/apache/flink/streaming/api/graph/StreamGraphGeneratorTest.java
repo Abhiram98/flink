@@ -202,35 +202,35 @@ class StreamGraphGeneratorTest {
         StreamGraph graph = env.getStreamGraph();
 
         // rebalanceMap
-        assertThat(graph.getStreamNode(rebalanceMap.getId()).getInEdges().get(0).getPartitioner())
+        assertThat(graph.getStreamNode(rebalanceMap.getIdentifier()).getInEdges().get(0).getPartitioner())
                 .isInstanceOf(RebalancePartitioner.class);
 
         // verify that only last partitioning takes precedence
-        assertThat(graph.getStreamNode(broadcastMap.getId()).getInEdges().get(0).getPartitioner())
+        assertThat(graph.getStreamNode(broadcastMap.getIdentifier()).getInEdges().get(0).getPartitioner())
                 .isInstanceOf(BroadcastPartitioner.class);
         assertThat(
                         graph.getSourceVertex(
-                                        graph.getStreamNode(broadcastMap.getId())
+                                        graph.getStreamNode(broadcastMap.getIdentifier())
                                                 .getInEdges()
                                                 .get(0))
-                                .getId())
-                .isEqualTo(rebalanceMap.getId());
+                                .getIdentifier())
+                .isEqualTo(rebalanceMap.getIdentifier());
 
         // verify that partitioning in unions is preserved
         assertThat(
-                        graph.getStreamNode(broadcastOperator.getId())
+                        graph.getStreamNode(broadcastOperator.getIdentifier())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
                 .isInstanceOf(BroadcastPartitioner.class);
         assertThat(
-                        graph.getStreamNode(globalOperator.getId())
+                        graph.getStreamNode(globalOperator.getIdentifier())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
                 .isInstanceOf(GlobalPartitioner.class);
         assertThat(
-                        graph.getStreamNode(shuffleOperator.getId())
+                        graph.getStreamNode(shuffleOperator.getIdentifier())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
@@ -333,13 +333,13 @@ class StreamGraphGeneratorTest {
         StreamGraph streamGraph = env.getStreamGraph();
         assertThat(streamGraph.getStreamNodes().size()).isEqualTo(4);
 
-        assertThat(streamGraph.getStreamEdges(source1.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source2.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source3.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source1.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source2.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source3.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(transform.getId())).hasSize(0);
+        assertThat(streamGraph.getStreamEdges(source1.getIdentifier(), transform.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source2.getIdentifier(), transform.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source3.getIdentifier(), transform.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source1.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source2.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source3.getIdentifier())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(transform.getIdentifier())).hasSize(0);
     }
 
     @Test
@@ -437,7 +437,7 @@ class StreamGraphGeneratorTest {
 
     private static StreamEdge edge(
             StreamGraph streamGraph, DataStream<Long> op1, DataStream<Long> op2) {
-        List<StreamEdge> streamEdges = streamGraph.getStreamEdges(op1.getId(), op2.getId());
+        List<StreamEdge> streamEdges = streamGraph.getStreamEdges(op1.getIdentifier(), op2.getIdentifier());
         assertThat(streamEdges).hasSize(1);
         return streamEdges.get(0);
     }
@@ -472,7 +472,7 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getId());
+        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getIdentifier());
 
         StreamPartitioner<?> streamPartitioner =
                 keyedResultNode.getInEdges().get(0).getPartitioner();
@@ -501,8 +501,8 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResult1Node = graph.getStreamNode(keyedResult1.getId());
-        StreamNode keyedResult2Node = graph.getStreamNode(keyedResult2.getId());
+        StreamNode keyedResult1Node = graph.getStreamNode(keyedResult1.getIdentifier());
+        StreamNode keyedResult2Node = graph.getStreamNode(keyedResult2.getIdentifier());
 
         assertThat(keyedResult1Node.getMaxParallelism()).isEqualTo(globalMaxParallelism);
         assertThat(keyedResult2Node.getMaxParallelism()).isEqualTo(keyedResult2MaxParallelism);
@@ -547,8 +547,8 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResult3Node = graph.getStreamNode(keyedResult3.getId());
-        StreamNode keyedResult4Node = graph.getStreamNode(keyedResult4.getId());
+        StreamNode keyedResult3Node = graph.getStreamNode(keyedResult3.getIdentifier());
+        StreamNode keyedResult4Node = graph.getStreamNode(keyedResult4.getIdentifier());
 
         assertThat(keyedResult3Node.getMaxParallelism()).isEqualTo(maxParallelism);
         assertThat(keyedResult4Node.getMaxParallelism()).isEqualTo(maxParallelism);
@@ -574,7 +574,7 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getId());
+        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getIdentifier());
 
         StreamPartitioner<?> streamPartitioner1 =
                 keyedResultNode.getInEdges().get(0).getPartitioner();
@@ -585,7 +585,7 @@ class StreamGraphGeneratorTest {
     /**
      * Tests that the json generated by JSONGenerator shall meet with 2 requirements: 1. sink nodes
      * are at the back 2. if both two nodes are sink nodes or neither of them is sink node, then
-     * sort by its id.
+     * sort by its identifier.
      */
     @Test
     void testSinkIdComparison() {
@@ -857,7 +857,7 @@ class StreamGraphGeneratorTest {
 
         final List<Integer> nodeIds =
                 streamGraph.getStreamNodes().stream()
-                        .map(StreamNode::getId)
+                        .map(StreamNode::getIdentifier)
                         .sorted(Integer::compare)
                         .collect(Collectors.toList());
         assertThat(streamGraph.getStreamEdges(nodeIds.get(0), nodeIds.get(1)))
@@ -986,7 +986,7 @@ class StreamGraphGeneratorTest {
                             assertThat(inEdge.getPartitioner())
                                     .isInstanceOf(ForwardPartitioner.class);
                             if (expectedTagId != null) {
-                                assertThat(inEdge.getOutputTag().getId()).isEqualTo(expectedTagId);
+                                assertThat(inEdge.getOutputTag().getIdentifier()).isEqualTo(expectedTagId);
                             }
 
                             assertThat(inEdge.getIntermediateDatasetIdToProduce()).isNotNull();
@@ -1208,8 +1208,8 @@ class StreamGraphGeneratorTest {
     private static class TestingStreamExecutionEnvironment extends StreamExecutionEnvironment {
         Set<AbstractID> completedClusterDatasetIds = new HashSet<>();
 
-        public void addCompletedClusterDatasetIds(AbstractID id) {
-            completedClusterDatasetIds.add(id);
+        public void addCompletedClusterDatasetIds(AbstractID identifier) {
+            completedClusterDatasetIds.add(identifier);
         }
 
         @Override

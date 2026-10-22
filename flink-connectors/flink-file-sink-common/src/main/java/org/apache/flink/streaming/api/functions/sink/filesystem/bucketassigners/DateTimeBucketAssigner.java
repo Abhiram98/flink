@@ -69,7 +69,7 @@ public class DateTimeBucketAssigner<IN> implements BucketAssigner<IN, String> {
      * Creates a new {@code DateTimeBucketAssigner} with the given date/time format string.
      *
      * @param formatString The format string that will be given to {@code SimpleDateFormat} to
-     *     determine the bucket id.
+     *     determine the bucket identifier.
      */
     public DateTimeBucketAssigner(String formatString) {
         this(formatString, ZoneId.systemDefault());
@@ -79,7 +79,7 @@ public class DateTimeBucketAssigner<IN> implements BucketAssigner<IN, String> {
      * Creates a new {@code DateTimeBucketAssigner} with format string {@code "yyyy-MM-dd--HH"}
      * using the given timezone.
      *
-     * @param zoneId The timezone used to format {@code DateTimeFormatter} for bucket id.
+     * @param zoneId The timezone used to format {@code DateTimeFormatter} for bucket identifier.
      */
     public DateTimeBucketAssigner(ZoneId zoneId) {
         this(DEFAULT_FORMAT_STRING, zoneId);
@@ -91,7 +91,7 @@ public class DateTimeBucketAssigner<IN> implements BucketAssigner<IN, String> {
      *
      * @param formatString The format string that will be given to {@code DateTimeFormatter} to
      *     determine the bucket path.
-     * @param zoneId The timezone used to format {@code DateTimeFormatter} for bucket id.
+     * @param zoneId The timezone used to format {@code DateTimeFormatter} for bucket identifier.
      */
     public DateTimeBucketAssigner(String formatString, ZoneId zoneId) {
         this.formatString = Preconditions.checkNotNull(formatString);

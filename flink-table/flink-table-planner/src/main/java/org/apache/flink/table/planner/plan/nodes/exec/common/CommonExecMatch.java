@@ -89,14 +89,14 @@ public abstract class CommonExecMatch extends ExecNodeBase<RowData>
     private final MatchSpec matchSpec;
 
     public CommonExecMatch(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             MatchSpec matchSpec,
             List<InputProperty> inputProperties,
             LogicalType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         checkArgument(inputProperties.size() == 1);
         this.matchSpec = checkNotNull(matchSpec);
     }

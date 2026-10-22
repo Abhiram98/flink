@@ -402,7 +402,7 @@ public class MetricGroupTest {
         MetricRegistryImpl registry = new MetricRegistryImpl(defaultMetricRegistryConfiguration);
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         TaskMetricGroup task = tm.addJob(jid, "jobname").addTask(eid, "taskName");
         GenericMetricGroup userGroup1 = new GenericMetricGroup(registry, task, "hello");

@@ -50,7 +50,7 @@ public class TieredStorageConsumerClient {
     private final List<TierConsumerAgent> tierConsumerAgents;
 
     /**
-     * This map is used to record the consumer agent being used and the id of segment being read for
+     * This map is used to record the consumer agent being used and the identifier of segment being read for
      * each data source, which is represented by {@link TieredStoragePartitionId} and {@link
      * TieredStorageSubpartitionId}.
      */

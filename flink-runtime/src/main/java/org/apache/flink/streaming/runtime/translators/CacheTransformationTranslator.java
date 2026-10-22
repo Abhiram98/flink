@@ -98,7 +98,7 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
         streamGraph.addVirtualSideOutputNode(cacheNodeId, virtualId, input.getOutputTag());
         streamGraph.addEdge(
                 virtualId,
-                transformation.getId(),
+                transformation.getIdentifier(),
                 0,
                 new IntermediateDataSetID(transformation.getDatasetId()));
         return Collections.singletonList(virtualId);
@@ -119,7 +119,7 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
 
         streamGraph.addEdge(
                 cacheNodeId,
-                transformation.getId(),
+                transformation.getIdentifier(),
                 0,
                 new IntermediateDataSetID(transformation.getDatasetId()));
         return Collections.singletonList(cacheNodeId);
@@ -134,7 +134,7 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
                 SimpleOperatorFactory.of(new NoOpStreamOperator<>());
         operatorFactory.setChainingStrategy(ChainingStrategy.HEAD);
         streamGraph.addOperator(
-                cacheTransformation.getId(),
+                cacheTransformation.getIdentifier(),
                 context.getSlotSharingGroup(),
                 cacheTransformation.getCoLocationGroupKey(),
                 operatorFactory,
@@ -143,10 +143,10 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
                 CACHE_PRODUCER_OPERATOR_NAME);
 
         streamGraph.setParallelism(
-                cacheTransformation.getId(),
+                cacheTransformation.getIdentifier(),
                 input.getParallelism(),
                 input.isParallelismConfigured());
-        streamGraph.setMaxParallelism(cacheTransformation.getId(), input.getMaxParallelism());
+        streamGraph.setMaxParallelism(cacheTransformation.getIdentifier(), input.getMaxParallelism());
     }
 
     private List<Integer> consumeCache(T transformation, Context context) {
@@ -156,7 +156,7 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
         final TypeInformation<OUT> outputType =
                 transformation.getTransformationToCache().getOutputType();
         streamGraph.addLegacySource(
-                transformation.getId(),
+                transformation.getIdentifier(),
                 context.getSlotSharingGroup(),
                 transformation.getCoLocationGroupKey(),
                 operatorFactory,
@@ -164,16 +164,16 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
                 outputType,
                 CACHE_CONSUMER_OPERATOR_NAME);
         streamGraph.setParallelism(
-                transformation.getId(),
+                transformation.getIdentifier(),
                 transformation.getTransformationToCache().getParallelism(),
                 transformation.isParallelismConfigured());
         streamGraph.setMaxParallelism(
-                transformation.getId(),
+                transformation.getIdentifier(),
                 transformation.getTransformationToCache().getMaxParallelism());
-        final StreamNode streamNode = streamGraph.getStreamNode(transformation.getId());
+        final StreamNode streamNode = streamGraph.getStreamNode(transformation.getIdentifier());
         streamNode.setConsumeClusterDatasetId(
                 new IntermediateDataSetID(transformation.getDatasetId()));
-        return Collections.singletonList(transformation.getId());
+        return Collections.singletonList(transformation.getIdentifier());
     }
 
     /**

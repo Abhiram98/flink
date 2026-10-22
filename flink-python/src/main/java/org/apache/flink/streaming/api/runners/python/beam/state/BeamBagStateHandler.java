@@ -59,7 +59,7 @@ public class BeamBagStateHandler extends AbstractBeamStateHandler<ListState<byte
         List<ByteString> byteStrings = convertToByteString(listState);
 
         return BeamFnApi.StateResponse.newBuilder()
-                .setId(request.getId())
+                .setIdentifier(request.getIdentifier())
                 .setGet(
                         BeamFnApi.StateGetResponse.newBuilder()
                                 .setData(ByteString.copyFrom(byteStrings)));
@@ -92,7 +92,7 @@ public class BeamBagStateHandler extends AbstractBeamStateHandler<ListState<byte
             listState.add(valueBytes);
         }
         return BeamFnApi.StateResponse.newBuilder()
-                .setId(request.getId())
+                .setIdentifier(request.getIdentifier())
                 .setAppend(BeamFnApi.StateAppendResponse.getDefaultInstance());
     }
 
@@ -101,7 +101,7 @@ public class BeamBagStateHandler extends AbstractBeamStateHandler<ListState<byte
         listState.clear();
 
         return BeamFnApi.StateResponse.newBuilder()
-                .setId(request.getId())
+                .setIdentifier(request.getIdentifier())
                 .setClear(BeamFnApi.StateClearResponse.getDefaultInstance());
     }
 

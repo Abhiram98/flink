@@ -51,7 +51,7 @@ public class EdgeManagerBuildUtil {
                 intermediateResult.getConsumingDistributionPattern();
         final JobVertexInputInfo jobVertexInputInfo =
                 vertex.getGraph()
-                        .getJobVertexInputInfo(vertex.getJobVertexId(), intermediateResult.getId());
+                        .getJobVertexInputInfo(vertex.getJobVertexId(), intermediateResult.getIdentifier());
 
         switch (distributionPattern) {
             case POINTWISE:

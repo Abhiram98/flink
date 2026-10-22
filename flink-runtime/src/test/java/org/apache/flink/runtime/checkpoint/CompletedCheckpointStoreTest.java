@@ -216,15 +216,15 @@ abstract class CompletedCheckpointStoreTest {
     // ---------------------------------------------------------------------------------------------
 
     public static TestCompletedCheckpoint createCheckpoint(
-            long id, SharedStateRegistry sharedStateRegistry) {
+            long identifier, SharedStateRegistry sharedStateRegistry) {
         return createCheckpoint(
-                id,
+                identifier,
                 sharedStateRegistry,
                 CheckpointProperties.forCheckpoint(NEVER_RETAIN_AFTER_TERMINATION));
     }
 
     public static TestCompletedCheckpoint createCheckpoint(
-            long id, SharedStateRegistry sharedStateRegistry, CheckpointProperties props) {
+            long identifier, SharedStateRegistry sharedStateRegistry, CheckpointProperties props) {
 
         int numberOfStates = 4;
 
@@ -240,9 +240,9 @@ abstract class CompletedCheckpointStoreTest {
             operatorState.putState(i, subtaskState);
         }
 
-        operatorState.registerSharedStates(sharedStateRegistry, id);
+        operatorState.registerSharedStates(sharedStateRegistry, identifier);
 
-        return new TestCompletedCheckpoint(new JobID(), id, 0, operatorGroupState, props);
+        return new TestCompletedCheckpoint(new JobID(), identifier, 0, operatorGroupState, props);
     }
 
     protected void verifyCheckpointRegistered(Collection<OperatorState> operatorStates) {

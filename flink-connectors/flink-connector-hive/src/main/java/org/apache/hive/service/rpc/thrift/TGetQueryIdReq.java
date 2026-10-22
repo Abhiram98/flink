@@ -100,7 +100,7 @@ public class TGetQueryIdReq
         }
     }
 
-    // isset id assignments
+    // isset identifier assignments
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData>
             metaDataMap;
 
@@ -343,7 +343,7 @@ public class TGetQueryIdReq
                 if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
                     break;
                 }
-                switch (schemeField.id) {
+                switch (schemeField.identifier) {
                     case 1: // OPERATION_HANDLE
                         if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
                             struct.operationHandle = new TOperationHandle();

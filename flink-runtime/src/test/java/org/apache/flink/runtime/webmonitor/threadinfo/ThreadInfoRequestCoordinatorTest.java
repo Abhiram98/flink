@@ -237,7 +237,7 @@ class ThreadInfoRequestCoordinatorTest {
                                                     Collectors.toMap(
                                                             task ->
                                                                     task.getExecutingThread()
-                                                                            .getId(),
+                                                                            .getIdentifier(),
                                                             IdleTestTask::getExecutionId));
 
                             Map<ExecutionAttemptID, Collection<ThreadInfoSample>> threadInfoSample =

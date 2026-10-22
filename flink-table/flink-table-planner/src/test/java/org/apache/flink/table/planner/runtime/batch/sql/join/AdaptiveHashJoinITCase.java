@@ -97,7 +97,7 @@ class AdaptiveHashJoinITCase {
                                 + "  z VARCHAR\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId1));
@@ -110,7 +110,7 @@ class AdaptiveHashJoinITCase {
                                 + "  c VARCHAR\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId2));

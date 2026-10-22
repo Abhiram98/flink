@@ -117,14 +117,14 @@ public abstract class AbstractExternalDataStreamPythonFunctionOperator<OUT>
     // Side outputs
     // ----------------------------------------------------------------------
 
-    protected OutputTag<?> getOutputTagById(String id) {
-        Preconditions.checkArgument(sideOutputTags.containsKey(id));
-        return sideOutputTags.get(id);
+    protected OutputTag<?> getOutputTagById(String identifier) {
+        Preconditions.checkArgument(sideOutputTags.containsKey(identifier));
+        return sideOutputTags.get(identifier);
     }
 
     public void addSideOutputTags(Collection<OutputTag<?>> outputTags) {
         for (OutputTag<?> outputTag : outputTags) {
-            sideOutputTags.put(outputTag.getId(), outputTag);
+            sideOutputTags.put(outputTag.getIdentifier(), outputTag);
         }
     }
 
@@ -146,9 +146,9 @@ public abstract class AbstractExternalDataStreamPythonFunctionOperator<OUT>
         return descriptorMap;
     }
 
-    protected TypeSerializer<Row> getSideOutputTypeSerializerById(String id) {
-        Preconditions.checkArgument(sideOutputSerializers.containsKey(id));
-        return sideOutputSerializers.get(id);
+    protected TypeSerializer<Row> getSideOutputTypeSerializerById(String identifier) {
+        Preconditions.checkArgument(sideOutputSerializers.containsKey(identifier));
+        return sideOutputSerializers.get(identifier);
     }
 
     private static TypeInformation<Row> getSideOutputTypeInfo(OutputTag<?> outputTag) {

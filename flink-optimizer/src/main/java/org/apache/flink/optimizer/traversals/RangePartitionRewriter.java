@@ -200,7 +200,7 @@ public class RangePartitionRewriter implements Visitor<PlanNode> {
         sicPlanNode.addOutgoingChannel(rbChannel);
         this.plan.getAllNodes().add(rbPlanNode);
 
-        // 4. Take range boundaries as broadcast input and take the tuple of partition id and record
+        // 4. Take range boundaries as broadcast input and take the tuple of partition identifier and record
         // as output.
         final AssignRangeIndex assignRangeIndex = new AssignRangeIndex(comparator);
         final TypeInformation<Tuple2> ariOutputTypeInformation =
@@ -232,7 +232,7 @@ public class RangePartitionRewriter implements Visitor<PlanNode> {
         broadcastChannels.add(broadcastChannel);
         ariPlanNode.setBroadcastInputs(broadcastChannels);
 
-        // 5. Remove the partition id.
+        // 5. Remove the partition identifier.
         final Channel partChannel = new Channel(ariPlanNode, TempMode.NONE);
         final FieldList keys = new FieldList(0);
         partChannel.setShipStrategy(

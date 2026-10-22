@@ -166,7 +166,7 @@ class AbstractMetricGroupTest {
         try {
             MetricGroup tmGroup =
                     TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                            testRegistry, "host", new ResourceID("id"));
+                            testRegistry, "host", new ResourceID("identifier"));
             tmGroup.counter(counterName);
             assertThat(testRegistry.getReporters())
                     .withFailMessage("Reporters were not properly instantiated")
@@ -244,7 +244,7 @@ class AbstractMetricGroupTest {
         try {
             MetricGroup tmGroup =
                     TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                                    testRegistry, "host", new ResourceID("id"))
+                                    testRegistry, "host", new ResourceID("identifier"))
                             .addGroup("B")
                             .addGroup("C");
             tmGroup.counter(counterName);
@@ -276,7 +276,7 @@ class AbstractMetricGroupTest {
         try {
             TaskManagerMetricGroup group =
                     TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                            testRegistry, "host", new ResourceID("id"));
+                            testRegistry, "host", new ResourceID("identifier"));
             assertThat(testRegistry.getReporters())
                     .withFailMessage("MetricReporters list should be empty")
                     .isEmpty();

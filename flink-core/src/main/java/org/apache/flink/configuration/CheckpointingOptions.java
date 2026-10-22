@@ -271,7 +271,7 @@ public class CheckpointingOptions {
                                     + "' is set to 'jobmanager', only the meta data of checkpoints will be stored in this directory.");
 
     /**
-     * Whether to create sub-directories named by job id to store the data files and meta data of
+     * Whether to create sub-directories named by job identifier to store the data files and meta data of
      * checkpoints. The default value is true to enable user could run several jobs with the same
      * checkpoint directory at the same time. If this value is set to false, pay attention not to
      * run several jobs with the same directory simultaneously.
@@ -285,7 +285,7 @@ public class CheckpointingOptions {
                     .withDescription(
                             Description.builder()
                                     .text(
-                                            "Whether to create sub-directories named by job id under the '%s' to store the data files and meta data "
+                                            "Whether to create sub-directories named by job identifier under the '%s' to store the data files and meta data "
                                                     + "of checkpoints. The default value is true to enable user could run several jobs with the same "
                                                     + "checkpoint directory at the same time. If this value is set to false, pay attention not to "
                                                     + "run several jobs with the same directory simultaneously. ",

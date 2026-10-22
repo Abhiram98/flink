@@ -26,10 +26,10 @@ import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 public interface SlotInfo {
 
     /**
-     * Gets the id under which the slot has been allocated on the TaskManager. This id uniquely
+     * Gets the identifier under which the slot has been allocated on the TaskManager. This identifier uniquely
      * identifies the physical slot.
      *
-     * @return The id under which the slot has been allocated on the TaskManager
+     * @return The identifier under which the slot has been allocated on the TaskManager
      */
     AllocationID getAllocationId();
 

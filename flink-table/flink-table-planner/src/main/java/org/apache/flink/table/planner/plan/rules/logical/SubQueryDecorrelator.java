@@ -291,7 +291,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
 
                     @Override
                     public Boolean visitCorrelVariable(RexCorrelVariable correlVariable) {
-                        return variableSet.contains(correlVariable.id);
+                        return variableSet.contains(correlVariable.identifier);
                     }
 
                     @Override
@@ -387,7 +387,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
             final RexNode ref = fieldAccess.getReferenceExpr();
             if (ref instanceof RexCorrelVariable) {
                 final RexCorrelVariable var = (RexCorrelVariable) ref;
-                assert variableSet.contains(var.id);
+                assert variableSet.contains(var.identifier);
                 final RelDataTypeField field = fieldAccess.getField();
                 return new RexInputRef(field.getIndex(), field.getType());
             } else {
@@ -1283,7 +1283,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
                     final RexNode ref = fieldAccess.getReferenceExpr();
                     if (ref instanceof RexCorrelVariable) {
                         final RexCorrelVariable var = (RexCorrelVariable) ref;
-                        // check the scope of correlation id
+                        // check the scope of correlation identifier
                         // we do not support nested correlation variables in SubQuery, such as:
                         // select * from t1 where exists (select * from t2 where t1.a = t2.c and
                         // t2.d in (select t3.d from t3 where t1.b = t3.e)
@@ -1291,7 +1291,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
                             hasUnsupportedCorCondition = !mapSubQueryNodeToCorSet.containsKey(rel);
                         }
                         if (!hasNestedCorScope && mapSubQueryNodeToCorSet.containsKey(rel)) {
-                            hasNestedCorScope = !mapSubQueryNodeToCorSet.get(rel).contains(var.id);
+                            hasNestedCorScope = !mapSubQueryNodeToCorSet.get(rel).contains(var.identifier);
                         }
 
                         if (mapFieldAccessToCorVar.containsKey(fieldAccess)) {
@@ -1303,7 +1303,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
                         } else {
                             final CorRef correlation =
                                     new CorRef(
-                                            var.id,
+                                            var.identifier,
                                             fieldAccess.getField().getIndex(),
                                             corrIdGenerator++);
                             mapFieldAccessToCorVar.put(fieldAccess, correlation);

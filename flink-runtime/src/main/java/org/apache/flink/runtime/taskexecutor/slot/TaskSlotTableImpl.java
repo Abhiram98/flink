@@ -81,13 +81,13 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
     /** The list of all task slots. */
     private final Map<Integer, TaskSlot<T>> taskSlots;
 
-    /** Mapping from allocation id to task slot. */
+    /** Mapping from allocation identifier to task slot. */
     private final Map<AllocationID, TaskSlot<T>> allocatedSlots;
 
-    /** Mapping from execution attempt id to task and task slot. */
+    /** Mapping from execution attempt identifier to task and task slot. */
     private final Map<ExecutionAttemptID, TaskSlotMapping<T>> taskSlotMappings;
 
-    /** Mapping from job id to allocated slots for a job. */
+    /** Mapping from job identifier to allocated slots for a job. */
     private final Map<JobID, Set<AllocationID>> slotsPerJob;
 
     /** Interface for slot actions, such as freeing them or timing them out. */
@@ -303,7 +303,7 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
             return isDuplicatedSlot(taskSlot, jobId, effectiveResourceProfile, index);
         } else if (isIndexAlreadyTaken(index)) {
             LOG.info(
-                    "The slot with index {} is already assigned to another allocation with id {}.",
+                    "The slot with index {} is already assigned to another allocation with identifier {}.",
                     index,
                     taskSlots.get(index).getAllocationId());
             return false;
@@ -331,7 +331,7 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
                         memoryVerificationExecutor);
         taskSlots.put(index, taskSlot);
 
-        // update the allocation id to task slot map
+        // update the allocation identifier to task slot map
         allocatedSlots.put(allocationId, taskSlot);
 
         // register a timeout for this slot since it's in state allocated
@@ -353,7 +353,7 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
     private boolean isDuplicatedSlot(
             TaskSlot taskSlot, JobID jobId, ResourceProfile resourceProfile, int index) {
         LOG.info(
-                "Slot with allocationId {} already exist, with resource profile {}, job id {} and index {}. The required index is {}.",
+                "Slot with allocationId {} already exist, with resource profile {}, job identifier {} and index {}. The required index is {}.",
                 taskSlot.getAllocationId(),
                 taskSlot.getResourceProfile(),
                 taskSlot.getJobId(),
@@ -443,7 +443,7 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
         }
 
         if (taskSlot.isEmpty()) {
-            // remove the allocation id to task slot mapping
+            // remove the allocation identifier to task slot mapping
             allocatedSlots.remove(allocationId);
 
             // unregister a potential timeout

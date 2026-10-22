@@ -153,10 +153,10 @@ public abstract class BatchRestoreTestBase implements TableTestProgramRunner {
                         TableConfigOptions.CatalogPlanCompilation.SCHEMA);
 
         for (SourceTestStep sourceTestStep : program.getSetupSourceTestSteps()) {
-            final String id = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
+            final String identifier = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
             final Map<String, String> options = new HashMap<>();
             options.put("connector", "values");
-            options.put("data-id", id);
+            options.put("data-identifier", identifier);
             options.put("bounded", "true");
             options.put("terminating", "true");
             options.put("runtime-source", "NewSource");
@@ -203,10 +203,10 @@ public abstract class BatchRestoreTestBase implements TableTestProgramRunner {
             List<Row> data = new ArrayList<>();
             data.addAll(sourceTestStep.dataBeforeRestore);
             data.addAll(sourceTestStep.dataAfterRestore);
-            final String id = TestValuesTableFactory.registerData(data);
+            final String identifier = TestValuesTableFactory.registerData(data);
             final Map<String, String> options = new HashMap<>();
             options.put("connector", "values");
-            options.put("data-id", id);
+            options.put("data-identifier", identifier);
             options.put("runtime-source", "NewSource");
             options.put("terminating", "true");
             options.put("bounded", "true");
@@ -236,13 +236,13 @@ public abstract class BatchRestoreTestBase implements TableTestProgramRunner {
 
     private Path getPlanPath(TableTestProgram program, ExecNodeMetadata metadata) {
         return Paths.get(
-                getTestResourceDirectory(program, metadata) + "/plan/" + program.id + ".json");
+                getTestResourceDirectory(program, metadata) + "/plan/" + program.identifier + ".json");
     }
 
     private String getTestResourceDirectory(TableTestProgram program, ExecNodeMetadata metadata) {
         return String.format(
                 "%s/src/test/resources/restore-tests/%s_%d/%s",
-                System.getProperty("user.dir"), metadata.name(), metadata.version(), program.id);
+                System.getProperty("user.dir"), metadata.name(), metadata.version(), program.identifier);
     }
 
     private static List<String> getActualResults(SinkTestStep sinkTestStep, String tableName) {

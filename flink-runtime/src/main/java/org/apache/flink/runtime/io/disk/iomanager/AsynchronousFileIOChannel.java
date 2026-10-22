@@ -80,7 +80,7 @@ public abstract class AsynchronousFileIOChannel<T, R extends IORequest>
      * buffers to be read/written and hands them to the asynchronous I/O thread. After being
      * processed, the buffers are returned by adding the to the given queue.
      *
-     * @param channelID The id describing the path of the file that the channel accessed.
+     * @param channelID The identifier describing the path of the file that the channel accessed.
      * @param requestQueue The queue that this channel hands its IO requests to.
      * @param callback The callback to be invoked when a request is done.
      * @param writeEnabled Flag describing whether the channel should be opened in read/write mode,

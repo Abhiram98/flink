@@ -184,7 +184,7 @@ class DefaultExecutionGraphCacheTest {
                                         return CompletableFuture.completedFuture(
                                                 expectedExecutionGraphInfo2);
                                     } else {
-                                        throw new AssertionError("Invalid job id received.");
+                                        throw new AssertionError("Invalid job identifier received.");
                                     }
                                 })
                         .build();

@@ -88,11 +88,11 @@ class SqlGatewayTest {
 
     @Test
     void testConfigureSqlGateway() throws Exception {
-        String id = UUID.randomUUID().toString();
+        String identifier = UUID.randomUUID().toString();
         String[] args =
                 new String[] {
                     "-Dsql-gateway.endpoint.type=[mocked]",
-                    "-Dsql-gateway.endpoint.mocked.id=" + id,
+                    "-Dsql-gateway.endpoint.mocked.identifier=" + identifier,
                     "-Dsql-gateway.endpoint.mocked.host=localhost",
                     "-Dsql-gateway.endpoint.mocked.port=9999"
                 };
@@ -105,7 +105,7 @@ class SqlGatewayTest {
             thread.start();
 
             CommonTestUtils.waitUtil(
-                    () -> MockedSqlGatewayEndpoint.isRunning(id),
+                    () -> MockedSqlGatewayEndpoint.isRunning(identifier),
                     Duration.ofSeconds(10),
                     "Failed to get the endpoint starts.");
 

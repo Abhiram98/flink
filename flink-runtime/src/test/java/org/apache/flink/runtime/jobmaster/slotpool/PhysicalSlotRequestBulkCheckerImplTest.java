@@ -258,7 +258,7 @@ class PhysicalSlotRequestBulkCheckerImplTest {
             CompletableFuture<SlotRequestId> cancellationFuture, SlotRequestId slotRequestId) {
         return TestingPhysicalSlotRequestBulkBuilder.newBuilder()
                 .addPendingRequest(slotRequestId, ResourceProfile.UNKNOWN)
-                .setCanceller((id, t) -> cancellationFuture.complete(id))
+                .setCanceller((identifier, t) -> cancellationFuture.complete(identifier))
                 .buildPhysicalSlotRequestBulkImpl();
     }
 

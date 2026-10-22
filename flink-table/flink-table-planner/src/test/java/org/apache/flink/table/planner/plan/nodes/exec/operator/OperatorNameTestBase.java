@@ -88,7 +88,7 @@ abstract class OperatorNameTestBase extends TableTestBase {
         createSourceWithTimeAttribute();
         String srcTableB =
                 "CREATE TABLE LookupTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  name varchar,\n"
                         + "  age int \n"
                         + ") with (\n"
@@ -97,7 +97,7 @@ abstract class OperatorNameTestBase extends TableTestBase {
         tEnv.executeSql(srcTableB);
         verifyQuery(
                 "SELECT * FROM MyTable AS T JOIN LookupTable "
-                        + "FOR SYSTEM_TIME AS OF T.proctime AS D ON T.b = D.id");
+                        + "FOR SYSTEM_TIME AS OF T.proctime AS D ON T.b = D.identifier");
     }
 
     /** Verify GroupWindowAggregate. */

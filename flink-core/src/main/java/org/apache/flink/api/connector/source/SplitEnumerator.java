@@ -43,9 +43,9 @@ public interface SplitEnumerator<SplitT extends SourceSplit, CheckpointT>
 
     /**
      * Handles the request for a split. This method is called when the reader with the given subtask
-     * id calls the {@link SourceReaderContext#sendSplitRequest()} method.
+     * identifier calls the {@link SourceReaderContext#sendSplitRequest()} method.
      *
-     * @param subtaskId the subtask id of the source reader who sent the source event.
+     * @param subtaskId the subtask identifier of the source reader who sent the source event.
      * @param requesterHostname Optional, the hostname where the requesting task is running. This
      *     can be used to make split assignments locality-aware.
      */
@@ -56,7 +56,7 @@ public interface SplitEnumerator<SplitT extends SourceSplit, CheckpointT>
      * fails and there are splits assigned to it after the last successful checkpoint.
      *
      * @param splits The splits to add back to the enumerator for reassignment.
-     * @param subtaskId The id of the subtask to which the returned splits belong.
+     * @param subtaskId The identifier of the subtask to which the returned splits belong.
      */
     void addSplitsBack(List<SplitT> splits, int subtaskId);
 
@@ -114,7 +114,7 @@ public interface SplitEnumerator<SplitT extends SourceSplit, CheckpointT>
      * to this method, but rather invoke the {@link #addReader(int)} and {@link
      * #handleSplitRequest(int, String)} methods.
      *
-     * @param subtaskId the subtask id of the source reader who sent the source event.
+     * @param subtaskId the subtask identifier of the source reader who sent the source event.
      * @param sourceEvent the source event from the source reader.
      */
     default void handleSourceEvent(int subtaskId, SourceEvent sourceEvent) {}

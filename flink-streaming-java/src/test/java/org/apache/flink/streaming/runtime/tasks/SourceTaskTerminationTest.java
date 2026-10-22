@@ -180,8 +180,8 @@ class SourceTaskTerminationTest {
         assertThat(next)
                 .as("next element is not a checkpoint barrier")
                 .isInstanceOf(CheckpointBarrier.class);
-        assertThat(((CheckpointBarrier) next).getId())
-                .as("wrong checkpoint id")
+        assertThat(((CheckpointBarrier) next).getIdentifier())
+                .as("wrong checkpoint identifier")
                 .isEqualTo(checkpointId);
     }
 

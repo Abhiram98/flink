@@ -71,7 +71,7 @@ public final class JvmUtils {
      *
      * @param threadIds The IDs of the threads to create the thread dump for.
      * @param maxStackTraceDepth The maximum number of entries in the stack trace to be collected.
-     * @return The map key is the thread id, the map value is the thread information for the
+     * @return The map key is the thread identifier, the map value is the thread information for the
      *     requested thread IDs.
      */
     public static Map<Long, ThreadInfoSample> createThreadInfoSample(

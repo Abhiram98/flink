@@ -543,7 +543,7 @@ public class EmbeddedRocksDBStateBackendTest
                         new File(dbPath), new AcceptAllFilter(), new AcceptAllFilter());
         try {
             ValueStateDescriptor<String> kvId =
-                    new ValueStateDescriptor<>("id", String.class, null);
+                    new ValueStateDescriptor<>("identifier", String.class, null);
 
             kvId.initializeSerializerUnlessSet(new ExecutionConfig());
 
@@ -575,7 +575,7 @@ public class EmbeddedRocksDBStateBackendTest
                     createKeyedBackend(IntSerializer.INSTANCE);
             try {
                 ValueStateDescriptor<String> kvId =
-                        new ValueStateDescriptor<>("id", String.class, null);
+                        new ValueStateDescriptor<>("identifier", String.class, null);
 
                 kvId.initializeSerializerUnlessSet(new ExecutionConfig());
 
@@ -654,7 +654,7 @@ public class EmbeddedRocksDBStateBackendTest
     public void testMapStateClear() throws Exception {
         setupRocksKeyedStateBackend();
         MapStateDescriptor<Integer, String> kvId =
-                new MapStateDescriptor<>("id", Integer.class, String.class);
+                new MapStateDescriptor<>("identifier", Integer.class, String.class);
         MapState<Integer, String> state =
                 keyedStateBackend.getPartitionedState(
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -713,7 +713,7 @@ public class EmbeddedRocksDBStateBackendTest
     /** Test that most of the non-overlapping small SST files are eventually merged. */
     @TestTemplate
     public void testSmallFilesCompaction() throws Exception {
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
         CheckpointStreamFactory streamFactory = createStreamFactory();
 
@@ -736,7 +736,7 @@ public class EmbeddedRocksDBStateBackendTest
                 // snapshot to force flushing memtables to disk and create a new SST file
                 runSnapshot(
                         backend.snapshot(
-                                i, // checkpoint id
+                                i, // checkpoint identifier
                                 i, // timestamp
                                 streamFactory,
                                 CheckpointOptions.forCheckpointWithDefaultLocation()),

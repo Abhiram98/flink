@@ -116,7 +116,7 @@ abstract class AbstractExpressionCodeGeneratorCastRule<IN, OUT>
 
             @Override
             public String getSessionTimeZoneTerm() {
-                return "java.util.TimeZone.getTimeZone(\"" + ctx.getSessionZoneId().getId() + "\")";
+                return "java.util.TimeZone.getTimeZone(\"" + ctx.getSessionZoneId().getIdentifier() + "\")";
             }
 
             @Override

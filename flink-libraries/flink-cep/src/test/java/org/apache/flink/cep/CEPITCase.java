@@ -122,11 +122,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                 (p, o) -> {
                                     StringBuilder builder = new StringBuilder();
 
-                                    builder.append(p.get("start").get(0).getId())
+                                    builder.append(p.get("start").get(0).getIdentifier())
                                             .append(",")
-                                            .append(p.get("middle").get(0).getId())
+                                            .append(p.get("middle").get(0).getIdentifier())
                                             .append(",")
-                                            .append(p.get("end").get(0).getId());
+                                            .append(p.get("end").get(0).getIdentifier());
 
                                     o.collect(builder.toString());
                                 },
@@ -167,7 +167,7 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
 
                                     @Override
                                     public Integer getKey(Event value) throws Exception {
-                                        return value.getId();
+                                        return value.getIdentifier();
                                     }
                                 });
 
@@ -187,11 +187,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                 p -> {
                                     StringBuilder builder = new StringBuilder();
 
-                                    builder.append(p.get("start").get(0).getId())
+                                    builder.append(p.get("start").get(0).getIdentifier())
                                             .append(",")
-                                            .append(p.get("middle").get(0).getId())
+                                            .append(p.get("middle").get(0).getIdentifier())
                                             .append(",")
-                                            .append(p.get("end").get(0).getId());
+                                            .append(p.get("end").get(0).getIdentifier());
 
                                     return builder.toString();
                                 });
@@ -262,11 +262,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                     public String select(Map<String, List<Event>> pattern) {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(pattern.get("start").get(0).getId())
+                                        builder.append(pattern.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("middle").get(0).getId())
+                                                .append(pattern.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("end").get(0).getId());
+                                                .append(pattern.get("end").get(0).getIdentifier());
 
                                         return builder.toString();
                                     }
@@ -330,7 +330,7 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
 
                                     @Override
                                     public Integer getKey(Event value) throws Exception {
-                                        return value.getId();
+                                        return value.getIdentifier();
                                     }
                                 });
 
@@ -351,11 +351,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                     public String select(Map<String, List<Event>> pattern) {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(pattern.get("start").get(0).getId())
+                                        builder.append(pattern.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("middle").get(0).getId())
+                                                .append(pattern.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("end").get(0).getId());
+                                                .append(pattern.get("end").get(0).getIdentifier());
 
                                         return builder.toString();
                                     }
@@ -664,11 +664,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                     public String select(Map<String, List<Event>> pattern) {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(pattern.get("start").get(0).getId())
+                                        builder.append(pattern.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("middle").get(0).getId())
+                                                .append(pattern.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("end").get(0).getId());
+                                                .append(pattern.get("end").get(0).getIdentifier());
 
                                         return builder.toString();
                                     }
@@ -752,11 +752,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                     public String select(Map<String, List<Event>> pattern) {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(pattern.get("start").get(0).getId())
+                                        builder.append(pattern.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("middle").get(0).getId())
+                                                .append(pattern.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(pattern.get("end").get(0).getId());
+                                                .append(pattern.get("end").get(0).getIdentifier());
 
                                         return builder.toString();
                                     }
@@ -891,11 +891,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                             throws Exception {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(p.get("start").get(0).getId())
+                                        builder.append(p.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(p.get("middle").get(0).getId())
+                                                .append(p.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(p.get("end").get(0).getId());
+                                                .append(p.get("end").get(0).getIdentifier());
 
                                         o.collect(builder.toString());
                                     }
@@ -937,7 +937,7 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
 
                                     @Override
                                     public Integer getKey(Event value) throws Exception {
-                                        return value.getId();
+                                        return value.getIdentifier();
                                     }
                                 });
 
@@ -986,11 +986,11 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                                             throws Exception {
                                         StringBuilder builder = new StringBuilder();
 
-                                        builder.append(p.get("start").get(0).getId())
+                                        builder.append(p.get("start").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(p.get("middle").get(0).getId())
+                                                .append(p.get("middle").get(0).getIdentifier())
                                                 .append(",")
-                                                .append(p.get("end").get(0).getId());
+                                                .append(p.get("end").get(0).getIdentifier());
 
                                         return builder.toString();
                                     }
@@ -1089,9 +1089,9 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
                         .select(
                                 (PatternSelectFunction<Event, String>)
                                         pattern1 ->
-                                                pattern1.get("start").get(0).getId()
+                                                pattern1.get("start").get(0).getIdentifier()
                                                         + ","
-                                                        + pattern1.get("middle").get(0).getId());
+                                                        + pattern1.get("middle").get(0).getIdentifier());
 
         List<String> resultList = new ArrayList<>();
         try (CloseableIterator<String> iterator = result.executeAndCollect()) {

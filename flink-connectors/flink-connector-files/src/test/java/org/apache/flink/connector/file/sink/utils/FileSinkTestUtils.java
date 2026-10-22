@@ -170,7 +170,7 @@ public class FileSinkTestUtils {
 
     /**
      * A simple {@link BucketAssigner} that accepts {@code String}'s and returns the element itself
-     * as the bucket id.
+     * as the bucket identifier.
      */
     public static class StringIdentityBucketAssigner implements BucketAssigner<String, String> {
         private static final long serialVersionUID = 1L;

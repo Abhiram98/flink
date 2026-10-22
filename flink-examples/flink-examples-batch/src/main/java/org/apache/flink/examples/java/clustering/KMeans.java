@@ -55,7 +55,7 @@ import static org.apache.flink.examples.java.util.DataSetDeprecationInfo.DATASET
  *
  * <p>This implementation works on two-dimensional data points. <br>
  * It computes an assignment of data points to cluster centers, i.e., each data point is annotated
- * with the id of the final cluster (center) it belongs to.
+ * with the identifier of the final cluster (center) it belongs to.
  *
  * <p>Input files are plain text files and must be formatted as follows:
  *
@@ -64,9 +64,9 @@ import static org.apache.flink.examples.java.util.DataSetDeprecationInfo.DATASET
  *       points are separated by newline characters.<br>
  *       For example <code>"1.2 2.3\n5.3 7.2\n"</code> gives two data points (x=1.2, y=2.3) and
  *       (x=5.3, y=7.2).
- *   <li>Cluster centers are represented by an integer id and a point value.<br>
- *       For example <code>"1 6.2 3.2\n2 2.9 5.7\n"</code> gives two centers (id=1, x=6.2, y=3.2)
- *       and (id=2, x=2.9, y=5.7).
+ *   <li>Cluster centers are represented by an integer identifier and a point value.<br>
+ *       For example <code>"1 6.2 3.2\n2 2.9 5.7\n"</code> gives two centers (identifier=1, x=6.2, y=3.2)
+ *       and (identifier=2, x=2.9, y=5.7).
  * </ul>
  *
  * <p>Usage: <code>
@@ -156,7 +156,7 @@ public class KMeans {
             centroids =
                     env.readCsvFile(params.get("centroids"))
                             .fieldDelimiter(" ")
-                            .pojoType(Centroid.class, "id", "x", "y");
+                            .pojoType(Centroid.class, "identifier", "x", "y");
         } else {
             System.out.println("Executing K-Means example with default centroid data set.");
             System.out.println("Use --centroids to specify file input.");
@@ -226,23 +226,23 @@ public class KMeans {
     /** A simple two-dimensional centroid, basically a point with an ID. */
     public static class Centroid extends Point {
 
-        public int id;
+        public int identifier;
 
         public Centroid() {}
 
-        public Centroid(int id, double x, double y) {
+        public Centroid(int identifier, double x, double y) {
             super(x, y);
-            this.id = id;
+            this.identifier = identifier;
         }
 
-        public Centroid(int id, Point p) {
+        public Centroid(int identifier, Point p) {
             super(p.x, p.y);
-            this.id = id;
+            this.identifier = identifier;
         }
 
         @Override
         public String toString() {
-            return id + " " + super.toString();
+            return identifier + " " + super.toString();
         }
     }
 
@@ -276,11 +276,11 @@ public class KMeans {
                 // update nearest cluster if necessary
                 if (distance < minDistance) {
                     minDistance = distance;
-                    closestCentroidId = centroid.id;
+                    closestCentroidId = centroid.identifier;
                 }
             }
 
-            // emit a new record with the center id and the data point.
+            // emit a new record with the center identifier and the data point.
             return new Tuple2<>(closestCentroidId, p);
         }
     }
@@ -309,7 +309,7 @@ public class KMeans {
     }
 
     /** Computes new centroid from coordinate sum and count of points. */
-    @ForwardedFields("0->id")
+    @ForwardedFields("0->identifier")
     public static final class CentroidAverager
             implements MapFunction<Tuple3<Integer, Point, Long>, Centroid> {
 

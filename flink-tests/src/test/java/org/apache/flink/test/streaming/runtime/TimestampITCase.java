@@ -220,15 +220,15 @@ public class TimestampITCase extends TestLogger {
                                 running = getRunningJobs(clusterClient);
                             }
 
-                            JobID id = running.get(0);
+                            JobID identifier = running.get(0);
 
-                            waitUntilAllTasksAreRunning(CLUSTER.getRestClusterClient(), id);
+                            waitUntilAllTasksAreRunning(CLUSTER.getRestClusterClient(), identifier);
                             // send stop until the job is stopped
                             do {
                                 try {
                                     clusterClient
                                             .stopWithSavepoint(
-                                                    id,
+                                                    identifier,
                                                     false,
                                                     "test",
                                                     SavepointFormatType.CANONICAL)

@@ -38,8 +38,8 @@ public class InputChannelID extends AbstractID {
         super(lowerPart, upperPart);
     }
 
-    public InputChannelID(AbstractID id) {
-        super(id);
+    public InputChannelID(AbstractID identifier) {
+        super(identifier);
     }
 
     public void writeTo(ByteBuf buf) {

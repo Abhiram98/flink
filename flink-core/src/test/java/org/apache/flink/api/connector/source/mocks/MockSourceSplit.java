@@ -36,21 +36,21 @@ public class MockSourceSplit implements SourceSplit, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int id;
+    private final int identifier;
     private final BlockingQueue<Integer> records;
     private final int endIndex;
     private int index;
 
-    public MockSourceSplit(int id) {
-        this(id, 0);
+    public MockSourceSplit(int identifier) {
+        this(identifier, 0);
     }
 
-    public MockSourceSplit(int id, int startingIndex) {
-        this(id, startingIndex, Integer.MAX_VALUE);
+    public MockSourceSplit(int identifier, int startingIndex) {
+        this(identifier, startingIndex, Integer.MAX_VALUE);
     }
 
-    public MockSourceSplit(int id, int startingIndex, int endIndex) {
-        this.id = id;
+    public MockSourceSplit(int identifier, int startingIndex, int endIndex) {
+        this.identifier = identifier;
         this.endIndex = endIndex;
         this.index = startingIndex;
         this.records = new LinkedBlockingQueue<>();
@@ -58,7 +58,7 @@ public class MockSourceSplit implements SourceSplit, Serializable {
 
     @Override
     public String splitId() {
-        return Integer.toString(id);
+        return Integer.toString(identifier);
     }
 
     public int index() {
@@ -93,7 +93,7 @@ public class MockSourceSplit implements SourceSplit, Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, Arrays.hashCode(records.toArray(new Integer[0])), endIndex, index);
+        return Objects.hash(identifier, Arrays.hashCode(records.toArray(new Integer[0])), endIndex, index);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MockSourceSplit implements SourceSplit, Serializable {
             return false;
         }
         MockSourceSplit that = (MockSourceSplit) obj;
-        return id == that.id
+        return identifier == that.identifier
                 && index == that.index
                 && Arrays.equals(
                         records.toArray(new Integer[0]), that.records.toArray(new Integer[0]))
@@ -112,7 +112,7 @@ public class MockSourceSplit implements SourceSplit, Serializable {
     @Override
     public String toString() {
         return String.format(
-                "MockSourceSplit(id=%d, num_records=%d, endIndex=%d, currentIndex=%d)",
-                id, records.size(), endIndex, index);
+                "MockSourceSplit(identifier=%d, num_records=%d, endIndex=%d, currentIndex=%d)",
+                identifier, records.size(), endIndex, index);
     }
 }

@@ -60,9 +60,9 @@ class CheckpointStatsCacheTest {
         assertThat(cache.tryGet(1)).isEqualTo(chk1);
     }
 
-    private AbstractCheckpointStats createCheckpoint(long id, CheckpointStatsStatus status) {
+    private AbstractCheckpointStats createCheckpoint(long identifier, CheckpointStatsStatus status) {
         AbstractCheckpointStats checkpoint = mock(AbstractCheckpointStats.class);
-        when(checkpoint.getCheckpointId()).thenReturn(id);
+        when(checkpoint.getCheckpointId()).thenReturn(identifier);
         when(checkpoint.getStatus()).thenReturn(status);
         return checkpoint;
     }

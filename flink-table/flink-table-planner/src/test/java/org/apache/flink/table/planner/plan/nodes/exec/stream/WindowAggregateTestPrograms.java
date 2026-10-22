@@ -473,14 +473,14 @@ public class WindowAggregateTestPrograms {
                     DistinctAggSplit.ENABLED);
 
     private static TableTestProgram getTableTestProgram(
-            final String id,
+            final String identifier,
             final String description,
             final String aggPhaseStrategy,
             final String windowSql,
             final String[] beforeRows,
             final String[] afterRows) {
         return getTableTestProgram(
-                id,
+                identifier,
                 description,
                 aggPhaseStrategy,
                 windowSql,
@@ -490,7 +490,7 @@ public class WindowAggregateTestPrograms {
     }
 
     private static TableTestProgram getTableTestProgram(
-            final String id,
+            final String identifier,
             final String description,
             final String aggPhaseStrategy,
             final String windowSql,
@@ -510,7 +510,7 @@ public class WindowAggregateTestPrograms {
                                 + "GROUP BY name, window_start, window_end",
                         windowSql);
 
-        TableTestProgram.Builder builder = TableTestProgram.of(id, description);
+        TableTestProgram.Builder builder = TableTestProgram.of(identifier, description);
         if (enableDistinctAggSplit == DistinctAggSplit.ENABLED) {
             builder.setupConfig(
                     OptimizerConfigOptions.TABLE_OPTIMIZER_DISTINCT_AGG_SPLIT_ENABLED, true);

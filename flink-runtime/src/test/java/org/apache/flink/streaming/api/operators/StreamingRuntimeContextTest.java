@@ -105,7 +105,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -132,7 +132,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -160,7 +160,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -189,7 +189,7 @@ class StreamingRuntimeContextTest {
                         ((KryoSerializer<?>) elementSerializer)
                                 .getKryo()
                                 .getRegistration(Path.class)
-                                .getId())
+                                .getIdentifier())
                 .isPositive();
     }
 
@@ -230,7 +230,7 @@ class StreamingRuntimeContextTest {
                         ((KryoSerializer<?>) valueSerializer)
                                 .getKryo()
                                 .getRegistration(Path.class)
-                                .getId())
+                                .getIdentifier())
                 .isPositive();
     }
 
@@ -269,7 +269,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -293,7 +293,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -321,7 +321,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -351,7 +351,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 
@@ -386,7 +386,7 @@ class StreamingRuntimeContextTest {
 
         // check that the Path class is really registered, i.e., the execution config was applied
         assertThat(serializer).isInstanceOf(KryoSerializer.class);
-        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getId())
+        assertThat(((KryoSerializer<?>) serializer).getKryo().getRegistration(Path.class).getIdentifier())
                 .isPositive();
     }
 

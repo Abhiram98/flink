@@ -24,14 +24,14 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public final class Alert {
 
-    private long id;
+    private long identifier;
 
-    public long getId() {
-        return id;
+    public long getIdentifier() {
+        return identifier;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setIdentifier(long identifier) {
+        this.identifier = identifier;
     }
 
     @Override
@@ -42,16 +42,16 @@ public final class Alert {
             return false;
         }
         Alert alert = (Alert) o;
-        return id == alert.id;
+        return identifier == alert.identifier;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(identifier);
     }
 
     @Override
     public String toString() {
-        return "Alert{" + "id=" + id + '}';
+        return "Alert{" + "identifier=" + identifier + '}';
     }
 }

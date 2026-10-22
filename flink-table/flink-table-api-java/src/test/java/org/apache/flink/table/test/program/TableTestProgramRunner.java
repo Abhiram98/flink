@@ -50,14 +50,14 @@ public interface TableTestProgramRunner {
     default List<TableTestProgram> supportedPrograms() {
         final List<TableTestProgram> programs = programs();
 
-        final List<String> ids = programs.stream().map(p -> p.id).collect(Collectors.toList());
+        final List<String> ids = programs.stream().map(p -> p.identifier).collect(Collectors.toList());
         final List<String> duplicates =
                 ids.stream()
-                        .filter(id -> Collections.frequency(ids, id) > 1)
+                        .filter(identifier -> Collections.frequency(ids, identifier) > 1)
                         .distinct()
                         .collect(Collectors.toList());
         if (!duplicates.isEmpty()) {
-            throw new IllegalArgumentException("Duplicate test program id found: " + duplicates);
+            throw new IllegalArgumentException("Duplicate test program identifier found: " + duplicates);
         }
 
         final Set<TestStep.TestKind> setupSteps = supportedSetupSteps();

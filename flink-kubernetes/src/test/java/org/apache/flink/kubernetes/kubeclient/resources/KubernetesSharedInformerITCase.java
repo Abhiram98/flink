@@ -181,8 +181,8 @@ class KubernetesSharedInformerITCase {
         return Tuple2.of(handler, watch);
     }
 
-    private String getConfigMapName(long id) {
-        return "shared-informer-test-cluster-" + id;
+    private String getConfigMapName(long identifier) {
+        return "shared-informer-test-cluster-" + identifier;
     }
 
     private static final class TestingCallbackHandler {

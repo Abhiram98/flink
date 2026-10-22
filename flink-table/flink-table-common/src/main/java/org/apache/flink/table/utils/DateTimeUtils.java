@@ -498,7 +498,7 @@ public class DateTimeUtils {
      * null if parsing failed.
      *
      * @param dateStr the date time string
-     * @param tzStr the time zone id string
+     * @param tzStr the time zone identifier string
      */
     private static long parseTimestampTz(String dateStr, String tzStr) throws ParseException {
         TimeZone tz = TIMEZONE_CACHE.get(tzStr);

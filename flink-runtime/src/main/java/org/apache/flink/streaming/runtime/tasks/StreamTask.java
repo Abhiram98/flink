@@ -1224,9 +1224,9 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
     }
 
     /**
-     * Gets the name of the task, appended with the subtask indicator and execution id.
+     * Gets the name of the task, appended with the subtask indicator and execution identifier.
      *
-     * @return The name of the task, with subtask indicator and execution id.
+     * @return The name of the task, with subtask indicator and execution identifier.
      */
     String getTaskNameWithSubtaskAndId() {
         return getEnvironment().getTaskInfo().getTaskNameWithSubtasks()

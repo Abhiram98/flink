@@ -43,7 +43,7 @@ class NetworkBufferAllocator {
     /**
      * Allocates a pooled network buffer for the specific input channel.
      *
-     * @param receiverId The id of the requested input channel.
+     * @param receiverId The identifier of the requested input channel.
      * @return The pooled network buffer.
      */
     @Nullable

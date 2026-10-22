@@ -68,7 +68,7 @@ public class SubtaskExecutionAttemptDetailsInfo implements ResponseBody {
 
     public static final String FIELD_NAME_METRICS = "metrics";
 
-    public static final String FIELD_NAME_TASKMANAGER_ID = "taskmanager-id";
+    public static final String FIELD_NAME_TASKMANAGER_ID = "taskmanager-identifier";
 
     public static final String FIELD_NAME_STATUS_DURATION = "status-duration";
 

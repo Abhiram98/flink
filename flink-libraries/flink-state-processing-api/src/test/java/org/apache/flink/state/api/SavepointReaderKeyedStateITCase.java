@@ -64,7 +64,7 @@ public abstract class SavepointReaderKeyedStateITCase<B extends StateBackend>
         env.addSource(createSource(elements))
                 .returns(Pojo.class)
                 .rebalance()
-                .keyBy(id -> id.key)
+                .keyBy(identifier -> identifier.key)
                 .process(new KeyedStatefulOperator())
                 .uid(uid)
                 .sinkTo(new DiscardingSink<>());

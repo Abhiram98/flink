@@ -84,7 +84,7 @@ public class DefaultInputConsumableDecider implements InputConsumableDecider {
         if (consumedPartitionGroup.getResultPartitionType().canBePipelinedConsumed()) {
             for (IntermediateResultPartitionID partitionId : consumedPartitionGroup) {
                 ExecutionVertexID producerVertex =
-                        resultPartitionRetriever.apply(partitionId).getProducer().getId();
+                        resultPartitionRetriever.apply(partitionId).getProducer().getIdentifier();
                 if (!verticesToSchedule.contains(producerVertex)
                         && !scheduledVertexRetriever.apply(producerVertex)) {
                     return false;

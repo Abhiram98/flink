@@ -95,7 +95,7 @@ class ExecutionEnvironmentImplTest {
         Collection<Integer> sourceIDs = streamGraph.getSourceIDs();
         for (StreamNode node : nodes) {
             if (node.getOperatorName().contains("source")) {
-                assertThat(sourceIDs).containsExactly(node.getId());
+                assertThat(sourceIDs).containsExactly(node.getIdentifier());
             }
         }
     }
@@ -123,7 +123,7 @@ class ExecutionEnvironmentImplTest {
         Collection<Integer> sourceIDs = streamGraph.getSourceIDs();
         for (StreamNode node : nodes) {
             if (node.getOperatorName().contains("source")) {
-                assertThat(sourceIDs).containsExactly(node.getId());
+                assertThat(sourceIDs).containsExactly(node.getIdentifier());
             }
         }
     }

@@ -35,7 +35,7 @@ public class FreeSlotTrackerTestUtils {
         return new DefaultFreeSlotTracker(
                 freeSlots.keySet(),
                 freeSlots::get,
-                id -> new TestingFreeSlotTracker.TestingFreeSlotInfo(freeSlots.get(id)),
+                identifier -> new TestingFreeSlotTracker.TestingFreeSlotInfo(freeSlots.get(identifier)),
                 ignored -> 0d);
     }
 }

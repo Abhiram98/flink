@@ -157,10 +157,10 @@ class TaskManagerGroupTest {
     void testGenerateScopeDefault() {
         TaskManagerMetricGroup group =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "localhost", new ResourceID("id"));
+                        registry, "localhost", new ResourceID("identifier"));
 
-        assertThat(group.getScopeComponents()).containsExactly("localhost", "taskmanager", "id");
-        assertThat(group.getMetricIdentifier("name")).isEqualTo("localhost.taskmanager.id.name");
+        assertThat(group.getScopeComponents()).containsExactly("localhost", "taskmanager", "identifier");
+        assertThat(group.getMetricIdentifier("name")).isEqualTo("localhost.taskmanager.identifier.name");
     }
 
     @Test
@@ -171,7 +171,7 @@ class TaskManagerGroupTest {
                 new MetricRegistryImpl(MetricRegistryTestUtils.fromConfiguration(cfg));
         TaskManagerMetricGroup group =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         assertThat(group.getScopeComponents()).containsExactly("constant", "host", "foo", "host");
         assertThat(group.getMetricIdentifier("name")).isEqualTo("constant.host.foo.host.name");
@@ -182,11 +182,11 @@ class TaskManagerGroupTest {
     void testCreateQueryServiceMetricInfo() {
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         QueryScopeInfo.TaskManagerQueryScopeInfo info =
                 tm.createQueryServiceMetricInfo(new DummyCharacterFilter());
         assertThat(info.scope).isEmpty();
-        assertThat(info.taskManagerID).isEqualTo("id");
+        assertThat(info.taskManagerID).isEqualTo("identifier");
     }
 }

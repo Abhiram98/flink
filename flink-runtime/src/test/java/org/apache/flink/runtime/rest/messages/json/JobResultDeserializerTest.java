@@ -51,7 +51,7 @@ class JobResultDeserializerTest {
         final JobResult jobResult =
                 objectMapper.readValue(
                         "{\n"
-                                + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
+                                + "\t\"identifier\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
                                 + "\t\"accumulator-results\": {},\n"
                                 + "\t\"net-runtime\": 0,\n"
                                 + "\t\"unknownfield\": \"foobar\"\n"
@@ -71,7 +71,7 @@ class JobResultDeserializerTest {
                         () ->
                                 objectMapper.readValue(
                                         "{\n"
-                                                + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
+                                                + "\t\"identifier\": \"1bb5e8c7df49938733b7c6a73678de6a\",\n"
                                                 + "\t\"net-runtime\": \"invalid\"\n"
                                                 + "}",
                                         JobResult.class))
@@ -85,7 +85,7 @@ class JobResultDeserializerTest {
                         () ->
                                 objectMapper.readValue(
                                         "{\n"
-                                                + "\t\"id\": \"1bb5e8c7df49938733b7c6a73678de6a\"\n"
+                                                + "\t\"identifier\": \"1bb5e8c7df49938733b7c6a73678de6a\"\n"
                                                 + "}",
                                         JobResult.class))
                 .isInstanceOf(JsonMappingException.class)

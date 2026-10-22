@@ -214,7 +214,7 @@ public class ExecNodePlanDumper {
 
     /** A class that describe the reuse info for the given DAG or tree. */
     private abstract static class ReuseInfo {
-        // build reuse id
+        // build reuse identifier
         private final ReuseIdBuilder reuseIdBuilder;
         // mapping node object to visited times
         protected final Map<ExecNode<?>, Integer> mapNodeToVisitedTimes;
@@ -225,7 +225,7 @@ public class ExecNodePlanDumper {
             this.mapNodeToVisitedTimes = new IdentityHashMap<>();
         }
 
-        /** Returns reuse id if the given node is a reuse node, else -1. */
+        /** Returns reuse identifier if the given node is a reuse node, else -1. */
         Integer getReuseId(ExecNode<?> node) {
             return reuseIdBuilder.getReuseId(node);
         }
@@ -271,13 +271,13 @@ public class ExecNodePlanDumper {
         }
     }
 
-    /** Build reuse id in an ExecNode DAG or tree. */
+    /** Build reuse identifier in an ExecNode DAG or tree. */
     private static class ReuseIdBuilder extends ExecNodeVisitorImpl {
         private final List<ExecNode<?>> borders;
         // visited node set
         private final Set<ExecNode<?>> visitedNodes =
                 Collections.newSetFromMap(new IdentityHashMap<>());
-        // mapping reuse node to its reuse id
+        // mapping reuse node to its reuse identifier
         private final Map<ExecNode<?>, Integer> mapReuseNodeToReuseId = new IdentityHashMap<>();
         private final AtomicInteger reuseIdGenerator = new AtomicInteger(0);
 
@@ -304,7 +304,7 @@ public class ExecNodePlanDumper {
         }
 
         /**
-         * Returns reuse id if the given node is a reuse node (that means it has multiple outputs),
+         * Returns reuse identifier if the given node is a reuse node (that means it has multiple outputs),
          * else -1.
          */
         public Integer getReuseId(ExecNode<?> node) {

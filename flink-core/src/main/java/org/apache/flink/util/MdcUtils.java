@@ -34,7 +34,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 /** Utility class to manage common Flink attributes in {@link MDC} (only {@link JobID} ATM). */
 public class MdcUtils {
 
-    public static final String JOB_ID = "flink-job-id";
+    public static final String JOB_ID = "flink-job-identifier";
 
     /**
      * Replace MDC contents with the provided one and return a closeable object that can be used to

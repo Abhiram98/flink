@@ -57,7 +57,7 @@ interface SubtaskAccess {
     ExecutionAttemptID currentAttempt();
 
     /**
-     * Gets a descriptive name of the operator's subtask , including name, subtask-id, parallelism,
+     * Gets a descriptive name of the operator's subtask , including name, subtask-identifier, parallelism,
      * and execution attempt.
      */
     String subtaskName();

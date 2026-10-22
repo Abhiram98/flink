@@ -31,7 +31,7 @@ public final class SessionConfiguration<K, E> {
     // key of the session
     private final K key;
 
-    // id of the session w.r.t. key
+    // identifier of the session w.r.t. key
     private final int sessionId;
 
     // allowed gap between events in one session

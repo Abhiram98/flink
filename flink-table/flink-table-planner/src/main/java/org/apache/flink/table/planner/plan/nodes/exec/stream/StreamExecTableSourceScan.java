@@ -67,14 +67,14 @@ public class StreamExecTableSourceScan extends CommonExecTableSourceScan
 
     @JsonCreator
     public StreamExecTableSourceScan(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_SCAN_TABLE_SOURCE) DynamicTableSourceSpec tableSourceSpec,
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 tableSourceSpec,

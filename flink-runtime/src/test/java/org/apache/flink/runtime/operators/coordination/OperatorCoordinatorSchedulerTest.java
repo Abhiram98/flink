@@ -943,19 +943,19 @@ class OperatorCoordinatorSchedulerTest {
 
     private static ExecutionJobVertex getJobVertex(
             DefaultScheduler scheduler, JobVertexID jobVertexId) {
-        final ExecutionVertexID id = new ExecutionVertexID(jobVertexId, 0);
-        return scheduler.getExecutionVertex(id).getJobVertex();
+        final ExecutionVertexID identifier = new ExecutionVertexID(jobVertexId, 0);
+        return scheduler.getExecutionVertex(identifier).getJobVertex();
     }
 
-    private static OperatorState createOperatorState(OperatorID id, byte[] coordinatorState) {
-        final OperatorState state = new OperatorState(id, 10, 16384);
+    private static OperatorState createOperatorState(OperatorID identifier, byte[] coordinatorState) {
+        final OperatorState state = new OperatorState(identifier, 10, 16384);
         state.setCoordinatorState(new ByteStreamStateHandle("name", coordinatorState));
         return state;
     }
 
-    private static byte[] serializeAsCheckpointMetadata(OperatorID id, byte[] coordinatorState)
+    private static byte[] serializeAsCheckpointMetadata(OperatorID identifier, byte[] coordinatorState)
             throws IOException {
-        final OperatorState state = createOperatorState(id, coordinatorState);
+        final OperatorState state = createOperatorState(identifier, coordinatorState);
         final CheckpointMetadata metadata =
                 new CheckpointMetadata(
                         1337L, Collections.singletonList(state), Collections.emptyList());

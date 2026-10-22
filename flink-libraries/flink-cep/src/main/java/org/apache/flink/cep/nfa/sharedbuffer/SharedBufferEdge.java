@@ -41,7 +41,7 @@ public class SharedBufferEdge {
     /**
      * Creates versioned (with {@link DeweyNumber}) edge that points to the target entry.
      *
-     * @param target id of target entry
+     * @param target identifier of target entry
      * @param deweyNumber version for this edge
      */
     public SharedBufferEdge(NodeId target, DeweyNumber deweyNumber) {

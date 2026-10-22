@@ -1404,7 +1404,7 @@ class JobMasterTest {
             assertThatThrownBy(partitionStateFuture::get)
                     .hasRootCauseInstanceOf(IllegalArgumentException.class);
 
-            // ask for wrong intermediate data set id
+            // ask for wrong intermediate data set identifier
             partitionStateFuture =
                     jobMasterGateway.requestPartitionState(
                             new IntermediateDataSetID(), partitionId);
@@ -2019,8 +2019,8 @@ class JobMasterTest {
                             .setRequestPartitionWithMetricsFunction(
                                     ignored -> fetchPartitionsFuture)
                             .setReleasePartitionsConsumer(
-                                    (id, partitions) ->
-                                            releaseRequest.complete(Tuple2.of(id, partitions)))
+                                    (identifier, partitions) ->
+                                            releaseRequest.complete(Tuple2.of(identifier, partitions)))
                             .setAddress("tm3")
                             .createTestingTaskExecutorGateway();
 

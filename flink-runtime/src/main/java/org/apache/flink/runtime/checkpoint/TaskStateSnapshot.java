@@ -46,7 +46,7 @@ import static org.apache.flink.runtime.checkpoint.InflightDataRescalingDescripto
 /**
  * This class encapsulates state handles to the snapshots of all operator instances executed within
  * one task. A task can run multiple operator instances as a result of operator chaining, and all
- * operator instances from the chain can register their state under their operator id. Each operator
+ * operator instances from the chain can register their state under their operator identifier. Each operator
  * instance is a physical execution responsible for processing a partition of the data that goes
  * through a logical operator. This partitioning happens to parallelize execution of logical
  * operators, e.g. distributing a map function.
@@ -66,7 +66,7 @@ public class TaskStateSnapshot implements CompositeStateHandle {
     public static final TaskStateSnapshot FINISHED_ON_RESTORE =
             new TaskStateSnapshot(new HashMap<>(), true, true);
 
-    /** Mapping from an operator id to the state of one subtask of this operator. */
+    /** Mapping from an operator identifier to the state of one subtask of this operator. */
     private final Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID;
 
     private final boolean isTaskDeployedAsFinished;
@@ -104,14 +104,14 @@ public class TaskStateSnapshot implements CompositeStateHandle {
         return isTaskFinished;
     }
 
-    /** Returns the subtask state for the given operator id (or null if not contained). */
+    /** Returns the subtask state for the given operator identifier (or null if not contained). */
     @Nullable
     public OperatorSubtaskState getSubtaskStateByOperatorID(OperatorID operatorID) {
         return subtaskStatesByOperatorID.get(operatorID);
     }
 
     /**
-     * Maps the given operator id to the given subtask state. Returns the subtask state of a
+     * Maps the given operator identifier to the given subtask state. Returns the subtask state of a
      * previous mapping, if such a mapping existed or null otherwise.
      */
     public OperatorSubtaskState putSubtaskStateByOperatorID(
@@ -120,7 +120,7 @@ public class TaskStateSnapshot implements CompositeStateHandle {
         return subtaskStatesByOperatorID.put(operatorID, Preconditions.checkNotNull(state));
     }
 
-    /** Returns the set of all mappings from operator id to the corresponding subtask state. */
+    /** Returns the set of all mappings from operator identifier to the corresponding subtask state. */
     public Set<Map.Entry<OperatorID, OperatorSubtaskState>> getSubtaskStateMappings() {
         return subtaskStatesByOperatorID.entrySet();
     }

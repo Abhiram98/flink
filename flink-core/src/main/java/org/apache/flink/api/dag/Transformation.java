@@ -123,7 +123,7 @@ public abstract class Transformation<T> {
         return ID_COUNTER.incrementAndGet();
     }
 
-    protected final int id;
+    protected final int identifier;
 
     protected String name;
 
@@ -176,7 +176,7 @@ public abstract class Transformation<T> {
 
     /**
      * User-specified ID for this transformation. This is used to assign the same operator ID across
-     * job restarts. There is also the automatically generated {@link #id}, which is assigned from a
+     * job restarts. There is also the automatically generated {@link #identifier}, which is assigned from a
      * static counter. That field is independent from this.
      */
     private String uid;
@@ -218,7 +218,7 @@ public abstract class Transformation<T> {
             TypeInformation<T> outputType,
             int parallelism,
             boolean parallelismConfigured) {
-        this.id = getNewNodeId();
+        this.identifier = getNewNodeId();
         this.name = checkNotNull(name);
         this.outputType = outputType;
         this.parallelism = parallelism;
@@ -228,8 +228,8 @@ public abstract class Transformation<T> {
     }
 
     /** Returns the unique ID of this {@code Transformation}. */
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     /** Changes the name of this {@code Transformation}. */
@@ -619,8 +619,8 @@ public abstract class Transformation<T> {
     public String toString() {
         return getClass().getSimpleName()
                 + "{"
-                + "id="
-                + id
+                + "identifier="
+                + identifier
                 + ", name='"
                 + name
                 + '\''
@@ -642,7 +642,7 @@ public abstract class Transformation<T> {
 
         Transformation<?> that = (Transformation<?>) o;
         return Objects.equals(bufferTimeout, that.bufferTimeout)
-                && Objects.equals(id, that.id)
+                && Objects.equals(identifier, that.identifier)
                 && Objects.equals(parallelism, that.parallelism)
                 && Objects.equals(name, that.name)
                 && Objects.equals(outputType, that.outputType);
@@ -650,7 +650,7 @@ public abstract class Transformation<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, outputType, parallelism, bufferTimeout);
+        return Objects.hash(identifier, name, outputType, parallelism, bufferTimeout);
     }
 
     public void setAttribute(Attribute attribute) {

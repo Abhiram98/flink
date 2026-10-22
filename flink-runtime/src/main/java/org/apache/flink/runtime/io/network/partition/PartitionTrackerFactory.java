@@ -41,7 +41,7 @@ public interface PartitionTrackerFactory {
         /**
          * Returns a {@link TaskExecutorGateway} corresponding to the given ResourceID.
          *
-         * @param taskExecutorId id of the task executor to look up.
+         * @param taskExecutorId identifier of the task executor to look up.
          * @return optional task executor gateway
          */
         Optional<TaskExecutorGateway> lookup(ResourceID taskExecutorId);

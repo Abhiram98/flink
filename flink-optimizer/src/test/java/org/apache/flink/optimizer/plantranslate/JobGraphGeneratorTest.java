@@ -328,7 +328,7 @@ public class JobGraphGeneratorTest {
                 mapVertex.getProducedDataSets().stream()
                         .anyMatch(
                                 dataSet ->
-                                        dataSet.getId()
+                                        dataSet.getIdentifier()
                                                         .equals(
                                                                 new IntermediateDataSetID(
                                                                         intermediateDataSetID))

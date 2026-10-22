@@ -325,7 +325,7 @@ class FineGrainedSlotManagerTest extends FineGrainedSlotManagerTestBase {
                             // check that we don't have any slots registered
                             assertThat(getSlotManager().getNumberRegisteredSlots()).isEqualTo(0);
 
-                            // this should not update anything since the instance id is not known to
+                            // this should not update anything since the instance identifier is not known to
                             // the slot manager
                             final CompletableFuture<Boolean> reportSlotFuture =
                                     new CompletableFuture<>();

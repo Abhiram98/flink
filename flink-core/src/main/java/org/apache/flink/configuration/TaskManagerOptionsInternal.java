@@ -27,7 +27,7 @@ import static org.apache.flink.configuration.ConfigOptions.key;
 public class TaskManagerOptionsInternal {
 
     public static final ConfigOption<String> TASK_MANAGER_RESOURCE_ID_METADATA =
-            key("internal.taskmanager.resource-id.metadata")
+            key("internal.taskmanager.resource-identifier.metadata")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(
@@ -39,7 +39,7 @@ public class TaskManagerOptionsInternal {
      * other modes, this option will not be set. This option is only used internally.
      */
     public static final ConfigOption<String> TASK_MANAGER_NODE_ID =
-            key("internal.taskmanager.node-id")
+            key("internal.taskmanager.node-identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription("ID of the node where the TaskManager is located on.");

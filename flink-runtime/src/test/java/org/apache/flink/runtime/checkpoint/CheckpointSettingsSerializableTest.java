@@ -126,7 +126,7 @@ class CheckpointSettingsSerializableTest {
         @Override
         public <V> MasterTriggerRestoreHook<V> create() {
             MasterTriggerRestoreHook<V> hook = mock(MasterTriggerRestoreHook.class);
-            when(hook.getIdentifier()).thenReturn("id");
+            when(hook.getIdentifier()).thenReturn("identifier");
             return hook;
         }
     }

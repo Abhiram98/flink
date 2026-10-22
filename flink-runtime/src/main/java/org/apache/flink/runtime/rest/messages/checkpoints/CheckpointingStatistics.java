@@ -387,7 +387,7 @@ public class CheckpointingStatistics implements ResponseBody {
     /** Statistics for a restored checkpoint. */
     public static final class RestoredCheckpointStatistics {
 
-        public static final String FIELD_NAME_ID = "id";
+        public static final String FIELD_NAME_ID = "identifier";
 
         public static final String FIELD_NAME_RESTORE_TIMESTAMP = "restore_timestamp";
 
@@ -396,7 +396,7 @@ public class CheckpointingStatistics implements ResponseBody {
         public static final String FIELD_NAME_EXTERNAL_PATH = "external_path";
 
         @JsonProperty(FIELD_NAME_ID)
-        private final long id;
+        private final long identifier;
 
         @JsonProperty(FIELD_NAME_RESTORE_TIMESTAMP)
         private final long restoreTimestamp;
@@ -410,18 +410,18 @@ public class CheckpointingStatistics implements ResponseBody {
 
         @JsonCreator
         public RestoredCheckpointStatistics(
-                @JsonProperty(FIELD_NAME_ID) long id,
+                @JsonProperty(FIELD_NAME_ID) long identifier,
                 @JsonProperty(FIELD_NAME_RESTORE_TIMESTAMP) long restoreTimestamp,
                 @JsonProperty(FIELD_NAME_IS_SAVEPOINT) boolean savepoint,
                 @JsonProperty(FIELD_NAME_EXTERNAL_PATH) @Nullable String externalPath) {
-            this.id = id;
+            this.identifier = identifier;
             this.restoreTimestamp = restoreTimestamp;
             this.savepoint = savepoint;
             this.externalPath = externalPath;
         }
 
-        public long getId() {
-            return id;
+        public long getIdentifier() {
+            return identifier;
         }
 
         public long getRestoreTimestamp() {
@@ -446,7 +446,7 @@ public class CheckpointingStatistics implements ResponseBody {
                 return false;
             }
             RestoredCheckpointStatistics that = (RestoredCheckpointStatistics) o;
-            return id == that.id
+            return identifier == that.identifier
                     && restoreTimestamp == that.restoreTimestamp
                     && savepoint == that.savepoint
                     && Objects.equals(externalPath, that.externalPath);
@@ -454,7 +454,7 @@ public class CheckpointingStatistics implements ResponseBody {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, restoreTimestamp, savepoint, externalPath);
+            return Objects.hash(identifier, restoreTimestamp, savepoint, externalPath);
         }
     }
 }

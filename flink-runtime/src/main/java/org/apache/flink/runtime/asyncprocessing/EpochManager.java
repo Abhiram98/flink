@@ -160,8 +160,8 @@ public class EpochManager {
      * Records are assigned to a unique epoch based on their arrival.
      */
     public static class Epoch {
-        /** The id of this epoch for easy debugging. */
-        long id;
+        /** The identifier of this epoch for easy debugging. */
+        long identifier;
         /** The number of records that are still ongoing in this epoch. */
         int ongoingRecordCount;
 
@@ -170,8 +170,8 @@ public class EpochManager {
 
         EpochStatus status;
 
-        public Epoch(long id) {
-            this.id = id;
+        public Epoch(long identifier) {
+            this.identifier = identifier;
             this.ongoingRecordCount = 0;
             this.status = EpochStatus.OPEN;
             this.action = null;
@@ -204,7 +204,7 @@ public class EpochManager {
 
         public String toString() {
             return String.format(
-                    "Epoch{id=%d, ongoingRecord=%d, status=%s}", id, ongoingRecordCount, status);
+                    "Epoch{identifier=%d, ongoingRecord=%d, status=%s}", identifier, ongoingRecordCount, status);
         }
     }
 }

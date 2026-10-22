@@ -373,33 +373,33 @@ class ColumnVectorTest {
         }
 
         @Override
-        public int decodeToInt(int id) {
-            return (int) intDictionary[id];
+        public int decodeToInt(int identifier) {
+            return (int) intDictionary[identifier];
         }
 
         @Override
-        public long decodeToLong(int id) {
-            return (long) intDictionary[id];
+        public long decodeToLong(int identifier) {
+            return (long) intDictionary[identifier];
         }
 
         @Override
-        public float decodeToFloat(int id) {
-            return (float) intDictionary[id];
+        public float decodeToFloat(int identifier) {
+            return (float) intDictionary[identifier];
         }
 
         @Override
-        public double decodeToDouble(int id) {
-            return (double) intDictionary[id];
+        public double decodeToDouble(int identifier) {
+            return (double) intDictionary[identifier];
         }
 
         @Override
-        public byte[] decodeToBinary(int id) {
-            return (byte[]) intDictionary[id];
+        public byte[] decodeToBinary(int identifier) {
+            return (byte[]) intDictionary[identifier];
         }
 
         @Override
-        public TimestampData decodeToTimestamp(int id) {
-            return (TimestampData) intDictionary[id];
+        public TimestampData decodeToTimestamp(int identifier) {
+            return (TimestampData) intDictionary[identifier];
         }
     }
 }

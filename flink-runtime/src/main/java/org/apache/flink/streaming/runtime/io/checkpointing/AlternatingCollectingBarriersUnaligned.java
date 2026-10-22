@@ -72,7 +72,7 @@ final class AlternatingCollectingBarriersUnaligned implements BarrierHandlerStat
         }
 
         if (controller.allBarriersReceived()) {
-            return finishCheckpoint(checkpointBarrier.getId());
+            return finishCheckpoint(checkpointBarrier.getIdentifier());
         }
         return this;
     }
@@ -92,7 +92,7 @@ final class AlternatingCollectingBarriersUnaligned implements BarrierHandlerStat
             checkState(
                     controller.getPendingCheckpointBarrier() != null,
                     "At least one barrier received in unaligned collecting barrier state.");
-            return finishCheckpoint(controller.getPendingCheckpointBarrier().getId());
+            return finishCheckpoint(controller.getPendingCheckpointBarrier().getIdentifier());
         }
         return this;
     }

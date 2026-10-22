@@ -122,7 +122,7 @@ public class SsgNetworkMemoryCalculationUtils {
             ExecutionJobVertex ejv) {
         Map<IntermediateDataSetID, Integer> partitionReuseCount = new HashMap<>();
         for (IntermediateResult intermediateResult : ejv.getInputs()) {
-            partitionReuseCount.merge(intermediateResult.getId(), 1, Integer::sum);
+            partitionReuseCount.merge(intermediateResult.getIdentifier(), 1, Integer::sum);
         }
         return partitionReuseCount;
     }
@@ -139,15 +139,15 @@ public class SsgNetworkMemoryCalculationUtils {
             IntermediateResult consumedResult = ejv.getInputs().get(i);
 
             // the inputs order should match in JobGraph and ExecutionGraph
-            checkState(consumedResult.getId().equals(inputEdge.getSourceId()));
+            checkState(consumedResult.getIdentifier().equals(inputEdge.getSourceId()));
 
             int maxNum =
                     EdgeManagerBuildUtil.computeMaxEdgesToTargetExecutionVertex(
                             ejv.getParallelism(),
                             consumedResult.getNumberOfAssignedPartitions(),
                             inputEdge.getDistributionPattern());
-            maxInputChannelNums.put(consumedResult.getId(), maxNum);
-            inputPartitionTypes.putIfAbsent(consumedResult.getId(), consumedResult.getResultType());
+            maxInputChannelNums.put(consumedResult.getIdentifier(), maxNum);
+            inputPartitionTypes.putIfAbsent(consumedResult.getIdentifier(), consumedResult.getResultType());
         }
     }
 
@@ -174,8 +174,8 @@ public class SsgNetworkMemoryCalculationUtils {
                                 consumerJobVertex.getParallelism(),
                                 outputEdge.getDistributionPattern());
             }
-            maxSubpartitionNums.put(producedDataSet.getId(), maxNum);
-            partitionTypes.putIfAbsent(producedDataSet.getId(), producedDataSet.getResultType());
+            maxSubpartitionNums.put(producedDataSet.getIdentifier(), maxNum);
+            partitionTypes.putIfAbsent(producedDataSet.getIdentifier(), producedDataSet.getResultType());
         }
     }
 
@@ -192,7 +192,7 @@ public class SsgNetworkMemoryCalculationUtils {
                         ejv.getGraph().getResultPartitionOrThrow((partitionGroup.getFirst()));
                 IndexRange subpartitionIndexRange =
                         vertex.getExecutionVertexInputInfo(
-                                        resultPartition.getIntermediateResult().getId())
+                                        resultPartition.getIntermediateResult().getIdentifier())
                                 .getSubpartitionIndexRange();
 
                 maxInputChannelNums.merge(
@@ -216,9 +216,9 @@ public class SsgNetworkMemoryCalculationUtils {
                     Arrays.stream(intermediateResult.getPartitions())
                             .map(IntermediateResultPartition::getNumberOfSubpartitions)
                             .reduce(0, Integer::max);
-            maxSubpartitionNums.put(intermediateResult.getId(), maxNum);
+            maxSubpartitionNums.put(intermediateResult.getIdentifier(), maxNum);
             partitionTypes.putIfAbsent(
-                    intermediateResult.getId(), intermediateResult.getResultType());
+                    intermediateResult.getIdentifier(), intermediateResult.getResultType());
         }
     }
 

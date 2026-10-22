@@ -29,7 +29,7 @@ public interface CommittableMessage<CommT> {
     int getSubtaskId();
 
     /**
-     * Returns the checkpoint id or empty if the message does not belong to a checkpoint. In that
+     * Returns the checkpoint identifier or empty if the message does not belong to a checkpoint. In that
      * case, the committable was created at the end of input (e.g., in batch mode).
      */
     OptionalLong getCheckpointId();

@@ -275,15 +275,15 @@ public class RestServerEndpointITCase {
     void testRequestInterleaving() throws Exception {
         final BlockerSync sync = new BlockerSync();
         testHandler.handlerBody =
-                id -> {
-                    if (id == 1) {
+                identifier -> {
+                    if (identifier == 1) {
                         try {
                             sync.block();
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
                     }
-                    return CompletableFuture.completedFuture(new TestResponse(id));
+                    return CompletableFuture.completedFuture(new TestResponse(identifier));
                 };
 
         // send first request and wait until the handler blocks
@@ -294,13 +294,13 @@ public class RestServerEndpointITCase {
         // send second request and verify response
         final CompletableFuture<TestResponse> response2 =
                 sendRequestToTestHandler(new TestRequest(2));
-        assertThat(response2.get().id).isEqualTo(2);
+        assertThat(response2.get().identifier).isEqualTo(2);
 
         // wake up blocked handler
         sync.releaseBlocker();
 
         // verify response to first request
-        assertThat(response1.get().id).isOne();
+        assertThat(response1.get().identifier).isOne();
     }
 
     /**
@@ -339,7 +339,7 @@ public class RestServerEndpointITCase {
     @TestTemplate
     void testShouldRespectMaxContentLengthLimitForRequests() throws Exception {
         testHandler.handlerBody =
-                id -> {
+                identifier -> {
                     throw new AssertionError("Request should not arrive at server.");
                 };
 
@@ -356,10 +356,10 @@ public class RestServerEndpointITCase {
     @TestTemplate
     void testShouldRespectMaxContentLengthLimitForResponses() throws Exception {
         testHandler.handlerBody =
-                id ->
+                identifier ->
                         CompletableFuture.completedFuture(
                                 new TestResponse(
-                                        id, createStringOfSize(TEST_REST_MAX_CONTENT_LENGTH)));
+                                        identifier, createStringOfSize(TEST_REST_MAX_CONTENT_LENGTH)));
         assertThatFuture(sendRequestToTestHandler(new TestRequest(1)))
                 .eventuallyFailsWith(ExecutionException.class)
                 .withCauseInstanceOf(TooLongFrameException.class)
@@ -573,7 +573,7 @@ public class RestServerEndpointITCase {
         testHandler.closeFuture = new CompletableFuture<>();
         final BlockerSync sync = new BlockerSync();
         testHandler.handlerBody =
-                id -> {
+                identifier -> {
                     // Intentionally schedule the work on a different thread. This is to simulate
                     // handlers where the CompletableFuture is finished by the RPC framework.
                     return CompletableFuture.supplyAsync(
@@ -583,7 +583,7 @@ public class RestServerEndpointITCase {
                                 } catch (InterruptedException e) {
                                     Thread.currentThread().interrupt();
                                 }
-                                return new TestResponse(id);
+                                return new TestResponse(identifier);
                             });
                 };
 
@@ -612,7 +612,7 @@ public class RestServerEndpointITCase {
     @TestTemplate
     void testRequestsRejectedAfterShutdownOfHandlerIsCompleted() throws Exception {
         testHandler.handlerBody =
-                id -> CompletableFuture.completedFuture(new TestResponse(id, "foobar"));
+                identifier -> CompletableFuture.completedFuture(new TestResponse(identifier, "foobar"));
 
         // let the test upload handler block the shut down of the RestServerEndpoint
         testUploadHandler.closeFuture = new CompletableFuture<>();
@@ -792,8 +792,8 @@ public class RestServerEndpointITCase {
             assertThat(request.getQueryParameter(JobIDQueryParameter.class).get(0))
                     .isEqualTo(QUERY_JOB_ID);
 
-            final int id = request.getRequestBody().id;
-            return handlerBody.apply(id);
+            final int identifier = request.getRequestBody().identifier;
+            return handlerBody.apply(identifier);
         }
 
         @Override
@@ -825,35 +825,35 @@ public class RestServerEndpointITCase {
     }
 
     private static class TestRequest implements RequestBody {
-        public final int id;
+        public final int identifier;
 
         public final String content;
 
-        public TestRequest(int id) {
-            this(id, null);
+        public TestRequest(int identifier) {
+            this(identifier, null);
         }
 
         @JsonCreator
         public TestRequest(
-                @JsonProperty("id") int id, @JsonProperty("content") final String content) {
-            this.id = id;
+                @JsonProperty("identifier") int identifier, @JsonProperty("content") final String content) {
+            this.identifier = identifier;
             this.content = content;
         }
     }
 
     private static class TestResponse implements ResponseBody {
 
-        public final int id;
+        public final int identifier;
 
         public final String content;
 
-        public TestResponse(int id) {
-            this(id, null);
+        public TestResponse(int identifier) {
+            this(identifier, null);
         }
 
         @JsonCreator
-        public TestResponse(@JsonProperty("id") int id, @JsonProperty("content") String content) {
-            this.id = id;
+        public TestResponse(@JsonProperty("identifier") int identifier, @JsonProperty("content") String content) {
+            this.identifier = identifier;
             this.content = content;
         }
     }

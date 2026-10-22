@@ -200,7 +200,7 @@ class ZooKeeperLeaderElectionDriverTest {
                                 assertThat(otherLeaderElectionDriver.hasLeadership()).isFalse();
 
                                 otherLeaderElectionDriver.publishLeaderInformation(
-                                        "component-id",
+                                        "component-identifier",
                                         LeaderInformation.known(UUID.randomUUID(), "localhost"));
 
                                 assertThat(

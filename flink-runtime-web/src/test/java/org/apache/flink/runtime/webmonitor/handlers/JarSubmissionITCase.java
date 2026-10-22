@@ -89,7 +89,7 @@ class JarSubmissionITCase {
         final JarListInfo.JarFileInfo listEntry =
                 postUploadListResponse.jarFileList.iterator().next();
         assertThat(listEntry.name).isEqualTo(jar.getFileName().toString());
-        assertThat(listEntry.id).isEqualTo(storedJarName);
+        assertThat(listEntry.identifier).isEqualTo(storedJarName);
 
         final JobPlanInfo planResponse = showPlan(planHandler, storedJarName, restfulGateway);
         // we're only interested in the core functionality so checking for a small detail is

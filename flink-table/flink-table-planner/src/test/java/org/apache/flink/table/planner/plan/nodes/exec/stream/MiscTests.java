@@ -82,10 +82,10 @@ class MiscTests implements TableTestProgramRunner {
         program.getSetupConfigOptionTestSteps().forEach(s -> s.apply(tEnv));
 
         for (SourceTestStep sourceTestStep : program.getSetupSourceTestSteps()) {
-            final String id = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
+            final String identifier = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
             final Map<String, String> options = new HashMap<>();
             options.put("connector", "values");
-            options.put("data-id", id);
+            options.put("data-identifier", identifier);
             options.put("runtime-source", "NewSource");
             sourceTestStep.apply(tEnv, options);
         }

@@ -50,7 +50,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(SplitFetcher.class);
 
-    private final int id;
+    private final int identifier;
 
     @GuardedBy("lock")
     private final Deque<SplitFetcherTask> taskQueue = new ArrayDeque<>();
@@ -94,14 +94,14 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
     private final CountDownLatch recordsProcessedLatch;
 
     SplitFetcher(
-            int id,
+            int identifier,
             FutureCompletingBlockingQueue<RecordsWithSplitIds<E>> elementsQueue,
             SplitReader<E, SplitT> splitReader,
             Consumer<Throwable> errorHandler,
             Runnable shutdownHook,
             Consumer<Collection<String>> splitFinishedHook,
             boolean allowUnalignedSourceSplits) {
-        this.id = id;
+        this.identifier = identifier;
         this.elementsQueue = checkNotNull(elementsQueue);
         this.splitReader = checkNotNull(splitReader);
         this.errorHandler = checkNotNull(errorHandler);
@@ -119,12 +119,12 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
                             splitFinishedHook.accept(ids);
                             LOG.info("Finished reading from splits {}", ids);
                         },
-                        id);
+                        identifier);
     }
 
     @Override
     public void run() {
-        LOG.info("Starting split fetcher {}", id);
+        LOG.info("Starting split fetcher {}", identifier);
         try {
             while (runOnce()) {
                 // nothing to do, everything is inside #runOnce.
@@ -152,7 +152,7 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
             } catch (Exception e) {
                 errorHandler.accept(e);
             } finally {
-                LOG.info("Split fetcher {} exited.", id);
+                LOG.info("Split fetcher {} exited.", identifier);
                 // This executes after possible errorHandler.accept(t). If these operations bear
                 // a happens-before relation, then we can checking side effect of
                 // errorHandler.accept(t)
@@ -194,7 +194,7 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
             throw new RuntimeException(
                     String.format(
                             "SplitFetcher thread %d received unexpected exception while polling the records",
-                            id),
+                            identifier),
                     e);
         }
 
@@ -330,7 +330,7 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
     }
 
     public int fetcherId() {
-        return id;
+        return identifier;
     }
 
     /** Shutdown the split fetcher. */
@@ -358,7 +358,7 @@ public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {
             if (!closed) {
                 closed = true;
                 paused = false;
-                LOG.info("Shutting down split fetcher {}", id);
+                LOG.info("Shutting down split fetcher {}", identifier);
                 wakeUpUnsafe(false);
             }
         } finally {

@@ -29,8 +29,8 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * The {@link NettyPayload} represents the payload that will be transferred to netty connection. It
- * could indicate a combination of buffer, buffer index, and its subpartition id, and it could also
- * indicate an error or a segment id.
+ * could indicate a combination of buffer, buffer index, and its subpartition identifier, and it could also
+ * indicate an error or a segment identifier.
  */
 public class NettyPayload {
 
@@ -53,13 +53,13 @@ public class NettyPayload {
     private final int bufferIndex;
 
     /**
-     * The id of subpartition. If the subpartition id is non-negative, buffer won't be null, error
+     * The identifier of subpartition. If the subpartition identifier is non-negative, buffer won't be null, error
      * will be null, bufferIndex will be non-negative, segmentId will be -1.
      */
     private final int subpartitionId;
 
     /**
-     * The id of segment. If the segment id is non-negative, buffer and error will be null,
+     * The identifier of segment. If the segment identifier is non-negative, buffer and error will be null,
      * bufferIndex and subpartitionId will be -1.
      */
     private final int segmentId;

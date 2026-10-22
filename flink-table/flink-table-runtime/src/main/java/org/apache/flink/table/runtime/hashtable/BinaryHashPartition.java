@@ -304,7 +304,7 @@ public class BinaryHashPartition extends AbstractPagedInputView implements Seeka
      * takes back one buffer to use it for further spilling.
      *
      * @param ioAccess The I/O manager to be used to create a writer to disk.
-     * @param targetChannel The id of the target channel for this partition.
+     * @param targetChannel The identifier of the target channel for this partition.
      * @return The number of buffers that were freed by spilling this partition.
      * @throws IOException Thrown, if the writing failed.
      */

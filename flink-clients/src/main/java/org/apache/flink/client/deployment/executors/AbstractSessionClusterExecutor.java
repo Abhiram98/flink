@@ -56,7 +56,7 @@ import static org.apache.flink.util.Preconditions.checkState;
  * An abstract {@link PipelineExecutor} used to execute {@link Pipeline pipelines} on an existing
  * (session) cluster.
  *
- * @param <ClusterID> the type of the id of the cluster.
+ * @param <ClusterID> the type of the identifier of the cluster.
  * @param <ClientFactory> the type of the {@link ClusterClientFactory} used to create/retrieve a
  *     client to the target cluster.
  */

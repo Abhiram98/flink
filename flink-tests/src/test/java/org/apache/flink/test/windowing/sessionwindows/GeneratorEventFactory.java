@@ -31,8 +31,8 @@ public interface GeneratorEventFactory<K, E> {
 
     /**
      * @param key session key
-     * @param sessionId session id
-     * @param eventId event id w.r.t. the session
+     * @param sessionId session identifier
+     * @param eventId event identifier w.r.t. the session
      * @param eventTimestamp event time
      * @param globalWatermark current value of the global watermark
      * @param timing indicator for lateness

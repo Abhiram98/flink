@@ -66,7 +66,7 @@ public interface ShuffleDescriptor extends Serializable {
      * ShuffleEnvironment#releasePartitionsLocally(Collection)} can be used to release such kind of
      * partitions locally.
      *
-     * @return the resource id of the producing task executor if the partition occupies local
+     * @return the resource identifier of the producing task executor if the partition occupies local
      *     resources there
      */
     Optional<ResourceID> storesLocalResourcesOn();

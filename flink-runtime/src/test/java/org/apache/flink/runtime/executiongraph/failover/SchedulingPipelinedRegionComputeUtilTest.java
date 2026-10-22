@@ -58,9 +58,9 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
 
         assertDistinctRegions(r1, r2, r3);
     }
@@ -94,12 +94,12 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getId());
-        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getId());
-        Set<SchedulingExecutionVertex> ra3 = pipelinedRegionByVertex.get(va3.getId());
-        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getId());
-        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getId());
-        Set<SchedulingExecutionVertex> rb3 = pipelinedRegionByVertex.get(vb3.getId());
+        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getIdentifier());
+        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getIdentifier());
+        Set<SchedulingExecutionVertex> ra3 = pipelinedRegionByVertex.get(va3.getIdentifier());
+        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getIdentifier());
+        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getIdentifier());
+        Set<SchedulingExecutionVertex> rb3 = pipelinedRegionByVertex.get(vb3.getIdentifier());
 
         assertSameRegion(ra1, rb1);
         assertSameRegion(ra2, rb2);
@@ -141,12 +141,12 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getId());
-        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getId());
-        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getId());
-        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getId());
-        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getId());
-        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getId());
+        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getIdentifier());
+        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getIdentifier());
+        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getIdentifier());
+        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getIdentifier());
+        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getIdentifier());
+        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getIdentifier());
 
         assertSameRegion(ra1, ra2, rb1, rb2, rc1, rc2);
     }
@@ -187,13 +187,13 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
-        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getId());
-        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getId());
-        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
+        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getIdentifier());
+        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getIdentifier());
+        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getIdentifier());
 
         assertSameRegion(r1, r2, r3, r4, r5, r6, r7);
     }
@@ -234,13 +234,13 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
-        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getId());
-        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getId());
-        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
+        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getIdentifier());
+        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getIdentifier());
+        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getIdentifier());
 
         assertSameRegion(r1, r2, r3, r4, r5, r6, r7);
     }
@@ -279,12 +279,12 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getId());
-        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getId());
-        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getId());
-        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getId());
-        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getId());
-        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getId());
+        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getIdentifier());
+        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getIdentifier());
+        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getIdentifier());
+        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getIdentifier());
+        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getIdentifier());
+        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getIdentifier());
 
         assertSameRegion(ra1, ra2, rb1, rb2);
 
@@ -327,12 +327,12 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getId());
-        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getId());
-        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getId());
-        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getId());
-        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getId());
-        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getId());
+        Set<SchedulingExecutionVertex> ra1 = pipelinedRegionByVertex.get(va1.getIdentifier());
+        Set<SchedulingExecutionVertex> ra2 = pipelinedRegionByVertex.get(va2.getIdentifier());
+        Set<SchedulingExecutionVertex> rb1 = pipelinedRegionByVertex.get(vb1.getIdentifier());
+        Set<SchedulingExecutionVertex> rb2 = pipelinedRegionByVertex.get(vb2.getIdentifier());
+        Set<SchedulingExecutionVertex> rc1 = pipelinedRegionByVertex.get(vc1.getIdentifier());
+        Set<SchedulingExecutionVertex> rc2 = pipelinedRegionByVertex.get(vc2.getIdentifier());
 
         assertSameRegion(ra1, ra2, rb1, rb2);
 
@@ -380,13 +380,13 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
-        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getId());
-        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getId());
-        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
+        Set<SchedulingExecutionVertex> r5 = pipelinedRegionByVertex.get(v5.getIdentifier());
+        Set<SchedulingExecutionVertex> r6 = pipelinedRegionByVertex.get(v6.getIdentifier());
+        Set<SchedulingExecutionVertex> r7 = pipelinedRegionByVertex.get(v7.getIdentifier());
 
         assertSameRegion(r1, r2, r5);
         assertSameRegion(r3, r4, r6);
@@ -425,10 +425,10 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
 
         assertSameRegion(r1, r2, r3, r4);
     }
@@ -464,10 +464,10 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
 
         assertSameRegion(r1, r2, r3, r4);
     }
@@ -489,10 +489,10 @@ class SchedulingPipelinedRegionComputeUtilTest {
         Map<ExecutionVertexID, Set<SchedulingExecutionVertex>> pipelinedRegionByVertex =
                 computePipelinedRegionByVertex(topology);
 
-        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getId());
-        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getId());
-        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getId());
-        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getId());
+        Set<SchedulingExecutionVertex> r1 = pipelinedRegionByVertex.get(v1.getIdentifier());
+        Set<SchedulingExecutionVertex> r2 = pipelinedRegionByVertex.get(v2.getIdentifier());
+        Set<SchedulingExecutionVertex> r3 = pipelinedRegionByVertex.get(v3.getIdentifier());
+        Set<SchedulingExecutionVertex> r4 = pipelinedRegionByVertex.get(v4.getIdentifier());
 
         assertDistinctRegions(r1, r2, r3, r4);
     }
@@ -515,7 +515,7 @@ class SchedulingPipelinedRegionComputeUtilTest {
                 new HashMap<>();
         for (Set<SchedulingExecutionVertex> region : regions) {
             for (SchedulingExecutionVertex vertex : region) {
-                pipelinedRegionByVertex.put(vertex.getId(), region);
+                pipelinedRegionByVertex.put(vertex.getIdentifier(), region);
             }
         }
         return pipelinedRegionByVertex;

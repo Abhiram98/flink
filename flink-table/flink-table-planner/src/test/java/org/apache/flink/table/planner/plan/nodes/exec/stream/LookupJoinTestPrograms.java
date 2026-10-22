@@ -34,7 +34,7 @@ public class LookupJoinTestPrograms {
 
     static final String[] CUSTOMERS_SCHEMA =
             new String[] {
-                "id INT PRIMARY KEY NOT ENFORCED",
+                "identifier INT PRIMARY KEY NOT ENFORCED",
                 "name STRING",
                 "age INT",
                 "city STRING",
@@ -135,7 +135,7 @@ public class LookupJoinTestPrograms {
             Arrays.asList(
                     "order_id INT",
                     "total DOUBLE",
-                    "id INT",
+                    "identifier INT",
                     "name STRING",
                     "age INT",
                     "city STRING",
@@ -169,14 +169,14 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.city, "
                                     + "C.state, "
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id")
+                                    + "ON O.customer_id = C.identifier")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_FILTER_PUSHDOWN =
@@ -200,7 +200,7 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -208,7 +208,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id AND C.age > 30")
+                                    + "ON O.customer_id = C.identifier AND C.age > 30")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_PRE_FILTER =
@@ -233,7 +233,7 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -241,7 +241,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "LEFT JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id AND C.age > 30 AND O.total > 15.3")
+                                    + "ON O.customer_id = C.identifier AND C.age > 30 AND O.total > 15.3")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_POST_FILTER =
@@ -266,7 +266,7 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -274,7 +274,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "LEFT JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id AND CAST(O.total AS INT) < C.age")
+                                    + "ON O.customer_id = C.identifier AND CAST(O.total AS INT) < C.age")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_PRE_POST_FILTER =
@@ -301,7 +301,7 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -309,7 +309,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "LEFT JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id AND O.total > 15.3 AND CAST(O.total AS INT) < C.age")
+                                    + "ON O.customer_id = C.identifier AND O.total > 15.3 AND CAST(O.total AS INT) < C.age")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_LEFT_JOIN =
@@ -334,7 +334,7 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -342,7 +342,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "LEFT JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id AND C.age > 30 AND O.customer_id <> 3")
+                                    + "ON O.customer_id = C.identifier AND C.age > 30 AND O.customer_id <> 3")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_ASYNC_HINT =
@@ -368,7 +368,7 @@ public class LookupJoinTestPrograms {
                                     + "/*+ LOOKUP('table'='C', 'async'='true', 'output-mode'='allow_unordered', 'timeout'='500s', 'capacity'='2000') */ "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -376,7 +376,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id")
+                                    + "ON O.customer_id = C.identifier")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_RETRY_HINT =
@@ -402,7 +402,7 @@ public class LookupJoinTestPrograms {
                                     + "/*+ LOOKUP('table'='C', 'retry-predicate'='lookup_miss', 'retry-strategy'='fixed_delay', 'fixed-delay'='10s', 'max-attempts'='3') */ "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.age, "
                                     + "C.city, "
@@ -410,7 +410,7 @@ public class LookupJoinTestPrograms {
                                     + "C.zipcode "
                                     + "FROM orders_t as O "
                                     + "JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id")
+                                    + "ON O.customer_id = C.identifier")
                     .build();
 
     static final TableTestProgram LOOKUP_JOIN_WITH_TRY_RESOLVE =
@@ -447,13 +447,13 @@ public class LookupJoinTestPrograms {
                             "INSERT INTO sink_t SELECT "
                                     + "O.order_id, "
                                     + "O.total, "
-                                    + "C.id, "
+                                    + "C.identifier, "
                                     + "C.name, "
                                     + "C.city, "
                                     + "C.state, "
                                     + "C.zipcode "
                                     + "FROM orders_cdc_t as O "
                                     + "JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C "
-                                    + "ON O.customer_id = C.id")
+                                    + "ON O.customer_id = C.identifier")
                     .build();
 }

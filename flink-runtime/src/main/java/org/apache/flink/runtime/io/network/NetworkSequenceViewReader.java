@@ -47,7 +47,7 @@ public interface NetworkSequenceViewReader {
      * partition.
      *
      * @param partitionProvider the result partition provider
-     * @param resultPartitionId the result partition id
+     * @param resultPartitionId the result partition identifier
      * @param subpartitionIndexSet the sub partition indexes
      * @throws IOException the thrown exception
      */
@@ -86,10 +86,10 @@ public interface NetworkSequenceViewReader {
     void addCredit(int creditDeltas);
 
     /**
-     * Notify the id of required segment from consumer.
+     * Notify the identifier of required segment from consumer.
      *
-     * @param subpartitionId The id of the corresponding subpartition.
-     * @param segmentId The id of required segment.
+     * @param subpartitionId The identifier of the corresponding subpartition.
+     * @param segmentId The identifier of required segment.
      */
     void notifyRequiredSegmentId(int subpartitionId, int segmentId);
 

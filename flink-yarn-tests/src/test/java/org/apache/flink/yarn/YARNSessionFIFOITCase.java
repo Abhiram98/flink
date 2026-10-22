@@ -191,8 +191,8 @@ class YARNSessionFIFOITCase extends YarnTestBase {
 
             assertThat(app.getName()).isEqualTo("MyCustomName");
             assertThat(app.getApplicationType()).isEqualTo("Apache Flink 1.x");
-            ApplicationId id = app.getApplicationId();
-            yc.killApplication(id);
+            ApplicationId identifier = app.getApplicationId();
+            yc.killApplication(identifier);
 
             CommonTestUtils.waitUntilCondition(
                     () ->

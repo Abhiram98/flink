@@ -55,10 +55,10 @@ public final class PipelinedRegionComputeUtil {
                 if (producerRegion == null) {
                     throw new IllegalStateException(
                             "Producer task "
-                                    + producerVertex.getId()
+                                    + producerVertex.getIdentifier()
                                     + " failover region is null"
                                     + " while calculating failover region for the consumer task "
-                                    + vertex.getId()
+                                    + vertex.getIdentifier()
                                     + ". This should be a failover region building bug.");
                 }
 

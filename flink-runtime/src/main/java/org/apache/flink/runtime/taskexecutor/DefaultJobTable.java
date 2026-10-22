@@ -243,7 +243,7 @@ public final class DefaultJobTable implements JobTable {
 
     private static final class EstablishedConnection {
 
-        // The unique id used for identifying the job manager
+        // The unique identifier used for identifying the job manager
         private final ResourceID resourceID;
 
         // Gateway to the job master

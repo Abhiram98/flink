@@ -570,7 +570,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                     .isInstanceOf(KryoSerializer.class);
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
             ValueState<TestPojo> state =
                     backend.getPartitionedState(
@@ -646,7 +646,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig());
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
             ValueState<TestPojo> state =
                     backend.getOrCreateKeyedState(VoidNamespaceSerializer.INSTANCE, kvId);
@@ -715,7 +715,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                 .isInstanceOf(KryoSerializer.class);
 
-        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE, env);
@@ -788,7 +788,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                 .isInstanceOf(KryoSerializer.class);
 
-        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE, env);
@@ -864,7 +864,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                 .isInstanceOf(KryoSerializer.class);
 
-        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+        ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE, env);
@@ -945,7 +945,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                     .isInstanceOf(KryoSerializer.class);
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
 
             ValueState<TestPojo> state =
                     backend.getPartitionedState(
@@ -985,7 +985,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // re-initialize to ensure that we create the KryoSerializer from scratch, otherwise
             // initializeSerializerUnlessSet would not pick up our new config
-            kvId = new ValueStateDescriptor<>("id", pojoType);
+            kvId = new ValueStateDescriptor<>("identifier", pojoType);
             state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1055,7 +1055,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                     .isInstanceOf(KryoSerializer.class);
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
             ValueState<TestPojo> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1092,7 +1092,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // re-initialize to ensure that we create the KryoSerializer from scratch, otherwise
             // initializeSerializerUnlessSet would not pick up our new config
-            kvId = new ValueStateDescriptor<>("id", pojoType);
+            kvId = new ValueStateDescriptor<>("identifier", pojoType);
             state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1152,7 +1152,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                     .isInstanceOf(KryoSerializer.class);
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
             ValueState<TestPojo> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1166,11 +1166,11 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             KryoSerializer<TestPojo> kryoSerializer =
                     (KryoSerializer<TestPojo>) internalKvState.getValueSerializer();
             int mainPojoClassRegistrationId =
-                    kryoSerializer.getKryo().getRegistration(TestPojo.class).getId();
+                    kryoSerializer.getKryo().getRegistration(TestPojo.class).getIdentifier();
             int nestedPojoClassARegistrationId =
-                    kryoSerializer.getKryo().getRegistration(TestNestedPojoClassA.class).getId();
+                    kryoSerializer.getKryo().getRegistration(TestNestedPojoClassA.class).getIdentifier();
             int nestedPojoClassBRegistrationId =
-                    kryoSerializer.getKryo().getRegistration(TestNestedPojoClassB.class).getId();
+                    kryoSerializer.getKryo().getRegistration(TestNestedPojoClassB.class).getIdentifier();
 
             // ============== create snapshot of current configuration ==============
 
@@ -1219,7 +1219,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // re-initialize to ensure that we create the KryoSerializer from scratch, otherwise
             // initializeSerializerUnlessSet would not pick up our new config
-            kvId = new ValueStateDescriptor<>("id", pojoType);
+            kvId = new ValueStateDescriptor<>("identifier", pojoType);
             state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1229,11 +1229,11 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // identical Kryo registration ids compared to the previous execution
             internalKvState = (InternalKvState) state;
             kryoSerializer = (KryoSerializer<TestPojo>) internalKvState.getValueSerializer();
-            assertThat(kryoSerializer.getKryo().getRegistration(TestPojo.class).getId())
+            assertThat(kryoSerializer.getKryo().getRegistration(TestPojo.class).getIdentifier())
                     .isEqualTo(mainPojoClassRegistrationId);
-            assertThat(kryoSerializer.getKryo().getRegistration(TestNestedPojoClassA.class).getId())
+            assertThat(kryoSerializer.getKryo().getRegistration(TestNestedPojoClassA.class).getIdentifier())
                     .isEqualTo(nestedPojoClassARegistrationId);
-            assertThat(kryoSerializer.getKryo().getRegistration(TestNestedPojoClassB.class).getId())
+            assertThat(kryoSerializer.getKryo().getRegistration(TestNestedPojoClassB.class).getIdentifier())
                     .isEqualTo(nestedPojoClassBRegistrationId);
 
             backend.setCurrentKey(1);
@@ -1281,7 +1281,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             assertThat(pojoType.createSerializer(env.getExecutionConfig().getSerializerConfig()))
                     .isInstanceOf(PojoSerializer.class);
 
-            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("id", pojoType);
+            ValueStateDescriptor<TestPojo> kvId = new ValueStateDescriptor<>("identifier", pojoType);
             ValueState<TestPojo> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1330,7 +1330,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // re-initialize to ensure that we create the PojoSerializer from scratch, otherwise
             // initializeSerializerUnlessSet would not pick up our new config
-            kvId = new ValueStateDescriptor<>("id", pojoType);
+            kvId = new ValueStateDescriptor<>("identifier", pojoType);
             state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -1366,7 +1366,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         CheckpointStreamFactory streamFactory = createStreamFactory();
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
 
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
 
         TypeSerializer<Integer> keySerializer = IntSerializer.INSTANCE;
         TypeSerializer<VoidNamespace> namespaceSerializer = VoidNamespaceSerializer.INSTANCE;
@@ -1576,7 +1576,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 createKeyedBackend(IntSerializer.INSTANCE);
         try {
             ValueStateDescriptor<MutableLong> kvId =
-                    new ValueStateDescriptor<>("id", MutableLong.class);
+                    new ValueStateDescriptor<>("identifier", MutableLong.class);
             kvId.enableTimeToLive(StateTtlConfig.newBuilder(Time.seconds(1)).build());
 
             ValueState<MutableLong> state =
@@ -1601,7 +1601,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     void testValueStateRace() throws Exception {
         final Integer namespace = 1;
 
-        final ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+        final ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
 
         final TypeSerializer<Integer> keySerializer = IntSerializer.INSTANCE;
         final TypeSerializer<Integer> namespaceSerializer = IntSerializer.INSTANCE;
@@ -1828,7 +1828,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 createKeyedBackend(IntSerializer.INSTANCE);
         try {
             ValueStateDescriptor<Long> kvId =
-                    new ValueStateDescriptor<>("id", LongSerializer.INSTANCE, 42L);
+                    new ValueStateDescriptor<>("identifier", LongSerializer.INSTANCE, 42L);
 
             ValueState<Long> state =
                     backend.getPartitionedState(
@@ -1884,7 +1884,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         CheckpointStreamFactory streamFactory = createStreamFactory();
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
 
-        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("id", String.class);
+        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("identifier", String.class);
 
         TypeSerializer<Integer> keySerializer = IntSerializer.INSTANCE;
         TypeSerializer<VoidNamespace> namespaceSerializer = VoidNamespaceSerializer.INSTANCE;
@@ -2446,7 +2446,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
 
         ReducingStateDescriptor<String> kvId =
-                new ReducingStateDescriptor<>("id", new AppendingReduce(), String.class);
+                new ReducingStateDescriptor<>("identifier", new AppendingReduce(), String.class);
 
         TypeSerializer<Integer> keySerializer = IntSerializer.INSTANCE;
         TypeSerializer<VoidNamespace> namespaceSerializer = VoidNamespaceSerializer.INSTANCE;
@@ -3198,7 +3198,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
 
         MapStateDescriptor<Integer, String> kvId =
-                new MapStateDescriptor<>("id", Integer.class, String.class);
+                new MapStateDescriptor<>("identifier", Integer.class, String.class);
 
         TypeSerializer<String> keySerializer = StringSerializer.INSTANCE;
         TypeSerializer<VoidNamespace> namespaceSerializer = VoidNamespaceSerializer.INSTANCE;
@@ -3548,7 +3548,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testMapStateIsEmpty() throws Exception {
         MapStateDescriptor<Integer, Long> kvId =
-                new MapStateDescriptor<>("id", Integer.class, Long.class);
+                new MapStateDescriptor<>("identifier", Integer.class, Long.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -3585,7 +3585,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testMapStateIteratorArbitraryAccess() throws Exception {
         MapStateDescriptor<Integer, Long> kvId =
-                new MapStateDescriptor<>("id", Integer.class, Long.class);
+                new MapStateDescriptor<>("identifier", Integer.class, Long.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -3664,7 +3664,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     /** Verify that {@link ValueStateDescriptor} allows {@code null} as default. */
     @TestTemplate
     void testValueStateNullAsDefaultValue() throws Exception {
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class, null);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class, null);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -3691,7 +3691,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     /** Verify that an empty {@code ValueState} will yield the default value. */
     @TestTemplate
     void testValueStateDefaultValue() throws Exception {
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class, "Hello");
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class, "Hello");
 
         KeyedStateHandle keyedStateHandle;
         CheckpointableKeyedStateBackend<Integer> backend =
@@ -3741,7 +3741,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testReducingStateDefaultValue() throws Exception {
         ReducingStateDescriptor<String> kvId =
-                new ReducingStateDescriptor<>("id", new AppendingReduce(), String.class);
+                new ReducingStateDescriptor<>("identifier", new AppendingReduce(), String.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -3767,7 +3767,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     /** Verify that an empty {@code ListState} yields {@code null}. */
     @TestTemplate
     void testListStateDefaultValue() throws Exception {
-        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("id", String.class);
+        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("identifier", String.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -3794,7 +3794,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testMapStateDefaultValue() throws Exception {
         MapStateDescriptor<String, String> kvId =
-                new MapStateDescriptor<>("id", String.class, String.class);
+                new MapStateDescriptor<>("identifier", String.class, String.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -4073,7 +4073,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
         SharedStateRegistry sharedStateRegistry = new SharedStateRegistryImpl();
 
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
 
         KeyedStateHandle snapshot;
         // use an IntSerializer at first
@@ -4122,7 +4122,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 createKeyedBackend(IntSerializer.INSTANCE);
 
         try {
-            ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+            ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
 
             ValueState<String> state =
                     backend.getPartitionedState(
@@ -4161,7 +4161,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                                                     VoidNamespace.INSTANCE,
                                                     VoidNamespaceSerializer.INSTANCE,
                                                     new ValueStateDescriptor<>(
-                                                            "id", fakeStringSerializer))
+                                                            "identifier", fakeStringSerializer))
                                             .value())
                     .withFailMessage("should recognize wrong serializers")
                     .isInstanceOf(StateMigrationException.class);
@@ -4181,7 +4181,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 createKeyedBackend(IntSerializer.INSTANCE);
 
         try {
-            ListStateDescriptor<String> kvId = new ListStateDescriptor<>("id", String.class);
+            ListStateDescriptor<String> kvId = new ListStateDescriptor<>("identifier", String.class);
             ListState<String> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -4219,7 +4219,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                                                     VoidNamespace.INSTANCE,
                                                     VoidNamespaceSerializer.INSTANCE,
                                                     new ListStateDescriptor<>(
-                                                            "id", fakeStringSerializer))
+                                                            "identifier", fakeStringSerializer))
                                             .get())
                     .withFailMessage("should recognize wrong serializers")
                     .isInstanceOf(StateMigrationException.class);
@@ -4241,7 +4241,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         try {
             ReducingStateDescriptor<String> kvId =
                     new ReducingStateDescriptor<>(
-                            "id", new AppendingReduce(), StringSerializer.INSTANCE);
+                            "identifier", new AppendingReduce(), StringSerializer.INSTANCE);
             ReducingState<String> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -4279,7 +4279,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                                                     VoidNamespace.INSTANCE,
                                                     VoidNamespaceSerializer.INSTANCE,
                                                     new ReducingStateDescriptor<>(
-                                                            "id",
+                                                            "identifier",
                                                             new AppendingReduce(),
                                                             fakeStringSerializer))
                                             .get())
@@ -4303,7 +4303,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
         try {
             MapStateDescriptor<String, String> kvId =
                     new MapStateDescriptor<>(
-                            "id", StringSerializer.INSTANCE, StringSerializer.INSTANCE);
+                            "identifier", StringSerializer.INSTANCE, StringSerializer.INSTANCE);
             MapState<String, String> state =
                     backend.getPartitionedState(
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
@@ -4340,7 +4340,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                                                     VoidNamespace.INSTANCE,
                                                     VoidNamespaceSerializer.INSTANCE,
                                                     new MapStateDescriptor<>(
-                                                            "id",
+                                                            "identifier",
                                                             fakeStringSerializer,
                                                             StringSerializer.INSTANCE))
                                             .entries())
@@ -4355,7 +4355,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testCopyDefaultValue() throws Exception {
         ValueStateDescriptor<IntValue> kvId =
-                new ValueStateDescriptor<>("id", IntValue.class, new IntValue(-1));
+                new ValueStateDescriptor<>("identifier", IntValue.class, new IntValue(-1));
 
         final CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -4387,7 +4387,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testRequireNonNullNamespace() throws Exception {
         ValueStateDescriptor<IntValue> kvId =
-                new ValueStateDescriptor<>("id", IntValue.class, new IntValue(-1));
+                new ValueStateDescriptor<>("identifier", IntValue.class, new IntValue(-1));
 
         final CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -4639,7 +4639,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     @SuppressWarnings("unchecked")
     void testNumStateEntries() throws Exception {
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -5193,7 +5193,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             List<Future> futureList = new ArrayList();
             for (int i = 0; i < 10; ++i) {
                 ValueStateDescriptor<Integer> kvId =
-                        new ValueStateDescriptor<>("id" + i, IntSerializer.INSTANCE);
+                        new ValueStateDescriptor<>("identifier" + i, IntSerializer.INSTANCE);
                 ValueState<Integer> state =
                         backend.getOrCreateKeyedState(VoidNamespaceSerializer.INSTANCE, kvId);
                 ((InternalValueState) state).setCurrentNamespace(VoidNamespace.INSTANCE);

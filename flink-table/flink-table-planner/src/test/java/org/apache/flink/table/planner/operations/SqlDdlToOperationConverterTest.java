@@ -2591,7 +2591,7 @@ public class SqlDdlToOperationConverterTest extends SqlNodeToOperationConversion
         CatalogTable catalogTable =
                 CatalogTable.of(
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT().notNull())
+                                .column("identifier", DataTypes.INT().notNull())
                                 .column("measurement", DataTypes.BIGINT().notNull())
                                 .column(
                                         "ts",
@@ -2610,7 +2610,7 @@ public class SqlDdlToOperationConverterTest extends SqlNodeToOperationConversion
                         + "CREATE TEMPORARY VIEW foo AS "
                         + "SELECT * "
                         + "FROM events MATCH_RECOGNIZE ("
-                        + "    PARTITION BY id "
+                        + "    PARTITION BY identifier "
                         + "    ORDER BY ts ASC "
                         + "    MEASURES "
                         + "      next_step.measurement - this_step.measurement AS diff "
@@ -2707,7 +2707,7 @@ public class SqlDdlToOperationConverterTest extends SqlNodeToOperationConversion
         CatalogTable catalogTable =
                 CatalogTable.of(
                         Schema.newBuilder()
-                                .column("id", DataTypes.BIGINT().notNull())
+                                .column("identifier", DataTypes.BIGINT().notNull())
                                 .column("uid", DataTypes.BIGINT().notNull())
                                 .build(),
                         null,
@@ -2718,49 +2718,49 @@ public class SqlDdlToOperationConverterTest extends SqlNodeToOperationConversion
                 catalogTable, ObjectIdentifier.of("builtin", "default", "id_table"), false);
 
         Operation operation =
-                parse("CREATE VIEW id_view(a, b) AS SELECT id, uid AS id FROM id_table");
+                parse("CREATE VIEW id_view(a, b) AS SELECT identifier, uid AS identifier FROM id_table");
         assertThat(operation).isInstanceOf(CreateViewOperation.class);
 
         assertThatThrownBy(
                         () ->
                                 parse(
-                                        "CREATE VIEW id_view(a, a) AS SELECT id, uid AS id FROM id_table"))
+                                        "CREATE VIEW id_view(a, a) AS SELECT identifier, uid AS identifier FROM id_table"))
                 .satisfies(
                         FlinkAssertions.anyCauseMatches(
                                 SqlValidateException.class,
                                 "A column with the same name `a` has been defined at line 1, column 37."));
 
         assertThatThrownBy(
-                        () -> parse("CREATE VIEW id_view AS\nSELECT id, uid AS id FROM id_table"))
+                        () -> parse("CREATE VIEW id_view AS\nSELECT identifier, uid AS identifier FROM id_table"))
                 .satisfies(
                         FlinkAssertions.anyCauseMatches(
                                 SqlValidateException.class,
-                                "A column with the same name `id` has been defined at line 2, column 8."));
+                                "A column with the same name `identifier` has been defined at line 2, column 8."));
 
         assertThatThrownBy(
                         () ->
                                 parse(
                                         "CREATE VIEW union_view AS\n"
-                                                + "  SELECT id, uid AS id FROM id_table\n"
+                                                + "  SELECT identifier, uid AS identifier FROM id_table\n"
                                                 + "  UNION\n"
-                                                + "  SELECT uid, id AS uid FROM id_table"))
+                                                + "  SELECT uid, identifier AS uid FROM id_table"))
                 .satisfies(
                         FlinkAssertions.anyCauseMatches(
                                 SqlValidateException.class,
-                                "A column with the same name `id` has been defined at line 2, column 10."));
+                                "A column with the same name `identifier` has been defined at line 2, column 10."));
         assertThatThrownBy(
                         () ->
                                 parse(
                                         "CREATE VIEW cte_view AS\n"
                                                 + "WITH id_num AS (\n"
-                                                + "  select id from id_table\n"
+                                                + "  select identifier from id_table\n"
                                                 + ")\n"
-                                                + "SELECT id, uid as id\n"
+                                                + "SELECT identifier, uid as identifier\n"
                                                 + "FROM id_table\n"))
                 .satisfies(
                         FlinkAssertions.anyCauseMatches(
                                 SqlValidateException.class,
-                                "A column with the same name `id` has been defined at line 5, column 8."));
+                                "A column with the same name `identifier` has been defined at line 5, column 8."));
     }
 
     // ~ Tool Methods ----------------------------------------------------------

@@ -282,7 +282,7 @@ public class JsonJobGraphGenerationTest {
             while (iter.hasNext()) {
                 JsonNode vertex = iter.next();
 
-                JsonNode vertexIdField = vertex.get("id");
+                JsonNode vertexIdField = vertex.get("identifier");
                 JsonNode parallelismField = vertex.get("parallelism");
                 JsonNode contentsFields = vertex.get("description");
                 JsonNode operatorField = vertex.get("operator");
@@ -314,7 +314,7 @@ public class JsonJobGraphGenerationTest {
                     Iterator<JsonNode> inputsIter = inputsField.elements();
                     while (inputsIter.hasNext()) {
                         JsonNode inputNode = inputsIter.next();
-                        JsonNode inputIdField = inputNode.get("id");
+                        JsonNode inputIdField = inputNode.get("identifier");
 
                         assertNotNull(inputIdField);
                         assertTrue(inputIdField.isTextual());

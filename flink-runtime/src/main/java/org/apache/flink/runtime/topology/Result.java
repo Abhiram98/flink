@@ -30,7 +30,7 @@ public interface Result<
         V extends Vertex<VID, RID, V, R>,
         R extends Result<VID, RID, V, R>> {
 
-    RID getId();
+    RID getIdentifier();
 
     ResultPartitionType getResultType();
 

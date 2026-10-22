@@ -73,7 +73,7 @@ class SubtaskGatewayImpl implements OperatorCoordinator.SubtaskGateway {
     /** The ids of the checkpoints that have been marked but not unmarked yet. */
     private final TreeSet<Long> currentMarkedCheckpointIds;
 
-    /** The id of the latest checkpoint that has ever been marked. */
+    /** The identifier of the latest checkpoint that has ever been marked. */
     private long latestAttemptedCheckpointId;
 
     SubtaskGatewayImpl(
@@ -226,7 +226,7 @@ class SubtaskGatewayImpl implements OperatorCoordinator.SubtaskGateway {
                             latestAttemptedCheckpointId, checkpointId));
         }
 
-        // The message to open gateway with a specific checkpoint id might arrive after the
+        // The message to open gateway with a specific checkpoint identifier might arrive after the
         // checkpoint has been aborted, or even after a new checkpoint has started. In these cases
         // this message should be ignored.
         if (!currentMarkedCheckpointIds.contains(checkpointId)) {

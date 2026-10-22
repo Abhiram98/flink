@@ -376,7 +376,7 @@ class AsyncLookupJoinHarnessTest {
         @Override
         public void asyncInvoke(RowData input, ResultFuture<RowData> resultFuture)
                 throws Exception {
-            int id = input.getInt(0);
+            int identifier = input.getInt(0);
             CompletableFuture.supplyAsync(
                             (Supplier<Collection<RowData>>)
                                     () -> {
@@ -385,7 +385,7 @@ class AsyncLookupJoinHarnessTest {
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         }
-                                        return data.get(id);
+                                        return data.get(identifier);
                                     },
                             executor)
                     .thenAcceptAsync(resultFuture::complete, executor);

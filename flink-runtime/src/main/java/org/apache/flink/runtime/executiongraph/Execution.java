@@ -166,11 +166,11 @@ public class Execution
             Optional.empty(); // once an ErrorInfo is set, never changes
 
     /**
-     * Information to restore the task on recovery, such as checkpoint id and task state snapshot.
+     * Information to restore the task on recovery, such as checkpoint identifier and task state snapshot.
      */
     @Nullable private JobManagerTaskRestore taskRestore;
 
-    /** This field holds the allocation id once it was assigned successfully. */
+    /** This field holds the allocation identifier once it was assigned successfully. */
     @Nullable private AllocationID assignedAllocationID;
 
     // ------------------------ Accumulators & Metrics ------------------------
@@ -268,8 +268,8 @@ public class Execution
     }
 
     public Optional<ResultPartitionDeploymentDescriptor> getResultPartitionDeploymentDescriptor(
-            IntermediateResultPartitionID id) {
-        return Optional.ofNullable(producedPartitions.get(id));
+            IntermediateResultPartitionID identifier) {
+        return Optional.ofNullable(producedPartitions.get(identifier));
     }
 
     /**
@@ -607,7 +607,7 @@ public class Execution
             }
 
             LOG.info(
-                    "Deploying {} (attempt #{}) with attempt id {} and vertex id {} to {} with allocation id {}",
+                    "Deploying {} (attempt #{}) with attempt identifier {} and vertex identifier {} to {} with allocation identifier {}",
                     vertex.getTaskNameWithSubtaskIndex(),
                     getAttemptNumber(),
                     attemptId,
@@ -809,7 +809,7 @@ public class Execution
     private static PartitionInfo createFinishedPartitionInfo(
             IntermediateResultPartition consumedPartition) {
         IntermediateDataSetID intermediateDataSetID =
-                consumedPartition.getIntermediateResult().getId();
+                consumedPartition.getIntermediateResult().getIdentifier();
         ShuffleDescriptor shuffleDescriptor =
                 getConsumedPartitionShuffleDescriptor(
                         consumedPartition,
@@ -833,7 +833,7 @@ public class Execution
 
     /**
      * Notify the task of this execution about a completed checkpoint and the last subsumed
-     * checkpoint id if possible.
+     * checkpoint identifier if possible.
      *
      * @param completedCheckpointId of the completed checkpoint
      * @param completedTimestamp of the completed checkpoint

@@ -56,14 +56,14 @@ public class DeactivatedChangelogStateBackend extends AbstractChangelogStateBack
             Collection<ChangelogStateBackendHandle> stateBackendHandles,
             BaseBackendBuilder<K> baseBackendBuilder)
             throws Exception {
-        // ChangelogKeyedStateBackend will use materialization id as the checkpoint id of delegated
+        // ChangelogKeyedStateBackend will use materialization identifier as the checkpoint identifier of delegated
         // state backend.
         // While switching Changelog from enabled to disabled,
-        // the materialization id will be passed into the delegated keyed state backend whose
+        // the materialization identifier will be passed into the delegated keyed state backend whose
         // KeyedStateHandle implements CheckpointBoundKeyedStateHandle.
         // It will cause unforeseen exception because we couldn't know what the delegated keyed
-        // state backend will do with checkpoint id.
-        // So we need to rebound the checkpoint id to the real checkpoint id here.
+        // state backend will do with checkpoint identifier.
+        // So we need to rebound the checkpoint identifier to the real checkpoint identifier here.
         stateBackendHandles = reboundCheckpoint(stateBackendHandles);
         ChangelogStateFactory changelogStateFactory = new ChangelogStateFactory();
 

@@ -67,12 +67,12 @@ public class EdgeManager {
 
     private List<ConsumerVertexGroup> getConsumerVertexGroupsForPartitionInternal(
             IntermediateResultPartitionID resultPartitionId) {
-        return partitionConsumers.computeIfAbsent(resultPartitionId, id -> new ArrayList<>());
+        return partitionConsumers.computeIfAbsent(resultPartitionId, identifier -> new ArrayList<>());
     }
 
     private List<ConsumedPartitionGroup> getConsumedPartitionGroupsForVertexInternal(
             ExecutionVertexID executionVertexId) {
-        return vertexConsumedPartitions.computeIfAbsent(executionVertexId, id -> new ArrayList<>());
+        return vertexConsumedPartitions.computeIfAbsent(executionVertexId, identifier -> new ArrayList<>());
     }
 
     public List<ConsumerVertexGroup> getConsumerVertexGroupsForPartition(
@@ -97,7 +97,7 @@ public class EdgeManager {
 
     private List<ConsumedPartitionGroup> getConsumedPartitionGroupsByIdInternal(
             IntermediateResultPartitionID resultPartitionId) {
-        return consumedPartitionsById.computeIfAbsent(resultPartitionId, id -> new ArrayList<>());
+        return consumedPartitionsById.computeIfAbsent(resultPartitionId, identifier -> new ArrayList<>());
     }
 
     public List<ConsumedPartitionGroup> getConsumedPartitionGroupsById(

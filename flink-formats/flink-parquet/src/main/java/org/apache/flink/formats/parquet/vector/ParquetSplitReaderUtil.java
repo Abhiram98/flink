@@ -679,7 +679,7 @@ public class ParquetSplitReaderUtil {
 
         PrimitiveColumnIO primitiveColumnIO = (PrimitiveColumnIO) columnIO;
         return new ParquetPrimitiveField(
-                type, required, primitiveColumnIO.getColumnDescriptor(), primitiveColumnIO.getId());
+                type, required, primitiveColumnIO.getColumnDescriptor(), primitiveColumnIO.getIdentifier());
     }
 
     /**

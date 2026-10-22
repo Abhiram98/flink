@@ -33,14 +33,14 @@ public class TaskTracker {
 
     private final int numberOfTasks;
 
-    /** Checkpoint id to notified tasks. */
+    /** Checkpoint identifier to notified tasks. */
     private final TreeMap<Long, Set<Integer>> notifiedTasks = new TreeMap<>();
 
     public TaskTracker(int numberOfTasks) {
         this.numberOfTasks = numberOfTasks;
     }
 
-    /** @return true, if this checkpoint id need be committed. */
+    /** @return true, if this checkpoint identifier need be committed. */
     public boolean add(long checkpointId, int task) {
         Set<Integer> tasks = notifiedTasks.computeIfAbsent(checkpointId, (k) -> new HashSet<>());
         tasks.add(task);

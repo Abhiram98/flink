@@ -142,7 +142,7 @@ public class ExecutionFailureHandler {
                 cause,
                 timestamp,
                 IterableUtils.toStream(schedulingTopology.getVertices())
-                        .map(SchedulingExecutionVertex::getId)
+                        .map(SchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet()),
                 true);
     }

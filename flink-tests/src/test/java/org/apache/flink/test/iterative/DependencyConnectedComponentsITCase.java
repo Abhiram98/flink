@@ -127,8 +127,8 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
                             .with(new FindCandidatesJoin())
                             .groupBy(
                                     new KeySelector<Long, Long>() {
-                                        public Long getKey(Long id) {
-                                            return id;
+                                        public Long getKey(Long identifier) {
+                                            return identifier;
                                         }
                                     })
                             .reduceGroup(new RemoveDuplicatesReduce());
@@ -138,8 +138,8 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
                             .join(edges)
                             .where(
                                     new KeySelector<Long, Long>() {
-                                        public Long getKey(Long id) {
-                                            return id;
+                                        public Long getKey(Long identifier) {
+                                            return identifier;
                                         }
                                     })
                             .equalTo(

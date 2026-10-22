@@ -100,7 +100,7 @@ public class TGetQueryIdResp
         }
     }
 
-    // isset id assignments
+    // isset identifier assignments
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData>
             metaDataMap;
 
@@ -334,7 +334,7 @@ public class TGetQueryIdResp
                 if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
                     break;
                 }
-                switch (schemeField.id) {
+                switch (schemeField.identifier) {
                     case 1: // QUERY_ID
                         if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
                             struct.queryId = iprot.readString();

@@ -96,8 +96,8 @@ class BlobServerDeleteTest {
      * Uploads a (different) byte array for each of the given jobs and verifies that deleting one of
      * them (via the {@link BlobServer}) does not influence the other.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      */
     private void testDeleteBlob(
             @Nullable JobID jobId1, @Nullable JobID jobId2, BlobKey.BlobType blobType)
@@ -161,7 +161,7 @@ class BlobServerDeleteTest {
      * Uploads a byte array for the given job and verifies that deleting it (via the {@link
      * BlobServer}) does not fail independent of whether the file exists.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      */
     private void testDeleteBlobAlreadyDeleted(
             @Nullable final JobID jobId, BlobKey.BlobType blobType) throws IOException {
@@ -212,7 +212,7 @@ class BlobServerDeleteTest {
      * BlobServer}) does not fail even if the file is not deletable, e.g. via restricting the
      * permissions.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      */
     private void testDeleteBlobFails(@Nullable final JobID jobId, BlobKey.BlobType blobType)
             throws IOException {

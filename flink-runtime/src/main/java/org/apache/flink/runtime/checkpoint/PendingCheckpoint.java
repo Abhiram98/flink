@@ -374,7 +374,7 @@ public class PendingCheckpoint implements Checkpoint {
     }
 
     /**
-     * Acknowledges the task with the given execution attempt id and the given subtask state.
+     * Acknowledges the task with the given execution attempt identifier and the given subtask state.
      *
      * @param executionAttemptId of the acknowledged task
      * @param operatorSubtaskStates of the acknowledged task

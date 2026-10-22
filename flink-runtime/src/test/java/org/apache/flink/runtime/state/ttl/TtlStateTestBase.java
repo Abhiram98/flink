@@ -381,7 +381,7 @@ public abstract class TtlStateTestBase {
     @TestTemplate
     void testMultipleKeys() throws Exception {
         initTest();
-        testMultipleStateIds(id -> sbetc.setCurrentKey(id), false);
+        testMultipleStateIds(identifier -> sbetc.setCurrentKey(identifier), false);
     }
 
     @TestTemplate
@@ -390,13 +390,13 @@ public abstract class TtlStateTestBase {
         initTest(getConfBuilder(TTL).cleanupFullSnapshot().build());
         // set time back after restore to see entry unexpired if it was not cleaned up in snapshot
         // properly
-        testMultipleStateIds(id -> sbetc.setCurrentKey(id), true);
+        testMultipleStateIds(identifier -> sbetc.setCurrentKey(identifier), true);
     }
 
     @TestTemplate
     void testMultipleNamespaces() throws Exception {
         initTest();
-        testMultipleStateIds(id -> ctx().ttlState.setCurrentNamespace(id), false);
+        testMultipleStateIds(identifier -> ctx().ttlState.setCurrentNamespace(identifier), false);
     }
 
     @TestTemplate
@@ -405,7 +405,7 @@ public abstract class TtlStateTestBase {
         initTest(getConfBuilder(TTL).cleanupFullSnapshot().build());
         // set time back after restore to see entry unexpired if it was not cleaned up in snapshot
         // properly
-        testMultipleStateIds(id -> ctx().ttlState.setCurrentNamespace(id), true);
+        testMultipleStateIds(identifier -> ctx().ttlState.setCurrentNamespace(identifier), true);
     }
 
     private void testMultipleStateIds(Consumer<String> idChanger, boolean timeBackAfterRestore)

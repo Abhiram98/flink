@@ -2532,8 +2532,8 @@ public class StreamExecutionEnvironment implements AutoCloseable {
                         .map(AbstractID::new)
                         .collect(Collectors.toSet());
         cachedTransformations.forEach(
-                (id, transformation) -> {
-                    transformation.setCached(completedClusterDatasets.contains(id));
+                (identifier, transformation) -> {
+                    transformation.setCached(completedClusterDatasets.contains(identifier));
                 });
     }
 
@@ -2981,8 +2981,8 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Override
     public void close() throws Exception {
-        for (AbstractID id : cachedTransformations.keySet()) {
-            invalidateClusterDataset(id);
+        for (AbstractID identifier : cachedTransformations.keySet()) {
+            invalidateClusterDataset(identifier);
         }
     }
 

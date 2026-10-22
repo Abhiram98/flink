@@ -36,7 +36,7 @@ public interface JobLeaderIdActions {
 
     /**
      * Notify a job timeout. The job is identified by the given JobID. In order to check for the
-     * validity of the timeout the timeout id of the triggered timeout is provided.
+     * validity of the timeout the timeout identifier of the triggered timeout is provided.
      *
      * @param jobId JobID which identifies the timed out job
      * @param timeoutId Id of the calling timeout to differentiate valid from invalid timeouts

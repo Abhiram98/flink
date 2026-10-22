@@ -108,10 +108,10 @@ public class EmbeddedCompletedCheckpointStore extends AbstractCompleteCheckpoint
 
         findLowest(checkpoints)
                 .ifPresent(
-                        id ->
+                        identifier ->
                                 checkpointsCleaner.cleanSubsumedCheckpoints(
-                                        id,
-                                        getSharedStateRegistry().unregisterUnusedState(id),
+                                        identifier,
+                                        getSharedStateRegistry().unregisterUnusedState(identifier),
                                         postCleanup,
                                         ioExecutor));
         return completedCheckpoint;

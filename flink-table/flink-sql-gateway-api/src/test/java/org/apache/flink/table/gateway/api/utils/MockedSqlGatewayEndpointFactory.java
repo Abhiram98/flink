@@ -32,7 +32,7 @@ import java.util.Set;
 public class MockedSqlGatewayEndpointFactory implements SqlGatewayEndpointFactory {
 
     public static final ConfigOption<String> ID =
-            ConfigOptions.key("id").stringType().noDefaultValue();
+            ConfigOptions.key("identifier").stringType().noDefaultValue();
     public static final ConfigOption<String> HOST =
             ConfigOptions.key("host").stringType().noDefaultValue();
     public static final ConfigOption<Integer> PORT =

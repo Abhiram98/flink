@@ -66,7 +66,7 @@ public class TestingSchedulingResultPartition implements SchedulingResultPartiti
     }
 
     @Override
-    public IntermediateResultPartitionID getId() {
+    public IntermediateResultPartitionID getIdentifier() {
         return intermediateResultPartitionID;
     }
 

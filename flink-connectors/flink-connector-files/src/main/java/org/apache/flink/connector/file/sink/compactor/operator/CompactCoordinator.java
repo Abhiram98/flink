@@ -115,7 +115,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CompactorRequest>
         }
 
         CompactTrigger trigger =
-                triggers.computeIfAbsent(bucketId, id -> new CompactTrigger(strategy));
+                triggers.computeIfAbsent(bucketId, identifier -> new CompactTrigger(strategy));
         CompactTriggerResult triggerResult = trigger.onElement(committable);
         switch (triggerResult) {
             case PASS_THROUGH:

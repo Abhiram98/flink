@@ -60,7 +60,7 @@ public interface ResultSet {
      * +-------------+-------------+----------+
      * | column name | column type | comments |
      * +-------------+-------------+----------+
-     * |   job id    |    string   |          |
+     * |   job identifier    |    string   |          |
      * +- -----------+-------------+----------+
      * </pre>
      */

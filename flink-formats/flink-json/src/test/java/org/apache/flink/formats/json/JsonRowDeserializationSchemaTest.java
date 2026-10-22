@@ -52,7 +52,7 @@ public class JsonRowDeserializationSchemaTest {
     /** Tests simple deserialization using type information. */
     @Test
     public void testTypeInfoDeserialization() throws Exception {
-        long id = 1238123899121L;
+        long identifier = 1238123899121L;
         String name = "asdlkjasjkdla998y1122";
         byte[] bytes = new byte[1024];
         ThreadLocalRandom.current().nextBytes(bytes);
@@ -70,7 +70,7 @@ public class JsonRowDeserializationSchemaTest {
 
         // Root
         ObjectNode root = OBJECT_MAPPER.createObjectNode();
-        root.put("id", id);
+        root.put("identifier", identifier);
         root.put("name", name);
         root.put("bytes", bytes);
         root.put("date1", "1990-10-14");
@@ -88,7 +88,7 @@ public class JsonRowDeserializationSchemaTest {
                 new JsonRowDeserializationSchema.Builder(
                                 Types.ROW_NAMED(
                                         new String[] {
-                                            "id",
+                                            "identifier",
                                             "name",
                                             "bytes",
                                             "date1",
@@ -115,7 +115,7 @@ public class JsonRowDeserializationSchemaTest {
                         .build();
 
         Row row = new Row(11);
-        row.setField(0, id);
+        row.setField(0, identifier);
         row.setField(1, name);
         row.setField(2, bytes);
         row.setField(3, date);
@@ -136,7 +136,7 @@ public class JsonRowDeserializationSchemaTest {
 
     @Test
     public void testSchemaDeserialization() throws Exception {
-        final BigDecimal id = BigDecimal.valueOf(1238123899121L);
+        final BigDecimal identifier = BigDecimal.valueOf(1238123899121L);
         final String name = "asdlkjasjkdla998y1122";
         final byte[] bytes = new byte[1024];
         ThreadLocalRandom.current().nextBytes(bytes);
@@ -148,7 +148,7 @@ public class JsonRowDeserializationSchemaTest {
 
         // Root
         ObjectNode root = OBJECT_MAPPER.createObjectNode();
-        root.put("id", id.longValue());
+        root.put("identifier", identifier.longValue());
         root.putNull("idOrNull");
         root.put("name", name);
         root.put("date", "1990-10-14");
@@ -166,7 +166,7 @@ public class JsonRowDeserializationSchemaTest {
                                 "{"
                                         + "    type: 'object',"
                                         + "    properties: {"
-                                        + "         id: { type: 'integer' },"
+                                        + "         identifier: { type: 'integer' },"
                                         + "         idOrNull: { type: ['integer', 'null'] },"
                                         + "         name: { type: 'string' },"
                                         + "         date: { type: 'string', format: 'date' },"
@@ -187,7 +187,7 @@ public class JsonRowDeserializationSchemaTest {
                         .build();
 
         final Row expected = new Row(10);
-        expected.setField(0, id);
+        expected.setField(0, identifier);
         expected.setField(1, null);
         expected.setField(2, name);
         expected.setField(3, Date.valueOf("1990-10-14"));
@@ -213,7 +213,7 @@ public class JsonRowDeserializationSchemaTest {
     public void testMissingNode() throws Exception {
         // Root
         ObjectNode root = OBJECT_MAPPER.createObjectNode();
-        root.put("id", 123123123);
+        root.put("identifier", 123123123);
         byte[] serializedJson = OBJECT_MAPPER.writeValueAsBytes(root);
 
         TypeInformation<Row> rowTypeInformation =
@@ -316,70 +316,70 @@ public class JsonRowDeserializationSchemaTest {
 
     private static List<TestSpec> testData =
             Arrays.asList(
-                    TestSpec.json("{\"id\": \"trueA\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.BOOLEAN))
+                    TestSpec.json("{\"identifier\": \"trueA\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.BOOLEAN))
                             .expect(Row.of(false)),
-                    TestSpec.json("{\"id\": true}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.BOOLEAN))
+                    TestSpec.json("{\"identifier\": true}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.BOOLEAN))
                             .expect(Row.of(true)),
-                    TestSpec.json("{\"id\":\"abc\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.INT))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"abc\"}'"),
-                    TestSpec.json("{\"id\":112.013}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.LONG))
+                    TestSpec.json("{\"identifier\":\"abc\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.INT))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"abc\"}'"),
+                    TestSpec.json("{\"identifier\":112.013}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.LONG))
                             .expect(Row.of(112L)),
-                    TestSpec.json("{\"id\":true}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":true}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("true")),
-                    TestSpec.json("{\"id\":123.234}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":123.234}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("123.234")),
-                    TestSpec.json("{\"id\":1234567}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":1234567}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("1234567")),
-                    TestSpec.json("{\"id\":\"string field\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":\"string field\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("string field")),
-                    TestSpec.json("{\"id\":[\"array data1\",\"array data2\",123,234.345]}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":[\"array data1\",\"array data2\",123,234.345]}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("[\"array data1\",\"array data2\",123,234.345]")),
-                    TestSpec.json("{\"id\":{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.STRING))
+                    TestSpec.json("{\"identifier\":{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.STRING))
                             .expect(Row.of("{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}")),
-                    TestSpec.json("{\"id\":\"long\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.LONG))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"long\"}'"),
-                    TestSpec.json("{\"id\":\"112.013.123\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.FLOAT))
+                    TestSpec.json("{\"identifier\":\"long\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.LONG))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"long\"}'"),
+                    TestSpec.json("{\"identifier\":\"112.013.123\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.FLOAT))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"112.013.123\"}'"),
-                    TestSpec.json("{\"id\":\"112.013.123\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.DOUBLE))
+                                    "Failed to deserialize JSON '{\"identifier\":\"112.013.123\"}'"),
+                    TestSpec.json("{\"identifier\":\"112.013.123\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.DOUBLE))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"112.013.123\"}'"),
-                    TestSpec.json("{\"id\":\"18:00:243\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.SQL_TIME))
+                                    "Failed to deserialize JSON '{\"identifier\":\"112.013.123\"}'"),
+                    TestSpec.json("{\"identifier\":\"18:00:243\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.SQL_TIME))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"18:00:243\"}'"),
-                    TestSpec.json("{\"id\":\"20191112\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.SQL_DATE))
+                                    "Failed to deserialize JSON '{\"identifier\":\"18:00:243\"}'"),
+                    TestSpec.json("{\"identifier\":\"20191112\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.SQL_DATE))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"20191112\"}'"),
-                    TestSpec.json("{\"id\":\"2019-11-12 18:00:12\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.SQL_TIMESTAMP))
+                                    "Failed to deserialize JSON '{\"identifier\":\"20191112\"}'"),
+                    TestSpec.json("{\"identifier\":\"2019-11-12 18:00:12\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.SQL_TIMESTAMP))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12 18:00:12\"}'"),
-                    TestSpec.json("{\"id\":\"abc\"}")
-                            .typeInfo(Types.ROW_NAMED(new String[] {"id"}, Types.BIG_DEC))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"abc\"}'"),
-                    TestSpec.json("{\"row\":{\"id\":\"abc\"}}")
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12 18:00:12\"}'"),
+                    TestSpec.json("{\"identifier\":\"abc\"}")
+                            .typeInfo(Types.ROW_NAMED(new String[] {"identifier"}, Types.BIG_DEC))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"abc\"}'"),
+                    TestSpec.json("{\"row\":{\"identifier\":\"abc\"}}")
                             .typeInfo(
                                     Types.ROW_NAMED(
                                             new String[] {"row"},
-                                            Types.ROW_NAMED(new String[] {"id"}, Types.INT)))
+                                            Types.ROW_NAMED(new String[] {"identifier"}, Types.INT)))
                             .expect(Row.of(new Row(1)))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"row\":{\"id\":\"abc\"}}'"),
+                                    "Failed to deserialize JSON '{\"row\":{\"identifier\":\"abc\"}}'"),
                     TestSpec.json("{\"array\":[123, \"abc\"]}")
                             .typeInfo(
                                     Types.ROW_NAMED(
@@ -395,10 +395,10 @@ public class JsonRowDeserializationSchemaTest {
                             .expect(Row.of(createHashMap("key1", 123, "key2", null)))
                             .expectErrorMessage(
                                     "Failed to deserialize JSON '{\"map\":{\"key1\":\"123\", \"key2\":\"abc\"}}'"),
-                    TestSpec.json("{\"id\":1,\"factor\":799.929496989092949698}")
+                    TestSpec.json("{\"identifier\":1,\"factor\":799.929496989092949698}")
                             .typeInfo(
                                     Types.ROW_NAMED(
-                                            new String[] {"id", "factor"},
+                                            new String[] {"identifier", "factor"},
                                             Types.INT,
                                             Types.BIG_DEC))
                             .expect(Row.of(1, new BigDecimal("799.929496989092949698"))));

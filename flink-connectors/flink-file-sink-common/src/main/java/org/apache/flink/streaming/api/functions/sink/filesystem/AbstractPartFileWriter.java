@@ -22,7 +22,7 @@ package org.apache.flink.streaming.api.functions.sink.filesystem;
  * An abstract writer for the currently open part file in a specific {@link Bucket}.
  *
  * @param <IN> the element type.
- * @param <BucketID> the bucket id type.
+ * @param <BucketID> the bucket identifier type.
  */
 public abstract class AbstractPartFileWriter<IN, BucketID>
         implements InProgressFileWriter<IN, BucketID> {

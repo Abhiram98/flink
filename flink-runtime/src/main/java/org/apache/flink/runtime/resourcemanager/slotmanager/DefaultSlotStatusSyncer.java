@@ -104,7 +104,7 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
                 taskManagerTracker.getRegisteredTaskManager(instanceId);
         Preconditions.checkState(
                 taskManager.isPresent(),
-                "Could not find a registered task manager for instance id " + instanceId + '.');
+                "Could not find a registered task manager for instance identifier " + instanceId + '.');
         final TaskExecutorGateway gateway =
                 taskManager.get().getTaskExecutorConnection().getTaskExecutorGateway();
         final ResourceID resourceId = taskManager.get().getTaskExecutorConnection().getResourceID();
@@ -230,7 +230,7 @@ public class DefaultSlotStatusSyncer implements SlotStatusSyncer {
 
         if (!taskManager.isPresent()) {
             LOG.debug(
-                    "Received slot report for unknown task manager with instance id {}. Ignoring this report.",
+                    "Received slot report for unknown task manager with instance identifier {}. Ignoring this report.",
                     instanceId);
             return false;
         }

@@ -35,8 +35,8 @@ public interface TierProducerAgent extends AutoCloseable {
     /**
      * Try to start a new segment in the Tier.
      *
-     * @param subpartitionId subpartition id that the new segment belongs to
-     * @param segmentId id of the new segment
+     * @param subpartitionId subpartition identifier that the new segment belongs to
+     * @param segmentId identifier of the new segment
      * @param minNumBuffers the minimum number of buffers that are expected to be written to the
      *     newly created segment.
      * @return true if the segment can be started, false otherwise.
@@ -51,7 +51,7 @@ public interface TierProducerAgent extends AutoCloseable {
      * should be released by the caller, otherwise the tier should be responsible to recycle the
      * buffer.
      *
-     * @param subpartitionId the subpartition id that the buffer is writing to
+     * @param subpartitionId the subpartition identifier that the buffer is writing to
      * @param finishedBuffer the writing buffer
      * @param bufferOwner the current owner of this writing buffer
      * @param numRemainingConsecutiveBuffers number of buffers that would be passed in the following

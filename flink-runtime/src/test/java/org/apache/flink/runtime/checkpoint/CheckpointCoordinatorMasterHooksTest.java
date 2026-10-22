@@ -85,10 +85,10 @@ class CheckpointCoordinatorMasterHooksTest {
         final CheckpointCoordinator cc = instantiateCheckpointCoordinator(graph);
 
         MasterTriggerRestoreHook<?> hook1 = mock(MasterTriggerRestoreHook.class);
-        when(hook1.getIdentifier()).thenReturn("test id");
+        when(hook1.getIdentifier()).thenReturn("test identifier");
 
         MasterTriggerRestoreHook<?> hook2 = mock(MasterTriggerRestoreHook.class);
-        when(hook2.getIdentifier()).thenReturn("test id");
+        when(hook2.getIdentifier()).thenReturn("test identifier");
 
         MasterTriggerRestoreHook<?> hook3 = mock(MasterTriggerRestoreHook.class);
         when(hook3.getIdentifier()).thenReturn("anotherId");
@@ -191,7 +191,7 @@ class CheckpointCoordinatorMasterHooksTest {
 
         final MasterTriggerRestoreHook<Void> statelessHook =
                 mockGeneric(MasterTriggerRestoreHook.class);
-        when(statelessHook.getIdentifier()).thenReturn("some-id");
+        when(statelessHook.getIdentifier()).thenReturn("some-identifier");
 
         // create the checkpoint coordinator
         JobVertexID jobVertexId = new JobVertexID();
@@ -285,7 +285,7 @@ class CheckpointCoordinatorMasterHooksTest {
 
         final MasterTriggerRestoreHook<Void> statelessHook =
                 mockGeneric(MasterTriggerRestoreHook.class);
-        when(statelessHook.getIdentifier()).thenReturn("some-id");
+        when(statelessHook.getIdentifier()).thenReturn("some-identifier");
 
         final JobID jid = new JobID();
         final long checkpointId = 13L;
@@ -346,7 +346,7 @@ class CheckpointCoordinatorMasterHooksTest {
 
         final MasterTriggerRestoreHook<Void> statelessHook =
                 mockGeneric(MasterTriggerRestoreHook.class);
-        when(statelessHook.getIdentifier()).thenReturn("some-id");
+        when(statelessHook.getIdentifier()).thenReturn("some-identifier");
 
         final JobID jid = new JobID();
         final long checkpointId = 44L;
@@ -400,7 +400,7 @@ class CheckpointCoordinatorMasterHooksTest {
      */
     @Test
     void ensureRegisteredAtHookTime() throws Exception {
-        final String id = "id";
+        final String identifier = "identifier";
 
         // create the checkpoint coordinator
         ExecutionGraph graph =
@@ -413,7 +413,7 @@ class CheckpointCoordinatorMasterHooksTest {
                 instantiateCheckpointCoordinator(graph, manuallyTriggeredScheduledExecutor);
 
         final MasterTriggerRestoreHook<Void> hook = mockGeneric(MasterTriggerRestoreHook.class);
-        when(hook.getIdentifier()).thenReturn(id);
+        when(hook.getIdentifier()).thenReturn(identifier);
         when(hook.triggerCheckpoint(anyLong(), anyLong(), any(Executor.class)))
                 .thenAnswer(
                         new Answer<CompletableFuture<Void>>() {

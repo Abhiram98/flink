@@ -294,8 +294,8 @@ public abstract class AbstractHaServices implements HighAvailabilityServices {
     /**
      * Get the leader path for specific JobManager.
      *
-     * @param jobID job id
-     * @return Return the JobManager leader name for specified job id. It is ConfigMap name in
+     * @param jobID job identifier
+     * @return Return the JobManager leader name for specified job identifier. It is ConfigMap name in
      *     Kubernetes or child node path in Zookeeper.
      */
     protected abstract String getLeaderPathForJobManager(final JobID jobID);

@@ -82,7 +82,7 @@ public class StreamExecSortLimit extends StreamExecRank {
 
     @JsonCreator
     public StreamExecSortLimit(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_SORT_SPEC) SortSpec sortSpec,
@@ -95,7 +95,7 @@ public class StreamExecSortLimit extends StreamExecRank {
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
 
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 RankType.ROW_NUMBER,

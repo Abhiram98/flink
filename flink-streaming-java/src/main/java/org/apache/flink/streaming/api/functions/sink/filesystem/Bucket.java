@@ -203,7 +203,7 @@ public class Bucket<IN, BucketID> {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Subtask {} merging buckets for bucket id={}", subtaskIndex, bucketId);
+            LOG.debug("Subtask {} merging buckets for bucket identifier={}", subtaskIndex, bucketId);
         }
     }
 
@@ -212,7 +212,7 @@ public class Bucket<IN, BucketID> {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Subtask {} closing in-progress part file for bucket id={} due to element {}.",
+                        "Subtask {} closing in-progress part file for bucket identifier={} due to element {}.",
                         subtaskIndex,
                         bucketId,
                         element);
@@ -235,7 +235,7 @@ public class Bucket<IN, BucketID> {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(
-                    "Subtask {} opening new part file \"{}\" for bucket id={}.",
+                    "Subtask {} opening new part file \"{}\" for bucket identifier={}.",
                     subtaskIndex,
                     partFilePath.getName(),
                     bucketId);
@@ -298,7 +298,7 @@ public class Bucket<IN, BucketID> {
         if (inProgressPart != null && rollingPolicy.shouldRollOnCheckpoint(inProgressPart)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Subtask {} closing in-progress part file for bucket id={} on checkpoint.",
+                        "Subtask {} closing in-progress part file for bucket identifier={} on checkpoint.",
                         subtaskIndex,
                         bucketId);
             }
@@ -355,7 +355,7 @@ public class Bucket<IN, BucketID> {
                     bucketWriter.cleanupInProgressFileRecoverable(inProgressFileRecoverable);
             if (LOG.isDebugEnabled() && successfullyDeleted) {
                 LOG.debug(
-                        "Subtask {} successfully deleted incomplete part for bucket id={}.",
+                        "Subtask {} successfully deleted incomplete part for bucket identifier={}.",
                         subtaskIndex,
                         bucketId);
             }
@@ -368,7 +368,7 @@ public class Bucket<IN, BucketID> {
                 && rollingPolicy.shouldRollOnProcessingTime(inProgressPart, timestamp)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Subtask {} closing in-progress part file for bucket id={} due to processing time rolling policy "
+                        "Subtask {} closing in-progress part file for bucket identifier={} due to processing time rolling policy "
                                 + "(in-progress file created @ {}, last updated @ {} and current time is {}).",
                         subtaskIndex,
                         bucketId,

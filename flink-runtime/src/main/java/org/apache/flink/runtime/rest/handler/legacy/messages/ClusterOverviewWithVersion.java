@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 
 import java.util.Objects;
 
-/** Cluster overview message including the current Flink version and commit id. */
+/** Cluster overview message including the current Flink version and commit identifier. */
 public class ClusterOverviewWithVersion extends ClusterOverview implements ResponseBody {
 
     private static final long serialVersionUID = 5000058311783413216L;

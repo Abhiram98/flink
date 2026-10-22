@@ -440,9 +440,9 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
                             "Error: All functions that are part of an iteration must have the same, or a lower, parallelism than the iteration operator.");
                 }
 
-                // store the id of the iterations the step functions participate in
+                // store the identifier of the iterations the step functions participate in
                 IterationDescriptor descr = this.iterations.get(this.currentIteration);
-                new TaskConfig(vertex.getConfiguration()).setIterationId(descr.getId());
+                new TaskConfig(vertex.getConfiguration()).setIterationId(descr.getIdentifier());
             }
 
             // store in the map
@@ -1992,11 +1992,11 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
 
         private TaskConfig headFinalResultConfig;
 
-        private final int id;
+        private final int identifier;
 
-        public IterationDescriptor(IterationPlanNode iterationNode, int id) {
+        public IterationDescriptor(IterationPlanNode iterationNode, int identifier) {
             this.iterationNode = iterationNode;
-            this.id = id;
+            this.identifier = identifier;
         }
 
         public IterationPlanNode getIterationNode() {
@@ -2023,8 +2023,8 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
             return headFinalResultConfig;
         }
 
-        public int getId() {
-            return this.id;
+        public int getIdentifier() {
+            return this.identifier;
         }
     }
 }

@@ -50,7 +50,7 @@ public class MockChannelStateWriter implements ChannelStateWriter {
             throw new IllegalStateException("Already started " + checkpointId);
         } else if (checkpointId < startedCheckpointId) {
             throw new IllegalArgumentException(
-                    "Expected a larger checkpoint id than "
+                    "Expected a larger checkpoint identifier than "
                             + startedCheckpointId
                             + " but "
                             + "got "
@@ -129,7 +129,7 @@ public class MockChannelStateWriter implements ChannelStateWriter {
                     "Need to have recently called #start with "
                             + checkpointId
                             + " but "
-                            + "currently started checkpoint id is "
+                            + "currently started checkpoint identifier is "
                             + startedCheckpointId);
         }
     }

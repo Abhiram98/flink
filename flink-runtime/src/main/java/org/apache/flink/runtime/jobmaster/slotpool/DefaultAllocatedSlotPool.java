@@ -66,7 +66,7 @@ public class DefaultAllocatedSlotPool implements AllocatedSlotPool {
     private void addSlot(AllocatedSlot slot, long currentTime) {
         Preconditions.checkState(
                 !registeredSlots.containsKey(slot.getAllocationId()),
-                "The slot pool already contains a slot with id %s",
+                "The slot pool already contains a slot with identifier %s",
                 slot.getAllocationId());
         addSlotInternal(slot, currentTime);
 
@@ -160,12 +160,12 @@ public class DefaultAllocatedSlotPool implements AllocatedSlotPool {
 
     @Override
     public AllocatedSlot reserveFreeSlot(AllocationID allocationId) {
-        LOG.debug("Reserve free slot with allocation id {}.", allocationId);
+        LOG.debug("Reserve free slot with allocation identifier {}.", allocationId);
         AllocatedSlot slot = registeredSlots.get(allocationId);
-        Preconditions.checkNotNull(slot, "The slot with id %s was not exists.", allocationId);
+        Preconditions.checkNotNull(slot, "The slot with identifier %s was not exists.", allocationId);
         Preconditions.checkState(
                 freeSlots.removeFreeSlot(allocationId, slot.getTaskManagerId()) != null,
-                "The slot with id %s was not free.",
+                "The slot with identifier %s was not free.",
                 allocationId);
         return registeredSlots.get(allocationId);
     }

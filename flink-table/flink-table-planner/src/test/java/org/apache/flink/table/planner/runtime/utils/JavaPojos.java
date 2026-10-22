@@ -69,18 +69,18 @@ public class JavaPojos {
     /** Simple POJO. */
     public static class ProductItem {
         public String name;
-        public Long id;
+        public Long identifier;
 
         public ProductItem() {}
 
-        public ProductItem(String name, Long id) {
+        public ProductItem(String name, Long identifier) {
             this.name = name;
-            this.id = id;
+            this.identifier = identifier;
         }
 
         @Override
         public String toString() {
-            return "Product{" + "name='" + name + '\'' + ", id=" + id + '}';
+            return "Product{" + "name='" + name + '\'' + ", identifier=" + identifier + '}';
         }
     }
 

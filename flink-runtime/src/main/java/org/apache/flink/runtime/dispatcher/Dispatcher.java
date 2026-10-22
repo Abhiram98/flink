@@ -1563,7 +1563,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                     throw new CompletionException(
                                             new DispatcherException(
                                                     String.format(
-                                                            "Termination of previous JobManager for job %s failed. Cannot submit job under the same job id.",
+                                                            "Termination of previous JobManager for job %s failed. Cannot submit job under the same job identifier.",
                                                             jobId),
                                                     throwable));
                                 });

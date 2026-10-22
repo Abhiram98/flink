@@ -206,7 +206,7 @@ abstract class AggregatingMetricsHandlerTestBase<
 
         List<String> availableMetrics =
                 response.getMetrics().stream()
-                        .map(AggregatedMetric::getId)
+                        .map(AggregatedMetric::getIdentifier)
                         .sorted()
                         .collect(Collectors.toList());
 
@@ -235,7 +235,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getMin()).isCloseTo(1.0, within(0.1));
         assertThat(aggregatedMetric.getMax()).isNull();
         assertThat(aggregatedMetric.getSum()).isNull();
@@ -264,7 +264,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getMax()).isCloseTo(3.0, within(0.1));
         assertThat(aggregatedMetric.getMin()).isNull();
         assertThat(aggregatedMetric.getSum()).isNull();
@@ -293,7 +293,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getSum()).isCloseTo(4.0, within(0.1));
         assertThat(aggregatedMetric.getMin()).isNull();
         assertThat(aggregatedMetric.getMax()).isNull();
@@ -322,7 +322,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getAvg()).isCloseTo(2.0, within(0.1));
         assertThat(aggregatedMetric.getMin()).isNull();
         assertThat(aggregatedMetric.getMax()).isNull();
@@ -351,7 +351,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getMin()).isCloseTo(1.0, within(0.1));
         assertThat(aggregatedMetric.getMax()).isCloseTo(3.0, within(0.1));
         assertThat(aggregatedMetric.getAvg()).isCloseTo(2.0, within(0.1));
@@ -379,7 +379,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         assertThat(aggregatedMetric.getMin()).isCloseTo(1.0, within(0.1));
         assertThat(aggregatedMetric.getMax()).isCloseTo(3.0, within(0.1));
         assertThat(aggregatedMetric.getAvg()).isCloseTo(2.0, within(0.1));
@@ -409,7 +409,7 @@ abstract class AggregatingMetricsHandlerTestBase<
         assertThat(aggregatedMetrics).hasSize(1);
         AggregatedMetric aggregatedMetric = aggregatedMetrics.iterator().next();
 
-        assertThat(aggregatedMetric.getId()).isEqualTo("abc.metric1");
+        assertThat(aggregatedMetric.getIdentifier()).isEqualTo("abc.metric1");
         // abc.metric1 has the data points: [1,3], avg=2
         // mean absolute deviation = (abs(1-2) + abs(3-2))/2 = 1
         // data skew = mean_abs_deviation/avg * 100 = 50

@@ -189,7 +189,7 @@ public class FileCache {
 
             // register reference holder
             final Set<ExecutionAttemptID> refHolders =
-                    jobRefHolders.computeIfAbsent(jobID, id -> new HashSet<>());
+                    jobRefHolders.computeIfAbsent(jobID, identifier -> new HashSet<>());
             refHolders.add(executionId);
 
             Future<Path> fileEntry = jobEntries.get(name);

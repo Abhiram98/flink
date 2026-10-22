@@ -179,7 +179,7 @@ public class RecordContext<K> extends ReferenceCounted<RecordContext.DisposerRun
                 + ", ref="
                 + getReferenceCount()
                 + ", epoch="
-                + epoch.id
+                + epoch.identifier
                 + "}";
     }
 

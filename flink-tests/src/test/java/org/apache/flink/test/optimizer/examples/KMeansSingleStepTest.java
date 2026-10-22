@@ -225,13 +225,13 @@ public class KMeansSingleStepTest extends CompilerTestBase {
     /** Center of a cluster. */
     public static class Centroid extends Tuple2<Integer, Point> {
 
-        public Centroid(int id, double x, double y) {
-            this.f0 = id;
+        public Centroid(int identifier, double x, double y) {
+            this.f0 = identifier;
             this.f1 = new Point(x, y);
         }
 
-        public Centroid(int id, Point p) {
-            this.f0 = id;
+        public Centroid(int identifier, Point p) {
+            this.f0 = identifier;
             this.f1 = p;
         }
     }
@@ -272,17 +272,17 @@ public class KMeansSingleStepTest extends CompilerTestBase {
                 Iterable<Tuple3<Integer, Point, Integer>> values,
                 Collector<Tuple3<Integer, Point, Integer>> out)
                 throws Exception {
-            int id = -1;
+            int identifier = -1;
             double x = 0;
             double y = 0;
             int count = 0;
             for (Tuple3<Integer, Point, Integer> value : values) {
-                id = value.f0;
+                identifier = value.f0;
                 x += value.f1.f0;
                 y += value.f1.f1;
                 count += value.f2;
             }
-            out.collect(new Tuple3<>(id, new Point(x, y), count));
+            out.collect(new Tuple3<>(identifier, new Point(x, y), count));
         }
 
         @Override

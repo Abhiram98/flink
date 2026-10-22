@@ -242,14 +242,14 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
         private void addVertexToExecutionSlotSharingGroup(
                 ExecutionSlotSharingGroup executionSlotSharingGroup,
                 SchedulingExecutionVertex executionVertex) {
-            final ExecutionVertexID executionVertexId = executionVertex.getId();
+            final ExecutionVertexID executionVertexId = executionVertex.getIdentifier();
             executionSlotSharingGroup.addVertex(executionVertexId);
             executionSlotSharingGroupMap.put(executionVertexId, executionSlotSharingGroup);
         }
 
         private CoLocationConstraint getCoLocationConstraint(SchedulingExecutionVertex sev) {
-            final JobVertexID jobVertexID = sev.getId().getJobVertexId();
-            final int subtaskIndex = sev.getId().getSubtaskIndex();
+            final JobVertexID jobVertexID = sev.getIdentifier().getJobVertexId();
+            final int subtaskIndex = sev.getIdentifier().getSubtaskIndex();
             return coLocationGroupMap.get(jobVertexID).getLocationConstraint(subtaskIndex);
         }
 
@@ -298,7 +298,7 @@ class TaskBalancedPreferredSlotSharingStrategy extends AbstractSlotSharingStrate
         private boolean allocatable(
                 final ExecutionSlotSharingGroup executionSlotSharingGroup,
                 @Nonnull SchedulingExecutionVertex executionVertex) {
-            final ExecutionVertexID executionVertexId = executionVertex.getId();
+            final ExecutionVertexID executionVertexId = executionVertex.getIdentifier();
             final JobVertexID jobVertexId = executionVertexId.getJobVertexId();
             final Set<JobVertexID> allocatedJobVertices =
                     executionSlotSharingGroup.getExecutionVertexIds().stream()

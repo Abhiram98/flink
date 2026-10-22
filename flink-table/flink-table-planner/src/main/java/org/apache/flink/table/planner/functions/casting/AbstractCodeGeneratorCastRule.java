@@ -203,7 +203,7 @@ abstract class AbstractCodeGeneratorCastRule<IN, OUT> extends AbstractCastRule<I
         @Override
         public String getSessionTimeZoneTerm() {
             return "java.util.TimeZone.getTimeZone(\""
-                    + castRuleCtx.getSessionZoneId().getId()
+                    + castRuleCtx.getSessionZoneId().getIdentifier()
                     + "\")";
         }
 

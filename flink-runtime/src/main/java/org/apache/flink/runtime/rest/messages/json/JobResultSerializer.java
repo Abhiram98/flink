@@ -42,7 +42,7 @@ public class JobResultSerializer extends StdSerializer<JobResult> {
 
     private static final long serialVersionUID = 1L;
 
-    static final String FIELD_NAME_JOB_ID = "id";
+    static final String FIELD_NAME_JOB_ID = "identifier";
 
     static final String FIELD_NAME_APPLICATION_STATUS = "application-status";
 

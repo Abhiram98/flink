@@ -703,7 +703,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("ListBucketResult", "Contents", "Owner")) {
                 if (name.equals("ID")) {
-                    currentOwner.setId(getText());
+                    currentOwner.setIdentifier(getText());
 
                 } else if (name.equals("DisplayName")) {
                     currentOwner.setDisplayName(getText());
@@ -850,7 +850,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("ListBucketResult", "Contents", "Owner")) {
                 if (name.equals("ID")) {
-                    currentOwner.setId(getText());
+                    currentOwner.setIdentifier(getText());
 
                 } else if (name.equals("DisplayName")) {
                     currentOwner.setDisplayName(getText());
@@ -904,7 +904,7 @@ public class XmlResponsesSaxParser {
         protected void doEndElement(String uri, String name, String qName) {
             if (in("ListAllMyBucketsResult", "Owner")) {
                 if (name.equals("ID")) {
-                    bucketsOwner.setId(getText());
+                    bucketsOwner.setIdentifier(getText());
 
                 } else if (name.equals("DisplayName")) {
                     bucketsOwner.setDisplayName(getText());
@@ -971,7 +971,7 @@ public class XmlResponsesSaxParser {
         protected void doEndElement(String uri, String name, String qName) {
             if (in("AccessControlPolicy", "Owner")) {
                 if (name.equals("ID")) {
-                    accessControlList.getOwner().setId(getText());
+                    accessControlList.getOwner().setIdentifier(getText());
                 } else if (name.equals("DisplayName")) {
                     accessControlList.getOwner().setDisplayName(getText());
                 }
@@ -1341,7 +1341,7 @@ public class XmlResponsesSaxParser {
                     || in("ListVersionsResult", "DeleteMarker", "Owner")) {
 
                 if (name.equals("ID")) {
-                    currentOwner.setId(getText());
+                    currentOwner.setIdentifier(getText());
                 } else if (name.equals("DisplayName")) {
                     currentOwner.setDisplayName(getText());
                 }
@@ -1684,8 +1684,8 @@ public class XmlResponsesSaxParser {
 
     /*
      * HTTP/1.1 200 OK
-     * x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-     * x-amz-request-id: 656c76696e6727732072657175657374
+     * x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+     * x-amz-request-identifier: 656c76696e6727732072657175657374
      * Date: Tue, 16 Feb 2010 20:34:56 GMT
      * Content-Length: 1330
      * Connection: keep-alive
@@ -1816,7 +1816,7 @@ public class XmlResponsesSaxParser {
                     || in("ListMultipartUploadsResult", "Upload", "Initiator")) {
 
                 if (name.equals("ID")) {
-                    currentOwner.setId(checkForEmptyString(getText()));
+                    currentOwner.setIdentifier(checkForEmptyString(getText()));
                 } else if (name.equals("DisplayName")) {
                     currentOwner.setDisplayName(checkForEmptyString(getText()));
                 }
@@ -1826,8 +1826,8 @@ public class XmlResponsesSaxParser {
 
     /*
      * HTTP/1.1 200 OK
-     * x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-     * x-amz-request-id: 656c76696e6727732072657175657374
+     * x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+     * x-amz-request-identifier: 656c76696e6727732072657175657374
      * Date: Tue, 16 Feb 2010 20:34:56 GMT
      * Content-Length: 985
      * Connection: keep-alive
@@ -1932,7 +1932,7 @@ public class XmlResponsesSaxParser {
             } else if (in("ListPartsResult", "Owner") || in("ListPartsResult", "Initiator")) {
 
                 if (name.equals("ID")) {
-                    currentOwner.setId(checkForEmptyString(getText()));
+                    currentOwner.setIdentifier(checkForEmptyString(getText()));
                 } else if (name.equals("DisplayName")) {
                     currentOwner.setDisplayName(checkForEmptyString(getText()));
                 }
@@ -2192,8 +2192,8 @@ public class XmlResponsesSaxParser {
 
     /*
        HTTP/1.1 200 OK
-       x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-       x-amz-request-id: 656c76696e6727732072657175657374
+       x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+       x-amz-request-identifier: 656c76696e6727732072657175657374
        Date: Tue, 20 Sep 2012 20:34:56 GMT
        Content-Type: application/xml
        Transfer-Encoding: chunked
@@ -2283,8 +2283,8 @@ public class XmlResponsesSaxParser {
     }
 
     /**
-     * HTTP/1.1 200 OK x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-     * x-amz-request-id: 656c76696e6727732072657175657374 Date: Tue, 20 Sep 2012 20:34:56 GMT
+     * HTTP/1.1 200 OK x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+     * x-amz-request-identifier: 656c76696e6727732072657175657374 Date: Tue, 20 Sep 2012 20:34:56 GMT
      * Content-Length: xxx Connection: keep-alive Server: AmazonS3
      *
      * <p><LifecycleConfiguration> <Rule> <ID>logs-rule</ID> <Prefix>logs/</Prefix>
@@ -2356,7 +2356,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("LifecycleConfiguration", "Rule")) {
                 if (name.equals("ID")) {
-                    currentRule.setId(getText());
+                    currentRule.setIdentifier(getText());
 
                 } else if (name.equals("Prefix")) {
                     currentRule.setPrefix(getText());
@@ -2451,8 +2451,8 @@ public class XmlResponsesSaxParser {
 
     /*
     HTTP/1.1 200 OK
-    x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-    x-amz-request-id: 656c76696e6727732072657175657374
+    x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+    x-amz-request-identifier: 656c76696e6727732072657175657374
     Date: Tue, 20 Sep 2011 20:34:56 GMT
     Content-Length: Some Length
     Connection: keep-alive
@@ -2527,7 +2527,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("CORSConfiguration", "CORSRule")) {
                 if (name.equals("ID")) {
-                    currentRule.setId(getText());
+                    currentRule.setIdentifier(getText());
 
                 } else if (name.equals("AllowedOrigin")) {
                     allowedOrigins.add(getText());
@@ -2550,15 +2550,15 @@ public class XmlResponsesSaxParser {
 
     /*
       HTTP/1.1 200 OK
-      x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
-      x-amz-request-id: 51991C342C575321
+      x-amz-identifier-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
+      x-amz-request-identifier: 51991C342C575321
       Date: Wed, 14 May 2014 02:11:22 GMT
       Server: AmazonS3
       Content-Length: ...
 
      <?xml version="1.0" encoding="UTF-8"?>
      <MetricsConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-       <Id>metrics-id</Id>
+       <Id>metrics-identifier</Id>
        <Filter>
        <!-- A filter should have only one of Prefix, Tag or And predicate. ->
          <Prefix>prefix</Prefix>
@@ -2609,7 +2609,7 @@ public class XmlResponsesSaxParser {
         protected void doEndElement(String uri, String name, String qName) {
             if (in("MetricsConfiguration")) {
                 if (name.equals("Id")) {
-                    configuration.setId(getText());
+                    configuration.setIdentifier(getText());
                 } else if (name.equals("Filter")) {
                     configuration.setFilter(filter);
                     filter = null;
@@ -2653,8 +2653,8 @@ public class XmlResponsesSaxParser {
 
     /*
         HTTP/1.1 200 OK
-        x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
-        x-amz-request-id: 51991C342C575321
+        x-amz-identifier-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
+        x-amz-request-identifier: 51991C342C575321
         Date: Wed, 14 May 2014 02:11:22 GMT
         Server: AmazonS3
         Content-Length: ...
@@ -2722,7 +2722,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("ListMetricsConfigurationsResult", "MetricsConfiguration")) {
                 if (name.equals("Id")) {
-                    currentConfiguration.setId(getText());
+                    currentConfiguration.setIdentifier(getText());
                 } else if (name.equals("Filter")) {
                     currentConfiguration.setFilter(currentFilter);
                     currentFilter = null;
@@ -2773,8 +2773,8 @@ public class XmlResponsesSaxParser {
 
     /*
         HTTP/1.1 200 OK
-        x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
-        x-amz-request-id: 51991C342C575321
+        x-amz-identifier-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
+        x-amz-request-identifier: 51991C342C575321
         Date: Wed, 14 May 2014 02:11:22 GMT
         Server: AmazonS3
         Content-Length: ...
@@ -2865,7 +2865,7 @@ public class XmlResponsesSaxParser {
         protected void doEndElement(String uri, String name, String qName) {
             if (in("AnalyticsConfiguration")) {
                 if (name.equals("Id")) {
-                    configuration.setId(getText());
+                    configuration.setIdentifier(getText());
                 } else if (name.equals("Filter")) {
                     configuration.setFilter(filter);
                 } else if (name.equals("StorageClassAnalysis")) {
@@ -2943,8 +2943,8 @@ public class XmlResponsesSaxParser {
 
     /*
        HTTP/1.1 200 OK
-       x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
-       x-amz-request-id: 51991C342C575321
+       x-amz-identifier-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
+       x-amz-request-identifier: 51991C342C575321
        Date: Wed, 14 May 2014 02:11:22 GMT
        Server: AmazonS3
        Content-Length: ...
@@ -3049,7 +3049,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("ListBucketAnalyticsConfigurationsResult", "AnalyticsConfiguration")) {
                 if (name.equals("Id")) {
-                    currentConfiguration.setId(getText());
+                    currentConfiguration.setIdentifier(getText());
                 } else if (name.equals("Filter")) {
                     currentConfiguration.setFilter(currentFilter);
                 } else if (name.equals("StorageClassAnalysis")) {
@@ -3152,8 +3152,8 @@ public class XmlResponsesSaxParser {
 
     /*
         HTTP/1.1 200 OK
-        x-amz-id-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
-        x-amz-request-id: 656c76696e6727732072657175657374
+        x-amz-identifier-2: Uuag1LuByRx9e6j5Onimru9pO4ZVKnJ2Qz7/C1NPcfTWAtRPfTaOFg==
+        x-amz-request-identifier: 656c76696e6727732072657175657374
         Date: Tue, 20 Sep 2012 20:34:56 GMT
         Content-Length: xxx
         Connection: keep-alive
@@ -3231,7 +3231,7 @@ public class XmlResponsesSaxParser {
 
             if (in("InventoryConfiguration")) {
                 if (name.equals("Id")) {
-                    configuration.setId(getText());
+                    configuration.setIdentifier(getText());
 
                 } else if (name.equals("Destination")) {
                     configuration.setDestination(inventoryDestination);
@@ -3301,8 +3301,8 @@ public class XmlResponsesSaxParser {
 
     /*
            HTTP/1.1 200 OK
-           x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
-           x-amz-request-id: 51991C342C575321
+           x-amz-identifier-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
+           x-amz-request-identifier: 51991C342C575321
            Date: Wed, 14 May 2014 02:11:22 GMT
            Server: AmazonS3
            Content-Length: ...
@@ -3382,7 +3382,7 @@ public class XmlResponsesSaxParser {
                 }
             } else if (in("ListInventoryConfigurationsResult", "InventoryConfiguration")) {
                 if (name.equals("Id")) {
-                    currentConfiguration.setId(getText());
+                    currentConfiguration.setIdentifier(getText());
 
                 } else if (name.equals("Destination")) {
                     currentConfiguration.setDestination(currentDestination);

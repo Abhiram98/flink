@@ -21,7 +21,7 @@ package org.apache.flink.table.gateway.service.utils;
 /** Constants used in the SqlGatewayService. */
 public class Constants {
 
-    public static final String JOB_ID = "job id";
+    public static final String JOB_ID = "job identifier";
     public static final String JOB_NAME = "job name";
     public static final String STATUS = "status";
     public static final String START_TIME = "start time";

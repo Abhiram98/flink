@@ -1328,11 +1328,11 @@ public class AdaptiveScheduler
             JobGraph adjustedJobGraph = jobInformation.copyJobGraph();
 
             for (JobVertex vertex : adjustedJobGraph.getVertices()) {
-                JobVertexID id = vertex.getID();
+                JobVertexID identifier = vertex.getID();
 
                 // use the determined "available parallelism" to use
                 // the resources we have access to
-                vertex.setParallelism(schedulingPlan.getVertexParallelism().getParallelism(id));
+                vertex.setParallelism(schedulingPlan.getVertexParallelism().getParallelism(identifier));
             }
 
             // use the originally configured max parallelism

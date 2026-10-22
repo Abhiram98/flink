@@ -443,7 +443,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
                     checkNotNull(result);
 
                     blockingResultInfos.compute(
-                            result.getId(),
+                            result.getIdentifier(),
                             (ignored, resultInfo) -> {
                                 if (resultInfo == null) {
                                     resultInfo = createFromIntermediateResult(result);
@@ -477,7 +477,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
                     .forEach(
                             partition -> {
                                 blockingResultInfos.computeIfPresent(
-                                        partition.getIntermediateResult().getId(),
+                                        partition.getIntermediateResult().getIdentifier(),
                                         (ignored, resultInfo) -> {
                                             resultInfo.resetPartitionInfo(
                                                     partition.getPartitionNumber());
@@ -747,11 +747,11 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
             long inputBytes = 0;
             for (IntermediateResult intermediateResult : intermediateResults) {
                 ExecutionVertexInputInfo inputInfo =
-                        ev.getExecutionVertexInputInfo(intermediateResult.getId());
+                        ev.getExecutionVertexInputInfo(intermediateResult.getIdentifier());
                 IndexRange partitionIndexRange = inputInfo.getPartitionIndexRange();
                 IndexRange subpartitionIndexRange = inputInfo.getSubpartitionIndexRange();
                 BlockingResultInfo blockingResultInfo =
-                        checkNotNull(getBlockingResultInfo(intermediateResult.getId()));
+                        checkNotNull(getBlockingResultInfo(intermediateResult.getIdentifier()));
                 inputBytes +=
                         blockingResultInfo.getNumBytesProduced(
                                 partitionIndexRange, subpartitionIndexRange);
@@ -789,10 +789,10 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
 
         for (DefaultLogicalResult consumedResult : consumedResults) {
             final ExecutionJobVertex producerVertex =
-                    getExecutionJobVertex(consumedResult.getProducer().getId());
+                    getExecutionJobVertex(consumedResult.getProducer().getIdentifier());
             if (producerVertex.isFinished()) {
                 BlockingResultInfo resultInfo =
-                        checkNotNull(blockingResultInfos.get(consumedResult.getId()));
+                        checkNotNull(blockingResultInfos.get(consumedResult.getIdentifier()));
                 consumableResultInfo.add(resultInfo);
             } else {
                 // not all inputs consumable, return Optional.empty()
@@ -881,12 +881,12 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         // of subpartitions.
         if (result.getConsumingDistributionPattern() == DistributionPattern.POINTWISE) {
             return new PointwiseBlockingResultInfo(
-                    result.getId(),
+                    result.getIdentifier(),
                     result.getNumberOfAssignedPartitions(),
                     result.getPartitions()[0].getNumberOfSubpartitions());
         } else {
             return new AllToAllBlockingResultInfo(
-                    result.getId(),
+                    result.getIdentifier(),
                     result.getNumberOfAssignedPartitions(),
                     result.getPartitions()[0].getNumberOfSubpartitions(),
                     result.isBroadcast());

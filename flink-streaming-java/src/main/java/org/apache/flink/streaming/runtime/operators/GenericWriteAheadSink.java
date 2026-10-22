@@ -66,7 +66,7 @@ public abstract class GenericWriteAheadSink<IN> extends AbstractStreamOperator<I
 
     protected static final Logger LOG = LoggerFactory.getLogger(GenericWriteAheadSink.class);
 
-    private final String id;
+    private final String identifier;
     private final CheckpointCommitter committer;
     protected final TypeSerializer<IN> serializer;
 
@@ -83,7 +83,7 @@ public abstract class GenericWriteAheadSink<IN> extends AbstractStreamOperator<I
 
         this.committer = Preconditions.checkNotNull(committer);
         this.serializer = Preconditions.checkNotNull(serializer);
-        this.id = UUID.randomUUID().toString();
+        this.identifier = UUID.randomUUID().toString();
 
         this.committer.setJobId(jobID);
         this.committer.createResource();
@@ -128,7 +128,7 @@ public abstract class GenericWriteAheadSink<IN> extends AbstractStreamOperator<I
     @Override
     public void open() throws Exception {
         super.open();
-        committer.setOperatorId(id);
+        committer.setOperatorId(identifier);
         committer.open();
 
         checkpointStorage = getContainingTask().getCheckpointStorage();
@@ -145,7 +145,7 @@ public abstract class GenericWriteAheadSink<IN> extends AbstractStreamOperator<I
      * Called when a checkpoint barrier arrives. It closes any open streams to the backend and marks
      * them as pending for committing to the external, third-party storage system.
      *
-     * @param checkpointId the id of the latest received checkpoint.
+     * @param checkpointId the identifier of the latest received checkpoint.
      * @throws IOException in case something went wrong when handling the stream to the backend.
      */
     private void saveHandleInState(final long checkpointId, final long timestamp) throws Exception {
@@ -344,7 +344,7 @@ public abstract class GenericWriteAheadSink<IN> extends AbstractStreamOperator<I
 
         @Override
         public String toString() {
-            return "Pending Checkpoint: id=" + checkpointId + "/" + subtaskId + "@" + timestamp;
+            return "Pending Checkpoint: identifier=" + checkpointId + "/" + subtaskId + "@" + timestamp;
         }
     }
 }

@@ -22,9 +22,9 @@ import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 
 public interface IntermediateResultInfo {
     /**
-     * Get the intermediate result id.
+     * Get the intermediate result identifier.
      *
-     * @return the intermediate result id
+     * @return the intermediate result identifier
      */
     IntermediateDataSetID getResultId();
 

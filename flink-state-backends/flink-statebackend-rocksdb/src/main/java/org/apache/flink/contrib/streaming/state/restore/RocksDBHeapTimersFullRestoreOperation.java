@@ -213,7 +213,7 @@ public class RocksDBHeapTimersFullRestoreOperation<K> implements RocksDBRestoreO
                             writeBatchWrapper.put(
                                     handle, groupEntry.getKey(), groupEntry.getValue());
                         } else {
-                            throw new IllegalStateException("Unknown state id: " + kvStateId);
+                            throw new IllegalStateException("Unknown state identifier: " + kvStateId);
                         }
                     }
                 }

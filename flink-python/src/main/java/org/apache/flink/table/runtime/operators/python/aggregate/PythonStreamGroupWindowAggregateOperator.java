@@ -480,7 +480,7 @@ public class PythonStreamGroupWindowAggregateOperator<K, W extends Window>
         for (FlinkFnApi.GroupWindow.WindowProperty namedProperty : namedProperties) {
             windowBuilder.addNamedProperties(namedProperty);
         }
-        windowBuilder.setShiftTimezone(shiftTimeZone.getId());
+        windowBuilder.setShiftTimezone(shiftTimeZone.getIdentifier());
         builder.setGroupWindow(windowBuilder);
         return builder.build();
     }

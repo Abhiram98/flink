@@ -76,9 +76,9 @@ public class TieredStorageNettyServiceImpl implements TieredStorageNettyService 
                 .computeIfAbsent(
                         partitionId,
                         ignore -> {
-                            final TieredStoragePartitionId id = partitionId;
+                            final TieredStoragePartitionId identifier = partitionId;
                             resourceRegistry.registerResource(
-                                    id, () -> registeredServiceProducers.remove(id));
+                                    identifier, () -> registeredServiceProducers.remove(identifier));
                             return new ArrayList<>();
                         })
                 .add(serviceProducer);
@@ -106,8 +106,8 @@ public class TieredStorageNettyServiceImpl implements TieredStorageNettyService 
     /**
      * Create a {@link ResultSubpartitionView} for the netty server.
      *
-     * @param partitionId partition id indicates the unique id of {@link TieredResultPartition}.
-     * @param subpartitionId subpartition id indicates the unique id of subpartition.
+     * @param partitionId partition identifier indicates the unique identifier of {@link TieredResultPartition}.
+     * @param subpartitionId subpartition identifier indicates the unique identifier of subpartition.
      * @param availabilityListener listener is used to listen the available status of data.
      * @return the {@link TieredStorageResultSubpartitionView}.
      */

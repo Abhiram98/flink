@@ -41,7 +41,7 @@ public class DispatcherProcess extends TestJvmProcess {
     private static final Logger LOG = LoggerFactory.getLogger(DispatcherProcess.class);
 
     /** ID for this Dispatcher. */
-    private final int id;
+    private final int identifier;
 
     /** The configuration for the Dispatcher. */
     private final Configuration config;
@@ -52,13 +52,13 @@ public class DispatcherProcess extends TestJvmProcess {
     /**
      * Creates a {@link Dispatcher} running in a separate JVM.
      *
-     * @param id ID for the Dispatcher
+     * @param identifier ID for the Dispatcher
      * @param config Configuration for the dispatcher process
      * @throws Exception
      */
-    public DispatcherProcess(int id, Configuration config) throws Exception {
-        checkArgument(id >= 0, "Negative ID");
-        this.id = id;
+    public DispatcherProcess(int identifier, Configuration config) throws Exception {
+        checkArgument(identifier >= 0, "Negative ID");
+        this.identifier = identifier;
         this.config = checkNotNull(config, "Configuration");
 
         ArrayList<String> args = new ArrayList<>();
@@ -74,7 +74,7 @@ public class DispatcherProcess extends TestJvmProcess {
 
     @Override
     public String getName() {
-        return "Dispatcher " + id;
+        return "Dispatcher " + identifier;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class DispatcherProcess extends TestJvmProcess {
 
     @Override
     public String toString() {
-        return String.format("DispatcherProcess(id=%d)", id);
+        return String.format("DispatcherProcess(identifier=%d)", identifier);
     }
 
     /** Entry point for the Dispatcher process. */

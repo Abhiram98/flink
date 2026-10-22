@@ -65,7 +65,7 @@ public class StateChangeFormat {
 
     private void writeChangeSet(DataOutputViewStreamWrapper output, List<StateChange> changes)
             throws IOException {
-        // write in groups to output kg id only once
+        // write in groups to output kg identifier only once
         Map<Integer, List<StateChange>> byKeyGroup =
                 changes.stream().collect(Collectors.groupingBy(StateChange::getKeyGroup));
         // write the number of key groups

@@ -50,8 +50,8 @@ import java.util.function.Function;
  * Similarly, two test cases in the same build will have different randomized values.
  *
  * <p>The seed can be set with the maven/system property test.randomization.seed and is set by
- * default to commit id. If the seed is empty, {@link EnvironmentInformation} and as a last fallback
- * git command is used to retrieve the commit id.
+ * default to commit identifier. If the seed is empty, {@link EnvironmentInformation} and as a last fallback
+ * git command is used to retrieve the commit identifier.
  */
 @Internal
 @NotThreadSafe

@@ -51,10 +51,10 @@ public class TestManagedFileSourceSplitSerializer
             throws IOException {
         if (version == VERSION) {
             final DataInputDeserializer in = new DataInputDeserializer(serialized);
-            final String id = in.readUTF();
+            final String identifier = in.readUTF();
             Path result = Path.deserializeFromDataInputView(in);
             final Path path = result == null ? new Path() : result;
-            return new TestManagedIterableSourceSplit(id, path);
+            return new TestManagedIterableSourceSplit(identifier, path);
         }
         throw new IOException(String.format("Unknown version %d", version));
     }

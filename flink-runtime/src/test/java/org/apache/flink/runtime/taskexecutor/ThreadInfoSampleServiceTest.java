@@ -185,7 +185,7 @@ class ThreadInfoSampleServiceTest {
         return tasks.stream()
                 .collect(
                         Collectors.toMap(
-                                task -> task.getExecutingThread().getId(),
+                                task -> task.getExecutingThread().getIdentifier(),
                                 SampleableTask::getExecutionId));
     }
 

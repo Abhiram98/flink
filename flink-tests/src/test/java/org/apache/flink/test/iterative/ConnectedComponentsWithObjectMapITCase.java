@@ -83,7 +83,7 @@ public class ConnectedComponentsWithObjectMapITCase extends JavaProgramTestBaseJ
                         .types(Long.class, Long.class)
                         .flatMap(new UndirectEdge());
 
-        // assign the initial components (equal to the vertex id)
+        // assign the initial components (equal to the vertex identifier)
         DataSet<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new ConnectedComponentsITCase.DuplicateValue<Long>());
 

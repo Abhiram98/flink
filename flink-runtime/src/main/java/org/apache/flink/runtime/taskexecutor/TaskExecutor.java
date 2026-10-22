@@ -641,7 +641,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                 tasks.stream()
                         .collect(
                                 Collectors.toMap(
-                                        task -> task.getExecutingThread().getId(),
+                                        task -> task.getExecutingThread().getIdentifier(),
                                         Task::getExecutionId));
 
         final CompletableFuture<Map<ExecutionAttemptID, Collection<ThreadInfoSample>>>
@@ -682,9 +682,9 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 
             if (!Objects.equals(jobManagerConnection.getJobMasterId(), jobMasterId)) {
                 final String message =
-                        "Rejecting the task submission because the job manager leader id "
+                        "Rejecting the task submission because the job manager leader identifier "
                                 + jobMasterId
-                                + " does not match the expected job manager leader id "
+                                + " does not match the expected job manager leader identifier "
                                 + jobManagerConnection.getJobMasterId()
                                 + '.';
 
@@ -860,7 +860,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
             taskMetricGroup.gauge(MetricNames.IS_BACK_PRESSURED, task::isBackPressured);
 
             log.info(
-                    "Received task {} ({}), deploy into slot with allocation id {}.",
+                    "Received task {} ({}), deploy into slot with allocation identifier {}.",
                     task.getTaskInfo().getTaskNameWithSubtasks(),
                     tdd.getExecutionAttemptId(),
                     tdd.getAllocationId());
@@ -881,7 +881,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                 return CompletableFuture.completedFuture(Acknowledge.get());
             } else {
                 final String message =
-                        "TaskManager already contains a task for id " + task.getExecutionId() + '.';
+                        "TaskManager already contains a task for identifier " + task.getExecutionId() + '.';
 
                 log.debug(message);
                 throw new TaskSubmissionException(message);
@@ -1193,7 +1193,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 
         try (MdcCloseable ignored = MdcUtils.withContext(MdcUtils.asContextData(jobId))) {
             log.info(
-                    "Receive slot request {} for job {} from resource manager with leader id {}.",
+                    "Receive slot request {} for job {} from resource manager with leader identifier {}.",
                     allocationId,
                     jobId,
                     resourceManagerId);
@@ -1222,7 +1222,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 
                 return CompletableFuture.completedFuture(Acknowledge.get());
             } catch (SlotAllocationException e) {
-                log.debug("Could not allocate slot for allocation id {}.", allocationId, e);
+                log.debug("Could not allocate slot for allocation identifier {}.", allocationId, e);
                 return FutureUtils.completedExceptionally(e);
             }
         }
@@ -1253,7 +1253,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                 onFatalError(slotNotFoundException);
             }
 
-            // release local state under the allocation id.
+            // release local state under the allocation identifier.
             localStateStoresManager.releaseLocalStateForAllocationId(allocationId);
 
             // sanity check
@@ -1454,7 +1454,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
     public CompletableFuture<Acknowledge> updateDelegationTokens(
             ResourceManagerId resourceManagerId, byte[] tokens) {
         log.info(
-                "Receive update delegation tokens from resource manager with leader id {}.",
+                "Receive update delegation tokens from resource manager with leader identifier {}.",
                 resourceManagerId);
 
         if (!isConnectedToResourceManager(resourceManagerId)) {
@@ -1855,7 +1855,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
             } else {
                 disconnectJobManagerConnection(
                         oldJobManagerConnection,
-                        new Exception("Found new job leader for job id " + jobId + '.'),
+                        new Exception("Found new job leader for job identifier " + jobId + '.'),
                         true);
             }
         }
@@ -2178,7 +2178,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                                     : MdcUtils.asContextData(jobId))) {
 
                 log.debug(
-                        "Free slot with allocation id {} because: {}",
+                        "Free slot with allocation identifier {} because: {}",
                         allocationId,
                         cause.getMessage());
 
@@ -2205,7 +2205,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                     }
                 }
             } catch (SlotNotFoundException e) {
-                log.debug("Could not free slot for allocation id {}.", allocationId, e);
+                log.debug("Could not free slot for allocation identifier {}.", allocationId, e);
             }
 
             localStateStoresManager.releaseLocalStateForAllocationId(allocationId);
@@ -2243,7 +2243,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                     allocationId, new Exception("The slot " + allocationId + " has timed out."));
         } else {
             log.debug(
-                    "Received an invalid timeout for allocation id {} with ticket {}.",
+                    "Received an invalid timeout for allocation identifier {} with ticket {}.",
                     allocationId,
                     ticket);
         }
@@ -2536,7 +2536,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         @Override
         public void jobManagerLostLeadership(final JobID jobId, final JobMasterId jobMasterId) {
             log.info(
-                    "JobManager for job {} with leader id {} lost leadership.", jobId, jobMasterId);
+                    "JobManager for job {} with leader identifier {} lost leadership.", jobId, jobMasterId);
 
             runAsync(
                     () ->
@@ -2546,7 +2546,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
                                                     disconnectJobManagerConnection(
                                                             jobManagerConnection,
                                                             new Exception(
-                                                                    "Job leader for job id "
+                                                                    "Job leader for job identifier "
                                                                             + jobId
                                                                             + " lost leadership."),
                                                             !shouldRetainPartitionsOnJobManagerConnectionLost())));
@@ -2696,7 +2696,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         public void notifyHeartbeatTimeout(final ResourceID resourceID) {
             final String message =
                     String.format(
-                            "The heartbeat of JobManager with id %s timed out.",
+                            "The heartbeat of JobManager with identifier %s timed out.",
                             resourceID.getStringWithMetadata());
 
             log.info(message);
@@ -2707,7 +2707,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "JobManager with id %s is no longer reachable.",
+                            "JobManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 
@@ -2776,7 +2776,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         public void notifyHeartbeatTimeout(final ResourceID resourceId) {
             final String message =
                     String.format(
-                            "The heartbeat of ResourceManager with id %s timed out.",
+                            "The heartbeat of ResourceManager with identifier %s timed out.",
                             resourceId.getStringWithMetadata());
 
             log.info(message);
@@ -2787,7 +2787,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "ResourceManager with id %s is no longer reachable.",
+                            "ResourceManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 

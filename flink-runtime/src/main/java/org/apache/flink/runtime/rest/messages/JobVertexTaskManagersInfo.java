@@ -40,7 +40,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** Response type of the {@link JobVertexTaskManagersHandler}. */
 public class JobVertexTaskManagersInfo implements ResponseBody {
-    public static final String VERTEX_TASK_FIELD_ID = "id";
+    public static final String VERTEX_TASK_FIELD_ID = "identifier";
     public static final String VERTEX_TASK_FIELD_NAME = "name";
     public static final String VERTEX_TASK_FIELD_NOW = "now";
     public static final String VERTEX_TASK_FIELD_TASK_MANAGERS = "taskmanagers";
@@ -108,7 +108,7 @@ public class JobVertexTaskManagersInfo implements ResponseBody {
         public static final String TASK_MANAGERS_FIELD_DURATION = "duration";
         public static final String TASK_MANAGERS_FIELD_METRICS = "metrics";
         public static final String TASK_MANAGERS_FIELD_STATUS_COUNTS = "status-counts";
-        public static final String TASK_MANAGERS_FIELD_TASKMANAGER_ID = "taskmanager-id";
+        public static final String TASK_MANAGERS_FIELD_TASKMANAGER_ID = "taskmanager-identifier";
         public static final String TASK_MANAGERS_FIELD_AGGREGATED = "aggregated";
 
         @JsonProperty(TASK_MANAGERS_FIELD_HOST)

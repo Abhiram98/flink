@@ -96,7 +96,7 @@ class ZooKeeperLeaderElectionTest {
 
     private Configuration configuration;
 
-    private static final String COMPONENT_ID = "component-id";
+    private static final String COMPONENT_ID = "component-identifier";
     private static final String LEADER_ADDRESS = "pekko://user/jobmanager";
     private static final long timeout = 200L * 1000L;
 

@@ -72,7 +72,7 @@ public class DynamicFileSplitEnumerator<SplitT extends FileSourceSplit>
     private final FileSplitAssigner.Provider splitAssignerFactory;
 
     /**
-     * Stores the id of splits that has been assigned. The split assigner may be rebuilt when a
+     * Stores the identifier of splits that has been assigned. The split assigner may be rebuilt when a
      * DynamicFilteringEvent is received. After that, the splits that are already assigned can be
      * assigned for the second time. We have to retain the state and filter out the splits that has
      * been assigned with this set.

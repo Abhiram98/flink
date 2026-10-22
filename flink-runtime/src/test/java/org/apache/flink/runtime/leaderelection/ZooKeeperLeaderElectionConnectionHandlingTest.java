@@ -149,7 +149,7 @@ class ZooKeeperLeaderElectionConnectionHandlingTest {
 
         final TestingContender contender = new TestingContender();
         try (LeaderElection leaderElection =
-                leaderElectionService.createLeaderElection("random-component-id")) {
+                leaderElectionService.createLeaderElection("random-component-identifier")) {
             leaderElection.startLeaderElection(contender);
 
             contender.awaitGrantLeadership();

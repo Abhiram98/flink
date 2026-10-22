@@ -95,9 +95,9 @@ public final class ResourceID implements ResourceIDRetrievable, Serializable {
     }
 
     /**
-     * Generate a random resource id.
+     * Generate a random resource identifier.
      *
-     * @return A random resource id.
+     * @return A random resource identifier.
      */
     public static ResourceID generate() {
         return new ResourceID(new AbstractID().toString());

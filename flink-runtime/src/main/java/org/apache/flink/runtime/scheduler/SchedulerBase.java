@@ -603,7 +603,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     private Map<ExecutionVertexID, ExecutionVertexVersion> incrementVersionsOfAllVertices() {
         return executionVertexVersioner.recordVertexModifications(
                 IterableUtils.toStream(schedulingTopology.getVertices())
-                        .map(SchedulingExecutionVertex::getId)
+                        .map(SchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet()));
     }
 
@@ -1019,8 +1019,8 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void reportCheckpointMetrics(
-            JobID jobID, ExecutionAttemptID attemptId, long id, CheckpointMetrics metrics) {
-        executionGraphHandler.reportCheckpointMetrics(attemptId, id, metrics);
+            JobID jobID, ExecutionAttemptID attemptId, long identifier, CheckpointMetrics metrics) {
+        executionGraphHandler.reportCheckpointMetrics(attemptId, identifier, metrics);
     }
 
     @Override

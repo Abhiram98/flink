@@ -50,7 +50,7 @@ public interface OperatorCoordinatorHandler {
     /**
      * Delivers an OperatorEvent to a {@link OperatorCoordinator}.
      *
-     * @param taskExecutionId Execution attempt id of the originating task.
+     * @param taskExecutionId Execution attempt identifier of the originating task.
      * @param operatorId OperatorId of the target OperatorCoordinator.
      * @param event Event to deliver to the OperatorCoordinator.
      * @throws FlinkException If no coordinator is registered for operator.

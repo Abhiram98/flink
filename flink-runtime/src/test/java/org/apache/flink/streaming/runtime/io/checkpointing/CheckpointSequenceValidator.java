@@ -88,7 +88,7 @@ class CheckpointSequenceValidator extends AbstractInvokable {
                         checkpointId, expectedId)
                 .isNegative();
         assertThat(checkpointId)
-                .as("wrong checkpoint id for checkpoint abort")
+                .as("wrong checkpoint identifier for checkpoint abort")
                 .isEqualTo(-expectedId);
     }
 

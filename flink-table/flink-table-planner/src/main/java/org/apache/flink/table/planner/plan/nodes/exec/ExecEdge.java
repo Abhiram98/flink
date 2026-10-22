@@ -35,7 +35,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * The representation of an edge connecting two {@link ExecNode}s.
  *
  * <p>The edge's json serialization/deserialization will be delegated to {@code JsonPlanEdge}, which
- * only stores the {@link ExecNode}'s id instead of instance.
+ * only stores the {@link ExecNode}'s identifier instead of instance.
  *
  * <p>{@code JsonPlanEdge} should also be updated with this class if the fields are added/removed.
  */

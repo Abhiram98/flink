@@ -101,7 +101,7 @@ class DebeziumJsonFileSystemITCase extends StreamingTestBase {
     private void createTable(boolean isSink, String path, boolean isPartition) {
         tEnv().executeSql(
                         format("create table %s (", isSink ? "sink" : "source")
-                                + "id int, name string,"
+                                + "identifier int, name string,"
                                 + (isSink ? "upper_name string," : "")
                                 + " description string, weight float"
                                 + (isPartition ? ", p int) partitioned by (p) " : ")")
@@ -119,10 +119,10 @@ class DebeziumJsonFileSystemITCase extends StreamingTestBase {
         createTable(true, sink.toURI().toString(), false);
 
         tEnv().executeSql(
-                        "insert into sink select id,name,UPPER(name),description,weight from source")
+                        "insert into sink select identifier,name,UPPER(name),description,weight from source")
                 .await();
         CloseableIterator<Row> iter =
-                tEnv().executeSql("select id,upper_name,description,weight from sink").collect();
+                tEnv().executeSql("select identifier,upper_name,description,weight from sink").collect();
 
         List<String> results =
                 CollectionUtil.iteratorToList(iter).stream()
@@ -140,10 +140,10 @@ class DebeziumJsonFileSystemITCase extends StreamingTestBase {
         createTable(true, sink.toURI().toString(), true);
 
         tEnv().executeSql(
-                        "insert into sink select id,name,UPPER(name),description,weight,p from source")
+                        "insert into sink select identifier,name,UPPER(name),description,weight,p from source")
                 .await();
         CloseableIterator<Row> iter =
-                tEnv().executeSql("select id,upper_name,description,weight,p from sink").collect();
+                tEnv().executeSql("select identifier,upper_name,description,weight,p from sink").collect();
         List<Row> list = CollectionUtil.iteratorToList(iter);
         iter.close();
 

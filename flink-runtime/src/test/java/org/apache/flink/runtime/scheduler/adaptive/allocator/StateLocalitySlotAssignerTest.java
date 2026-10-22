@@ -185,10 +185,10 @@ class StateLocalitySlotAssignerTest {
     }
 
     private static VertexInformation createVertex(int parallelism) {
-        JobVertexID id = new JobVertexID();
+        JobVertexID identifier = new JobVertexID();
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
-        slotSharingGroup.addVertexToGroup(id);
-        return new TestVertexInformation(id, parallelism, slotSharingGroup);
+        slotSharingGroup.addVertexToGroup(identifier);
+        return new TestVertexInformation(identifier, parallelism, slotSharingGroup);
     }
 
     private static List<AllocationID> createAllocationIDS(int numFreeSlots) {

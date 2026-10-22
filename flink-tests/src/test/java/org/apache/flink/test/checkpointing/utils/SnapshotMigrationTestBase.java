@@ -235,9 +235,9 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         config.set(TaskManagerOptions.MINI_CLUSTER_NUM_TASK_MANAGERS, 1);
         config.set(TaskManagerOptions.NUM_TASK_SLOTS, DEFAULT_PARALLELISM);
 
-        UUID id = UUID.randomUUID();
-        final File checkpointDir = TEMP_FOLDER.newFolder("checkpoints_" + id).getAbsoluteFile();
-        final File savepointDir = TEMP_FOLDER.newFolder("savepoints_" + id).getAbsoluteFile();
+        UUID identifier = UUID.randomUUID();
+        final File checkpointDir = TEMP_FOLDER.newFolder("checkpoints_" + identifier).getAbsoluteFile();
+        final File savepointDir = TEMP_FOLDER.newFolder("savepoints_" + identifier).getAbsoluteFile();
 
         if (!checkpointDir.exists() || !savepointDir.exists()) {
             throw new Exception("Test setup failed: failed to create (temporary) directories.");

@@ -217,7 +217,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
                                         false));
         // "ITEM"
         registerOp(SqlStdOperatorTable.ITEM, this::convertItem);
-        // "AS" has no effect, so expand "x AS id" into "x".
+        // "AS" has no effect, so expand "x AS identifier" into "x".
         registerOp(SqlStdOperatorTable.AS, (cx, call) -> cx.convertExpression(call.operand(0)));
         // "SQRT(x)" is equivalent to "POWER(x, .5)"
         registerOp(
@@ -740,8 +740,8 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
         final List<SqlNode> operands = call.getOperandList();
         assert operands.size() == 1;
         assert operands.get(0) instanceof SqlIdentifier;
-        final SqlIdentifier id = (SqlIdentifier) operands.get(0);
-        final String key = Util.listToString(id.names);
+        final SqlIdentifier identifier = (SqlIdentifier) operands.get(0);
+        final String key = Util.listToString(identifier.names);
         RelDataType returnType = cx.getValidator().getValidatedNodeType(call);
         return cx.getRexBuilder()
                 .makeCall(returnType, fun, ImmutableList.of(cx.getRexBuilder().makeLiteral(key)));

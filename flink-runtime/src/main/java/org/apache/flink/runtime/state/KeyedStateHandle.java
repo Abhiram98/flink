@@ -42,13 +42,13 @@ public interface KeyedStateHandle extends CompositeStateHandle {
     KeyedStateHandle getIntersection(KeyGroupRange keyGroupRange);
 
     /**
-     * Returns a unique state handle id to distinguish with other keyed state handles.
+     * Returns a unique state handle identifier to distinguish with other keyed state handles.
      *
      * <p><Note>If this state handle would be used as materialized part of {@link
-     * ChangelogStateBackendHandle}, it should persist this state handle id when serializing of
-     * checkpoint and deserialize it back to ensure the state handle id is constant.
+     * ChangelogStateBackendHandle}, it should persist this state handle identifier when serializing of
+     * checkpoint and deserialize it back to ensure the state handle identifier is constant.
      *
-     * @return A unique state handle id.
+     * @return A unique state handle identifier.
      */
     StateHandleID getStateHandleId();
 }

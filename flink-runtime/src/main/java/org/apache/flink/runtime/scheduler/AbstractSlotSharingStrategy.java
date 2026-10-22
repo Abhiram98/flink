@@ -102,7 +102,7 @@ abstract class AbstractSlotSharingStrategy
         for (SchedulingExecutionVertex executionVertex : topology.getVertices()) {
             final List<SchedulingExecutionVertex> executionVertexGroup =
                     vertices.computeIfAbsent(
-                            executionVertex.getId().getJobVertexId(), k -> new ArrayList<>());
+                            executionVertex.getIdentifier().getJobVertexId(), k -> new ArrayList<>());
             executionVertexGroup.add(executionVertex);
         }
         return vertices;

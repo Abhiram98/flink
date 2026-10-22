@@ -56,7 +56,7 @@ public class DefaultSchedulingPipelinedRegion implements SchedulingPipelinedRegi
 
         this.executionVertices = new HashMap<>();
         for (DefaultExecutionVertex executionVertex : defaultExecutionVertices) {
-            this.executionVertices.put(executionVertex.getId(), executionVertex);
+            this.executionVertices.put(executionVertex.getIdentifier(), executionVertex);
         }
 
         this.resultPartitionRetriever = checkNotNull(resultPartitionRetriever);

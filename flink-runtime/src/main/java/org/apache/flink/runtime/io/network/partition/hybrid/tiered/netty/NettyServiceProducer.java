@@ -31,7 +31,7 @@ public interface NettyServiceProducer {
      * {@link NettyConnectionWriter} will be created when a netty connection is established for a
      * subpartition.
      *
-     * @param subpartitionId subpartition id indicates the id of subpartition.
+     * @param subpartitionId subpartition identifier indicates the identifier of subpartition.
      * @param nettyConnectionWriter writer is used to write buffers to netty connection.
      */
     void connectionEstablished(
@@ -39,10 +39,10 @@ public interface NettyServiceProducer {
             NettyConnectionWriter nettyConnectionWriter);
 
     /**
-     * {@link NettyConnectionWriter} related to a connection id will be notified when the netty
+     * {@link NettyConnectionWriter} related to a connection identifier will be notified when the netty
      * connection is broken.
      *
-     * @param connectionId connection id is the id of connection.
+     * @param connectionId connection identifier is the identifier of connection.
      */
     void connectionBroken(NettyConnectionId connectionId);
 }

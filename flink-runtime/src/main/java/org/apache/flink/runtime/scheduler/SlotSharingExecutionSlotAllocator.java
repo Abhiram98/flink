@@ -305,7 +305,7 @@ class SlotSharingExecutionSlotAllocator implements ExecutionSlotAllocator {
         Preconditions.checkNotNull(slot);
         Preconditions.checkState(
                 slot.isEmpty(),
-                "Trying to remove a shared slot with physical request id %s which has assigned logical slots",
+                "Trying to remove a shared slot with physical request identifier %s which has assigned logical slots",
                 slot.getPhysicalSlotRequestId());
         slotProvider.cancelSlotRequest(
                 slot.getPhysicalSlotRequestId(),

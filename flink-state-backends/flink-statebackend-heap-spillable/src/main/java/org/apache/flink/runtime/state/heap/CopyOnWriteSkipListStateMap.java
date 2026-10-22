@@ -544,7 +544,7 @@ public final class CopyOnWriteSkipListStateMap<K, N, S> extends StateMap<K, N, S
      * @param keySegment memory segment which contains the key.
      * @param keyOffset offset of the key in the memory segment.
      * @param level the level.
-     * @return node id before the key at the given level.
+     * @return node identifier before the key at the given level.
      */
     private long findPredecessor(MemorySegment keySegment, int keyOffset, int level) {
         return SkipListUtils.findPredecessor(
@@ -991,7 +991,7 @@ public final class CopyOnWriteSkipListStateMap<K, N, S> extends StateMap<K, N, S
      *
      * @param key the key.
      * @param namespace the namespace.
-     * @return id of the node. NIL_NODE will be returned if key does no exist.
+     * @return identifier of the node. NIL_NODE will be returned if key does no exist.
      */
     private S getNodeInternal(K key, N namespace) {
         MemorySegment keySegment = getKeySegment(key, namespace);

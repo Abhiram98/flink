@@ -580,7 +580,7 @@ public interface StreamTableEnvironment extends TableEnvironment {
      * convert a table column into a POJO type.
      *
      * <pre>
-     *     // given a Table of (id BIGINT, payload ROW < name STRING , age INT >)
+     *     // given a Table of (identifier BIGINT, payload ROW < name STRING , age INT >)
      *
      *     public static class MyPojo {
      *         public String name;
@@ -599,7 +599,7 @@ public interface StreamTableEnvironment extends TableEnvironment {
      *     tableEnv.toChangelogStream(
      *         table,
      *         Schema.newBuilder()
-     *             .column("id", DataTypes.BIGINT())
+     *             .column("identifier", DataTypes.BIGINT())
      *             .column("payload", DataTypes.of(MyPojo.class)) // force an implicit conversion
      *             .build());
      * </pre>
@@ -622,7 +622,7 @@ public interface StreamTableEnvironment extends TableEnvironment {
      * <p>The following examples illustrate common schema declarations and their semantics:
      *
      * <pre>
-     *     // given a Table of (id INT, name STRING, my_rowtime TIMESTAMP_LTZ(3))
+     *     // given a Table of (identifier INT, name STRING, my_rowtime TIMESTAMP_LTZ(3))
      *
      *     // === EXAMPLE 1 ===
      *
@@ -633,19 +633,19 @@ public interface StreamTableEnvironment extends TableEnvironment {
      *         .columnByMetadata("rowtime", "TIMESTAMP_LTZ(3)")
      *         .build()
      *
-     *     // equal to: CREATE TABLE (id INT, name STRING, rowtime TIMESTAMP_LTZ(3) METADATA)
+     *     // equal to: CREATE TABLE (identifier INT, name STRING, rowtime TIMESTAMP_LTZ(3) METADATA)
      *
      *     // === EXAMPLE 2 ===
      *
      *     // physical columns defined, all columns must be defined
      *
      *     Schema.newBuilder()
-     *         .column("id", "INT")
+     *         .column("identifier", "INT")
      *         .column("name", "STRING")
      *         .columnByMetadata("rowtime", "TIMESTAMP_LTZ(3)")
      *         .build()
      *
-     *     // equal to: CREATE TABLE (id INT, name STRING, rowtime TIMESTAMP_LTZ(3) METADATA)
+     *     // equal to: CREATE TABLE (identifier INT, name STRING, rowtime TIMESTAMP_LTZ(3) METADATA)
      * </pre>
      *
      * @param table The {@link Table} to convert. It can be updating or insert-only.

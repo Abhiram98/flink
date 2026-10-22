@@ -502,9 +502,9 @@ class KeyedLookupJoinHarnessTest {
             extends TestingEvolvingOutputFetcherFunction {
         @Override
         public void flatMap(RowData value, Collector<RowData> out) throws Exception {
-            int id = value.getInt(0);
-            int currentCnt = counter(id);
-            List<GenericRowData> rows = lookup(id);
+            int identifier = value.getInt(0);
+            int currentCnt = counter(identifier);
+            List<GenericRowData> rows = lookup(identifier);
             if (rows != null) {
                 // collect first row
                 collectUpdatedRow(rows.get(0), currentCnt, out);
@@ -540,9 +540,9 @@ class KeyedLookupJoinHarnessTest {
             accessCounter = new HashMap<>();
         }
 
-        protected int counter(int id) {
-            int currentCnt = accessCounter.computeIfAbsent(id, key -> 0) + 1;
-            accessCounter.put(id, currentCnt);
+        protected int counter(int identifier) {
+            int currentCnt = accessCounter.computeIfAbsent(identifier, key -> 0) + 1;
+            accessCounter.put(identifier, currentCnt);
             return currentCnt;
         }
 
@@ -558,15 +558,15 @@ class KeyedLookupJoinHarnessTest {
             }
         }
 
-        protected List<GenericRowData> lookup(int id) {
-            return baseData.get(id);
+        protected List<GenericRowData> lookup(int identifier) {
+            return baseData.get(identifier);
         }
 
         @Override
         public void flatMap(RowData value, Collector<RowData> out) throws Exception {
-            int id = value.getInt(0);
-            int currentCnt = counter(id);
-            List<GenericRowData> rows = lookup(id);
+            int identifier = value.getInt(0);
+            int currentCnt = counter(identifier);
+            List<GenericRowData> rows = lookup(identifier);
             if (rows != null) {
                 for (GenericRowData row : rows) {
                     collectUpdatedRow(row, currentCnt, out);

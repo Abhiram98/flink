@@ -61,13 +61,13 @@ public interface NestedFieldsProjectableTableSource<T> {
      * <pre>{@code
      * // schema
      * tableSchema = {
-     *     id,
+     *     identifier,
      *     student<\school<\city, tuition>, age, name>,
      *     teacher<\age, name>
      * }
      *
      * // query
-     * select (id, student.school.city, student.age, teacher)
+     * select (identifier, student.school.city, student.age, teacher)
      *
      * // parameters
      * fields = field = [0, 1, 2]

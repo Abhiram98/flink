@@ -33,12 +33,12 @@ public class TemporalJoinSQLExampleITCase extends ExampleOutputTestBase {
         final String consoleOutput = getOutputString();
         assertThat(consoleOutput)
                 .contains(
-                        "EnrichedTransaction{id=trx1, trxTime=1970-01-01T00:00:01Z, currencyCode='USD', amount=1.0, totalEuro=0.8}")
+                        "EnrichedTransaction{identifier=trx1, trxTime=1970-01-01T00:00:01Z, currencyCode='USD', amount=1.0, totalEuro=0.8}")
                 .contains(
-                        "EnrichedTransaction{id=trx2, trxTime=1970-01-01T00:00:02Z, currencyCode='USD', amount=1.0, totalEuro=0.8}")
+                        "EnrichedTransaction{identifier=trx2, trxTime=1970-01-01T00:00:02Z, currencyCode='USD', amount=1.0, totalEuro=0.8}")
                 .contains(
-                        "EnrichedTransaction{id=trx3, trxTime=1970-01-01T00:00:03Z, currencyCode='USD', amount=1.0, totalEuro=1.0}")
+                        "EnrichedTransaction{identifier=trx3, trxTime=1970-01-01T00:00:03Z, currencyCode='USD', amount=1.0, totalEuro=1.0}")
                 .contains(
-                        "EnrichedTransaction{id=trx4, trxTime=1970-01-01T00:00:04Z, currencyCode='USD', amount=1.0, totalEuro=0.9}");
+                        "EnrichedTransaction{identifier=trx4, trxTime=1970-01-01T00:00:04Z, currencyCode='USD', amount=1.0, totalEuro=0.9}");
     }
 }

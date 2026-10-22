@@ -80,15 +80,15 @@ public class StateRecoveryOptions {
                     .withDescription("Flag to enable approximate local recovery.");
 
     public static final ConfigOption<Long> CHECKPOINT_ID_OF_IGNORED_IN_FLIGHT_DATA =
-            ConfigOptions.key("execution.state-recovery.without-channel-state.checkpoint-id")
+            ConfigOptions.key("execution.state-recovery.without-channel-state.checkpoint-identifier")
                     .longType()
                     .defaultValue(-1L)
                     .withDeprecatedKeys(
-                            "execution.checkpointing.recover-without-channel-state.checkpoint-id")
+                            "execution.checkpointing.recover-without-channel-state.checkpoint-identifier")
                     .withDescription(
                             Description.builder()
                                     .text(
-                                            "Checkpoint id for which in-flight data should be ignored in case of the recovery from this checkpoint.")
+                                            "Checkpoint identifier for which in-flight data should be ignored in case of the recovery from this checkpoint.")
                                     .linebreak()
                                     .linebreak()
                                     .text(

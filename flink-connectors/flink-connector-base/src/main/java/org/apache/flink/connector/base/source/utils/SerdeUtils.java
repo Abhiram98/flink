@@ -47,7 +47,7 @@ public class SerdeUtils {
      * 4 bytes - number of subtasks
      * 4 bytes - split serializer version
      * N bytes - [assignment_for_subtask]
-     * 		4 bytes - subtask id
+     * 		4 bytes - subtask identifier
      * 		4 bytes - number of assigned splits
      * 		N bytes - [assigned_splits]
      * 			4 bytes - serialized split length
@@ -101,7 +101,7 @@ public class SerdeUtils {
      *     assigned splits for a subtask.
      * @param <SplitT> the type of the splits.
      * @param <C> the type of the collection to hold the assigned splits for a subtask.
-     * @return A mapping from subtask id to its assigned splits.
+     * @return A mapping from subtask identifier to its assigned splits.
      * @throws IOException when deserialization failed.
      */
     public static <SplitT extends SourceSplit, C extends Collection<SplitT>>

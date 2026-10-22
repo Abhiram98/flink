@@ -73,12 +73,12 @@ public class SharedObjects extends ExternalResource {
      * Identifier of the SharedObjects used to retrieve the original instance during
      * deserialization.
      */
-    private final int id;
+    private final int identifier;
     /** All registered objects for the current test case. The objects are purged upon completion. */
     private final transient Map<SharedReference<?>, Object> objects = new ConcurrentHashMap<>();
 
-    private SharedObjects(int id) {
-        this.id = id;
+    private SharedObjects(int identifier) {
+        this.identifier = identifier;
     }
 
     /**
@@ -102,20 +102,20 @@ public class SharedObjects extends ExternalResource {
      * only access the object through the returned {@link SharedReference}.
      */
     public <T> SharedReference<T> add(T object) {
-        SharedReference<T> tag = new DefaultTag<>(id, objects.size());
+        SharedReference<T> tag = new DefaultTag<>(identifier, objects.size());
         objects.put(tag, object);
         return tag;
     }
 
     @Override
     protected void before() throws Throwable {
-        INSTANCES.put(id, this);
+        INSTANCES.put(identifier, this);
     }
 
     @Override
     protected void after() {
         objects.clear();
-        INSTANCES.remove(id);
+        INSTANCES.remove(identifier);
     }
 
     @SuppressWarnings("unchecked")
@@ -136,12 +136,12 @@ public class SharedObjects extends ExternalResource {
             return false;
         }
         SharedObjects that = (SharedObjects) o;
-        return id == that.id;
+        return identifier == that.identifier;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(identifier);
     }
 
     private static class DefaultTag<T> implements SharedReference<T> {

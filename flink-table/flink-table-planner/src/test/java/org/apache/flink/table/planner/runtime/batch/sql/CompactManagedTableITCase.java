@@ -104,7 +104,7 @@ class CompactManagedTableITCase extends BatchTestBase {
 
     @Test
     void testCompactPartitionOnNonPartitionedTable() {
-        String sql = "CREATE TABLE MyTable (id BIGINT, content STRING)";
+        String sql = "CREATE TABLE MyTable (identifier BIGINT, content STRING)";
         tEnv().executeSql(sql);
         assertThatThrownBy(
                         () ->
@@ -119,7 +119,7 @@ class CompactManagedTableITCase extends BatchTestBase {
     void testCompactPartitionOnNonExistedPartitionKey() {
         String sql =
                 "CREATE TABLE MyTable (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  content STRING,\n"
                         + "  season STRING\n"
                         + ") PARTITIONED BY (season)";
@@ -138,7 +138,7 @@ class CompactManagedTableITCase extends BatchTestBase {
     void testCompactPartitionOnNonExistedPartitionValue() throws Exception {
         String sql =
                 "CREATE TABLE MyTable (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  content STRING,\n"
                         + "  season STRING\n"
                         + ") PARTITIONED BY (season)";
@@ -154,7 +154,7 @@ class CompactManagedTableITCase extends BatchTestBase {
 
     @Test
     void testCompactNonPartitionedTable() throws Exception {
-        String sql = "CREATE TABLE MyTable (id BIGINT, content STRING)";
+        String sql = "CREATE TABLE MyTable (identifier BIGINT, content STRING)";
         prepare(sql, Collections.emptyList());
 
         // test compact table
@@ -168,7 +168,7 @@ class CompactManagedTableITCase extends BatchTestBase {
     void testCompactSinglePartitionedTable() throws Exception {
         String sql =
                 "CREATE TABLE MyTable (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  content STRING,\n"
                         + "  season STRING\n"
                         + ") PARTITIONED BY (season)";
@@ -194,7 +194,7 @@ class CompactManagedTableITCase extends BatchTestBase {
     void testCompactMultiPartitionedTable() throws Exception {
         String sql =
                 "CREATE TABLE MyTable ("
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  content STRING,\n"
                         + "  season STRING,\n"
                         + "  `month` INT\n"
@@ -288,12 +288,12 @@ class CompactManagedTableITCase extends BatchTestBase {
     private void prepareMirrorTables(String managedTableDDL) {
         tEnv().executeSql(managedTableDDL);
         String helperSource =
-                "CREATE TABLE HelperSource (id BIGINT, content STRING ) WITH ("
+                "CREATE TABLE HelperSource (identifier BIGINT, content STRING ) WITH ("
                         + "  'connector' = 'datagen', "
                         + "  'rows-per-second' = '5', "
-                        + "  'fields.id.kind' = 'sequence', "
-                        + "  'fields.id.start' = '0', "
-                        + "  'fields.id.end' = '200', "
+                        + "  'fields.identifier.kind' = 'sequence', "
+                        + "  'fields.identifier.start' = '0', "
+                        + "  'fields.identifier.end' = '200', "
                         + "  'fields.content.kind' = 'random', "
                         + "  'number-of-rows' = '50')";
         String helperSink =
@@ -317,11 +317,11 @@ class CompactManagedTableITCase extends BatchTestBase {
     private static String prepareInsertDML(List<LinkedHashMap<String, String>> partitionKVs) {
         StringBuilder dmlBuilder = new StringBuilder("INSERT INTO HelperSink\n");
         if (partitionKVs.isEmpty()) {
-            return dmlBuilder.append("SELECT id,\n  content\nFROM HelperSource\n").toString();
+            return dmlBuilder.append("SELECT identifier,\n  content\nFROM HelperSource\n").toString();
         }
 
         for (int i = 0; i < partitionKVs.size(); i++) {
-            dmlBuilder.append("SELECT id,\n  content,\n");
+            dmlBuilder.append("SELECT identifier,\n  content,\n");
             int j = 0;
             for (Map.Entry<String, String> entry : partitionKVs.get(i).entrySet()) {
                 dmlBuilder.append("  ");

@@ -87,7 +87,7 @@ public class BatchExecLimit extends ExecNodeBase<RowData>
 
     @JsonCreator
     public BatchExecLimit(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_LIMIT_START) long limitStart,
@@ -96,7 +96,7 @@ public class BatchExecLimit extends ExecNodeBase<RowData>
             @JsonProperty(FIELD_NAME_INPUT_PROPERTIES) List<InputProperty> inputProperties,
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) LogicalType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.isGlobal = isGlobal;
         this.limitStart = limitStart;
         this.limitEnd = limitEnd;

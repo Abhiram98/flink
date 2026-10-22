@@ -50,7 +50,7 @@ class GSRecoverableFsDataOutputStream extends RecoverableFsDataOutputStream {
     /** The GS file system options. */
     private final GSFileSystemOptions options;
 
-    /** The blob id to which the recoverable write operation is writing. */
+    /** The blob identifier to which the recoverable write operation is writing. */
     private final GSBlobIdentifier finalBlobIdentifier;
 
     /** The write position, i.e. number of bytes that have been written so far. */
@@ -214,7 +214,7 @@ class GSRecoverableFsDataOutputStream extends RecoverableFsDataOutputStream {
 
     private GSChecksumWriteChannel createWriteChannel() {
 
-        // add a new component blob id for the new channel to write to
+        // add a new component blob identifier for the new channel to write to
         UUID componentObjectId = UUID.randomUUID();
         componentObjectIds.add(componentObjectId);
         GSBlobIdentifier blobIdentifier =

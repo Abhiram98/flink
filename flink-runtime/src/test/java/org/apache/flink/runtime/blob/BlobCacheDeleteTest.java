@@ -89,8 +89,8 @@ class BlobCacheDeleteTest {
      * Uploads a (different) byte array for each of the given jobs and verifies that deleting one of
      * them (via the {@link BlobCacheService}) does not influence the other.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      */
     private void testDelete(@Nullable JobID jobId1, @Nullable JobID jobId2) throws IOException {
         Tuple2<BlobServer, BlobCacheService> serverAndCache =
@@ -164,7 +164,7 @@ class BlobCacheDeleteTest {
      * Uploads a byte array for the given job and verifies that deleting it (via the {@link
      * BlobCacheService}) does not fail independent of whether the file exists.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      */
     private void testDeleteTransientAlreadyDeleted(@Nullable final JobID jobId) throws IOException {
         Tuple2<BlobServer, BlobCacheService> serverAndCache =
@@ -211,7 +211,7 @@ class BlobCacheDeleteTest {
      * BlobCacheService}) does not fail even if the file is not deletable locally, e.g. via
      * restricting the permissions.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      */
     private void testDeleteTransientLocalFails(@Nullable final JobID jobId)
             throws IOException, InterruptedException {

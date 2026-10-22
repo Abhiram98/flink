@@ -436,7 +436,7 @@ public final class MultiInputSortingDataInput<IN, K> implements StreamTaskInput<
     }
 
     /**
-     * A thin wrapper that represents a head of a sorted input. Additionally it keeps the id of the
+     * A thin wrapper that represents a head of a sorted input. Additionally it keeps the identifier of the
      * input it belongs to.
      *
      * <p>The class is mutable and we only ever have a single instance per input.

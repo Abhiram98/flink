@@ -238,7 +238,7 @@ public class VertexInputInfoComputationUtils {
 
         @Override
         public IntermediateDataSetID getResultId() {
-            return intermediateResult.getId();
+            return intermediateResult.getIdentifier();
         }
 
         @Override

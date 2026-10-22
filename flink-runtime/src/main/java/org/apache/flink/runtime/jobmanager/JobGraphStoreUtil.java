@@ -27,18 +27,18 @@ import org.apache.flink.api.common.JobID;
 public interface JobGraphStoreUtil {
 
     /**
-     * Get the name in external storage from job id.
+     * Get the name in external storage from job identifier.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @return Key name in ConfigMap or child path name in ZooKeeper
      */
     String jobIDToName(JobID jobId);
 
     /**
-     * Get the job id from name.
+     * Get the job identifier from name.
      *
      * @param name Key name in ConfigMap or child path name in ZooKeeper
-     * @return parsed job id.
+     * @return parsed job identifier.
      */
     JobID nameToJobID(String name);
 }

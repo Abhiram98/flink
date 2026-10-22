@@ -94,7 +94,7 @@ public class BatchExecExchange extends CommonExecExchange implements BatchExecNo
 
     @JsonCreator
     public BatchExecExchange(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_INPUT_PROPERTIES) List<InputProperty> inputProperties,
@@ -102,7 +102,7 @@ public class BatchExecExchange extends CommonExecExchange implements BatchExecNo
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description,
             @JsonProperty(FIELD_NAME_REQUIRED_EXCHANGE_MODE)
                     StreamExchangeMode requiredExchangeMode) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.requiredExchangeMode = requiredExchangeMode;
     }
 

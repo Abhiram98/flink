@@ -216,10 +216,10 @@ class ChangelogBackendLogApplier {
             StateChangeOperation operation,
             Map<Short, StateID> stateIds)
             throws Exception {
-        StateID id = checkNotNull(stateIds.get(in.readShort()));
-        ChangelogState state = changelogRestoreTarget.getExistingState(id.stateName, id.stateType);
+        StateID identifier = checkNotNull(stateIds.get(in.readShort()));
+        ChangelogState state = changelogRestoreTarget.getExistingState(identifier.stateName, identifier.stateType);
         Preconditions.checkState(
-                state != null, String.format("%s state %s not found", id.stateType, id.stateName));
+                state != null, String.format("%s state %s not found", identifier.stateType, identifier.stateName));
         StateChangeApplier changeApplier = state.getChangeApplier(factory);
         changeApplier.apply(operation, in);
     }

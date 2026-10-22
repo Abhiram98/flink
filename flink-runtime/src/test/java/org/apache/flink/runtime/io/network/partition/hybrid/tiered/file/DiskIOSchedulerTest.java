@@ -230,7 +230,7 @@ class DiskIOSchedulerTest {
 
     /**
      * The {@link DiskIOScheduler} shouldn't hold the lock when sending {@link NettyPayload} with
-     * segment id to {@link NettyConnectionWriter}, otherwise there may happen a deadlock when the
+     * segment identifier to {@link NettyConnectionWriter}, otherwise there may happen a deadlock when the
      * downstream is trying to request the lock in {@link DiskIOScheduler}.
      */
     @Test

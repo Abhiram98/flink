@@ -45,7 +45,7 @@ class TestingContainer extends ContainerPBImpl {
     }
 
     @Override
-    public ContainerId getId() {
+    public ContainerId getIdentifier() {
         return containerId;
     }
 

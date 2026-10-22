@@ -80,20 +80,20 @@ public interface TaskManagerGateway extends TaskExecutorOperatorEventGateway {
     /**
      * Batch release intermediate result partitions.
      *
-     * @param jobId id of the job that the partitions belong to
+     * @param jobId identifier of the job that the partitions belong to
      * @param partitionIds partition ids to release
      */
     void releasePartitions(JobID jobId, Set<ResultPartitionID> partitionIds);
 
     /**
-     * Notify the given task about a completed checkpoint and the last subsumed checkpoint id if
+     * Notify the given task about a completed checkpoint and the last subsumed checkpoint identifier if
      * possible.
      *
      * @param executionAttemptID identifying the task
      * @param jobId identifying the job to which the task belongs
      * @param completedCheckpointId of the completed checkpoint
      * @param completedTimestamp of the completed checkpoint
-     * @param lastSubsumedCheckpointId of the last subsumed checkpoint id,
+     * @param lastSubsumedCheckpointId of the last subsumed checkpoint identifier,
      */
     void notifyCheckpointOnComplete(
             ExecutionAttemptID executionAttemptID,

@@ -29,7 +29,7 @@ public class SlotOffer implements Serializable {
 
     private static final long serialVersionUID = -7067814231108250971L;
 
-    /** Allocation id of this slot, this would be the only identifier for this slot offer */
+    /** Allocation identifier of this slot, this would be the only identifier for this slot offer */
     private AllocationID allocationId;
 
     /** Index of the offered slot */

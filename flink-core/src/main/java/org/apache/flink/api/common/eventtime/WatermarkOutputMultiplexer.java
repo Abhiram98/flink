@@ -64,7 +64,7 @@ public class WatermarkOutputMultiplexer {
     private final WatermarkOutput underlyingOutput;
 
     /**
-     * Map view, to allow finding them when requesting the {@link WatermarkOutput} for a given id.
+     * Map view, to allow finding them when requesting the {@link WatermarkOutput} for a given identifier.
      */
     private final Map<String, PartialWatermark> watermarkPerOutputId;
 
@@ -85,18 +85,18 @@ public class WatermarkOutputMultiplexer {
      * an output ID that can be used to get a deferred or immediate {@link WatermarkOutput} for that
      * output.
      */
-    public void registerNewOutput(String id, WatermarkUpdateListener onWatermarkUpdate) {
+    public void registerNewOutput(String identifier, WatermarkUpdateListener onWatermarkUpdate) {
         final PartialWatermark outputState = new PartialWatermark(onWatermarkUpdate);
 
         final PartialWatermark previouslyRegistered =
-                watermarkPerOutputId.putIfAbsent(id, outputState);
-        checkState(previouslyRegistered == null, "Already contains an output for ID %s", id);
+                watermarkPerOutputId.putIfAbsent(identifier, outputState);
+        checkState(previouslyRegistered == null, "Already contains an output for ID %s", identifier);
 
         combinedWatermarkStatus.add(outputState);
     }
 
-    public boolean unregisterOutput(String id) {
-        final PartialWatermark output = watermarkPerOutputId.remove(id);
+    public boolean unregisterOutput(String identifier) {
+        final PartialWatermark output = watermarkPerOutputId.remove(identifier);
         if (output != null) {
             combinedWatermarkStatus.remove(output);
             return true;
@@ -114,7 +114,7 @@ public class WatermarkOutputMultiplexer {
     public WatermarkOutput getImmediateOutput(String outputId) {
         final PartialWatermark outputState = watermarkPerOutputId.get(outputId);
         Preconditions.checkArgument(
-                outputState != null, "no output registered under id %s", outputId);
+                outputState != null, "no output registered under identifier %s", outputId);
         return new ImmediateOutput(outputState);
     }
 
@@ -127,7 +127,7 @@ public class WatermarkOutputMultiplexer {
     public WatermarkOutput getDeferredOutput(String outputId) {
         final PartialWatermark outputState = watermarkPerOutputId.get(outputId);
         Preconditions.checkArgument(
-                outputState != null, "no output registered under id %s", outputId);
+                outputState != null, "no output registered under identifier %s", outputId);
         return new DeferredOutput(outputState);
     }
 

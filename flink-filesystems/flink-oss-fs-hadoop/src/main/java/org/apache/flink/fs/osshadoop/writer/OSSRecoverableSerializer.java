@@ -63,7 +63,7 @@ public class OSSRecoverableSerializer implements SimpleVersionedSerializer<OSSRe
         final byte[] lastPartBytes = lastObjectKey == null ? null : lastObjectKey.getBytes(CHARSET);
 
         /**
-         * magic number object name length + object name bytes upload id length + upload id bytes
+         * magic number object name length + object name bytes upload identifier length + upload identifier bytes
          * etags length + (part number + etag length + etag bytes)? number bytes of parts last part
          * bytes length + last part bytes last part object length
          */

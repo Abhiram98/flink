@@ -111,7 +111,7 @@ public abstract class AbstractEmbeddedDataStreamPythonFunctionOperator<OUT>
     @Override
     public void addSideOutputTags(Collection<OutputTag<?>> outputTags) {
         for (OutputTag<?> outputTag : outputTags) {
-            sideOutputTags.put(outputTag.getId(), outputTag);
+            sideOutputTags.put(outputTag.getIdentifier(), outputTag);
         }
     }
 
@@ -156,10 +156,10 @@ public abstract class AbstractEmbeddedDataStreamPythonFunctionOperator<OUT>
         }
 
         @SuppressWarnings("unchecked")
-        public void collectSideOutputById(String id, Object record) {
-            OutputTag<?> outputTag = sideOutputTags.get(id);
+        public void collectSideOutputById(String identifier, Object record) {
+            OutputTag<?> outputTag = sideOutputTags.get(identifier);
             PythonTypeUtils.DataConverter<Object, Object> sideOutputDataConverter =
-                    sideOutputDataConverters.get(id);
+                    sideOutputDataConverters.get(identifier);
             collector.collect(
                     outputTag, new StreamRecord(sideOutputDataConverter.toInternal(record)));
         }

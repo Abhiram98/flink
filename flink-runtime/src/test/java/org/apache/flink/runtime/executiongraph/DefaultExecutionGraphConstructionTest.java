@@ -288,15 +288,15 @@ class DefaultExecutionGraphConstructionTest {
 
         ExecutionJobVertex ejv1 = checkNotNull(eg.getJobVertex(v1.getID()));
         assertThat(ejv1.getProducedDataSets()).hasSize(1);
-        assertThat(ejv1.getProducedDataSets()[0].getId()).isEqualTo(dataSetId);
+        assertThat(ejv1.getProducedDataSets()[0].getIdentifier()).isEqualTo(dataSetId);
 
         ExecutionJobVertex ejv2 = checkNotNull(eg.getJobVertex(v2.getID()));
         assertThat(ejv2.getInputs()).hasSize(1);
-        assertThat(ejv2.getInputs().get(0).getId()).isEqualTo(dataSetId);
+        assertThat(ejv2.getInputs().get(0).getIdentifier()).isEqualTo(dataSetId);
 
         ExecutionJobVertex ejv3 = checkNotNull(eg.getJobVertex(v3.getID()));
         assertThat(ejv3.getInputs()).hasSize(1);
-        assertThat(ejv3.getInputs().get(0).getId()).isEqualTo(dataSetId);
+        assertThat(ejv3.getInputs().get(0).getIdentifier()).isEqualTo(dataSetId);
 
         List<ConsumedPartitionGroup> partitionGroups1 =
                 ejv2.getTaskVertices()[0].getAllConsumedPartitionGroups();

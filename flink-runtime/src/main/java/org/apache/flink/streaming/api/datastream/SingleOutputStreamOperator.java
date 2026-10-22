@@ -52,7 +52,7 @@ public class SingleOutputStreamOperator<T> extends DataStream<T> {
 
     /**
      * We keep track of the side outputs that were already requested and their types. With this, we
-     * can catch the case when a side output with a matching id is requested for a different type
+     * can catch the case when a side output with a matching identifier is requested for a different type
      * because this would lead to problems at runtime.
      */
     private Map<OutputTag<?>, TypeInformation<?>> requestedSideOutputs = new HashMap<>();
@@ -403,12 +403,12 @@ public class SingleOutputStreamOperator<T> extends DataStream<T> {
         sideOutputTag = clean(requireNonNull(sideOutputTag));
 
         // make a defensive copy
-        sideOutputTag = new OutputTag<X>(sideOutputTag.getId(), sideOutputTag.getTypeInfo());
+        sideOutputTag = new OutputTag<X>(sideOutputTag.getIdentifier(), sideOutputTag.getTypeInfo());
 
         TypeInformation<?> type = requestedSideOutputs.get(sideOutputTag);
         if (type != null && !type.equals(sideOutputTag.getTypeInfo())) {
             throw new UnsupportedOperationException(
-                    "A side output with a matching id was "
+                    "A side output with a matching identifier was "
                             + "already requested with a different type. This is not allowed, side output "
                             + "ids need to be unique.");
         }

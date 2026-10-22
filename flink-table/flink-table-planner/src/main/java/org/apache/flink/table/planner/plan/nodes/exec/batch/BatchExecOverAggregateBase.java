@@ -50,7 +50,7 @@ public abstract class BatchExecOverAggregateBase extends ExecNodeBase<RowData>
     protected final OverSpec overSpec;
 
     public BatchExecOverAggregateBase(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             OverSpec overSpec,
@@ -58,7 +58,7 @@ public abstract class BatchExecOverAggregateBase extends ExecNodeBase<RowData>
             RowType outputType,
             String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 Collections.singletonList(inputProperty),

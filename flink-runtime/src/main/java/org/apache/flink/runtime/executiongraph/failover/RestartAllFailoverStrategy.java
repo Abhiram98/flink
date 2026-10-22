@@ -47,7 +47,7 @@ public class RestartAllFailoverStrategy implements FailoverStrategy {
     public Set<ExecutionVertexID> getTasksNeedingRestart(
             ExecutionVertexID executionVertexId, Throwable cause) {
         return IterableUtils.toStream(topology.getVertices())
-                .map(SchedulingExecutionVertex::getId)
+                .map(SchedulingExecutionVertex::getIdentifier)
                 .collect(Collectors.toSet());
     }
 

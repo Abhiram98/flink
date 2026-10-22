@@ -551,7 +551,7 @@ public class SkipListUtils {
      * @param level the level.
      * @param levelIndexHeader the head level index.
      * @param spaceAllocator the space allocator.
-     * @return node id before the key at the given level.
+     * @return node identifier before the key at the given level.
      */
     static long findPredecessor(
             long node,
@@ -578,7 +578,7 @@ public class SkipListUtils {
      * @param level the level.
      * @param levelIndexHeader the head level index.
      * @param spaceAllocator the space allocator.
-     * @return node id before the key at the given level.
+     * @return node identifier before the key at the given level.
      */
     static long findPredecessor(
             MemorySegment keySegment,

@@ -96,7 +96,7 @@ public class CompactorOperator
 
     // collecting requests during the current checkpoint
     private List<CompactorRequest> collectingRequests = new ArrayList<>();
-    // checkpoint id to its collecting requests, the requests is added when checkpointing, and are
+    // checkpoint identifier to its collecting requests, the requests is added when checkpointing, and are
     // moved to compacting requests once submitted.
     private final TreeMap<Long, List<CompactorRequest>> checkpointRequests = new TreeMap<>();
     // the currently compacting requests and their completable futures, completed requests are
@@ -172,7 +172,7 @@ public class CompactorOperator
         // snapshot all compacting requests as well, including the requests that are not finished
         // when invoking prepareSnapshotPreBarrier but finished now, since they are not emitted yet
         Map<Long, List<CompactorRequest>> requests = new HashMap<>(checkpointRequests);
-        requests.computeIfAbsent(SUBMITTED_ID, id -> new ArrayList<>())
+        requests.computeIfAbsent(SUBMITTED_ID, identifier -> new ArrayList<>())
                 .addAll(compactingRequests.stream().map(r -> r.f0).collect(Collectors.toList()));
         remainingRequestsState.update(Collections.singletonList(requests));
     }
@@ -194,7 +194,7 @@ public class CompactorOperator
                 // elements can be more than one when redistributed after parallelism changing
                 for (Map.Entry<Long, List<CompactorRequest>> e : requests.entrySet()) {
                     List<CompactorRequest> list =
-                            checkpointRequests.computeIfAbsent(e.getKey(), id -> new ArrayList<>());
+                            checkpointRequests.computeIfAbsent(e.getKey(), identifier -> new ArrayList<>());
                     list.addAll(e.getValue());
                 }
             }

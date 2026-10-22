@@ -27,7 +27,7 @@ import java.util.Collections;
 
 /**
  * Message parameter for a TaskManager specific handler. The message parameters define the
- * TaskManager id as a path parameter.
+ * TaskManager identifier as a path parameter.
  */
 public class TaskManagerMessageParameters extends MessageParameters {
 

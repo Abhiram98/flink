@@ -84,10 +84,10 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
 
         for (SchedulingExecutionVertex vertex : schedulingTopology.getVertices()) {
             final SchedulingPipelinedRegion region =
-                    schedulingTopology.getPipelinedRegionOfVertex(vertex.getId());
+                    schedulingTopology.getPipelinedRegionOfVertex(vertex.getIdentifier());
             regionVerticesSorted
                     .computeIfAbsent(region, r -> new ArrayList<>())
-                    .add(vertex.getId());
+                    .add(vertex.getIdentifier());
         }
     }
 
@@ -144,7 +144,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
 
     private SchedulingPipelinedRegion getProducerRegion(IntermediateResultPartitionID partitionId) {
         return schedulingTopology.getPipelinedRegionOfVertex(
-                schedulingTopology.getResultPartition(partitionId).getProducer().getId());
+                schedulingTopology.getResultPartition(partitionId).getProducer().getIdentifier());
     }
 
     private void initPartitionGroupConsumerRegions() {
@@ -378,7 +378,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
     private boolean isExternalConsumedPartition(
             IntermediateResultPartitionID partitionId, SchedulingPipelinedRegion pipelinedRegion) {
         return !pipelinedRegion.contains(
-                schedulingTopology.getResultPartition(partitionId).getProducer().getId());
+                schedulingTopology.getResultPartition(partitionId).getProducer().getIdentifier());
     }
 
     @VisibleForTesting

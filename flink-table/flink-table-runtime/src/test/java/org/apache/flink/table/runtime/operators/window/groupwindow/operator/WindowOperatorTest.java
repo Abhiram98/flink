@@ -2150,7 +2150,7 @@ class WindowOperatorTest {
             if (!countIsNull) {
                 row.setField(1, count);
             }
-            row.setField(2, namespace.getId());
+            row.setField(2, namespace.getIdentifier());
             return row;
         }
     }
@@ -2204,7 +2204,7 @@ class WindowOperatorTest {
             if (!countIsNull) {
                 row.setField(1, count);
             }
-            row.setField(2, namespace.getId());
+            row.setField(2, namespace.getIdentifier());
 
             result.replace(key, row);
             // Simply output two lines

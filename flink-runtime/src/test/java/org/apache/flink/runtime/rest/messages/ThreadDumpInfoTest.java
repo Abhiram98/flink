@@ -61,7 +61,7 @@ class ThreadDumpInfoTest extends RestResponseMarshallingTestBase<ThreadDumpInfo>
     void testComparedWithDefaultJDKImplemetation() {
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         ThreadInfo threadInfo =
-                threadMxBean.getThreadInfo(Thread.currentThread().getId(), Integer.MAX_VALUE);
+                threadMxBean.getThreadInfo(Thread.currentThread().getIdentifier(), Integer.MAX_VALUE);
 
         // JDK11 has increased the output info of threadInfo.daemon and threadInfo.priority compared
         // to JDK8, hence only compare the output of stacktrace content for compatibility.
@@ -80,7 +80,7 @@ class ThreadDumpInfoTest extends RestResponseMarshallingTestBase<ThreadDumpInfo>
     void testStacktraceDepthLimitation() {
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         ThreadInfo threadInfo =
-                threadMxBean.getThreadInfo(Thread.currentThread().getId(), Integer.MAX_VALUE);
+                threadMxBean.getThreadInfo(Thread.currentThread().getIdentifier(), Integer.MAX_VALUE);
 
         int expectedStacktraceDepth = threadInfo.getStackTrace().length;
 

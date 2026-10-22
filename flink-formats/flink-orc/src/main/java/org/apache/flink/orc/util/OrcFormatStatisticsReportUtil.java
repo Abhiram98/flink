@@ -89,7 +89,7 @@ public class OrcFormatStatisticsReportUtil {
                 for (String column : producedRowType.getFieldNames()) {
                     int fieldIdx = fileOrcStatistics.getFieldNames().indexOf(column);
                     if (fieldIdx >= 0) {
-                        int colId = fileOrcStatistics.getColumnTypes().get(fieldIdx).getId();
+                        int colId = fileOrcStatistics.getColumnTypes().get(fieldIdx).getIdentifier();
                         ColumnStatistics statistic = fileOrcStatistics.getStatistics()[colId];
                         updateStatistics(statistic, column, columnStatisticsMap);
                     }

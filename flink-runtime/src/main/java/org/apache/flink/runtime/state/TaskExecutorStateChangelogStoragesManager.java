@@ -52,7 +52,7 @@ public class TaskExecutorStateChangelogStoragesManager {
 
     /**
      * This map holds all state changelog storages for tasks running on the task manager / executor
-     * that own the instance of this. Maps from job id to all the subtask's state changelog
+     * that own the instance of this. Maps from job identifier to all the subtask's state changelog
      * storages. Value type Optional is for containing the null value.
      */
     @GuardedBy("lock")
@@ -136,7 +136,7 @@ public class TaskExecutorStateChangelogStoragesManager {
     }
 
     private void releaseStateChangelogStorageForJob(@Nonnull JobID jobId) {
-        LOG.debug("Releasing state changelog storage under job id {}.", jobId);
+        LOG.debug("Releasing state changelog storage under job identifier {}.", jobId);
         Optional<StateChangelogStorage<?>> cleanupChangelogStorage;
         synchronized (lock) {
             if (closed) {
@@ -194,7 +194,7 @@ public class TaskExecutorStateChangelogStoragesManager {
     }
 
     private void releaseStateChangelogStorageViewForJob(@Nonnull JobID jobID) {
-        LOG.debug("Releasing state changelog storage view under job id {}.", jobID);
+        LOG.debug("Releasing state changelog storage view under job identifier {}.", jobID);
         StateChangelogStorageView<ChangelogStateHandleStreamImpl> cleanupStorageView;
         synchronized (lock) {
             if (closed) {

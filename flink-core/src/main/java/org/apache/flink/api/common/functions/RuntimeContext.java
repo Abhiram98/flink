@@ -226,7 +226,7 @@ public interface RuntimeContext {
      *
      * <pre>{@code
      * DataStream<MyType> stream = ...;
-     * KeyedStream<MyType> keyedStream = stream.keyBy("id");
+     * KeyedStream<MyType> keyedStream = stream.keyBy("identifier");
      *
      * keyedStream.map(new RichMapFunction<MyType, Tuple2<MyType, Long>>() {
      *
@@ -263,7 +263,7 @@ public interface RuntimeContext {
      *
      * <pre>{@code
      * DataStream<MyType> stream = ...;
-     * KeyedStream<MyType> keyedStream = stream.keyBy("id");
+     * KeyedStream<MyType> keyedStream = stream.keyBy("identifier");
      *
      * keyedStream.map(new RichFlatMapFunction<MyType, List<MyType>>() {
      *
@@ -304,7 +304,7 @@ public interface RuntimeContext {
      *
      * <pre>{@code
      * DataStream<MyType> stream = ...;
-     * KeyedStream<MyType> keyedStream = stream.keyBy("id");
+     * KeyedStream<MyType> keyedStream = stream.keyBy("identifier");
      *
      * keyedStream.map(new RichMapFunction<MyType, List<MyType>>() {
      *
@@ -341,7 +341,7 @@ public interface RuntimeContext {
      *
      * <pre>{@code
      * DataStream<MyType> stream = ...;
-     * KeyedStream<MyType> keyedStream = stream.keyBy("id");
+     * KeyedStream<MyType> keyedStream = stream.keyBy("identifier");
      * AggregateFunction<...> aggregateFunction = ...
      *
      * keyedStream.map(new RichMapFunction<MyType, List<MyType>>() {
@@ -382,7 +382,7 @@ public interface RuntimeContext {
      *
      * <pre>{@code
      * DataStream<MyType> stream = ...;
-     * KeyedStream<MyType> keyedStream = stream.keyBy("id");
+     * KeyedStream<MyType> keyedStream = stream.keyBy("identifier");
      *
      * keyedStream.map(new RichMapFunction<MyType, List<MyType>>() {
      *

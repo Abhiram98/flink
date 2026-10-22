@@ -124,7 +124,7 @@ class FileSystemTableSinkTest {
     private static String buildSourceTableSql(String testSourceTableName, boolean bounded) {
         return String.format(
                 "CREATE TABLE %s ("
-                        + " id BIGINT,"
+                        + " identifier BIGINT,"
                         + " real_col FLOAT,"
                         + " double_col DOUBLE,"
                         + " decimal_col DECIMAL(10, 4)"
@@ -139,7 +139,7 @@ class FileSystemTableSinkTest {
             String tableName, int parallelism, boolean autoCompaction) {
         return String.format(
                 "CREATE TABLE %s ("
-                        + " id BIGINT,"
+                        + " identifier BIGINT,"
                         + " real_col FLOAT,"
                         + " double_col DOUBLE,"
                         + " decimal_col DECIMAL(10, 4)"

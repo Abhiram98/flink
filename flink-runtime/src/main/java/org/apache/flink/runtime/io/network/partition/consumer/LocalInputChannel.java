@@ -107,7 +107,7 @@ public class LocalInputChannel extends InputChannel implements BufferAvailabilit
     // ------------------------------------------------------------------------
 
     public void checkpointStarted(CheckpointBarrier barrier) throws CheckpointException {
-        channelStatePersister.startPersisting(barrier.getId(), Collections.emptyList());
+        channelStatePersister.startPersisting(barrier.getIdentifier(), Collections.emptyList());
     }
 
     public void checkpointStopped(long checkpointId) {

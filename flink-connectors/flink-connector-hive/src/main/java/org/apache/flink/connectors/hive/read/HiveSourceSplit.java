@@ -61,7 +61,7 @@ public class HiveSourceSplit extends FileSourceSplit {
     }
 
     public HiveSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
@@ -71,7 +71,7 @@ public class HiveSourceSplit extends FileSourceSplit {
             @Nullable CheckpointedPosition readerPosition,
             HiveTablePartition hiveTablePartition) {
         super(
-                id,
+                identifier,
                 filePath,
                 offset,
                 length,
@@ -89,14 +89,14 @@ public class HiveSourceSplit extends FileSourceSplit {
      */
     @Deprecated
     public HiveSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
             String[] hostnames,
             @Nullable CheckpointedPosition readerPosition,
             HiveTablePartition hiveTablePartition) {
-        this(id, filePath, offset, length, 0, 0, hostnames, readerPosition, hiveTablePartition);
+        this(identifier, filePath, offset, length, 0, 0, hostnames, readerPosition, hiveTablePartition);
     }
 
     public HiveTablePartition getHiveTablePartition() {

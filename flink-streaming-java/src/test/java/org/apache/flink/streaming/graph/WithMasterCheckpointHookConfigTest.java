@@ -105,15 +105,15 @@ class WithMasterCheckpointHookConfigTest {
 
     private static class TestHook implements MasterTriggerRestoreHook<String> {
 
-        private final String id;
+        private final String identifier;
 
-        TestHook(String id) {
-            this.id = id;
+        TestHook(String identifier) {
+            this.identifier = identifier;
         }
 
         @Override
         public String getIdentifier() {
-            return id;
+            return identifier;
         }
 
         @Override
@@ -149,12 +149,12 @@ class WithMasterCheckpointHookConfigTest {
             return obj == this
                     || (obj != null
                             && obj.getClass() == getClass()
-                            && ((TestHook) obj).id.equals(id));
+                            && ((TestHook) obj).identifier.equals(identifier));
         }
 
         @Override
         public int hashCode() {
-            return id.hashCode();
+            return identifier.hashCode();
         }
     }
 
@@ -176,15 +176,15 @@ class WithMasterCheckpointHookConfigTest {
     private static class TestSourceWithHook extends TestSource
             implements WithMasterCheckpointHook<String> {
 
-        private final String id;
+        private final String identifier;
 
-        TestSourceWithHook(String id) {
-            this.id = id;
+        TestSourceWithHook(String identifier) {
+            this.identifier = identifier;
         }
 
         @Override
         public TestHook createMasterTriggerRestoreHook() {
-            return new TestHook(id);
+            return new TestHook(identifier);
         }
     }
 
@@ -203,15 +203,15 @@ class WithMasterCheckpointHookConfigTest {
     private static class IdentityWithHook<T> extends Identity<T>
             implements WithMasterCheckpointHook<String> {
 
-        private final String id;
+        private final String identifier;
 
-        IdentityWithHook(String id) {
-            this.id = id;
+        IdentityWithHook(String identifier) {
+            this.identifier = identifier;
         }
 
         @Override
         public TestHook createMasterTriggerRestoreHook() {
-            return new TestHook(id);
+            return new TestHook(identifier);
         }
     }
 }

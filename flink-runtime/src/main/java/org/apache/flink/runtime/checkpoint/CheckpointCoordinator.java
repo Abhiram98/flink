@@ -403,12 +403,12 @@ public class CheckpointCoordinator {
     public boolean addMasterHook(MasterTriggerRestoreHook<?> hook) {
         checkNotNull(hook);
 
-        final String id = hook.getIdentifier();
-        checkArgument(!StringUtils.isNullOrWhitespaceOnly(id), "The hook has a null or empty id");
+        final String identifier = hook.getIdentifier();
+        checkArgument(!StringUtils.isNullOrWhitespaceOnly(identifier), "The hook has a null or empty identifier");
 
         synchronized (lock) {
-            if (!masterHooks.containsKey(id)) {
-                masterHooks.put(id, hook);
+            if (!masterHooks.containsKey(identifier)) {
+                masterHooks.put(identifier, hook);
                 return true;
             } else {
                 return false;
@@ -871,7 +871,7 @@ public class CheckpointCoordinator {
      * Initialize the checkpoint location asynchronously. It will be expected to be executed in io
      * thread due to it might be time-consuming.
      *
-     * @param checkpointID checkpoint id
+     * @param checkpointID checkpoint identifier
      * @param props checkpoint properties
      * @param externalSavepointLocation the external savepoint location, it might be null
      * @return the checkpoint location
@@ -1278,7 +1278,7 @@ public class CheckpointCoordinator {
                     case UNKNOWN:
                         LOG.warn(
                                 "Could not acknowledge the checkpoint {} for task {} of job {} at {}, "
-                                        + "because the task's execution attempt id was unknown. Discarding "
+                                        + "because the task's execution attempt identifier was unknown. Discarding "
                                         + "the state handle to avoid lingering state.",
                                 message.getCheckpointId(),
                                 message.getTaskExecutionId(),
@@ -1626,11 +1626,11 @@ public class CheckpointCoordinator {
         }
     }
 
-    private void rememberRecentExpiredCheckpointId(long id) {
+    private void rememberRecentExpiredCheckpointId(long identifier) {
         if (recentExpiredCheckpoints.size() >= NUM_GHOST_CHECKPOINT_IDS) {
             recentExpiredCheckpoints.removeFirst();
         }
-        recentExpiredCheckpoints.addLast(id);
+        recentExpiredCheckpoints.addLast(identifier);
     }
 
     private void dropSubsumedCheckpoints(long checkpointId) {
@@ -2159,8 +2159,8 @@ public class CheckpointCoordinator {
     }
 
     public void reportCheckpointMetrics(
-            long id, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {
-        statsTracker.reportIncompleteStats(id, attemptId, metrics);
+            long identifier, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {
+        statsTracker.reportIncompleteStats(identifier, attemptId, metrics);
     }
 
     public void reportInitializationMetrics(
@@ -2211,7 +2211,7 @@ public class CheckpointCoordinator {
 
     /**
      * Discards the given state object asynchronously belonging to the given job, execution attempt
-     * id and checkpoint id.
+     * identifier and checkpoint identifier.
      *
      * @param jobId identifying the job to which the state object belongs
      * @param executionAttemptID identifying the task to which the state object belongs

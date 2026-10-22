@@ -23,10 +23,10 @@ public interface CheckpointBoundKeyedStateHandle extends KeyedStateHandle {
     long getCheckpointId();
 
     /**
-     * Returns a new {@link CheckpointBoundKeyedStateHandle} Rebounding checkpoint id to a specific
-     * checkpoint id.
+     * Returns a new {@link CheckpointBoundKeyedStateHandle} Rebounding checkpoint identifier to a specific
+     * checkpoint identifier.
      *
-     * @param checkpointId rebounded checkpoint id.
+     * @param checkpointId rebounded checkpoint identifier.
      */
     CheckpointBoundKeyedStateHandle rebound(long checkpointId);
 }

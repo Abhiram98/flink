@@ -54,7 +54,7 @@ import static org.mockito.Mockito.verify;
 /** Tests for the {@link DefaultJobLeaderIdService}. */
 class DefaultJobLeaderIdServiceTest {
 
-    /** Tests adding a job and finding out its leader id. */
+    /** Tests adding a job and finding out its leader identifier. */
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void testAddingJob() throws Exception {
@@ -81,7 +81,7 @@ class DefaultJobLeaderIdServiceTest {
 
         CompletableFuture<JobMasterId> leaderIdFuture = jobLeaderIdService.getLeaderId(jobId);
 
-        // notify the leader id service about the new leader
+        // notify the leader identifier service about the new leader
         leaderRetrievalService.notifyListener(address, leaderId.toUUID());
 
         assertThat(leaderIdFuture).isCompletedWithValue(leaderId);
@@ -89,7 +89,7 @@ class DefaultJobLeaderIdServiceTest {
         assertThat(jobLeaderIdService.containsJob(jobId)).isTrue();
     }
 
-    /** Tests that removing a job completes the job leader id future exceptionally. */
+    /** Tests that removing a job completes the job leader identifier future exceptionally. */
     @Test
     @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     void testRemovingJob() throws Exception {
@@ -120,7 +120,7 @@ class DefaultJobLeaderIdServiceTest {
         assertThat(jobLeaderIdService.containsJob(jobId)).isFalse();
 
         assertThatFuture(leaderIdFuture)
-                .withFailMessage("The leader id future should be completed exceptionally.")
+                .withFailMessage("The leader identifier future should be completed exceptionally.")
                 .eventuallyFails()
                 .withThrowableOfType(ExecutionException.class);
     }
@@ -222,7 +222,7 @@ class DefaultJobLeaderIdServiceTest {
 
         CompletableFuture<JobMasterId> leaderIdFuture = jobLeaderIdService.getLeaderId(jobId);
 
-        // notify the leader id service about the new leader
+        // notify the leader identifier service about the new leader
         leaderRetrievalService.notifyListener(address, leaderId.toUUID());
 
         assertThat(leaderIdFuture).isCompletedWithValue(leaderId);

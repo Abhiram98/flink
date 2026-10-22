@@ -265,15 +265,15 @@ public class HiveASTParseUtils {
                 HiveParserASTBuilder.construct(HiveASTParser.TOK_SELEXPR, "TOK_SELEXPR");
         HiveParserASTBuilder toc =
                 HiveParserASTBuilder.construct(HiveASTParser.TOK_TABLE_OR_COL, "TOK_TABLE_OR_COL");
-        HiveParserASTBuilder id =
+        HiveParserASTBuilder identifier =
                 HiveParserASTBuilder.construct(HiveASTParser.Identifier, colAlias);
         if (alias == null) {
-            selExpr = selExpr.add(toc.add(id));
+            selExpr = selExpr.add(toc.add(identifier));
         } else {
             HiveParserASTBuilder dot = HiveParserASTBuilder.construct(HiveASTParser.DOT, ".");
             HiveParserASTBuilder aliasNode =
                     HiveParserASTBuilder.construct(HiveASTParser.Identifier, alias);
-            selExpr = selExpr.add(dot.add(toc.add(aliasNode)).add(id));
+            selExpr = selExpr.add(dot.add(toc.add(aliasNode)).add(identifier));
         }
         newChildren.add(selExpr.node());
         return true;

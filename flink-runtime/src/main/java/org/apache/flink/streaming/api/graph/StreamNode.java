@@ -55,7 +55,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 @Internal
 public class StreamNode {
 
-    private final int id;
+    private final int identifier;
     private int parallelism;
     /**
      * Maximum parallelism for this stream node. The maximum parallelism is the upper limit for
@@ -103,14 +103,14 @@ public class StreamNode {
 
     @VisibleForTesting
     public StreamNode(
-            Integer id,
+            Integer identifier,
             @Nullable String slotSharingGroup,
             @Nullable String coLocationGroup,
             @Nullable StreamOperator<?> operator,
             String operatorName,
             Class<? extends TaskInvokable> jobVertexClass) {
         this(
-                id,
+                identifier,
                 slotSharingGroup,
                 coLocationGroup,
                 operator == null ? null : SimpleOperatorFactory.of(operator),
@@ -119,13 +119,13 @@ public class StreamNode {
     }
 
     public StreamNode(
-            Integer id,
+            Integer identifier,
             @Nullable String slotSharingGroup,
             @Nullable String coLocationGroup,
             @Nullable StreamOperatorFactory<?> operatorFactory,
             String operatorName,
             Class<? extends TaskInvokable> jobVertexClass) {
-        this.id = id;
+        this.identifier = identifier;
         this.operatorName = operatorName;
         this.operatorDescription = operatorName;
         this.operatorFactory = operatorFactory;
@@ -140,8 +140,8 @@ public class StreamNode {
                 "Adding not unique edge = %s to existing inEdges = %s",
                 inEdge,
                 inEdges);
-        if (inEdge.getTargetId() != getId()) {
-            throw new IllegalArgumentException("Destination id doesn't match the StreamNode id");
+        if (inEdge.getTargetId() != getIdentifier()) {
+            throw new IllegalArgumentException("Destination identifier doesn't match the StreamNode identifier");
         } else {
             inEdges.add(inEdge);
         }
@@ -153,8 +153,8 @@ public class StreamNode {
                 "Adding not unique edge = %s to existing outEdges = %s",
                 outEdge,
                 outEdges);
-        if (outEdge.getSourceId() != getId()) {
-            throw new IllegalArgumentException("Source id doesn't match the StreamNode id");
+        if (outEdge.getSourceId() != getIdentifier()) {
+            throw new IllegalArgumentException("Source identifier doesn't match the StreamNode identifier");
         } else {
             outEdges.add(outEdge);
         }
@@ -188,8 +188,8 @@ public class StreamNode {
         return inEdgeIndices;
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     public void setAttribute(Attribute attribute) {
@@ -358,7 +358,7 @@ public class StreamNode {
 
     @Override
     public String toString() {
-        return operatorName + "-" + id;
+        return operatorName + "-" + identifier;
     }
 
     public KeySelector<?, ?>[] getStatePartitioners() {
@@ -428,12 +428,12 @@ public class StreamNode {
         }
 
         StreamNode that = (StreamNode) o;
-        return id == that.id;
+        return identifier == that.identifier;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return identifier;
     }
 
     @Nullable

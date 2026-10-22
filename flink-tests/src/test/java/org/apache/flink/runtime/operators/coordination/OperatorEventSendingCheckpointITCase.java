@@ -333,7 +333,7 @@ public class OperatorEventSendingCheckpointITCase extends TestLogger {
 
         // initialize with a handler that filters nothing
         static OperatorEventRpcHandler currentHandler =
-                new OperatorEventRpcHandler((task, id, evt, rpc) -> null, Collections.emptySet());
+                new OperatorEventRpcHandler((task, identifier, evt, rpc) -> null, Collections.emptySet());
 
         OpEventRpcInterceptor(TaskExecutorGateway originalGateway) {
             super(originalGateway);

@@ -44,7 +44,7 @@ public class FieldSet implements Iterable<Integer> {
     /**
      * Creates a set with one field.
      *
-     * @param fieldID The id of the field.
+     * @param fieldID The identifier of the field.
      */
     public FieldSet(Integer fieldID) {
         if (fieldID == null) {

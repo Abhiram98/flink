@@ -51,7 +51,7 @@ public class LegacySinkTransformationTranslator<IN>
         boolean isKeyed = transformation.getStateKeySelector() != null;
         if (isKeyed) {
             BatchExecutionUtils.applyBatchExecutionSettings(
-                    transformation.getId(), context, StreamConfig.InputRequirement.SORTED);
+                    transformation.getIdentifier(), context, StreamConfig.InputRequirement.SORTED);
         }
         return ids;
     }
@@ -69,7 +69,7 @@ public class LegacySinkTransformationTranslator<IN>
 
         final StreamGraph streamGraph = context.getStreamGraph();
         final String slotSharingGroup = context.getSlotSharingGroup();
-        final int transformationId = transformation.getId();
+        final int transformationId = transformation.getIdentifier();
         final ExecutionConfig executionConfig = streamGraph.getExecutionConfig();
 
         final List<Transformation<?>> parentTransformations = transformation.getInputs();

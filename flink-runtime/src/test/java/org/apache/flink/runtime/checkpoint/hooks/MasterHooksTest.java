@@ -42,7 +42,7 @@ class MasterHooksTest {
 
     @Test
     void wrapHook() throws Exception {
-        final String id = "id";
+        final String identifier = "identifier";
 
         Thread thread = Thread.currentThread();
         final ClassLoader originalClassLoader = thread.getContextClassLoader();
@@ -75,7 +75,7 @@ class MasterHooksTest {
                                 .withFailMessage("The method shouldn't be called multiple times.")
                                 .isNotDone();
                         getIdentifierFuture.complete(null);
-                        return id;
+                        return identifier;
                     }
 
                     @Override

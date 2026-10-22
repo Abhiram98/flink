@@ -307,7 +307,7 @@ public abstract class StateTable<K, N, S>
         }
     }
 
-    /** Translates a key-group id to the internal array offset. */
+    /** Translates a key-group identifier to the internal array offset. */
     private int indexToOffset(int index) {
         return index - getKeyGroupOffset();
     }

@@ -293,7 +293,7 @@ public class StreamNetworkBenchmarkEnvironment<T extends IOReadableWritable> {
             int connectionIndex) {
         final NettyShuffleDescriptorBuilder builder =
                 NettyShuffleDescriptorBuilder.newBuilder()
-                        .setId(resultPartitionID)
+                        .setIdentifier(resultPartitionID)
                         .setProducerInfoFromTaskManagerLocation(senderLocation)
                         .setConnectionIndex(connectionIndex);
         return localMode

@@ -118,7 +118,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
         Assert.assertEquals(ShipStrategyType.FORWARD, minIdCombiner.getInput().getShipStrategy());
 
         Assert.assertEquals(
-                ShipStrategyType.FORWARD, updatingMatch.getInput1().getShipStrategy()); // min id
+                ShipStrategyType.FORWARD, updatingMatch.getInput1().getShipStrategy()); // min identifier
         Assert.assertEquals(
                 ShipStrategyType.FORWARD,
                 updatingMatch.getInput2().getShipStrategy()); // solution set
@@ -140,7 +140,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
         Assert.assertEquals(LocalStrategy.NONE, minIdCombiner.getInput().getLocalStrategy());
 
         Assert.assertEquals(
-                LocalStrategy.NONE, updatingMatch.getInput1().getLocalStrategy()); // min id
+                LocalStrategy.NONE, updatingMatch.getInput1().getLocalStrategy()); // min identifier
         Assert.assertEquals(
                 LocalStrategy.NONE, updatingMatch.getInput2().getLocalStrategy()); // solution set
 
@@ -218,7 +218,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
                 ShipStrategyType.FORWARD,
                 updatingMatch.getInput1().getShipStrategy()); // solution set
         Assert.assertEquals(
-                ShipStrategyType.FORWARD, updatingMatch.getInput2().getShipStrategy()); // min id
+                ShipStrategyType.FORWARD, updatingMatch.getInput2().getShipStrategy()); // min identifier
 
         // test all the local strategies
         Assert.assertEquals(LocalStrategy.NONE, sink.getInput().getLocalStrategy());
@@ -237,7 +237,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
         Assert.assertEquals(LocalStrategy.NONE, minIdCombiner.getInput().getLocalStrategy());
 
         Assert.assertEquals(
-                LocalStrategy.NONE, updatingMatch.getInput1().getLocalStrategy()); // min id
+                LocalStrategy.NONE, updatingMatch.getInput1().getLocalStrategy()); // min identifier
         Assert.assertEquals(
                 LocalStrategy.NONE, updatingMatch.getInput2().getLocalStrategy()); // solution set
 

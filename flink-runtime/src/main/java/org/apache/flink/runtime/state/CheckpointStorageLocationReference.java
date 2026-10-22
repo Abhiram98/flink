@@ -32,7 +32,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * interpret byte streams). There is special handling for a 'default location', which can be used as
  * an optimization by state backends, when no extra information is needed to determine where the
  * checkpoints should be stored (all information can be derived from the configuration and the
- * checkpoint id).
+ * checkpoint identifier).
  *
  * <h3>Why is this simply a byte array?</h3>
  *

@@ -194,7 +194,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         }
         throw new IllegalArgumentException(
                 String.format(
-                        "Unsupported operator type %s with input id %d",
+                        "Unsupported operator type %s with input identifier %d",
                         getClass().getName(), inputId));
     }
 

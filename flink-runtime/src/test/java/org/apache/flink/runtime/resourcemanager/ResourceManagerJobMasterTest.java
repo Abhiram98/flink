@@ -103,7 +103,7 @@ class ResourceManagerJobMasterTest {
                                         return jobMasterLeaderRetrievalService;
                                     } else {
                                         throw new FlinkRuntimeException(
-                                                String.format("Unknown job id %s", jobId));
+                                                String.format("Unknown job identifier %s", jobId));
                                     }
                                 })
                         .setRmLeaderElection(leaderElection)
@@ -277,7 +277,7 @@ class ResourceManagerJobMasterTest {
     void testRegisterJobMasterWithFailureLeaderListener() {
         JobID unknownJobIDToHAServices = new JobID();
 
-        // this should fail because we try to register a job leader listener for an unknown job id
+        // this should fail because we try to register a job leader listener for an unknown job identifier
         CompletableFuture<RegistrationResponse> registrationFuture =
                 resourceManagerGateway.registerJobMaster(
                         jobMasterGateway.getFencingToken(),

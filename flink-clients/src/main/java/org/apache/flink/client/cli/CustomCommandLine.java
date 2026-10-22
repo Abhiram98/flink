@@ -40,7 +40,7 @@ public interface CustomCommandLine {
      *
      * @return A unique identifier
      */
-    String getId();
+    String getIdentifier();
 
     /**
      * Adds custom options to the existing run options.

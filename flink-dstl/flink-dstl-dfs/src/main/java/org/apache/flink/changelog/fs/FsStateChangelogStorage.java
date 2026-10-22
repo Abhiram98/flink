@@ -62,7 +62,7 @@ public class FsStateChangelogStorage extends FsStateChangelogStorageForRecovery
     private final long preEmptivePersistThresholdInBytes;
 
     /**
-     * The log id is only needed on write to separate changes from different backends (i.e.
+     * The log identifier is only needed on write to separate changes from different backends (i.e.
      * operators) in the resulting file.
      */
     private final AtomicInteger logIdGenerator = new AtomicInteger(0);

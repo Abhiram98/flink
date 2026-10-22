@@ -81,7 +81,7 @@ public interface ResourceManagerGateway
     /**
      * Declares the absolute resource requirements for a job.
      *
-     * @param jobMasterId id of the JobMaster
+     * @param jobMasterId identifier of the JobMaster
      * @param resourceRequirements resource requirements
      * @return The confirmation that the requirements have been processed
      */
@@ -104,7 +104,7 @@ public interface ResourceManagerGateway
      * Sends the given {@link SlotReport} to the ResourceManager.
      *
      * @param taskManagerResourceId The resource ID of the sending TaskManager
-     * @param taskManagerRegistrationId id identifying the sending TaskManager
+     * @param taskManagerRegistrationId identifier identifying the sending TaskManager
      * @param slotReport which is sent to the ResourceManager
      * @param timeout for the operation
      * @return Future which is completed with {@link Acknowledge} once the slot report has been
@@ -119,7 +119,7 @@ public interface ResourceManagerGateway
     /**
      * Sent by the TaskExecutor to notify the ResourceManager that a slot has become available.
      *
-     * @param instanceId TaskExecutor's instance id
+     * @param instanceId TaskExecutor's instance identifier
      * @param slotID The SlotID of the freed slot
      * @param oldAllocationId to which the slot has been allocated
      */
@@ -145,7 +145,7 @@ public interface ResourceManagerGateway
     /**
      * Sends the heartbeat to resource manager from task manager.
      *
-     * @param heartbeatOrigin unique id of the task manager
+     * @param heartbeatOrigin unique identifier of the task manager
      * @param heartbeatPayload payload from the originating TaskManager
      * @return future which is completed exceptionally if the operation fails
      */
@@ -155,7 +155,7 @@ public interface ResourceManagerGateway
     /**
      * Sends the heartbeat to resource manager from job manager.
      *
-     * @param heartbeatOrigin unique id of the job manager
+     * @param heartbeatOrigin unique identifier of the job manager
      * @return future which is completed exceptionally if the operation fails
      */
     CompletableFuture<Void> heartbeatFromJobManager(final ResourceID heartbeatOrigin);

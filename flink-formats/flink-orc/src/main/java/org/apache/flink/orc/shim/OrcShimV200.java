@@ -126,7 +126,7 @@ public class OrcShimV200 implements OrcShim<VectorizedRowBatch> {
         RecordReader orcRowsReader = createRecordReader(orcReader, options);
 
         // assign ids
-        schema.getId();
+        schema.getIdentifier();
 
         return orcRowsReader;
     }
@@ -200,7 +200,7 @@ public class OrcShimV200 implements OrcShim<VectorizedRowBatch> {
         for (int inIdx : selectedFields) {
             // set all nested fields of a selected field to true
             TypeDescription fieldSchema = schema.getChildren().get(inIdx);
-            for (int i = fieldSchema.getId(); i <= fieldSchema.getMaximumId(); i++) {
+            for (int i = fieldSchema.getIdentifier(); i <= fieldSchema.getMaximumId(); i++) {
                 projectionMask[i] = true;
             }
         }

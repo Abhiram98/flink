@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 public class CollectSinkOperator<IN> extends StreamSink<IN> implements OperatorEventHandler {
 
     private final CollectSinkFunction<IN> sinkFunction;
-    // we need operator id to identify the coordinator of this operator,
+    // we need operator identifier to identify the coordinator of this operator,
     // this is only used for in clients so no need to serialize
     private final transient CompletableFuture<OperatorID> operatorIdFuture;
 

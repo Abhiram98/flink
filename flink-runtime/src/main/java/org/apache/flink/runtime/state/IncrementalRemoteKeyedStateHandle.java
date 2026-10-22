@@ -203,7 +203,7 @@ public class IncrementalRemoteKeyedStateHandle extends AbstractIncrementalStateH
         final boolean isRegistered = (registry != null);
 
         LOG.trace(
-                "Discarding IncrementalRemoteKeyedStateHandle (registered = {}) for checkpoint {} from backend with id {}.",
+                "Discarding IncrementalRemoteKeyedStateHandle (registered = {}) for checkpoint {} from backend with identifier {}.",
                 isRegistered,
                 checkpointId,
                 backendIdentifier);
@@ -280,7 +280,7 @@ public class IncrementalRemoteKeyedStateHandle extends AbstractIncrementalStateH
         sharedStateRegistry = Preconditions.checkNotNull(stateRegistry);
 
         LOG.trace(
-                "Registering IncrementalRemoteKeyedStateHandle for checkpoint {} from backend with id {}.",
+                "Registering IncrementalRemoteKeyedStateHandle for checkpoint {} from backend with identifier {}.",
                 checkpointId,
                 backendIdentifier);
 
@@ -294,7 +294,7 @@ public class IncrementalRemoteKeyedStateHandle extends AbstractIncrementalStateH
 
             // This step consolidates our shared handles with the registry, which will replace
             // placeholder state handle with already registered, actual state handles.
-            // Because of SharedStateRegistryKey is based on the physical id of the stream handle,
+            // Because of SharedStateRegistryKey is based on the physical identifier of the stream handle,
             // no de-duplication will be performed. see FLINK-29913.
             handleAndLocalPath.replaceHandle(reference);
         }

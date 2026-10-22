@@ -359,9 +359,9 @@ final class SpillingThread<E> extends ThreadBase<E> {
                             writer, this.writeMemory, this.memManager.getPageSize());
 
             // write sort-buffer to channel
-            LOG.debug("Spilling buffer " + element.getId() + ".");
+            LOG.debug("Spilling buffer " + element.getIdentifier() + ".");
             spillingBehaviour.spillBuffer(element, output, largeRecordHandler);
-            LOG.debug("Spilled buffer " + element.getId() + ".");
+            LOG.debug("Spilled buffer " + element.getIdentifier() + ".");
 
             output.close();
             spillChannelManager.unregisterOpenChannelToBeRemovedAtShutdown(writer);
@@ -423,7 +423,7 @@ final class SpillingThread<E> extends ThreadBase<E> {
             List<FileIOChannel> readerList,
             MutableObjectIterator<E> largeRecords)
             throws IOException {
-        // create one iterator per channel id
+        // create one iterator per channel identifier
         LOG.debug("Performing merge of {} sorted streams.", channelIDs.size());
 
         final List<MutableObjectIterator<E>> iterators = new ArrayList<>(channelIDs.size() + 1);

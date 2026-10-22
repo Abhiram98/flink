@@ -217,7 +217,7 @@ public class ChangelogStateBackendTestUtils {
         TypeInformation<StateBackendTestBase.TestPojo> pojoType =
                 new GenericTypeInfo<>(StateBackendTestBase.TestPojo.class);
         ValueStateDescriptor<StateBackendTestBase.TestPojo> kvId =
-                new ValueStateDescriptor<>("id", pojoType);
+                new ValueStateDescriptor<>("identifier", pojoType);
         if (stateTtlConfig.isEnabled()) {
             kvId.enableTimeToLive(stateTtlConfig);
         }

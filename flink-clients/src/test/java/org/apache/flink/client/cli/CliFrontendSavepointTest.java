@@ -118,7 +118,7 @@ class CliFrontendSavepointTest extends CliFrontendTestBase {
                         new RestClusterClient<>(
                                 getConfiguration(), StandaloneClusterId.getInstance()));
 
-        String[] parameters = {"invalid job id"};
+        String[] parameters = {"invalid job identifier"};
         assertThatThrownBy(() -> frontend.savepoint(parameters))
                 .isInstanceOf(CliArgsException.class)
                 .hasMessageContaining("Cannot parse JobID");

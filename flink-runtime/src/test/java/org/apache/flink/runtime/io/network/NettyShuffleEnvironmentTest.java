@@ -167,7 +167,7 @@ class NettyShuffleEnvironmentTest {
         shuffleEnvironment.createInputGates(
                 shuffleEnvironment.createShuffleIOOwnerContext(
                         "test", createExecutionAttemptId(), taskMetricGroup),
-                (dsid, id, consumer) -> {},
+                (dsid, identifier, consumer) -> {},
                 Arrays.asList(
                         new InputGateDeploymentDescriptor(
                                 new IntermediateDataSetID(),

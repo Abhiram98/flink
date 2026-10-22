@@ -222,7 +222,7 @@ public class Buckets<IN, BucketID> {
                 activeBuckets.entrySet().iterator();
 
         LOG.info(
-                "Subtask {} received completion notification for checkpoint with id={}.",
+                "Subtask {} received completion notification for checkpoint with identifier={}.",
                 subtaskIndex,
                 checkpointId);
 
@@ -251,7 +251,7 @@ public class Buckets<IN, BucketID> {
                 "sink has not been initialized");
 
         LOG.info(
-                "Subtask {} checkpointing for checkpoint with id={} (max part counter={}).",
+                "Subtask {} checkpointing for checkpoint with identifier={} (max part counter={}).",
                 subtaskIndex,
                 checkpointId,
                 maxPartCounter);

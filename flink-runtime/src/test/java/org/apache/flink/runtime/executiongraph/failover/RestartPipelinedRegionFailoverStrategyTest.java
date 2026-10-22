@@ -187,8 +187,8 @@ class RestartPipelinedRegionFailoverStrategyTest {
         RestartPipelinedRegionFailoverStrategy strategy =
                 new RestartPipelinedRegionFailoverStrategy(topology, availabilityChecker);
 
-        IntermediateResultPartitionID rp1ID = v1.getProducedResults().iterator().next().getId();
-        IntermediateResultPartitionID rp2ID = v2.getProducedResults().iterator().next().getId();
+        IntermediateResultPartitionID rp1ID = v1.getProducedResults().iterator().next().getIdentifier();
+        IntermediateResultPartitionID rp2ID = v2.getProducedResults().iterator().next().getIdentifier();
 
         // -------------------------------------------------
         // Combination1: (rp1 == available, rp2 == available)
@@ -402,9 +402,9 @@ class RestartPipelinedRegionFailoverStrategyTest {
             return cause(
                     new PartitionConnectionException(
                             new ResultPartitionID(
-                                    failedProducer.getId(),
+                                    failedProducer.getIdentifier(),
                                     createExecutionAttemptId(
-                                            failedProducer.getProducer().getId(), 0)),
+                                            failedProducer.getProducer().getIdentifier(), 0)),
                             new Exception("Test failure")));
         }
 
@@ -415,11 +415,11 @@ class RestartPipelinedRegionFailoverStrategyTest {
 
         private void restarts(SchedulingExecutionVertex... expectedResult) {
             Set<ExecutionVertexID> tasksNeedingRestart =
-                    strategy.getTasksNeedingRestart(executionVertex.getId(), cause);
+                    strategy.getTasksNeedingRestart(executionVertex.getIdentifier(), cause);
             assertThat(tasksNeedingRestart)
                     .containsExactlyInAnyOrderElementsOf(
                             Stream.of(expectedResult)
-                                    .map(SchedulingExecutionVertex::getId)
+                                    .map(SchedulingExecutionVertex::getIdentifier)
                                     .collect(Collectors.toList()));
         }
     }

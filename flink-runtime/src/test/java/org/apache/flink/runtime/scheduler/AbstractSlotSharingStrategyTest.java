@@ -87,11 +87,11 @@ abstract class AbstractSlotSharingStrategyTest {
                         Sets.newHashSet());
 
         assertThat(strategy.getExecutionSlotSharingGroups()).hasSize(3);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev10.getId()).getResourceProfile())
+        assertThat(strategy.getExecutionSlotSharingGroup(ev10.getIdentifier()).getResourceProfile())
                 .isEqualTo(resourceProfile1);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getId()).getResourceProfile())
+        assertThat(strategy.getExecutionSlotSharingGroup(ev11.getIdentifier()).getResourceProfile())
                 .isEqualTo(resourceProfile1);
-        assertThat(strategy.getExecutionSlotSharingGroup(ev20.getId()).getResourceProfile())
+        assertThat(strategy.getExecutionSlotSharingGroup(ev20.getIdentifier()).getResourceProfile())
                 .isEqualTo(resourceProfile2);
     }
 

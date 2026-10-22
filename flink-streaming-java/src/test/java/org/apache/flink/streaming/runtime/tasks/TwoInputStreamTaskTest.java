@@ -605,13 +605,13 @@ class TwoInputStreamTaskTest {
                 new InterceptingTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID id, String name) {
-                        if (id.equals(headOperatorId)) {
+                            OperatorID identifier, String name) {
+                        if (identifier.equals(headOperatorId)) {
                             return headOperatorMetricGroup;
-                        } else if (id.equals(chainedOperatorId)) {
+                        } else if (identifier.equals(chainedOperatorId)) {
                             return chainedOperatorMetricGroup;
                         } else {
-                            return super.getOrAddOperator(id, name);
+                            return super.getOrAddOperator(identifier, name);
                         }
                     }
                 };

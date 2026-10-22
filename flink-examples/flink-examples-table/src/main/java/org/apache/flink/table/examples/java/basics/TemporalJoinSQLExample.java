@@ -95,13 +95,13 @@ public class TemporalJoinSQLExample {
                 tableEnv.fromDataStream(
                                 transaction,
                                 Schema.newBuilder()
-                                        .column("id", DataTypes.STRING())
+                                        .column("identifier", DataTypes.STRING())
                                         .column("trxTime", DataTypes.TIMESTAMP_LTZ(3))
                                         .column("currencyCode", DataTypes.STRING())
                                         .column("amount", DataTypes.DOUBLE())
                                         .watermark("trxTime", "trxTime - INTERVAL '2' SECONDS")
                                         .build())
-                        .as("id", "trx_time", "currency_code", "amount");
+                        .as("identifier", "trx_time", "currency_code", "amount");
 
         // Register the table as a view, it will be accessible under a name
         tableEnv.createTemporaryView("transaction", trxTable);
@@ -110,7 +110,7 @@ public class TemporalJoinSQLExample {
         final Table result =
                 tableEnv.sqlQuery(
                         "    SELECT\n"
-                                + "        t.id,\n"
+                                + "        t.identifier,\n"
                                 + "        t.trx_time,\n"
                                 + "        c.currency_code,\n"
                                 + "        t.amount,\n"
@@ -129,7 +129,7 @@ public class TemporalJoinSQLExample {
 
     /** A simple class to represent a transaction. */
     public static class Transaction {
-        public String id;
+        public String identifier;
         public Instant trxTime;
         public String currencyCode;
         // the rate comparing with euro
@@ -139,8 +139,8 @@ public class TemporalJoinSQLExample {
         public Transaction() {}
 
         // for structured type detection in Table API
-        public Transaction(String id, Instant trxTime, String currencyCode, double amount) {
-            this.id = id;
+        public Transaction(String identifier, Instant trxTime, String currencyCode, double amount) {
+            this.identifier = identifier;
             this.trxTime = trxTime;
             this.currencyCode = currencyCode;
             this.amount = amount;
@@ -149,8 +149,8 @@ public class TemporalJoinSQLExample {
         @Override
         public String toString() {
             return "Transaction{"
-                    + "id="
-                    + id
+                    + "identifier="
+                    + identifier
                     + ", trxTime="
                     + trxTime
                     + ", currencyCode='"
@@ -171,16 +171,16 @@ public class TemporalJoinSQLExample {
 
         // for structured type detection in Table API
         public EnrichedTransaction(
-                String id, Instant trxTime, String currencyCode, double amount, double totalEuro) {
-            super(id, trxTime, currencyCode, amount);
+                String identifier, Instant trxTime, String currencyCode, double amount, double totalEuro) {
+            super(identifier, trxTime, currencyCode, amount);
             this.totalEuro = totalEuro;
         }
 
         @Override
         public String toString() {
             return "EnrichedTransaction{"
-                    + "id="
-                    + id
+                    + "identifier="
+                    + identifier
                     + ", trxTime="
                     + trxTime
                     + ", currencyCode='"

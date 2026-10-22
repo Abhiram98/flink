@@ -108,9 +108,9 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>For a lookup join query:
  *
  * <pre>
- * SELECT T.id, T.content, D.age
+ * SELECT T.identifier, T.content, D.age
  * FROM T JOIN userTable FOR SYSTEM_TIME AS OF T.proctime AS D
- * ON T.content = concat(D.name, '!') AND D.age = 11 AND T.id = D.id
+ * ON T.content = concat(D.name, '!') AND D.age = 11 AND T.identifier = D.identifier
  * WHERE D.name LIKE 'Jack%'
  * </pre>
  *
@@ -121,12 +121,12 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  *    /     \
  * RelNode  Calc (concat(name, "!") as name, name LIKE 'Jack%')
  *           |
- *        DimTable (lookup-keys: age=11, id=l.id)
- *     (age, id, name)
+ *        DimTable (lookup-keys: age=11, identifier=l.identifier)
+ *     (age, identifier, name)
  * </pre>
  *
  * <ul>
- *   <li>lookupKeys: [$0=11, $1=l.id] ($0 and $1 is the indexes of age and id in dim table)
+ *   <li>lookupKeys: [$0=11, $1=l.identifier] ($0 and $1 is the indexes of age and identifier in dim table)
  *   <li>calcOnTemporalTable: calc on temporal table rows before join
  *   <li>joinCondition: join condition on temporal table rows after calc
  * </ul>
@@ -198,7 +198,7 @@ public abstract class CommonExecLookupJoin extends ExecNodeBase<RowData> {
     private final @Nullable LookupJoinUtil.RetryLookupOptions retryOptions;
 
     protected CommonExecLookupJoin(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             FlinkJoinType joinType,
@@ -215,7 +215,7 @@ public abstract class CommonExecLookupJoin extends ExecNodeBase<RowData> {
             List<InputProperty> inputProperties,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         checkArgument(inputProperties.size() == 1);
         this.joinType = checkNotNull(joinType);
         this.preFilterCondition = preFilterCondition;

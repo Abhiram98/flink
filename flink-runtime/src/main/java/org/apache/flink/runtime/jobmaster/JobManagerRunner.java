@@ -58,9 +58,9 @@ public interface JobManagerRunner extends AutoCloseableAsync {
     CompletableFuture<JobManagerRunnerResult> getResultFuture();
 
     /**
-     * Get the job id of the executed job.
+     * Get the job identifier of the executed job.
      *
-     * @return job id of the executed job
+     * @return job identifier of the executed job
      */
     JobID getJobID();
 

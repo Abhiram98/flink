@@ -50,12 +50,12 @@ class ClusterDataSetListResponseBodyTest
                 ClusterDataSetListResponseBody.from(originalDataSets).getDataSets();
         assertThat(convertedDataSets).hasSize(2);
         for (ClusterDataSetEntry convertedDataSet : convertedDataSets) {
-            IntermediateDataSetID id =
+            IntermediateDataSetID identifier =
                     new IntermediateDataSetID(
                             new AbstractID(
                                     StringUtils.hexStringToByte(convertedDataSet.getDataSetId())));
 
-            DataSetMetaInfo dataSetMetaInfo = originalDataSets.get(id);
+            DataSetMetaInfo dataSetMetaInfo = originalDataSets.get(identifier);
 
             assertThat(convertedDataSet.isComplete())
                     .isEqualTo(

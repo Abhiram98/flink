@@ -580,7 +580,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                         "ALTER TABLE `T1` ADD (\n"
                                 + "  `NEW_COLUMN` STRING COMMENT 'new_column docs' FIRST\n"
                                 + ")");
-        sql("alter table t1 add new_column string comment 'new_column docs' after id")
+        sql("alter table t1 add new_column string comment 'new_column docs' after identifier")
                 .ok(
                         "ALTER TABLE `T1` ADD (\n"
                                 + "  `NEW_COLUMN` STRING COMMENT 'new_column docs' AFTER `ID`\n"
@@ -687,7 +687,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                         + "log_ts string comment 'log timestamp string' first,\n"
                         + "ts AS to_timestamp(log_ts) after log_ts,\n"
                         + "col_meta int metadata from 'mk1' virtual comment 'comment_str' after col_b,\n"
-                        + "primary key (id) not enforced,\n"
+                        + "primary key (identifier) not enforced,\n"
                         + "unique(a, b),\n"
                         + "watermark for ts as ts - interval '3' second\n"
                         + ")";
@@ -709,7 +709,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                         + "log_ts string comment 'log timestamp string' first,\n"
                         + "ts AS to_timestamp(log_ts) after log_ts,\n"
                         + "col_meta int metadata from 'mk1' virtual comment 'comment_str' after col_b,\n"
-                        + "primary key (id) not enforced,\n"
+                        + "primary key (identifier) not enforced,\n"
                         + "unique (a, b),\n"
                         + "watermark for ts as ts - interval '3' second\n"
                         + ")";
@@ -733,7 +733,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                         "ALTER TABLE `T1` MODIFY (\n"
                                 + "  `NEW_COLUMN` STRING COMMENT 'new_column docs' FIRST\n"
                                 + ")");
-        sql("alter table t1 modify new_column string comment 'new_column docs' after id")
+        sql("alter table t1 modify new_column string comment 'new_column docs' after identifier")
                 .ok(
                         "ALTER TABLE `T1` MODIFY (\n"
                                 + "  `NEW_COLUMN` STRING COMMENT 'new_column docs' AFTER `ID`\n"
@@ -822,7 +822,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                         + "log_ts string comment 'log timestamp string' first,\n"
                         + "ts AS to_timestamp(log_ts) after log_ts,\n"
                         + "col_meta int metadata from 'mk1' virtual comment 'comment_str' after col_b,\n"
-                        + "primary key (id) not enforced,\n"
+                        + "primary key (identifier) not enforced,\n"
                         + "unique(a, b),\n"
                         + "watermark for ts as ts - interval '3' second\n"
                         + ")";
@@ -841,19 +841,19 @@ class FlinkSqlParserImplTest extends SqlParserTest {
 
     @Test
     public void testAlterTableDropSingleColumn() {
-        sql("alter table if exists t1 drop id")
+        sql("alter table if exists t1 drop identifier")
                 .ok("ALTER TABLE IF EXISTS `T1` DROP (\n" + "  `ID`\n" + ")");
-        sql("alter table t1 drop id").ok("ALTER TABLE `T1` DROP (\n" + "  `ID`\n" + ")");
+        sql("alter table t1 drop identifier").ok("ALTER TABLE `T1` DROP (\n" + "  `ID`\n" + ")");
 
-        sql("alter table t1 drop (id)").ok("ALTER TABLE `T1` DROP (\n" + "  `ID`\n" + ")");
+        sql("alter table t1 drop (identifier)").ok("ALTER TABLE `T1` DROP (\n" + "  `ID`\n" + ")");
 
-        sql("alter table t1 drop tuple.id")
+        sql("alter table t1 drop tuple.identifier")
                 .ok("ALTER TABLE `T1` DROP (\n" + "  `TUPLE`.`ID`\n" + ")");
     }
 
     @Test
     public void testAlterTableDropMultipleColumn() {
-        sql("alter table if exists t1 drop (id, ts, tuple.f0, tuple.f1)")
+        sql("alter table if exists t1 drop (identifier, ts, tuple.f0, tuple.f1)")
                 .ok(
                         "ALTER TABLE IF EXISTS `T1` DROP (\n"
                                 + "  `ID`,\n"
@@ -861,7 +861,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
                                 + "  `TUPLE`.`F0`,\n"
                                 + "  `TUPLE`.`F1`\n"
                                 + ")");
-        sql("alter table t1 drop (id, ts, tuple.f0, tuple.f1)")
+        sql("alter table t1 drop (identifier, ts, tuple.f0, tuple.f1)")
                 .ok(
                         "ALTER TABLE `T1` DROP (\n"
                                 + "  `ID`,\n"
@@ -1561,7 +1561,7 @@ class FlinkSqlParserImplTest extends SqlParserTest {
         final String sql =
                 "CREATE TABLE tbl1 (\n"
                         + "  ts timestamp(3),\n"
-                        + "  id varchar, \n"
+                        + "  identifier varchar, \n"
                         + "  watermark FOR ts AS ts - interval '3' second\n"
                         + ")\n"
                         + "  with (\n"

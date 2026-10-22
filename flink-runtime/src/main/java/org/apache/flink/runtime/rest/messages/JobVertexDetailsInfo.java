@@ -38,7 +38,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** Response type of the {@link JobVertexDetailsHandler}. */
 public class JobVertexDetailsInfo implements ResponseBody {
-    public static final String FIELD_NAME_VERTEX_ID = "id";
+    public static final String FIELD_NAME_VERTEX_ID = "identifier";
     public static final String FIELD_NAME_VERTEX_NAME = "name";
     public static final String FIELD_NAME_PARALLELISM = "parallelism";
     public static final String FIELD_NAME_MAX_PARALLELISM = "maxParallelism";
@@ -48,7 +48,7 @@ public class JobVertexDetailsInfo implements ResponseBody {
 
     @JsonProperty(FIELD_NAME_VERTEX_ID)
     @JsonSerialize(using = JobVertexIDSerializer.class)
-    private final JobVertexID id;
+    private final JobVertexID identifier;
 
     @JsonProperty(FIELD_NAME_VERTEX_NAME)
     private final String name;
@@ -72,13 +72,13 @@ public class JobVertexDetailsInfo implements ResponseBody {
     public JobVertexDetailsInfo(
             @JsonDeserialize(using = JobVertexIDDeserializer.class)
                     @JsonProperty(FIELD_NAME_VERTEX_ID)
-                    JobVertexID id,
+                    JobVertexID identifier,
             @JsonProperty(FIELD_NAME_VERTEX_NAME) String name,
             @JsonProperty(FIELD_NAME_PARALLELISM) int parallelism,
             @JsonProperty(FIELD_NAME_MAX_PARALLELISM) int maxParallelism,
             @JsonProperty(FIELD_NAME_NOW) long now,
             @JsonProperty(FIELD_NAME_SUBTASKS) List<SubtaskExecutionAttemptDetailsInfo> subtasks) {
-        this.id = checkNotNull(id);
+        this.identifier = checkNotNull(identifier);
         this.name = checkNotNull(name);
         this.parallelism = parallelism;
         this.maxParallelism = maxParallelism;
@@ -103,7 +103,7 @@ public class JobVertexDetailsInfo implements ResponseBody {
         }
 
         JobVertexDetailsInfo that = (JobVertexDetailsInfo) o;
-        return Objects.equals(id, that.id)
+        return Objects.equals(identifier, that.identifier)
                 && Objects.equals(name, that.name)
                 && parallelism == that.parallelism
                 && maxParallelism == that.maxParallelism
@@ -114,6 +114,6 @@ public class JobVertexDetailsInfo implements ResponseBody {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parallelism, maxParallelism, now, subtasks, aggregated);
+        return Objects.hash(identifier, name, parallelism, maxParallelism, now, subtasks, aggregated);
     }
 }

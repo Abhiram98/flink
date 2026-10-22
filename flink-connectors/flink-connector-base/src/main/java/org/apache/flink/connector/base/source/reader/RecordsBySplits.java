@@ -118,7 +118,7 @@ public class RecordsBySplits<E> implements RecordsWithSplitIds<E> {
         public void addAll(String splitId, Collection<E> records) {
             this.recordsBySplits.compute(
                     splitId,
-                    (id, r) -> {
+                    (identifier, r) -> {
                         if (r == null) {
                             r = records;
                         } else {

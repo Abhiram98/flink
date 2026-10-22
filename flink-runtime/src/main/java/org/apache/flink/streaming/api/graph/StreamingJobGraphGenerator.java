@@ -201,7 +201,7 @@ public class StreamingJobGraphGenerator {
                     List<CompletableFuture<SerializedValue<OperatorCoordinator.Provider>>>>
             coordinatorSerializationFuturesPerJobVertex = new HashMap<>();
 
-    /** The {@link OperatorChainInfo}s, key is the start node id of the chain. */
+    /** The {@link OperatorChainInfo}s, key is the start node identifier of the chain. */
     private final Map<Integer, OperatorChainInfo> chainInfos;
 
     /**
@@ -281,8 +281,8 @@ public class StreamingJobGraphGenerator {
                 Collections.unmodifiableMap(jobVertices),
                 Collections.unmodifiableMap(vertexConfigs),
                 Collections.unmodifiableMap(chainedConfigs),
-                id -> streamGraph.getStreamNode(id).getManagedMemoryOperatorScopeUseCaseWeights(),
-                id -> streamGraph.getStreamNode(id).getManagedMemorySlotScopeUseCases());
+                identifier -> streamGraph.getStreamNode(identifier).getManagedMemoryOperatorScopeUseCaseWeights(),
+                identifier -> streamGraph.getStreamNode(identifier).getManagedMemorySlotScopeUseCases());
 
         configureCheckpointing();
 
@@ -469,7 +469,7 @@ public class StreamingJobGraphGenerator {
     private String getDescriptionWithChainedSourcesInfo(StreamNode node) {
 
         List<StreamNode> chainedSources;
-        if (!chainedConfigs.containsKey(node.getId())) {
+        if (!chainedConfigs.containsKey(node.getIdentifier())) {
             // node is not head operator of a vertex
             chainedSources = Collections.emptyList();
         } else {
@@ -477,11 +477,11 @@ public class StreamingJobGraphGenerator {
                     node.getInEdges().stream()
                             .map(StreamEdge::getSourceId)
                             .filter(
-                                    id ->
-                                            streamGraph.getSourceIDs().contains(id)
+                                    identifier ->
+                                            streamGraph.getSourceIDs().contains(identifier)
                                                     && chainedConfigs
-                                                            .get(node.getId())
-                                                            .containsKey(id))
+                                                            .get(node.getIdentifier())
+                                                            .containsKey(identifier))
                             .map(streamGraph::getStreamNode)
                             .collect(Collectors.toList());
         }
@@ -1260,7 +1260,7 @@ public class StreamingJobGraphGenerator {
         }
         List<NonChainedOutput> outputs = new ArrayList<>(consumerEdges.size());
         for (StreamEdge consumerEdge : consumerEdges) {
-            checkState(vertexId == consumerEdge.getSourceId(), "Vertex id must be the same.");
+            checkState(vertexId == consumerEdge.getSourceId(), "Vertex identifier must be the same.");
             ResultPartitionType partitionType = getResultPartitionType(consumerEdge);
             IntermediateDataSetID dataSetId = new IntermediateDataSetID();
 
@@ -1784,7 +1784,7 @@ public class StreamingJobGraphGenerator {
             }
 
             for (LogicalVertex vertex : region.getVertices()) {
-                vertexRegionSlotSharingGroups.put(vertex.getId(), regionSlotSharingGroup);
+                vertexRegionSlotSharingGroups.put(vertex.getIdentifier(), regionSlotSharingGroup);
             }
         }
 

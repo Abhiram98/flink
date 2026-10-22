@@ -80,7 +80,7 @@ public final class OneInputTransformationTranslator<IN, OUT>
         KeySelector<IN, ?> keySelector = transformation.getStateKeySelector();
         if (keySelector != null && !transformation.isInternalSorterSupported()) {
             BatchExecutionUtils.applyBatchExecutionSettings(
-                    transformation.getId(), context, StreamConfig.InputRequirement.SORTED);
+                    transformation.getIdentifier(), context, StreamConfig.InputRequirement.SORTED);
         }
     }
 }

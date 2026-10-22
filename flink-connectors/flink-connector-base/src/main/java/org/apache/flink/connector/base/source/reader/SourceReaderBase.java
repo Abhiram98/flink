@@ -299,7 +299,7 @@ public abstract class SourceReaderBase<E, T, SplitT extends SourceSplit, SplitSt
     @Override
     public List<SplitT> snapshotState(long checkpointId) {
         List<SplitT> splits = new ArrayList<>();
-        splitStates.forEach((id, context) -> splits.add(toSplitType(id, context.state)));
+        splitStates.forEach((identifier, context) -> splits.add(toSplitType(identifier, context.state)));
         return splits;
     }
 

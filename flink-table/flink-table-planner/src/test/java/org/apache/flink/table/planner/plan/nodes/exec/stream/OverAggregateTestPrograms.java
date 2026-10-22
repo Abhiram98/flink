@@ -195,7 +195,7 @@ public class OverAggregateTestPrograms {
                     AFTER_RESTORE_DATA_PRECEDING_ROWS);
 
     private static TableTestProgram getTableTestProgram(
-            final String id,
+            final String identifier,
             final String description,
             final String windowSql,
             final String[] beforeRows,
@@ -211,7 +211,7 @@ public class OverAggregateTestPrograms {
                                 + " WINDOW w as (%s)",
                         windowSql);
 
-        return TableTestProgram.of(id, description)
+        return TableTestProgram.of(identifier, description)
                 .setupConfig(LOCAL_TIME_ZONE, "UTC")
                 .setupTemporarySystemFunction(
                         "LTCNT", JavaUserDefinedAggFunctions.LargerThanCount.class)

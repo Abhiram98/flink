@@ -435,7 +435,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 
-        // order id, order status, order data, order prio, ship prio
+        // order identifier, order status, order data, order prio, ship prio
         DataSet<Tuple5<Long, String, String, String, Integer>> orders =
                 env.readCsvFile(args[1])
                         .fieldDelimiter("|")
@@ -444,7 +444,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
                         .types(Long.class, String.class, String.class, String.class, Integer.class)
                         .name(ORDERS);
 
-        // order id, extended price
+        // order identifier, extended price
         DataSet<Tuple2<Long, Double>> lineItems =
                 env.readCsvFile(args[2])
                         .fieldDelimiter("|")

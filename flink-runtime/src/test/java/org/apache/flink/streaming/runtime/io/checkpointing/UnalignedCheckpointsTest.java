@@ -769,7 +769,7 @@ class UnalignedCheckpointsTest {
         verifyTriggeredCheckpoint(handler, invokable, cancelledCheckpointId);
 
         final long nextCancelledCheckpointId = cancelledCheckpointId + 1L;
-        // should update current checkpoint id and abort notification while processing
+        // should update current checkpoint identifier and abort notification while processing
         // CancelCheckpointMarker
         handler.processCancellationBarrier(
                 new CancelCheckpointMarker(nextCancelledCheckpointId), new InputChannelInfo(0, 0));
@@ -1042,9 +1042,9 @@ class UnalignedCheckpointsTest {
                 .collect(Collectors.toList());
     }
 
-    private CheckpointBarrier buildCheckpointBarrier(long id) {
+    private CheckpointBarrier buildCheckpointBarrier(long identifier) {
         return new CheckpointBarrier(
-                id, 0, CheckpointOptions.unaligned(CheckpointType.CHECKPOINT, getDefault()));
+                identifier, 0, CheckpointOptions.unaligned(CheckpointType.CHECKPOINT, getDefault()));
     }
 
     // ------------------------------------------------------------------------
@@ -1087,7 +1087,7 @@ class UnalignedCheckpointsTest {
     }
 
     /**
-     * Specific {@link AbstractInvokable} implementation to record and validate which checkpoint id
+     * Specific {@link AbstractInvokable} implementation to record and validate which checkpoint identifier
      * is executed and how many checkpoints are executed.
      */
     private static final class ValidatingCheckpointInvokable extends StreamTask {

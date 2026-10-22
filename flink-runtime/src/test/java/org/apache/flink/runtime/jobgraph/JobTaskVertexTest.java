@@ -78,7 +78,7 @@ class JobTaskVertexTest {
         assertThat(producer.getProducedDataSets()).hasSize(2);
 
         IntermediateDataSet dataSet = producer.getProducedDataSets().get(0);
-        assertThat(dataSet.getId()).isEqualTo(dataSetId);
+        assertThat(dataSet.getIdentifier()).isEqualTo(dataSetId);
 
         List<JobEdge> consumers1 = dataSet.getConsumers();
         assertThat(consumers1).hasSize(2);

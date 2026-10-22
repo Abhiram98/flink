@@ -88,7 +88,7 @@ import java.util.stream.Collectors;
 public class TableTestProgram {
 
     /** Identifier of the test program (e.g. for naming generated files). */
-    public final String id;
+    public final String identifier;
 
     /** Description for internal documentation. */
     public final String description;
@@ -100,8 +100,8 @@ public class TableTestProgram {
     public final List<TestStep> runSteps;
 
     private TableTestProgram(
-            String id, String description, List<TestStep> setupSteps, List<TestStep> runSteps) {
-        this.id = id;
+            String identifier, String description, List<TestStep> setupSteps, List<TestStep> runSteps) {
+        this.identifier = identifier;
         this.description = description;
         this.setupSteps = setupSteps;
         this.runSteps = runSteps;
@@ -109,7 +109,7 @@ public class TableTestProgram {
 
     @Override
     public String toString() {
-        return id;
+        return identifier;
     }
 
     /**
@@ -131,8 +131,8 @@ public class TableTestProgram {
      *       missing row projection")
      * </ul>
      */
-    public static Builder of(String id, String description) {
-        return new Builder(id, description);
+    public static Builder of(String identifier, String description) {
+        return new Builder(identifier, description);
     }
 
     /** Convenience method to avoid casting. It assumes that the order of steps is not important. */
@@ -216,13 +216,13 @@ public class TableTestProgram {
     /** Builder pattern for {@link TableTestProgram}. */
     public static class Builder {
 
-        private final String id;
+        private final String identifier;
         private final String description;
         private final List<TestStep> setupSteps = new ArrayList<>();
         private final List<TestStep> runSteps = new ArrayList<>();
 
-        private Builder(String id, String description) {
-            this.id = id;
+        private Builder(String identifier, String description) {
+            this.identifier = identifier;
             this.description = description;
         }
 
@@ -330,7 +330,7 @@ public class TableTestProgram {
         }
 
         public TableTestProgram build() {
-            return new TableTestProgram(id, description, setupSteps, runSteps);
+            return new TableTestProgram(identifier, description, setupSteps, runSteps);
         }
     }
 }

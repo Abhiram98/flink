@@ -127,7 +127,7 @@ public interface DeclarativeSlotPool {
      *
      * @param allocationId allocationId specifies the slot to check for
      * @return {@code true} if the slot pool contains a free slot registered under the given
-     *     allocation id; otherwise {@code false}
+     *     allocation identifier; otherwise {@code false}
      */
     boolean containsFreeSlot(AllocationID allocationId);
 

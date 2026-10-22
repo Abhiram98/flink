@@ -264,7 +264,7 @@ class ResultFetcherTest {
                                 }
 
                                 rows.compute(
-                                        Thread.currentThread().getId(),
+                                        Thread.currentThread().getIdentifier(),
                                         (k, v) -> {
                                             if (v == null) {
                                                 return resultSet.getData();

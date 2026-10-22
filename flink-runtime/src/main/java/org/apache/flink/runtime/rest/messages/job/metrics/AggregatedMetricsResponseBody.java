@@ -43,7 +43,7 @@ import java.util.List;
  * follows:
  *
  * <pre>{@code
- * [{"id": "metricName", "min": "1"}]
+ * [{"identifier": "metricName", "min": "1"}]
  * }</pre>
  *
  * @see AggregatedMetricsResponseBody.Serializer

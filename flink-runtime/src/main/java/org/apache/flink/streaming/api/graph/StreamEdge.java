@@ -128,8 +128,8 @@ public class StreamEdge implements Serializable {
             int uniqueId,
             IntermediateDataSetID intermediateDatasetId) {
 
-        this.sourceId = sourceVertex.getId();
-        this.targetId = targetVertex.getId();
+        this.sourceId = sourceVertex.getIdentifier();
+        this.targetId = targetVertex.getIdentifier();
         this.uniqueId = uniqueId;
         this.typeNumber = typeNumber;
         this.bufferTimeout = bufferTimeout;

@@ -38,9 +38,9 @@ public interface HeartbeatMonitor<O> {
     HeartbeatTarget<O> getHeartbeatTarget();
 
     /**
-     * Gets heartbeat target id.
+     * Gets heartbeat target identifier.
      *
-     * @return the heartbeat target id
+     * @return the heartbeat target identifier
      */
     ResourceID getHeartbeatTargetId();
 
@@ -72,7 +72,7 @@ public interface HeartbeatMonitor<O> {
         /**
          * Create heartbeat monitor heartbeat monitor.
          *
-         * @param resourceID the resource id
+         * @param resourceID the resource identifier
          * @param heartbeatTarget the heartbeat target
          * @param mainThreadExecutor the main thread executor
          * @param heartbeatListener the heartbeat listener

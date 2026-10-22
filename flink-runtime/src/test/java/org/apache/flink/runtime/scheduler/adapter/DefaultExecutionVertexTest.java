@@ -109,7 +109,7 @@ class DefaultExecutionVertexTest {
         IntermediateResultPartitionID partitionIds1 =
                 IterableUtils.toStream(producerVertex.getProducedResults())
                         .findAny()
-                        .map(SchedulingResultPartition::getId)
+                        .map(SchedulingResultPartition::getIdentifier)
                         .orElseThrow(
                                 () ->
                                         new IllegalArgumentException(
@@ -122,7 +122,7 @@ class DefaultExecutionVertexTest {
         IntermediateResultPartitionID partitionIds1 =
                 IterableUtils.toStream(consumerVertex.getConsumedResults())
                         .findAny()
-                        .map(SchedulingResultPartition::getId)
+                        .map(SchedulingResultPartition::getIdentifier)
                         .orElseThrow(
                                 () ->
                                         new IllegalArgumentException(

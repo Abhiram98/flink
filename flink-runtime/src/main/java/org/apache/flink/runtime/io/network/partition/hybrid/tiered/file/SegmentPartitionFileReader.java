@@ -55,9 +55,9 @@ public class SegmentPartitionFileReader implements PartitionFileReader {
     private final ByteBuffer reusedHeaderBuffer = BufferReaderWriterUtil.allocatedHeaderBuffer();
 
     /**
-     * Opened file channels and segment id of related segment files stored in map.
+     * Opened file channels and segment identifier of related segment files stored in map.
      *
-     * <p>The key is partition id and subpartition id. The value is file channel and segment id.
+     * <p>The key is partition identifier and subpartition identifier. The value is file channel and segment identifier.
      */
     private final Map<
                     TieredStoragePartitionId,

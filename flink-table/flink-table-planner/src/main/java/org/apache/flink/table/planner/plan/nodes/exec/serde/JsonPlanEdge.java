@@ -33,7 +33,7 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.annotatio
  * The {@link ExecEdge}'s JSON representation.
  *
  * <p>Differs from {@link ExecEdge}, since {@link JsonPlanEdge} only stores the {@link
- * ExecNode#getId()} instead of instance.
+ * ExecNode#getIdentifier()} instead of instance.
  *
  * <p>This model is used only during serialization/deserialization.
  */
@@ -45,10 +45,10 @@ final class JsonPlanEdge {
     static final String FIELD_NAME_SHUFFLE = "shuffle";
     static final String FIELD_NAME_SHUFFLE_MODE = "shuffleMode";
 
-    /** The source node id of this edge. */
+    /** The source node identifier of this edge. */
     @JsonProperty(FIELD_NAME_SOURCE)
     private final int sourceId;
-    /** The target node id of this edge. */
+    /** The target node identifier of this edge. */
     @JsonProperty(FIELD_NAME_TARGET)
     private final int targetId;
     /** The {@link ExecEdge.Shuffle} on this edge from source to target. */
@@ -91,8 +91,8 @@ final class JsonPlanEdge {
     /** Build {@link JsonPlanEdge} from an {@link ExecEdge}. */
     static JsonPlanEdge fromExecEdge(ExecEdge execEdge) {
         return new JsonPlanEdge(
-                execEdge.getSource().getId(),
-                execEdge.getTarget().getId(),
+                execEdge.getSource().getIdentifier(),
+                execEdge.getTarget().getIdentifier(),
                 execEdge.getShuffle(),
                 execEdge.getExchangeMode());
     }

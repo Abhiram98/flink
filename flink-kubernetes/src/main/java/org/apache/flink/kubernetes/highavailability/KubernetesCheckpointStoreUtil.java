@@ -32,10 +32,10 @@ public enum KubernetesCheckpointStoreUtil implements CheckpointStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(KubernetesCheckpointStoreUtil.class);
 
     /**
-     * Convert a checkpoint id into a ConfigMap key.
+     * Convert a checkpoint identifier into a ConfigMap key.
      *
      * @param checkpointId to convert to the key
-     * @return key created from the given checkpoint id
+     * @return key created from the given checkpoint identifier
      */
     @Override
     public String checkpointIDToName(long checkpointId) {
@@ -43,10 +43,10 @@ public enum KubernetesCheckpointStoreUtil implements CheckpointStoreUtil {
     }
 
     /**
-     * Converts a key in ConfigMap to the checkpoint id.
+     * Converts a key in ConfigMap to the checkpoint identifier.
      *
      * @param key in ConfigMap
-     * @return Checkpoint id parsed from the key
+     * @return Checkpoint identifier parsed from the key
      */
     @Override
     public long nameToCheckpointID(String key) {
@@ -54,8 +54,8 @@ public enum KubernetesCheckpointStoreUtil implements CheckpointStoreUtil {
             return Long.parseLong(key.substring(CHECKPOINT_ID_KEY_PREFIX.length()));
         } catch (NumberFormatException e) {
             LOG.warn(
-                    "Could not parse checkpoint id from {}. This indicates that the "
-                            + "checkpoint id to path conversion has changed.",
+                    "Could not parse checkpoint identifier from {}. This indicates that the "
+                            + "checkpoint identifier to path conversion has changed.",
                     key);
 
             return INVALID_CHECKPOINT_ID;

@@ -122,7 +122,7 @@ class StateDescriptorTest {
                         new KryoSerializer<>(String.class, new SerializerConfigImpl())
                                 .getKryo()
                                 .getRegistration(File.class)
-                                .getId())
+                                .getIdentifier())
                 .as("broken test assumption")
                 .isEqualTo(-1);
 
@@ -139,7 +139,7 @@ class StateDescriptorTest {
                         ((KryoSerializer<?>) clone.getSerializer())
                                         .getKryo()
                                         .getRegistration(File.class)
-                                        .getId()
+                                        .getIdentifier()
                                 > 0)
                 .isTrue();
     }

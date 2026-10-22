@@ -44,7 +44,7 @@ import static org.apache.flink.table.utils.PartitionPathUtils.searchPartSpecAndP
  * files.
  *
  * <p>Temporary file directory contains the following directory parts: 1.temporary base path
- * directory. 2.task id directory. 3.directories to specify partitioning. 4.data files. eg:
+ * directory. 2.task identifier directory. 3.directories to specify partitioning. 4.data files. eg:
  * /tmp/task-0-attempt-0/p0=1/p1=2/fileName.
  */
 @Internal

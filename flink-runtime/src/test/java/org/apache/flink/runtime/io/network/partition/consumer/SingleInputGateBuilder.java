@@ -49,7 +49,7 @@ import java.util.stream.IntStream;
 public class SingleInputGateBuilder {
 
     public static final PartitionProducerStateProvider NO_OP_PRODUCER_CHECKER =
-            (dsid, id, consumer) -> {};
+            (dsid, identifier, consumer) -> {};
 
     private final IntermediateDataSetID intermediateDataSetID = new IntermediateDataSetID();
 

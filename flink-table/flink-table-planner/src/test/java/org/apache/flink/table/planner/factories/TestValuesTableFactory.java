@@ -189,17 +189,17 @@ public final class TestValuesTableFactory
     private static final Map<String, Collection<RowData>> registeredRowData = new HashMap<>();
 
     /**
-     * Register the given data into the data factory context and return the data id. The data id can
+     * Register the given data into the data factory context and return the data identifier. The data identifier can
      * be used as a reference to the registered data in data connector DDL.
      */
     public static String registerData(Collection<Row> data) {
-        String id = String.valueOf(idCounter.incrementAndGet());
-        registeredData.put(id, data);
-        return id;
+        String identifier = String.valueOf(idCounter.incrementAndGet());
+        registeredData.put(identifier, data);
+        return identifier;
     }
 
     /**
-     * Register the given data into the data factory context and return the data id. The data id can
+     * Register the given data into the data factory context and return the data identifier. The data identifier can
      * be used as a reference to the registered data in data connector DDL.
      */
     public static String registerData(Seq<Row> data) {
@@ -207,18 +207,18 @@ public final class TestValuesTableFactory
     }
 
     /**
-     * Register the given internal RowData into the data factory context and return the data id. The
-     * data id can be used as a reference to the registered data in data connector DDL.
+     * Register the given internal RowData into the data factory context and return the data identifier. The
+     * data identifier can be used as a reference to the registered data in data connector DDL.
      */
     public static String registerRowData(Collection<RowData> data) {
-        String id = String.valueOf(idCounter.incrementAndGet());
-        registeredRowData.put(id, data);
-        return id;
+        String identifier = String.valueOf(idCounter.incrementAndGet());
+        registeredRowData.put(identifier, data);
+        return identifier;
     }
 
     /**
-     * Register the given internal RowData into the data factory context and return the data id. The
-     * data id can be used as a reference to the registered data in data connector DDL.
+     * Register the given internal RowData into the data factory context and return the data identifier. The
+     * data identifier can be used as a reference to the registered data in data connector DDL.
      */
     public static String registerRowData(Seq<RowData> data) {
         return registerRowData(JavaScalaConversionUtil.toJava(data));
@@ -287,7 +287,7 @@ public final class TestValuesTableFactory
         return TestValuesRuntimeFunctions.getWatermarks(tableName);
     }
 
-    /** Removes the registered data under the given data id. */
+    /** Removes the registered data under the given data identifier. */
     public static void clearAllData() {
         registeredData.clear();
         registeredRowData.clear();
@@ -326,7 +326,7 @@ public final class TestValuesTableFactory
     public static final String IDENTIFIER = "values";
 
     private static final ConfigOption<String> DATA_ID =
-            ConfigOptions.key("data-id").stringType().noDefaultValue();
+            ConfigOptions.key("data-identifier").stringType().noDefaultValue();
 
     private static final ConfigOption<Boolean> BOUNDED =
             ConfigOptions.key("bounded").booleanType().defaultValue(false);

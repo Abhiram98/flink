@@ -74,19 +74,19 @@ public class ChangelogDelegateStateTest {
     @Test
     public void testDelegatingValueState() throws Exception {
         testDelegatingState(
-                new ValueStateDescriptor<>("id", String.class), ChangelogValueState.class);
+                new ValueStateDescriptor<>("identifier", String.class), ChangelogValueState.class);
     }
 
     @Test
     public void testDelegatingListState() throws Exception {
         testDelegatingState(
-                new ListStateDescriptor<>("id", String.class), ChangelogListState.class);
+                new ListStateDescriptor<>("identifier", String.class), ChangelogListState.class);
     }
 
     @Test
     public void testDelegatingMapState() throws Exception {
         testDelegatingState(
-                new MapStateDescriptor<>("id", Integer.class, String.class),
+                new MapStateDescriptor<>("identifier", Integer.class, String.class),
                 ChangelogMapState.class);
     }
 
@@ -94,7 +94,7 @@ public class ChangelogDelegateStateTest {
     public void testDelegatingReducingState() throws Exception {
         testDelegatingState(
                 new ReducingStateDescriptor<>(
-                        "id", (value1, value2) -> value1 + "," + value2, String.class),
+                        "identifier", (value1, value2) -> value1 + "," + value2, String.class),
                 ChangelogReducingState.class);
     }
 

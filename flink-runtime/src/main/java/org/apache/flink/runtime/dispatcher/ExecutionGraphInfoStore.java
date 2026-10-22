@@ -40,7 +40,7 @@ public interface ExecutionGraphInfoStore extends Closeable {
     int size();
 
     /**
-     * Get the {@link ExecutionGraphInfo} for the given job id. Null if it isn't stored.
+     * Get the {@link ExecutionGraphInfo} for the given job identifier. Null if it isn't stored.
      *
      * @param jobId identifying the serializable execution graph to retrieve
      * @return The stored serializable execution graph or null

@@ -165,7 +165,7 @@ public interface Sink<InputT, CommT, WriterStateT, GlobalCommT> extends Serializ
          */
         ProcessingTimeService getProcessingTimeService();
 
-        /** @return The id of task where the writer is. */
+        /** @return The identifier of task where the writer is. */
         int getSubtaskId();
 
         /** @return The number of parallel Sink tasks. */
@@ -175,7 +175,7 @@ public interface Sink<InputT, CommT, WriterStateT, GlobalCommT> extends Serializ
         SinkWriterMetricGroup metricGroup();
 
         /**
-         * Returns id of the restored checkpoint, if state was restored from the snapshot of a
+         * Returns identifier of the restored checkpoint, if state was restored from the snapshot of a
          * previous execution.
          */
         OptionalLong getRestoredCheckpointId();

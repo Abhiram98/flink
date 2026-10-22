@@ -99,11 +99,11 @@ public final class ChannelStatePersister {
         }
     }
 
-    protected void stopPersisting(long id) {
-        logEvent("stopPersisting", id);
-        if (id >= lastSeenBarrier) {
+    protected void stopPersisting(long identifier) {
+        logEvent("stopPersisting", identifier);
+        if (identifier >= lastSeenBarrier) {
             checkpointStatus = CheckpointStatus.COMPLETED;
-            lastSeenBarrier = id;
+            lastSeenBarrier = identifier;
         }
     }
 
@@ -120,7 +120,7 @@ public final class ChannelStatePersister {
     protected OptionalLong checkForBarrier(Buffer buffer) throws IOException {
         AbstractEvent event = parseEvent(buffer);
         if (event instanceof CheckpointBarrier) {
-            long barrierId = ((CheckpointBarrier) event).getId();
+            long barrierId = ((CheckpointBarrier) event).getIdentifier();
             long expectedBarrierId =
                     checkpointStatus == CheckpointStatus.COMPLETED
                             ? lastSeenBarrier + 1
@@ -137,7 +137,7 @@ public final class ChannelStatePersister {
         if (event instanceof EventAnnouncement) { // NOTE: only remote channels
             EventAnnouncement announcement = (EventAnnouncement) event;
             if (announcement.getAnnouncedEvent() instanceof CheckpointBarrier) {
-                long barrierId = ((CheckpointBarrier) announcement.getAnnouncedEvent()).getId();
+                long barrierId = ((CheckpointBarrier) announcement.getAnnouncedEvent()).getIdentifier();
                 logEvent("found announcement for barrier", barrierId);
                 return OptionalLong.of(barrierId);
             }

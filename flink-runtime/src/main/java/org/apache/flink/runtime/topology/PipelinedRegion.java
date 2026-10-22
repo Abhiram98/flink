@@ -41,19 +41,19 @@ public interface PipelinedRegion<
     Iterable<? extends V> getVertices();
 
     /**
-     * Returns the vertex with the specified vertex id.
+     * Returns the vertex with the specified vertex identifier.
      *
-     * @param vertexId the vertex id used to look up the vertex
-     * @return the vertex with the specified id
+     * @param vertexId the vertex identifier used to look up the vertex
+     * @return the vertex with the specified identifier
      * @throws IllegalArgumentException if there is no vertex in this pipelined region with the
-     *     specified vertex id
+     *     specified vertex identifier
      */
     V getVertex(VID vertexId);
 
     /**
      * Returns whether the vertex is in this pipelined region or not.
      *
-     * @param vertexId the vertex id used to look up
+     * @param vertexId the vertex identifier used to look up
      * @return the vertex is in this pipelined region or not
      */
     boolean contains(VID vertexId);

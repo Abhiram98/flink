@@ -67,7 +67,7 @@ class ContainerRequestReflector {
              * @param priority The priority at which to request the containers. Higher priorities
              *     have lower numerical values.
              * @param allocationRequestId The allocationRequestId of the request. To be used as a
-             *     tracking id to match Containers allocated against this request. Will default to 0
+             *     tracking identifier to match Containers allocated against this request. Will default to 0
              *     if not specified.
              * @param relaxLocality If true, containers for this request may be assigned on hosts
              *     and racks other than the ones explicitly requested.

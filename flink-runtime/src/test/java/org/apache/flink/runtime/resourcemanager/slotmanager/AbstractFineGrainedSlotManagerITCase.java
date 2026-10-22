@@ -238,7 +238,7 @@ abstract class AbstractFineGrainedSlotManagerITCase extends FineGrainedSlotManag
 
                             assertThat(assertFutureCompleteAndReturn(requestFuture).f2)
                                     .as(
-                                            "The slot has not been allocated to the expected allocation id.")
+                                            "The slot has not been allocated to the expected allocation identifier.")
                                     .isEqualTo(slot.getAllocationId());
                         });
             }
@@ -406,7 +406,7 @@ abstract class AbstractFineGrainedSlotManagerITCase extends FineGrainedSlotManag
                                             .get();
 
                             assertThat(resourceRequirements1.getJobId())
-                                    .as("The slot has not been allocated to the expected job id.")
+                                    .as("The slot has not been allocated to the expected job identifier.")
                                     .isEqualTo(slot.getJobId());
 
                             if (secondRequirementDeclarationTime
@@ -451,7 +451,7 @@ abstract class AbstractFineGrainedSlotManagerITCase extends FineGrainedSlotManag
                                                             allocationIdFuture2))
                                             .get();
                             assertThat(resourceRequirements2.getJobId())
-                                    .as("The slot has not been allocated to the expected job id.")
+                                    .as("The slot has not been allocated to the expected job identifier.")
                                     .isEqualTo(slot.getJobId());
                         });
             }

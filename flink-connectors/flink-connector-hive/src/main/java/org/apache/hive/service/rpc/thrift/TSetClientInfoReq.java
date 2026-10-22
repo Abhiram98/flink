@@ -107,7 +107,7 @@ public class TSetClientInfoReq
         }
     }
 
-    // isset id assignments
+    // isset identifier assignments
     private static final _Fields optionals[] = {_Fields.CONFIGURATION};
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData>
             metaDataMap;
@@ -451,7 +451,7 @@ public class TSetClientInfoReq
                 if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
                     break;
                 }
-                switch (schemeField.id) {
+                switch (schemeField.identifier) {
                     case 1: // SESSION_HANDLE
                         if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
                             struct.sessionHandle = new TSessionHandle();

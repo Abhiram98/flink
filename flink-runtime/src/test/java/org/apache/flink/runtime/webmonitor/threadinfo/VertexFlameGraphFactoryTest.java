@@ -106,7 +106,7 @@ class VertexFlameGraphFactoryTest {
         Supplier<ThreadInfo> r1 =
                 () ->
                         ManagementFactory.getThreadMXBean()
-                                .getThreadInfo(Thread.currentThread().getId(), Integer.MAX_VALUE);
+                                .getThreadInfo(Thread.currentThread().getIdentifier(), Integer.MAX_VALUE);
         Supplier<ThreadInfo> r2 = () -> r1.get();
         return r2.get();
     }

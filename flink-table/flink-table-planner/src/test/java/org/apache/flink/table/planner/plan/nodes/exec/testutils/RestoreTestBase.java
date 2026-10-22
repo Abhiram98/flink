@@ -219,10 +219,10 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
                         TableConfigOptions.CatalogPlanCompilation.SCHEMA);
 
         for (SourceTestStep sourceTestStep : program.getSetupSourceTestSteps()) {
-            final String id = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
+            final String identifier = TestValuesTableFactory.registerData(sourceTestStep.dataBeforeRestore);
             final Map<String, String> options = new HashMap<>();
             options.put("connector", "values");
-            options.put("data-id", id);
+            options.put("data-identifier", identifier);
             options.put("terminating", "false");
             options.put("runtime-source", "NewSource");
             sourceTestStep.apply(tEnv, options);
@@ -295,10 +295,10 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
                     afterRestoreSource == AfterRestoreSource.NO_RESTORE
                             ? sourceTestStep.dataBeforeRestore
                             : sourceTestStep.dataAfterRestore;
-            final String id = TestValuesTableFactory.registerData(data);
+            final String identifier = TestValuesTableFactory.registerData(data);
             final Map<String, String> options = new HashMap<>();
             options.put("connector", "values");
-            options.put("data-id", id);
+            options.put("data-identifier", identifier);
             options.put("runtime-source", "NewSource");
             if (afterRestoreSource == AfterRestoreSource.INFINITE) {
                 options.put("terminating", "false");
@@ -347,7 +347,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
 
     private Path getPlanPath(TableTestProgram program, ExecNodeMetadata metadata) {
         return Paths.get(
-                getTestResourceDirectory(program, metadata) + "/plan/" + program.id + ".json");
+                getTestResourceDirectory(program, metadata) + "/plan/" + program.identifier + ".json");
     }
 
     private Path getSavepointPath(TableTestProgram program, ExecNodeMetadata metadata) {
@@ -357,7 +357,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
     private String getTestResourceDirectory(TableTestProgram program, ExecNodeMetadata metadata) {
         return String.format(
                 "%s/src/test/resources/restore-tests/%s_%d/%s",
-                System.getProperty("user.dir"), metadata.name(), metadata.version(), program.id);
+                System.getProperty("user.dir"), metadata.name(), metadata.version(), program.identifier);
     }
 
     private static List<String> getExpectedResults(SinkTestStep sinkTestStep, String tableName) {

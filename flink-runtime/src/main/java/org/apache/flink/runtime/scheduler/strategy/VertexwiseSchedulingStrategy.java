@@ -80,7 +80,7 @@ public class VertexwiseSchedulingStrategy
         Set<ExecutionVertexID> sourceVertices =
                 IterableUtils.toStream(schedulingTopology.getVertices())
                         .filter(vertex -> vertex.getConsumedPartitionGroups().isEmpty())
-                        .map(SchedulingExecutionVertex::getId)
+                        .map(SchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet());
 
         maybeScheduleVertices(sourceVertices);
@@ -152,7 +152,7 @@ public class VertexwiseSchedulingStrategy
         Set<ExecutionVertexID> verticesToSchedule =
                 IterableUtils.toStream(schedulingTopology.getVertices())
                         .filter(vertex -> !vertex.getState().equals(ExecutionState.FINISHED))
-                        .map(SchedulingExecutionVertex::getId)
+                        .map(SchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet());
 
         maybeScheduleVertices(verticesToSchedule);
@@ -216,7 +216,7 @@ public class VertexwiseSchedulingStrategy
                         schedulingTopology, verticesToSchedule);
 
         sortedVerticesToSchedule.forEach(
-                id -> schedulerOperations.allocateSlotsAndDeploy(Collections.singletonList(id)));
+                identifier -> schedulerOperations.allocateSlotsAndDeploy(Collections.singletonList(identifier)));
     }
 
     /** The factory for creating {@link VertexwiseSchedulingStrategy}. */

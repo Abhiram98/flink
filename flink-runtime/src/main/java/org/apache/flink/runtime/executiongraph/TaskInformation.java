@@ -33,7 +33,7 @@ public class TaskInformation implements Serializable {
 
     private static final long serialVersionUID = -9006218793155953789L;
 
-    /** Job vertex id of the associated job vertex. */
+    /** Job vertex identifier of the associated job vertex. */
     private final JobVertexID jobVertexId;
 
     /** Name of the task. */

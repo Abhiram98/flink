@@ -26,7 +26,7 @@ import java.util.Objects;
 
 /**
  * Any operation key for the {@link AbstractAsynchronousOperationHandlers} must extend this class.
- * It is used to store the trigger id.
+ * It is used to store the trigger identifier.
  */
 public class OperationKey implements Serializable {
 
@@ -39,9 +39,9 @@ public class OperationKey implements Serializable {
     }
 
     /**
-     * Get the trigger id for the given operation key.
+     * Get the trigger identifier for the given operation key.
      *
-     * @return trigger id
+     * @return trigger identifier
      */
     public TriggerId getTriggerId() {
         return triggerId;

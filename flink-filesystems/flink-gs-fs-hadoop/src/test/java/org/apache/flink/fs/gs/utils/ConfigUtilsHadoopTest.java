@@ -86,7 +86,7 @@ class ConfigUtilsHadoopTest {
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                         null,
@@ -99,14 +99,14 @@ class ConfigUtilsHadoopTest {
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                         "/hadoop/conf",
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                     },
@@ -122,14 +122,14 @@ class ConfigUtilsHadoopTest {
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                         "/hadoop/conf",
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                     },
@@ -145,14 +145,14 @@ class ConfigUtilsHadoopTest {
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                         "/hadoop/conf2",
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                     },
@@ -168,7 +168,7 @@ class ConfigUtilsHadoopTest {
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                         "/hadoop/conf",
@@ -176,7 +176,7 @@ class ConfigUtilsHadoopTest {
                                 new HashMap<String, String>() {
                                     {
                                         put("fs.gs.block.size", "10000");
-                                        put("fs.gs.project.id", "project-id");
+                                        put("fs.gs.project.identifier", "project-identifier");
                                     }
                                 }),
                     },
@@ -186,20 +186,20 @@ class ConfigUtilsHadoopTest {
                         Configuration.fromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("gs.project.id", "project-id-1");
+                                        put("gs.project.identifier", "project-identifier-1");
                                     }
                                 }),
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id-2");
+                                        put("fs.gs.project.identifier", "project-identifier-2");
                                     }
                                 }),
                         "/hadoop/conf",
                         TestUtils.hadoopConfigFromMap(
                                 new HashMap<String, String>() {
                                     {
-                                        put("fs.gs.project.id", "project-id-1");
+                                        put("fs.gs.project.identifier", "project-identifier-1");
                                     }
                                 }),
                     },

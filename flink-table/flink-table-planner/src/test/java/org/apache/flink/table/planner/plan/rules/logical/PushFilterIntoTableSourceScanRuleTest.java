@@ -59,11 +59,11 @@ class PushFilterIntoTableSourceScanRuleTest extends PushFilterIntoTableSourceSca
                                                 CoreRules.FILTER_PROJECT_TRANSPOSE))
                                 .build());
 
-        // name: STRING, id: LONG, amount: INT, price: DOUBLE
+        // name: STRING, identifier: LONG, amount: INT, price: DOUBLE
         String ddl1 =
                 "CREATE TABLE MyTable (\n"
                         + "  name STRING,\n"
-                        + "  id bigint,\n"
+                        + "  identifier bigint,\n"
                         + "  amount int,\n"
                         + "  price double\n"
                         + ") WITH (\n"
@@ -76,7 +76,7 @@ class PushFilterIntoTableSourceScanRuleTest extends PushFilterIntoTableSourceSca
         String ddl2 =
                 "CREATE TABLE VirtualTable (\n"
                         + "  name STRING,\n"
-                        + "  id bigint,\n"
+                        + "  identifier bigint,\n"
                         + "  amount int,\n"
                         + "  virtualField as amount + 1,\n"
                         + "  price double\n"
@@ -90,7 +90,7 @@ class PushFilterIntoTableSourceScanRuleTest extends PushFilterIntoTableSourceSca
 
         String ddl3 =
                 "CREATE TABLE NestedTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  deepNested row<nested1 row<name string, `value` int>, nested2 row<num int, flag boolean>>,\n"
                         + "  nested row<name string, `value` int>,\n"
                         + "  `deepNestedWith.` row<`.value` int, nested row<```name` string, `.value` int>>,\n"
@@ -183,13 +183,13 @@ class PushFilterIntoTableSourceScanRuleTest extends PushFilterIntoTableSourceSca
     @Test
     void testNestedFilterWithDotInTheName() {
         util.verifyRelPlan(
-                "SELECT id FROM NestedTable WHERE `deepNestedWith.`.nested.`.value` > 5");
+                "SELECT identifier FROM NestedTable WHERE `deepNestedWith.`.nested.`.value` > 5");
     }
 
     @Test
     void testNestedFilterWithBacktickInTheName() {
         util.verifyRelPlan(
-                "SELECT id FROM NestedTable WHERE `deepNestedWith.`.nested.```name` = 'foo'");
+                "SELECT identifier FROM NestedTable WHERE `deepNestedWith.`.nested.```name` = 'foo'");
     }
 
     @Test

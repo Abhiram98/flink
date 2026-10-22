@@ -80,7 +80,7 @@ public class DefaultCLI extends AbstractCustomCommandLine {
     }
 
     @Override
-    public String getId() {
+    public String getIdentifier() {
         return ID;
     }
 

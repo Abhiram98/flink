@@ -124,20 +124,20 @@ public abstract class AfterMatchSkipStrategy implements Serializable {
     }
 
     /**
-     * Tells if the partial/completed match starting at given id should be prunned by given
+     * Tells if the partial/completed match starting at given identifier should be prunned by given
      * pruningId.
      *
-     * @param startEventID starting event id of a partial/completed match
+     * @param startEventID starting event identifier of a partial/completed match
      * @param pruningId pruningId calculated by this strategy
      * @return true if the match should be pruned
      */
     protected abstract boolean shouldPrune(EventId startEventID, EventId pruningId);
 
     /**
-     * Retrieves event id of the pruning element from the given match based on the strategy.
+     * Retrieves event identifier of the pruning element from the given match based on the strategy.
      *
      * @param match match corresponding to which should the pruning happen
-     * @return pruning event id
+     * @return pruning event identifier
      */
     protected abstract EventId getPruningId(Collection<Map<String, List<EventId>>> match);
 

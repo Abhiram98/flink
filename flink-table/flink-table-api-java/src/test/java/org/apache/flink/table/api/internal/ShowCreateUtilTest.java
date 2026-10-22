@@ -53,11 +53,11 @@ public class ShowCreateUtilTest {
             ObjectIdentifier.of("catalogName", "dbName", "viewName");
 
     private static final ResolvedSchema ONE_COLUMN_SCHEMA =
-            ResolvedSchema.of(Column.physical("id", DataTypes.INT()));
+            ResolvedSchema.of(Column.physical("identifier", DataTypes.INT()));
 
     private static final ResolvedSchema TWO_COLUMNS_SCHEMA =
             ResolvedSchema.of(
-                    Column.physical("id", DataTypes.INT()),
+                    Column.physical("identifier", DataTypes.INT()),
                     Column.physical("name", DataTypes.STRING()));
 
     @ParameterizedTest(name = "{index}: {1}")
@@ -123,7 +123,7 @@ public class ShowCreateUtilTest {
                 Arguments.of(
                         createResolvedView(ONE_COLUMN_SCHEMA, "SELECT 1", "SELECT 1", null),
                         "CREATE VIEW `catalogName`.`dbName`.`viewName` (\n"
-                                + "  `id`\n"
+                                + "  `identifier`\n"
                                 + ")\n"
                                 + "AS SELECT 1\n"));
 
@@ -131,15 +131,15 @@ public class ShowCreateUtilTest {
                 Arguments.of(
                         createResolvedView(
                                 TWO_COLUMNS_SCHEMA,
-                                "SELECT id, name FROM tbl_a",
-                                "SELECT id, name FROM `catalogName`.`dbName`.`tbl_a`",
+                                "SELECT identifier, name FROM tbl_a",
+                                "SELECT identifier, name FROM `catalogName`.`dbName`.`tbl_a`",
                                 "View comment"),
                         "CREATE VIEW `catalogName`.`dbName`.`viewName` (\n"
-                                + "  `id`,\n"
+                                + "  `identifier`,\n"
                                 + "  `name`\n"
                                 + ")\n"
                                 + "COMMENT 'View comment'\n"
-                                + "AS SELECT id, name FROM `catalogName`.`dbName`.`tbl_a`\n"));
+                                + "AS SELECT identifier, name FROM `catalogName`.`dbName`.`tbl_a`\n"));
         return argList;
     }
 
@@ -157,7 +157,7 @@ public class ShowCreateUtilTest {
                                         Arrays.asList("key1", "key2")),
                                 null),
                         "CREATE TABLE `catalogName`.`dbName`.`tableName` (\n"
-                                + "  `id` INT\n"
+                                + "  `identifier` INT\n"
                                 + ")\n"
                                 + "DISTRIBUTED BY HASH(`key1`, `key2`) INTO 2 BUCKETS\n"));
 
@@ -171,7 +171,7 @@ public class ShowCreateUtilTest {
                                         TableDistribution.Kind.RANGE, 2, Arrays.asList("1", "10")),
                                 "Table comment"),
                         "CREATE TABLE `catalogName`.`dbName`.`tableName` (\n"
-                                + "  `id` INT\n"
+                                + "  `identifier` INT\n"
                                 + ")\n"
                                 + "COMMENT 'Table comment'\n"
                                 + "DISTRIBUTED BY RANGE(`1`, `10`) INTO 2 BUCKETS\n"));
@@ -190,7 +190,7 @@ public class ShowCreateUtilTest {
                                 null,
                                 "Another table comment"),
                         "CREATE TABLE `catalogName`.`dbName`.`tableName` (\n"
-                                + "  `id` INT,\n"
+                                + "  `identifier` INT,\n"
                                 + "  `name` VARCHAR(2147483647)\n"
                                 + ")\n"
                                 + "COMMENT 'Another table comment'\n"
@@ -209,7 +209,7 @@ public class ShowCreateUtilTest {
                                 null,
                                 "comment"),
                         "CREATE TABLE `catalogName`.`dbName`.`tableName` (\n"
-                                + "  `id` INT\n"
+                                + "  `identifier` INT\n"
                                 + ")\n"
                                 + "COMMENT 'comment'\n"
                                 + "PARTITIONED BY (`key1`, `key2`)\n"));
@@ -226,7 +226,7 @@ public class ShowCreateUtilTest {
                                         Arrays.asList("1", "2", "3")),
                                 "table comment"),
                         "CREATE TABLE `catalogName`.`dbName`.`tableName` (\n"
-                                + "  `id` INT,\n"
+                                + "  `identifier` INT,\n"
                                 + "  `name` VARCHAR(2147483647)\n"
                                 + ")\n"
                                 + "COMMENT 'table comment'\n"

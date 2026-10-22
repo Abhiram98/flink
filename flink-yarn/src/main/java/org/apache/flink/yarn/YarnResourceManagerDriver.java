@@ -378,8 +378,8 @@ public class YarnResourceManagerDriver extends AbstractResourceManagerDriver<Yar
         final Container container = workerNode.getContainer();
         log.info("Stopping container {}.", workerNode.getResourceID().getStringWithMetadata());
         trackerOfReleasedResources.register();
-        nodeManagerClient.stopContainerAsync(container.getId(), container.getNodeId());
-        resourceManagerClient.releaseAssignedContainer(container.getId());
+        nodeManagerClient.stopContainerAsync(container.getIdentifier(), container.getNodeId());
+        resourceManagerClient.releaseAssignedContainer(container.getIdentifier());
     }
 
     // ------------------------------------------------------------------------
@@ -474,8 +474,8 @@ public class YarnResourceManagerDriver extends AbstractResourceManagerDriver<Yar
     }
 
     private void returnExcessContainer(Container excessContainer) {
-        log.info("Returning excess container {}.", excessContainer.getId());
-        resourceManagerClient.releaseAssignedContainer(excessContainer.getId());
+        log.info("Returning excess container {}.", excessContainer.getIdentifier());
+        resourceManagerClient.releaseAssignedContainer(excessContainer.getIdentifier());
     }
 
     private void startTaskExecutorInContainerAsync(
@@ -638,7 +638,7 @@ public class YarnResourceManagerDriver extends AbstractResourceManagerDriver<Yar
 
     @VisibleForTesting
     private static ResourceID getContainerResourceId(Container container) {
-        return new ResourceID(container.getId().toString(), container.getNodeId().toString());
+        return new ResourceID(container.getIdentifier().toString(), container.getNodeId().toString());
     }
 
     private Map<Priority, List<Container>> groupContainerByPriority(List<Container> containers) {

@@ -332,14 +332,14 @@ public class EmbeddedQuartzScheduler {
 
                 String jobId = results.get(0).getString(0).toString();
                 LOG.info(
-                        "Successfully execute refresh operation for materialized table: {} with job id: {}.",
+                        "Successfully execute refresh operation for materialized table: {} with job identifier: {}.",
                         workflowInfo.getMaterializedTableIdentifier(),
                         jobId);
 
                 context.setResult(
                         "Successfully execute refresh operation for materialized table: "
                                 + workflowInfo.getMaterializedTableIdentifier()
-                                + " with job id: "
+                                + " with job identifier: "
                                 + jobId);
                 // TODO wait for the job to finish
             } catch (Exception e) {

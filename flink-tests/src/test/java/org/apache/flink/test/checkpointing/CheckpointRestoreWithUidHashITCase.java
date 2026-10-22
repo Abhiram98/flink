@@ -62,7 +62,7 @@ import static org.hamcrest.Matchers.contains;
 /**
  * Verifies that with {@code uidHash} a job could restore state from an existing savepoint, and the
  * job would still be able to restored from the checkpoints taken after restarted correctly without
- * losing states due to mismatched operator id.
+ * losing states due to mismatched operator identifier.
  */
 public class CheckpointRestoreWithUidHashITCase {
 
@@ -118,7 +118,7 @@ public class CheckpointRestoreWithUidHashITCase {
                                 SavepointFormatType.CANONICAL)
                         .get();
 
-        // Get the operator id
+        // Get the operator identifier
         List<OperatorIDPair> operatorIds =
                 firstJob.getVerticesSortedTopologicallyFromSources().get(0).getOperatorIDs();
         OperatorIDPair sourceOperatorIds = operatorIds.get(operatorIds.size() - 1);

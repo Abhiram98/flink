@@ -91,16 +91,16 @@ final class JsonPlanGraph {
                         }
                         super.visitInputs(node);
 
-                        final int id = node.getId();
-                        if (nodesIds.contains(id)) {
+                        final int identifier = node.getIdentifier();
+                        if (nodesIds.contains(identifier)) {
                             throw new TableException(
                                     String.format(
-                                            "The id: %s is not unique for ExecNode: %s.\nplease check it.",
-                                            id, node.getDescription()));
+                                            "The identifier: %s is not unique for ExecNode: %s.\nplease check it.",
+                                            identifier, node.getDescription()));
                         }
 
                         allNodes.add(node);
-                        nodesIds.add(id);
+                        nodesIds.add(identifier);
                         visitedNodes.add(node);
                         for (ExecEdge execEdge : node.getInputEdges()) {
                             allEdges.add(JsonPlanEdge.fromExecEdge(execEdge));
@@ -117,14 +117,14 @@ final class JsonPlanGraph {
     ExecNodeGraph convertToExecNodeGraph() {
         Map<Integer, ExecNode<?>> idToExecNodes = new HashMap<>();
         for (ExecNode<?> execNode : nodes) {
-            int id = execNode.getId();
-            if (idToExecNodes.containsKey(id)) {
+            int identifier = execNode.getIdentifier();
+            if (idToExecNodes.containsKey(identifier)) {
                 throw new TableException(
                         String.format(
-                                "The id: %s is not unique for ExecNode: %s.\nplease check it.",
-                                id, execNode.getDescription()));
+                                "The identifier: %s is not unique for ExecNode: %s.\nplease check it.",
+                                identifier, execNode.getDescription()));
             }
-            idToExecNodes.put(id, execNode);
+            idToExecNodes.put(identifier, execNode);
         }
         Map<Integer, List<ExecEdge>> idToInputEdges = new HashMap<>();
         Map<Integer, List<ExecEdge>> idToOutputEdges = new HashMap<>();
@@ -133,13 +133,13 @@ final class JsonPlanGraph {
             if (source == null) {
                 throw new TableException(
                         String.format(
-                                "Source node id: %s is not found in nodes.", edge.getSourceId()));
+                                "Source node identifier: %s is not found in nodes.", edge.getSourceId()));
             }
             ExecNode<?> target = idToExecNodes.get(edge.getTargetId());
             if (target == null) {
                 throw new TableException(
                         String.format(
-                                "Target node id: %s is not found in nodes.", edge.getTargetId()));
+                                "Target node identifier: %s is not found in nodes.", edge.getTargetId()));
             }
             ExecEdge execEdge =
                     ExecEdge.builder()
@@ -148,19 +148,19 @@ final class JsonPlanGraph {
                             .shuffle(edge.getShuffle())
                             .exchangeMode(edge.getExchangeMode())
                             .build();
-            idToInputEdges.computeIfAbsent(target.getId(), n -> new ArrayList<>()).add(execEdge);
-            idToOutputEdges.computeIfAbsent(source.getId(), n -> new ArrayList<>()).add(execEdge);
+            idToInputEdges.computeIfAbsent(target.getIdentifier(), n -> new ArrayList<>()).add(execEdge);
+            idToOutputEdges.computeIfAbsent(source.getIdentifier(), n -> new ArrayList<>()).add(execEdge);
         }
 
         List<ExecNode<?>> rootNodes = new ArrayList<>();
         for (Map.Entry<Integer, ExecNode<?>> entry : idToExecNodes.entrySet()) {
-            int id = entry.getKey();
+            int identifier = entry.getKey();
             ExecNode<?> node = entry.getValue();
             // connect input edges
-            List<ExecEdge> inputEdges = idToInputEdges.getOrDefault(id, new ArrayList<>());
+            List<ExecEdge> inputEdges = idToInputEdges.getOrDefault(identifier, new ArrayList<>());
             node.setInputEdges(inputEdges);
 
-            if (!idToOutputEdges.containsKey(id)) {
+            if (!idToOutputEdges.containsKey(identifier)) {
                 // if the node has no output nodes, it's a root node
                 rootNodes.add(node);
             }

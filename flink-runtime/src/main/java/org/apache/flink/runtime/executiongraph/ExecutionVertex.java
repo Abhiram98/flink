@@ -88,7 +88,7 @@ public class ExecutionVertex
 
     private long inputBytes;
 
-    /** This field holds the allocation id of the last successful assignment. */
+    /** This field holds the allocation identifier of the last successful assignment. */
     @Nullable private TaskManagerLocation lastAssignedLocation;
 
     @Nullable private AllocationID lastAssignedAllocationID;

@@ -158,7 +158,7 @@ class PartitionRequestQueue extends ChannelInboundHandlerAdapter {
      * Adds unannounced credits from the consumer or resumes data consumption after an exactly-once
      * checkpoint and enqueues the corresponding reader for this consumer (if not enqueued yet).
      *
-     * @param receiverId The input channel id to identify the consumer.
+     * @param receiverId The input channel identifier to identify the consumer.
      * @param operation The operation to be performed (add credit or resume data consumption).
      */
     void addCreditOrResumeConsumption(
@@ -198,11 +198,11 @@ class PartitionRequestQueue extends ChannelInboundHandlerAdapter {
     }
 
     /**
-     * Notify the id of required segment from the consumer.
+     * Notify the identifier of required segment from the consumer.
      *
-     * @param receiverId The input channel id to identify the consumer.
-     * @param subpartitionId The id of the corresponding subpartition.
-     * @param segmentId The id of required segment.
+     * @param receiverId The input channel identifier to identify the consumer.
+     * @param subpartitionId The identifier of the corresponding subpartition.
+     * @param segmentId The identifier of required segment.
      */
     void notifyRequiredSegmentId(InputChannelID receiverId, int subpartitionId, int segmentId) {
         if (fatalError) {

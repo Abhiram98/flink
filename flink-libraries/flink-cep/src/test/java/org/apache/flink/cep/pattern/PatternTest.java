@@ -83,7 +83,7 @@ public class PatternTest extends TestLogger {
                         .next("next")
                         .where(SimpleCondition.of(value -> value.getName().equals("foobar")))
                         .next("end")
-                        .where(SimpleCondition.of(value -> value.getId() == 42));
+                        .where(SimpleCondition.of(value -> value.getIdentifier() == 42));
 
         Pattern<Event, ?> previous;
         Pattern<Event, ?> previous2;

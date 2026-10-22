@@ -239,7 +239,7 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                                     "ConfigMap " + LEADER_CONFIGMAP_NAME + " does not exist.";
                             assertThatThrownBy(
                                             () -> checkpointIDCounter.get(),
-                                            "We should get an exception when trying to get checkpoint id counter but ConfigMap does not exist.")
+                                            "We should get an exception when trying to get checkpoint identifier counter but ConfigMap does not exist.")
                                     .satisfies(anyCauseMatches(errMsg));
                         });
             }

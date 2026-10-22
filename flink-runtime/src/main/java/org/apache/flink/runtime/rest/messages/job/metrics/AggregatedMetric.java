@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class AggregatedMetric {
 
-    private static final String FIELD_NAME_ID = "id";
+    private static final String FIELD_NAME_ID = "identifier";
 
     private static final String FIELD_NAME_MIN = "min";
 
@@ -46,7 +46,7 @@ public class AggregatedMetric {
     private static final String FIELD_NAME_SKEW = "skew";
 
     @JsonProperty(value = FIELD_NAME_ID, required = true)
-    private final String id;
+    private final String identifier;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty(FIELD_NAME_MIN)
@@ -70,14 +70,14 @@ public class AggregatedMetric {
 
     @JsonCreator
     public AggregatedMetric(
-            final @JsonProperty(value = FIELD_NAME_ID, required = true) String id,
+            final @JsonProperty(value = FIELD_NAME_ID, required = true) String identifier,
             final @Nullable @JsonProperty(FIELD_NAME_MIN) Double min,
             final @Nullable @JsonProperty(FIELD_NAME_MAX) Double max,
             final @Nullable @JsonProperty(FIELD_NAME_AVG) Double avg,
             final @Nullable @JsonProperty(FIELD_NAME_SUM) Double sum,
             final @Nullable @JsonProperty(FIELD_NAME_SKEW) Double skew) {
 
-        this.id = requireNonNull(id, "id must not be null");
+        this.identifier = requireNonNull(identifier, "identifier must not be null");
         this.min = min;
         this.max = max;
         this.avg = avg;
@@ -85,13 +85,13 @@ public class AggregatedMetric {
         this.skew = skew;
     }
 
-    public AggregatedMetric(final @JsonProperty(value = FIELD_NAME_ID, required = true) String id) {
-        this(id, null, null, null, null, null);
+    public AggregatedMetric(final @JsonProperty(value = FIELD_NAME_ID, required = true) String identifier) {
+        this(identifier, null, null, null, null, null);
     }
 
     @JsonIgnore
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     @JsonIgnore
@@ -122,8 +122,8 @@ public class AggregatedMetric {
     @Override
     public String toString() {
         return "AggregatedMetric{"
-                + "id='"
-                + id
+                + "identifier='"
+                + identifier
                 + '\''
                 + ", mim='"
                 + min

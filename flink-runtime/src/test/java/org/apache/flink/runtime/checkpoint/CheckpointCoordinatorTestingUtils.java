@@ -643,21 +643,21 @@ public class CheckpointCoordinatorTestingUtils {
             this.mainThreadExecutor = ComponentMainThreadExecutorServiceAdapter.forMainThread();
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id) {
-            return addJobVertex(id, true);
+        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID identifier) {
+            return addJobVertex(identifier, true);
         }
 
-        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID id, boolean isSource) {
-            return addJobVertex(id, 1, 32768, Collections.emptyList(), isSource);
-        }
-
-        public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id, int parallelism, int maxParallelism) {
-            return addJobVertex(id, parallelism, maxParallelism, Collections.emptyList(), true);
+        public CheckpointExecutionGraphBuilder addJobVertex(JobVertexID identifier, boolean isSource) {
+            return addJobVertex(identifier, 1, 32768, Collections.emptyList(), isSource);
         }
 
         public CheckpointExecutionGraphBuilder addJobVertex(
-                JobVertexID id,
+                JobVertexID identifier, int parallelism, int maxParallelism) {
+            return addJobVertex(identifier, parallelism, maxParallelism, Collections.emptyList(), true);
+        }
+
+        public CheckpointExecutionGraphBuilder addJobVertex(
+                JobVertexID identifier,
                 int parallelism,
                 int maxParallelism,
                 List<OperatorIDPair> operators,
@@ -665,8 +665,8 @@ public class CheckpointCoordinatorTestingUtils {
 
             JobVertex jobVertex =
                     operators.size() == 0
-                            ? new JobVertex("anon", id)
-                            : new JobVertex("anon", id, operators);
+                            ? new JobVertex("anon", identifier)
+                            : new JobVertex("anon", identifier, operators);
             jobVertex.setParallelism(parallelism);
             jobVertex.setMaxParallelism(maxParallelism);
             jobVertex.setInvokableClass(NoOpInvokable.class);

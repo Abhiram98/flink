@@ -63,7 +63,7 @@ public class StreamExecExpand extends CommonExecExpand implements StreamExecNode
 
     @JsonCreator
     public StreamExecExpand(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_PROJECTS) List<List<RexNode>> projects,
@@ -71,7 +71,7 @@ public class StreamExecExpand extends CommonExecExpand implements StreamExecNode
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 projects,

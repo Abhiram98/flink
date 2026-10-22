@@ -122,7 +122,7 @@ public class StreamIterationHead<OUT> extends OneInputStreamTask<OUT, OUT> {
      * per iteration per job.
      *
      * @param jid The job ID.
-     * @param iterationID The id of the iteration in the job.
+     * @param iterationID The identifier of the iteration in the job.
      * @param subtaskIndex The parallel subtask number
      * @return The identification string.
      */

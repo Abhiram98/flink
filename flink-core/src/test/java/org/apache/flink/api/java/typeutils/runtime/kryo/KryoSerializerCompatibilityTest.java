@@ -182,9 +182,9 @@ public class KryoSerializerCompatibilityTest {
                 new KryoSerializer<>(TestClass.class, serializerConfigImpl);
 
         // get original registration ids
-        int testClassId = kryoSerializer.getKryo().getRegistration(TestClass.class).getId();
-        int testClassAId = kryoSerializer.getKryo().getRegistration(TestClassA.class).getId();
-        int testClassBId = kryoSerializer.getKryo().getRegistration(TestClassB.class).getId();
+        int testClassId = kryoSerializer.getKryo().getRegistration(TestClass.class).getIdentifier();
+        int testClassAId = kryoSerializer.getKryo().getRegistration(TestClassA.class).getIdentifier();
+        int testClassBId = kryoSerializer.getKryo().getRegistration(TestClassB.class).getIdentifier();
 
         // snapshot configuration and serialize to bytes
         TypeSerializerSnapshot kryoSerializerConfigSnapshot =
@@ -211,7 +211,7 @@ public class KryoSerializerCompatibilityTest {
                             Thread.currentThread().getContextClassLoader());
         }
 
-        // reconfigure - check reconfiguration result and that registration id remains the same
+        // reconfigure - check reconfiguration result and that registration identifier remains the same
         @SuppressWarnings("unchecked")
         TypeSerializerSchemaCompatibility<TestClass> compatResult =
                 kryoSerializer
@@ -220,11 +220,11 @@ public class KryoSerializerCompatibilityTest {
         assertThat(compatResult.isCompatibleWithReconfiguredSerializer()).isTrue();
 
         kryoSerializer = (KryoSerializer<TestClass>) compatResult.getReconfiguredSerializer();
-        assertThat(kryoSerializer.getKryo().getRegistration(TestClass.class).getId())
+        assertThat(kryoSerializer.getKryo().getRegistration(TestClass.class).getIdentifier())
                 .isEqualTo(testClassId);
-        assertThat(kryoSerializer.getKryo().getRegistration(TestClassA.class).getId())
+        assertThat(kryoSerializer.getKryo().getRegistration(TestClassA.class).getIdentifier())
                 .isEqualTo(testClassAId);
-        assertThat(kryoSerializer.getKryo().getRegistration(TestClassB.class).getId())
+        assertThat(kryoSerializer.getKryo().getRegistration(TestClassB.class).getIdentifier())
                 .isEqualTo(testClassBId);
     }
 

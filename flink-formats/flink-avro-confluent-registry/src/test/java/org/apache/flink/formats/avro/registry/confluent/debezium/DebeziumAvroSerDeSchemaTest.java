@@ -72,7 +72,7 @@ class DebeziumAvroSerDeSchemaTest {
     private static final RowType rowType =
             (RowType)
                     ROW(
-                                    FIELD("id", BIGINT()),
+                                    FIELD("identifier", BIGINT()),
                                     FIELD("name", STRING()),
                                     FIELD("description", STRING()),
                                     FIELD("weight", DOUBLE()))

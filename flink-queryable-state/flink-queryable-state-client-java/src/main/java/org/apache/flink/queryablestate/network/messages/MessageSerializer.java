@@ -61,7 +61,7 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
     /** Byte length of the header. */
     private static final int HEADER_LENGTH = 2 * Integer.BYTES;
 
-    /** Byte length of the request id. */
+    /** Byte length of the request identifier. */
     private static final int REQUEST_ID_SIZE = Long.BYTES;
 
     /** The constructor of the {@link MessageBody client requests}. Used for deserialization. */
@@ -86,7 +86,7 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
      *
      * @param alloc The {@link ByteBufAllocator} used to allocate the buffer to serialize the
      *     message into.
-     * @param requestId The id of the request to which the message refers to.
+     * @param requestId The identifier of the request to which the message refers to.
      * @param request The request to be serialized.
      * @return A {@link ByteBuf} containing the serialized message.
      */
@@ -101,7 +101,7 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
      *
      * @param alloc The {@link ByteBufAllocator} used to allocate the buffer to serialize the
      *     message into.
-     * @param requestId The id of the request to which the message refers to.
+     * @param requestId The identifier of the request to which the message refers to.
      * @param response The response to be serialized.
      * @return A {@link ByteBuf} containing the serialized message.
      */
@@ -117,7 +117,7 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
      *
      * @param alloc The {@link ByteBufAllocator} used to allocate the buffer to serialize the
      *     message into.
-     * @param requestId The id of the request to which the message refers to.
+     * @param requestId The identifier of the request to which the message refers to.
      * @param cause The exception thrown at the server.
      * @return A {@link ByteBuf} containing the serialized message.
      */
@@ -188,7 +188,7 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
      *
      * @param alloc The {@link ByteBufAllocator} used to allocate the buffer to serialize the
      *     message into.
-     * @param requestId The id of the request to which the message refers to.
+     * @param requestId The identifier of the request to which the message refers to.
      * @param messageType The {@link MessageType type of the message}.
      * @param payload The serialized version of the message.
      * @return A {@link ByteBuf} containing the serialized message.
@@ -245,11 +245,11 @@ public final class MessageSerializer<REQ extends MessageBody, RESP extends Messa
      * De-serializes the header and returns the {@link MessageType}.
      *
      * <pre>
-     *  <b>The buffer is expected to be at the request id position.</b>
+     *  <b>The buffer is expected to be at the request identifier position.</b>
      * </pre>
      *
-     * @param buf The {@link ByteBuf} containing the serialized request id.
-     * @return The request id.
+     * @param buf The {@link ByteBuf} containing the serialized request identifier.
+     * @return The request identifier.
      */
     public static long getRequestId(final ByteBuf buf) {
         return buf.readLong();

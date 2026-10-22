@@ -1021,7 +1021,7 @@ public class HiveParserCalcitePlanner {
                                         "SubQuery in LHS expressions are not supported."));
                     }
                     String sbQueryAlias = "sq_" + qb.incrNumSubQueryPredicates();
-                    HiveParserQB subQB = new HiveParserQB(qb.getId(), sbQueryAlias, true);
+                    HiveParserQB subQB = new HiveParserQB(qb.getIdentifier(), sbQueryAlias, true);
                     HiveParserBaseSemanticAnalyzer.Phase1Ctx ctx1 = initPhase1Ctx();
                     semanticAnalyzer.doPhase1(
                             (HiveParserASTNode) next.getChild(1), subQB, ctx1, null);
@@ -2867,7 +2867,7 @@ public class HiveParserCalcitePlanner {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Created Plan for Query Block " + qb.getId());
+            LOG.debug("Created Plan for Query Block " + qb.getIdentifier());
         }
 
         semanticAnalyzer.setQB(qb);

@@ -133,7 +133,7 @@ public class JobDispatcherLeaderProcessFactoryFactory
                 dirtyJobResults.stream().map(JobResult::getJobId).collect(Collectors.toSet());
         if (jobIdsOfFinishedJobs.contains(jobGraph.getJobID())) {
             LOG.info(
-                    "Skipping recovery of a job with job id {}, because it already reached a globally terminal state",
+                    "Skipping recovery of a job with job identifier {}, because it already reached a globally terminal state",
                     jobGraph.getJobID());
             return Optional.empty();
         }

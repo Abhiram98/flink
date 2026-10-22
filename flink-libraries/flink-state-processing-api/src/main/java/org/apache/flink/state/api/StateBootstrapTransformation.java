@@ -115,7 +115,7 @@ public class StateBootstrapTransformation<T> {
     }
 
     /**
-     * @param operatorID The operator id for the stream operator.
+     * @param operatorID The operator identifier for the stream operator.
      * @param stateBackend The state backend for the job.
      * @param config Additional configurations applied to the bootstrap stream tasks.
      * @param globalMaxParallelism Global max parallelism set for the savepoint.

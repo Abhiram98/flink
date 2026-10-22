@@ -80,7 +80,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         final String[] args = {
             "--configDir",
             confDirPath,
-            "--job-id",
+            "--job-identifier",
             jobID.toHexString(),
             "--fromSavepoint",
             savepointRestoreSettings.getRestorePath(),
@@ -119,7 +119,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testEntrypointClusterConfigWOSavepointSettingsToConfigurationParsing()
             throws FlinkParseException {
         final JobID jobID = JobID.generate();
-        final String[] args = {"-c", confDirPath, "--job-id", jobID.toHexString()};
+        final String[] args = {"-c", confDirPath, "--job-identifier", jobID.toHexString()};
 
         final StandaloneApplicationClusterConfiguration clusterConfiguration =
                 commandLineParser.parse(args);
@@ -214,7 +214,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testSetJobIdManually() throws FlinkParseException {
         final JobID jobId = new JobID();
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", jobId.toString()
+            "--configDir", confDirPath, "--job-classname", "foobar", "--job-identifier", jobId.toString()
         };
 
         final StandaloneApplicationClusterConfiguration standaloneApplicationClusterConfiguration =
@@ -227,7 +227,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testInvalidJobIdThrows() {
         final String invalidJobId = "0xINVALID";
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", invalidJobId
+            "--configDir", confDirPath, "--job-classname", "foobar", "--job-identifier", invalidJobId
         };
 
         try {

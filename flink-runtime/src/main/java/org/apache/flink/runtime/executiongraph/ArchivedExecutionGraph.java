@@ -188,8 +188,8 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     }
 
     @Override
-    public ArchivedExecutionJobVertex getJobVertex(JobVertexID id) {
-        return this.tasks.get(id);
+    public ArchivedExecutionJobVertex getJobVertex(JobVertexID identifier) {
+        return this.tasks.get(identifier);
     }
 
     @Override

@@ -611,7 +611,7 @@ public class CliFrontend {
                     // Trigger savepoint in detached mode
                     if (stopOptions.isDetached()) {
                         // trigger stop-with-savepoint in detached mode and
-                        // return the trigger id immediately
+                        // return the trigger identifier immediately
                         stopWithDetachedSavepoint(
                                 clusterClient,
                                 jobId,
@@ -815,7 +815,7 @@ public class CliFrontend {
                         // Trigger savepoint in detached mode
                         if (savepointOptions.isDetached()) {
                             // trigger savepoint in detached mode and
-                            // return the trigger id immediately
+                            // return the trigger identifier immediately
                             triggerDetachedSavepoint(
                                     clusterClient,
                                     jobId,
@@ -1213,7 +1213,7 @@ public class CliFrontend {
      * @param activeCommandLine to create the {@link ClusterDescriptor} from
      * @param commandLine containing the parsed command line options
      * @param clusterAction the cluster action to run against the retrieved {@link ClusterClient}.
-     * @param <ClusterID> type of the cluster id
+     * @param <ClusterID> type of the cluster identifier
      * @throws FlinkException if something goes wrong
      */
     private <ClusterID> void runClusterAction(
@@ -1233,7 +1233,7 @@ public class CliFrontend {
         final ClusterID clusterId = clusterClientFactory.getClusterId(effectiveConfiguration);
         if (clusterId == null) {
             throw new FlinkException(
-                    "No cluster id was specified. Please specify a cluster to which you would like to connect.");
+                    "No cluster identifier was specified. Please specify a cluster to which you would like to connect.");
         }
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
@@ -1249,7 +1249,7 @@ public class CliFrontend {
      * Internal interface to encapsulate cluster actions which are executed via the {@link
      * ClusterClient}.
      *
-     * @param <ClusterID> type of the cluster id
+     * @param <ClusterID> type of the cluster identifier
      */
     @FunctionalInterface
     private interface ClusterAction<ClusterID> {

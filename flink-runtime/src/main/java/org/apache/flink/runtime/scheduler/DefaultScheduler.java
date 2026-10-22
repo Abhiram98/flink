@@ -227,7 +227,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
     protected void cancelAllPendingSlotRequestsInternal() {
         getSchedulingTopology()
                 .getVertices()
-                .forEach(ev -> cancelAllPendingSlotRequestsForVertex(ev.getId()));
+                .forEach(ev -> cancelAllPendingSlotRequestsForVertex(ev.getIdentifier()));
     }
 
     @Override
@@ -378,7 +378,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
     protected FailureHandlingResultSnapshot createFailureHandlingResultSnapshot(
             final FailureHandlingResult failureHandlingResult) {
         return FailureHandlingResultSnapshot.create(
-                failureHandlingResult, id -> getExecutionVertex(id).getCurrentExecutions());
+                failureHandlingResult, identifier -> getExecutionVertex(identifier).getCurrentExecutions());
     }
 
     private void addVerticesToRestartPending(final Set<ExecutionVertexID> verticesToRestart) {

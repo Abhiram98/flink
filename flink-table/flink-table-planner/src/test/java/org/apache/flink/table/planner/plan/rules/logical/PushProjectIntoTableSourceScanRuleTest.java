@@ -104,7 +104,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
 
         String ddl3 =
                 "CREATE TABLE NestedTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  deepNested row<nested1 row<name string, `value` int>, nested2 row<num int, flag boolean>>,\n"
                         + "  nested row<name string, `value` int>,\n"
                         + "  `deepNestedWith.` row<`.value` int, nested row<name string, `.value` int>>,\n"
@@ -119,7 +119,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
 
         String ddl4 =
                 "CREATE TABLE MetadataTable(\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  deepNested row<nested1 row<name string, `value` int>, nested2 row<num int, flag boolean>>,\n"
                         + "  metadata_1 int metadata,\n"
                         + "  metadata_2 string metadata,\n"
@@ -134,11 +134,11 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
 
         String ddl5 =
                 "CREATE TABLE UpsertTable("
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  deepNested row<nested1 row<name string, `value` int>, nested2 row<num int, flag boolean>>,\n"
                         + "  metadata_1 int metadata,\n"
                         + "  metadata_2 string metadata,\n"
-                        + "  PRIMARY KEY(id, deepNested) NOT ENFORCED"
+                        + "  PRIMARY KEY(identifier, deepNested) NOT ENFORCED"
                         + ") WITH ("
                         + "  'connector' = 'values',"
                         + "  'nested-projection-supported' = 'true',"
@@ -224,14 +224,14 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
 
     @Test
     void testProjectWithMapType() {
-        String sqlQuery = "SELECT id, testMap['e']\n" + "FROM NestedTable";
+        String sqlQuery = "SELECT identifier, testMap['e']\n" + "FROM NestedTable";
         util.verifyRelPlan(sqlQuery);
     }
 
     @Test
     void testNestedProject() {
         String sqlQuery =
-                "SELECT id,\n"
+                "SELECT identifier,\n"
                         + "    deepNested.nested1.name AS nestedName,\n"
                         + "    nested.`value` AS nestedValue,\n"
                         + "    deepNested.nested2.flag AS nestedFlag,\n"
@@ -243,7 +243,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
     @Test
     void testComplicatedNestedProject() {
         String sqlQuery =
-                "SELECT id,"
+                "SELECT identifier,"
                         + "    deepNested.nested1.name AS nestedName,\n"
                         + "    (`deepNestedWith.`.`.value` + `deepNestedWith.`.nested.`.value`) AS nestedSum\n"
                         + "FROM NestedTable";
@@ -252,7 +252,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
 
     @Test
     void testProjectWithDuplicateMetadataKey() {
-        String sqlQuery = "SELECT id, metadata_3, metadata_1 FROM MetadataTable";
+        String sqlQuery = "SELECT identifier, metadata_3, metadata_1 FROM MetadataTable";
 
         util.verifyRelPlan(sqlQuery);
     }
@@ -260,7 +260,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
     @Test
     void testNestProjectWithMetadata() {
         String sqlQuery =
-                "SELECT id,"
+                "SELECT identifier,"
                         + "    deepNested.nested1 AS nested1,\n"
                         + "    deepNested.nested1.`value` + deepNested.nested2.num + metadata_1 as results\n"
                         + "FROM MetadataTable";
@@ -271,7 +271,7 @@ class PushProjectIntoTableSourceScanRuleTest extends TableTestBase {
     @Test
     void testNestProjectWithUpsertSource() {
         String sqlQuery =
-                "SELECT id,"
+                "SELECT identifier,"
                         + "    deepNested.nested1 AS nested1,\n"
                         + "    deepNested.nested1.`value` + deepNested.nested2.num + metadata_1 as results\n"
                         + "FROM MetadataTable";

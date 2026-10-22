@@ -80,12 +80,12 @@ public class EnvironmentInformation {
         return getVersionsInstance().gitBuildTimeStr;
     }
 
-    /** @return The last known commit id of this version of the software. */
+    /** @return The last known commit identifier of this version of the software. */
     public static String getGitCommitId() {
         return getVersionsInstance().gitCommitId;
     }
 
-    /** @return The last known abbreviated commit id of this version of the software. */
+    /** @return The last known abbreviated commit identifier of this version of the software. */
     public static String getGitCommitIdAbbrev() {
         return getVersionsInstance().gitCommitIdAbbrev;
     }
@@ -150,13 +150,13 @@ public class EnvironmentInformation {
                     projectVersion = getProperty(properties, "project.version", UNKNOWN);
                     scalaVersion = getProperty(properties, "scala.binary.version", UNKNOWN);
 
-                    gitCommitId = getProperty(properties, "git.commit.id", UNKNOWN_COMMIT_ID);
+                    gitCommitId = getProperty(properties, "git.commit.identifier", UNKNOWN_COMMIT_ID);
                     gitCommitIdAbbrev =
                             getProperty(
-                                    properties, "git.commit.id.abbrev", UNKNOWN_COMMIT_ID_ABBREV);
+                                    properties, "git.commit.identifier.abbrev", UNKNOWN_COMMIT_ID_ABBREV);
 
                     // This is to reliably parse the datetime format configured in the
-                    // git-commit-id-plugin
+                    // git-commit-identifier-plugin
                     DateTimeFormatter gitDateTimeFormatter =
                             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -506,7 +506,7 @@ public class EnvironmentInformation {
      */
     public static class RevisionInformation {
 
-        /** The git commit id (hash) */
+        /** The git commit identifier (hash) */
         public final String commitId;
 
         /** The git commit date */

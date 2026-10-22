@@ -546,7 +546,7 @@ public class DefaultDeclarativeSlotPool implements DeclarativeSlotPool {
                                     () ->
                                             new IllegalStateException(
                                                     String.format(
-                                                            "Could not find slot for allocation id %s.",
+                                                            "Could not find slot for allocation identifier %s.",
                                                             idleSlot.getAllocationId())));
                     slotsToReturnToOwner.add(allocatedSlot);
                 }

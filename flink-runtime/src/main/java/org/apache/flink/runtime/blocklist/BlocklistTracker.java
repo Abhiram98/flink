@@ -25,7 +25,7 @@ import java.util.Set;
 public interface BlocklistTracker {
 
     /**
-     * Add new blocked node records. If a node (identified by node id) already exists, the newly
+     * Add new blocked node records. If a node (identified by node identifier) already exists, the newly
      * added one will be merged with the existing one.
      *
      * @param newNodes the new blocked node records

@@ -137,7 +137,7 @@ public class FileDataIndexCache<T extends FileDataIndexRegionHelper.Region> {
     /**
      * Put regions to cache.
      *
-     * @param subpartition the subpartition's id of regions.
+     * @param subpartition the subpartition's identifier of regions.
      * @param fileRegions regions to be cached.
      */
     public void put(int subpartition, List<T> fileRegions) {
@@ -200,10 +200,10 @@ public class FileDataIndexCache<T extends FileDataIndexRegionHelper.Region> {
 
     /**
      * This class represents the key of cached region, it is uniquely identified by the region's
-     * subpartition id and firstBufferIndex.
+     * subpartition identifier and firstBufferIndex.
      */
     private static class CachedRegionKey {
-        /** The subpartition id of cached region. */
+        /** The subpartition identifier of cached region. */
         private final int subpartition;
 
         /** The first buffer's index of cached region. */

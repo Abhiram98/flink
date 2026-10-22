@@ -49,25 +49,25 @@ import static org.assertj.core.api.Assertions.fail;
 class CollectionInputFormatTest {
 
     private static class ElementType {
-        private final int id;
+        private final int identifier;
 
         public ElementType() {
             this(-1);
         }
 
-        public ElementType(int id) {
-            this.id = id;
+        public ElementType(int identifier) {
+            this.identifier = identifier;
         }
 
-        public int getId() {
-            return id;
+        public int getIdentifier() {
+            return identifier;
         }
 
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof ElementType) {
                 ElementType et = (ElementType) obj;
-                return et.getId() == this.getId();
+                return et.getIdentifier() == this.getIdentifier();
             } else {
                 return false;
             }
@@ -75,12 +75,12 @@ class CollectionInputFormatTest {
 
         @Override
         public int hashCode() {
-            return id;
+            return identifier;
         }
 
         @Override
         public String toString() {
-            return "ElementType{" + "id=" + id + '}';
+            return "ElementType{" + "identifier=" + identifier + '}';
         }
     }
 
@@ -272,7 +272,7 @@ class CollectionInputFormatTest {
         CollectionInputFormat<ElementType> inputFormat =
                 new CollectionInputFormat<>(smallList, new TestSerializer(true, false));
 
-        assertThat(inputFormat).hasToString("[ElementType{id=1}, ElementType{id=2}]");
+        assertThat(inputFormat).hasToString("[ElementType{identifier=1}, ElementType{identifier=2}]");
     }
 
     @Test
@@ -286,8 +286,8 @@ class CollectionInputFormatTest {
 
         assertThat(inputFormat)
                 .hasToString(
-                        "[ElementType{id=0}, ElementType{id=1}, ElementType{id=2}, "
-                                + "ElementType{id=3}, ElementType{id=4}, ElementType{id=5}, ...]");
+                        "[ElementType{identifier=0}, ElementType{identifier=1}, ElementType{identifier=2}, "
+                                + "ElementType{identifier=3}, ElementType{identifier=4}, ElementType{identifier=5}, ...]");
     }
 
     private static class TestException extends IOException {
@@ -341,7 +341,7 @@ class CollectionInputFormatTest {
             if (failOnWrite) {
                 throw new TestException();
             }
-            target.writeInt(record.getId());
+            target.writeInt(record.getIdentifier());
         }
 
         @Override

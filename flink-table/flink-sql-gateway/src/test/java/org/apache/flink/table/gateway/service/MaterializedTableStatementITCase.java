@@ -254,7 +254,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                                 + "WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'bounded' = 'true',\n"
-                                + "  'data-id' = '%s'\n"
+                                + "  'data-identifier' = '%s'\n"
                                 + ")",
                         dataId);
 

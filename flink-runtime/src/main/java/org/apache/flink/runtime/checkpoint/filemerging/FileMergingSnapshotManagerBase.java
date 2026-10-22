@@ -71,7 +71,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
     private static final int NUM_GHOST_CHECKPOINT_IDS = 16;
 
     /** The identifier of this manager. */
-    private final String id;
+    private final String identifier;
 
     /** The executor for I/O operations in this manager. */
     protected final Executor ioExecutor;
@@ -159,13 +159,13 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
     protected FileMergingMetricGroup metricGroup;
 
     public FileMergingSnapshotManagerBase(
-            String id,
+            String identifier,
             long maxFileSize,
             PhysicalFilePool.Type filePoolType,
             float maxSpaceAmplification,
             Executor ioExecutor,
             MetricGroup parentMetricGroup) {
-        this.id = id;
+        this.identifier = identifier;
         this.maxPhysicalFileSize = maxFileSize;
         this.filePoolType = filePoolType;
         this.maxSpaceAmplification =
@@ -201,12 +201,12 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
             this.sharedStateDir = Preconditions.checkNotNull(sharedStateDir);
             this.taskOwnedStateDir = Preconditions.checkNotNull(taskOwnedStateDir);
             this.shouldSyncAfterClosingLogicalFile = shouldSyncAfterClosingLogicalFile(fileSystem);
-            // Initialize the managed exclusive path using id as the child path name.
+            // Initialize the managed exclusive path using identifier as the child path name.
             // Currently, we use the task-owned directory to place the merged private state.
             // According
             // to the FLIP-306, we later consider move these files to the new introduced
             // task-manager-owned directory.
-            Path managedExclusivePath = new Path(taskOwnedStateDir, uriEscape(id));
+            Path managedExclusivePath = new Path(taskOwnedStateDir, uriEscape(identifier));
             boolean newCreated = createManagedDirectory(managedExclusivePath);
             this.managedExclusiveStateDir = managedExclusivePath;
             this.managedExclusiveStateDirHandle =
@@ -248,7 +248,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
      * @param physicalFile the underlying physical file.
      * @param startOffset the offset in the physical file that the logical file starts from.
      * @param length the length of the logical file.
-     * @param subtaskKey the id of the subtask that the logical file belongs to.
+     * @param subtaskKey the identifier of the subtask that the logical file belongs to.
      * @return the created logical file.
      */
     protected LogicalFile createLogicalFile(
@@ -457,7 +457,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
      * #returnPhysicalFileForNextReuse}.
      *
      * @param subtaskKey the subtask key for the caller
-     * @param checkpointId the checkpoint id
+     * @param checkpointId the checkpoint identifier
      * @param scope checkpoint scope
      * @return the requested physical file.
      * @throws IOException thrown if anything goes wrong with file system.
@@ -485,7 +485,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
     /**
      * The callback which will be triggered when all subtasks discarded (aborted or subsumed).
      *
-     * @param checkpointId the discarded checkpoint id.
+     * @param checkpointId the discarded checkpoint identifier.
      * @throws IOException if anything goes wrong with file system.
      */
     protected void discardCheckpoint(long checkpointId) throws IOException {
@@ -775,7 +775,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
 
     private static String uriEscape(String input) {
         // All reserved characters (RFC 2396) will be removed. This is enough for flink's resource
-        // id, job id and operator id.
+        // identifier, job identifier and operator identifier.
         // Ref: https://docs.oracle.com/javase/8/docs/api/index.html?java/net/URI.html
         return input.replaceAll("[;/?:@&=+$,\\[\\]]", "-");
     }
@@ -834,8 +834,8 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
     }
 
     @VisibleForTesting
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     // ------------------------------------------------------------------------
@@ -848,7 +848,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
 
         synchronized (lock) {
             Set<LogicalFile> restoredLogicalFiles =
-                    uploadedStates.computeIfAbsent(checkpointId, id -> new HashSet<>());
+                    uploadedStates.computeIfAbsent(checkpointId, identifier -> new HashSet<>());
 
             Map<Path, PhysicalFile> knownPhysicalFiles = new HashMap<>();
             knownLogicalFiles.values().stream()

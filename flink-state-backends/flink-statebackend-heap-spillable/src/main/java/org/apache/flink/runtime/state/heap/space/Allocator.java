@@ -40,10 +40,10 @@ public interface Allocator extends Closeable {
     void free(long address);
 
     /**
-     * Returns the chunk with the given chunk id.
+     * Returns the chunk with the given chunk identifier.
      *
-     * @param chunkId id of the chunk.
-     * @return chunk with the given id.
+     * @param chunkId identifier of the chunk.
+     * @return chunk with the given identifier.
      */
     Chunk getChunkById(int chunkId);
 }

@@ -98,7 +98,7 @@ public class ValuesOperationTreeBuilderTest {
                 TestSpec.test("Explicit common type")
                         .values(
                                 DataTypes.ROW(
-                                        DataTypes.FIELD("id", DataTypes.DECIMAL(10, 2)),
+                                        DataTypes.FIELD("identifier", DataTypes.DECIMAL(10, 2)),
                                         DataTypes.FIELD("name", DataTypes.STRING())),
                                 row(1L, "ABC"),
                                 row(3.1f, "DEFG"))
@@ -126,12 +126,12 @@ public class ValuesOperationTreeBuilderTest {
                                                                                 .notNull()),
                                                                 DataTypes.STRING()))),
                                         ResolvedSchema.of(
-                                                Column.physical("id", DataTypes.DECIMAL(10, 2)),
+                                                Column.physical("identifier", DataTypes.DECIMAL(10, 2)),
                                                 Column.physical("name", DataTypes.STRING())))),
                 TestSpec.test("Explicit common type for nested rows")
                         .values(
                                 DataTypes.ROW(
-                                        DataTypes.FIELD("id", DataTypes.DECIMAL(10, 2)),
+                                        DataTypes.FIELD("identifier", DataTypes.DECIMAL(10, 2)),
                                         DataTypes.FIELD(
                                                 "details",
                                                 DataTypes.ROW(
@@ -196,7 +196,7 @@ public class ValuesOperationTreeBuilderTest {
                                                                         DataTypes.DECIMAL(
                                                                                 10, 2))))),
                                         ResolvedSchema.of(
-                                                Column.physical("id", DataTypes.DECIMAL(10, 2)),
+                                                Column.physical("identifier", DataTypes.DECIMAL(10, 2)),
                                                 Column.physical(
                                                         "details",
                                                         DataTypes.ROW(

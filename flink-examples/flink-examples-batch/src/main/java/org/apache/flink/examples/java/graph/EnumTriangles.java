@@ -116,7 +116,7 @@ public class EnumTriangles {
             edges = EnumTrianglesData.getDefaultEdgeDataSet(env);
         }
 
-        // project edges by vertex id
+        // project edges by vertex identifier
         DataSet<Edge> edgesById = edges.map(new EdgeByIdProjector());
 
         DataSet<Triad> triangles =
@@ -159,7 +159,7 @@ public class EnumTriangles {
     }
 
     /**
-     * Projects an edge (pair of vertices) such that the id of the first is smaller than the id of
+     * Projects an edge (pair of vertices) such that the identifier of the first is smaller than the identifier of
      * the second.
      */
     private static class EdgeByIdProjector implements MapFunction<Edge, Edge> {

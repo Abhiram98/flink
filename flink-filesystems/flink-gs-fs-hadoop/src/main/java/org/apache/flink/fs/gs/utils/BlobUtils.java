@@ -37,11 +37,11 @@ public class BlobUtils {
     public static final int COMPOSE_MAX_BLOBS = 32;
 
     /**
-     * Parses a blob id from a Google storage uri, i.e. gs://bucket/foo/bar yields a blob with
+     * Parses a blob identifier from a Google storage uri, i.e. gs://bucket/foo/bar yields a blob with
      * bucket name "bucket" and object name "foo/bar".
      *
      * @param uri The gs uri
-     * @return The blob id
+     * @return The blob identifier
      */
     public static GSBlobIdentifier parseUri(URI uri) {
         Preconditions.checkArgument(
@@ -94,12 +94,12 @@ public class BlobUtils {
     }
 
     /**
-     * Returns a temporary object name, formed by appending the temporary object id to the temporary
+     * Returns a temporary object name, formed by appending the temporary object identifier to the temporary
      * object partial name, i.e. .inprogress/foo/bar/abc for the final blob with object name
-     * "foo/bar" and temporary object id "abc".
+     * "foo/bar" and temporary object identifier "abc".
      *
      * @param finalBlobIdentifier The final blob identifier
-     * @param temporaryObjectId The temporary object id
+     * @param temporaryObjectId The temporary object identifier
      * @return The temporary object name
      */
     public static String getTemporaryObjectName(
@@ -108,12 +108,12 @@ public class BlobUtils {
     }
 
     /**
-     * Returns a temporary object name with entropy, formed by adding the temporary object id to the
+     * Returns a temporary object name with entropy, formed by adding the temporary object identifier to the
      * temporary object partial name in both start and end of path, i.e. abc.inprogress/foo/bar/abc
-     * for the final blob with object name "foo/bar" and temporary object id "abc".
+     * for the final blob with object name "foo/bar" and temporary object identifier "abc".
      *
      * @param finalBlobIdentifier The final blob identifier
-     * @param temporaryObjectId The temporary object id
+     * @param temporaryObjectId The temporary object identifier
      * @return The temporary object name with entropy
      */
     public static String getTemporaryObjectNameWithEntropy(
@@ -124,11 +124,11 @@ public class BlobUtils {
     }
 
     /**
-     * Resolves a temporary blob identifier for a provided temporary object id and the provided
+     * Resolves a temporary blob identifier for a provided temporary object identifier and the provided
      * options.
      *
      * @param finalBlobIdentifier The final blob identifier
-     * @param temporaryObjectId The temporary object id
+     * @param temporaryObjectId The temporary object identifier
      * @param options The file system options
      * @return The blob identifier
      */

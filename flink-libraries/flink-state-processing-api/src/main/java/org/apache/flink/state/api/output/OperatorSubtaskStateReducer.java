@@ -46,7 +46,7 @@ public class OperatorSubtaskStateReducer
     private final int maxParallelism;
 
     public OperatorSubtaskStateReducer(OperatorID operatorID, int maxParallelism) {
-        Preconditions.checkNotNull(operatorID, "Operator id must not be null.");
+        Preconditions.checkNotNull(operatorID, "Operator identifier must not be null.");
         Preconditions.checkState(maxParallelism > 1);
 
         this.operatorID = operatorID;

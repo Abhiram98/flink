@@ -2665,9 +2665,9 @@ public class RelBuilder {
         final List<AggCall> aggregateCallsWithoutGroupId = new ArrayList<>(aggregateCalls);
         aggregateCallsWithoutGroupId.removeIf(RelBuilder::isGroupId);
 
-        // For each group id value, we first construct an Aggregate without
+        // For each group identifier value, we first construct an Aggregate without
         // GROUP_ID() function call, and then create a Project node on top of it.
-        // The Project adds literal value for group id in right position.
+        // The Project adds literal value for group identifier in right position.
         final Frame frame = stack.pop();
         for (int groupId = 0; groupId <= maxGroupId; groupId++) {
             // Create the Aggregate node without GROUP_ID() call
@@ -2958,7 +2958,7 @@ public class RelBuilder {
             condition = simplifier.simplifyUnknownAsFalse(condition);
         }
         if (correlate) {
-            final CorrelationId id = Iterables.getOnlyElement(variablesSet);
+            final CorrelationId identifier = Iterables.getOnlyElement(variablesSet);
             // Correlate does not have an ON clause.
             switch (joinType) {
                 case LEFT:
@@ -2966,7 +2966,7 @@ public class RelBuilder {
                 case ANTI:
                     // For a LEFT/SEMI/ANTI, predicate must be evaluated first.
                     stack.push(right);
-                    filter(condition.accept(new Shifter(left.rel, id, right.rel)));
+                    filter(condition.accept(new Shifter(left.rel, identifier, right.rel)));
                     right = stack.pop();
                     break;
                 case INNER:
@@ -2977,10 +2977,10 @@ public class RelBuilder {
                     throw new IllegalArgumentException(
                             "Correlated " + joinType + " join is not supported");
             }
-            final ImmutableBitSet requiredColumns = RelOptUtil.correlationColumns(id, right.rel);
+            final ImmutableBitSet requiredColumns = RelOptUtil.correlationColumns(identifier, right.rel);
             join =
                     struct.correlateFactory.createCorrelate(
-                            left.rel, right.rel, ImmutableList.of(), id, requiredColumns, joinType);
+                            left.rel, right.rel, ImmutableList.of(), identifier, requiredColumns, joinType);
         } else {
             RelNode join0 =
                     struct.joinFactory.createJoin(
@@ -4130,10 +4130,10 @@ public class RelBuilder {
     }
 
     /**
-     * Checks for {@link CorrelationId}, then validates the id is not used on left, and finally
-     * checks if id is actually used on right.
+     * Checks for {@link CorrelationId}, then validates the identifier is not used on left, and finally
+     * checks if identifier is actually used on right.
      *
-     * @return true if a correlate id is present and used
+     * @return true if a correlate identifier is present and used
      * @throws IllegalArgumentException if the {@link CorrelationId} is used by left side or if the
      *     a {@link CorrelationId} is present and the {@link JoinRelType} is FULL or RIGHT.
      */
@@ -4145,10 +4145,10 @@ public class RelBuilder {
         if (variablesSet.size() != 1) {
             return false;
         }
-        CorrelationId id = Iterables.getOnlyElement(variablesSet);
-        if (!RelOptUtil.notContainsCorrelation(leftNode, id, Litmus.IGNORE)) {
+        CorrelationId identifier = Iterables.getOnlyElement(variablesSet);
+        if (!RelOptUtil.notContainsCorrelation(leftNode, identifier, Litmus.IGNORE)) {
             throw new IllegalArgumentException(
-                    "variable " + id + " must not be used by left input to correlation");
+                    "variable " + identifier + " must not be used by left input to correlation");
         }
         switch (joinType) {
             case RIGHT:
@@ -5043,12 +5043,12 @@ public class RelBuilder {
      */
     private class Shifter extends RexShuttle {
         private final RelNode left;
-        private final CorrelationId id;
+        private final CorrelationId identifier;
         private final RelNode right;
 
-        Shifter(RelNode left, CorrelationId id, RelNode right) {
+        Shifter(RelNode left, CorrelationId identifier, RelNode right) {
             this.left = left;
-            this.id = id;
+            this.identifier = identifier;
             this.right = right;
         }
 
@@ -5058,7 +5058,7 @@ public class RelBuilder {
             final RexBuilder rexBuilder = getRexBuilder();
             final int leftCount = leftRowType.getFieldCount();
             if (inputRef.getIndex() < leftCount) {
-                final RexNode v = rexBuilder.makeCorrel(leftRowType, id);
+                final RexNode v = rexBuilder.makeCorrel(leftRowType, identifier);
                 return rexBuilder.makeFieldAccess(v, inputRef.getIndex());
             } else {
                 return rexBuilder.makeInputRef(right, inputRef.getIndex() - leftCount);

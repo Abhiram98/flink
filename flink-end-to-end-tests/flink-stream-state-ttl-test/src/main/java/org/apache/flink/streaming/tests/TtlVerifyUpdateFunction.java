@@ -90,13 +90,13 @@ class TtlVerifyUpdateFunction extends RichFlatMapFunction<TtlStateUpdate, String
     private TtlVerificationContext<?, ?> generateUpdateAndVerificationContext(
             TtlStateUpdate updates, TtlStateVerifier<?, ?> verifier) throws Exception {
 
-        List<ValueWithTs<?>> prevUpdates = getPrevUpdates(verifier.getId());
-        Object update = updates.getUpdate(verifier.getId());
+        List<ValueWithTs<?>> prevUpdates = getPrevUpdates(verifier.getIdentifier());
+        Object update = updates.getUpdate(verifier.getIdentifier());
         TtlUpdateContext<?, ?> updateContext = performUpdate(verifier, update);
         stat.update(prevUpdates.size());
-        prevUpdatesByVerifierId.get(verifier.getId()).add(updateContext.getUpdateWithTs());
+        prevUpdatesByVerifierId.get(verifier.getIdentifier()).add(updateContext.getUpdateWithTs());
         return new TtlVerificationContext<>(
-                updates.getKey(), verifier.getId(), prevUpdates, updateContext);
+                updates.getKey(), verifier.getIdentifier(), prevUpdates, updateContext);
     }
 
     private List<ValueWithTs<?>> getPrevUpdates(String verifierId) throws Exception {
@@ -110,7 +110,7 @@ class TtlVerifyUpdateFunction extends RichFlatMapFunction<TtlStateUpdate, String
 
         return MonotonicTTLTimeProvider.doWithFrozenTime(
                 frozenTimestamp -> {
-                    State state = states.get(verifier.getId());
+                    State state = states.get(verifier.getIdentifier());
                     Object valueBeforeUpdate = verifier.get(state);
                     verifier.update(state, update);
                     Object updatedValue = verifier.get(state);
@@ -128,13 +128,13 @@ class TtlVerifyUpdateFunction extends RichFlatMapFunction<TtlStateUpdate, String
                 TtlStateVerifier.VERIFIERS.stream()
                         .collect(
                                 Collectors.toMap(
-                                        TtlStateVerifier::getId,
+                                        TtlStateVerifier::getIdentifier,
                                         v -> v.createState(context, ttlConfig)));
         prevUpdatesByVerifierId =
                 TtlStateVerifier.VERIFIERS.stream()
                         .collect(
                                 Collectors.toMap(
-                                        TtlStateVerifier::getId,
+                                        TtlStateVerifier::getIdentifier,
                                         v -> {
                                             checkNotNull(v);
                                             final TypeSerializer<ValueWithTs<?>> typeSerializer =
@@ -144,7 +144,7 @@ class TtlVerifyUpdateFunction extends RichFlatMapFunction<TtlStateUpdate, String
 
                                             ListStateDescriptor<ValueWithTs<?>> stateDesc =
                                                     new ListStateDescriptor<>(
-                                                            "TtlPrevValueState_" + v.getId(),
+                                                            "TtlPrevValueState_" + v.getIdentifier(),
                                                             typeSerializer);
                                             KeyedStateStore store = context.getKeyedStateStore();
                                             return store.getListState(stateDesc);

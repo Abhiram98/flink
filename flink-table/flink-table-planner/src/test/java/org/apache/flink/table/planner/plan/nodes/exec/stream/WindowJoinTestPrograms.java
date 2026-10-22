@@ -74,7 +74,7 @@ public class WindowJoinTestPrograms {
 
     static final String[] SOURCE_SCHEMA = {
         "ts STRING",
-        "id STRING",
+        "identifier STRING",
         "num INT",
         "name STRING",
         "row_time AS TO_TIMESTAMP(`ts`)",
@@ -105,9 +105,9 @@ public class WindowJoinTestPrograms {
                     + "L.window_start AS window_start,\n"
                     + "L.window_end AS window_end,\n"
                     + "L.name AS name,\n"
-                    + "L.id AS L_id,\n"
+                    + "L.identifier AS L_id,\n"
                     + "L.num AS L_num,\n"
-                    + "R.id AS R_id,\n"
+                    + "R.identifier AS R_id,\n"
                     + "R.num AS R_num\n"
                     + "FROM\n"
                     + "(\n"
@@ -305,7 +305,7 @@ public class WindowJoinTestPrograms {
                                             "+I[2020-10-10T00:00:40, 2020-10-10T00:00:45, c, L43, 12, NOT_PRESENT, 0]")
                                     .build())
                     .runSql(
-                            "INSERT INTO sink_t SELECT window_start, window_end, name, id, num, 'NOT_PRESENT', 0\n"
+                            "INSERT INTO sink_t SELECT window_start, window_end, name, identifier, num, 'NOT_PRESENT', 0\n"
                                     + "           FROM (\n"
                                     + "               SELECT * FROM TABLE(TUMBLE(TABLE source_one_t, DESCRIPTOR(row_time), INTERVAL '5' SECOND))\n"
                                     + "           ) L WHERE EXISTS (\n"
@@ -335,7 +335,7 @@ public class WindowJoinTestPrograms {
                                             "+I[2020-10-10T00:00:40, 2020-10-10T00:00:45, d, L44, 13, NOT_PRESENT, 0]")
                                     .build())
                     .runSql(
-                            "INSERT INTO sink_t SELECT window_start, window_end, name, id, num, 'NOT_PRESENT', 0\n"
+                            "INSERT INTO sink_t SELECT window_start, window_end, name, identifier, num, 'NOT_PRESENT', 0\n"
                                     + "           FROM (\n"
                                     + "               SELECT * FROM TABLE(TUMBLE(TABLE source_one_t, DESCRIPTOR(row_time), INTERVAL '5' SECOND))\n"
                                     + "           ) L WHERE NOT EXISTS (\n"

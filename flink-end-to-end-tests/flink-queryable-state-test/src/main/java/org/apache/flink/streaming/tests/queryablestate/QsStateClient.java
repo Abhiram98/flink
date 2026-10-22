@@ -36,7 +36,7 @@ import java.util.concurrent.ExecutionException;
  * A simple implementation of a queryable state client. This client queries the state for a while
  * (~2.5 mins) and prints out the values that it found in the map state
  *
- * <p>Usage: java -jar QsStateClient.jar --host HOST --port PORT --job-id JOB_ID
+ * <p>Usage: java -jar QsStateClient.jar --host HOST --port PORT --job-identifier JOB_ID
  */
 public class QsStateClient {
 
@@ -47,7 +47,7 @@ public class QsStateClient {
         ParameterTool parameters = ParameterTool.fromArgs(args);
 
         // setup values
-        String jobId = parameters.getRequired("job-id");
+        String jobId = parameters.getRequired("job-identifier");
         String host = parameters.get("host", "localhost");
         int port = parameters.getInt("port", 9069);
         int numIterations = parameters.getInt("iterations", 1500);

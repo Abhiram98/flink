@@ -73,10 +73,10 @@ public class ExecutionGraphHandler {
     }
 
     public void reportCheckpointMetrics(
-            ExecutionAttemptID attemptId, long id, CheckpointMetrics metrics) {
+            ExecutionAttemptID attemptId, long identifier, CheckpointMetrics metrics) {
         processCheckpointCoordinatorMessage(
                 "ReportCheckpointStats",
-                coordinator -> coordinator.reportCheckpointMetrics(id, attemptId, metrics));
+                coordinator -> coordinator.reportCheckpointMetrics(identifier, attemptId, metrics));
     }
 
     public void reportInitializationMetrics(

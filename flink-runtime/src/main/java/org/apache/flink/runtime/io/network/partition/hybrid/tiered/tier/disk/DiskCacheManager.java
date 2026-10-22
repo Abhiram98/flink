@@ -110,7 +110,7 @@ class DiskCacheManager {
     /**
      * Return the current buffer index.
      *
-     * @param subpartitionId the target subpartition id
+     * @param subpartitionId the target subpartition identifier
      * @return the finished buffer index
      */
     int getBufferIndex(int subpartitionId) {

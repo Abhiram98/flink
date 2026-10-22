@@ -135,10 +135,10 @@ public class GrpcStateService extends BeamFnStateGrpc.BeamFnStateImplBase
                                 // threadsafe.
                                 outboundObserver.onNext(
                                         t == null
-                                                ? responseBuilder.setId(request.getId()).build()
-                                                : createErrorResponse(request.getId(), t)));
+                                                ? responseBuilder.setIdentifier(request.getIdentifier()).build()
+                                                : createErrorResponse(request.getIdentifier(), t)));
             } catch (Exception e) {
-                outboundObserver.onNext(createErrorResponse(request.getId(), e));
+                outboundObserver.onNext(createErrorResponse(request.getIdentifier(), e));
             }
         }
 
@@ -162,13 +162,13 @@ public class GrpcStateService extends BeamFnStateGrpc.BeamFnStateImplBase
                     StateResponse.newBuilder()
                             .setError(
                                     String.format(
-                                            "Unknown process bundle instruction id '%s'",
+                                            "Unknown process bundle instruction identifier '%s'",
                                             request.getInstructionId())));
             return result;
         }
 
-        private StateResponse createErrorResponse(String id, Throwable t) {
-            return StateResponse.newBuilder().setId(id).setError(getStackTraceAsString(t)).build();
+        private StateResponse createErrorResponse(String identifier, Throwable t) {
+            return StateResponse.newBuilder().setIdentifier(identifier).setError(getStackTraceAsString(t)).build();
         }
     }
 }

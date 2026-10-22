@@ -265,8 +265,8 @@ public class TableOperatorWrapper<OP extends StreamOperator<RowData>> implements
         private final TableOperatorWrapper<?> target;
 
         /**
-         * The input id (start from 1) corresponding to the target's inputs. e.g. the target is a
-         * join operator, depending on the side of the source, input id may be 1 (left side) or 2
+         * The input identifier (start from 1) corresponding to the target's inputs. e.g. the target is a
+         * join operator, depending on the side of the source, input identifier may be 1 (left side) or 2
          * (right side).
          */
         private final int inputId;

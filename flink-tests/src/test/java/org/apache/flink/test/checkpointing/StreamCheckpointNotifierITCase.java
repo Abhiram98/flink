@@ -58,7 +58,7 @@ import static org.junit.Assert.fail;
 /**
  * Integration test for the {@link CheckpointListener} interface. The test ensures that {@link
  * CheckpointListener#notifyCheckpointComplete(long)} is called for completed checkpoints, that it
- * is called at most once for any checkpoint id and that it is not called for a deliberately failed
+ * is called at most once for any checkpoint identifier and that it is not called for a deliberately failed
  * checkpoint.
  *
  * <p>The topology tested here includes a number of {@link OneInputStreamOperator}s and a {@link

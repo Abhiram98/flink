@@ -68,10 +68,10 @@ class SortingThread<E> extends ThreadBase<E> {
                     continue;
                 }
 
-                LOG.debug("Sorting buffer {}.", element.getId());
+                LOG.debug("Sorting buffer {}.", element.getIdentifier());
                 this.sorter.sort(element.getBuffer());
 
-                LOG.debug("Sorted buffer {}.", element.getId());
+                LOG.debug("Sorted buffer {}.", element.getIdentifier());
             } else if (element == EOF_MARKER) {
                 LOG.debug("Sorting thread done.");
                 alive = false;

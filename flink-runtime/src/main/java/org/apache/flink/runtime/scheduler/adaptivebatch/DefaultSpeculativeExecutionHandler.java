@@ -271,7 +271,7 @@ public class DefaultSpeculativeExecutionHandler
                 slowTasks.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
 
         return slowExecutions.stream()
-                .map(id -> registerExecutionsSupplier.get().get(id))
+                .map(identifier -> registerExecutionsSupplier.get().get(identifier))
                 .map(
                         e -> {
                             checkNotNull(

@@ -65,7 +65,7 @@ class KubernetesLeaderElectionAndRetrievalITCase {
 
     @Test
     void testLeaderElectionAndRetrieval() throws Exception {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final String leaderAddress = "random-address";
         final String configMapName = LEADER_CONFIGMAP_NAME + UUID.randomUUID();
         final FlinkKubeClient flinkKubeClient = KUBERNETES_EXTENSION.getFlinkKubeClient();

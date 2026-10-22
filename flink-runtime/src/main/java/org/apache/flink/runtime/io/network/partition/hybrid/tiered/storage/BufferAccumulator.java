@@ -34,7 +34,7 @@ public interface BufferAccumulator extends AutoCloseable {
     /**
      * Setup the accumulator.
      *
-     * @param bufferFlusher accepts the accumulated buffers. The first field is the subpartition id,
+     * @param bufferFlusher accepts the accumulated buffers. The first field is the subpartition identifier,
      *     the second is the accumulated buffer to flush, and the third is the number of remaining
      *     buffers to be written consecutively to the same segment.
      */
@@ -49,7 +49,7 @@ public interface BufferAccumulator extends AutoCloseable {
      * value will range from 0 to the number of subpartitions.
      *
      * @param record the received record
-     * @param subpartitionId the subpartition id of the record
+     * @param subpartitionId the subpartition identifier of the record
      * @param dataType the data type of the record
      * @param isBroadcast whether the record is a broadcast record
      */

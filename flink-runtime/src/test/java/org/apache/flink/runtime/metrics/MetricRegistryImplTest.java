@@ -222,7 +222,7 @@ class MetricRegistryImplTest {
 
         TaskManagerMetricGroup root =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
         root.counter("rootCounter");
 
         assertThat(reporter1.getLastAddedMetric()).containsInstanceOf(Counter.class);
@@ -313,7 +313,7 @@ class MetricRegistryImplTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
         assertThat(tmGroup.getMetricIdentifier("name")).isEqualTo("A_B_C_D_E_name");
 
         registry.closeAsync().get();
@@ -378,7 +378,7 @@ class MetricRegistryImplTest {
 
         TaskManagerMetricGroup group =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
         group.counter(name);
         group.close();
         registry.closeAsync().get();

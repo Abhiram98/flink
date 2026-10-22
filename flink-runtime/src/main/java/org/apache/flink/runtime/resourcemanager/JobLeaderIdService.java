@@ -25,8 +25,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Service which retrieves for a registered job the current job leader id (the leader id of the job
- * manager responsible for the job). The leader id will be exposed as a future via the {@link
+ * Service which retrieves for a registered job the current job leader identifier (the leader identifier of the job
+ * manager responsible for the job). The leader identifier will be exposed as a future via the {@link
  * #getLeaderId(JobID)}. The future will only be completed with an exception in case the service
  * will be stopped.
  */
@@ -35,7 +35,7 @@ public interface JobLeaderIdService {
     /**
      * Start the service with the given job leader actions.
      *
-     * @param initialJobLeaderIdActions to use for job leader id actions
+     * @param initialJobLeaderIdActions to use for job leader identifier actions
      * @throws Exception which is thrown when clearing up old state
      */
     void start(JobLeaderIdActions initialJobLeaderIdActions) throws Exception;
@@ -48,14 +48,14 @@ public interface JobLeaderIdService {
     void stop() throws Exception;
 
     /**
-     * Stop and clear the currently registered job leader id listeners.
+     * Stop and clear the currently registered job leader identifier listeners.
      *
      * @throws Exception which is thrown in case a retrieval service cannot be stopped properly
      */
     void clear() throws Exception;
 
     /**
-     * Add a job to be monitored to retrieve the job leader id.
+     * Add a job to be monitored to retrieve the job leader identifier.
      *
      * @param jobId identifying the job to monitor
      * @throws Exception if the job could not be added to the service

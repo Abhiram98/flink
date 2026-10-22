@@ -61,7 +61,7 @@ public class StandaloneHaServicesTest extends TestLogger {
 
     /**
      * Tests that the standalone leader election services return a fixed address and leader session
-     * id.
+     * identifier.
      */
     @Test
     public void testLeaderElection() throws Exception {
@@ -83,7 +83,7 @@ public class StandaloneHaServicesTest extends TestLogger {
 
     /**
      * Tests that the standalone leader retrieval services return the specified address and the
-     * fixed leader session id.
+     * fixed leader session identifier.
      */
     @Test
     public void testJobManagerLeaderRetrieval() throws Exception {
@@ -115,7 +115,7 @@ public class StandaloneHaServicesTest extends TestLogger {
 
     /**
      * Tests that the standalone leader retrieval services return the given address and the fixed
-     * leader session id.
+     * leader session identifier.
      */
     @Test
     public void testJobMasterLeaderRetrieval() throws Exception {

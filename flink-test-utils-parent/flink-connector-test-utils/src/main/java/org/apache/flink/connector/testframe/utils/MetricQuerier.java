@@ -126,10 +126,10 @@ public class MetricQuerier {
             String metricName,
             String filter)
             throws Exception {
-        // get job details, including the vertex id
+        // get job details, including the vertex identifier
         JobDetailsInfo jobDetailsInfo = getJobDetails(restClient, endpoint, jobId);
 
-        // get the vertex id for source/sink operator
+        // get the vertex identifier for source/sink operator
         JobDetailsInfo.JobVertexDetailsInfo vertex =
                 jobDetailsInfo.getJobVertexInfos().stream()
                         .filter(v -> v.getName().contains(sourceOrSinkName))
@@ -148,8 +148,8 @@ public class MetricQuerier {
                         .filter(
                                 m ->
                                         filterByMetricName(
-                                                m.getId(), sourceOrSinkName, metricName, filter))
-                        .map(m -> m.getId())
+                                                m.getIdentifier(), sourceOrSinkName, metricName, filter))
+                        .map(m -> m.getIdentifier())
                         .collect(Collectors.joining(","));
 
         if (StringUtils.isNullOrWhitespaceOnly(queryParam)) {

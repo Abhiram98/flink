@@ -148,7 +148,7 @@ public class ResultPartitionFactory {
     public ResultPartition create(
             String taskNameWithSubtaskAndId,
             int partitionIndex,
-            ResultPartitionID id,
+            ResultPartitionID identifier,
             ResultPartitionType type,
             int numberOfPartitions,
             int numberOfSubpartitions,
@@ -177,7 +177,7 @@ public class ResultPartitionFactory {
                     new PipelinedResultPartition(
                             taskNameWithSubtaskAndId,
                             partitionIndex,
-                            id,
+                            identifier,
                             type,
                             subpartitions,
                             maxParallelism,
@@ -205,7 +205,7 @@ public class ResultPartitionFactory {
                         new SortMergeResultPartition(
                                 taskNameWithSubtaskAndId,
                                 partitionIndex,
-                                id,
+                                identifier,
                                 type,
                                 subpartitions.length,
                                 maxParallelism,
@@ -220,7 +220,7 @@ public class ResultPartitionFactory {
                         new BoundedBlockingResultPartition(
                                 taskNameWithSubtaskAndId,
                                 partitionIndex,
-                                id,
+                                identifier,
                                 type,
                                 subpartitions,
                                 maxParallelism,
@@ -245,7 +245,7 @@ public class ResultPartitionFactory {
                     tieredResultPartitionFactory.createTieredResultPartition(
                             taskNameWithSubtaskAndId,
                             partitionIndex,
-                            id,
+                            identifier,
                             type,
                             numberOfPartitions,
                             subpartitions.length,

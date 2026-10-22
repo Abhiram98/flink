@@ -40,9 +40,9 @@ public interface CacheSupportedPipelineExecutor extends PipelineExecutor {
             throws Exception;
 
     /**
-     * Invalidate the cluster dataset with the given id.
+     * Invalidate the cluster dataset with the given identifier.
      *
-     * @param clusterDatasetId id of the cluster dataset to be invalidated.
+     * @param clusterDatasetId identifier of the cluster dataset to be invalidated.
      * @param configuration the {@link Configuration} with the required parameters
      * @param userCodeClassloader the {@link ClassLoader} to deserialize usercode
      * @return Future which will be completed when the cached dataset is invalidated.

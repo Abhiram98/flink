@@ -1229,16 +1229,16 @@ class AlternatingCheckpointsTest {
         SingleCheckpointBarrierHandler barrierHandler =
                 getTestBarrierHandlerFactory(target).create(inputGate);
 
-        final long id = 1;
+        final long identifier = 1;
         barrierHandler.processBarrier(
                 new CheckpointBarrier(
-                        id,
+                        identifier,
                         clock.relativeTimeMillis(),
                         new CheckpointOptions(CHECKPOINT, getDefault())),
                 new InputChannelInfo(0, 0),
                 false);
 
-        assertThat(barrierHandler.getAllBarriersReceivedFuture(id)).isNotDone();
+        assertThat(barrierHandler.getAllBarriersReceivedFuture(identifier)).isNotDone();
     }
 
     @Test

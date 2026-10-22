@@ -35,11 +35,11 @@ class CheckpointBarrierTest {
      */
     @Test
     void testSerialization() {
-        long id = Integer.MAX_VALUE + 123123L;
+        long identifier = Integer.MAX_VALUE + 123123L;
         long timestamp = Integer.MAX_VALUE + 1228L;
 
         CheckpointOptions options = CheckpointOptions.forCheckpointWithDefaultLocation();
-        CheckpointBarrier barrier = new CheckpointBarrier(id, timestamp, options);
+        CheckpointBarrier barrier = new CheckpointBarrier(identifier, timestamp, options);
 
         assertThatThrownBy(() -> barrier.write(new DataOutputSerializer(1024)))
                 .isInstanceOf(UnsupportedOperationException.class);

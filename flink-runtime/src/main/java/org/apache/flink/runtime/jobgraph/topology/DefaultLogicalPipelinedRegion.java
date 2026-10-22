@@ -38,7 +38,7 @@ public class DefaultLogicalPipelinedRegion implements LogicalPipelinedRegion {
 
         this.vertexById =
                 logicalVertices.stream()
-                        .collect(Collectors.toMap(LogicalVertex::getId, Function.identity()));
+                        .collect(Collectors.toMap(LogicalVertex::getIdentifier, Function.identity()));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DefaultLogicalPipelinedRegion implements LogicalPipelinedRegion {
         return "DefaultLogicalPipelinedRegion{"
                 + "vertexIDs="
                 + vertexById.values().stream()
-                        .map(LogicalVertex::getId)
+                        .map(LogicalVertex::getIdentifier)
                         .collect(Collectors.toList())
                 + '}';
     }

@@ -128,7 +128,7 @@ public class PartitionDescriptor implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "PartitionDescriptor [result id: %s, partition id: %s, partition type: %s, "
+                "PartitionDescriptor [result identifier: %s, partition identifier: %s, partition type: %s, "
                         + "subpartitions: %d, connection index: %d, is broadcast: %s, "
                         + "is all-to-all distribution: %s]",
                 resultId,
@@ -145,7 +145,7 @@ public class PartitionDescriptor implements Serializable {
 
         IntermediateResult result = partition.getIntermediateResult();
         return new PartitionDescriptor(
-                result.getId(),
+                result.getIdentifier(),
                 partition.getIntermediateResult().getNumberOfAssignedPartitions(),
                 partition.getPartitionId(),
                 result.getResultType(),

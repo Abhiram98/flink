@@ -74,9 +74,9 @@ import java.util.Objects;
  *    return new MyAccumulator();
  *  }
  *
- *   public void accumulate(MyAccumulator accumulator, String id) {
- *     if (!accumulator.map.contains(id)) {
- *       accumulator.map.put(id, 1);
+ *   public void accumulate(MyAccumulator accumulator, String identifier) {
+ *     if (!accumulator.map.contains(identifier)) {
+ *       accumulator.map.put(identifier, 1);
  *       accumulator.count++;
  *     }
  *   }

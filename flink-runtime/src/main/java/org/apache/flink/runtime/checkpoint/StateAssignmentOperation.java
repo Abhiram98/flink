@@ -134,7 +134,7 @@ public class StateAssignmentOperation {
                             vertexAssignments);
             vertexAssignments.put(executionJobVertex, stateAssignment);
             for (final IntermediateResult producedDataSet : executionJobVertex.getInputs()) {
-                consumerAssignment.put(producedDataSet.getId(), stateAssignment);
+                consumerAssignment.put(producedDataSet.getIdentifier(), stateAssignment);
             }
         }
 
@@ -297,7 +297,7 @@ public class StateAssignmentOperation {
                 });
     }
 
-    // TODO rewrite based on operator id
+    // TODO rewrite based on operator identifier
     private Tuple2<List<KeyedStateHandle>, List<KeyedStateHandle>> reAssignSubKeyedStates(
             OperatorState operatorState,
             List<KeyGroupRange> keyGroupPartitions,
@@ -812,7 +812,7 @@ public class StateAssignmentOperation {
      * @param newParallelism parallelism with which the state should be partitioned
      * @return repartitioned state
      */
-    // TODO rewrite based on operator id
+    // TODO rewrite based on operator identifier
     public static <T> List<List<T>> applyRepartitioner(
             OperatorStateRepartitioner<T> opStateRepartitioner,
             List<List<T>> chainOpParallelStates,

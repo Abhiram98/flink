@@ -112,7 +112,7 @@ public final class DefaultDispatcherRunner implements DispatcherRunner, LeaderCo
         runActionIfRunning(
                 () -> {
                     LOG.info(
-                            "{} was granted leadership with leader id {}. Creating new {}.",
+                            "{} was granted leadership with leader identifier {}. Creating new {}.",
                             getClass().getSimpleName(),
                             leaderSessionID,
                             DispatcherLeaderProcess.class.getSimpleName());
@@ -190,7 +190,7 @@ public final class DefaultDispatcherRunner implements DispatcherRunner, LeaderCo
         runActionIfRunning(
                 () -> {
                     LOG.info(
-                            "{} was revoked the leadership with leader id {}. Stopping the {}.",
+                            "{} was revoked the leadership with leader identifier {}. Stopping the {}.",
                             getClass().getSimpleName(),
                             dispatcherLeaderProcess.getLeaderSessionId(),
                             DispatcherLeaderProcess.class.getSimpleName());

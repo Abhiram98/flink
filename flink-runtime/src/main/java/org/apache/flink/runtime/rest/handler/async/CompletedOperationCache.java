@@ -115,7 +115,7 @@ public class CompletedOperationCache<K extends OperationKey, R extends Serializa
                                                 removalNotification.getValue().markAccessed();
 
                                                 LOGGER.info(
-                                                        "Evicted result with trigger id {} because its TTL of {}s has expired.",
+                                                        "Evicted result with trigger identifier {} because its TTL of {}s has expired.",
                                                         removalNotification.getKey().getTriggerId(),
                                                         cacheDuration.getSeconds());
                                             }

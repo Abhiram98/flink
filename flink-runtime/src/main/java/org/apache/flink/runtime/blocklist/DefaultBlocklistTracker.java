@@ -33,7 +33,7 @@ public class DefaultBlocklistTracker implements BlocklistTracker {
     private final Map<String, BlockedNode> blockedNodes = new HashMap<>();
 
     /**
-     * Try to add a new blocked node record. If the node (identified by node id) already exists, the
+     * Try to add a new blocked node record. If the node (identified by node identifier) already exists, the
      * newly added one will be merged with the existing one.
      *
      * @param newNode the new blocked node record

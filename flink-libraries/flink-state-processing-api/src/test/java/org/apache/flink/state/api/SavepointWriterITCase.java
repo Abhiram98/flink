@@ -114,7 +114,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
         StateBootstrapTransformation<Account> transformation =
                 OperatorTransformation.bootstrapWith(env.fromData(accounts))
-                        .keyBy(acc -> acc.id)
+                        .keyBy(acc -> acc.identifier)
                         .transform(new AccountBootstrapper());
 
         StateBootstrapTransformation<CurrencyRate> broadcastTransformation =
@@ -142,7 +142,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
         DataStream<Account> stream =
                 env.fromData(accounts)
-                        .keyBy(acc -> acc.id)
+                        .keyBy(acc -> acc.identifier)
                         .flatMap(new UpdateAndGetAccount())
                         .uid(ACCOUNT_UID);
 
@@ -193,13 +193,13 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
         DataStream<Account> stream =
                 sEnv.fromData(accounts)
-                        .keyBy(acc -> acc.id)
+                        .keyBy(acc -> acc.identifier)
                         .flatMap(new UpdateAndGetAccount())
                         .uid(ACCOUNT_UID);
 
         final CloseableIterator<Account> results = stream.collectAsync();
 
-        stream.map(acc -> acc.id)
+        stream.map(acc -> acc.identifier)
                 .map(new StatefulOperator())
                 .uid(MODIFY_UID)
                 .sinkTo(new DiscardingSink<>());
@@ -222,13 +222,13 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
     /** A simple pojo. */
     @SuppressWarnings("WeakerAccess")
     public static class Account {
-        Account(int id, double amount) {
-            this.id = id;
+        Account(int identifier, double amount) {
+            this.identifier = identifier;
             this.amount = amount;
             this.timestamp = 1000L;
         }
 
-        public int id;
+        public int identifier;
 
         public double amount;
 
@@ -237,13 +237,13 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Account
-                    && ((Account) obj).id == id
+                    && ((Account) obj).identifier == identifier
                     && ((Account) obj).amount == amount;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, amount);
+            return Objects.hash(identifier, amount);
         }
     }
 

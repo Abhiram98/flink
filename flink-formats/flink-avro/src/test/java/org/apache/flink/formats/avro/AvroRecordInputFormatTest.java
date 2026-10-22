@@ -414,7 +414,7 @@ public class AvroRecordInputFormatTest {
      *
      * @param format the format to test
      * @param parameters the configuration to use
-     * @throws IOException thrown id there is a issue
+     * @throws IOException thrown identifier there is a issue
      */
     @SuppressWarnings("unchecked")
     private void doTestDeserializationGenericRecord(

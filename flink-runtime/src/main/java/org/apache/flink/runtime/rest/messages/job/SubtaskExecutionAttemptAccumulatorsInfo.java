@@ -33,7 +33,7 @@ public class SubtaskExecutionAttemptAccumulatorsInfo implements ResponseBody {
 
     public static final String FIELD_NAME_SUBTASK_INDEX = "subtask";
     public static final String FIELD_NAME_ATTEMPT_NUM = "attempt";
-    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ID = "identifier";
     public static final String FIELD_NAME_USER_ACCUMULATORS = "user-accumulators";
 
     @JsonProperty(FIELD_NAME_SUBTASK_INDEX)
@@ -43,7 +43,7 @@ public class SubtaskExecutionAttemptAccumulatorsInfo implements ResponseBody {
     private final int attemptNum;
 
     @JsonProperty(FIELD_NAME_ID)
-    private final String id;
+    private final String identifier;
 
     @JsonProperty(FIELD_NAME_USER_ACCUMULATORS)
     private final Collection<UserAccumulator> userAccumulatorList;
@@ -52,13 +52,13 @@ public class SubtaskExecutionAttemptAccumulatorsInfo implements ResponseBody {
     public SubtaskExecutionAttemptAccumulatorsInfo(
             @JsonProperty(FIELD_NAME_SUBTASK_INDEX) int subtaskIndex,
             @JsonProperty(FIELD_NAME_ATTEMPT_NUM) int attemptNum,
-            @JsonProperty(FIELD_NAME_ID) String id,
+            @JsonProperty(FIELD_NAME_ID) String identifier,
             @JsonProperty(FIELD_NAME_USER_ACCUMULATORS)
                     Collection<UserAccumulator> userAccumulatorList) {
 
         this.subtaskIndex = subtaskIndex;
         this.attemptNum = attemptNum;
-        this.id = Preconditions.checkNotNull(id);
+        this.identifier = Preconditions.checkNotNull(identifier);
         this.userAccumulatorList = Preconditions.checkNotNull(userAccumulatorList);
     }
 
@@ -73,12 +73,12 @@ public class SubtaskExecutionAttemptAccumulatorsInfo implements ResponseBody {
         SubtaskExecutionAttemptAccumulatorsInfo that = (SubtaskExecutionAttemptAccumulatorsInfo) o;
         return subtaskIndex == that.subtaskIndex
                 && attemptNum == that.attemptNum
-                && Objects.equals(id, that.id)
+                && Objects.equals(identifier, that.identifier)
                 && Objects.equals(userAccumulatorList, that.userAccumulatorList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(subtaskIndex, attemptNum, id, userAccumulatorList);
+        return Objects.hash(subtaskIndex, attemptNum, identifier, userAccumulatorList);
     }
 }

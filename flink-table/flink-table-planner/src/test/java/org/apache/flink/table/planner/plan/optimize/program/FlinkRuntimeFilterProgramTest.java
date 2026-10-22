@@ -63,7 +63,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         // row avg size is 48
         String dimDdl =
                 "create table dim (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  male BOOLEAN,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
@@ -78,7 +78,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         // row avg size is 60
         String factDdl =
                 "create table fact (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  name STRING,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
@@ -193,7 +193,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table fact2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") with (\n"
@@ -216,7 +216,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table fact2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") with (\n"
@@ -252,7 +252,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table fact2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
                                 + "  fact_date_sk BIGINT\n"
@@ -320,7 +320,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table dim2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") with (\n"
@@ -359,7 +359,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table fact2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") with (\n"
@@ -381,7 +381,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "create table fact2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") with (\n"
@@ -414,7 +414,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         setupTableRowCount("fact2", SUITABLE_FACT_ROW_COUNT);
 
         String query =
-                "select * from (select * from fact inner join fact2 on fact.id = fact2.id2) as factSide "
+                "select * from (select * from fact inner join fact2 on fact.identifier = fact2.id2) as factSide "
                         + "inner join dim on factSide.amount = dim.amount and factSide.price2 = dim.price and dim.price < 500";
         util.verifyPlan(query);
     }
@@ -430,7 +430,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
                         AggregatePhaseStrategy.ONE_PHASE);
         String query =
                 "select * from dim join"
-                        + " (select id, fact_date_sk, sum(fact.price) from fact group by (id, fact_date_sk)) factSide"
+                        + " (select identifier, fact_date_sk, sum(fact.price) from fact group by (identifier, fact_date_sk)) factSide"
                         + " on dim.dim_date_sk = factSide.fact_date_sk and dim.price < 500";
         util.verifyPlan(query);
     }
@@ -446,7 +446,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
                         AggregatePhaseStrategy.ONE_PHASE);
         String query =
                 "select * from dim join"
-                        + " (select id, fact_date_sk, sum(fact.price) as sum_price from fact group by (id, fact_date_sk)) factSide"
+                        + " (select identifier, fact_date_sk, sum(fact.price) as sum_price from fact group by (identifier, fact_date_sk)) factSide"
                         + " on dim.price = factSide.sum_price and dim.price < 500";
         util.verifyPlan(query);
     }
@@ -456,8 +456,8 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         // probe side will be pushed down to union.
         setupSuitableTableStatistics();
         String query =
-                "Select * from (select id, fact_date_sk, amount as amount1 from fact where price < 500 union all "
-                        + "select id, fact_date_sk, amount from fact where price > 600) fact2, dim"
+                "Select * from (select identifier, fact_date_sk, amount as amount1 from fact where price < 500 union all "
+                        + "select identifier, fact_date_sk, amount from fact where price > 600) fact2, dim"
                         + " where fact2.fact_date_sk = dim.dim_date_sk"
                         + " and dim.price < 500";
         util.verifyPlan(query);
@@ -485,7 +485,7 @@ public class FlinkRuntimeFilterProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE fact_part (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"

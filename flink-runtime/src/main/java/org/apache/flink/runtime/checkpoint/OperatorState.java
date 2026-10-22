@@ -47,7 +47,7 @@ public class OperatorState implements CompositeStateHandle {
 
     private static final long serialVersionUID = -4845578005863201810L;
 
-    /** The id of the operator. */
+    /** The identifier of the operator. */
     private final OperatorID operatorID;
 
     /** The handles to states created by the parallel tasks: subtaskIndex -> subtaskstate. */

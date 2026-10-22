@@ -27,7 +27,7 @@ import static org.apache.flink.configuration.ConfigOptions.key;
 public class PipelineOptionsInternal {
 
     public static final ConfigOption<String> PIPELINE_FIXED_JOB_ID =
-            key("$internal.pipeline.job-id")
+            key("$internal.pipeline.job-identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(

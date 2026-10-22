@@ -87,13 +87,13 @@ public class JobVertexWatermarksHandler
         List<Metric> metrics = new ArrayList<>(taskVertices.length);
 
         for (AccessExecutionVertex taskVertex : taskVertices) {
-            String id =
+            String identifier =
                     taskVertex.getParallelSubtaskIndex()
                             + "."
                             + MetricNames.IO_CURRENT_INPUT_WATERMARK;
-            String watermarkValue = taskMetricStore.getMetric(id);
+            String watermarkValue = taskMetricStore.getMetric(identifier);
             if (watermarkValue != null) {
-                metrics.add(new Metric(id, watermarkValue));
+                metrics.add(new Metric(identifier, watermarkValue));
             }
         }
 

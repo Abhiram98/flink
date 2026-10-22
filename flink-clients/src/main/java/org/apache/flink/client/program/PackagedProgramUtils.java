@@ -67,7 +67,7 @@ public enum PackagedProgramUtils {
      * @param packagedProgram to extract the JobGraph from
      * @param configuration to use for the optimizer and job graph generator
      * @param defaultParallelism for the JobGraph
-     * @param jobID the pre-generated job id
+     * @param jobID the pre-generated job identifier
      * @return JobGraph extracted from the PackagedProgram
      * @throws ProgramInvocationException if the JobGraph generation failed
      */

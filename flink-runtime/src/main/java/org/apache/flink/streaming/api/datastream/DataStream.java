@@ -151,8 +151,8 @@ public class DataStream<T> {
      * @return ID of the DataStream
      */
     @Internal
-    public int getId() {
-        return transformation.getId();
+    public int getIdentifier() {
+        return transformation.getIdentifier();
     }
 
     /**

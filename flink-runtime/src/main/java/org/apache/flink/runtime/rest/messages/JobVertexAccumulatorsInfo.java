@@ -31,21 +31,21 @@ import java.util.Objects;
 /** Response type of the {@link JobVertexAccumulatorsHandler}. */
 public class JobVertexAccumulatorsInfo implements ResponseBody {
 
-    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ID = "identifier";
     public static final String FIELD_NAME_USER_ACCUMULATORS = "user-accumulators";
 
     @JsonProperty(FIELD_NAME_ID)
-    private String id;
+    private String identifier;
 
     @JsonProperty(FIELD_NAME_USER_ACCUMULATORS)
     private Collection<UserAccumulator> userAccumulatorList;
 
     @JsonCreator
     public JobVertexAccumulatorsInfo(
-            @JsonProperty(FIELD_NAME_ID) String id,
+            @JsonProperty(FIELD_NAME_ID) String identifier,
             @JsonProperty(FIELD_NAME_USER_ACCUMULATORS)
                     Collection<UserAccumulator> userAccumulatorList) {
-        this.id = Preconditions.checkNotNull(id);
+        this.identifier = Preconditions.checkNotNull(identifier);
         this.userAccumulatorList = Preconditions.checkNotNull(userAccumulatorList);
     }
 
@@ -58,12 +58,12 @@ public class JobVertexAccumulatorsInfo implements ResponseBody {
             return false;
         }
         JobVertexAccumulatorsInfo that = (JobVertexAccumulatorsInfo) o;
-        return Objects.equals(id, that.id)
+        return Objects.equals(identifier, that.identifier)
                 && Objects.equals(userAccumulatorList, that.userAccumulatorList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userAccumulatorList);
+        return Objects.hash(identifier, userAccumulatorList);
     }
 }

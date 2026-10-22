@@ -111,7 +111,7 @@ public class ConnectedComponents {
         DataSet<Long> vertices = getVertexDataSet(env, params);
         DataSet<Tuple2<Long, Long>> edges = getEdgeDataSet(env, params).flatMap(new UndirectEdge());
 
-        // assign the initial components (equal to the vertex id)
+        // assign the initial components (equal to the vertex identifier)
         DataSet<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new DuplicateValue<Long>());
 

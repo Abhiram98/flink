@@ -378,7 +378,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
 
         target.writeByte(flags);
 
-        // if its a registered subclass, write the class tag id, otherwise write the full classname
+        // if its a registered subclass, write the class tag identifier, otherwise write the full classname
         if ((flags & IS_SUBCLASS) != 0) {
             target.writeUTF(actualClass.getName());
         } else if ((flags & IS_TAGGED_SUBCLASS) != 0) {
@@ -736,7 +736,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         final LinkedHashMap<Class<?>, TypeSerializer<?>> result =
                 CollectionUtil.newLinkedHashMapWithExpectedSize(registeredClasses.size());
         registeredClasses.forEach(
-                (registeredClass, id) -> result.put(registeredClass, registeredSerializers[id]));
+                (registeredClass, identifier) -> result.put(registeredClass, registeredSerializers[identifier]));
         return result;
     }
 
@@ -776,10 +776,10 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             LinkedHashSet<Class<?>> registeredSubclasses) {
         final LinkedHashMap<Class<?>, Integer> classToTag = new LinkedHashMap<>();
 
-        int id = 0;
+        int identifier = 0;
         for (Class<?> registeredClass : registeredSubclasses) {
-            classToTag.put(registeredClass, id);
-            id++;
+            classToTag.put(registeredClass, identifier);
+            identifier++;
         }
 
         return classToTag;

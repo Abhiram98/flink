@@ -69,7 +69,7 @@ class UpdateTableITCase extends BatchTestBase {
                                         + " b string,"
                                         + " c double) WITH"
                                         + " ('connector' = 'test-update-delete', "
-                                        + "'data-id' = '%s', "
+                                        + "'data-identifier' = '%s', "
                                         + "'update-mode' = '%s')",
                                 dataId, updateMode));
         tEnv().executeSql("UPDATE t SET b = 'uaa', c = c * c WHERE a >= 1").await();
@@ -94,7 +94,7 @@ class UpdateTableITCase extends BatchTestBase {
                                         + " b string not null,"
                                         + " c double not null) WITH"
                                         + " ('connector' = 'test-update-delete', "
-                                        + "'data-id' = '%s',"
+                                        + "'data-identifier' = '%s',"
                                         + " 'required-columns-for-update' = 'a;b', "
                                         + " 'update-mode' = '%s')",
                                 dataId, updateMode));
@@ -114,7 +114,7 @@ class UpdateTableITCase extends BatchTestBase {
                                         + " PRIMARY KEY (a, c) NOT ENFORCED"
                                         + ") WITH"
                                         + " ('connector' = 'test-update-delete', "
-                                        + "'data-id' = '%s',"
+                                        + "'data-identifier' = '%s',"
                                         + " 'required-columns-for-update' = 'a;b', "
                                         + " 'update-mode' = '%s')",
                                 dataId, updateMode));

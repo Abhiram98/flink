@@ -443,7 +443,7 @@ public class RegionFailoverITCase extends TestLogger {
 
     /**
      * An extension of {@link StandaloneCompletedCheckpointStore} which would record information of
-     * last completed checkpoint id and the number of completed checkpoints.
+     * last completed checkpoint identifier and the number of completed checkpoints.
      */
     private static class TestingCompletedCheckpointStore
             extends StandaloneCompletedCheckpointStore {

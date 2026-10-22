@@ -122,7 +122,7 @@ class AvroKryoSerializerRegistrationsTest {
      * with one entry per line:
      *
      * <pre>
-     * id,class
+     * identifier,class
      * </pre>
      *
      * <p>The produced file is used to check that the registered IDs don't change in future Flink
@@ -145,7 +145,7 @@ class AvroKryoSerializerRegistrationsTest {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (int i = 0; i < nextId; i++) {
                 Registration registration = kryo.getRegistration(i);
-                String str = registration.getId() + "," + registration.getType().getName();
+                String str = registration.getIdentifier() + "," + registration.getType().getName();
                 writer.write(str, 0, str.length());
                 writer.newLine();
             }

@@ -541,7 +541,7 @@ class JMFailoverITCase {
 
             int subIdx = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask();
 
-            // attempt id ++
+            // attempt identifier ++
             attemptIds.compute(
                     subIdx,
                     (ignored, value) -> {
@@ -553,7 +553,7 @@ class JMFailoverITCase {
                         return value;
                     });
 
-            // record result partition id.
+            // record result partition identifier.
             Environment environment = getContainingTask().getEnvironment();
             checkState(environment.getAllWriters().length == 1);
             resultPartitions.put(subIdx, environment.getAllWriters()[0].getPartitionId());
@@ -603,7 +603,7 @@ class JMFailoverITCase {
 
             int subIdx = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask();
 
-            // attempt id ++
+            // attempt identifier ++
             attemptIds.compute(
                     subIdx,
                     (ignored, value) -> {
@@ -656,7 +656,7 @@ class JMFailoverITCase {
 
             int subIdx = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask();
 
-            // attempt id ++
+            // attempt identifier ++
             attemptIds.compute(
                     subIdx,
                     (ignored, value) -> {
@@ -712,7 +712,7 @@ class JMFailoverITCase {
 
             int subIdx = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask();
 
-            // attempt id ++
+            // attempt identifier ++
             attemptIds.compute(
                     subIdx,
                     (ignored, value) -> {

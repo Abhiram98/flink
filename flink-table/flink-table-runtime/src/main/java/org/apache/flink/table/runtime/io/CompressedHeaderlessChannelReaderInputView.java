@@ -61,7 +61,7 @@ public class CompressedHeaderlessChannelReaderInputView extends AbstractChannelR
     private int currentSegmentLimit;
 
     public CompressedHeaderlessChannelReaderInputView(
-            FileIOChannel.ID id,
+            FileIOChannel.ID identifier,
             IOManager ioManager,
             BlockCompressionFactory compressionCodecFactory,
             int compressionBlockSize,
@@ -69,7 +69,7 @@ public class CompressedHeaderlessChannelReaderInputView extends AbstractChannelR
             throws IOException {
         super(0);
         this.numBlocksRemaining = numBlocks;
-        this.reader = ioManager.createBufferFileReader(id, this);
+        this.reader = ioManager.createBufferFileReader(identifier, this);
         uncompressedBuffer = MemorySegmentFactory.wrap(new byte[compressionBlockSize]);
         decompressor = compressionCodecFactory.getDecompressor();
         cause = new AtomicReference<>();

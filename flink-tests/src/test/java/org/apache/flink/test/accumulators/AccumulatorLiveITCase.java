@@ -121,7 +121,7 @@ public class AccumulatorLiveITCase extends TestLogger {
         DataSet<Integer> input = env.fromCollection(inputData);
         input.flatMap(new NotifyingMapper()).output(new DummyOutputFormat());
 
-        // Extract job graph and set job id for the task to notify of accumulator changes.
+        // Extract job graph and set job identifier for the task to notify of accumulator changes.
         JobGraph jobGraph = getJobGraph(env.createProgramPlan());
 
         submitJobAndVerifyResults(jobGraph);

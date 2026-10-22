@@ -67,7 +67,7 @@ public class StreamExecPythonCorrelate extends CommonExecPythonCorrelate
 
     @JsonCreator
     public StreamExecPythonCorrelate(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_JOIN_TYPE) FlinkJoinType joinType,
@@ -76,7 +76,7 @@ public class StreamExecPythonCorrelate extends CommonExecPythonCorrelate
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 joinType,

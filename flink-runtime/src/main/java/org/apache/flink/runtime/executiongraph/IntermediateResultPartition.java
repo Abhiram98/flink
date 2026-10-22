@@ -64,7 +64,7 @@ public class IntermediateResultPartition {
             EdgeManager edgeManager) {
         this.totalResult = totalResult;
         this.producer = producer;
-        this.partitionId = new IntermediateResultPartitionID(totalResult.getId(), partitionNumber);
+        this.partitionId = new IntermediateResultPartitionID(totalResult.getIdentifier(), partitionNumber);
         this.edgeManager = edgeManager;
 
         if (!producer.getExecutionGraphAccessor().isDynamic()) {

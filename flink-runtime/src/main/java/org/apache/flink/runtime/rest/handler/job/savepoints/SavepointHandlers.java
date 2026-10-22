@@ -67,7 +67,7 @@ import java.util.concurrent.CompletionException;
  * <p>Drawing savepoints is a potentially long-running operation. To avoid blocking HTTP
  * connections, savepoints must be drawn in two steps. First, an HTTP request is issued to trigger
  * the savepoint asynchronously. The request will be assigned a {@link TriggerId}, which is returned
- * in the response body. Next, the returned id should be used to poll the status of the savepoint
+ * in the response body. Next, the returned identifier should be used to poll the status of the savepoint
  * until it is finished.
  *
  * <p>A savepoint is triggered by sending an HTTP {@code POST} request to {@code
@@ -80,10 +80,10 @@ import java.util.concurrent.CompletionException;
  *
  * <p>If the body is omitted, or the field {@code target-property} is {@code null}, the default
  * savepoint directory as specified by {@link CheckpointingOptions#SAVEPOINT_DIRECTORY} will be
- * used. As written above, the response will contain a request id, e.g.,
+ * used. As written above, the response will contain a request identifier, e.g.,
  *
  * <pre>
- * { "request-id": "7d273f5a62eb4730b9dea8e833733c1e" }
+ * { "request-identifier": "7d273f5a62eb4730b9dea8e833733c1e" }
  * </pre>
  *
  * <p>To poll for the status of an ongoing savepoint, an HTTP {@code GET} request is issued to
@@ -93,18 +93,18 @@ import java.util.concurrent.CompletionException;
  * <pre>
  * {
  *     "status": {
- *         "id": "IN_PROGRESS"
+ *         "identifier": "IN_PROGRESS"
  *     }
  * }
  * </pre>
  *
- * <p>If the specified savepoint has completed, the status id will transition to {@code COMPLETED},
+ * <p>If the specified savepoint has completed, the status identifier will transition to {@code COMPLETED},
  * and the response will additionally contain information about the savepoint, such as the location:
  *
  * <pre>
  * {
  *     "status": {
- *         "id": "COMPLETED"
+ *         "identifier": "COMPLETED"
  *     },
  *     "operation": {
  *         "location": "/tmp/savepoint-d9813b-8a68e674325b"

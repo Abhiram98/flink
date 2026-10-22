@@ -235,7 +235,7 @@ public class Types {
      * <pre>{@code
      *   class MyTuple extends Tuple2<Integer, String> {
      *
-     *     public int getId() { return f0; }
+     *     public int getIdentifier() { return f0; }
      *
      *     public String getName() { return f1; }
      *   }

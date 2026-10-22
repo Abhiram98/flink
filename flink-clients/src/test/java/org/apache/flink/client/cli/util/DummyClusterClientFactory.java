@@ -32,7 +32,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /**
  * A {@link ClusterClientFactory} used for testing.
  *
- * @param <ClusterID> The type of the id of the cluster.
+ * @param <ClusterID> The type of the identifier of the cluster.
  */
 public class DummyClusterClientFactory<ClusterID> implements ClusterClientFactory {
 

@@ -34,7 +34,7 @@ public interface JobMasterServiceProcess extends AutoCloseableAsync {
         return WaitingForLeadership.INSTANCE;
     }
 
-    /** The leader session id of this process. */
+    /** The leader session identifier of this process. */
     UUID getLeaderSessionId();
 
     /** True iff the {@link JobMasterService} has been initialized and is running. */

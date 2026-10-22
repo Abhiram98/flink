@@ -59,7 +59,7 @@ public interface BatchJobRecoveryHandler {
     /**
      * Records the job vertex initialization event for use during future batch job recovery.
      *
-     * @param jobVertexId the id of the job vertex being initialized.
+     * @param jobVertexId the identifier of the job vertex being initialized.
      * @param parallelism the parallelism of the job vertex.
      * @param jobVertexInputInfos a map of intermediate dataset IDs to job vertex input info.
      */
@@ -71,7 +71,7 @@ public interface BatchJobRecoveryHandler {
     /**
      * Records the execution vertex finished event for use during future batch job recovery.
      *
-     * @param executionVertexId the id of the execution vertex is finished.
+     * @param executionVertexId the identifier of the execution vertex is finished.
      */
     void onExecutionFinished(ExecutionVertexID executionVertexId);
 }

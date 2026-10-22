@@ -69,7 +69,7 @@ public interface FlinkKubeClient extends AutoCloseable {
      * Stop cluster and clean up all resources, include services, auxiliary services and all running
      * pods.
      *
-     * @param clusterId cluster id
+     * @param clusterId cluster identifier
      */
     void stopAndCleanupCluster(String clusterId);
 
@@ -84,7 +84,7 @@ public interface FlinkKubeClient extends AutoCloseable {
     /**
      * Get the rest endpoint for access outside cluster.
      *
-     * @param clusterId cluster id
+     * @param clusterId cluster identifier
      * @return Return empty if the service does not exist or could not extract the Endpoint from the
      *     service.
      */

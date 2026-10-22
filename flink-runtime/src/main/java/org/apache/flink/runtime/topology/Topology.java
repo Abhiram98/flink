@@ -37,11 +37,11 @@ public interface Topology<
     /**
      * The pipelined region for a specified vertex.
      *
-     * @param vertexId the vertex id identifying the vertex for which the pipelined region should be
+     * @param vertexId the vertex identifier identifying the vertex for which the pipelined region should be
      *     returned
      * @return the pipelined region of the vertex
      * @throws IllegalArgumentException if there is no vertex in this topology with the specified
-     *     vertex id
+     *     vertex identifier
      */
     default PR getPipelinedRegionOfVertex(VID vertexId) {
         throw new UnsupportedOperationException();

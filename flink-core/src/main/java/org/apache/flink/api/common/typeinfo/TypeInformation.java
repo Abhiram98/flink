@@ -61,7 +61,7 @@ import java.util.Map;
  *
  * <pre>{@code
  * public class InnerType {
- *   public int id;
+ *   public int identifier;
  *   public String text;
  * }
  *
@@ -71,9 +71,9 @@ import java.util.Map;
  * }
  * }</pre>
  *
- * <p>The types "id", "text", and "timestamp" are basic types that take up one field. The
+ * <p>The types "identifier", "text", and "timestamp" are basic types that take up one field. The
  * "InnerType" has an arity of two, and also two fields totally. The "OuterType" has an arity of two
- * fields, and a total number of three fields ( it contains "id", "text", and "timestamp" through
+ * fields, and a total number of three fields ( it contains "identifier", "text", and "timestamp" through
  * recursive flattening).
  *
  * @param <T> The type represented by this type information.

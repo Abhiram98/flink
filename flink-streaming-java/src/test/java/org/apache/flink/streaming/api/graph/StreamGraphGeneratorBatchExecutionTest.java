@@ -126,7 +126,7 @@ class StreamGraphGeneratorBatchExecutionTest {
         DataStreamSink<Integer> sink = process.sinkTo(new DiscardingSink<>());
 
         StreamGraph graph = getStreamGraphInBatchMode(sink);
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
 
         final Map<ManagedMemoryUseCase, Integer> expectedOperatorWeights = new HashMap<>();
         expectedOperatorWeights.put(
@@ -149,7 +149,7 @@ class StreamGraphGeneratorBatchExecutionTest {
         configuration.set(ExecutionOptions.SORTED_INPUTS_MEMORY, MemorySize.ofMebiBytes(42));
 
         StreamGraph graph = getStreamGraphInBatchMode(sink, configuration);
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
 
         final Map<ManagedMemoryUseCase, Integer> expectedOperatorWeights = new HashMap<>();
         expectedOperatorWeights.put(ManagedMemoryUseCase.OPERATOR, 42);
@@ -169,7 +169,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0))
                 .isEqualTo(StreamConfig.InputRequirement.SORTED);
         assertThat(processNode.getOperatorFactory().getChainingStrategy())
@@ -192,7 +192,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink, configuration);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0))
                 .isEqualTo(StreamConfig.InputRequirement.SORTED);
         assertThat(processNode.getOperatorFactory().getChainingStrategy())
@@ -215,7 +215,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink, configuration);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0)).isNull();
         assertThat(graph.getStateBackend()).isNull();
         assertThat(graph.getTimerServiceProvider()).isNull();
@@ -253,7 +253,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0))
                 .isEqualTo(StreamConfig.InputRequirement.SORTED);
         assertThat(processNode.getInputRequirements().get(1))
@@ -283,7 +283,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink, configuration);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0))
                 .isEqualTo(StreamConfig.InputRequirement.SORTED);
         assertThat(processNode.getInputRequirements().get(1))
@@ -313,7 +313,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink, configuration);
 
-        StreamNode processNode = graph.getStreamNode(process.getId());
+        StreamNode processNode = graph.getStreamNode(process.getIdentifier());
         assertThat(processNode.getInputRequirements().get(0)).isNull();
         assertThat(processNode.getInputRequirements().get(1)).isNull();
         assertThat(graph.getStateBackend()).isNull();
@@ -398,7 +398,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
         StreamGraph graph = getStreamGraphInBatchMode(sink);
 
-        StreamNode operatorNode = graph.getStreamNode(multipleInputTransformation.getId());
+        StreamNode operatorNode = graph.getStreamNode(multipleInputTransformation.getIdentifier());
         assertThat(operatorNode.getInputRequirements().get(0))
                 .isEqualTo(StreamConfig.InputRequirement.SORTED);
         assertThat(operatorNode.getInputRequirements().get(1))

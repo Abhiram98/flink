@@ -43,9 +43,9 @@ public class SpillChannelManager implements Closeable {
     }
 
     /** Add a new File channel. */
-    public synchronized void addChannel(FileIOChannel.ID id) {
+    public synchronized void addChannel(FileIOChannel.ID identifier) {
         checkArgument(!closed);
-        channels.add(id);
+        channels.add(identifier);
     }
 
     /** Open File channels. */
@@ -57,9 +57,9 @@ public class SpillChannelManager implements Closeable {
         }
     }
 
-    public synchronized void removeChannel(FileIOChannel.ID id) {
+    public synchronized void removeChannel(FileIOChannel.ID identifier) {
         checkArgument(!closed);
-        channels.remove(id);
+        channels.remove(identifier);
     }
 
     @Override

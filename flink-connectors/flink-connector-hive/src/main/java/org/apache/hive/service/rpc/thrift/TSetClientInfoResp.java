@@ -100,7 +100,7 @@ public class TSetClientInfoResp
         }
     }
 
-    // isset id assignments
+    // isset identifier assignments
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData>
             metaDataMap;
 
@@ -337,7 +337,7 @@ public class TSetClientInfoResp
                 if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
                     break;
                 }
-                switch (schemeField.id) {
+                switch (schemeField.identifier) {
                     case 1: // STATUS
                         if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
                             struct.status = new TStatus();

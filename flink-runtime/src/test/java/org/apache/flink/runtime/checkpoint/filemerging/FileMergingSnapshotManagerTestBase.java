@@ -573,7 +573,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
             assertThat(fs.exists(sharedDirOfSubtask1)).isTrue();
             assertThat(fs.exists(sharedDirOfSubtask2)).isTrue();
-            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getId());
+            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getIdentifier());
             assertThat(fs.exists(exclusiveDir)).isTrue();
         }
         assertThat(fs.exists(sharedDirOfSubtask1)).isFalse();
@@ -603,7 +603,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
             assertThat(fs.exists(sharedDirOfSubtask1)).isTrue();
             assertThat(fs.exists(sharedDirOfSubtask2)).isTrue();
-            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getId());
+            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getIdentifier());
             assertThat(fs.exists(exclusiveDir)).isTrue();
         }
         assertThat(fs.exists(sharedDirOfSubtask1)).isFalse();
@@ -633,7 +633,7 @@ public abstract class FileMergingSnapshotManagerTestBase {
 
             assertThat(fs.exists(sharedDirOfSubtask1)).isTrue();
             assertThat(fs.exists(sharedDirOfSubtask2)).isTrue();
-            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getId());
+            exclusiveDir = new Path(taskOwnedStateDir, fmsm.getIdentifier());
             assertThat(fs.exists(exclusiveDir)).isTrue();
         }
         assertThat(fs.exists(sharedDirOfSubtask1)).isTrue();

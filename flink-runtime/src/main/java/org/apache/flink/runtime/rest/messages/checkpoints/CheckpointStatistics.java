@@ -82,7 +82,7 @@ import java.util.Objects;
         })
 public class CheckpointStatistics implements ResponseBody {
 
-    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ID = "identifier";
 
     public static final String FIELD_NAME_STATUS = "status";
 
@@ -121,7 +121,7 @@ public class CheckpointStatistics implements ResponseBody {
     public static final String FIELD_NAME_CHECKPOINT_TYPE = "checkpoint_type";
 
     @JsonProperty(FIELD_NAME_ID)
-    private final long id;
+    private final long identifier;
 
     @JsonProperty(FIELD_NAME_STATUS)
     private final CheckpointStatsStatus status;
@@ -172,7 +172,7 @@ public class CheckpointStatistics implements ResponseBody {
 
     @JsonCreator
     private CheckpointStatistics(
-            @JsonProperty(FIELD_NAME_ID) long id,
+            @JsonProperty(FIELD_NAME_ID) long identifier,
             @JsonProperty(FIELD_NAME_STATUS) CheckpointStatsStatus status,
             @JsonProperty(FIELD_NAME_IS_SAVEPOINT) boolean savepoint,
             @JsonProperty(FIELD_NAME_SAVEPOINT_FORMAT) String savepointFormat,
@@ -190,7 +190,7 @@ public class CheckpointStatistics implements ResponseBody {
             @JsonDeserialize(keyUsing = JobVertexIDKeyDeserializer.class)
                     @JsonProperty(FIELD_NAME_TASKS)
                     Map<JobVertexID, TaskCheckpointStatistics> checkpointStatisticsPerTask) {
-        this.id = id;
+        this.identifier = identifier;
         this.status = Preconditions.checkNotNull(status);
         this.savepoint = savepoint;
         this.savepointFormat = savepointFormat;
@@ -208,8 +208,8 @@ public class CheckpointStatistics implements ResponseBody {
         this.checkpointStatisticsPerTask = Preconditions.checkNotNull(checkpointStatisticsPerTask);
     }
 
-    public long getId() {
-        return id;
+    public long getIdentifier() {
+        return identifier;
     }
 
     public CheckpointStatsStatus getStatus() {
@@ -266,7 +266,7 @@ public class CheckpointStatistics implements ResponseBody {
             return false;
         }
         CheckpointStatistics that = (CheckpointStatistics) o;
-        return id == that.id
+        return identifier == that.identifier
                 && savepoint == that.savepoint
                 && Objects.equals(savepointFormat, that.savepointFormat)
                 && triggerTimestamp == that.triggerTimestamp
@@ -286,7 +286,7 @@ public class CheckpointStatistics implements ResponseBody {
     @Override
     public int hashCode() {
         return Objects.hash(
-                id,
+                identifier,
                 status,
                 savepoint,
                 savepointFormat,
@@ -471,7 +471,7 @@ public class CheckpointStatistics implements ResponseBody {
 
         @JsonCreator
         public CompletedCheckpointStatistics(
-                @JsonProperty(FIELD_NAME_ID) long id,
+                @JsonProperty(FIELD_NAME_ID) long identifier,
                 @JsonProperty(FIELD_NAME_STATUS) CheckpointStatsStatus status,
                 @JsonProperty(FIELD_NAME_IS_SAVEPOINT) boolean savepoint,
                 @JsonProperty(FIELD_NAME_SAVEPOINT_FORMAT) String savepointFormat,
@@ -492,7 +492,7 @@ public class CheckpointStatistics implements ResponseBody {
                 @JsonProperty(FIELD_NAME_EXTERNAL_PATH) @Nullable String externalPath,
                 @JsonProperty(FIELD_NAME_DISCARDED) boolean discarded) {
             super(
-                    id,
+                    identifier,
                     status,
                     savepoint,
                     savepointFormat,
@@ -559,7 +559,7 @@ public class CheckpointStatistics implements ResponseBody {
 
         @JsonCreator
         public FailedCheckpointStatistics(
-                @JsonProperty(FIELD_NAME_ID) long id,
+                @JsonProperty(FIELD_NAME_ID) long identifier,
                 @JsonProperty(FIELD_NAME_STATUS) CheckpointStatsStatus status,
                 @JsonProperty(FIELD_NAME_IS_SAVEPOINT) boolean savepoint,
                 @JsonProperty(FIELD_NAME_SAVEPOINT_FORMAT) String savepointFormat,
@@ -580,7 +580,7 @@ public class CheckpointStatistics implements ResponseBody {
                 @JsonProperty(FIELD_NAME_FAILURE_TIMESTAMP) long failureTimestamp,
                 @JsonProperty(FIELD_NAME_FAILURE_MESSAGE) @Nullable String failureMessage) {
             super(
-                    id,
+                    identifier,
                     status,
                     savepoint,
                     savepointFormat,
@@ -637,7 +637,7 @@ public class CheckpointStatistics implements ResponseBody {
 
         @JsonCreator
         public PendingCheckpointStatistics(
-                @JsonProperty(FIELD_NAME_ID) long id,
+                @JsonProperty(FIELD_NAME_ID) long identifier,
                 @JsonProperty(FIELD_NAME_STATUS) CheckpointStatsStatus status,
                 @JsonProperty(FIELD_NAME_IS_SAVEPOINT) boolean savepoint,
                 @JsonProperty(FIELD_NAME_SAVEPOINT_FORMAT) String savepointFormat,
@@ -656,7 +656,7 @@ public class CheckpointStatistics implements ResponseBody {
                         @JsonProperty(FIELD_NAME_TASKS)
                         Map<JobVertexID, TaskCheckpointStatistics> checkpointingStatisticsPerTask) {
             super(
-                    id,
+                    identifier,
                     status,
                     savepoint,
                     savepointFormat,

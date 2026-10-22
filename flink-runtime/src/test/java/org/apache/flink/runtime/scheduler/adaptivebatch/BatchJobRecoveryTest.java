@@ -889,7 +889,7 @@ public class BatchJobRecoveryTest {
                                 partition -> {
                                     BlockingResultInfo resultInfo =
                                             scheduler.getBlockingResultInfo(
-                                                    partition.getIntermediateResult().getId());
+                                                    partition.getIntermediateResult().getIdentifier());
                                     IntermediateResultPartitionID partitionId =
                                             partition.getPartitionId();
                                     final Execution producer =
@@ -946,7 +946,7 @@ public class BatchJobRecoveryTest {
                                 .getConsumedResults()
                                 .spliterator(),
                         false)
-                .map(SchedulingResultPartition::getId)
+                .map(SchedulingResultPartition::getIdentifier)
                 .collect(Collectors.toList());
     }
 

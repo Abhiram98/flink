@@ -95,7 +95,7 @@ public class GenericCLI implements CustomCommandLine {
     }
 
     @Override
-    public String getId() {
+    public String getIdentifier() {
         return ID;
     }
 

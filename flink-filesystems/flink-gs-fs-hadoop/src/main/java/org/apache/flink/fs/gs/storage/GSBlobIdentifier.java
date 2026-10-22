@@ -45,7 +45,7 @@ public class GSBlobIdentifier {
     }
 
     /**
-     * Get a Google blob id for this identifier, with generation=null.
+     * Get a Google blob identifier for this identifier, with generation=null.
      *
      * @return The BlobId
      */

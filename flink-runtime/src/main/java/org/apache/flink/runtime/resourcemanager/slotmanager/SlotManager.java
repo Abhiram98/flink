@@ -64,7 +64,7 @@ public interface SlotManager extends AutoCloseable {
     Collection<SlotInfo> getAllocatedSlotsOf(InstanceID instanceID);
 
     /**
-     * Starts the slot manager with the given leader id and resource manager actions.
+     * Starts the slot manager with the given leader identifier and resource manager actions.
      *
      * @param newResourceManagerId to use for communication with the task managers
      * @param newMainThreadExecutor to use to run code in the ResourceManager's main thread
@@ -114,17 +114,17 @@ public interface SlotManager extends AutoCloseable {
             ResourceProfile defaultSlotResourceProfile);
 
     /**
-     * Unregisters the task manager identified by the given instance id and its associated slots
+     * Unregisters the task manager identified by the given instance identifier and its associated slots
      * from the slot manager.
      *
      * @param instanceId identifying the task manager to unregister
      * @param cause for unregistering the TaskManager
-     * @return True if there existed a registered task manager with the given instance id
+     * @return True if there existed a registered task manager with the given instance identifier
      */
     boolean unregisterTaskManager(InstanceID instanceId, Exception cause);
 
     /**
-     * Reports the current slot allocations for a task manager identified by the given instance id.
+     * Reports the current slot allocations for a task manager identified by the given instance identifier.
      *
      * @param instanceId identifying the task manager for which to report the slot status
      * @param slotReport containing the status for all of its slots
@@ -134,7 +134,7 @@ public interface SlotManager extends AutoCloseable {
 
     /**
      * Free the given slot from the given allocation. If the slot is still allocated by the given
-     * allocation id, then the slot will be marked as free and will be subject to new slot requests.
+     * allocation identifier, then the slot will be marked as free and will be subject to new slot requests.
      *
      * @param slotId identifying the slot to free
      * @param allocationId with which the slot is presumably allocated

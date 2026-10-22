@@ -100,7 +100,7 @@ class ZooKeeperCompletedCheckpointStoreTest {
             checkpointsInZk.add(
                     createHandle(
                             1,
-                            id -> {
+                            identifier -> {
                                 throw new ExpectedTestException();
                             }));
             assertThatThrownBy(
@@ -114,10 +114,10 @@ class ZooKeeperCompletedCheckpointStoreTest {
     }
 
     private Tuple2<RetrievableStateHandle<CompletedCheckpoint>, String> createHandle(
-            long id, Function<Long, CompletedCheckpoint> checkpointSupplier) {
+            long identifier, Function<Long, CompletedCheckpoint> checkpointSupplier) {
         return Tuple2.of(
-                new CheckpointStateHandle(checkpointSupplier, id),
-                zooKeeperCheckpointStoreUtil.checkpointIDToName(id));
+                new CheckpointStateHandle(checkpointSupplier, identifier),
+                zooKeeperCheckpointStoreUtil.checkpointIDToName(identifier));
     }
 
     /** Tests that subsumed checkpoints are discarded. */
@@ -210,16 +210,16 @@ class ZooKeeperCompletedCheckpointStoreTest {
             implements RetrievableStateHandle<CompletedCheckpoint> {
         private static final long serialVersionUID = 1L;
         private final Function<Long, CompletedCheckpoint> checkpointSupplier;
-        private final long id;
+        private final long identifier;
 
-        CheckpointStateHandle(Function<Long, CompletedCheckpoint> checkpointSupplier, long id) {
+        CheckpointStateHandle(Function<Long, CompletedCheckpoint> checkpointSupplier, long identifier) {
             this.checkpointSupplier = checkpointSupplier;
-            this.id = id;
+            this.identifier = identifier;
         }
 
         @Override
         public CompletedCheckpoint retrieveState() {
-            return checkpointSupplier.apply(id);
+            return checkpointSupplier.apply(identifier);
         }
 
         @Override

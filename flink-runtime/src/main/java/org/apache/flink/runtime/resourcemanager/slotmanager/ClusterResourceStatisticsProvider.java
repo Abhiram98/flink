@@ -27,25 +27,25 @@ public interface ClusterResourceStatisticsProvider {
     /** Get total number of registered slots. */
     int getNumberRegisteredSlots();
 
-    /** Get number of registered slots from the TaskManager with the given instance id. */
+    /** Get number of registered slots from the TaskManager with the given instance identifier. */
     int getNumberRegisteredSlotsOf(InstanceID instanceId);
 
     /** Get total number of free slots. */
     int getNumberFreeSlots();
 
-    /** Get number of free slots from the TaskManager with the given instance id. */
+    /** Get number of free slots from the TaskManager with the given instance identifier. */
     int getNumberFreeSlotsOf(InstanceID instanceId);
 
     /** Get profile of total registered resources. */
     ResourceProfile getRegisteredResource();
 
-    /** Get profile of registered resources from the TaskManager with the given instance id. */
+    /** Get profile of registered resources from the TaskManager with the given instance identifier. */
     ResourceProfile getRegisteredResourceOf(InstanceID instanceId);
 
     /** Get profile of total free resources. */
     ResourceProfile getFreeResource();
 
-    /** Get profile of free resources from the TaskManager with the given instance id. */
+    /** Get profile of free resources from the TaskManager with the given instance identifier. */
     ResourceProfile getFreeResourceOf(InstanceID instanceId);
 
     /** Get profile of total pending resources. */

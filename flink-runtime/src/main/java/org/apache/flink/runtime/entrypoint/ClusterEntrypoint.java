@@ -358,7 +358,7 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
                                                     ResourceID.generate()));
 
             LOG.debug(
-                    "Initialize cluster entrypoint {} with resource id {}.",
+                    "Initialize cluster entrypoint {} with resource identifier {}.",
                     getClass().getSimpleName(),
                     resourceId);
 

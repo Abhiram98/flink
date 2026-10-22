@@ -31,8 +31,8 @@ public interface AvailabilityNotifier {
      * Notify that the data for the specific partition and input channel is available in tiered
      * storage.
      *
-     * @param partitionId the partition id.
-     * @param inputChannelId the input channel id.
+     * @param partitionId the partition identifier.
+     * @param inputChannelId the input channel identifier.
      */
     void notifyAvailable(
             TieredStoragePartitionId partitionId, TieredStorageInputChannelId inputChannelId);

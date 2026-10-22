@@ -62,7 +62,7 @@ public class MemoryTierProducerAgent implements TierProducerAgent, NettyServiceP
 
     /**
      * Whether a subpartition's netty connection has been established. The array index is
-     * corresponding to the subpartition id.
+     * corresponding to the subpartition identifier.
      */
     private final boolean[] nettyConnectionEstablished;
 

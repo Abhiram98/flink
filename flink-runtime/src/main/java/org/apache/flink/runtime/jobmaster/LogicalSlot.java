@@ -113,17 +113,17 @@ public interface LogicalSlot {
     CompletableFuture<?> releaseSlot(@Nullable Throwable cause);
 
     /**
-     * Gets the allocation id of this slot. Multiple logical slots can share the same allocation id.
+     * Gets the allocation identifier of this slot. Multiple logical slots can share the same allocation identifier.
      *
-     * @return allocation id of this slot
+     * @return allocation identifier of this slot
      */
     AllocationID getAllocationId();
 
     /**
-     * Gets the slot request id uniquely identifying the request with which this slot has been
+     * Gets the slot request identifier uniquely identifying the request with which this slot has been
      * allocated.
      *
-     * @return Unique id identifying the slot request with which this slot was allocated
+     * @return Unique identifier identifying the slot request with which this slot was allocated
      */
     SlotRequestId getSlotRequestId();
 

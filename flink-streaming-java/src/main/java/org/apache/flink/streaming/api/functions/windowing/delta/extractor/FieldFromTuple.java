@@ -33,9 +33,9 @@ public class FieldFromTuple<OUT> implements Extractor<Tuple, OUT> {
     private int fieldId = 0;
 
     /**
-     * Extracts the field with the given id from the tuple.
+     * Extracts the field with the given identifier from the tuple.
      *
-     * @param fieldId The id of the field which will be extracted from the tuple.
+     * @param fieldId The identifier of the field which will be extracted from the tuple.
      */
     public FieldFromTuple(int fieldId) {
         this.fieldId = fieldId;

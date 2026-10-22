@@ -94,7 +94,7 @@ class StreamTaskCancellationBarrierTest {
         assertThat(result).as("nothing emitted").isNotNull();
         assertThat(result).as("wrong type emitted").isInstanceOf(CancelCheckpointMarker.class);
         assertThat(((CancelCheckpointMarker) result).getCheckpointId())
-                .as("wrong checkpoint id")
+                .as("wrong checkpoint identifier")
                 .isEqualTo(2L);
 
         // cancel and shutdown
@@ -148,7 +148,7 @@ class StreamTaskCancellationBarrierTest {
         assertThat(result).as("nothing emitted").isNotNull();
         assertThat(result).as("wrong type emitted").isInstanceOf(CancelCheckpointMarker.class);
         assertThat(((CancelCheckpointMarker) result).getCheckpointId())
-                .as("wrong checkpoint id")
+                .as("wrong checkpoint identifier")
                 .isEqualTo(2L);
 
         // cancel and shutdown

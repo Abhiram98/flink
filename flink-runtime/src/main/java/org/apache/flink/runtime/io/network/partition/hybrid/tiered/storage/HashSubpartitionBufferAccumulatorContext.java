@@ -39,7 +39,7 @@ public interface HashSubpartitionBufferAccumulatorContext {
     /**
      * Flush the accumulated {@link Buffer}s of the subpartition.
      *
-     * @param subpartitionId the subpartition id
+     * @param subpartitionId the subpartition identifier
      * @param accumulatedBuffer the accumulated buffer
      * @param numRemainingConsecutiveBuffers number of buffers that would be passed in the following
      *     invocations and should be written to the same segment as this one

@@ -37,7 +37,7 @@ import static org.apache.flink.runtime.executiongraph.ExecutionGraphTestUtils.cr
 /** Builder to mock {@link NettyShuffleDescriptor} in tests. */
 public class NettyShuffleDescriptorBuilder {
     private ResourceID producerLocation = ResourceID.generate();
-    private ResultPartitionID id = new ResultPartitionID();
+    private ResultPartitionID identifier = new ResultPartitionID();
     private InetAddress address = InetAddress.getLoopbackAddress();
     private int dataPort;
     private int connectionIndex;
@@ -47,8 +47,8 @@ public class NettyShuffleDescriptorBuilder {
         return this;
     }
 
-    public NettyShuffleDescriptorBuilder setId(ResultPartitionID id) {
-        this.id = id;
+    public NettyShuffleDescriptorBuilder setIdentifier(ResultPartitionID identifier) {
+        this.identifier = identifier;
         return this;
     }
 
@@ -79,7 +79,7 @@ public class NettyShuffleDescriptorBuilder {
                 producerLocation,
                 new NetworkPartitionConnectionInfo(
                         new InetSocketAddress(address, dataPort), connectionIndex),
-                id);
+                identifier);
     }
 
     public NettyShuffleDescriptor buildLocal() {
@@ -89,7 +89,7 @@ public class NettyShuffleDescriptorBuilder {
         return new NettyShuffleDescriptor(
                 producerLocation,
                 LocalExecutionPartitionConnectionInfo.INSTANCE,
-                id,
+                identifier,
                 tierShuffleDescriptors);
     }
 
@@ -100,7 +100,7 @@ public class NettyShuffleDescriptorBuilder {
     public static NettyShuffleDescriptor createRemoteWithIdAndLocation(
             IntermediateResultPartitionID partitionId, ResourceID producerLocation) {
         return newBuilder()
-                .setId(new ResultPartitionID(partitionId, createExecutionAttemptId()))
+                .setIdentifier(new ResultPartitionID(partitionId, createExecutionAttemptId()))
                 .setProducerLocation(producerLocation)
                 .buildRemote();
     }

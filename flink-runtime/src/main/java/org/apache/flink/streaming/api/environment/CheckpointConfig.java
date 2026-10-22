@@ -112,7 +112,7 @@ public class CheckpointConfig implements java.io.Serializable {
     @Deprecated public static final int UNDEFINED_TOLERABLE_CHECKPOINT_NUMBER = -1;
 
     /**
-     * Default id of checkpoint for which in-flight data should be ignored on recovery.
+     * Default identifier of checkpoint for which in-flight data should be ignored on recovery.
      *
      * @deprecated This field is no longer used. Please use {@link
      *     StateRecoveryOptions.CHECKPOINT_ID_OF_IGNORED_IN_FLIGHT_DATA} instead.
@@ -950,10 +950,10 @@ public class CheckpointConfig implements java.io.Serializable {
     }
 
     /**
-     * Setup the checkpoint id for which the in-flight data will be ignored for all operators in
+     * Setup the checkpoint identifier for which the in-flight data will be ignored for all operators in
      * case of the recovery from this checkpoint.
      *
-     * @param checkpointIdOfIgnoredInFlightData Checkpoint id for which in-flight data should be
+     * @param checkpointIdOfIgnoredInFlightData Checkpoint identifier for which in-flight data should be
      *     ignored.
      * @see #setCheckpointIdOfIgnoredInFlightData
      */
@@ -965,7 +965,7 @@ public class CheckpointConfig implements java.io.Serializable {
     }
 
     /**
-     * @return Checkpoint id for which in-flight data should be ignored.
+     * @return Checkpoint identifier for which in-flight data should be ignored.
      * @see #setCheckpointIdOfIgnoredInFlightData
      */
     @PublicEvolving

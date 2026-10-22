@@ -142,7 +142,7 @@ public abstract class JsonPlanTestBase {
         String dataId = TestValuesTableFactory.registerData(data);
         Map<String, String> properties = new HashMap<>();
         properties.put("connector", "values");
-        properties.put("data-id", dataId);
+        properties.put("data-identifier", dataId);
         properties.put("bounded", "true");
         properties.put("disable-lookup", "true");
         properties.putAll(extraProperties);

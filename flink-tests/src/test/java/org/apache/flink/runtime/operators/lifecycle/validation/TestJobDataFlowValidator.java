@@ -165,12 +165,12 @@ public class TestJobDataFlowValidator {
                 vertex.getOperatorIDs().listIterator(upstream ? 0 : vertex.getOperatorIDs().size());
         while (upstream ? iterator.hasNext() : iterator.hasPrevious()) {
             OperatorIDPair idPair = upstream ? iterator.next() : iterator.previous();
-            String id =
+            String identifier =
                     idPair.getUserDefinedOperatorID()
                             .orElse(idPair.getGeneratedOperatorID())
                             .toString();
-            if (testJob.operatorsWithDataFlowTracking.contains(id)) {
-                return Optional.of(id);
+            if (testJob.operatorsWithDataFlowTracking.contains(identifier)) {
+                return Optional.of(identifier);
             }
         }
         return Optional.empty();

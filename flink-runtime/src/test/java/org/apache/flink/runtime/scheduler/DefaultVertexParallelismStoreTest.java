@@ -38,13 +38,13 @@ class DefaultVertexParallelismStoreTest {
 
     @Test
     void testSetInfo() {
-        JobVertexID id = new JobVertexID();
+        JobVertexID identifier = new JobVertexID();
         VertexParallelismInformation info = new MockVertexParallelismInfo();
         DefaultVertexParallelismStore store = new DefaultVertexParallelismStore();
 
-        store.setParallelismInfo(id, info);
+        store.setParallelismInfo(identifier, info);
 
-        VertexParallelismInformation storedInfo = store.getParallelismInfo(id);
+        VertexParallelismInformation storedInfo = store.getParallelismInfo(identifier);
 
         assertThat(storedInfo).isEqualTo(info);
     }

@@ -235,7 +235,7 @@ class TransformationsTest {
     public void testUidFlink1_15() throws IOException {
         checkUidModification(
                 config ->
-                        config.set(TABLE_EXEC_UID_FORMAT, "<id>_<type>_<version>_<transformation>"),
+                        config.set(TABLE_EXEC_UID_FORMAT, "<identifier>_<type>_<version>_<transformation>"),
                 json -> {},
                 env -> planFromFlink1_15(env).asJsonString(),
                 "\\d+_stream-exec-sink_1_sink",
@@ -247,7 +247,7 @@ class TransformationsTest {
     public void testUidFlink1_18() throws IOException {
         checkUidModification(
                 config ->
-                        config.set(TABLE_EXEC_UID_FORMAT, "<id>_<type>_<version>_<transformation>"),
+                        config.set(TABLE_EXEC_UID_FORMAT, "<identifier>_<type>_<version>_<transformation>"),
                 json -> {},
                 env -> planFromCurrentFlinkVersion(env).asJsonString(),
                 "\\d+_stream-exec-sink_1_sink",
@@ -264,7 +264,7 @@ class TransformationsTest {
                                 json,
                                 "stream-exec-sink_1",
                                 TABLE_EXEC_UID_FORMAT.key(),
-                                "my_custom_<transformation>_<id>"),
+                                "my_custom_<transformation>_<identifier>"),
                 env -> planFromCurrentFlinkVersion(env).asJsonString(),
                 "my_custom_sink_\\d+",
                 "my_custom_constraint-validator_\\d+",

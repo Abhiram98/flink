@@ -34,10 +34,10 @@ public class SlotID implements ResourceIDRetrievable, Serializable {
 
     private static final long serialVersionUID = -6399206032549807771L;
 
-    /** The resource id which this slot located */
+    /** The resource identifier which this slot located */
     private final ResourceID resourceId;
 
-    /** The numeric id for single slot */
+    /** The numeric identifier for single slot */
     private final int slotNumber;
 
     public SlotID(ResourceID resourceId, int slotNumber) {

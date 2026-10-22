@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 @Internal
 class OperatorStateSpecV2 {
 
-    private final OperatorID id;
+    private final OperatorID identifier;
 
     @Nullable private final OperatorState existingState;
 
@@ -50,13 +50,13 @@ class OperatorStateSpecV2 {
     }
 
     private OperatorStateSpecV2(OperatorState existingState) {
-        this.id = existingState.getOperatorID();
+        this.identifier = existingState.getOperatorID();
         this.existingState = existingState;
         this.newOperatorStateTransformation = null;
     }
 
     private OperatorStateSpecV2(StateBootstrapTransformationWithID<?> transformation) {
-        this.id = transformation.getOperatorID();
+        this.identifier = transformation.getOperatorID();
         this.newOperatorStateTransformation = transformation;
         this.existingState = null;
     }
@@ -71,7 +71,7 @@ class OperatorStateSpecV2 {
 
     OperatorState asExistingState() {
         Preconditions.checkState(
-                isExistingState(), "OperatorState %s is not an existing state.", id);
+                isExistingState(), "OperatorState %s is not an existing state.", identifier);
         return existingState;
     }
 
@@ -80,7 +80,7 @@ class OperatorStateSpecV2 {
         Preconditions.checkState(
                 isNewStateTransformation(),
                 "OperatorState %s is not a new state defined with BootstrapTransformation",
-                id);
+                identifier);
         return (StateBootstrapTransformationWithID<T>) newOperatorStateTransformation;
     }
 }

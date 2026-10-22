@@ -28,9 +28,9 @@ import org.apache.flink.annotation.Internal;
 @Internal
 public interface CheckpointCommittableManager<CommT> extends CommittableManager<CommT> {
     /**
-     * Returns the checkpoint id in which the committable was created.
+     * Returns the checkpoint identifier in which the committable was created.
      *
-     * @return checkpoint id
+     * @return checkpoint identifier
      */
     long getCheckpointId();
 }

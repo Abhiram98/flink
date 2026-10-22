@@ -75,7 +75,7 @@ class OperationManagerTest {
                 new ResultSetImpl(
                         PAYLOAD,
                         1L,
-                        ResolvedSchema.of(Column.physical("id", DataTypes.BIGINT())),
+                        ResolvedSchema.of(Column.physical("identifier", DataTypes.BIGINT())),
                         Collections.singletonList(GenericRowData.of(1L)),
                         SIMPLE_ROW_DATA_TO_STRING_CONVERTER,
                         false,
@@ -96,7 +96,7 @@ class OperationManagerTest {
                 .isNotEqualTo(OperationStatus.ERROR);
 
         assertThat(operationManager.getOperationResultSchema(operationHandle))
-                .isEqualTo(ResolvedSchema.of(Column.physical("id", DataTypes.BIGINT())));
+                .isEqualTo(ResolvedSchema.of(Column.physical("identifier", DataTypes.BIGINT())));
 
         assertThat(operationManager.getOperationInfo(operationHandle).getStatus())
                 .isEqualTo(OperationStatus.FINISHED);

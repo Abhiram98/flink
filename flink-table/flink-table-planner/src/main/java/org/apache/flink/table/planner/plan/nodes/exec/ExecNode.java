@@ -48,7 +48,7 @@ import static org.apache.flink.table.planner.plan.nodes.exec.ExecNode.FIELD_NAME
 @Internal
 public interface ExecNode<T> extends ExecNodeTranslator<T>, FusionCodegenExecNode {
 
-    String FIELD_NAME_ID = "id";
+    String FIELD_NAME_ID = "identifier";
     String FIELD_NAME_TYPE = "type";
     String FIELD_NAME_CONFIGURATION = "configuration";
     String FIELD_NAME_DESCRIPTION = "description";
@@ -58,7 +58,7 @@ public interface ExecNode<T> extends ExecNodeTranslator<T>, FusionCodegenExecNod
 
     /** The unique ID of the node. */
     @JsonProperty(value = FIELD_NAME_ID, index = 0)
-    int getId();
+    int getIdentifier();
 
     /** Returns a string which describes this node. */
     @JsonProperty(value = FIELD_NAME_DESCRIPTION)

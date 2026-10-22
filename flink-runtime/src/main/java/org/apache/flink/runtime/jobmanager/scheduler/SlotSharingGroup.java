@@ -46,12 +46,12 @@ public class SlotSharingGroup implements java.io.Serializable {
 
     // --------------------------------------------------------------------------------------------
 
-    public void addVertexToGroup(final JobVertexID id) {
-        ids.add(checkNotNull(id));
+    public void addVertexToGroup(final JobVertexID identifier) {
+        ids.add(checkNotNull(identifier));
     }
 
-    public void removeVertexFromGroup(final JobVertexID id) {
-        ids.remove(checkNotNull(id));
+    public void removeVertexFromGroup(final JobVertexID identifier) {
+        ids.remove(checkNotNull(identifier));
     }
 
     public Set<JobVertexID> getJobVertexIds() {

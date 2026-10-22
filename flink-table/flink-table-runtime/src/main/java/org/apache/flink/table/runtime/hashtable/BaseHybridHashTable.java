@@ -479,7 +479,7 @@ public abstract class BaseHybridHashTable implements MemorySegmentPool {
         return Math.max(1, ((totalNumBuffers - 2) / 6) / partitions);
     }
 
-    protected List<MemorySegment> readAllBuffers(FileIOChannel.ID id, int blockCount)
+    protected List<MemorySegment> readAllBuffers(FileIOChannel.ID identifier, int blockCount)
             throws IOException {
         // we are guaranteed to stay in memory
         ensureNumBuffersReturned(blockCount);
@@ -488,7 +488,7 @@ public abstract class BaseHybridHashTable implements MemorySegmentPool {
         BlockChannelReader<MemorySegment> reader =
                 FileChannelUtil.createBlockChannelReader(
                         ioManager,
-                        id,
+                        identifier,
                         retSegments,
                         compressionEnabled,
                         compressionCodecFactory,
@@ -505,11 +505,11 @@ public abstract class BaseHybridHashTable implements MemorySegmentPool {
     }
 
     protected HeaderlessChannelReaderInputView createInputView(
-            FileIOChannel.ID id, int blockCount, int lastSegmentLimit) throws IOException {
+            FileIOChannel.ID identifier, int blockCount, int lastSegmentLimit) throws IOException {
         BlockChannelReader<MemorySegment> inReader =
                 FileChannelUtil.createBlockChannelReader(
                         ioManager,
-                        id,
+                        identifier,
                         new LinkedBlockingQueue<>(),
                         compressionEnabled,
                         compressionCodecFactory,

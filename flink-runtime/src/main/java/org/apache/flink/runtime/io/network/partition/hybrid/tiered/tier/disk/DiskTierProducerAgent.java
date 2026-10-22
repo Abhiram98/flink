@@ -72,8 +72,8 @@ public class DiskTierProducerAgent implements TierProducerAgent, NettyServicePro
 
     /**
      * Record the first buffer index in the segment for each subpartition. The index of the list is
-     * responding to the subpartition id. The key in the map is the first buffer index and the value
-     * in the map is the segment id.
+     * responding to the subpartition identifier. The key in the map is the first buffer index and the value
+     * in the map is the segment identifier.
      */
     private final List<Map<Integer, Integer>> firstBufferIndexInSegment;
 

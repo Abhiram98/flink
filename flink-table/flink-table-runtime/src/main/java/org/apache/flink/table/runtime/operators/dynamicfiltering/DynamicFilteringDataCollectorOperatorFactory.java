@@ -81,8 +81,8 @@ public class DynamicFilteringDataCollectorOperatorFactory
         return castedOperator;
     }
 
-    public void registerDynamicFilteringDataListenerID(String id) {
-        this.dynamicFilteringDataListenerIDs.add(checkNotNull(id));
+    public void registerDynamicFilteringDataListenerID(String identifier) {
+        this.dynamicFilteringDataListenerIDs.add(checkNotNull(identifier));
     }
 
     @SuppressWarnings("rawtypes")

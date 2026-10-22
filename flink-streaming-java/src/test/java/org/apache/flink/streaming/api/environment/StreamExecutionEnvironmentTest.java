@@ -147,7 +147,7 @@ class StreamExecutionEnvironmentTest {
             final StreamGraph streamGraph = env.getStreamGraph();
             streamGraph.getStreamingPlanAsJSON();
 
-            assertThat(streamGraph.getStreamNode(dataStream2.getId()).getParallelism())
+            assertThat(streamGraph.getStreamNode(dataStream2.getIdentifier()).getParallelism())
                     .as("Parallelism of parallel collection source must be 4.")
                     .isEqualTo(4);
         } catch (Exception e) {
@@ -555,7 +555,7 @@ class StreamExecutionEnvironmentTest {
     private static StreamOperator<?> getOperatorFromDataStream(DataStream<?> dataStream) {
         StreamExecutionEnvironment env = dataStream.getExecutionEnvironment();
         StreamGraph streamGraph = env.getStreamGraph();
-        return streamGraph.getStreamNode(dataStream.getId()).getOperator();
+        return streamGraph.getStreamNode(dataStream.getIdentifier()).getOperator();
     }
 
     @SuppressWarnings("unchecked")

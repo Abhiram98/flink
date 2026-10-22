@@ -1267,7 +1267,7 @@ public class SqlNodeToOperationConversion {
 
     private Operation convertStopJob(SqlStopJob sqlStopJob) {
         return new StopJobOperation(
-                sqlStopJob.getId(), sqlStopJob.isWithSavepoint(), sqlStopJob.isWithDrain());
+                sqlStopJob.getIdentifier(), sqlStopJob.isWithSavepoint(), sqlStopJob.isWithDrain());
     }
 
     private Operation convertDelete(SqlDelete sqlDelete) {

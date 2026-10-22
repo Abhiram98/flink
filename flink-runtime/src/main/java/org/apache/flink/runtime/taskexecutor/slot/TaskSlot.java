@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
  * <p>A task slot can only be allocated if it is in state free. An allocated task slot can transit
  * to state active.
  *
- * <p>An active slot allows to add tasks from the respective job and with the correct allocation id.
+ * <p>An active slot allows to add tasks from the respective job and with the correct allocation identifier.
  * An active slot can be marked as inactive which sets the state back to allocated.
  *
  * <p>An allocated or active slot can only be freed if it is empty. If it is not empty, then it's
@@ -78,10 +78,10 @@ public class TaskSlot<T extends TaskSlotPayload> implements AutoCloseableAsync {
     /** State of this slot. */
     private TaskSlotState state;
 
-    /** Job id to which the slot has been allocated. */
+    /** Job identifier to which the slot has been allocated. */
     private final JobID jobId;
 
-    /** Allocation id of this slot. */
+    /** Allocation identifier of this slot. */
     private final AllocationID allocationId;
 
     /** The closing future is completed when the slot is freed and closed. */
@@ -182,12 +182,12 @@ public class TaskSlot<T extends TaskSlotPayload> implements AutoCloseableAsync {
 
     /**
      * Add the given task to the task slot. This is only possible if there is not already another
-     * task with the same execution attempt id added to the task slot. In this case, the method
+     * task with the same execution attempt identifier added to the task slot. In this case, the method
      * returns true. Otherwise the task slot is left unchanged and false is returned.
      *
      * <p>In case that the task slot state is not active an {@link IllegalStateException} is thrown.
-     * In case that the task's job id and allocation id don't match with the job id and allocation
-     * id for which the task slot has been allocated, an {@link IllegalArgumentException} is thrown.
+     * In case that the task's job identifier and allocation identifier don't match with the job identifier and allocation
+     * identifier for which the task slot has been allocated, an {@link IllegalArgumentException} is thrown.
      *
      * @param task to be added to the task slot
      * @throws IllegalStateException if the task slot is not in state active
@@ -197,12 +197,12 @@ public class TaskSlot<T extends TaskSlotPayload> implements AutoCloseableAsync {
         // Check that this slot has been assigned to the job sending this task
         Preconditions.checkArgument(
                 task.getJobID().equals(jobId),
-                "The task's job id does not match the "
-                        + "job id for which the slot has been allocated.");
+                "The task's job identifier does not match the "
+                        + "job identifier for which the slot has been allocated.");
         Preconditions.checkArgument(
                 task.getAllocationId().equals(allocationId),
                 "The task's allocation "
-                        + "id does not match the allocation id for which the slot has been allocated.");
+                        + "identifier does not match the allocation identifier for which the slot has been allocated.");
         Preconditions.checkState(
                 TaskSlotState.ACTIVE == state, "The task slot is not in state active.");
 
@@ -217,7 +217,7 @@ public class TaskSlot<T extends TaskSlotPayload> implements AutoCloseableAsync {
     }
 
     /**
-     * Remove the task identified by the given execution attempt id.
+     * Remove the task identified by the given execution attempt identifier.
      *
      * @param executionAttemptId identifying the task to be removed
      * @return The removed task if there was any; otherwise null.

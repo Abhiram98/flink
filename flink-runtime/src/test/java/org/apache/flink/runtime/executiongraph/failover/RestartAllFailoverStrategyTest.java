@@ -45,8 +45,8 @@ class RestartAllFailoverStrategyTest {
 
         final RestartAllFailoverStrategy strategy = new RestartAllFailoverStrategy(topology);
 
-        assertThat(new HashSet<>(Arrays.asList(v1.getId(), v2.getId(), v3.getId())))
+        assertThat(new HashSet<>(Arrays.asList(v1.getIdentifier(), v2.getIdentifier(), v3.getIdentifier())))
                 .isEqualTo(
-                        strategy.getTasksNeedingRestart(v1.getId(), new Exception("Test failure")));
+                        strategy.getTasksNeedingRestart(v1.getIdentifier(), new Exception("Test failure")));
     }
 }

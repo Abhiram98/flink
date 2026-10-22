@@ -81,7 +81,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -129,7 +129,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -248,7 +248,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -292,7 +292,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -428,7 +428,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -467,7 +467,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -525,7 +525,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -565,7 +565,7 @@ public class CEPMigrationTest implements MigrationTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 

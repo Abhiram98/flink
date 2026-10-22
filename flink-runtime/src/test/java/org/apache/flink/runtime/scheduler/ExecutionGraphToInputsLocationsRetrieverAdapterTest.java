@@ -92,9 +92,9 @@ class ExecutionGraphToInputsLocationsRetrieverAdapterTest {
                 inputsLocationsRetriever.getConsumedPartitionGroups(evIdOfConsumer);
 
         IntermediateResultPartitionID partitionId1 =
-                new IntermediateResultPartitionID(dataSet1.getId(), 0);
+                new IntermediateResultPartitionID(dataSet1.getIdentifier(), 0);
         IntermediateResultPartitionID partitionId2 =
-                new IntermediateResultPartitionID(dataSet2.getId(), 0);
+                new IntermediateResultPartitionID(dataSet2.getIdentifier(), 0);
         assertThat(consumedPartitionGroupsOfProducer1).isEmpty();
         assertThat(consumedPartitionGroupsOfProducer2).isEmpty();
         assertThat(consumedPartitionGroupsOfConsumer).hasSize(2);

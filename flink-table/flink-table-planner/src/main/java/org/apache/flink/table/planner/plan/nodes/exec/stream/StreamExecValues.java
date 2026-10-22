@@ -59,12 +59,12 @@ public class StreamExecValues extends CommonExecValues implements StreamExecNode
 
     @JsonCreator
     public StreamExecValues(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_TUPLES) List<List<RexLiteral>> tuples,
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
-        super(id, context, persistedConfig, tuples, outputType, description);
+        super(identifier, context, persistedConfig, tuples, outputType, description);
     }
 }

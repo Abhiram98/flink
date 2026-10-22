@@ -50,7 +50,7 @@ class ScanReuseITCase extends StreamingTestBase {
                         + ") WITH (\n"
                         + " 'connector' = 'values',\n"
                         + " 'bounded' = 'true',\n"
-                        + String.format(" 'data-id' = '%s',\n", myTableDataId)
+                        + String.format(" 'data-identifier' = '%s',\n", myTableDataId)
                         + " 'nested-projection-supported' = 'true',\n"
                         + " 'readable-metadata' = 'metadata_1:INT, metadata_2:STRING'\n"
                         + ")";

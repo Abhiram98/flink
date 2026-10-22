@@ -205,10 +205,10 @@ class KvStateLocationRegistryTest {
     // ------------------------------------------------------------------------
 
     private ExecutionJobVertex createJobVertex(int maxParallelism) {
-        JobVertexID id = new JobVertexID();
+        JobVertexID identifier = new JobVertexID();
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
 
-        when(vertex.getJobVertexId()).thenReturn(id);
+        when(vertex.getJobVertexId()).thenReturn(identifier);
         when(vertex.getMaxParallelism()).thenReturn(maxParallelism);
 
         return vertex;

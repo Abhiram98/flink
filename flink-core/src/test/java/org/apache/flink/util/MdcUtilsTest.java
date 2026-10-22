@@ -54,7 +54,7 @@ class MdcUtilsTest {
     void testJobIDAsContext() {
         JobID jobID = new JobID();
         assertThat(MdcUtils.asContextData(jobID))
-                .isEqualTo(Collections.singletonMap("flink-job-id", jobID.toHexString()));
+                .isEqualTo(Collections.singletonMap("flink-job-identifier", jobID.toHexString()));
     }
 
     @Test
@@ -138,7 +138,7 @@ class MdcUtilsTest {
                 assertThat(loggerExtension.getEvents())
                         .singleElement()
                         .extracting(LogEvent::getContextData)
-                        .extracting(m -> m.getValue("flink-job-id"));
+                        .extracting(m -> m.getValue("flink-job-identifier"));
         if (jobId == null) {
             extracting.isNull();
         } else {

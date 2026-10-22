@@ -58,18 +58,18 @@ import java.util.stream.Collectors;
  * available metrics or the aggregated values of them across all/selected entities.
  *
  * <p>If the query parameters do not contain a "get" parameter the list of all metrics is returned.
- * {@code [ { "id" : "X" } ] }
+ * {@code [ { "identifier" : "X" } ] }
  *
  * <p>If the query parameters do contain a "get" parameter, a comma-separated list of metric names
  * is expected as a value. {@code /metrics?get=X,Y} The handler will then return a list containing
- * the values of the requested metrics. {@code [ { "id" : "X", "value" : "S" }, { "id" : "Y",
+ * the values of the requested metrics. {@code [ { "identifier" : "X", "value" : "S" }, { "identifier" : "Y",
  * "value" : "T" } ] }
  *
  * <p>The "agg" query parameter is used to define which aggregates should be calculated. Available
  * aggregations are "sum", "max", "min" and "avg". If the parameter is not specified, all
  * aggregations will be returned. {@code /metrics?get=X,Y&agg=min,max} The handler will then return
- * a list of objects containing the aggregations for the requested metrics. {@code [ { "id" : "X",
- * "min", "1", "max", "2" }, { "id" : "Y", "min", "4", "max", "10"}]}
+ * a list of objects containing the aggregations for the requested metrics. {@code [ { "identifier" : "X",
+ * "min", "1", "max", "2" }, { "identifier" : "Y", "min", "4", "max", "10"}]}
  */
 public abstract class AbstractAggregatingMetricsHandler<
                 P extends AbstractAggregatedMetricsParameters<?>>

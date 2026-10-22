@@ -106,7 +106,7 @@ abstract class PushFilterIntoTableSourceScanRuleTestBase extends TableTestBase {
     void testUnconvertedExpression() {
         util.verifyRelPlan(
                 "SELECT * FROM MyTable WHERE\n"
-                        + "    amount > 2 AND id < 100 AND CAST(amount AS BIGINT) > 10");
+                        + "    amount > 2 AND identifier < 100 AND CAST(amount AS BIGINT) > 10");
     }
 
     @Test

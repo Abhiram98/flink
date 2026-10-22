@@ -115,7 +115,7 @@ public class StreamExecChangelogNormalize extends ExecNodeBase<RowData>
 
     @JsonCreator
     public StreamExecChangelogNormalize(
-            @JsonProperty(FIELD_NAME_ID) Integer id,
+            @JsonProperty(FIELD_NAME_ID) Integer identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_UNIQUE_KEYS) int[] uniqueKeys,
@@ -124,7 +124,7 @@ public class StreamExecChangelogNormalize extends ExecNodeBase<RowData>
             @JsonProperty(FIELD_NAME_INPUT_PROPERTIES) List<InputProperty> inputProperties,
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.uniqueKeys = uniqueKeys;
         this.generateUpdateBefore = generateUpdateBefore;
         this.stateMetadataList = stateMetadataList;

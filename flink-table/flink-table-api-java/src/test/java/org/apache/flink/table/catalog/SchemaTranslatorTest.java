@@ -272,7 +272,7 @@ class SchemaTranslatorTest {
     void testOutputToNoSchema() {
         final ResolvedSchema tableSchema =
                 ResolvedSchema.of(
-                        Column.physical("id", BIGINT()),
+                        Column.physical("identifier", BIGINT()),
                         Column.metadata("rowtime", TIMESTAMP_LTZ(3), null, false),
                         Column.physical("name", STRING()));
 
@@ -283,7 +283,7 @@ class SchemaTranslatorTest {
         assertThat(result.getSchema())
                 .isEqualTo(
                         Schema.newBuilder()
-                                .column("id", BIGINT())
+                                .column("identifier", BIGINT())
                                 .column("rowtime", TIMESTAMP_LTZ(3)) // becomes physical
                                 .column("name", STRING())
                                 .build());
@@ -295,7 +295,7 @@ class SchemaTranslatorTest {
     void testOutputToEmptySchema() {
         final ResolvedSchema tableSchema =
                 ResolvedSchema.of(
-                        Column.physical("id", BIGINT()),
+                        Column.physical("identifier", BIGINT()),
                         Column.metadata("rowtime", TIMESTAMP_LTZ(3), null, false),
                         Column.physical("name", STRING()));
 
@@ -307,7 +307,7 @@ class SchemaTranslatorTest {
         assertThat(result.getSchema())
                 .isEqualTo(
                         Schema.newBuilder()
-                                .column("id", BIGINT())
+                                .column("identifier", BIGINT())
                                 .column("rowtime", TIMESTAMP_LTZ(3)) // becomes physical
                                 .column("name", STRING())
                                 .build());
@@ -319,7 +319,7 @@ class SchemaTranslatorTest {
     void testOutputToPartialSchema() {
         final ResolvedSchema tableSchema =
                 ResolvedSchema.of(
-                        Column.physical("id", BIGINT().notNull()),
+                        Column.physical("identifier", BIGINT().notNull()),
                         Column.physical("name", STRING()),
                         Column.metadata("rowtime", TIMESTAMP_LTZ(3), null, false));
 
@@ -329,17 +329,17 @@ class SchemaTranslatorTest {
                         Schema.newBuilder()
                                 .columnByExpression("computed", "f1 + 42")
                                 .columnByMetadata("rowtime", TIMESTAMP_LTZ(3))
-                                .primaryKey("id")
+                                .primaryKey("identifier")
                                 .build());
 
         assertThat(result.getSchema())
                 .isEqualTo(
                         Schema.newBuilder()
-                                .column("id", BIGINT().notNull())
+                                .column("identifier", BIGINT().notNull())
                                 .column("name", STRING())
                                 .columnByExpression("computed", "f1 + 42")
                                 .columnByMetadata("rowtime", TIMESTAMP_LTZ(3)) // becomes metadata
-                                .primaryKey("id")
+                                .primaryKey("identifier")
                                 .build());
     }
 
@@ -347,7 +347,7 @@ class SchemaTranslatorTest {
     void testOutputToDeclaredSchema() {
         final ResolvedSchema tableSchema =
                 ResolvedSchema.of(
-                        Column.physical("id", BIGINT()),
+                        Column.physical("identifier", BIGINT()),
                         Column.physical("rowtime", TIMESTAMP_LTZ(3)),
                         Column.physical("name", STRING()));
 
@@ -355,7 +355,7 @@ class SchemaTranslatorTest {
                 SchemaTranslator.createProducingResult(
                         tableSchema,
                         Schema.newBuilder()
-                                .column("id", BIGINT())
+                                .column("identifier", BIGINT())
                                 .columnByMetadata("rowtime", TIMESTAMP_LTZ(3))
                                 .column("name", STRING().bridgedTo(StringData.class))
                                 .build());
@@ -363,7 +363,7 @@ class SchemaTranslatorTest {
         assertThat(result.getSchema())
                 .isEqualTo(
                         Schema.newBuilder()
-                                .column("id", BIGINT())
+                                .column("identifier", BIGINT())
                                 .columnByMetadata("rowtime", TIMESTAMP_LTZ(3))
                                 .column("name", STRING().bridgedTo(StringData.class))
                                 .build());

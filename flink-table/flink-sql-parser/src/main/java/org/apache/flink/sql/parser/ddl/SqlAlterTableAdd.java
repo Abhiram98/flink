@@ -43,7 +43,7 @@ import java.util.List;
  *     log_ts STRING COMMENT 'log timestamp string' FIRST,
  *     ts AS TO_TIMESTAMP(log_ts) AFTER log_ts,
  *     col_meta int metadata from 'mk1' virtual AFTER col_b,
- *     PRIMARY KEY (id) NOT ENFORCED,
+ *     PRIMARY KEY (identifier) NOT ENFORCED,
  *     WATERMARK FOR ts AS ts - INTERVAL '3' SECOND
  * );
  * }</pre>

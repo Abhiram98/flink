@@ -24,10 +24,10 @@ import java.io.Serializable;
 public interface JobEvent extends Serializable {
 
     /**
-     * Retrieves the type id of this job event. The type id is a unique identifier based on the
+     * Retrieves the type identifier of this job event. The type identifier is a unique identifier based on the
      * class of the specific event object.
      *
-     * @return An integer representing the unique type id of this job event.
+     * @return An integer representing the unique type identifier of this job event.
      */
     default int getType() {
         return JobEvents.getTypeID(this.getClass());

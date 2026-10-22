@@ -715,7 +715,7 @@ class DataStreamJavaITCase {
         tableEnv.createTemporaryTable(
                 "InputTable1",
                 TableDescriptor.forConnector("values")
-                        .option("data-id", input1DataId)
+                        .option("data-identifier", input1DataId)
                         .schema(
                                 Schema.newBuilder()
                                         .column("i", INT())

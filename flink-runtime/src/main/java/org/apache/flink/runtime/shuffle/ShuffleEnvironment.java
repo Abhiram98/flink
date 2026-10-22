@@ -120,7 +120,7 @@ public interface ShuffleEnvironment<P extends ResultPartitionWriter, G extends I
      * registration.
      *
      * @param ownerName the owner name, used for logs
-     * @param executionAttemptID execution attempt id of the producer or consumer
+     * @param executionAttemptID execution attempt identifier of the producer or consumer
      * @param parentGroup parent of shuffle specific metric group
      * @return context of the shuffle input/output owner used to create partitions or gates
      *     belonging to the owner
@@ -167,7 +167,7 @@ public interface ShuffleEnvironment<P extends ResultPartitionWriter, G extends I
      * Get metrics of the partition if it still occupies some resources locally and have not been
      * released yet.
      *
-     * @param partitionId the partition id
+     * @param partitionId the partition identifier
      * @return An Optional of {@link ShuffleMetrics}, if found, of the given partition
      */
     default Optional<ShuffleMetrics> getMetricsIfPartitionOccupyingLocalResource(
@@ -195,7 +195,7 @@ public interface ShuffleEnvironment<P extends ResultPartitionWriter, G extends I
     /**
      * Update a gate with the newly available partition information, previously unknown.
      *
-     * @param consumerID execution id to distinguish gates with the same id from the different
+     * @param consumerID execution identifier to distinguish gates with the same identifier from the different
      *     consumer executions
      * @param partitionInfo information needed to consume the updated partition, e.g. network
      *     location

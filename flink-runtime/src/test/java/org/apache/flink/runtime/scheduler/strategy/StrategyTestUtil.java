@@ -42,7 +42,7 @@ class StrategyTestUtil {
     static List<ExecutionVertexID> idsFromVertices(
             final List<TestingSchedulingExecutionVertex> vertices) {
         return vertices.stream()
-                .map(TestingSchedulingExecutionVertex::getId)
+                .map(TestingSchedulingExecutionVertex::getIdentifier)
                 .collect(Collectors.toList());
     }
 }

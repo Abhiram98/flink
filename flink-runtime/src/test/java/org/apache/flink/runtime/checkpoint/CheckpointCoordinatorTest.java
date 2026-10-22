@@ -1791,7 +1791,7 @@ class CheckpointCoordinatorTest {
         // of the vertices that need to be acknowledged.
         // non of the messages should throw an exception
 
-        // wrong job id
+        // wrong job identifier
         checkpointCoordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(new JobID(), attemptID1, checkpointId),
                 TASK_MANAGER_LOCATION_INFO);
@@ -3736,7 +3736,7 @@ class CheckpointCoordinatorTest {
                         .setTimer(manuallyTriggeredScheduledExecutor)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
-        TestResetHook hook = new TestResetHook("id");
+        TestResetHook hook = new TestResetHook("identifier");
 
         checkpointCoordinator.addMasterHook(hook);
         assertThat(hook.resetCalled).isFalse();
@@ -3866,8 +3866,8 @@ class CheckpointCoordinatorTest {
                                 .MockOperatorCheckpointCoordinatorContextBuilder()
                         .setOperatorID(new OperatorID())
                         .setOnCallingCheckpointCoordinator(
-                                (id, future) -> {
-                                    notificationSequence.add(trigger + id);
+                                (identifier, future) -> {
+                                    notificationSequence.add(trigger + identifier);
                                     future.complete(new byte[0]);
                                 })
                         .setOnCallingAbortCurrentTriggering(() -> notificationSequence.add(abort))
@@ -3885,7 +3885,7 @@ class CheckpointCoordinatorTest {
                         .build(graph);
         try {
             checkpointCoordinator.triggerCheckpoint(false);
-            // trigger three times to trigger checkpoint, to get checkpoint id and create pending
+            // trigger three times to trigger checkpoint, to get checkpoint identifier and create pending
             // checkpoint
             manuallyTriggeredScheduledExecutor.trigger();
             manuallyTriggeredScheduledExecutor.trigger();
@@ -4217,17 +4217,17 @@ class CheckpointCoordinatorTest {
 
     private static class TestResetHook implements MasterTriggerRestoreHook<String> {
 
-        private final String id;
+        private final String identifier;
         boolean resetCalled;
 
-        TestResetHook(String id) {
-            this.id = id;
+        TestResetHook(String identifier) {
+            this.identifier = identifier;
             this.resetCalled = false;
         }
 
         @Override
         public String getIdentifier() {
-            return id;
+            return identifier;
         }
 
         @Override

@@ -280,13 +280,13 @@ public class SharedBuffer<V> {
     }
 
     EventId registerEvent(V value, long timestamp) throws Exception {
-        Integer id = eventsCount.get(timestamp);
-        if (id == null) {
-            id = 0;
+        Integer identifier = eventsCount.get(timestamp);
+        if (identifier == null) {
+            identifier = 0;
         }
-        EventId eventId = new EventId(id, timestamp);
+        EventId eventId = new EventId(identifier, timestamp);
         Lockable<V> lockableValue = new Lockable<>(value, 1);
-        eventsCount.put(timestamp, id + 1);
+        eventsCount.put(timestamp, identifier + 1);
         eventsBufferCache.put(eventId, lockableValue);
         return eventId;
     }
@@ -311,7 +311,7 @@ public class SharedBuffer<V> {
     /**
      * Inserts or updates an event in cache.
      *
-     * @param eventId id of the event
+     * @param eventId identifier of the event
      * @param event event body
      */
     void upsertEvent(EventId eventId, Lockable<V> event) {
@@ -321,7 +321,7 @@ public class SharedBuffer<V> {
     /**
      * Inserts or updates a shareBufferNode in cache.
      *
-     * @param nodeId id of the event
+     * @param nodeId identifier of the event
      * @param entry SharedBufferNode
      */
     void upsertEntry(NodeId nodeId, Lockable<SharedBufferNode> entry) {
@@ -331,7 +331,7 @@ public class SharedBuffer<V> {
     /**
      * Removes an event from cache and state.
      *
-     * @param eventId id of the event
+     * @param eventId identifier of the event
      */
     void removeEvent(EventId eventId) throws Exception {
         this.eventsBufferCache.invalidate(eventId);
@@ -341,7 +341,7 @@ public class SharedBuffer<V> {
     /**
      * Removes a ShareBufferNode from cache and state.
      *
-     * @param nodeId id of the event
+     * @param nodeId identifier of the event
      */
     void removeEntry(NodeId nodeId) throws Exception {
         this.entryCache.invalidate(nodeId);
@@ -351,7 +351,7 @@ public class SharedBuffer<V> {
     /**
      * It always returns node either from state or cache.
      *
-     * @param nodeId id of the node
+     * @param nodeId identifier of the node
      * @return SharedBufferNode
      */
     Lockable<SharedBufferNode> getEntry(NodeId nodeId) {
@@ -374,7 +374,7 @@ public class SharedBuffer<V> {
     /**
      * It always returns event either from state or cache.
      *
-     * @param eventId id of the event
+     * @param eventId identifier of the event
      * @return event
      */
     Lockable<V> getEvent(EventId eventId) {

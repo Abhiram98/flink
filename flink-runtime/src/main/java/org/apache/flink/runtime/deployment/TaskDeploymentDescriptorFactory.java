@@ -149,7 +149,7 @@ public class TaskDeploymentDescriptorFactory {
                             .getResultPartitionOrThrow(consumedPartitionGroup.getFirst())
                             .getIntermediateResult();
 
-            IntermediateDataSetID resultId = consumedIntermediateResult.getId();
+            IntermediateDataSetID resultId = consumedIntermediateResult.getIdentifier();
             ResultPartitionType partitionType = consumedIntermediateResult.getResultType();
             IndexRange subpartitionRange =
                     executionVertex
@@ -375,7 +375,7 @@ public class TaskDeploymentDescriptorFactory {
             msg =
                     String.format(
                             "Trying to consume an input partition whose producer "
-                                    + "is not ready (result type: %s, hasAllDataProduced: %s, producer state: %s, partition id: %s).",
+                                    + "is not ready (result type: %s, hasAllDataProduced: %s, producer state: %s, partition identifier: %s).",
                             resultPartitionType,
                             hasAllDataProduced,
                             producerState,

@@ -33,7 +33,7 @@ public class IdAndEstimatesVisitor implements Visitor<OptimizerNode> {
 
     private final DataStatistics statistics;
 
-    private int id = 1;
+    private int identifier = 1;
 
     public IdAndEstimatesVisitor(DataStatistics statistics) {
         this.statistics = statistics;
@@ -41,13 +41,13 @@ public class IdAndEstimatesVisitor implements Visitor<OptimizerNode> {
 
     @Override
     public boolean preVisit(OptimizerNode visitable) {
-        return visitable.getId() == -1;
+        return visitable.getIdentifier() == -1;
     }
 
     @Override
     public void postVisit(OptimizerNode visitable) {
         // the node ids
-        visitable.initId(this.id++);
+        visitable.initId(this.identifier++);
 
         // connections need to figure out their maximum path depths
         for (DagConnection conn : visitable.getIncomingConnections()) {

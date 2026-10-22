@@ -163,7 +163,7 @@ public class BatchExecMultipleInput extends ExecNodeBase<RowData>
                         edgeIdxInTargetNode,
                         ExecEdge.builder().source(inputAdapter).target(target).build());
 
-                // The input id and read order
+                // The input identifier and read order
                 inputSelectionSpecs.add(new InputSelectionSpec(multipleInputId, readOrders[i]));
                 i++;
             }
@@ -221,7 +221,7 @@ public class BatchExecMultipleInput extends ExecNodeBase<RowData>
 
             minResources = generator.getMinResources();
             preferredResources = generator.getPreferredResources();
-            // here set the all elements of InputTransformation and its id index indicates the order
+            // here set the all elements of InputTransformation and its identifier index indicates the order
             inputTransforms =
                     inputTransformAndInputSpecPairs.stream()
                             .map(Pair::getKey)

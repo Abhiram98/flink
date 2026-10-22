@@ -572,7 +572,7 @@ public class DefaultSchedulerTest {
 
         final SchedulingExecutionVertex onlySchedulingVertex =
                 Iterables.getOnlyElement(topology.getVertices());
-        schedulingStrategy.schedule(Collections.singletonList(onlySchedulingVertex.getId()));
+        schedulingStrategy.schedule(Collections.singletonList(onlySchedulingVertex.getIdentifier()));
 
         final ArchivedExecutionVertex onlyExecutionVertex =
                 Iterables.getOnlyElement(
@@ -608,7 +608,7 @@ public class DefaultSchedulerTest {
         scheduler.startScheduling();
 
         final ExecutionVertexID onlySchedulingVertexId =
-                Iterables.getOnlyElement(topology.getVertices()).getId();
+                Iterables.getOnlyElement(topology.getVertices()).getIdentifier();
 
         // Schedule the vertex to get it to a non-CREATED state
         schedulingStrategy.schedule(Collections.singletonList(onlySchedulingVertexId));

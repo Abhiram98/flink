@@ -124,7 +124,7 @@ public interface JobTable extends AutoCloseable {
         /**
          * Returns the {@link JobID} which is associated with this job.
          *
-         * @return job id which is associated with this job
+         * @return job identifier which is associated with this job
          */
         JobID getJobId();
 

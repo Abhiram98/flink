@@ -246,7 +246,7 @@ public class InputGateDeploymentDescriptor implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "InputGateDeploymentDescriptor [result id: %s, "
+                "InputGateDeploymentDescriptor [result identifier: %s, "
                         + "consumed subpartition index range: %s]",
                 consumedResultId.toString(), consumedSubpartitionIndexRange);
     }

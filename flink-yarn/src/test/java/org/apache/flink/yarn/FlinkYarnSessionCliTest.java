@@ -250,7 +250,7 @@ class FlinkYarnSessionCliTest {
 
     /**
      * Tests that we fail when reading an invalid yarn properties file when retrieving the cluster
-     * id.
+     * identifier.
      */
     @Test
     void testInvalidYarnPropertiesFile() throws Exception {

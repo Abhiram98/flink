@@ -64,10 +64,10 @@ public class TaskStateManagerImpl implements TaskStateManager {
     /** The logger for this class. */
     private static final Logger LOG = LoggerFactory.getLogger(TaskStateManagerImpl.class);
 
-    /** The id of the job for which this manager was created, can report, and recover. */
+    /** The identifier of the job for which this manager was created, can report, and recover. */
     private final JobID jobId;
 
-    /** The execution attempt id that this manager reports for. */
+    /** The execution attempt identifier that this manager reports for. */
     private final ExecutionAttemptID executionAttemptID;
 
     /**

@@ -1682,9 +1682,9 @@ public class HiveParserDDLSemanticAnalyzer {
 
     /**
      * A query like this will generate a tree as follows "describe formatted default.maptable
-     * partition (b=100) id;" TOK_TABTYPE TOK_TABNAME --> root for tablename, 2 child nodes mean DB
+     * partition (b=100) identifier;" TOK_TABTYPE TOK_TABNAME --> root for tablename, 2 child nodes mean DB
      * specified default maptable TOK_PARTSPEC --> root node for partition spec. else columnName
-     * TOK_PARTVAL b 100 id --> root node for columnName formatted
+     * TOK_PARTVAL b 100 identifier --> root node for columnName formatted
      */
     private Operation convertDescribeTable(HiveParserASTNode ast) {
         HiveParserASTNode tableTypeExpr = (HiveParserASTNode) ast.getChild(0);

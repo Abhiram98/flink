@@ -39,19 +39,19 @@ public class TestManagedIterableSourceSplit
 
     private static final long serialVersionUID = 1L;
 
-    private final String id;
+    private final String identifier;
     private final Path filePath;
 
     private Iterator<RowData> iterator;
 
-    public TestManagedIterableSourceSplit(String id, Path filePath) {
-        this.id = id;
+    public TestManagedIterableSourceSplit(String identifier, Path filePath) {
+        this.identifier = identifier;
         this.filePath = filePath;
     }
 
     @Override
     public String splitId() {
-        return id;
+        return identifier;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TestManagedIterableSourceSplit
                                 reader.lines().iterator(),
                                 line ->
                                         GenericRowData.of(
-                                                StringData.fromString(id),
+                                                StringData.fromString(identifier),
                                                 StringData.fromString(filePath.getPath()),
                                                 StringData.fromString(line)));
             } catch (IOException e) {
@@ -78,7 +78,7 @@ public class TestManagedIterableSourceSplit
     public IteratorSourceSplit<RowData, Iterator<RowData>> getUpdatedSplitForIterator(
             Iterator<RowData> iterator) {
         TestManagedIterableSourceSplit recovered =
-                new TestManagedIterableSourceSplit(this.id, this.filePath);
+                new TestManagedIterableSourceSplit(this.identifier, this.filePath);
         recovered.iterator = this.iterator;
         return recovered;
     }
@@ -87,7 +87,7 @@ public class TestManagedIterableSourceSplit
     public String toString() {
         return "TestManagedIterableSourceSplit{"
                 + "splitId='"
-                + id
+                + identifier
                 + '\''
                 + ", filePath="
                 + filePath

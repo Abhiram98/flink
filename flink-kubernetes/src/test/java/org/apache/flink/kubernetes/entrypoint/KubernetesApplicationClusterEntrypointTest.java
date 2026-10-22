@@ -37,7 +37,7 @@ public class KubernetesApplicationClusterEntrypointTest {
     private static final Logger LOG =
             LoggerFactory.getLogger(KubernetesApplicationClusterEntrypointTest.class);
     public static final String TEST_NAMESPACE = "flink-artifact-namespace-test";
-    public static final String TEST_CLUSTER_ID = "flink-artifact-cluster-id-test";
+    public static final String TEST_CLUSTER_ID = "flink-artifact-cluster-identifier-test";
     private Configuration configuration;
     @TempDir Path tempDir;
 

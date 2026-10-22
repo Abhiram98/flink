@@ -127,9 +127,9 @@ import java.util.stream.Collectors;
  *   Correlate
  *     /      \
  *   /       TableFunctionScan1(deterministic)
- * Project1 {select id,name,attr1,op_time}
+ * Project1 {select identifier,name,attr1,op_time}
  *   |
- * Scan {cdc source <id,name,attr1,op_type,op_time> }
+ * Scan {cdc source <identifier,name,attr1,op_type,op_time> }
  * }</pre>
  *
  * <p>4.1 cdc source with metadata
@@ -140,9 +140,9 @@ import java.util.stream.Collectors;
  *   LookupJoin {lookup key not contains the lookup source's pk}
  *     /      \
  *   /       Source2
- * Project1 {select id,name,attr1,op_time}
+ * Project1 {select identifier,name,attr1,op_time}
  *   |
- * Scan {cdc source <id,name,attr1,op_type,op_time> }
+ * Scan {cdc source <identifier,name,attr1,op_type,op_time> }
  * }</pre>
  *
  * <p>CDC source with metadata is another form of non-deterministic update.

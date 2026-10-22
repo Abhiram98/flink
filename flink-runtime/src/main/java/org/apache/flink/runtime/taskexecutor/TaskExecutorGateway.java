@@ -60,13 +60,13 @@ public interface TaskExecutorGateway
     /**
      * Requests a slot from the TaskManager.
      *
-     * @param slotId slot id for the request
+     * @param slotId slot identifier for the request
      * @param jobId for which to request a slot
-     * @param allocationId id for the request
+     * @param allocationId identifier for the request
      * @param resourceProfile of requested slot, used only for dynamic slot allocation and will be
      *     ignored otherwise
      * @param targetAddress to which to offer the requested slots
-     * @param resourceManagerId current leader id of the ResourceManager
+     * @param resourceManagerId current leader identifier of the ResourceManager
      * @param timeout for the operation
      * @return answer to the slot request
      */
@@ -106,7 +106,7 @@ public interface TaskExecutorGateway
     /**
      * Batch release intermediate result partitions.
      *
-     * @param jobId id of the job that the partitions belong to
+     * @param jobId identifier of the job that the partitions belong to
      * @param partitionIds partition ids to release
      */
     void releasePartitions(JobID jobId, Set<ResultPartitionID> partitionIds);
@@ -114,7 +114,7 @@ public interface TaskExecutorGateway
     /**
      * Batch promote intermediate result partitions.
      *
-     * @param jobId id of the job that the partitions belong to
+     * @param jobId identifier of the job that the partitions belong to
      * @param partitionIds partition ids to release
      * @return Future acknowledge that the partitions are successfully promoted.
      */
@@ -136,7 +136,7 @@ public interface TaskExecutorGateway
      * and the checkpoint timestamp.
      *
      * @param executionAttemptID identifying the task
-     * @param checkpointID unique id for the checkpoint
+     * @param checkpointID unique identifier for the checkpoint
      * @param checkpointTimestamp is the timestamp when the checkpoint has been initiated
      * @param checkpointOptions for performing the checkpoint
      * @return Future acknowledge if the checkpoint has been successfully triggered
@@ -152,9 +152,9 @@ public interface TaskExecutorGateway
      * and the checkpoint timestamp.
      *
      * @param executionAttemptID identifying the task
-     * @param completedCheckpointId unique id for the completed checkpoint
+     * @param completedCheckpointId unique identifier for the completed checkpoint
      * @param completedCheckpointTimestamp is the timestamp when the checkpoint has been initiated
-     * @param lastSubsumedCheckpointId unique id for the checkpoint to be subsumed
+     * @param lastSubsumedCheckpointId unique identifier for the checkpoint to be subsumed
      * @return Future acknowledge if the checkpoint has been successfully confirmed
      */
     CompletableFuture<Acknowledge> confirmCheckpoint(
@@ -168,8 +168,8 @@ public interface TaskExecutorGateway
      * the checkpoint timestamp.
      *
      * @param executionAttemptID identifying the task
-     * @param checkpointId unique id for the checkpoint
-     * @param latestCompletedCheckpointId the id of the latest completed checkpoint
+     * @param checkpointId unique identifier for the checkpoint
+     * @param latestCompletedCheckpointId the identifier of the latest completed checkpoint
      * @param checkpointTimestamp is the timestamp when the checkpoint has been initiated
      * @return Future acknowledge if the checkpoint has been successfully confirmed
      */
@@ -192,7 +192,7 @@ public interface TaskExecutorGateway
     /**
      * Heartbeat request from the job manager.
      *
-     * @param heartbeatOrigin unique id of the job manager
+     * @param heartbeatOrigin unique identifier of the job manager
      * @return future which is completed exceptionally if the operation fails
      */
     CompletableFuture<Void> heartbeatFromJobManager(
@@ -201,7 +201,7 @@ public interface TaskExecutorGateway
     /**
      * Heartbeat request from the resource manager.
      *
-     * @param heartbeatOrigin unique id of the resource manager
+     * @param heartbeatOrigin unique identifier of the resource manager
      * @return future which is completed exceptionally if the operation fails
      */
     CompletableFuture<Void> heartbeatFromResourceManager(ResourceID heartbeatOrigin);
@@ -310,7 +310,7 @@ public interface TaskExecutorGateway
     /**
      * Sends new delegation tokens to this TaskManager.
      *
-     * @param resourceManagerId current leader id of the ResourceManager
+     * @param resourceManagerId current leader identifier of the ResourceManager
      * @param tokens new tokens
      * @return Future acknowledge of the successful operation
      */

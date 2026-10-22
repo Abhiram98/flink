@@ -269,7 +269,7 @@ public class HighAvailabilityServicesUtils {
         } catch (Exception e) {
             throw new IllegalConfigurationException(
                     String.format(
-                            "Cannot create cluster high available storage path '%s/%s'. This indicates that an invalid cluster id (%s) has been specified.",
+                            "Cannot create cluster high available storage path '%s/%s'. This indicates that an invalid cluster identifier (%s) has been specified.",
                             storagePath, clusterId, HighAvailabilityOptions.HA_CLUSTER_ID.key()),
                     e);
         }

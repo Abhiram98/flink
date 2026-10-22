@@ -96,11 +96,11 @@ public class MockSplitEnumeratorContext<SplitT extends SourceSplit>
                         .submit(
                                 () ->
                                         sentSourceEvent
-                                                .computeIfAbsent(subtaskId, id -> new ArrayList<>())
+                                                .computeIfAbsent(subtaskId, identifier -> new ArrayList<>())
                                                 .add(event))
                         .get();
             } else {
-                sentSourceEvent.computeIfAbsent(subtaskId, id -> new ArrayList<>()).add(event);
+                sentSourceEvent.computeIfAbsent(subtaskId, identifier -> new ArrayList<>()).add(event);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to assign splits", e);

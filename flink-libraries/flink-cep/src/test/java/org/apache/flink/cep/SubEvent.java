@@ -22,8 +22,8 @@ package org.apache.flink.cep;
 public class SubEvent extends Event {
     private final double volume;
 
-    public SubEvent(int id, String name, double price, double volume) {
-        super(id, name, price);
+    public SubEvent(int identifier, String name, double price, double volume) {
+        super(identifier, name, price);
         this.volume = volume;
     }
 
@@ -46,7 +46,7 @@ public class SubEvent extends Event {
         StringBuilder builder = new StringBuilder();
 
         builder.append("SubEvent(")
-                .append(getId())
+                .append(getIdentifier())
                 .append(", ")
                 .append(getName())
                 .append(", ")

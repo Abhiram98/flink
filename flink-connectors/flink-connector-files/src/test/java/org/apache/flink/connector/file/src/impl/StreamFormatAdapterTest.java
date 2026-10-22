@@ -97,7 +97,7 @@ class StreamFormatAdapterTest extends AdapterTestBase<StreamFormat<Integer>> {
         final BulkFormat.Reader<Integer> reader =
                 format.createReader(
                         new Configuration(),
-                        new FileSourceSplit("test-id", emptyFilePath, 0L, 0, 0L, 0));
+                        new FileSourceSplit("test-identifier", emptyFilePath, 0L, 0, 0L, 0));
 
         final List<Integer> result = new ArrayList<>();
         readNumbers(reader, result, 0);
@@ -113,7 +113,7 @@ class StreamFormatAdapterTest extends AdapterTestBase<StreamFormat<Integer>> {
         final BulkFormat.Reader<Integer> reader =
                 format.createReader(
                         config,
-                        new FileSourceSplit("test-id", testPath, 0L, FILE_LEN, 0L, FILE_LEN));
+                        new FileSourceSplit("test-identifier", testPath, 0L, FILE_LEN, 0L, FILE_LEN));
 
         final List<Integer> result = new ArrayList<>();
         readNumbers(reader, result, NUM_NUMBERS);

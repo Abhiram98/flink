@@ -51,7 +51,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /**
  * Stream {@link ExecNode} which injects a mini-batch event in the streaming data. The mini-batch
  * event will be recognized as a boundary between two mini-batches. The following operators will
- * keep track of the mini-batch events and trigger mini-batch once the mini-batch id is advanced.
+ * keep track of the mini-batch events and trigger mini-batch once the mini-batch identifier is advanced.
  *
  * <p>NOTE: currently, we leverage the runtime watermark mechanism to achieve the mini-batch,
  * because runtime doesn't support customized events and the watermark mechanism fully meets
@@ -91,14 +91,14 @@ public class StreamExecMiniBatchAssigner extends ExecNodeBase<RowData>
 
     @JsonCreator
     public StreamExecMiniBatchAssigner(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_MINI_BATCH_INTERVAL) MiniBatchInterval miniBatchInterval,
             @JsonProperty(FIELD_NAME_INPUT_PROPERTIES) List<InputProperty> inputProperties,
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.miniBatchInterval = checkNotNull(miniBatchInterval);
     }
 

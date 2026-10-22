@@ -56,7 +56,7 @@ public class FileMergingSnapshotManagerBuilder {
     /**
      * Initialize the builder.
      *
-     * @param id the id of the manager.
+     * @param identifier the identifier of the manager.
      */
     public FileMergingSnapshotManagerBuilder(
             JobID jobId, ResourceID tmResourceId, FileMergingType type) {

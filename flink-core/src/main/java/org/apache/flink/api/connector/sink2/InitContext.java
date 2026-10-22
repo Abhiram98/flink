@@ -32,13 +32,13 @@ import java.util.OptionalLong;
 @Internal
 public interface InitContext {
     /**
-     * The first checkpoint id when an application is started and not recovered from a previously
+     * The first checkpoint identifier when an application is started and not recovered from a previously
      * taken checkpoint or savepoint.
      */
     long INITIAL_CHECKPOINT_ID = 1;
 
     /**
-     * Returns id of the restored checkpoint, if state was restored from the snapshot of a previous
+     * Returns identifier of the restored checkpoint, if state was restored from the snapshot of a previous
      * execution.
      */
     OptionalLong getRestoredCheckpointId();

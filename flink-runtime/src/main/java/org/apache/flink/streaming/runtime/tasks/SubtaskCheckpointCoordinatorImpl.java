@@ -524,16 +524,16 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
     }
 
     @Override
-    public void initInputsCheckpoint(long id, CheckpointOptions checkpointOptions)
+    public void initInputsCheckpoint(long identifier, CheckpointOptions checkpointOptions)
             throws CheckpointException {
         if (checkpointOptions.isUnalignedCheckpoint()) {
-            channelStateWriter.start(id, checkpointOptions);
+            channelStateWriter.start(identifier, checkpointOptions);
 
-            prepareInflightDataSnapshot(id);
+            prepareInflightDataSnapshot(identifier);
         } else if (checkpointOptions.isTimeoutable()) {
             // The output buffer may need to be snapshotted, so start the channelStateWriter here.
-            channelStateWriter.start(id, checkpointOptions);
-            channelStateWriter.finishInput(id);
+            channelStateWriter.start(identifier, checkpointOptions);
+            channelStateWriter.finishInput(identifier);
         }
     }
 
@@ -628,7 +628,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
     }
 
     /**
-     * Cancel the async checkpoint runnable with given checkpoint id. If given checkpoint id is not
+     * Cancel the async checkpoint runnable with given checkpoint identifier. If given checkpoint identifier is not
      * registered, return false, otherwise return true.
      */
     private boolean cancelAsyncCheckpointRunnable(long checkpointId) {
@@ -819,7 +819,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
                 long checkpointId, CheckpointStorageLocationReference reference) {
             return cache.computeIfAbsent(
                     checkpointId,
-                    id -> {
+                    identifier -> {
                         try {
                             return delegate.resolveCheckpointStorageLocation(
                                     checkpointId, reference);

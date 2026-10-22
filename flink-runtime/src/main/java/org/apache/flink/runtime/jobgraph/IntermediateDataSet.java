@@ -36,7 +36,7 @@ public class IntermediateDataSet implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final IntermediateDataSetID id; // the identifier
+    private final IntermediateDataSetID identifier; // the identifier
 
     private final JobVertex producer; // the operation that produced this data set
 
@@ -53,16 +53,16 @@ public class IntermediateDataSet implements java.io.Serializable {
     // --------------------------------------------------------------------------------------------
 
     public IntermediateDataSet(
-            IntermediateDataSetID id, ResultPartitionType resultType, JobVertex producer) {
-        this.id = checkNotNull(id);
+            IntermediateDataSetID identifier, ResultPartitionType resultType, JobVertex producer) {
+        this.identifier = checkNotNull(identifier);
         this.producer = checkNotNull(producer);
         this.resultType = checkNotNull(resultType);
     }
 
     // --------------------------------------------------------------------------------------------
 
-    public IntermediateDataSetID getId() {
-        return id;
+    public IntermediateDataSetID getIdentifier() {
+        return identifier;
     }
 
     public JobVertex getProducer() {
@@ -89,7 +89,7 @@ public class IntermediateDataSet implements java.io.Serializable {
 
     public void addConsumer(JobEdge edge) {
         // sanity check
-        checkState(id.equals(edge.getSourceId()), "Incompatible dataset id.");
+        checkState(identifier.equals(edge.getSourceId()), "Incompatible dataset identifier.");
 
         if (consumers.isEmpty()) {
             distributionPattern = edge.getDistributionPattern();
@@ -107,6 +107,6 @@ public class IntermediateDataSet implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Intermediate Data Set (" + id + ")";
+        return "Intermediate Data Set (" + identifier + ")";
     }
 }

@@ -72,7 +72,7 @@ class PushFilterInCalcIntoTableSourceRuleTest extends PushFilterIntoTableSourceS
         String ddl1 =
                 "CREATE TABLE MyTable (\n"
                         + "  name STRING,\n"
-                        + "  id bigint,\n"
+                        + "  identifier bigint,\n"
                         + "  amount int,\n"
                         + "  price double\n"
                         + ") WITH (\n"
@@ -85,7 +85,7 @@ class PushFilterInCalcIntoTableSourceRuleTest extends PushFilterIntoTableSourceS
         String ddl2 =
                 "CREATE TABLE VirtualTable (\n"
                         + "  name STRING,\n"
-                        + "  id bigint,\n"
+                        + "  identifier bigint,\n"
                         + "  amount int,\n"
                         + "  virtualField as amount + 1,\n"
                         + "  price double\n"

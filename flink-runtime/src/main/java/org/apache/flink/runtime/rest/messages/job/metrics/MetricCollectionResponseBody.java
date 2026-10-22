@@ -44,7 +44,7 @@ import static java.util.Objects.requireNonNull;
  * follows:
  *
  * <pre>{@code
- * [{"id": "metricName", "value": "1"}]
+ * [{"identifier": "metricName", "value": "1"}]
  * }</pre>
  *
  * @see Serializer

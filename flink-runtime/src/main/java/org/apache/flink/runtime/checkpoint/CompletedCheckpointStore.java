@@ -73,7 +73,7 @@ public interface CompletedCheckpointStore {
         return allCheckpoints.get(allCheckpoints.size() - 1);
     }
 
-    /** Returns the id of the latest completed checkpoints. */
+    /** Returns the identifier of the latest completed checkpoints. */
     default long getLatestCheckpointId() {
         try {
             List<CompletedCheckpoint> allCheckpoints = getAllCheckpoints();

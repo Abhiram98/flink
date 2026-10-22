@@ -32,7 +32,7 @@ public interface SemanticProperties extends Serializable {
      * Returns the indexes of all target fields to which a source field has been unmodified copied
      * by a function.
      *
-     * @param input The input id for the requested source field (0 for first input, 1 for second
+     * @param input The input identifier for the requested source field (0 for first input, 1 for second
      *     input)
      * @param sourceField The index of the field for which the target position index is requested.
      * @return A set containing the indexes of all target fields to which the source field has been
@@ -44,7 +44,7 @@ public interface SemanticProperties extends Serializable {
      * Returns the index of the source field on the given input from which the target field has been
      * unmodified copied by a function.
      *
-     * @param input The input id for the requested source field (0 for first input, 1 for second
+     * @param input The input identifier for the requested source field (0 for first input, 1 for second
      *     input)
      * @param targetField The index of the target field to which the source field has been copied.
      * @return The index of the source field on the given index that was copied to the given target
@@ -55,7 +55,7 @@ public interface SemanticProperties extends Serializable {
     /**
      * Returns the position indexes of all fields of an input that are accessed by a function.
      *
-     * @param input The input id for which accessed fields are requested.
+     * @param input The input identifier for which accessed fields are requested.
      * @return A set of fields of the specified input which have been accessed by the function. Null
      *     if no information is available.
      */

@@ -46,13 +46,13 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         ArrayList<TestSpecification<?, ?>> testSpecifications = new ArrayList<>();
         testSpecifications.add(
                 new TestSpecification<>(
-                        "event-id-serializer",
+                        "event-identifier-serializer",
                         flinkVersion,
                         EventIdSerializerSetup.class,
                         EventIdSerializerVerifier.class));
         testSpecifications.add(
                 new TestSpecification<>(
-                        "node-id-serializer",
+                        "node-identifier-serializer",
                         flinkVersion,
                         NodeIdSerializerSetup.class,
                         NodeIdSerializerVerifier.class));
@@ -79,7 +79,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
     }
 
     // ----------------------------------------------------------------------------------------------
-    //  Specification for "event-id-serializer"
+    //  Specification for "event-identifier-serializer"
     // ----------------------------------------------------------------------------------------------
 
     /**
@@ -125,7 +125,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
     }
 
     // ----------------------------------------------------------------------------------------------
-    //  Specification for "node-id-serializer"
+    //  Specification for "node-identifier-serializer"
     // ----------------------------------------------------------------------------------------------
 
     /**

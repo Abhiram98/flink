@@ -363,9 +363,9 @@ public class TestTaskStateManager implements TaskStateManager {
 
         long latestId = -1;
 
-        for (long id : taskStateSnapshotsByCheckpointId.keySet()) {
-            if (id > latestId) {
-                latestId = id;
+        for (long identifier : taskStateSnapshotsByCheckpointId.keySet()) {
+            if (identifier > latestId) {
+                latestId = identifier;
             }
         }
 

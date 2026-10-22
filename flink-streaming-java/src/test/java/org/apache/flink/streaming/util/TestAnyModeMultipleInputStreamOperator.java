@@ -65,7 +65,7 @@ public class TestAnyModeMultipleInputStreamOperator extends AbstractStreamOperat
         }
     }
 
-    /** {@link AbstractInput} that converts argument to string pre-pending input id. */
+    /** {@link AbstractInput} that converts argument to string pre-pending input identifier. */
     public static class ToStringInput<T> extends AbstractInput<T, String> {
         public ToStringInput(AbstractStreamOperatorV2<String> owner, int inputId) {
             super(owner, inputId);

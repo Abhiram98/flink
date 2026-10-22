@@ -134,7 +134,7 @@ public class RestartPipelinedRegionFailoverStrategy implements FailoverStrategy 
             for (SchedulingExecutionVertex vertex : region.getVertices()) {
                 // we do not need to restart tasks which are already in the initial state
                 if (vertex.getState() != ExecutionState.CREATED) {
-                    tasksToRestart.add(vertex.getId());
+                    tasksToRestart.add(vertex.getIdentifier());
                 }
             }
         }
@@ -185,7 +185,7 @@ public class RestartPipelinedRegionFailoverStrategy implements FailoverStrategy 
                             topology.getResultPartition(consumedPartitionId);
                     SchedulingPipelinedRegion producerRegion =
                             topology.getPipelinedRegionOfVertex(
-                                    consumedPartition.getProducer().getId());
+                                    consumedPartition.getProducer().getIdentifier());
                     if (!visitedRegions.contains(producerRegion)) {
                         visitedRegions.add(producerRegion);
                         regionsToVisit.add(producerRegion);

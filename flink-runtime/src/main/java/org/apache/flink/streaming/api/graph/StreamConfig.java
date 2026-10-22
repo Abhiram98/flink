@@ -330,7 +330,7 @@ public class StreamConfig implements Serializable {
     }
 
     public void setTypeSerializerSideOut(OutputTag<?> outputTag, TypeSerializer<?> serializer) {
-        setTypeSerializer(TYPE_SERIALIZER_SIDEOUT_PREFIX + outputTag.getId(), serializer);
+        setTypeSerializer(TYPE_SERIALIZER_SIDEOUT_PREFIX + outputTag.getIdentifier(), serializer);
     }
 
     private void setTypeSerializer(String key, TypeSerializer<?> typeWrapper) {
@@ -338,10 +338,10 @@ public class StreamConfig implements Serializable {
     }
 
     public <T> TypeSerializer<T> getTypeSerializerSideOut(OutputTag<?> outputTag, ClassLoader cl) {
-        checkNotNull(outputTag, "Side output id must not be null.");
+        checkNotNull(outputTag, "Side output identifier must not be null.");
         try {
             return InstantiationUtil.readObjectFromConfig(
-                    this.config, TYPE_SERIALIZER_SIDEOUT_PREFIX + outputTag.getId(), cl);
+                    this.config, TYPE_SERIALIZER_SIDEOUT_PREFIX + outputTag.getIdentifier(), cl);
         } catch (Exception e) {
             throw new StreamTaskException("Could not instantiate serializer.", e);
         }
@@ -611,7 +611,7 @@ public class StreamConfig implements Serializable {
     public void setTransitiveChainedTaskConfigs(Map<Integer, StreamConfig> chainedTaskConfigs) {
         if (chainedTaskConfigs != null) {
             chainedTaskConfigs.forEach(
-                    (id, config) -> chainedTaskFutures.put(id, config.getSerializationFuture()));
+                    (identifier, config) -> chainedTaskFutures.put(identifier, config.getSerializationFuture()));
         }
     }
 

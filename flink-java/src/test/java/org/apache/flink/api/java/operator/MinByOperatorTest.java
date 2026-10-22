@@ -221,7 +221,7 @@ class MinByOperatorTest {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         TypeInformation<?>[] types = new TypeInformation[] {Types.INT, Types.INT};
 
-        String[] fieldNames = new String[] {"id", "value"};
+        String[] fieldNames = new String[] {"identifier", "value"};
         RowTypeInfo rowTypeInfo = new RowTypeInfo(types, fieldNames);
         DataSet<Row> tupleDs = env.fromCollection(Collections.singleton(new Row(2)), rowTypeInfo);
 
@@ -235,7 +235,7 @@ class MinByOperatorTest {
 
         TypeInformation<?>[] types = new TypeInformation[] {Types.INT, Types.INT};
 
-        String[] fieldNames = new String[] {"id", "value"};
+        String[] fieldNames = new String[] {"identifier", "value"};
         RowTypeInfo rowTypeInfo = new RowTypeInfo(types, fieldNames);
 
         UnsortedGrouping<Row> groupDs =

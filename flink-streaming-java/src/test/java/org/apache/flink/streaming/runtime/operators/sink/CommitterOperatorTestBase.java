@@ -146,7 +146,7 @@ abstract class CommitterOperatorTestBase {
 
         final CommittableWithLineage<String> first = new CommittableWithLineage<>("1", 1L, 1);
 
-        // Commit elements with lower or equal the latest checkpoint id immediately
+        // Commit elements with lower or equal the latest checkpoint identifier immediately
         testHarness.processElement(new StreamRecord<>(first));
 
         final List<StreamElement> output = fromOutput(testHarness.getOutput());

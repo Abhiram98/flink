@@ -840,8 +840,8 @@ class CheckpointBarrierTrackerTest {
                 new InputChannelInfo(0, channel));
     }
 
-    private static BufferOrEvent createCancellationBarrier(long id, int channel) {
-        return new BufferOrEvent(new CancelCheckpointMarker(id), new InputChannelInfo(0, channel));
+    private static BufferOrEvent createCancellationBarrier(long identifier, int channel) {
+        return new BufferOrEvent(new CancelCheckpointMarker(identifier), new InputChannelInfo(0, channel));
     }
 
     private static BufferOrEvent createBuffer(int channel) {

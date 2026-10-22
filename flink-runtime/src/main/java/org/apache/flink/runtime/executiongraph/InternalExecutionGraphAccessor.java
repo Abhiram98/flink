@@ -99,13 +99,13 @@ public interface InternalExecutionGraphAccessor {
 
     EdgeManager getEdgeManager();
 
-    ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID id);
+    ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID identifier);
 
-    IntermediateResultPartition getResultPartitionOrThrow(final IntermediateResultPartitionID id);
+    IntermediateResultPartition getResultPartitionOrThrow(final IntermediateResultPartitionID identifier);
 
     void deleteBlobs(List<PermanentBlobKey> blobKeys);
 
-    ExecutionJobVertex getJobVertex(JobVertexID id);
+    ExecutionJobVertex getJobVertex(JobVertexID identifier);
 
     boolean isDynamic();
 
@@ -120,8 +120,8 @@ public interface InternalExecutionGraphAccessor {
     /**
      * Get the input info of a certain input of a certain job vertex.
      *
-     * @param jobVertexId the job vertex id
-     * @param resultId the input(intermediate result) id
+     * @param jobVertexId the job vertex identifier
+     * @param resultId the input(intermediate result) identifier
      * @return the input info
      */
     JobVertexInputInfo getJobVertexInputInfo(

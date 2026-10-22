@@ -300,7 +300,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
             SlotRequestId slotRequestId,
             AllocationID allocationId,
             ResourceProfile resourceProfile) {
-        log.debug("Reserve slot {} for slot request id {}", allocationId, slotRequestId);
+        log.debug("Reserve slot {} for slot request identifier {}", allocationId, slotRequestId);
         getDeclarativeSlotPool().reserveFreeSlot(allocationId, resourceProfile);
         fulfilledRequests.put(slotRequestId, allocationId);
     }
@@ -314,7 +314,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
         Preconditions.checkNotNull(requirementProfile, "The requiredSlotProfile must not be null.");
 
         log.debug(
-                "Reserving free slot {} for slot request id {} and profile {}.",
+                "Reserving free slot {} for slot request identifier {} and profile {}.",
                 allocationID,
                 slotRequestId,
                 requirementProfile);
@@ -347,7 +347,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
         assertRunningInMainThread();
 
         log.debug(
-                "Request new allocated slot with slot request id {} and resource profile {}",
+                "Request new allocated slot with slot request identifier {} and resource profile {}",
                 slotRequestId,
                 resourceProfile);
 
@@ -367,7 +367,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
         assertRunningInMainThread();
 
         log.debug(
-                "Request new allocated batch slot with slot request id {} and resource profile {}",
+                "Request new allocated batch slot with slot request identifier {} and resource profile {}",
                 slotRequestId,
                 resourceProfile);
 
@@ -423,7 +423,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
 
     @Override
     public void releaseSlot(@Nonnull SlotRequestId slotRequestId, @Nullable Throwable cause) {
-        log.debug("Release slot with slot request id {}", slotRequestId);
+        log.debug("Release slot with slot request identifier {}", slotRequestId);
         assertRunningInMainThread();
 
         final PendingRequest pendingRequest = pendingRequests.remove(slotRequestId);

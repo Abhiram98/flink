@@ -139,7 +139,7 @@ public class CorrelateSortToRankRule
             return false;
         }
         RexCorrelVariable variable = (RexCorrelVariable) tuple.f1.getReferenceExpr();
-        return variable.id.equals(correlate.getCorrelationId());
+        return variable.identifier.equals(correlate.getCorrelationId());
     }
 
     /**

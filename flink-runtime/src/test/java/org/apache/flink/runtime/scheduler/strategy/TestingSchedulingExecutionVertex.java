@@ -54,7 +54,7 @@ public class TestingSchedulingExecutionVertex implements SchedulingExecutionVert
     }
 
     @Override
-    public ExecutionVertexID getId() {
+    public ExecutionVertexID getIdentifier() {
         return executionVertexId;
     }
 

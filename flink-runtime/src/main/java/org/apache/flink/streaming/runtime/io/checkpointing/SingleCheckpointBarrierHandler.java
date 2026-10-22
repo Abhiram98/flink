@@ -72,7 +72,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
     private final CheckpointableInput[] inputs;
 
     /**
-     * The checkpoint id to guarantee that we would trigger only one checkpoint when reading the
+     * The checkpoint identifier to guarantee that we would trigger only one checkpoint when reading the
      * same barrier from different channels.
      */
     private long currentCheckpointId = -1L;
@@ -214,7 +214,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
     public void processBarrier(
             CheckpointBarrier barrier, InputChannelInfo channelInfo, boolean isRpcTriggered)
             throws IOException {
-        long barrierId = barrier.getId();
+        long barrierId = barrier.getIdentifier();
         LOG.debug("{}: Received barrier from channel {} @ {}.", taskName, channelInfo, barrierId);
 
         if (currentCheckpointId > barrierId
@@ -244,9 +244,9 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
         alignedChannels.add(alignedChannel);
         if (alignedChannels.size() == 1) {
             if (targetChannelCount == 1) {
-                markAlignmentStartAndEnd(barrier.getId(), barrier.getTimestamp());
+                markAlignmentStartAndEnd(barrier.getIdentifier(), barrier.getTimestamp());
             } else {
-                markAlignmentStart(barrier.getId(), barrier.getTimestamp());
+                markAlignmentStart(barrier.getIdentifier(), barrier.getTimestamp());
             }
         }
 
@@ -282,7 +282,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
         LOG.debug(
                 "{}: Triggering checkpoint {} on the barrier announcement at {}.",
                 taskName,
-                trigger.getId(),
+                trigger.getIdentifier(),
                 trigger.getTimestamp());
         notifyCheckpoint(trigger);
     }
@@ -293,7 +293,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
             throws IOException {
         checkNewCheckpoint(announcedBarrier);
 
-        long barrierId = announcedBarrier.getId();
+        long barrierId = announcedBarrier.getIdentifier();
         if (currentCheckpointId > barrierId
                 || (currentCheckpointId == barrierId && !isCheckpointPending())) {
             LOG.debug(
@@ -313,7 +313,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
         this.currentAlignmentTimer =
                 registerTimer.registerTask(
                         () -> {
-                            long barrierId = announcedBarrier.getId();
+                            long barrierId = announcedBarrier.getIdentifier();
                             try {
                                 if (currentCheckpointId == barrierId
                                         && !getAllBarriersReceivedFuture(barrierId).isDone()) {
@@ -333,7 +333,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
     }
 
     private void checkNewCheckpoint(CheckpointBarrier barrier) throws IOException {
-        long barrierId = barrier.getId();
+        long barrierId = barrier.getIdentifier();
         if (currentCheckpointId >= barrierId) {
             return; // This barrier is not the first for this checkpoint.
         }
@@ -491,7 +491,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
         @Override
         public boolean isTimedOut(CheckpointBarrier barrier) {
             return barrier.getCheckpointOptions().isTimeoutable()
-                    && barrier.getId() <= currentCheckpointId
+                    && barrier.getIdentifier() <= currentCheckpointId
                     && barrier.getCheckpointOptions().getAlignedCheckpointTimeout()
                             < (getClock().absoluteTimeMillis() - barrier.getTimestamp());
         }
@@ -511,7 +511,7 @@ public class SingleCheckpointBarrierHandler extends CheckpointBarrierHandler {
         public void initInputsCheckpoint(CheckpointBarrier checkpointBarrier)
                 throws CheckpointException {
             checkState(subTaskCheckpointCoordinator != null);
-            long barrierId = checkpointBarrier.getId();
+            long barrierId = checkpointBarrier.getIdentifier();
             subTaskCheckpointCoordinator.initInputsCheckpoint(
                     barrierId, checkpointBarrier.getCheckpointOptions());
         }

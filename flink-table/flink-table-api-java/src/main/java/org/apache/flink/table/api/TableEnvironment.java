@@ -220,7 +220,7 @@ public interface TableEnvironment {
      * <pre>{@code
      * tEnv.fromValues(
      *     DataTypes.ROW(
-     *         DataTypes.FIELD("id", DataTypes.DECIMAL(10, 2)),
+     *         DataTypes.FIELD("identifier", DataTypes.DECIMAL(10, 2)),
      *         DataTypes.FIELD("name", DataTypes.STRING())
      *     ),
      *     row(1, "ABC"),
@@ -232,7 +232,7 @@ public interface TableEnvironment {
      *
      * <pre>{@code
      * root
-     * |-- id: DECIMAL(10, 2)
+     * |-- identifier: DECIMAL(10, 2)
      * |-- name: STRING
      * }</pre>
      *
@@ -338,7 +338,7 @@ public interface TableEnvironment {
      * <pre>{@code
      * tEnv.fromValues(
      *     DataTypes.ROW(
-     *         DataTypes.FIELD("id", DataTypes.DECIMAL(10, 2)),
+     *         DataTypes.FIELD("identifier", DataTypes.DECIMAL(10, 2)),
      *         DataTypes.FIELD("name", DataTypes.STRING())
      *     ),
      *     row(1, "ABC"),
@@ -350,7 +350,7 @@ public interface TableEnvironment {
      *
      * <pre>{@code
      * root
-     * |-- id: DECIMAL(10, 2)
+     * |-- identifier: DECIMAL(10, 2)
      * |-- name: STRING
      * }</pre>
      *

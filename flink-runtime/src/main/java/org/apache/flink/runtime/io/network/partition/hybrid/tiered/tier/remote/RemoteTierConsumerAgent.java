@@ -57,7 +57,7 @@ public class RemoteTierConsumerAgent implements TierConsumerAgent {
     /**
      * The current reading buffer indexes and segment ids stored in map.
      *
-     * <p>The key is partition id and subpartition id. The value is buffer index and segment id.
+     * <p>The key is partition identifier and subpartition identifier. The value is buffer index and segment identifier.
      */
     private final Map<
                     TieredStoragePartitionId,
@@ -138,7 +138,7 @@ public class RemoteTierConsumerAgent implements TierConsumerAgent {
             TieredStoragePartitionId partitionId,
             TieredStorageSubpartitionId subpartitionId,
             int segmentId) {
-        // Get current segment id and buffer index.
+        // Get current segment identifier and buffer index.
         Tuple2<Integer, Integer> bufferIndexAndSegmentId =
                 currentBufferIndexAndSegmentIds
                         .computeIfAbsent(partitionId, ignore -> new HashMap<>())

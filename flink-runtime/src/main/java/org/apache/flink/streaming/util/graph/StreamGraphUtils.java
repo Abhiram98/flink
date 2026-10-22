@@ -53,7 +53,7 @@ public final class StreamGraphUtils {
      * Configure a stream node's buffer timeout according to the given transformation.
      *
      * @param streamGraph The StreamGraph the node belongs to
-     * @param nodeId The node's id
+     * @param nodeId The node's identifier
      * @param transformation A given transformation
      * @param defaultBufferTimeout The default buffer timeout value
      */

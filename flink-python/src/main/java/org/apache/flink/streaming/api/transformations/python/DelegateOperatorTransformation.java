@@ -79,7 +79,7 @@ public interface DelegateOperatorTransformation<OUT> {
         @Override
         public void addSideOutputTags(Collection<OutputTag<?>> outputTags) {
             for (OutputTag<?> outputTag : outputTags) {
-                sideOutputTags.put(outputTag.getId(), outputTag);
+                sideOutputTags.put(outputTag.getIdentifier(), outputTag);
             }
         }
 

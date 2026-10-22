@@ -234,7 +234,7 @@ class WebFrontendITCase {
         JsonNode parsed = OBJECT_MAPPER.readTree(json);
         ArrayNode taskManagers = (ArrayNode) parsed.get("taskmanagers");
         JsonNode taskManager = taskManagers.get(0);
-        String id = taskManager.get("id").asText();
+        String identifier = taskManager.get("identifier").asText();
 
         WebMonitorUtils.LogFileLocation logFiles =
                 WebMonitorUtils.LogFileLocation.find(CLUSTER_CONFIGURATION);
@@ -246,7 +246,7 @@ class WebFrontendITCase {
                         "http://localhost:"
                                 + restAddress.getPort()
                                 + "/taskmanagers/"
-                                + id
+                                + identifier
                                 + "/log");
         assertThat(logs).contains("job manager log");
 
@@ -256,7 +256,7 @@ class WebFrontendITCase {
                         "http://localhost:"
                                 + restAddress.getPort()
                                 + "/taskmanagers/"
-                                + id
+                                + identifier
                                 + "/stdout");
         assertThat(logs).contains("job manager out");
     }

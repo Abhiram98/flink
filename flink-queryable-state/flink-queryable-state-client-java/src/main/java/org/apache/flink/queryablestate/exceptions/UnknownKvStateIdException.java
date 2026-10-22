@@ -33,7 +33,7 @@ public class UnknownKvStateIdException extends BadRequestException {
      * Creates the exception.
      *
      * @param serverName the name of the server that threw the exception.
-     * @param kvStateId the state id for which no state was found.
+     * @param kvStateId the state identifier for which no state was found.
      */
     public UnknownKvStateIdException(String serverName, KvStateID kvStateId) {
         super(

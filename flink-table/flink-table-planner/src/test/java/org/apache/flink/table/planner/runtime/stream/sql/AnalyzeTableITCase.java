@@ -48,7 +48,7 @@ class AnalyzeTableITCase extends StreamingTestBase {
                                 + "  `c` VARCHAR\n"
                                 + ") WITH (\n"
                                 + "  'connector' = 'values',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
                         dataId1));

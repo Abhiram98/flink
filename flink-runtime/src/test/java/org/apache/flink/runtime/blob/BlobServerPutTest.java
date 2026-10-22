@@ -180,8 +180,8 @@ class BlobServerPutTest {
      * Uploads two byte arrays for different jobs into the server via the {@link BlobServer}. File
      * transfers should be successful.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferSuccessfulGet(
@@ -264,8 +264,8 @@ class BlobServerPutTest {
      * Uploads two file streams for different jobs into the server via the {@link BlobServer}. File
      * transfers should be successful.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutStreamSuccessfulGet(
@@ -348,8 +348,8 @@ class BlobServerPutTest {
      * Uploads two chunked file streams for different jobs into the server via the {@link
      * BlobServer}. File transfers should be successful.
      *
-     * @param jobId1 first job id
-     * @param jobId2 second job id
+     * @param jobId1 first job identifier
+     * @param jobId2 second job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutChunkedStreamSuccessfulGet(
@@ -425,7 +425,7 @@ class BlobServerPutTest {
      * Uploads a byte array to a server which cannot create any files via the {@link BlobServer}.
      * File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFails(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -475,7 +475,7 @@ class BlobServerPutTest {
      * Uploads a byte array to a server which cannot create incoming files via the {@link
      * BlobServer}. File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFailsIncoming(@Nullable final JobID jobId, BlobKey.BlobType blobType)
@@ -536,7 +536,7 @@ class BlobServerPutTest {
      * Uploads a byte array to a server which cannot move incoming files to the final blob store via
      * the {@link BlobServer}. File transfers should fail.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param blobType whether the BLOB should become permanent or transient
      */
     private void testPutBufferFailsStore(@Nullable final JobID jobId, BlobKey.BlobType blobType)

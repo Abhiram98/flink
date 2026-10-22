@@ -46,7 +46,7 @@ import java.util.Set;
  * <pre>{@code
  * Router<Class> router = new Router<Class>()
  *   .GET      ("/articles",     IndexHandler.class)
- *   .GET      ("/articles/:id", ShowHandler.class)
+ *   .GET      ("/articles/:identifier", ShowHandler.class)
  *   .POST     ("/articles",     CreateHandler.class)
  *   .GET      ("/download/:*",  DownloadHandler.class)  // ":*" must be the last token
  *   .GET_FIRST("/articles/new", NewHandler.class);      // This will be matched first

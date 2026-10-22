@@ -115,7 +115,7 @@ class LocalInputChannelTest {
         // pull AC barrier
         channel.getNextBuffer();
         // pretend that alignment timed out
-        stateWriter.start(barrier.getId(), barrier.getCheckpointOptions());
+        stateWriter.start(barrier.getIdentifier(), barrier.getCheckpointOptions());
         channel.checkpointStarted(barrier);
         // pull data
         channel.getNextBuffer();

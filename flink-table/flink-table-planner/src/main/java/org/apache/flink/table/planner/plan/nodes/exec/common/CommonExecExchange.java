@@ -39,12 +39,12 @@ public abstract class CommonExecExchange extends ExecNodeBase<RowData>
     public static final String EXCHANGE_TRANSFORMATION = "exchange";
 
     public CommonExecExchange(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             List<InputProperty> inputProperties,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
     }
 }

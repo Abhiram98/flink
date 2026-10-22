@@ -946,7 +946,7 @@ public class HiveParserBaseSemanticAnalyzer {
     }
 
     static String getAliasId(String alias, HiveParserQB qb) {
-        return (qb.getId() == null ? alias : qb.getId() + ":" + alias).toLowerCase();
+        return (qb.getIdentifier() == null ? alias : qb.getIdentifier() + ":" + alias).toLowerCase();
     }
 
     public static RexWindowBound getBound(
@@ -1962,7 +1962,7 @@ public class HiveParserBaseSemanticAnalyzer {
                 if (rn instanceof RexFieldAccess) {
                     final RexNode ref = ((RexFieldAccess) rn).getReferenceExpr();
                     if (ref instanceof RexCorrelVariable) {
-                        allVars.add(((RexCorrelVariable) ref).id);
+                        allVars.add(((RexCorrelVariable) ref).identifier);
                     }
                 } else {
                     allVars.addAll(findCorrelatedVar(rn));

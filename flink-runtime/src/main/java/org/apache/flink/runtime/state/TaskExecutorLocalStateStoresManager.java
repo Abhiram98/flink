@@ -61,7 +61,7 @@ public class TaskExecutorLocalStateStoresManager {
 
     /**
      * This map holds all local state stores for tasks running on the task manager / executor that
-     * own the instance of this. Maps from allocation id to all the subtask's local state stores.
+     * own the instance of this. Maps from allocation identifier to all the subtask's local state stores.
      */
     @GuardedBy("lock")
     private final Map<AllocationID, Map<JobVertexSubtaskKey, OwnedTaskLocalStateStore>>
@@ -150,7 +150,7 @@ public class TaskExecutorLocalStateStoresManager {
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(
-                            "Registered new allocation id {} for local state stores for job {}.",
+                            "Registered new allocation identifier {} for local state stores for job {}.",
                             allocationID.toHexString(),
                             jobId);
                 }
@@ -208,7 +208,7 @@ public class TaskExecutorLocalStateStoresManager {
 
                 LOG.debug(
                         "Registered new local state store with configuration {} for {} - {} - {} under allocation "
-                                + "id {}.",
+                                + "identifier {}.",
                         localRecoveryConfig,
                         jobId,
                         jobVertexID,
@@ -217,7 +217,7 @@ public class TaskExecutorLocalStateStoresManager {
 
             } else {
                 LOG.debug(
-                        "Found existing local state store for {} - {} - {} under allocation id {}: {}",
+                        "Found existing local state store for {} - {} - {} under allocation identifier {}: {}",
                         jobId,
                         jobVertexID,
                         subtaskIndex,
@@ -231,7 +231,7 @@ public class TaskExecutorLocalStateStoresManager {
 
     public void releaseLocalStateForAllocationId(@Nonnull AllocationID allocationID) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Releasing local state under allocation id {}.", allocationID);
+            LOG.debug("Releasing local state under allocation identifier {}.", allocationID);
         }
 
         Map<JobVertexSubtaskKey, OwnedTaskLocalStateStore> cleanupLocalStores;
@@ -377,16 +377,16 @@ public class TaskExecutorLocalStateStoresManager {
         }
     }
 
-    /** Deletes the base dirs for this allocation id (recursively). */
+    /** Deletes the base dirs for this allocation identifier (recursively). */
     private void cleanupAllocationBaseDirs(AllocationID allocationID) {
-        // clear the base dirs for this allocation id.
+        // clear the base dirs for this allocation identifier.
         File[] allocationDirectories = allocationBaseDirectories(allocationID);
         for (File directory : allocationDirectories) {
             try {
                 FileUtils.deleteFileOrDirectory(directory);
             } catch (IOException e) {
                 LOG.warn(
-                        "Exception while deleting local state directory for allocation id {}.",
+                        "Exception while deleting local state directory for allocation identifier {}.",
                         allocationID,
                         e);
             }
@@ -399,7 +399,7 @@ public class TaskExecutorLocalStateStoresManager {
      */
     private static final class JobVertexSubtaskKey {
 
-        /** The job vertex id. */
+        /** The job vertex identifier. */
         @Nonnull final JobVertexID jobVertexID;
 
         /** The subtask index. */

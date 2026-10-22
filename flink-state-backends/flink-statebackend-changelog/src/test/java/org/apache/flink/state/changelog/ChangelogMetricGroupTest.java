@@ -175,7 +175,7 @@ public class ChangelogMetricGroupTest {
                 changelogKeyedStateBackend.getPartitionedState(
                         VoidNamespace.INSTANCE,
                         VoidNamespaceSerializer.INSTANCE,
-                        new ValueStateDescriptor<>("id", Integer.class));
+                        new ValueStateDescriptor<>("identifier", Integer.class));
         startedMaterializationCounter =
                 Preconditions.checkNotNull(counterMap.get(STARTED_MATERIALIZATION));
         completedMaterializationCounter =

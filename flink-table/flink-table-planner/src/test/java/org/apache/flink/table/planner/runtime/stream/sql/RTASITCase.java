@@ -50,7 +50,7 @@ class RTASITCase extends StreamingTestBase {
         tEnv().executeSql(
                         String.format(
                                 "CREATE TABLE source(a int, b bigint, c string)"
-                                        + " WITH ('connector' = 'values', 'bounded' = 'true', 'data-id' = '%s')",
+                                        + " WITH ('connector' = 'values', 'bounded' = 'true', 'data-identifier' = '%s')",
                                 dataId1));
         tEnv().executeSql(
                         "CREATE TABLE target(a int, b bigint, c string)"

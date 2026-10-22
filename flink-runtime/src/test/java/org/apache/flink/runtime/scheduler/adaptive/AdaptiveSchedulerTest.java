@@ -1683,7 +1683,7 @@ public class AdaptiveSchedulerTest {
                         jobGraph.setSnapshotSettings(
                                 new JobCheckpointingSettings(
                                         // set a large checkpoint interval so we can easily deduce
-                                        // the savepoints checkpoint id
+                                        // the savepoints checkpoint identifier
                                         CheckpointCoordinatorConfiguration.builder()
                                                 .setCheckpointInterval(Long.MAX_VALUE)
                                                 .build(),
@@ -1712,11 +1712,11 @@ public class AdaptiveSchedulerTest {
                                             attemptId, ExecutionState.FAILED, expectedException)));
 
                     // fail the savepoint so that the job terminates
-                    for (ExecutionAttemptID id : attemptIds) {
+                    for (ExecutionAttemptID identifier : attemptIds) {
                         scheduler.declineCheckpoint(
                                 new DeclineCheckpoint(
                                         scheduler.requestJob().getJobId(),
-                                        id,
+                                        identifier,
                                         checkpointIDCounter.get() - 1,
                                         new CheckpointException(
                                                 CheckpointFailureReason.IO_EXCEPTION)));

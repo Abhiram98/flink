@@ -153,7 +153,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             if (hasUsedUnionListState(vertex, operatorStates)) {
                 throw new PartialFinishingNotSupportedByStateException(
                         String.format(
-                                "The vertex %s (id = %s) has used"
+                                "The vertex %s (identifier = %s) has used"
                                         + " UnionListState, but part of its tasks are FINISHED.",
                                 vertex.getName(), vertex.getJobVertexId()));
             }
@@ -184,7 +184,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
                     && hasUsedUnionListState(vertex, operatorStates)) {
                 throw new PartialFinishingNotSupportedByStateException(
                         String.format(
-                                "The vertex %s (id = %s) has used"
+                                "The vertex %s (identifier = %s) has used"
                                         + " UnionListState, but part of its tasks has called operators' finish method.",
                                 vertex.getName(), vertex.getJobVertexId()));
             }

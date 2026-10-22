@@ -288,7 +288,7 @@ public class KubernetesResourceManagerDriver
         }
 
         log.info(
-                "Recovered {} pods from previous attempts, current attempt id is {}.",
+                "Recovered {} pods from previous attempts, current attempt identifier is {}.",
                 recoveredWorkers.size(),
                 ++currentMaxAttemptId);
 

@@ -40,8 +40,8 @@ public class VertexInputInfoStore {
     /**
      * Put a {@link JobVertexInputInfo}.
      *
-     * @param jobVertexId the job vertex id
-     * @param resultId the intermediate result id
+     * @param jobVertexId the job vertex identifier
+     * @param resultId the intermediate result identifier
      * @param info the {@link JobVertexInputInfo} to put
      */
     public void put(
@@ -65,10 +65,10 @@ public class VertexInputInfoStore {
     /**
      * Get a {@link JobVertexInputInfo}.
      *
-     * @param jobVertexId the job vertex id
-     * @param resultId the intermediate result id
-     * @return the {@link JobVertexInputInfo} identified by the job vertex id and intermediate
-     *     result id
+     * @param jobVertexId the job vertex identifier
+     * @param resultId the intermediate result identifier
+     * @return the {@link JobVertexInputInfo} identified by the job vertex identifier and intermediate
+     *     result identifier
      */
     public JobVertexInputInfo get(JobVertexID jobVertexId, IntermediateDataSetID resultId) {
         checkNotNull(jobVertexId);

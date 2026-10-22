@@ -183,7 +183,7 @@ public class TaskConfig implements Serializable {
     private static final String NUMBER_OF_EOS_EVENTS_BROADCAST_PREFIX =
             "iterative.num-eos-events.bc.";
 
-    private static final String ITERATION_HEAD_ID = "iterative.head.id";
+    private static final String ITERATION_HEAD_ID = "iterative.head.identifier";
 
     private static final String ITERATION_WORKSET_MARKER = "iterative.is-workset";
 
@@ -939,19 +939,19 @@ public class TaskConfig implements Serializable {
                 getIntConfigOption(NUMBER_OF_EOS_EVENTS_BROADCAST_PREFIX + bcGateIndex), 0);
     }
 
-    public void setIterationId(int id) {
-        if (id < 0) {
+    public void setIterationId(int identifier) {
+        if (identifier < 0) {
             throw new IllegalArgumentException();
         }
-        this.config.set(getIntConfigOption(ITERATION_HEAD_ID), id);
+        this.config.set(getIntConfigOption(ITERATION_HEAD_ID), identifier);
     }
 
     public int getIterationId() {
-        int id = this.config.get(getIntConfigOption(ITERATION_HEAD_ID), -1);
-        if (id == -1) {
+        int identifier = this.config.get(getIntConfigOption(ITERATION_HEAD_ID), -1);
+        if (identifier == -1) {
             throw new CorruptConfigurationException("Iteration head ID is missing.");
         }
-        return id;
+        return identifier;
     }
 
     public void setIsWorksetIteration() {

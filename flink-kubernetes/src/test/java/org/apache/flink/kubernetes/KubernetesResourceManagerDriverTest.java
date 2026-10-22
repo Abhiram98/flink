@@ -566,7 +566,7 @@ class KubernetesResourceManagerDriverTest
 
                         // prepare validation
                         // - pod removed
-                        // - onTerminated is called in main thread with correct resource id
+                        // - onTerminated is called in main thread with correct resource identifier
                         final CompletableFuture<Void> validationFuture =
                                 CompletableFuture.allOf(
                                         stopPodFuture.thenAccept(

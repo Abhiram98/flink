@@ -78,14 +78,14 @@ public class InMemoryReporter implements MetricReporter {
     private static final Map<UUID, InMemoryReporter> REPORTERS = new ConcurrentHashMap<>();
 
     private final Map<MetricGroup, Map<String, Metric>> metrics = new HashMap<>();
-    private final UUID id;
+    private final UUID identifier;
 
     private final boolean retainMetrics;
 
     InMemoryReporter(boolean retainMetrics) {
         this.retainMetrics = retainMetrics;
-        this.id = UUID.randomUUID();
-        REPORTERS.put(id, this);
+        this.identifier = UUID.randomUUID();
+        REPORTERS.put(identifier, this);
     }
 
     public static InMemoryReporter create() {
@@ -103,7 +103,7 @@ public class InMemoryReporter implements MetricReporter {
     public void close() {
         synchronized (this) {
             metrics.clear();
-            REPORTERS.remove(id);
+            REPORTERS.remove(identifier);
         }
     }
 
@@ -287,7 +287,7 @@ public class InMemoryReporter implements MetricReporter {
     public Configuration addToConfiguration(Configuration configuration) {
         MetricOptions.forReporter(configuration, "mini_cluster_resource_reporter")
                 .set(MetricOptions.REPORTER_FACTORY_CLASS, InMemoryReporter.Factory.class.getName())
-                .setString("ID", id.toString());
+                .setString("ID", identifier.toString());
 
         return configuration;
     }
@@ -297,11 +297,11 @@ public class InMemoryReporter implements MetricReporter {
 
         @Override
         public MetricReporter createMetricReporter(Properties properties) {
-            String id = properties.getProperty(ID);
+            String identifier = properties.getProperty(ID);
             checkState(
-                    id != null,
-                    "Reporter id not found. Did you use InMemoryReporter#addConfiguration?");
-            return REPORTERS.get(UUID.fromString(id));
+                    identifier != null,
+                    "Reporter identifier not found. Did you use InMemoryReporter#addConfiguration?");
+            return REPORTERS.get(UUID.fromString(identifier));
         }
     }
 }

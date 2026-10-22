@@ -32,13 +32,13 @@ public class AcrossCheckpointFileMergingSnapshotManager extends FileMergingSnaps
     private final PhysicalFilePool filePool;
 
     public AcrossCheckpointFileMergingSnapshotManager(
-            String id,
+            String identifier,
             long maxFileSize,
             PhysicalFilePool.Type filePoolType,
             float maxSpaceAmplification,
             Executor ioExecutor,
             MetricGroup metricGroup) {
-        super(id, maxFileSize, filePoolType, maxSpaceAmplification, ioExecutor, metricGroup);
+        super(identifier, maxFileSize, filePoolType, maxSpaceAmplification, ioExecutor, metricGroup);
         filePool = createPhysicalPool();
     }
 

@@ -110,7 +110,7 @@ public class JsonGeneratorTest {
             for (Iterator<JsonNode> iter = rootNode.path("nodes").elements(); iter.hasNext(); ) {
                 JsonNode next = iter.next();
 
-                JsonNode idNode = next.get("id");
+                JsonNode idNode = next.get("identifier");
                 assertNotNull(idNode);
                 assertTrue(idNode.isTextual());
                 checkVertexExists(idNode.asText(), jg);
@@ -130,12 +130,12 @@ public class JsonGeneratorTest {
 
     private void checkVertexExists(String vertexId, JobGraph graph) {
         // validate that the vertex has a valid
-        JobVertexID id = JobVertexID.fromHexString(vertexId);
+        JobVertexID identifier = JobVertexID.fromHexString(vertexId);
         for (JobVertex vertex : graph.getVertices()) {
-            if (vertex.getID().equals(id)) {
+            if (vertex.getID().equals(identifier)) {
                 return;
             }
         }
-        fail("could not find vertex with id " + vertexId + " in JobGraph");
+        fail("could not find vertex with identifier " + vertexId + " in JobGraph");
     }
 }

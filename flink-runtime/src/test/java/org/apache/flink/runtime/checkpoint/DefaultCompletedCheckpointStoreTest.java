@@ -392,18 +392,18 @@ class DefaultCompletedCheckpointStoreTest {
                 executorService);
     }
 
-    private CompletedCheckpoint getCheckpoint(boolean isSavepoint, long id) {
+    private CompletedCheckpoint getCheckpoint(boolean isSavepoint, long identifier) {
         return getCheckpoint(
                 isSavepoint
                         ? CheckpointProperties.forSavepoint(false, SavepointFormatType.CANONICAL)
                         : CheckpointProperties.forCheckpoint(NEVER_RETAIN_AFTER_TERMINATION),
-                id);
+                identifier);
     }
 
-    private CompletedCheckpoint getCheckpoint(CheckpointProperties props, long id) {
+    private CompletedCheckpoint getCheckpoint(CheckpointProperties props, long identifier) {
         return new CompletedCheckpoint(
                 new JobID(),
-                id,
+                identifier,
                 0L,
                 0L,
                 Collections.emptyMap(),

@@ -51,14 +51,14 @@ class DefaultLineageGraphTest {
 
     /** Testing sink lineage vertex. */
     static class TestingLineageVertex implements LineageVertex {
-        private final String id;
+        private final String identifier;
 
-        private TestingLineageVertex(String id) {
-            this.id = id;
+        private TestingLineageVertex(String identifier) {
+            this.identifier = identifier;
         }
 
-        private String id() {
-            return id;
+        private String identifier() {
+            return identifier;
         }
 
         @Override
@@ -71,8 +71,8 @@ class DefaultLineageGraphTest {
     static class TestingSourceLineageVertex extends TestingLineageVertex
             implements SourceLineageVertex {
 
-        private TestingSourceLineageVertex(String id) {
-            super(id);
+        private TestingSourceLineageVertex(String identifier) {
+            super(identifier);
         }
 
         @Override

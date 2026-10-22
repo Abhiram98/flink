@@ -238,7 +238,7 @@ public class PipelinedSubpartition extends ResultSubpartition implements Channel
             }
             if (!inflightBuffers.isEmpty()) {
                 channelStateWriter.addOutputData(
-                        barrier.getId(),
+                        barrier.getIdentifier(),
                         subpartitionInfo,
                         ChannelStateWriter.SEQUENCE_NUMBER_UNKNOWN,
                         inflightBuffers.toArray(new Buffer[0]));
@@ -259,10 +259,10 @@ public class PipelinedSubpartition extends ResultSubpartition implements Channel
     private void processTimeoutableCheckpointBarrier(BufferConsumer bufferConsumer) {
         CheckpointBarrier barrier = parseAndCheckTimeoutableCheckpointBarrier(bufferConsumer);
         channelStateWriter.addOutputDataFuture(
-                barrier.getId(),
+                barrier.getIdentifier(),
                 subpartitionInfo,
                 ChannelStateWriter.SEQUENCE_NUMBER_UNKNOWN,
-                createChannelStateFuture(barrier.getId()));
+                createChannelStateFuture(barrier.getIdentifier()));
     }
 
     @GuardedBy("buffers")
@@ -368,7 +368,7 @@ public class PipelinedSubpartition extends ResultSubpartition implements Channel
                     == bufferConsumer.getDataType()) {
                 barrier = parseAndCheckTimeoutableCheckpointBarrier(bufferConsumer);
                 // It may be an aborted barrier
-                if (barrier.getId() != checkpointId) {
+                if (barrier.getIdentifier() != checkpointId) {
                     continue;
                 }
                 element = next;
@@ -540,7 +540,7 @@ public class PipelinedSubpartition extends ResultSubpartition implements Channel
     @GuardedBy("buffers")
     private void completeTimeoutableCheckpointBarrier(BufferConsumer bufferConsumer) {
         CheckpointBarrier barrier = parseAndCheckTimeoutableCheckpointBarrier(bufferConsumer);
-        if (!isChannelStateFutureAvailable(barrier.getId())) {
+        if (!isChannelStateFutureAvailable(barrier.getIdentifier())) {
             // It happens on a previously aborted checkpoint.
             return;
         }

@@ -321,7 +321,7 @@ public class TaskManagerServicesConfiguration {
         final String[] tmpDirs = ConfigurationUtils.parseTempDirectories(configuration);
 
         // If TaskManagerOptionsInternal.TASK_MANAGER_NODE_ID is not set, use the external address
-        // as the node id.
+        // as the node identifier.
         final String nodeId =
                 configuration
                         .getOptional(TaskManagerOptionsInternal.TASK_MANAGER_NODE_ID)

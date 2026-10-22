@@ -149,10 +149,10 @@ public class DefaultCompletedCheckpointStore<R extends ResourceVersion<R>>
 
         findLowest(completedCheckpoints)
                 .ifPresent(
-                        id ->
+                        identifier ->
                                 checkpointsCleaner.cleanSubsumedCheckpoints(
-                                        id,
-                                        getSharedStateRegistry().unregisterUnusedState(id),
+                                        identifier,
+                                        getSharedStateRegistry().unregisterUnusedState(identifier),
                                         postCleanup,
                                         ioExecutor));
         return subsume.orElse(null);
@@ -238,7 +238,7 @@ public class DefaultCompletedCheckpointStore<R extends ResourceVersion<R>>
     }
 
     /**
-     * Tries to remove the checkpoint identified by the given checkpoint id.
+     * Tries to remove the checkpoint identified by the given checkpoint identifier.
      *
      * @param checkpointId identifying the checkpoint to remove
      * @return true if the checkpoint could be removed

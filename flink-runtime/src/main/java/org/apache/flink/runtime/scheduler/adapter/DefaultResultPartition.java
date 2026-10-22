@@ -64,7 +64,7 @@ class DefaultResultPartition implements SchedulingResultPartition {
     }
 
     @Override
-    public IntermediateResultPartitionID getId() {
+    public IntermediateResultPartitionID getIdentifier() {
         return resultPartitionId;
     }
 

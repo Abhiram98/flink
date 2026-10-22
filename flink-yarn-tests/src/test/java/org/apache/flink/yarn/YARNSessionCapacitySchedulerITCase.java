@@ -605,7 +605,7 @@ class YARNSessionCapacitySchedulerITCase extends YarnTestBase {
         assertThat(runner.isAlive()).isFalse();
         LOG.info("CLI Frontend has returned, so the job is running");
 
-        // find out the application id and wait until it has finished.
+        // find out the application identifier and wait until it has finished.
         try {
             List<ApplicationReport> apps =
                     getApplicationReportWithRetryOnNPE(
@@ -638,7 +638,7 @@ class YARNSessionCapacitySchedulerITCase extends YarnTestBase {
                         tmpAppId,
                         Arrays.toString(apps.toArray()));
             }
-            final ApplicationId id = tmpAppId;
+            final ApplicationId identifier = tmpAppId;
 
             // now it has finished.
             // check the output files.
@@ -662,21 +662,21 @@ class YARNSessionCapacitySchedulerITCase extends YarnTestBase {
                             "..",
                             (dir, name) ->
                                     name.contains("jobmanager.log")
-                                            && dir.getAbsolutePath().contains(id.toString()));
+                                            && dir.getAbsolutePath().contains(identifier.toString()));
             assertThat(jobmanagerLog).isNotNull();
             content =
                     new StringBuilder(
                             FileUtils.readFileToString(jobmanagerLog, Charset.defaultCharset()));
             assertThat(content.toString())
                     .contains("Starting TaskManagers")
-                    .contains(" (2/2) (attempt #0) with attempt id ");
+                    .contains(" (2/2) (attempt #0) with attempt identifier ");
 
             // make sure the detached app is really finished.
             LOG.info("Checking again that app has finished");
             ApplicationReport rep;
             do {
                 sleep(500);
-                rep = yc.getApplicationReport(id);
+                rep = yc.getApplicationReport(identifier);
                 LOG.info("Got report {}", rep);
             } while (rep.getYarnApplicationState() == YarnApplicationState.RUNNING);
 

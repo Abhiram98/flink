@@ -35,7 +35,7 @@ public class ProgramInvocationException extends Exception {
     }
 
     /**
-     * Creates a <tt>ProgramInvocationException</tt> with the given message which contains job id.
+     * Creates a <tt>ProgramInvocationException</tt> with the given message which contains job identifier.
      *
      * @param message The additional message.
      * @param jobID ID of failed job.
@@ -66,7 +66,7 @@ public class ProgramInvocationException extends Exception {
 
     /**
      * Creates a <tt>ProgramInvocationException</tt> for the given exception with an additional
-     * message which contains job id.
+     * message which contains job identifier.
      *
      * @param message The additional message.
      * @param jobID ID of failed job.

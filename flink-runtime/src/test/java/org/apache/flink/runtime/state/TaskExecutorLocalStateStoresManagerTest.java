@@ -285,7 +285,7 @@ class TaskExecutorLocalStateStoresManagerTest {
 
         assertThat(testFile).exists();
 
-        // check cleanup after releasing allocation id
+        // check cleanup after releasing allocation identifier
         storesManager.releaseLocalStateForAllocationId(allocationID);
         checkRootDirsClean(rootDirs);
 

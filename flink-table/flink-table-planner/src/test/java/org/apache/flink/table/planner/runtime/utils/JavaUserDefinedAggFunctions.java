@@ -206,14 +206,14 @@ public class JavaUserDefinedAggFunctions {
         }
 
         // Overloaded accumulate method
-        public void accumulate(CountDistinctAccum accumulator, String id) {
+        public void accumulate(CountDistinctAccum accumulator, String identifier) {
             try {
-                Integer cnt = accumulator.map.get(id);
+                Integer cnt = accumulator.map.get(identifier);
                 if (cnt != null) {
                     cnt += 1;
-                    accumulator.map.put(id, cnt);
+                    accumulator.map.put(identifier, cnt);
                 } else {
-                    accumulator.map.put(id, 1);
+                    accumulator.map.put(identifier, 1);
                     accumulator.count += 1;
                 }
             } catch (Exception e) {
@@ -222,14 +222,14 @@ public class JavaUserDefinedAggFunctions {
         }
 
         // Overloaded accumulate method
-        public void accumulate(CountDistinctAccum accumulator, long id) {
+        public void accumulate(CountDistinctAccum accumulator, long identifier) {
             try {
-                Integer cnt = accumulator.map.get(String.valueOf(id));
+                Integer cnt = accumulator.map.get(String.valueOf(identifier));
                 if (cnt != null) {
                     cnt += 1;
-                    accumulator.map.put(String.valueOf(id), cnt);
+                    accumulator.map.put(String.valueOf(identifier), cnt);
                 } else {
-                    accumulator.map.put(String.valueOf(id), 1);
+                    accumulator.map.put(String.valueOf(identifier), 1);
                     accumulator.count += 1;
                 }
             } catch (Exception e) {
@@ -287,16 +287,16 @@ public class JavaUserDefinedAggFunctions {
     public static class CountDistinctWithRetractAndReset extends CountDistinct {
 
         // Overloaded retract method
-        public void retract(CountDistinctAccum accumulator, long id) {
+        public void retract(CountDistinctAccum accumulator, long identifier) {
             try {
-                Integer cnt = accumulator.map.get(String.valueOf(id));
+                Integer cnt = accumulator.map.get(String.valueOf(identifier));
                 if (cnt != null) {
                     cnt -= 1;
                     if (cnt <= 0) {
-                        accumulator.map.remove(String.valueOf(id));
+                        accumulator.map.remove(String.valueOf(identifier));
                         accumulator.count -= 1;
                     } else {
-                        accumulator.map.put(String.valueOf(id), cnt);
+                        accumulator.map.put(String.valueOf(identifier), cnt);
                     }
                 }
             } catch (Exception e) {

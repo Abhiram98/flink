@@ -53,7 +53,7 @@ public class KeyGroupPartitionedPriorityQueue<
     /** A heap of heap sets. Each sub-heap represents the partition for a key-group. */
     @Nonnull private final HeapPriorityQueue<PQ> heapOfKeyGroupedHeaps;
 
-    /** All elements from keyGroupHeap, indexed by their key-group id, relative to firstKeyGroup. */
+    /** All elements from keyGroupHeap, indexed by their key-group identifier, relative to firstKeyGroup. */
     @Nonnull private final PQ[] keyGroupedHeaps;
 
     /** Function to extract the key from contained elements. */
@@ -62,7 +62,7 @@ public class KeyGroupPartitionedPriorityQueue<
     /** The total number of key-groups (in the job). */
     @Nonnegative private final int totalKeyGroups;
 
-    /** The smallest key-group id with a subpartition managed by this ordered set. */
+    /** The smallest key-group identifier with a subpartition managed by this ordered set. */
     @Nonnegative private final int firstKeyGroup;
 
     @SuppressWarnings("unchecked")

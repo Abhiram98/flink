@@ -51,10 +51,10 @@ import static java.util.Collections.singletonList;
  *
  * <pre>{@code
  * CREATE TABLE base_table_1 (
- *     id BIGINT,
+ *     identifier BIGINT,
  *     name STRING,
  *     tstmp TIMESTAMP,
- *     PRIMARY KEY(id)
+ *     PRIMARY KEY(identifier)
  * ) WITH (
  *     ‘connector’: ‘kafka’,
  *     ‘connector.starting-offset’: ‘12345’,
@@ -77,7 +77,7 @@ import static java.util.Collections.singletonList;
  *
  * <pre>{@code
  * CREATE TEMPORARY TABLE derived_table (
- *     id BIGINT,
+ *     identifier BIGINT,
  *     name STRING,
  *     tstmp TIMESTAMP,
  *     WATERMARK FOR tstmp AS tsmp - INTERVAL '5' SECOND

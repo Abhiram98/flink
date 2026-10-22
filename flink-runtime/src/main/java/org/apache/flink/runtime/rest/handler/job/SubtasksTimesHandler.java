@@ -94,7 +94,7 @@ public class SubtasksTimesHandler
     }
 
     private static SubtasksTimesInfo createSubtaskTimesInfo(AccessExecutionJobVertex jobVertex) {
-        final String id = jobVertex.getJobVertexId().toString();
+        final String identifier = jobVertex.getJobVertexId().toString();
         final String name = jobVertex.getName();
         final long now = System.currentTimeMillis();
         final List<SubtasksTimesInfo.SubtaskTimeInfo> subtasks = new ArrayList<>();
@@ -126,6 +126,6 @@ public class SubtasksTimesHandler
                     new SubtasksTimesInfo.SubtaskTimeInfo(
                             num++, host, endpoint, duration, timestampMap));
         }
-        return new SubtasksTimesInfo(id, name, now, subtasks);
+        return new SubtasksTimesInfo(identifier, name, now, subtasks);
     }
 }

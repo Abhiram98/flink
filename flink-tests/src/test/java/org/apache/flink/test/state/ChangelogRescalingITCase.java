@@ -184,7 +184,7 @@ public class ChangelogRescalingITCase extends TestLogger {
                                     ThreadLocalRandom.current().nextBytes(bytes);
                                     return new TestEvent(el, bytes);
                                 });
-        DataStreamUtils.reinterpretAsKeyedStream(map, e -> key(e.id))
+        DataStreamUtils.reinterpretAsKeyedStream(map, e -> key(e.identifier))
                 .window(SlidingProcessingTimeWindows.of(WINDOW_SIZE, WINDOW_SLIDE))
                 .process(
                         new ProcessWindowFunction<TestEvent, String, Long, TimeWindow>() {
@@ -240,13 +240,13 @@ public class ChangelogRescalingITCase extends TestLogger {
     }
 
     private static final class TestEvent implements Serializable {
-        private final long id;
+        private final long identifier;
 
         @SuppressWarnings({"FieldCanBeLocal", "unused"})
         private final byte[] payload;
 
-        private TestEvent(long id, byte[] payload) {
-            this.id = id;
+        private TestEvent(long identifier, byte[] payload) {
+            this.identifier = identifier;
             this.payload = payload;
         }
     }

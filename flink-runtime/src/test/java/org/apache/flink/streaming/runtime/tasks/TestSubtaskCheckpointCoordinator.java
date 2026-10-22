@@ -53,8 +53,8 @@ public class TestSubtaskCheckpointCoordinator implements SubtaskCheckpointCoordi
     }
 
     @Override
-    public void initInputsCheckpoint(long id, CheckpointOptions checkpointOptions) {
-        channelStateWriter.start(id, checkpointOptions);
+    public void initInputsCheckpoint(long identifier, CheckpointOptions checkpointOptions) {
+        channelStateWriter.start(identifier, checkpointOptions);
     }
 
     @Override

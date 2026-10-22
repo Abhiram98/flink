@@ -271,7 +271,7 @@ public class TestUtils {
 
     /**
      * A simple {@link BucketAssigner} that returns the first (String) element of a {@code Tuple2}
-     * object as the bucket id.
+     * object as the bucket identifier.
      */
     static class TupleToStringBucketer implements BucketAssigner<Tuple2<String, Integer>, String> {
 
@@ -290,7 +290,7 @@ public class TestUtils {
 
     /**
      * A simple {@link BucketAssigner} that returns the second (Integer) element of a {@code Tuple2}
-     * object as the bucket id.
+     * object as the bucket identifier.
      */
     static class TupleToIntegerBucketer
             implements BucketAssigner<Tuple2<String, Integer>, Integer> {
@@ -333,7 +333,7 @@ public class TestUtils {
 
     /**
      * A simple {@link BucketAssigner} that accepts {@code String}'s and returns the element itself
-     * as the bucket id.
+     * as the bucket identifier.
      */
     static class StringIdentityBucketAssigner implements BucketAssigner<String, String> {
         private static final long serialVersionUID = 1L;

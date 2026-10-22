@@ -20,25 +20,25 @@ package org.apache.flink.runtime.checkpoint;
 
 /**
  * {@link CompletedCheckpointStore} utility interfaces. For example, convert a name(e.g. ZooKeeper
- * path, key name in Kubernetes ConfigMap) to checkpoint id in {@link Long} format, or vice versa.
+ * path, key name in Kubernetes ConfigMap) to checkpoint identifier in {@link Long} format, or vice versa.
  */
 public interface CheckpointStoreUtil {
 
     long INVALID_CHECKPOINT_ID = -1L;
 
     /**
-     * Get the name in external storage from checkpoint id.
+     * Get the name in external storage from checkpoint identifier.
      *
-     * @param checkpointId checkpoint id
+     * @param checkpointId checkpoint identifier
      * @return Key name in ConfigMap or child path name in ZooKeeper
      */
     String checkpointIDToName(long checkpointId);
 
     /**
-     * Get the checkpoint id from name.
+     * Get the checkpoint identifier from name.
      *
      * @param name Key name in ConfigMap or child path name in ZooKeeper
-     * @return parsed checkpoint id. Or {@link #INVALID_CHECKPOINT_ID} when parsing failed.
+     * @return parsed checkpoint identifier. Or {@link #INVALID_CHECKPOINT_ID} when parsing failed.
      */
     long nameToCheckpointID(String name);
 }

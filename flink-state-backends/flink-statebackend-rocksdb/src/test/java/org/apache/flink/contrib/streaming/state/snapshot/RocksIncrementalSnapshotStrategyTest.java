@@ -74,14 +74,14 @@ class RocksIncrementalSnapshotStrategyTest {
                         createSnapshotStrategy()) {
             FsCheckpointStreamFactory checkpointStreamFactory = createFsCheckpointStreamFactory();
 
-            // make and notify checkpoint with id 1
+            // make and notify checkpoint with identifier 1
             snapshot(1L, checkpointSnapshotStrategy, checkpointStreamFactory, closeableRegistry);
             checkpointSnapshotStrategy.notifyCheckpointComplete(1L);
 
-            // notify savepoint with id 2
+            // notify savepoint with identifier 2
             checkpointSnapshotStrategy.notifyCheckpointComplete(2L);
 
-            // make checkpoint with id 3
+            // make checkpoint with identifier 3
             IncrementalRemoteKeyedStateHandle incrementalRemoteKeyedStateHandle3 =
                     snapshot(
                             3L,

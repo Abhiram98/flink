@@ -61,7 +61,7 @@ public class SavepointOutputFormatTest {
         CheckpointMetadata metadataOnDisk = SavepointLoader.loadSavepointMetadata(path.getPath());
 
         Assert.assertEquals(
-                "Incorrect checkpoint id",
+                "Incorrect checkpoint identifier",
                 metadata.getCheckpointId(),
                 metadataOnDisk.getCheckpointId());
 

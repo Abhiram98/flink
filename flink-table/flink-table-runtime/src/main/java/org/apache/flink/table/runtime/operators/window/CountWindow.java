@@ -29,20 +29,20 @@ import java.io.IOException;
 
 /**
  * A {@link Window} that represents a count window. For each count window, we will assign a unique
- * id. Thus this CountWindow can act as namespace part in state. We can attach data to each
+ * identifier. Thus this CountWindow can act as namespace part in state. We can attach data to each
  * different CountWindow.
  */
 public class CountWindow extends Window {
 
-    private final long id;
+    private final long identifier;
 
-    public CountWindow(long id) {
-        this.id = id;
+    public CountWindow(long identifier) {
+        this.identifier = identifier;
     }
 
-    /** Gets the id (0-based) of the window. */
-    public long getId() {
-        return id;
+    /** Gets the identifier (0-based) of the window. */
+    public long getIdentifier() {
+        return identifier;
     }
 
     @Override
@@ -61,23 +61,23 @@ public class CountWindow extends Window {
 
         CountWindow window = (CountWindow) o;
 
-        return id == window.id;
+        return identifier == window.identifier;
     }
 
     @Override
     public int hashCode() {
-        return MathUtils.longToIntWithBitMixing(id);
+        return MathUtils.longToIntWithBitMixing(identifier);
     }
 
     @Override
     public String toString() {
-        return "CountWindow{" + "id=" + id + '}';
+        return "CountWindow{" + "identifier=" + identifier + '}';
     }
 
     @Override
     public int compareTo(Window o) {
         CountWindow that = (CountWindow) o;
-        return Long.compare(this.id, that.id);
+        return Long.compare(this.identifier, that.identifier);
     }
 
     // ------------------------------------------------------------------------
@@ -115,7 +115,7 @@ public class CountWindow extends Window {
 
         @Override
         public void serialize(CountWindow record, DataOutputView target) throws IOException {
-            target.writeLong(record.id);
+            target.writeLong(record.identifier);
         }
 
         @Override

@@ -246,7 +246,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
     }
 
     /**
-     * Returns the current session time zone id. It is used when converting to/from {@code TIMESTAMP
+     * Returns the current session time zone identifier. It is used when converting to/from {@code TIMESTAMP
      * WITH LOCAL TIME ZONE}. See {@link #setLocalTimeZone(ZoneId)} for more details.
      *
      * @see org.apache.flink.table.types.logical.LocalZonedTimestampType
@@ -261,7 +261,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
     }
 
     /**
-     * Sets the current session time zone id. It is used when converting to/from {@link
+     * Sets the current session time zone identifier. It is used when converting to/from {@link
      * DataTypes#TIMESTAMP_WITH_LOCAL_TIME_ZONE()}. Internally, timestamps with local time zone are
      * always represented in the UTC time zone. However, when converting to data types that don't
      * include a time zone (e.g. TIMESTAMP, TIME, or simply STRING), the session time zone is used
@@ -272,7 +272,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      * <pre>{@code
      * TableConfig config = tEnv.getConfig();
      * config.setLocalTimeZone(ZoneOffset.ofHours(2));
-     * tEnv.executeSql("CREATE TABLE testTable (id BIGINT, tmstmp TIMESTAMP WITH LOCAL TIME ZONE)");
+     * tEnv.executeSql("CREATE TABLE testTable (identifier BIGINT, tmstmp TIMESTAMP WITH LOCAL TIME ZONE)");
      * tEnv.executeSql("INSERT INTO testTable VALUES ((1, '2000-01-01 2:00:00'), (2, TIMESTAMP '2000-01-01 2:00:00'))");
      * tEnv.executeSql("SELECT * FROM testTable"); // query with local time zone set to UTC+2
      * }</pre>
@@ -281,7 +281,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      *
      * <pre>
      * =============================
-     *    id   |       tmstmp
+     *    identifier   |       tmstmp
      * =============================
      *    1    | 2000-01-01 2:00:00'
      *    2    | 2000-01-01 2:00:00'
@@ -298,7 +298,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      *
      * <pre>
      * =============================
-     *    id   |       tmstmp
+     *    identifier   |       tmstmp
      * =============================
      *    1    | 2000-01-01 0:00:00'
      *    2    | 2000-01-01 0:00:00'

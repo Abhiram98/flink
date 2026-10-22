@@ -106,7 +106,7 @@ public class HiveCompactReaderFactory implements CompactReader.Factory<RowData> 
     private HiveSourceSplit createSplit(Path path, FileSystem fs) throws IOException {
         FileStatus fileStatus = fs.getFileStatus(path);
         return new HiveSourceSplit(
-                "id",
+                "identifier",
                 path,
                 0,
                 fileStatus.getLen(),

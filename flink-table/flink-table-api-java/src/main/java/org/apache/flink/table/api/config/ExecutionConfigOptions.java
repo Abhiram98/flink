@@ -562,7 +562,7 @@ public class ExecutionConfigOptions {
                     .booleanType()
                     .defaultValue(true)
                     .withDescription(
-                            "When it is true, the optimizer will simplify the operator name with id and type of ExecNode and keep detail in description. Default value is true.");
+                            "When it is true, the optimizer will simplify the operator name with identifier and type of ExecNode and keep detail in description. Default value is true.");
 
     @Documentation.TableOption(execMode = Documentation.ExecMode.STREAMING)
     public static final ConfigOption<Boolean>
@@ -643,13 +643,13 @@ public class ExecutionConfigOptions {
     public static final ConfigOption<String> TABLE_EXEC_UID_FORMAT =
             key("table.exec.uid.format")
                     .stringType()
-                    .defaultValue("<id>_<transformation>")
+                    .defaultValue("<identifier>_<transformation>")
                     .withDescription(
                             "Defines the format pattern for generating the UID of an ExecNode streaming transformation. "
                                     + "The pattern can be defined globally or per-ExecNode in the compiled plan. "
-                                    + "Supported arguments are: <id> (from static counter), <type> (e.g. 'stream-exec-sink'), "
+                                    + "Supported arguments are: <identifier> (from static counter), <type> (e.g. 'stream-exec-sink'), "
                                     + "<version>, and <transformation> (e.g. 'constraint-validator' for a sink). "
-                                    + "In Flink 1.15.x the pattern was wrongly defined as '<id>_<type>_<version>_<transformation>' "
+                                    + "In Flink 1.15.x the pattern was wrongly defined as '<identifier>_<type>_<version>_<transformation>' "
                                     + "which would prevent migrations in the future.");
 
     @Documentation.TableOption(execMode = Documentation.ExecMode.STREAMING)

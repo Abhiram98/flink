@@ -72,9 +72,9 @@ public interface TaskInfo {
     String getTaskNameWithSubtasks();
 
     /**
-     * Returns the allocation id for where this task is executed.
+     * Returns the allocation identifier for where this task is executed.
      *
-     * @return The allocation id for where this task is executed.
+     * @return The allocation identifier for where this task is executed.
      */
     String getAllocationIDAsString();
 }

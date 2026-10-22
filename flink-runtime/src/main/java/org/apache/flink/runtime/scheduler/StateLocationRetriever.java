@@ -30,7 +30,7 @@ public interface StateLocationRetriever {
     /**
      * Returns state location of an execution vertex.
      *
-     * @param executionVertexId id of the execution vertex
+     * @param executionVertexId identifier of the execution vertex
      * @return optional that is assigned with the vertex's state location if the location exists,
      *     otherwise empty
      */

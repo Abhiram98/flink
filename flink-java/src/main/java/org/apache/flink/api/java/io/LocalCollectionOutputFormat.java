@@ -55,12 +55,12 @@ public class LocalCollectionOutputFormat<T> extends RichOutputFormat<T>
 
     private TypeSerializer<T> typeSerializer;
 
-    private int id;
+    private int identifier;
 
     public LocalCollectionOutputFormat(Collection<T> out) {
         synchronized (RESULT_HOLDER) {
-            this.id = generateRandomId();
-            RESULT_HOLDER.put(this.id, out);
+            this.identifier = generateRandomId();
+            RESULT_HOLDER.put(this.identifier, out);
         }
     }
 
@@ -91,7 +91,7 @@ public class LocalCollectionOutputFormat<T> extends RichOutputFormat<T>
     public void close() throws IOException {
         synchronized (RESULT_HOLDER) {
             @SuppressWarnings("unchecked")
-            Collection<T> result = (Collection<T>) RESULT_HOLDER.get(this.id);
+            Collection<T> result = (Collection<T>) RESULT_HOLDER.get(this.identifier);
             result.addAll(this.taskResult);
         }
     }

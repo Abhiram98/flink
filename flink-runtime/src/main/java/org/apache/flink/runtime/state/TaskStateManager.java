@@ -84,13 +84,13 @@ public interface TaskStateManager extends CheckpointListener, AutoCloseable {
     /** Whether all the operators of the task are finished on restore. */
     boolean isTaskDeployedAsFinished();
 
-    /** Acquires the checkpoint id to restore from. */
+    /** Acquires the checkpoint identifier to restore from. */
     Optional<Long> getRestoreCheckpointId();
 
     /**
      * Returns means to restore previously reported state of an operator running in the owning task.
      *
-     * @param operatorID the id of the operator for which we request state.
+     * @param operatorID the identifier of the operator for which we request state.
      * @return Previous state for the operator. The previous state can be empty if the operator had
      *     no previous state.
      */
@@ -101,7 +101,7 @@ public interface TaskStateManager extends CheckpointListener, AutoCloseable {
      * Get the restored state from jobManager which belongs to an operator running in the owning
      * task.
      *
-     * @param operatorID the id of the operator for which we request state.
+     * @param operatorID the identifier of the operator for which we request state.
      * @return the subtask restored state from jobManager.
      */
     Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OperatorID operatorID);

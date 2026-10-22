@@ -28,24 +28,24 @@ import static java.util.Objects.requireNonNull;
 public class ParquetPrimitiveField extends ParquetField {
 
     private final ColumnDescriptor descriptor;
-    private final int id;
+    private final int identifier;
 
     public ParquetPrimitiveField(
-            LogicalType type, boolean required, ColumnDescriptor descriptor, int id) {
+            LogicalType type, boolean required, ColumnDescriptor descriptor, int identifier) {
         super(
                 type,
                 descriptor.getMaxRepetitionLevel(),
                 descriptor.getMaxDefinitionLevel(),
                 required);
         this.descriptor = requireNonNull(descriptor, "descriptor is required");
-        this.id = id;
+        this.identifier = identifier;
     }
 
     public ColumnDescriptor getDescriptor() {
         return descriptor;
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 }

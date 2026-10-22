@@ -789,7 +789,7 @@ public class JobManagerOptions {
      */
     @Documentation.Section(Documentation.Sections.ALL_JOB_MANAGER)
     public static final ConfigOption<String> JOB_MANAGER_RESOURCE_ID =
-            key("jobmanager.resource-id")
+            key("jobmanager.resource-identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(

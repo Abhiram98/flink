@@ -129,7 +129,7 @@ class HiveTableSinkITCase {
                 () -> {
                     tEnv.executeSql(
                             "CREATE TABLE test_table ("
-                                    + " id int,"
+                                    + " identifier int,"
                                     + " real_col int"
                                     + ") TBLPROPERTIES ("
                                     + " 'sink.parallelism' = '8'" // set sink parallelism = 8

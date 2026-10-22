@@ -79,7 +79,7 @@ import org.apache.flink.annotation.Public;
  *             anywhere.
  *         <li>A "pending set": Artifacts being committed with a checkpoint. The actual publishing
  *             happens when the checkpoint is complete. This is a map of "{@code long =>
- *             List<Artifact>}", mapping from the id of the checkpoint when the artifact was ready
+ *             List<Artifact>}", mapping from the identifier of the checkpoint when the artifact was ready
  *             to the artifacts. /li>
  *       </ol>
  *   <li>On checkpoint, add that set of artifacts from the "ready set" to the "pending set",

@@ -1166,7 +1166,7 @@ class BatchExecutionStateBackendTest {
     @Test
     void testMapStateIsEmpty() throws Exception {
         MapStateDescriptor<Integer, Long> kvId =
-                new MapStateDescriptor<>("id", Integer.class, Long.class);
+                new MapStateDescriptor<>("identifier", Integer.class, Long.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -1202,7 +1202,7 @@ class BatchExecutionStateBackendTest {
     @Test
     void testMapStateIteratorArbitraryAccess() throws Exception {
         MapStateDescriptor<Integer, Long> kvId =
-                new MapStateDescriptor<>("id", Integer.class, Long.class);
+                new MapStateDescriptor<>("identifier", Integer.class, Long.class);
 
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
@@ -1248,7 +1248,7 @@ class BatchExecutionStateBackendTest {
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
 
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class, null);
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class, null);
 
         ValueState<String> state =
                 backend.getPartitionedState(
@@ -1272,7 +1272,7 @@ class BatchExecutionStateBackendTest {
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
 
-        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("id", String.class, "Hello");
+        ValueStateDescriptor<String> kvId = new ValueStateDescriptor<>("identifier", String.class, "Hello");
 
         ValueState<String> state =
                 backend.getPartitionedState(
@@ -1297,7 +1297,7 @@ class BatchExecutionStateBackendTest {
                 createKeyedBackend(IntSerializer.INSTANCE);
 
         ReducingStateDescriptor<String> kvId =
-                new ReducingStateDescriptor<>("id", new AppendingReduce(), String.class);
+                new ReducingStateDescriptor<>("identifier", new AppendingReduce(), String.class);
 
         ReducingState<String> state =
                 backend.getPartitionedState(
@@ -1321,7 +1321,7 @@ class BatchExecutionStateBackendTest {
         CheckpointableKeyedStateBackend<Integer> backend =
                 createKeyedBackend(IntSerializer.INSTANCE);
 
-        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("id", String.class);
+        ListStateDescriptor<String> kvId = new ListStateDescriptor<>("identifier", String.class);
 
         ListState<String> state =
                 backend.getPartitionedState(
@@ -1346,7 +1346,7 @@ class BatchExecutionStateBackendTest {
                 createKeyedBackend(IntSerializer.INSTANCE);
 
         MapStateDescriptor<String, String> kvId =
-                new MapStateDescriptor<>("id", String.class, String.class);
+                new MapStateDescriptor<>("identifier", String.class, String.class);
 
         MapState<String, String> state =
                 backend.getPartitionedState(

@@ -78,7 +78,7 @@ public class DynamicFilteringITCase extends BatchTestBase {
                                 + " 'connector' = 'values',\n"
                                 + "  'runtime-source' = 'NewSource',\n"
                                 + " 'disable-lookup' = 'true',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId1));
@@ -98,7 +98,7 @@ public class DynamicFilteringITCase extends BatchTestBase {
                                 + "  'runtime-source' = 'NewSource',\n"
                                 + "  'partition-list' = 'a:1;a:2;a:3;a:4;a:5;',\n"
                                 + "  'dynamic-filtering-fields' = 'a',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
@@ -119,7 +119,7 @@ public class DynamicFilteringITCase extends BatchTestBase {
                                 + "  'runtime-source' = 'NewSource',\n"
                                 + "  'partition-list' = 'e:1,a:1;e:1,a:2;e:1,a:4;e:1,a:5;e:2,a:2;e:2,a:3;e:2,a:4;e:2,a:5;e:3,a:3;e:3,a:5;',\n"
                                 + "  'dynamic-filtering-fields' = 'a;e',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
@@ -174,7 +174,7 @@ public class DynamicFilteringITCase extends BatchTestBase {
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
                                 + " 'disable-lookup' = 'true',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId1));

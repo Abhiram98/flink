@@ -93,7 +93,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
                         new MapFunction<Centroid, String>() {
                             @Override
                             public String map(Centroid c) throws Exception {
-                                return String.format(Locale.US, "%d|%.2f|%.2f|", c.id, c.x, c.y);
+                                return String.format(Locale.US, "%d|%.2f|%.2f|", c.identifier, c.x, c.y);
                             }
                         });
 

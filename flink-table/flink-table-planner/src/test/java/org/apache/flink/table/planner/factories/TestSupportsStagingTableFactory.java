@@ -54,7 +54,7 @@ public class TestSupportsStagingTableFactory implements DynamicTableSinkFactory 
             ConfigOptions.key("data-dir")
                     .stringType()
                     .noDefaultValue()
-                    .withDescription("The data id used to write the rows.");
+                    .withDescription("The data identifier used to write the rows.");
 
     private static final ConfigOption<Boolean> SINK_FAIL =
             ConfigOptions.key("sink-fail")

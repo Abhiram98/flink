@@ -88,11 +88,11 @@ public interface AccessExecutionGraph extends JobStatusProvider {
     /**
      * Returns the job vertex for the given {@link JobVertexID}.
      *
-     * @param id id of job vertex to be returned
-     * @return job vertex for the given id, or {@code null}
+     * @param identifier identifier of job vertex to be returned
+     * @return job vertex for the given identifier, or {@code null}
      */
     @Nullable
-    AccessExecutionJobVertex getJobVertex(JobVertexID id);
+    AccessExecutionJobVertex getJobVertex(JobVertexID identifier);
 
     /**
      * Returns a map containing all job vertices for this execution graph.

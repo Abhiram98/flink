@@ -41,42 +41,42 @@ import static org.apache.flink.test.util.TestBaseUtils.compareResultAsText;
 public class BroadcastBranchingITCase extends JavaProgramTestBaseJUnit4 {
     private static final String RESULT = "(2,112)\n";
 
-    //              Sc1(id,a,b,c) --
+    //              Sc1(identifier,a,b,c) --
     //                              \
-    //    Sc2(id,x) --------         Jn2(id) -- Mp2 -- Sk
+    //    Sc2(identifier,x) --------         Jn2(identifier) -- Mp2 -- Sk
     //                      \        /          / <=BC
-    //                       Jn1(id) -- Mp1 ----
+    //                       Jn1(identifier) -- Mp1 ----
     //                      /
-    //    Sc3(id,y) --------
+    //    Sc3(identifier,y) --------
     @Override
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
         // Sc1 generates M parameters a,b,c for second degree polynomials P(x) = ax^2 + bx + c
-        // identified by id
+        // identified by identifier
         DataSet<Tuple4<String, Integer, Integer, Integer>> sc1 =
                 env.fromElements(
                         new Tuple4<>("1", 61, 6, 29),
                         new Tuple4<>("2", 7, 13, 10),
                         new Tuple4<>("3", 8, 13, 27));
 
-        // Sc2 generates N x values to be evaluated with the polynomial identified by id
+        // Sc2 generates N x values to be evaluated with the polynomial identified by identifier
         DataSet<Tuple2<String, Integer>> sc2 =
                 env.fromElements(new Tuple2<>("1", 5), new Tuple2<>("2", 3), new Tuple2<>("3", 6));
 
-        // Sc3 generates N y values to be evaluated with the polynomial identified by id
+        // Sc3 generates N y values to be evaluated with the polynomial identified by identifier
         DataSet<Tuple2<String, Integer>> sc3 =
                 env.fromElements(new Tuple2<>("1", 2), new Tuple2<>("2", 3), new Tuple2<>("3", 7));
 
-        // Jn1 matches x and y values on id and emits (id, x, y) triples
+        // Jn1 matches x and y values on identifier and emits (identifier, x, y) triples
         JoinOperator<
                         Tuple2<String, Integer>,
                         Tuple2<String, Integer>,
                         Tuple3<String, Integer, Integer>>
                 jn1 = sc2.join(sc3).where(0).equalTo(0).with(new Jn1());
 
-        // Jn2 matches polynomial and arguments by id, computes p = min(P(x),P(y)) and emits (id, p)
+        // Jn2 matches polynomial and arguments by identifier, computes p = min(P(x),P(y)) and emits (identifier, p)
         // tuples
         JoinOperator<
                         Tuple3<String, Integer, Integer>,
@@ -84,7 +84,7 @@ public class BroadcastBranchingITCase extends JavaProgramTestBaseJUnit4 {
                         Tuple2<String, Integer>>
                 jn2 = jn1.join(sc1).where(0).equalTo(0).with(new Jn2());
 
-        // Mp1 selects (id, x, y) triples where x = y and broadcasts z (=x=y) to Mp2
+        // Mp1 selects (identifier, x, y) triples where x = y and broadcasts z (=x=y) to Mp2
         FlatMapOperator<Tuple3<String, Integer, Integer>, Tuple2<String, Integer>> mp1 =
                 jn1.flatMap(new Mp1());
 

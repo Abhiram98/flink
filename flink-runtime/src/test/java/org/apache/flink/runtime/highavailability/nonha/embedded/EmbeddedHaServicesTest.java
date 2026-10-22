@@ -62,7 +62,7 @@ public class EmbeddedHaServicesTest extends TestLogger {
         }
     }
 
-    /** Tests that exactly one JobManager is elected as the leader for a given job id. */
+    /** Tests that exactly one JobManager is elected as the leader for a given job identifier. */
     @Test
     public void testJobManagerLeaderElection() throws Exception {
         JobID jobId1 = new JobID();

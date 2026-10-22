@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generates records with an id and a and CoordVector. The input format is line-based, i.e. one
+ * Generates records with an identifier and a and CoordVector. The input format is line-based, i.e. one
  * record is read from one line which is terminated by '\n'. Within a line the first '|' character
- * separates the id from the CoordVector. The vector consists of a vector of decimals. The decimals
- * are separated by '|' as well. The id is the id of a data point or cluster center and the
+ * separates the identifier from the CoordVector. The vector consists of a vector of decimals. The decimals
+ * are separated by '|' as well. The identifier is the identifier of a data point or cluster center and the
  * CoordVector the corresponding position (coordinate vector) of the data point or cluster center.
  * Example line: "42|23.23|52.57|74.43| Id: 42 Coordinate vector: (23.23, 52.57, 74.43)
  */
@@ -46,7 +46,7 @@ public class PointInFormat extends DelimitedInputFormat<Tuple2<Integer, CoordVec
 
         final int limit = offset + numBytes;
 
-        int id = -1;
+        int identifier = -1;
         int value = 0;
         int fractionValue = 0;
         int fractionChars = 0;
@@ -56,9 +56,9 @@ public class PointInFormat extends DelimitedInputFormat<Tuple2<Integer, CoordVec
 
         for (int pos = offset; pos < limit; pos++) {
             if (bytes[pos] == '|') {
-                // check if id was already set
-                if (id == -1) {
-                    id = value;
+                // check if identifier was already set
+                if (identifier == -1) {
+                    identifier = value;
                 } else {
                     double v =
                             value
@@ -88,7 +88,7 @@ public class PointInFormat extends DelimitedInputFormat<Tuple2<Integer, CoordVec
         }
 
         // set the ID
-        reuse.f0 = id;
+        reuse.f0 = identifier;
 
         // set the data points
         if (this.pointValues.length != this.dimensionValues.size()) {

@@ -93,7 +93,7 @@ class TableSchemaUtilsTest {
         ResolvedSchema schema =
                 new ResolvedSchema(
                         Arrays.asList(
-                                Column.physical("id", DataTypes.INT().notNull()),
+                                Column.physical("identifier", DataTypes.INT().notNull()),
                                 Column.physical("t", rowTimeType),
                                 Column.computed(
                                         "date",
@@ -101,12 +101,12 @@ class TableSchemaUtilsTest {
                                 Column.metadata("metadata-1", DataTypes.INT(), "metadata", false)),
                         Collections.singletonList(
                                 WatermarkSpec.of("t", ResolvedExpressionMock.of(rowTimeType, "t"))),
-                        UniqueConstraint.primaryKey("test-pk", Collections.singletonList("id")));
+                        UniqueConstraint.primaryKey("test-pk", Collections.singletonList("identifier")));
         assertThat(TableSchemaUtils.removeTimeAttributeFromResolvedSchema(schema))
                 .isEqualTo(
                         new ResolvedSchema(
                                 Arrays.asList(
-                                        Column.physical("id", DataTypes.INT().notNull()),
+                                        Column.physical("identifier", DataTypes.INT().notNull()),
                                         Column.physical("t", DataTypes.TIMESTAMP(3)),
                                         Column.computed(
                                                 "date",
@@ -118,6 +118,6 @@ class TableSchemaUtilsTest {
                                         WatermarkSpec.of(
                                                 "t", ResolvedExpressionMock.of(rowTimeType, "t"))),
                                 UniqueConstraint.primaryKey(
-                                        "test-pk", Collections.singletonList("id"))));
+                                        "test-pk", Collections.singletonList("identifier"))));
     }
 }

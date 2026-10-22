@@ -25,7 +25,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.util.Preconditions;
 
 /**
- * Container for JobManager related registration information, such as the leader id or the job id.
+ * Container for JobManager related registration information, such as the leader identifier or the job identifier.
  */
 public class JobManagerRegistration {
     private final JobID jobID;

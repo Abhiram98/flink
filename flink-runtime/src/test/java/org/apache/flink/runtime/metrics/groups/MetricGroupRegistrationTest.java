@@ -50,7 +50,7 @@ class MetricGroupRegistrationTest {
 
         MetricGroup root =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         Counter counter = root.counter("counter");
         assertThat(TestReporter1.lastPassedMetric).isEqualTo(counter);
@@ -118,7 +118,7 @@ class MetricGroupRegistrationTest {
 
         MetricGroup root =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
 
         MetricGroup group1 = root.addGroup("group");
         MetricGroup group2 = root.addGroup("group");

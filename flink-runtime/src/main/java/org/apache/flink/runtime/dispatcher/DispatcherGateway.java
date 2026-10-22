@@ -75,7 +75,7 @@ public interface DispatcherGateway extends FencedRpcGateway<DispatcherId>, Restf
      * Triggers a savepoint with the given savepoint directory as a target, returning a future that
      * completes with the savepoint location when it is complete.
      *
-     * @param jobId the job id
+     * @param jobId the job identifier
      * @param targetDirectory Target directory for the savepoint.
      * @param formatType Binary format of the savepoint.
      * @param savepointMode context of the savepoint operation
@@ -95,7 +95,7 @@ public interface DispatcherGateway extends FencedRpcGateway<DispatcherId>, Restf
      * Stops the job with a savepoint, returning a future that completes with the savepoint location
      * when the savepoint is completed.
      *
-     * @param jobId the job id
+     * @param jobId the job identifier
      * @param targetDirectory Target directory for the savepoint.
      * @param savepointMode context of the savepoint operation
      * @param timeout for the rpc call
@@ -111,10 +111,10 @@ public interface DispatcherGateway extends FencedRpcGateway<DispatcherId>, Restf
     }
 
     /**
-     * Triggers a checkpoint, returning a future that completes with the checkpoint id when it is
+     * Triggers a checkpoint, returning a future that completes with the checkpoint identifier when it is
      * complete.
      *
-     * @param jobId the job id
+     * @param jobId the job identifier
      * @param checkpointType checkpoint type of this checkpoint (configured / full / incremental)
      * @param timeout Timeout for the asynchronous operation
      * @return Future which is completed once the operation is triggered successfully

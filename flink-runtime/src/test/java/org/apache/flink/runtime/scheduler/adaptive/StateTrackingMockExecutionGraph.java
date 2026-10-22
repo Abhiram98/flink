@@ -313,7 +313,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public ExecutionJobVertex getJobVertex(JobVertexID id) {
+    public ExecutionJobVertex getJobVertex(JobVertexID identifier) {
         throw new UnsupportedOperationException();
     }
 
@@ -328,7 +328,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public IntermediateResultPartition getResultPartitionOrThrow(IntermediateResultPartitionID id) {
+    public IntermediateResultPartition getResultPartitionOrThrow(IntermediateResultPartitionID identifier) {
         throw new UnsupportedOperationException();
     }
 

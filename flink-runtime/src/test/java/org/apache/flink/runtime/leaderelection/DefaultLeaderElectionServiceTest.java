@@ -164,7 +164,7 @@ class DefaultLeaderElectionServiceTest {
                         driverFactory, fatalErrorHandlerExtension.getTestingFatalErrorHandler())) {
 
             // creating the LeaderElection is necessary to instantiate the driver
-            final LeaderElection leaderElection = testInstance.createLeaderElection("component-id");
+            final LeaderElection leaderElection = testInstance.createLeaderElection("component-identifier");
             leaderElection.startLeaderElection(TestingGenericLeaderContender.newBuilder().build());
 
             final TestingLeaderElectionDriver driver =
@@ -238,7 +238,7 @@ class DefaultLeaderElectionServiceTest {
                     .isFalse();
 
             try (final LeaderElection leaderElection =
-                    testInstance.createLeaderElection("component-id")) {
+                    testInstance.createLeaderElection("component-identifier")) {
                 assertThat(driverCreated)
                         .as(
                                 "The driver shouldn't have been created during LeaderElection creation.")
@@ -265,7 +265,7 @@ class DefaultLeaderElectionServiceTest {
         // This results in the close method not having any effect.
         testInstance.close();
 
-        assertThatThrownBy(() -> testInstance.createLeaderElection("component-id"))
+        assertThatThrownBy(() -> testInstance.createLeaderElection("component-identifier"))
                 .as(
                         "Registering a contender on a closed service should have resulted in an IllegalStateException.")
                 .isInstanceOf(IllegalStateException.class);
@@ -1247,7 +1247,7 @@ class DefaultLeaderElectionServiceTest {
     }
 
     private static String createRandomComponentId() {
-        return String.format("component-id-%s", UUID.randomUUID());
+        return String.format("component-identifier-%s", UUID.randomUUID());
     }
 
     private class Context {
@@ -1359,12 +1359,12 @@ class DefaultLeaderElectionServiceTest {
         private final TestingContender contender;
         private LeaderElection leaderElection;
 
-        private static ContenderContext create(int id, LeaderElectionService leaderElectionService)
+        private static ContenderContext create(int identifier, LeaderElectionService leaderElectionService)
                 throws Exception {
             // randomSuffix is added to ensure uniqueness even between tests
             final String randomSuffix = UUID.randomUUID().toString().substring(0, 4);
-            final String componentId = String.format("component-id-%d-%s", id, randomSuffix);
-            final String address = String.format("address-%d-%s", id, randomSuffix);
+            final String componentId = String.format("component-identifier-%d-%s", identifier, randomSuffix);
+            final String address = String.format("address-%d-%s", identifier, randomSuffix);
 
             final LeaderElection leaderElection =
                     leaderElectionService.createLeaderElection(componentId);

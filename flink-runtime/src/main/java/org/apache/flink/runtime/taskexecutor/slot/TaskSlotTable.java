@@ -85,7 +85,7 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
     SlotReport createSlotReport(ResourceID resourceId);
 
     /**
-     * Allocate the slot with the given index for the given job and allocation id. If negative index
+     * Allocate the slot with the given index for the given job and allocation identifier. If negative index
      * is given, a new auto increasing index will be generated. Returns true if the slot could be
      * allocated. Otherwise it returns false.
      *
@@ -99,7 +99,7 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
     boolean allocateSlot(int index, JobID jobId, AllocationID allocationId, Duration slotTimeout);
 
     /**
-     * Allocate the slot with the given index for the given job and allocation id. If negative index
+     * Allocate the slot with the given index for the given job and allocation identifier. If negative index
      * is given, a new auto increasing index will be generated. Returns true if the slot could be
      * allocated. Otherwise it returns false.
      *
@@ -119,22 +119,22 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
             Duration slotTimeout);
 
     /**
-     * Marks the slot under the given allocation id as active. If the slot could not be found, then
+     * Marks the slot under the given allocation identifier as active. If the slot could not be found, then
      * a {@link SlotNotFoundException} is thrown.
      *
      * @param allocationId to identify the task slot to mark as active
-     * @throws SlotNotFoundException if the slot could not be found for the given allocation id
+     * @throws SlotNotFoundException if the slot could not be found for the given allocation identifier
      * @return True if the slot could be marked active; otherwise false
      */
     boolean markSlotActive(AllocationID allocationId) throws SlotNotFoundException;
 
     /**
-     * Marks the slot under the given allocation id as inactive. If the slot could not be found,
+     * Marks the slot under the given allocation identifier as inactive. If the slot could not be found,
      * then a {@link SlotNotFoundException} is thrown.
      *
      * @param allocationId to identify the task slot to mark as inactive
      * @param slotTimeout until the slot times out
-     * @throws SlotNotFoundException if the slot could not be found for the given allocation id
+     * @throws SlotNotFoundException if the slot could not be found for the given allocation identifier
      * @return True if the slot could be marked inactive
      */
     boolean markSlotInactive(AllocationID allocationId, Duration slotTimeout)
@@ -146,7 +146,7 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
      * releasing, fail all tasks and return -1.
      *
      * @param allocationId identifying the task slot to be freed
-     * @throws SlotNotFoundException if there is not task slot for the given allocation id
+     * @throws SlotNotFoundException if there is not task slot for the given allocation identifier
      * @return Index of the freed slot if the slot could be freed; otherwise -1
      */
     default int freeSlot(AllocationID allocationId) throws SlotNotFoundException {
@@ -160,13 +160,13 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
      *
      * @param allocationId identifying the task slot to be freed
      * @param cause to fail the tasks with if slot is not empty
-     * @throws SlotNotFoundException if there is not task slot for the given allocation id
+     * @throws SlotNotFoundException if there is not task slot for the given allocation identifier
      * @return Index of the freed slot if the slot could be freed; otherwise -1
      */
     int freeSlot(AllocationID allocationId, Throwable cause) throws SlotNotFoundException;
 
     /**
-     * Check whether the timeout with ticket is valid for the given allocation id.
+     * Check whether the timeout with ticket is valid for the given allocation identifier.
      *
      * @param allocationId to check against
      * @param ticket of the timeout
@@ -175,12 +175,12 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
     boolean isValidTimeout(AllocationID allocationId, UUID ticket);
 
     /**
-     * Check whether the slot for the given index is allocated for the given job and allocation id.
+     * Check whether the slot for the given index is allocated for the given job and allocation identifier.
      *
      * @param index of the task slot
      * @param jobId for which the task slot should be allocated
-     * @param allocationId which should match the task slot's allocation id
-     * @return True if the given task slot is allocated for the given job and allocation id
+     * @param allocationId which should match the task slot's allocation identifier
+     * @return True if the given task slot is allocated for the given job and allocation identifier
      */
     boolean isAllocated(int index, JobID jobId, AllocationID allocationId);
 
@@ -205,12 +205,12 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
      * Check whether the job has allocated (not active) slots.
      *
      * @param jobId for which to check for allocated slots
-     * @return True if there are allocated slots for the given job id.
+     * @return True if there are allocated slots for the given job identifier.
      */
     boolean hasAllocatedSlots(JobID jobId);
 
     /**
-     * Return an iterator of allocated slots for the given job id.
+     * Return an iterator of allocated slots for the given job identifier.
      *
      * @param jobId for which to return the allocated slots
      * @return Iterator of allocated slots.
@@ -222,36 +222,36 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
      *
      * @param allocationId identifying the slot for which to retrieve the owning job
      * @return Owning job of the specified {@link TaskSlot} or null if there is no slot for the
-     *     given allocation id or if the slot has no owning job assigned
+     *     given allocation identifier or if the slot has no owning job assigned
      */
     @Nullable
     JobID getOwningJob(AllocationID allocationId);
 
     /**
-     * Add the given task to the slot identified by the task's allocation id.
+     * Add the given task to the slot identified by the task's allocation identifier.
      *
-     * @param task to add to the task slot with the respective allocation id
-     * @throws SlotNotFoundException if there was no slot for the given allocation id
-     * @throws SlotNotActiveException if there was no slot active for task's job and allocation id
+     * @param task to add to the task slot with the respective allocation identifier
+     * @throws SlotNotFoundException if there was no slot for the given allocation identifier
+     * @throws SlotNotActiveException if there was no slot active for task's job and allocation identifier
      * @return True if the task could be added to the task slot; otherwise false
      */
     boolean addTask(T task) throws SlotNotFoundException, SlotNotActiveException;
 
     /**
-     * Remove the task with the given execution attempt id from its task slot. If the owning task
+     * Remove the task with the given execution attempt identifier from its task slot. If the owning task
      * slot is in state releasing and empty after removing the task, the slot is freed via the slot
      * actions.
      *
      * @param executionAttemptID identifying the task to remove
-     * @return The removed task if there is any for the given execution attempt id; otherwise null
+     * @return The removed task if there is any for the given execution attempt identifier; otherwise null
      */
     T removeTask(ExecutionAttemptID executionAttemptID);
 
     /**
-     * Get the task for the given execution attempt id. If none could be found, then return null.
+     * Get the task for the given execution attempt identifier. If none could be found, then return null.
      *
      * @param executionAttemptID identifying the requested task
-     * @return The task for the given execution attempt id if it exist; otherwise null
+     * @return The task for the given execution attempt identifier if it exist; otherwise null
      */
     T getTask(ExecutionAttemptID executionAttemptID);
 
@@ -266,15 +266,15 @@ public interface TaskSlotTable<T extends TaskSlotPayload>
     /**
      * Get the current allocation for the task slot with the given index.
      *
-     * @param index identifying the slot for which the allocation id shall be retrieved
-     * @return Allocation id of the specified slot if allocated; otherwise null
+     * @param index identifying the slot for which the allocation identifier shall be retrieved
+     * @return Allocation identifier of the specified slot if allocated; otherwise null
      */
     AllocationID getCurrentAllocation(int index);
 
     /**
      * Get the memory manager of the slot allocated for the task.
      *
-     * @param allocationID allocation id of the slot allocated for the task
+     * @param allocationID allocation identifier of the slot allocated for the task
      * @return the memory manager of the slot allocated for the task
      */
     MemoryManager getTaskMemoryManager(AllocationID allocationID) throws SlotNotFoundException;

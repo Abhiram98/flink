@@ -56,10 +56,10 @@ public class StandaloneApplicationClusterConfigurationParserFactory
 
     private static final Option JOB_ID_OPTION =
             Option.builder("jid")
-                    .longOpt("job-id")
+                    .longOpt("job-identifier")
                     .required(false)
                     .hasArg(true)
-                    .argName("job id")
+                    .argName("job identifier")
                     .desc("Job ID of the job to run.")
                     .build();
 

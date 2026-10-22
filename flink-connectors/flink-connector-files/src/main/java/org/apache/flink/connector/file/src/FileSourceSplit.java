@@ -57,7 +57,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
     private static final String[] NO_HOSTS = StringUtils.EMPTY_STRING_ARRAY;
 
     /** The unique ID of the split. Unique within the scope of this source. */
-    private final String id;
+    private final String identifier;
 
     /** The path of the file referenced by this split. */
     private final Path filePath;
@@ -94,7 +94,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
     /**
      * Constructs a split with host information.
      *
-     * @param id The unique ID of this source split.
+     * @param identifier The unique ID of this source split.
      * @param filePath The path to the file.
      * @param offset The start (inclusive) of the split's rage in the file.
      * @param length The number of bytes in the split (starting from the offset)
@@ -102,13 +102,13 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      * @param fileSize The size of the full file
      */
     public FileSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
             long fileModificationTime,
             long fileSize) {
-        this(id, filePath, offset, length, fileModificationTime, fileSize, NO_HOSTS);
+        this(identifier, filePath, offset, length, fileModificationTime, fileSize, NO_HOSTS);
     }
 
     /**
@@ -122,14 +122,14 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      * @param hostnames The hostnames of the nodes storing the split's file range.
      */
     public FileSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
             long fileModificationTime,
             long fileSize,
             String... hostnames) {
-        this(id, filePath, offset, length, fileModificationTime, fileSize, hostnames, null, null);
+        this(identifier, filePath, offset, length, fileModificationTime, fileSize, hostnames, null, null);
     }
 
     /**
@@ -143,7 +143,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      * @param hostnames The hostnames of the nodes storing the split's file range.
      */
     public FileSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
@@ -152,7 +152,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
             String[] hostnames,
             @Nullable CheckpointedPosition readerPosition) {
         this(
-                id,
+                identifier,
                 filePath,
                 offset,
                 length,
@@ -165,8 +165,8 @@ public class FileSourceSplit implements SourceSplit, Serializable {
 
     /** @deprecated You should use {@link #FileSourceSplit(String, Path, long, long, long, long)} */
     @Deprecated
-    public FileSourceSplit(String id, Path filePath, long offset, long length) {
-        this(id, filePath, offset, length, 0, 0, NO_HOSTS);
+    public FileSourceSplit(String identifier, Path filePath, long offset, long length) {
+        this(identifier, filePath, offset, length, 0, 0, NO_HOSTS);
     }
 
     /**
@@ -175,8 +175,8 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      */
     @Deprecated
     public FileSourceSplit(
-            String id, Path filePath, long offset, long length, String... hostnames) {
-        this(id, filePath, offset, length, 0, 0, hostnames, null, null);
+            String identifier, Path filePath, long offset, long length, String... hostnames) {
+        this(identifier, filePath, offset, length, 0, 0, hostnames, null, null);
     }
 
     /**
@@ -185,20 +185,20 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      */
     @Deprecated
     public FileSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
             String[] hostnames,
             @Nullable CheckpointedPosition readerPosition) {
-        this(id, filePath, offset, length, 0, 0, hostnames, readerPosition, null);
+        this(identifier, filePath, offset, length, 0, 0, hostnames, readerPosition, null);
     }
 
     /**
      * Package private constructor, used by the serializers to directly cache the serialized form.
      */
     FileSourceSplit(
-            String id,
+            String identifier,
             Path filePath,
             long offset,
             long length,
@@ -214,7 +214,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
         checkArgument(length >= 0, "length must be >= 0");
         checkNoNullHosts(hostnames);
 
-        this.id = checkNotNull(id);
+        this.identifier = checkNotNull(identifier);
         this.filePath = checkNotNull(filePath);
         this.offset = offset;
         this.length = length;
@@ -229,7 +229,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
 
     @Override
     public String splitId() {
-        return id;
+        return identifier;
     }
 
     /** Gets the file's path. */
@@ -290,7 +290,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
      */
     public FileSourceSplit updateWithCheckpointedPosition(@Nullable CheckpointedPosition position) {
         return new FileSourceSplit(
-                id, filePath, offset, length, fileModificationTime, fileSize, hostnames, position);
+                identifier, filePath, offset, length, fileModificationTime, fileSize, hostnames, position);
     }
 
     // ------------------------------------------------------------------------
@@ -303,7 +303,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
                 hostnames.length == 0 ? "(no host info)" : " hosts=" + Arrays.toString(hostnames);
         return String.format(
                 "FileSourceSplit: %s [%d, %d) %s ID=%s position=%s",
-                filePath, offset, offset + length, hosts, id, readerPosition);
+                filePath, offset, offset + length, hosts, identifier, readerPosition);
     }
 
     private static void checkNoNullHosts(String[] hosts) {

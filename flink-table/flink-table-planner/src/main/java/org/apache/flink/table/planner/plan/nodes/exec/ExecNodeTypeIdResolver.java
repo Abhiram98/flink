@@ -57,8 +57,8 @@ class ExecNodeTypeIdResolver extends TypeIdResolverBase {
     }
 
     @Override
-    public JavaType typeFromId(DatabindContext context, String id) {
-        ExecNodeContext execNodeContext = new ExecNodeContext(id);
+    public JavaType typeFromId(DatabindContext context, String identifier) {
+        ExecNodeContext execNodeContext = new ExecNodeContext(identifier);
         return context.constructSpecializedType(
                 superType,
                 ExecNodeMetadataUtil.retrieveExecNode(

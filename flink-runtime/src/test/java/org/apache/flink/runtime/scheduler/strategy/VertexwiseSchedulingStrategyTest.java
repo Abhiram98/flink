@@ -118,7 +118,7 @@ class VertexwiseSchedulingStrategyTest {
         final Set<ExecutionVertexID> verticesToRestart =
                 Stream.of(source, map, sink)
                         .flatMap(List::stream)
-                        .map(TestingSchedulingExecutionVertex::getId)
+                        .map(TestingSchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toSet());
 
         schedulingStrategy.restartTasks(verticesToRestart);
@@ -145,31 +145,31 @@ class VertexwiseSchedulingStrategyTest {
         // trigger map1 scheduled
         final TestingSchedulingExecutionVertex source1 = source.get(0);
         inputConsumableDecider.setInputConsumable(map.get(0));
-        schedulingStrategy.onExecutionStateChange(source1.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(source1.getIdentifier(), ExecutionState.FINISHED);
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(3);
 
         // trigger map2 scheduled
         final TestingSchedulingExecutionVertex source2 = source.get(1);
         inputConsumableDecider.setInputConsumable(map.get(1));
-        schedulingStrategy.onExecutionStateChange(source2.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(source2.getIdentifier(), ExecutionState.FINISHED);
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(4);
 
         // sinks' inputs are not consumable yet so they are not scheduled
         final TestingSchedulingExecutionVertex map1 = map.get(0);
-        schedulingStrategy.onExecutionStateChange(map1.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(map1.getIdentifier(), ExecutionState.FINISHED);
         assertThat(
                         inputConsumableDecider
                                 .getLastExecutionToDecideInputConsumable()
-                                .getId()
+                                .getIdentifier()
                                 .getJobVertexId())
-                .isEqualTo(sink.get(0).getId().getJobVertexId());
+                .isEqualTo(sink.get(0).getIdentifier().getJobVertexId());
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(4);
 
         // trigger sink1, sink2 scheduled
         final TestingSchedulingExecutionVertex map2 = map.get(1);
         inputConsumableDecider.setInputConsumable(sink.get(0));
         inputConsumableDecider.setInputConsumable(sink.get(1));
-        schedulingStrategy.onExecutionStateChange(map2.getId(), ExecutionState.FINISHED);
+        schedulingStrategy.onExecutionStateChange(map2.getIdentifier(), ExecutionState.FINISHED);
         assertThat(testingSchedulerOperation.getScheduledVertices()).hasSize(6);
 
         final List<List<TestingSchedulingExecutionVertex>> expectedScheduledVertices =
@@ -243,7 +243,7 @@ class VertexwiseSchedulingStrategyTest {
 
         // producer_0 finished
         schedulingStrategy.onExecutionStateChange(
-                producers.get(0).getId(), ExecutionState.FINISHED);
+                producers.get(0).getIdentifier(), ExecutionState.FINISHED);
 
         // add consumers to scheduling strategy.
         if (allToAll) {
@@ -260,12 +260,12 @@ class VertexwiseSchedulingStrategyTest {
         schedulingStrategy.notifySchedulingTopologyUpdated(
                 topology,
                 consumers.stream()
-                        .map(TestingSchedulingExecutionVertex::getId)
+                        .map(TestingSchedulingExecutionVertex::getIdentifier)
                         .collect(Collectors.toList()));
         inputConsumableDecider.setInputConsumable(consumers.get(0));
         inputConsumableDecider.setInputConsumable(consumers.get(1));
         schedulingStrategy.onExecutionStateChange(
-                producers.get(1).getId(), ExecutionState.FINISHED);
+                producers.get(1).getIdentifier(), ExecutionState.FINISHED);
 
         // consumers are properly scheduled indicates that the consuming relationship and
         // correlation are successfully built

@@ -67,7 +67,7 @@ public class TimeTravelTestUtil {
                     Map<String, String> options = new HashMap<>();
                     options.put("connector", "values");
                     options.put("bounded", "true");
-                    options.put("data-id", dataId);
+                    options.put("data-identifier", dataId);
                     try {
                         catalog.registerTableForTimeTravel(
                                 tableName,

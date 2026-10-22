@@ -208,7 +208,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
      * to downstream subtasks, such that different downstream subtasks consume roughly the same
      * number of subpartitions.
      *
-     * @param jobVertexId The job vertex id
+     * @param jobVertexId The job vertex identifier
      * @param consumedResults The information of consumed blocking results
      * @param initialParallelism The initial parallelism of the job vertex
      * @param minParallelism the min parallelism
@@ -294,7 +294,7 @@ public class DefaultVertexParallelismAndInputInfosDecider
      * downstream subtasks, such that different downstream subtasks consume roughly the same amount
      * of data.
      *
-     * @param jobVertexId The job vertex id
+     * @param jobVertexId The job vertex identifier
      * @param consumedResults The information of consumed blocking results
      * @param initialParallelism The initial parallelism of the job vertex
      * @param minParallelism the min parallelism

@@ -126,7 +126,7 @@ class GSRecoverableWriterCommitter implements RecoverableFsDataOutputStream.Comm
      * composeMaxBlobs limit for any individual compose operation.
      *
      * @param sourceBlobIdentifiers The source blob ids to compose
-     * @param targetBlobIdentifier The target blob id for the composed result
+     * @param targetBlobIdentifier The target blob identifier for the composed result
      */
     private void composeBlobs(
             List<GSBlobIdentifier> sourceBlobIdentifiers, GSBlobIdentifier targetBlobIdentifier) {
@@ -146,9 +146,9 @@ class GSRecoverableWriterCommitter implements RecoverableFsDataOutputStream.Comm
         List<GSBlobIdentifier> remainingBlobIds =
                 sourceBlobIdentifiers.subList(composeToIndex, sourceBlobIdentifiers.size());
 
-        // determine the resulting blob id for this compose operation. if this is the last compose,
-        // i.e. if there are no remaining blob ids, then the composed blob id is the originally
-        // specified target blob id. otherwise, we must create an intermediate blob id to hold the
+        // determine the resulting blob identifier for this compose operation. if this is the last compose,
+        // i.e. if there are no remaining blob ids, then the composed blob identifier is the originally
+        // specified target blob identifier. otherwise, we must create an intermediate blob identifier to hold the
         // result of this compose operation
         UUID temporaryObjectId = UUID.randomUUID();
         GSBlobIdentifier composedBlobId =
@@ -160,7 +160,7 @@ class GSRecoverableWriterCommitter implements RecoverableFsDataOutputStream.Comm
         // compose the blobs
         storage.compose(composeBlobIds, composedBlobId);
 
-        // if we have remaining blobs, add the composed blob id to the beginning of the list
+        // if we have remaining blobs, add the composed blob identifier to the beginning of the list
         // of remaining blob ids, and recurse
         if (!remainingBlobIds.isEmpty()) {
             remainingBlobIds.add(0, composedBlobId);
@@ -180,9 +180,9 @@ class GSRecoverableWriterCommitter implements RecoverableFsDataOutputStream.Comm
 
         } else {
 
-            // yes, we have component blobs. compose them into the final blob id. if the component
-            // blob ids are in the same bucket as the final blob id, this can be done directly.
-            // otherwise, we must compose to a new temporary blob id in the same bucket as the
+            // yes, we have component blobs. compose them into the final blob identifier. if the component
+            // blob ids are in the same bucket as the final blob identifier, this can be done directly.
+            // otherwise, we must compose to a new temporary blob identifier in the same bucket as the
             // component blob ids and then copy that blob to the final blob location
             String temporaryBucketName =
                     BlobUtils.getTemporaryBucketName(recoverable.finalBlobIdentifier, options);

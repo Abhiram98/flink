@@ -103,7 +103,7 @@ public interface ChannelStateWriter extends Closeable {
      */
     int SEQUENCE_NUMBER_UNKNOWN = -2;
 
-    /** Initiate write of channel state for the given checkpoint id. */
+    /** Initiate write of channel state for the given checkpoint identifier. */
     void start(long checkpointId, CheckpointOptions checkpointOptions);
 
     /**
@@ -159,7 +159,7 @@ public interface ChannelStateWriter extends Closeable {
             throws IllegalArgumentException;
 
     /**
-     * Finalize write of channel state data for the given checkpoint id. Must be called after {@link
+     * Finalize write of channel state data for the given checkpoint identifier. Must be called after {@link
      * #start(long, CheckpointOptions)} and all of the input data of the given checkpoint added.
      * When both {@link #finishInput} and {@link #finishOutput} were called the results can be
      * (eventually) obtained using {@link #getAndRemoveWriteResult}
@@ -167,7 +167,7 @@ public interface ChannelStateWriter extends Closeable {
     void finishInput(long checkpointId);
 
     /**
-     * Finalize write of channel state data for the given checkpoint id. Must be called after {@link
+     * Finalize write of channel state data for the given checkpoint identifier. Must be called after {@link
      * #start(long, CheckpointOptions)} and all of the output data of the given checkpoint added.
      * When both {@link #finishInput} and {@link #finishOutput} were called the results can be
      * (eventually) obtained using {@link #getAndRemoveWriteResult}

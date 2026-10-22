@@ -82,13 +82,13 @@ class SharingPhysicalSlotRequestBulk implements PhysicalSlotRequestBulk {
         // pending requests must be canceled first otherwise they might be fulfilled by
         // allocated slots released from this bulk
         for (ExecutionSlotSharingGroup group : pendingRequests.keySet()) {
-            for (ExecutionVertexID id : executions.get(group)) {
-                logicalSlotRequestCanceller.accept(id, cause);
+            for (ExecutionVertexID identifier : executions.get(group)) {
+                logicalSlotRequestCanceller.accept(identifier, cause);
             }
         }
         for (ExecutionSlotSharingGroup group : fulfilledRequests.keySet()) {
-            for (ExecutionVertexID id : executions.get(group)) {
-                logicalSlotRequestCanceller.accept(id, cause);
+            for (ExecutionVertexID identifier : executions.get(group)) {
+                logicalSlotRequestCanceller.accept(identifier, cause);
             }
         }
     }

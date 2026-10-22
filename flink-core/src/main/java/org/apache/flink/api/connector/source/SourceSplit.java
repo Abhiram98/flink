@@ -25,9 +25,9 @@ import org.apache.flink.annotation.Public;
 public interface SourceSplit {
 
     /**
-     * Get the split id of this source split.
+     * Get the split identifier of this source split.
      *
-     * @return id of this source split.
+     * @return identifier of this source split.
      */
     String splitId();
 }

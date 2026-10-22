@@ -443,7 +443,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         final ExplicitTableSqlSelect select = (ExplicitTableSqlSelect) scope.getNode();
         return select.descriptors.stream()
                 .map(SqlIdentifier::getSimple)
-                .anyMatch(id -> id.equals(column.getName()));
+                .anyMatch(identifier -> identifier.equals(column.getName()));
     }
 
     /**

@@ -133,7 +133,7 @@ class CheckpointHandlersTest {
                                 checkpointTriggerStatusRequest(triggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(checkpointTriggerResponseBody.queueStatus().getId())
+        assertThat(checkpointTriggerResponseBody.queueStatus().getIdentifier())
                 .isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(checkpointTriggerResponseBody.resource()).isNotNull();
         assertThat(checkpointTriggerResponseBody.resource().getCheckpointId())
@@ -183,7 +183,7 @@ class CheckpointHandlersTest {
                                 checkpointTriggerStatusRequest(triggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(checkpointTriggerResponseBody.queueStatus().getId())
+        assertThat(checkpointTriggerResponseBody.queueStatus().getIdentifier())
                 .isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(checkpointTriggerResponseBody.resource()).isNotNull();
         assertThat(checkpointTriggerResponseBody.resource().getCheckpointId())
@@ -273,7 +273,7 @@ class CheckpointHandlersTest {
                                 checkpointTriggerStatusRequest(triggerId), testingRestfulGateway)
                         .get();
 
-        assertThat(checkpointTriggerResponseBody.queueStatus().getId())
+        assertThat(checkpointTriggerResponseBody.queueStatus().getIdentifier())
                 .isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(checkpointTriggerResponseBody.resource()).isNotNull();
         assertThat(checkpointTriggerResponseBody.resource().getFailureCause()).isNotNull();
@@ -333,7 +333,7 @@ class CheckpointHandlersTest {
                                 testingRestfulGateway)
                         .get();
 
-        assertThat(checkpointTriggerResponseBody.queueStatus().getId())
+        assertThat(checkpointTriggerResponseBody.queueStatus().getIdentifier())
                 .isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(checkpointTriggerResponseBody.resource()).isNotNull();
         assertThat(checkpointTriggerResponseBody.resource().getCheckpointId())

@@ -390,7 +390,7 @@ public class RocksDBIncrementalRestoreOperation<K> implements RocksDBRestoreOper
         // Check if the key-groups range has changed.
         if (Objects.equals(stateHandleKeyGroupRange, keyGroupRange)) {
             // This is the case if we didn't rescale, so we can restore all the info from the
-            // previous backend instance (backend id and incremental checkpoint history).
+            // previous backend instance (backend identifier and incremental checkpoint history).
             restorePreviousIncrementalFilesStatus(stateHandle);
         } else {
             // If the key-groups don't match, this was a scale out, and we need to clip the
@@ -727,7 +727,7 @@ public class RocksDBIncrementalRestoreOperation<K> implements RocksDBRestoreOper
                 localKeyedStateHandle.getSharedStateHandles());
         lastCompletedCheckpointId = localKeyedStateHandle.getCheckpointId();
         logger.info(
-                "Restored previous incremental files status in backend with range {} in operator {}: backend uuid {}, last checkpoint id {}.",
+                "Restored previous incremental files status in backend with range {} in operator {}: backend uuid {}, last checkpoint identifier {}.",
                 keyGroupRange.prettyPrintInterval(),
                 operatorIdentifier,
                 backendUID,

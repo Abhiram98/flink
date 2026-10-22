@@ -95,7 +95,7 @@ public class UsingRemoteJarITCase extends HdfsITCaseBase {
         runAndCheckSQL(
                 "scalar_udf_e2e.sql",
                 Collections.singletonList(
-                        "{\"before\":null,\"after\":{\"id\":1,\"str\":\"Hello Flink\"},\"op\":\"c\"}"));
+                        "{\"before\":null,\"after\":{\"identifier\":1,\"str\":\"Hello Flink\"},\"op\":\"c\"}"));
     }
 
     @Test

@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /** Tests for {@link TableTestProgram} and {@link TableTestProgramRunner}. */
 public class TableTestProgramRunnerTest {
 
-    private static final String ID = "id";
+    private static final String ID = "identifier";
     private static final String DESCRIPTION = "description";
 
     @Test
@@ -147,7 +147,7 @@ public class TableTestProgramRunnerTest {
         runner.programs = Arrays.asList(program1, program2);
 
         assertThatThrownBy(runner::supportedPrograms)
-                .hasMessageContaining("Duplicate test program id found: [id]");
+                .hasMessageContaining("Duplicate test program identifier found: [identifier]");
     }
 
     @Test

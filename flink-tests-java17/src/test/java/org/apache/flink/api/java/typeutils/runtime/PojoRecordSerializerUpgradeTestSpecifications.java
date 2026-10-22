@@ -41,13 +41,13 @@ class PojoRecordSerializerUpgradeTestSpecifications {
         @ClassRelocator.RelocateClass("TestPojoToRecord")
         @SuppressWarnings("WeakerAccess")
         public static class PojoBeforeUpgrade {
-            public int id;
+            public int identifier;
             public String name;
 
             public PojoBeforeUpgrade() {}
 
-            public PojoBeforeUpgrade(int id, String name) {
-                this.id = id;
+            public PojoBeforeUpgrade(int identifier, String name) {
+                this.identifier = identifier;
                 this.name = name;
             }
         }
@@ -73,7 +73,7 @@ class PojoRecordSerializerUpgradeTestSpecifications {
 
         @ClassRelocator.RelocateClass("TestPojoToRecord")
         @SuppressWarnings("WeakerAccess")
-        public record PojoAfterUpgrade(int id, String name) {}
+        public record PojoAfterUpgrade(int identifier, String name) {}
 
         @Override
         public TypeSerializer<PojoAfterUpgrade> createUpgradedSerializer() {
@@ -103,7 +103,7 @@ class PojoRecordSerializerUpgradeTestSpecifications {
 
         @ClassRelocator.RelocateClass("TestRecordMigration")
         @SuppressWarnings("WeakerAccess")
-        public record RecordBeforeMigration(int id, String name) {}
+        public record RecordBeforeMigration(int identifier, String name) {}
 
         @Override
         public TypeSerializer<RecordBeforeMigration> createPriorSerializer() {

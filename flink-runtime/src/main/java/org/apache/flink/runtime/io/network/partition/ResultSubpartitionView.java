@@ -84,8 +84,8 @@ public interface ResultSubpartitionView {
      * In tiered storage shuffle mode, only required segments will be sent to prevent the redundant
      * buffer usage. Downstream will notify the upstream by this method to send required segments.
      *
-     * @param subpartitionId The id of the corresponding subpartition.
-     * @param segmentId The id of required segment.
+     * @param subpartitionId The identifier of the corresponding subpartition.
+     * @param segmentId The identifier of required segment.
      */
     default void notifyRequiredSegmentId(int subpartitionId, int segmentId) {}
 

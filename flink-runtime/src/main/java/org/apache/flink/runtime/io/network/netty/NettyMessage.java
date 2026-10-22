@@ -87,12 +87,12 @@ public abstract class NettyMessage {
      * an integer to position <tt>0</tt>!
      *
      * @param allocator byte buffer allocator to use
-     * @param id {@link NettyMessage} subclass ID
+     * @param identifier {@link NettyMessage} subclass ID
      * @return a newly allocated direct buffer with header data written for {@link
      *     NettyMessageEncoder}
      */
-    private static ByteBuf allocateBuffer(ByteBufAllocator allocator, byte id) {
-        return allocateBuffer(allocator, id, -1);
+    private static ByteBuf allocateBuffer(ByteBufAllocator allocator, byte identifier) {
+        return allocateBuffer(allocator, identifier, -1);
     }
 
     /**
@@ -103,13 +103,13 @@ public abstract class NettyMessage {
      * the contents as an integer to position <tt>0</tt>!
      *
      * @param allocator byte buffer allocator to use
-     * @param id {@link NettyMessage} subclass ID
+     * @param identifier {@link NettyMessage} subclass ID
      * @param contentLength content length (or <tt>-1</tt> if unknown)
      * @return a newly allocated direct buffer with header data written for {@link
      *     NettyMessageEncoder}
      */
-    private static ByteBuf allocateBuffer(ByteBufAllocator allocator, byte id, int contentLength) {
-        return allocateBuffer(allocator, id, 0, contentLength, true);
+    private static ByteBuf allocateBuffer(ByteBufAllocator allocator, byte identifier, int contentLength) {
+        return allocateBuffer(allocator, identifier, 0, contentLength, true);
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class NettyMessage {
      * the contents as an integer to position <tt>0</tt>!
      *
      * @param allocator byte buffer allocator to use
-     * @param id {@link NettyMessage} subclass ID
+     * @param identifier {@link NettyMessage} subclass ID
      * @param messageHeaderLength additional header length that should be part of the allocated
      *     buffer and is written outside of this method
      * @param contentLength content length (or <tt>-1</tt> if unknown)
@@ -131,7 +131,7 @@ public abstract class NettyMessage {
      */
     private static ByteBuf allocateBuffer(
             ByteBufAllocator allocator,
-            byte id,
+            byte identifier,
             int messageHeaderLength,
             int contentLength,
             boolean allocateForContent) {
@@ -154,7 +154,7 @@ public abstract class NettyMessage {
                         + messageHeaderLength
                         + contentLength); // may be updated later, e.g. if contentLength == -1
         buffer.writeInt(MAGIC_NUMBER);
-        buffer.writeByte(id);
+        buffer.writeByte(identifier);
 
         return buffer;
     }
@@ -923,7 +923,7 @@ public abstract class NettyMessage {
         }
     }
 
-    /** Message to notify producer about the id of required segment. */
+    /** Message to notify producer about the identifier of required segment. */
     static class SegmentId extends NettyMessage {
 
         private static final byte ID = 11;
@@ -983,13 +983,13 @@ public abstract class NettyMessage {
             ChannelPromise promise,
             ByteBufAllocator allocator,
             Consumer<ByteBuf> consumer,
-            byte id,
+            byte identifier,
             int length)
             throws IOException {
 
         ByteBuf byteBuf = null;
         try {
-            byteBuf = allocateBuffer(allocator, id, length);
+            byteBuf = allocateBuffer(allocator, identifier, length);
             consumer.accept(byteBuf);
             out.write(byteBuf, promise);
         } catch (Throwable t) {

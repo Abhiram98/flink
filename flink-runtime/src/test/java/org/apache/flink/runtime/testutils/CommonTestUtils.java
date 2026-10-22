@@ -303,7 +303,7 @@ public class CommonTestUtils {
     }
 
     public static void waitForSubtasksToFinish(
-            MiniCluster miniCluster, JobID job, JobVertexID id, boolean allSubtasks)
+            MiniCluster miniCluster, JobID job, JobVertexID identifier, boolean allSubtasks)
             throws Exception {
         Predicate<AccessExecutionVertex> subtaskPredicate =
                 subtask -> {
@@ -328,12 +328,12 @@ public class CommonTestUtils {
                     Stream<AccessExecutionVertex> vertexStream =
                             Arrays.stream(
                                     graph.getAllVertices().values().stream()
-                                            .filter(jv -> jv.getJobVertexId().equals(id))
+                                            .filter(jv -> jv.getJobVertexId().equals(identifier))
                                             .findAny()
                                             .orElseThrow(
                                                     () ->
                                                             new RuntimeException(
-                                                                    "Vertex not found " + id))
+                                                                    "Vertex not found " + identifier))
                                             .getTaskVertices());
                     return allSubtasks
                             ? vertexStream.allMatch(subtaskPredicate)

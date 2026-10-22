@@ -44,7 +44,7 @@ public interface SchedulingStrategy {
     /**
      * Called whenever an {@link Execution} changes its state.
      *
-     * @param executionVertexId The id of the task
+     * @param executionVertexId The identifier of the task
      * @param executionState The new state of the execution
      */
     void onExecutionStateChange(ExecutionVertexID executionVertexId, ExecutionState executionState);
@@ -52,7 +52,7 @@ public interface SchedulingStrategy {
     /**
      * Called whenever an {@link IntermediateResultPartition} becomes consumable.
      *
-     * @param resultPartitionId The id of the result partition
+     * @param resultPartitionId The identifier of the result partition
      */
     void onPartitionConsumable(IntermediateResultPartitionID resultPartitionId);
 

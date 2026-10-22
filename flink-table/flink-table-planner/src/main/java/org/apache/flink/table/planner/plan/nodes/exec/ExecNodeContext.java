@@ -65,13 +65,13 @@ public final class ExecNodeContext {
         return idCounter.incrementAndGet();
     }
 
-    /** Reset the id counter to 0. */
+    /** Reset the identifier counter to 0. */
     @VisibleForTesting
     public static void resetIdCounter() {
         idCounter.set(0);
     }
 
-    private final Integer id;
+    private final Integer identifier;
     private final String name;
     private final Integer version;
 
@@ -84,26 +84,26 @@ public final class ExecNodeContext {
     }
 
     /**
-     * @param id The unique id of the {@link ExecNode}. See {@link ExecNode#getId()}. It can be null
+     * @param identifier The unique identifier of the {@link ExecNode}. See {@link ExecNode#getIdentifier()}. It can be null
      *     initially and then later set by using {@link #withId(int)} which creates a new instance
      *     of {@link ExecNodeContext} since it's immutable. This way we can satisfy both the {@link
      *     ExecNodeBase#ExecNodeBase(int, ExecNodeContext, ReadableConfig, List, LogicalType,
-     *     String)} ctor, which is used for the {@link JsonCreator} ctors, where the {@code id} and
+     *     String)} ctor, which is used for the {@link JsonCreator} ctors, where the {@code identifier} and
      *     the {@code context} are read separately, and the {@link
-     *     ExecNodeBase#getContextFromAnnotation()} which creates a new context with a new id
+     *     ExecNodeBase#getContextFromAnnotation()} which creates a new context with a new identifier
      *     provided by: {@link #newNodeId()}.
      * @param name The name of the {@link ExecNode}. See {@link ExecNodeMetadata#name()}.
      * @param version The version of the {@link ExecNode}. See {@link ExecNodeMetadata#version()}.
      */
-    private ExecNodeContext(@Nullable Integer id, String name, Integer version) {
-        this.id = id;
+    private ExecNodeContext(@Nullable Integer identifier, String name, Integer version) {
+        this.identifier = identifier;
         this.name = name;
         this.version = version;
     }
 
     @JsonCreator
     public ExecNodeContext(String value) {
-        this.id = null;
+        this.identifier = null;
         String[] split = value.split("_");
         if ("null".equals(split[0]) || "null".equals(split[1])) {
             throw new TableException(String.format("Unsupported exec node type: '%s'.", value));
@@ -113,8 +113,8 @@ public final class ExecNodeContext {
     }
 
     /** The unique identifier for each ExecNode in the JSON plan. */
-    int getId() {
-        return checkNotNull(id);
+    int getIdentifier() {
+        return checkNotNull(identifier);
     }
 
     /** The type identifying an ExecNode in the JSON plan. See {@link ExecNodeMetadata#name()}. */
@@ -146,20 +146,20 @@ public final class ExecNodeContext {
         // subscribe to multiple old UIDs.
         return StringUtils.replaceEach(
                 uidPattern,
-                new String[] {"<id>", "<type>", "<version>", "<transformation>"},
+                new String[] {"<identifier>", "<type>", "<version>", "<transformation>"},
                 new String[] {
-                    String.valueOf(id), name, String.valueOf(version), transformationName
+                    String.valueOf(identifier), name, String.valueOf(version), transformationName
                 });
     }
 
     /**
      * Set the unique ID of the node, so that the {@link ExecNodeContext}, together with the type
      * related {@link #name} and {@link #version}, stores all the necessary info to uniquely
-     * reconstruct the {@link ExecNode}, and avoid storing the {@link #id} independently as a field
+     * reconstruct the {@link ExecNode}, and avoid storing the {@link #identifier} independently as a field
      * in {@link ExecNodeBase}.
      */
-    public ExecNodeContext withId(int id) {
-        return new ExecNodeContext(id, this.name, this.version);
+    public ExecNodeContext withId(int identifier) {
+        return new ExecNodeContext(identifier, this.name, this.version);
     }
 
     /**
@@ -173,16 +173,16 @@ public final class ExecNodeContext {
         if (name == null || version == null) {
             throw new TableException(
                     String.format(
-                            "Can not serialize ExecNode with id: %d. Missing type, this is a bug,"
+                            "Can not serialize ExecNode with identifier: %d. Missing type, this is a bug,"
                                     + " please file a ticket.",
-                            getId()));
+                            getIdentifier()));
         }
         return name + "_" + version;
     }
 
     @Override
     public String toString() {
-        return getId() + "_" + getName() + "_" + getVersion();
+        return getIdentifier() + "_" + getName() + "_" + getVersion();
     }
 
     public static <T extends ExecNode<?>> ExecNodeContext newContext(Class<T> execNodeClass) {

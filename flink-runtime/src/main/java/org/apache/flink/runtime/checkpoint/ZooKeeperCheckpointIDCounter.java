@@ -53,11 +53,11 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>Each counter creates a ZNode:
  *
  * <pre>
- * +----O /flink/checkpoint-counter/&lt;job-id&gt; 1 [persistent]
+ * +----O /flink/checkpoint-counter/&lt;job-identifier&gt; 1 [persistent]
  * .
  * .
  * .
- * +----O /flink/checkpoint-counter/&lt;job-id&gt; N [persistent]
+ * +----O /flink/checkpoint-counter/&lt;job-identifier&gt; N [persistent]
  * </pre>
  *
  * <p>The checkpoints IDs are required to be ascending (per job). In order to guarantee this in case

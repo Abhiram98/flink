@@ -33,7 +33,7 @@ public interface TieredStorageNettyService {
      * {@link TierProducerAgent} will provide a callback named {@link NettyServiceProducer} to
      * register to {@link TieredStorageNettyService}.
      *
-     * @param partitionId partition id indicates the unique id of {@link TieredResultPartition}.
+     * @param partitionId partition identifier indicates the unique identifier of {@link TieredResultPartition}.
      * @param serviceProducer serviceProducer is a callback from {@link TierProducerAgent} and used
      *     to register a {@link NettyConnectionWriter} and disconnect the netty connection.
      */
@@ -44,8 +44,8 @@ public interface TieredStorageNettyService {
      * {@link TierConsumerAgent} will register to {@link TieredStorageNettyService} and get a future
      * of {@link NettyConnectionReader}.
      *
-     * @param partitionId partition id indicates the unique id of {@link TieredResultPartition}.
-     * @param subpartitionId subpartition id indicates the unique id of subpartition.
+     * @param partitionId partition identifier indicates the unique identifier of {@link TieredResultPartition}.
+     * @param subpartitionId subpartition identifier indicates the unique identifier of subpartition.
      * @return the future of netty connection reader.
      */
     CompletableFuture<NettyConnectionReader> registerConsumer(

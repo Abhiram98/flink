@@ -285,7 +285,7 @@ public class StreamConfigChainer<OWNER> {
             streamOutputs.add(
                     new NonChainedOutput(
                             true,
-                            sourceVertexDummy.getId(),
+                            sourceVertexDummy.getIdentifier(),
                             1,
                             1,
                             100,

@@ -141,9 +141,9 @@ class ChannelStatePersisterTest {
                 .isInstanceOf(CheckpointException.class);
     }
 
-    private static Buffer barrier(long id) throws IOException {
+    private static Buffer barrier(long identifier) throws IOException {
         return EventSerializer.toBuffer(
-                new CheckpointBarrier(id, 1L, CheckpointOptions.forCheckpointWithDefaultLocation()),
+                new CheckpointBarrier(identifier, 1L, CheckpointOptions.forCheckpointWithDefaultLocation()),
                 true);
     }
 }

@@ -62,14 +62,14 @@ public abstract class CommonExecWindowTableFunction extends ExecNodeBase<RowData
     protected final TimeAttributeWindowingStrategy windowingStrategy;
 
     protected CommonExecWindowTableFunction(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             TimeAttributeWindowingStrategy windowingStrategy,
             List<InputProperty> inputProperties,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         checkArgument(inputProperties.size() == 1);
         this.windowingStrategy = checkNotNull(windowingStrategy);
     }

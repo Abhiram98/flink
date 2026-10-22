@@ -102,7 +102,7 @@ public class HiveDialectQueryITCase {
         tableEnv.executeSql("create table bar(I int, s string)");
         tableEnv.executeSql("create table baz(ai array<int>, d double)");
         tableEnv.executeSql(
-                "create table employee(id int,name string,dep string,salary int,age int)");
+                "create table employee(identifier int,name string,dep string,salary int,age int)");
         tableEnv.executeSql("create table dest (x int, y int)");
         tableEnv.executeSql("create table destp (x int) partitioned by (p string, q string)");
         tableEnv.executeSql("alter table destp add partition (p='-1',q='-1')");
@@ -618,14 +618,14 @@ public class HiveDialectQueryITCase {
 
     @Test
     public void testMultiInsert() throws Exception {
-        tableEnv.executeSql("create table t1 (id bigint, name string)");
-        tableEnv.executeSql("create table t2 (id bigint, name string)");
-        tableEnv.executeSql("create table t3 (id bigint, name string, age int)");
+        tableEnv.executeSql("create table t1 (identifier bigint, name string)");
+        tableEnv.executeSql("create table t2 (identifier bigint, name string)");
+        tableEnv.executeSql("create table t3 (identifier bigint, name string, age int)");
         try {
             String multiInsertSql =
-                    "from (select id, name, age from t3) t"
-                            + " insert overwrite table t1 select id, name where age < 20"
-                            + "  insert overwrite table t2 select id, name where age > 20";
+                    "from (select identifier, name, age from t3) t"
+                            + " insert overwrite table t1 select identifier, name where age < 20"
+                            + "  insert overwrite table t2 select identifier, name where age > 20";
             // test explain
             String actualPlan = explainSql(multiInsertSql);
             assertThat(actualPlan).isEqualTo(readFromResource("/explain/testMultiInsert.out"));
@@ -777,7 +777,7 @@ public class HiveDialectQueryITCase {
 
     @Test
     public void testBoolComparison() throws Exception {
-        tableEnv.executeSql("CREATE TABLE tbool (id int, a int, b string, c boolean)");
+        tableEnv.executeSql("CREATE TABLE tbool (identifier int, a int, b string, c boolean)");
         try {
             tableEnv.executeSql("insert into tbool values (1, 1, '12', true), (2, 1, '0.4', false)")
                     .await();
@@ -785,7 +785,7 @@ public class HiveDialectQueryITCase {
             List<Row> results =
                     CollectionUtil.iteratorToList(
                             tableEnv.executeSql(
-                                            "select id from tbool where a = true and b != false and c = '1'")
+                                            "select identifier from tbool where a = true and b != false and c = '1'")
                                     .collect());
             assertThat(results.toString()).isEqualTo("[+I[1]]");
         } finally {

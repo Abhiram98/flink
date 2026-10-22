@@ -281,7 +281,7 @@ class StreamingJobGraphGeneratorTest {
         // check the streamGraph parallelism configured
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
         assertThat(streamNodes.get(0).isParallelismConfigured()).isFalse();
         assertThat(streamNodes.get(1).isParallelismConfigured()).isTrue();
@@ -311,9 +311,9 @@ class StreamingJobGraphGeneratorTest {
         StreamGraph streamGraph = env.getStreamGraph();
 
         // check the streamGraph max parallelism is configured correctly
-        assertThat(streamGraph.getStreamNode(source.getId()).getMaxParallelism()).isEqualTo(4);
-        assertThat(streamGraph.getStreamNode(map.getId()).getMaxParallelism()).isEqualTo(10);
-        assertThat(streamGraph.getStreamNode(sink.getTransformation().getId()).getMaxParallelism())
+        assertThat(streamGraph.getStreamNode(source.getIdentifier()).getMaxParallelism()).isEqualTo(4);
+        assertThat(streamGraph.getStreamNode(map.getIdentifier()).getMaxParallelism()).isEqualTo(10);
+        assertThat(streamGraph.getStreamNode(sink.getTransformation().getIdentifier()).getMaxParallelism())
                 .isEqualTo(20);
     }
 
@@ -326,7 +326,7 @@ class StreamingJobGraphGeneratorTest {
         // check the streamGraph parallelism configured
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
         assertThat(streamNodes.get(0).isParallelismConfigured()).isFalse();
         assertThat(streamNodes.get(1).isParallelismConfigured()).isFalse();
@@ -370,7 +370,7 @@ class StreamingJobGraphGeneratorTest {
         // check the streamGraph parallelism configured
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
         assertThat(streamNodes.get(0).isParallelismConfigured()).isFalse();
         assertThat(streamNodes.get(1).isParallelismConfigured()).isTrue();
@@ -1140,7 +1140,7 @@ class StreamingJobGraphGeneratorTest {
 
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
         assertThat(areOperatorsChainable(streamNodes.get(0), streamNodes.get(1), streamGraph))
                 .isTrue();
@@ -1188,7 +1188,7 @@ class StreamingJobGraphGeneratorTest {
 
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
         assertThat(areOperatorsChainable(streamNodes.get(0), streamNodes.get(1), streamGraph))
                 .isFalse();
@@ -2022,7 +2022,7 @@ class StreamingJobGraphGeneratorTest {
         JobVertex sourceVertex = vertices.get(0);
         List<IntermediateDataSetID> producedDataSet =
                 sourceVertex.getProducedDataSets().stream()
-                        .map(IntermediateDataSet::getId)
+                        .map(IntermediateDataSet::getIdentifier)
                         .collect(Collectors.toList());
         assertThat(producedDataSet).hasSize(5);
 
@@ -2030,10 +2030,10 @@ class StreamingJobGraphGeneratorTest {
         JobVertex sinkVertex2 = checkNotNull(findJobVertexWithName(vertices, "sink2"));
         JobVertex sinkVertex3 = checkNotNull(findJobVertexWithName(vertices, "sink3"));
 
-        assertThat(sinkVertex2.getInputs().get(0).getSource().getId())
-                .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
-        assertThat(sinkVertex3.getInputs().get(0).getSource().getId())
-                .isNotEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
+        assertThat(sinkVertex2.getInputs().get(0).getSource().getIdentifier())
+                .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getIdentifier());
+        assertThat(sinkVertex3.getInputs().get(0).getSource().getIdentifier())
+                .isNotEqualTo(sinkVertex1.getInputs().get(0).getSource().getIdentifier());
 
         StreamConfig streamConfig = new StreamConfig(sourceVertex.getConfiguration());
         List<IntermediateDataSetID> nonChainedOutputs =
@@ -2091,7 +2091,7 @@ class StreamingJobGraphGeneratorTest {
         JobVertex sourceVertex = vertices.get(0);
         List<IntermediateDataSetID> producedDataSet =
                 sourceVertex.getProducedDataSets().stream()
-                        .map(IntermediateDataSet::getId)
+                        .map(IntermediateDataSet::getIdentifier)
                         .collect(Collectors.toList());
         assertThat(producedDataSet).hasSize(6);
 
@@ -2100,12 +2100,12 @@ class StreamingJobGraphGeneratorTest {
         JobVertex sinkVertex3 = checkNotNull(findJobVertexWithName(vertices, "sink3"));
         JobVertex sinkVertex4 = checkNotNull(findJobVertexWithName(vertices, "sink4"));
 
-        assertThat(sinkVertex2.getInputs().get(0).getSource().getId())
-                .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
-        assertThat(sinkVertex4.getInputs().get(0).getSource().getId())
-                .isEqualTo(sinkVertex3.getInputs().get(0).getSource().getId());
-        assertThat(sinkVertex3.getInputs().get(0).getSource().getId())
-                .isNotEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
+        assertThat(sinkVertex2.getInputs().get(0).getSource().getIdentifier())
+                .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getIdentifier());
+        assertThat(sinkVertex4.getInputs().get(0).getSource().getIdentifier())
+                .isEqualTo(sinkVertex3.getInputs().get(0).getSource().getIdentifier());
+        assertThat(sinkVertex3.getInputs().get(0).getSource().getIdentifier())
+                .isNotEqualTo(sinkVertex1.getInputs().get(0).getSource().getIdentifier());
 
         StreamConfig streamConfig = new StreamConfig(sourceVertex.getConfiguration());
         List<IntermediateDataSetID> nonChainedOutputs =
@@ -2114,7 +2114,7 @@ class StreamingJobGraphGeneratorTest {
                         .collect(Collectors.toList());
         assertThat(nonChainedOutputs).hasSize(5);
         assertThat(nonChainedOutputs)
-                .doesNotContain(sinkVertex3.getInputs().get(0).getSource().getId());
+                .doesNotContain(sinkVertex3.getInputs().get(0).getSource().getIdentifier());
 
         List<IntermediateDataSetID> streamOutputsInOrder =
                 streamConfig.getVertexNonChainedOutputs(getClass().getClassLoader()).stream()
@@ -2205,19 +2205,19 @@ class StreamingJobGraphGeneratorTest {
         final StreamGraph streamGraph = env.getStreamGraph();
         final List<StreamNode> streamNodes =
                 streamGraph.getStreamNodes().stream()
-                        .sorted(Comparator.comparingInt(StreamNode::getId))
+                        .sorted(Comparator.comparingInt(StreamNode::getIdentifier))
                         .collect(Collectors.toList());
 
         final StreamNode sourceNode = streamNodes.get(0);
         final StreamNode map1Node = streamNodes.get(1);
         final StreamNode map2Node = streamNodes.get(2);
         final StreamNode sinkNode = streamNodes.get(3);
-        streamGraph.setSupportsConcurrentExecutionAttempts(sourceNode.getId(), true);
+        streamGraph.setSupportsConcurrentExecutionAttempts(sourceNode.getIdentifier(), true);
         // map1 and map2 are chained
         // map1 supports concurrent execution attempt however map2 does not
-        streamGraph.setSupportsConcurrentExecutionAttempts(map1Node.getId(), true);
-        streamGraph.setSupportsConcurrentExecutionAttempts(map2Node.getId(), false);
-        streamGraph.setSupportsConcurrentExecutionAttempts(sinkNode.getId(), false);
+        streamGraph.setSupportsConcurrentExecutionAttempts(map1Node.getIdentifier(), true);
+        streamGraph.setSupportsConcurrentExecutionAttempts(map2Node.getIdentifier(), false);
+        streamGraph.setSupportsConcurrentExecutionAttempts(sinkNode.getIdentifier(), false);
 
         final JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         assertThat(jobGraph.getNumberOfVertices()).isEqualTo(3);
@@ -2952,8 +2952,8 @@ class StreamingJobGraphGeneratorTest {
     private static class TestingStreamExecutionEnvironment extends StreamExecutionEnvironment {
         Set<AbstractID> completedClusterDatasetIds = new HashSet<>();
 
-        public void addCompletedClusterDataset(AbstractID id) {
-            completedClusterDatasetIds.add(id);
+        public void addCompletedClusterDataset(AbstractID identifier) {
+            completedClusterDatasetIds.add(identifier);
         }
 
         @Override

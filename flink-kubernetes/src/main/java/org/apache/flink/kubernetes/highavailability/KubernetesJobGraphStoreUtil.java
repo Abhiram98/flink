@@ -43,7 +43,7 @@ public enum KubernetesJobGraphStoreUtil implements JobGraphStoreUtil {
      * Convert a {@link JobID} to config map key. We will add prefix {@link
      * Constants#JOB_GRAPH_STORE_KEY_PREFIX}.
      *
-     * @param jobID job id
+     * @param jobID job identifier
      * @return a key to store job graph in the ConfigMap
      */
     public String jobIDToName(JobID jobID) {

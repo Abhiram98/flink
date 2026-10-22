@@ -437,7 +437,7 @@ class SlotSharingSlotAllocatorTest {
                                 (allocationId, resourceProfile) ->
                                         TestingPhysicalSlot.builder().build(),
                                 (allocationID, cause, ts) -> {},
-                                id -> false,
+                                identifier -> false,
                                 true)
                         .determineParallelismAndCalculateAssignment(
                                 new TestJobInformation(Arrays.asList(vertex1, vertex2, vertex3)),
@@ -452,8 +452,8 @@ class SlotSharingSlotAllocatorTest {
             Set<VertexID> set =
                     allocated.computeIfAbsent(
                             assignment.getSlotInfo().getAllocationId(), ign -> new HashSet<>());
-            for (ExecutionVertexID id : target.getContainedExecutionVertices()) {
-                set.add(id.getJobVertexId());
+            for (ExecutionVertexID identifier : target.getContainedExecutionVertices()) {
+                set.add(identifier.getJobVertexId());
             }
         }
         assertThat(allocated.get(allocation1)).contains(vertex1.getJobVertexID());

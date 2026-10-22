@@ -503,7 +503,7 @@ public abstract class UnalignedCheckpointTestBase extends TestLogger {
                 // Called on recovery
                 subtaskRestarts.compute(
                         subtaskId,
-                        (id, oldCount) -> oldCount == null ? state.numRestarts + 1 : oldCount + 1);
+                        (identifier, oldCount) -> oldCount == null ? state.numRestarts + 1 : oldCount + 1);
                 state.unassignedSplits.addAll(splits);
             }
 

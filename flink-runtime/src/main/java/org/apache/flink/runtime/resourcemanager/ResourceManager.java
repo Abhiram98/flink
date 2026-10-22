@@ -126,7 +126,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
 
     public static final String RESOURCE_MANAGER_NAME = "resourcemanager";
 
-    /** Unique id of the resource manager. */
+    /** Unique identifier of the resource manager. */
     private final ResourceID resourceId;
 
     /** All currently registered JobMasterGateways scoped by JobID. */
@@ -379,12 +379,12 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
             } catch (Exception e) {
                 ResourceManagerException exception =
                         new ResourceManagerException(
-                                "Could not add the job " + jobId + " to the job id leader service.",
+                                "Could not add the job " + jobId + " to the job identifier leader service.",
                                 e);
 
                 onFatalError(exception);
 
-                log.error("Could not add job {} to job leader id service.", jobId, e);
+                log.error("Could not add job {} to job leader identifier service.", jobId, e);
                 return FutureUtils.completedExceptionally(exception);
             }
         }
@@ -397,19 +397,19 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         try {
             jobMasterIdFuture = jobLeaderIdService.getLeaderId(jobId);
         } catch (Exception e) {
-            // we cannot check the job leader id so let's fail
+            // we cannot check the job leader identifier so let's fail
             // TODO: Maybe it's also ok to skip this check in case that we cannot check the leader
-            // id
+            // identifier
             ResourceManagerException exception =
                     new ResourceManagerException(
                             "Cannot obtain the "
-                                    + "job leader id future to verify the correct job leader.",
+                                    + "job leader identifier future to verify the correct job leader.",
                             e);
 
             onFatalError(exception);
 
             log.debug(
-                    "Could not obtain the job leader id future to verify the correct job leader.");
+                    "Could not obtain the job leader identifier future to verify the correct job leader.");
             return FutureUtils.completedExceptionally(exception);
         }
 
@@ -429,7 +429,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
                             } else {
                                 final String declineMessage =
                                         String.format(
-                                                "The leading JobMaster id %s did not match the received JobMaster id %s. "
+                                                "The leading JobMaster identifier %s did not match the received JobMaster identifier %s. "
                                                         + "This indicates that a JobMaster leader change has happened.",
                                                 leadingJobMasterId, jobMasterId);
                                 log.debug(declineMessage);
@@ -534,7 +534,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
             return FutureUtils.completedExceptionally(
                     new ResourceManagerException(
                             String.format(
-                                    "Unknown TaskManager registration id %s.",
+                                    "Unknown TaskManager registration identifier %s.",
                                     taskManagerRegistrationId)));
         }
     }
@@ -591,9 +591,9 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
                 } else {
                     return FutureUtils.completedExceptionally(
                             new ResourceManagerException(
-                                    "The job leader's id "
+                                    "The job leader's identifier "
                                             + jobManagerRegistration.getJobMasterId()
-                                            + " does not match the received id "
+                                            + " does not match the received identifier "
                                             + jobMasterId
                                             + '.'));
                 }
@@ -619,12 +619,12 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
                 slotManager.freeSlot(slotId, allocationId);
             } else {
                 log.debug(
-                        "Invalid registration id for slot available message. This indicates an"
+                        "Invalid registration identifier for slot available message. This indicates an"
                                 + " outdated request.");
             }
         } else {
             log.debug(
-                    "Could not find registration for resource id {}. Discarding the slot available"
+                    "Could not find registration for resource identifier {}. Discarding the slot available"
                             + "message {}.",
                     resourceId.getStringWithMetadata(),
                     slotId);
@@ -1108,7 +1108,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         } catch (Exception e) {
             onFatalError(
                     new ResourceManagerException(
-                            "Could not properly clear the job leader id service.", e));
+                            "Could not properly clear the job leader identifier service.", e));
         }
     }
 
@@ -1203,7 +1203,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
             jobLeaderIdService.removeJob(jobId);
         } catch (Exception e) {
             log.warn(
-                    "Could not properly remove the job {} from the job leader id service.",
+                    "Could not properly remove the job {} from the job leader identifier service.",
                     jobId,
                     e);
         }
@@ -1337,7 +1337,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
     /**
      * Get worker node if the worker resource is accepted.
      *
-     * @param resourceID The worker resource id
+     * @param resourceID The worker resource identifier
      */
     protected abstract Optional<WorkerType> getWorkerNodeIfAcceptRegistration(
             ResourceID resourceID);
@@ -1459,7 +1459,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         public void notifyHeartbeatTimeout(final ResourceID resourceID) {
             final String message =
                     String.format(
-                            "The heartbeat of TaskManager with id %s timed out.",
+                            "The heartbeat of TaskManager with identifier %s timed out.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 
@@ -1476,7 +1476,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "TaskManager with id %s is no longer reachable.",
+                            "TaskManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 
@@ -1514,7 +1514,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         public void notifyHeartbeatTimeout(final ResourceID resourceID) {
             final String message =
                     String.format(
-                            "The heartbeat of JobManager with id %s timed out.",
+                            "The heartbeat of JobManager with identifier %s timed out.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 
@@ -1540,7 +1540,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         public void notifyTargetUnreachable(ResourceID resourceID) {
             final String message =
                     String.format(
-                            "JobManager with id %s is no longer reachable.",
+                            "JobManager with identifier %s is no longer reachable.",
                             resourceID.getStringWithMetadata());
             log.info(message);
 

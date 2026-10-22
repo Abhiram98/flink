@@ -30,7 +30,7 @@ public class InputSelectionSpec implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The input id (start from 1) used for identifying each {@link Input} in {@link
+     * The input identifier (start from 1) used for identifying each {@link Input} in {@link
      * MultipleInputStreamOperator#getInputs()}.
      */
     private final int multipleInputId;

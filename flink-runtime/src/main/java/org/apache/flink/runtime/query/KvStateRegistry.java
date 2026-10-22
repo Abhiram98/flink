@@ -106,7 +106,7 @@ public class KvStateRegistry {
             throw new IllegalStateException(
                     "State \""
                             + registrationName
-                            + " \"(id="
+                            + " \"(identifier="
                             + kvStateId
                             + ") appears registered although it should not.");
         }

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/** Manages partition request listener with input channel id. */
+/** Manages partition request listener with input channel identifier. */
 public class PartitionRequestListenerManager {
     private final Map<InputChannelID, PartitionRequestListener> listeners;
 

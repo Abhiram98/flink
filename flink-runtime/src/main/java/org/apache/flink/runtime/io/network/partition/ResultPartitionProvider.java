@@ -35,7 +35,7 @@ public interface ResultPartitionProvider {
      * If the upstream task's partition has been registered, returns the result subpartition input
      * view immediately, otherwise register the listener and return empty.
      *
-     * @param partitionId the result partition id
+     * @param partitionId the result partition identifier
      * @param indexSet the index set
      * @param availabilityListener the buffer availability listener
      * @param partitionRequestListener the partition request listener

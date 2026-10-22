@@ -176,7 +176,7 @@ public class KubernetesUtils {
      * Get the common labels for Flink native clusters. All the Kubernetes resources will be set
      * with these labels.
      *
-     * @param clusterId cluster id
+     * @param clusterId cluster identifier
      * @return Return common labels map
      */
     public static Map<String, String> getCommonLabels(String clusterId) {
@@ -191,7 +191,7 @@ public class KubernetesUtils {
      * Get ConfigMap labels for the current Flink cluster. They could be used to filter and clean-up
      * the resources.
      *
-     * @param clusterId cluster id
+     * @param clusterId cluster identifier
      * @param type the config map use case. It could only be {@link
      *     Constants#LABEL_CONFIGMAP_TYPE_HIGH_AVAILABILITY} now.
      * @return Return ConfigMap labels.

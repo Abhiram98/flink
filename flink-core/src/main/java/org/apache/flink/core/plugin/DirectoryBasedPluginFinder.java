@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  *
  * <p>The expected structure is as follows: the given plugins root folder, containing the plugins
  * folder. One plugin folder contains all resources (jar files) belonging to a plugin. The name of
- * the plugin folder becomes the plugin id.
+ * the plugin folder becomes the plugin identifier.
  *
  * <pre>
  * plugins-root-folder/

@@ -583,7 +583,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
         } catch (YarnException | IOException e) {
             throw new FlinkException(
-                    "Could not kill the Yarn Flink cluster with id " + applicationId + '.', e);
+                    "Could not kill the Yarn Flink cluster with identifier " + applicationId + '.', e);
         }
     }
 
@@ -699,7 +699,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
                         yarnApplication,
                         validClusterSpecification);
 
-        // print the application id for user to cancel themselves.
+        // print the application identifier for user to cancel themselves.
         if (detached) {
             final ApplicationId yarnApplicationId = report.getApplicationId();
             logDetachedClusterInformation(yarnApplicationId, LOG);
@@ -1936,7 +1936,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
     }
 
     private void setHAClusterIdIfNotSet(Configuration configuration, ApplicationId appId) {
-        // set cluster-id to app id if not specified
+        // set cluster-identifier to app identifier if not specified
         if (!configuration.contains(HighAvailabilityOptions.HA_CLUSTER_ID)) {
             configuration.set(
                     HighAvailabilityOptions.HA_CLUSTER_ID, ConverterUtils.toString(appId));
@@ -1948,7 +1948,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         logger.info(
                 "The Flink YARN session cluster has been started in detached mode. In order to "
                         + "stop Flink gracefully, use the following command:\n"
-                        + "$ echo \"stop\" | ./bin/yarn-session.sh -id {}\n"
+                        + "$ echo \"stop\" | ./bin/yarn-session.sh -identifier {}\n"
                         + "If this should not be possible, then you can also kill Flink via YARN's web interface or via:\n"
                         + "$ yarn application -kill {}\n"
                         + "Note that killing Flink might not clean up all job artifacts and temporary files.",

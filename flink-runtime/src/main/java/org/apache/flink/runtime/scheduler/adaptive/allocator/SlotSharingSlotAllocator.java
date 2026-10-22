@@ -284,7 +284,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
     }
 
     static class ExecutionSlotSharingGroup {
-        private final String id;
+        private final String identifier;
         private final Set<ExecutionVertexID> containedExecutionVertices;
 
         public ExecutionSlotSharingGroup(Set<ExecutionVertexID> containedExecutionVertices) {
@@ -292,13 +292,13 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
         }
 
         public ExecutionSlotSharingGroup(
-                Set<ExecutionVertexID> containedExecutionVertices, String id) {
+                Set<ExecutionVertexID> containedExecutionVertices, String identifier) {
             this.containedExecutionVertices = containedExecutionVertices;
-            this.id = id;
+            this.identifier = identifier;
         }
 
-        public String getId() {
-            return id;
+        public String getIdentifier() {
+            return identifier;
         }
 
         public Collection<ExecutionVertexID> getContainedExecutionVertices() {

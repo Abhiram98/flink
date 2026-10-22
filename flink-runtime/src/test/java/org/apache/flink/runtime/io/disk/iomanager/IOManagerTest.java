@@ -51,9 +51,9 @@ class IOManagerTest {
             FileIOChannel.Enumerator enumerator = ioMan.createChannelEnumerator();
 
             for (int i = 0; i < 3 * tempDirs.length; i++) {
-                FileIOChannel.ID id = enumerator.next();
+                FileIOChannel.ID identifier = enumerator.next();
 
-                File pathFile = id.getPathFile();
+                File pathFile = identifier.getPathFile();
                 Files.createFile(pathFile.toPath());
 
                 assertThat(pathFile)

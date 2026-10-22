@@ -264,6 +264,6 @@ public class PendingCheckpointStats extends AbstractCheckpointStats {
 
     @Override
     public String toString() {
-        return "PendingCheckpoint(id=" + getCheckpointId() + ")";
+        return "PendingCheckpoint(identifier=" + getCheckpointId() + ")";
     }
 }

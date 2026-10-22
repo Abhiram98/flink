@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 /** A SinkFunction for collecting results of DataStream transformations in test cases. */
 public class DataStreamTestCollectSink<IN> implements SinkFunction<IN> {
 
-    private final int id;
+    private final int identifier;
 
     private static final List<Tuple2<Integer, Object>> collectedResult = new ArrayList<>();
 
     public DataStreamTestCollectSink() {
-        id = hashCode();
+        identifier = hashCode();
     }
 
     /**
@@ -45,7 +45,7 @@ public class DataStreamTestCollectSink<IN> implements SinkFunction<IN> {
     public void invoke(IN value, Context context) throws Exception {
 
         synchronized (collectedResult) {
-            collectedResult.add(Tuple2.of(id, value));
+            collectedResult.add(Tuple2.of(identifier, value));
         }
     }
 
@@ -54,7 +54,7 @@ public class DataStreamTestCollectSink<IN> implements SinkFunction<IN> {
         synchronized (collectedResult) {
             listToBeReturned =
                     collectedResult.stream()
-                            .filter(e -> e.f0.equals(id))
+                            .filter(e -> e.f0.equals(identifier))
                             .map(e -> e.f1)
                             .collect(Collectors.toList());
         }
@@ -69,7 +69,7 @@ public class DataStreamTestCollectSink<IN> implements SinkFunction<IN> {
 
     public void clear() {
         synchronized (collectedResult) {
-            collectedResult.removeIf(e -> e.f0.equals(id));
+            collectedResult.removeIf(e -> e.f0.equals(identifier));
         }
     }
 }

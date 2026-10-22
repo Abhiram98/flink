@@ -121,7 +121,7 @@ public class JobEdge implements java.io.Serializable {
      * @return The ID of the consumed data set.
      */
     public IntermediateDataSetID getSourceId() {
-        return source.getId();
+        return source.getIdentifier();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -240,6 +240,6 @@ public class JobEdge implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s --> %s [%s]", source.getId(), target, distributionPattern.name());
+        return String.format("%s --> %s [%s]", source.getIdentifier(), target, distributionPattern.name());
     }
 }

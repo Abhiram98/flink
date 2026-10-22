@@ -160,7 +160,7 @@ public class TaskExecutorFileMergingManager {
                             fileMergingSnapshotManagerByJobId.get(jobId);
             if (fileMergingSnapshotManagerAndRetainedExecutions != null) {
                 LOG.debug(
-                        "Releasing file merging snapshot manager under job id {} and attempt {}.",
+                        "Releasing file merging snapshot manager under job identifier {} and attempt {}.",
                         jobId,
                         executionAttemptID);
                 fileMergingSnapshotManagerAndRetainedExecutions.f1.remove(executionAttemptID);
@@ -176,7 +176,7 @@ public class TaskExecutorFileMergingManager {
      * org.apache.flink.runtime.taskexecutor.TaskExecutor#releaseJobResources} called.
      */
     public void releaseMergingSnapshotManagerForJob(@Nonnull JobID jobId) {
-        LOG.debug("Releasing file merging snapshot manager under job id {}.", jobId);
+        LOG.debug("Releasing file merging snapshot manager under job identifier {}.", jobId);
         Tuple2<FileMergingSnapshotManager, Set<ExecutionAttemptID>> toRelease = null;
         synchronized (lock) {
             if (closed) {

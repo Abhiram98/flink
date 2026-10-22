@@ -44,7 +44,7 @@ abstract class AbstractYarnCli extends AbstractCustomCommandLine {
         this.configuration = configuration;
         this.applicationId =
                 new Option(
-                        shortPrefix + "id",
+                        shortPrefix + "identifier",
                         longPrefix + "applicationId",
                         true,
                         "Attach to running YARN session");
@@ -73,7 +73,7 @@ abstract class AbstractYarnCli extends AbstractCustomCommandLine {
     }
 
     @Override
-    public String getId() {
+    public String getIdentifier() {
         return ID;
     }
 }

@@ -94,7 +94,7 @@ class KubernetesHighAvailabilityTestBase {
                     new KubernetesTestFixture(CLUSTER_ID, LEADER_CONFIGMAP_NAME, LOCK_IDENTITY);
 
             final UUID randomTestID = UUID.randomUUID();
-            componentId = "random-component-id-" + randomTestID;
+            componentId = "random-component-identifier-" + randomTestID;
             leaderAddress = "random-address-" + randomTestID;
 
             flinkKubeClient = kubernetesTestFixture.getFlinkKubeClient();

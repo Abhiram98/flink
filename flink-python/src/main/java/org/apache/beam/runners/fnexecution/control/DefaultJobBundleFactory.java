@@ -100,7 +100,7 @@ public class DefaultJobBundleFactory implements JobBundleFactory {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultJobBundleFactory.class);
     private static final IdGenerator factoryIdGenerator = IdGenerators.incrementingLongs();
 
-    private final String factoryId = factoryIdGenerator.getId();
+    private final String factoryId = factoryIdGenerator.getIdentifier();
     private final ImmutableList<EnvironmentCacheAndLock> environmentCaches;
     private final AtomicInteger stageBundleFactoryCount = new AtomicInteger();
     private final Map<String, EnvironmentFactory.Provider> environmentFactoryProviderMap;
@@ -146,7 +146,7 @@ public class DefaultJobBundleFactory implements JobBundleFactory {
         this.environmentFactoryProviderMap = environmentFactoryMap;
         this.executor = Executors.newCachedThreadPool();
         this.clientPool = MapControlClientPool.create();
-        this.stageIdGenerator = () -> factoryId + "-" + stageIdSuffixGenerator.getId();
+        this.stageIdGenerator = () -> factoryId + "-" + stageIdSuffixGenerator.getIdentifier();
         this.environmentExpirationMillis = getEnvironmentExpirationMillis(jobInfo);
         this.loadBalanceBundles = shouldLoadBalanceBundles(jobInfo);
         this.environmentCaches =
@@ -266,7 +266,7 @@ public class DefaultJobBundleFactory implements JobBundleFactory {
                                     ServerFactory serverFactory =
                                             environmentFactoryProvider.getServerFactory();
                                     ServerInfo serverInfo = serverInfoCreator.apply(serverFactory);
-                                    String workerId = stageIdGenerator.getId();
+                                    String workerId = stageIdGenerator.getIdentifier();
                                     serverInfo
                                             .getProvisioningServer()
                                             .getService()
@@ -453,7 +453,7 @@ public class DefaultJobBundleFactory implements JobBundleFactory {
             preparedClient.wrappedClient = wrappedClient;
             preparedClient.processBundleDescriptor =
                     ProcessBundleDescriptors.fromExecutableStage(
-                            stageIdGenerator.getId(),
+                            stageIdGenerator.getIdentifier(),
                             executableStage,
                             wrappedClient.getServerInfo().getDataServer().getApiServiceDescriptor(),
                             wrappedClient
@@ -577,8 +577,8 @@ public class DefaultJobBundleFactory implements JobBundleFactory {
                             checkpointHandler);
             return new RemoteBundle() {
                 @Override
-                public String getId() {
-                    return bundle.getId();
+                public String getIdentifier() {
+                    return bundle.getIdentifier();
                 }
 
                 @Override

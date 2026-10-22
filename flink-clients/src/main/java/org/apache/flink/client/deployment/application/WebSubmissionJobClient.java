@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * A {@link JobClient} that only allows asking for the job id of the job it is attached to.
+ * A {@link JobClient} that only allows asking for the job identifier of the job it is attached to.
  *
  * <p>This is used in web submission, where we do not want the Web UI to have jobs blocking threads
  * while waiting for their completion.

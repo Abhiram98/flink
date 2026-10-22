@@ -51,7 +51,7 @@ public class NFAState {
                     .thenComparingInt(
                             c ->
                                     c.getStartEventID() != null
-                                            ? c.getStartEventID().getId()
+                                            ? c.getStartEventID().getIdentifier()
                                             : Integer.MAX_VALUE);
 
     public NFAState(Iterable<ComputationState> states) {

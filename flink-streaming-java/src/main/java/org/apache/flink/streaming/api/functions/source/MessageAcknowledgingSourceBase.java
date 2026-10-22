@@ -214,7 +214,7 @@ public abstract class MessageAcknowledgingSourceBase<Type, UId> extends RichSour
      * return true.
      *
      * @param uid The ID to add.
-     * @return True if the id has not been processed previously.
+     * @return True if the identifier has not been processed previously.
      */
     protected boolean addId(UId uid) {
         idsForCurrentCheckpoint.add(uid);
@@ -233,7 +233,7 @@ public abstract class MessageAcknowledgingSourceBase<Type, UId> extends RichSour
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(
-                    "Checkpointing: Messages: {}, checkpoint id: {}, timestamp: {}",
+                    "Checkpointing: Messages: {}, checkpoint identifier: {}, timestamp: {}",
                     idsForCurrentCheckpoint,
                     context.getCheckpointId(),
                     context.getCheckpointTimestamp());
@@ -255,9 +255,9 @@ public abstract class MessageAcknowledgingSourceBase<Type, UId> extends RichSour
         for (Iterator<Tuple2<Long, Set<UId>>> iter = pendingCheckpoints.iterator();
                 iter.hasNext(); ) {
             Tuple2<Long, Set<UId>> checkpoint = iter.next();
-            long id = checkpoint.f0;
+            long identifier = checkpoint.f0;
 
-            if (id <= checkpointId) {
+            if (identifier <= checkpointId) {
                 LOG.trace("Committing Messages with following IDs {}", checkpoint.f1);
                 acknowledgeIDs(checkpointId, checkpoint.f1);
                 // remove deduplication data

@@ -66,7 +66,7 @@ class SubpartitionRemoteCacheManager {
     private CompletableFuture<Void> flushCompletableFuture = FutureUtils.completedVoidFuture();
 
     /**
-     * Record the segment id that is writing to.
+     * Record the segment identifier that is writing to.
      *
      * <p>Note that when flushing buffers, this can be touched by task thread or the flushing
      * thread, so the thread safety should be ensured.
@@ -116,7 +116,7 @@ class SubpartitionRemoteCacheManager {
         // Only task thread can modify the segmentId, and the method can only be called by the task
         // thread, so accessing segmentId is not guarded here.
         //noinspection FieldAccessNotGuarded
-        checkState(this.segmentId == segmentId, "Wrong segment id.");
+        checkState(this.segmentId == segmentId, "Wrong segment identifier.");
         // Flush the buffers belonging to the current segment
         flushBuffers();
 

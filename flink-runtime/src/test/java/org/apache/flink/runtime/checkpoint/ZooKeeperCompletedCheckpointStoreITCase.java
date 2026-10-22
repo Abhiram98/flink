@@ -243,7 +243,7 @@ class ZooKeeperCompletedCheckpointStoreITCase extends CompletedCheckpointStoreTe
     /**
      * FLINK-6284.
      *
-     * <p>Tests that the latest recovered checkpoint is the one with the highest checkpoint id
+     * <p>Tests that the latest recovered checkpoint is the one with the highest checkpoint identifier
      */
     @Test
     void testLatestCheckpointRecovery() throws Exception {

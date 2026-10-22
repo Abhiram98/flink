@@ -24,15 +24,15 @@ import org.apache.flink.table.data.TimestampData;
 @Internal
 public interface Dictionary {
 
-    int decodeToInt(int id);
+    int decodeToInt(int identifier);
 
-    long decodeToLong(int id);
+    long decodeToLong(int identifier);
 
-    float decodeToFloat(int id);
+    float decodeToFloat(int identifier);
 
-    double decodeToDouble(int id);
+    double decodeToDouble(int identifier);
 
-    byte[] decodeToBinary(int id);
+    byte[] decodeToBinary(int identifier);
 
-    TimestampData decodeToTimestamp(int id);
+    TimestampData decodeToTimestamp(int identifier);
 }

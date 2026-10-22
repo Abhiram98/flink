@@ -51,7 +51,7 @@ public class LogicalFile {
     LogicalFileId fileId;
 
     /**
-     * The id of the last checkpoint that use this logical file. This acts as a watermark
+     * The identifier of the last checkpoint that use this logical file. This acts as a watermark
      * determining whether this logical file could be removed.
      *
      * @see #discardWithCheckpointId(long)
@@ -71,7 +71,7 @@ public class LogicalFile {
     /** The length of this logical file. */
     private final long length;
 
-    /** The id of the subtask that this logical file belongs to. */
+    /** The identifier of the subtask that this logical file belongs to. */
     @Nonnull private final SubtaskKey subtaskKey;
 
     public LogicalFile(
@@ -95,7 +95,7 @@ public class LogicalFile {
 
     /**
      * A logical file may share across checkpoints (especially for shared state). When this logical
-     * file is used/reused by a checkpoint, update the last checkpoint id that uses this logical
+     * file is used/reused by a checkpoint, update the last checkpoint identifier that uses this logical
      * file.
      *
      * @param checkpointId the checkpoint that uses this logical file.

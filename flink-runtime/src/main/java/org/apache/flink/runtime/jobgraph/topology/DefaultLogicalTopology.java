@@ -76,12 +76,12 @@ public class DefaultLogicalTopology implements LogicalTopology {
             final DefaultLogicalVertex logicalVertex =
                     new DefaultLogicalVertex(jobVertex, resultRetriever);
             this.verticesSorted.add(logicalVertex);
-            this.idToVertexMap.put(logicalVertex.getId(), logicalVertex);
+            this.idToVertexMap.put(logicalVertex.getIdentifier(), logicalVertex);
 
             for (IntermediateDataSet intermediateDataSet : jobVertex.getProducedDataSets()) {
                 final DefaultLogicalResult logicalResult =
                         new DefaultLogicalResult(intermediateDataSet, vertexRetriever);
-                idToResultMap.put(logicalResult.getId(), logicalResult);
+                idToResultMap.put(logicalResult.getIdentifier(), logicalResult);
             }
         }
     }

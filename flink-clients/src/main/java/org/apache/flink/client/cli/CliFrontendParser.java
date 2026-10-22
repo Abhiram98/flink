@@ -179,7 +179,7 @@ public class CliFrontendParser {
                     "detached",
                     false,
                     "Triggering savepoint in detached mode, client and JM are decoupled,"
-                            + " return the savepoint trigger id as the unique identification of"
+                            + " return the savepoint trigger identifier as the unique identification of"
                             + " the detached savepoint.");
 
     // list specific options
@@ -681,7 +681,7 @@ public class CliFrontendParser {
             boolean runOptions) {
         // prints options from all available command-line classes
         for (CustomCommandLine cli : customCommandLines) {
-            formatter.setSyntaxPrefix("  Options for " + cli.getId() + " mode:");
+            formatter.setSyntaxPrefix("  Options for " + cli.getIdentifier() + " mode:");
             Options customOpts = new Options();
             cli.addGeneralOptions(customOpts);
             if (runOptions) {

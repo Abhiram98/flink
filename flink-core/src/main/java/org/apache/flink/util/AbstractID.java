@@ -74,14 +74,14 @@ public class AbstractID implements Comparable<AbstractID>, java.io.Serializable 
     /**
      * Copy constructor: Creates a new abstract ID from the given one.
      *
-     * @param id the abstract ID to copy
+     * @param identifier the abstract ID to copy
      */
-    public AbstractID(AbstractID id) {
-        if (id == null) {
+    public AbstractID(AbstractID identifier) {
+        if (identifier == null) {
             throw new IllegalArgumentException("Id must not be null.");
         }
-        this.lowerPart = id.lowerPart;
-        this.upperPart = id.upperPart;
+        this.lowerPart = identifier.lowerPart;
+        this.upperPart = identifier.upperPart;
     }
 
     /** Constructs a new random ID from a uniform distribution. */

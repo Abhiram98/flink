@@ -229,7 +229,7 @@ public class DefaultJobLeaderService implements JobLeaderService {
 
         private final Object lock = new Object();
 
-        /** Job id identifying the job to look for a leader. */
+        /** Job identifier identifying the job to look for a leader. */
         private final JobID jobId;
 
         /** Rpc connection to the job leader. */
@@ -242,7 +242,7 @@ public class DefaultJobLeaderService implements JobLeaderService {
                         JMTMRegistrationRejection>
                 rpcConnection;
 
-        /** Leader id of the current job leader. */
+        /** Leader identifier of the current job leader. */
         @GuardedBy("lock")
         @Nullable
         private JobMasterId currentJobMasterId;
@@ -307,7 +307,7 @@ public class DefaultJobLeaderService implements JobLeaderService {
                     final JobMasterId jobMasterId = JobMasterId.fromUuidOrNull(leaderId);
 
                     LOG.debug(
-                            "New leader information for job {}. Address: {}, leader id: {}.",
+                            "New leader information for job {}. Address: {}, leader identifier: {}.",
                             jobId,
                             leaderAddress,
                             jobMasterId);
@@ -348,7 +348,7 @@ public class DefaultJobLeaderService implements JobLeaderService {
                             LOG, leaderAddress, jobMasterId, rpcService.getScheduledExecutor());
 
             LOG.info(
-                    "Try to register at job manager {} with leader id {}.",
+                    "Try to register at job manager {} with leader identifier {}.",
                     leaderAddress,
                     jobMasterId.toUUID());
             rpcConnection.start();

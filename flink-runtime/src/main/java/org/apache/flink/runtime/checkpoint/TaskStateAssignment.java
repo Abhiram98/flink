@@ -139,7 +139,7 @@ class TaskStateAssignment {
         if (downstreamAssignments == null) {
             downstreamAssignments =
                     Arrays.stream(executionJobVertex.getProducedDataSets())
-                            .map(result -> consumerAssignment.get(result.getId()))
+                            .map(result -> consumerAssignment.get(result.getIdentifier()))
                             .toArray(TaskStateAssignment[]::new);
         }
         return downstreamAssignments;

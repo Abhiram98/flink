@@ -29,35 +29,35 @@ public class MockedSqlGatewayEndpoint implements SqlGatewayEndpoint {
 
     private static final Set<String> RUNNING_ENDPOINTS = ConcurrentHashMap.newKeySet();
 
-    private final String id;
+    private final String identifier;
     private final String host;
     private final int port;
     private final String description;
 
-    public static boolean isRunning(String id) {
-        return RUNNING_ENDPOINTS.contains(id);
+    public static boolean isRunning(String identifier) {
+        return RUNNING_ENDPOINTS.contains(identifier);
     }
 
-    public MockedSqlGatewayEndpoint(String id, String host, int port, String description) {
-        this.id = id;
+    public MockedSqlGatewayEndpoint(String identifier, String host, int port, String description) {
+        this.identifier = identifier;
         this.host = host;
         this.port = port;
         this.description = description;
 
-        if (RUNNING_ENDPOINTS.contains(id)) {
+        if (RUNNING_ENDPOINTS.contains(identifier)) {
             throw new IllegalArgumentException(
-                    "There are endpoints with the same id is running. Please specify an unique identifier.");
+                    "There are endpoints with the same identifier is running. Please specify an unique identifier.");
         }
     }
 
     @Override
     public void start() throws Exception {
-        RUNNING_ENDPOINTS.add(id);
+        RUNNING_ENDPOINTS.add(identifier);
     }
 
     @Override
     public void stop() throws Exception {
-        RUNNING_ENDPOINTS.remove(id);
+        RUNNING_ENDPOINTS.remove(identifier);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MockedSqlGatewayEndpoint implements SqlGatewayEndpoint {
             return false;
         }
         MockedSqlGatewayEndpoint that = (MockedSqlGatewayEndpoint) o;
-        return Objects.equals(id, that.id)
+        return Objects.equals(identifier, that.identifier)
                 && port == that.port
                 && Objects.equals(host, that.host)
                 && Objects.equals(description, that.description);
@@ -77,6 +77,6 @@ public class MockedSqlGatewayEndpoint implements SqlGatewayEndpoint {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, host, port, description);
+        return Objects.hash(identifier, host, port, description);
     }
 }

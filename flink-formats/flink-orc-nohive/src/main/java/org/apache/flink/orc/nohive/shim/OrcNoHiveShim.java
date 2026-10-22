@@ -79,7 +79,7 @@ public class OrcNoHiveShim implements OrcShim<VectorizedRowBatch> {
         RecordReader orcRowsReader = orcReader.rows(options);
 
         // assign ids
-        schema.getId();
+        schema.getIdentifier();
 
         return orcRowsReader;
     }

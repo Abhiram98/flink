@@ -1234,14 +1234,14 @@ class ExecutingTest {
         }
 
         @Override
-        public ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID id) {
+        public ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID identifier) {
             throw new UnsupportedOperationException(
                     "This method is not supported by the MockInternalExecutionGraphAccessor.");
         }
 
         @Override
         public IntermediateResultPartition getResultPartitionOrThrow(
-                IntermediateResultPartitionID id) {
+                IntermediateResultPartitionID identifier) {
             throw new UnsupportedOperationException(
                     "This method is not supported by the MockInternalExecutionGraphAccessor.");
         }
@@ -1253,7 +1253,7 @@ class ExecutingTest {
         }
 
         @Override
-        public ExecutionJobVertex getJobVertex(JobVertexID id) {
+        public ExecutionJobVertex getJobVertex(JobVertexID identifier) {
             throw new UnsupportedOperationException(
                     "This method is not supported by the MockInternalExecutionGraphAccessor.");
         }

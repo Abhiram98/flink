@@ -259,15 +259,15 @@ public class PojoSerializerUpgradeTestSpecifications {
         @ClassRelocator.RelocateClass("TestPojoWithModifiedSchema")
         @SuppressWarnings("WeakerAccess")
         public static class PojoBeforeSchemaUpgrade {
-            public int id;
+            public int identifier;
             public String name;
             public int age;
             public double height;
 
             public PojoBeforeSchemaUpgrade() {}
 
-            public PojoBeforeSchemaUpgrade(int id, String name, int age, double height) {
-                this.id = id;
+            public PojoBeforeSchemaUpgrade(int identifier, String name, int age, double height) {
+                this.identifier = identifier;
                 this.name = name;
                 this.age = age;
                 this.height = height;

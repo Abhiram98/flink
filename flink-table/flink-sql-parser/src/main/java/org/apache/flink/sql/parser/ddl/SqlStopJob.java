@@ -81,7 +81,7 @@ public class SqlStopJob extends SqlCall {
         return Collections.singletonList(jobId);
     }
 
-    public String getId() {
+    public String getIdentifier() {
         return jobId.getValueAs(NlsString.class).getValue();
     }
 

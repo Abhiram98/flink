@@ -344,7 +344,7 @@ public class InternalTimerServiceImpl<K, N> implements InternalTimerService<N> {
     /**
      * Snapshots the timers (both processing and event time ones) for a given {@code keyGroupIdx}.
      *
-     * @param keyGroupIdx the id of the key-group to be put in the snapshot.
+     * @param keyGroupIdx the identifier of the key-group to be put in the snapshot.
      * @return a snapshot containing the timers for the given key-group, and the serializers for
      *     them
      */
@@ -369,7 +369,7 @@ public class InternalTimerServiceImpl<K, N> implements InternalTimerService<N> {
      *
      * @param restoredSnapshot the restored snapshot containing the key-group's timers, and the
      *     serializers that were used to write them
-     * @param keyGroupIdx the id of the key-group to be put in the snapshot.
+     * @param keyGroupIdx the identifier of the key-group to be put in the snapshot.
      */
     @SuppressWarnings("unchecked")
     public void restoreTimersForKeyGroup(

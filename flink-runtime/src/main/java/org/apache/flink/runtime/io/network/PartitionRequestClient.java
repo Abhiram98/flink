@@ -59,11 +59,11 @@ public interface PartitionRequestClient {
     void notifyNewBufferSize(RemoteInputChannel inputChannel, int bufferSize);
 
     /**
-     * Notifies the id of segment required from one remote input channel.
+     * Notifies the identifier of segment required from one remote input channel.
      *
      * @param inputChannel The remote input channel who requires segment.
-     * @param subpartitionIndex The id of the corresponding subpartition.
-     * @param segmentId The id of segment.
+     * @param subpartitionIndex The identifier of the corresponding subpartition.
+     * @param segmentId The identifier of segment.
      */
     void notifyRequiredSegmentId(
             RemoteInputChannel inputChannel, int subpartitionIndex, int segmentId);

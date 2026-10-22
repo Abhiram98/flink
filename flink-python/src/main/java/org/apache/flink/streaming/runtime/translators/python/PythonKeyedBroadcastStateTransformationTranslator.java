@@ -90,7 +90,7 @@ public class PythonKeyedBroadcastStateTransformationTranslator<OUT>
                         context);
 
         BatchExecutionUtils.applyBatchExecutionSettings(
-                transformation.getId(),
+                transformation.getIdentifier(),
                 context,
                 StreamConfig.InputRequirement.SORTED,
                 StreamConfig.InputRequirement.PASS_THROUGH);

@@ -73,8 +73,8 @@ import java.util.Objects;
  *     return new MyAccumulator();
  *   }
  *
- *   public void accumulate(MyAccumulator accumulator, String id) {
- *     accumulator.list.add(id);
+ *   public void accumulate(MyAccumulator accumulator, String identifier) {
+ *     accumulator.list.add(identifier);
  *     accumulator.count++;
  *   }
  *

@@ -85,7 +85,7 @@ class ChangelogTaskLocalStateStoreTest extends TaskLocalStateStoreImplTest {
         TestingTaskStateSnapshot stateSnapshot2 = storeChangelogStates(2, 1);
         TestingTaskStateSnapshot stateSnapshot3 = storeChangelogStates(3, 1);
 
-        taskLocalStateStore.pruneMatchingCheckpoints(id -> id != 2);
+        taskLocalStateStore.pruneMatchingCheckpoints(identifier -> identifier != 2);
         assertThat(taskLocalStateStore.retrieveLocalState(3)).isNull();
         assertThat(stateSnapshot3.isDiscarded()).isTrue();
         assertThat(taskLocalStateStore.retrieveLocalState(1)).isNull();

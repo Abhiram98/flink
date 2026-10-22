@@ -190,8 +190,8 @@ public class EventSerializer {
             } else if (type == END_OF_USER_RECORDS_EVENT) {
                 return new EndOfData(StopMode.values()[buffer.get()]);
             } else if (type == CANCEL_CHECKPOINT_MARKER_EVENT) {
-                long id = buffer.getLong();
-                return new CancelCheckpointMarker(id);
+                long identifier = buffer.getLong();
+                return new CancelCheckpointMarker(identifier);
             } else if (type == ANNOUNCEMENT_EVENT) {
                 int sequenceNumber = buffer.getInt();
                 AbstractEvent announcedEvent = fromSerializedEvent(buffer, classLoader);
@@ -252,7 +252,7 @@ public class EventSerializer {
                 ByteBuffer.allocate(38 + (locationBytes == null ? 0 : locationBytes.length));
 
         buf.putInt(CHECKPOINT_BARRIER_EVENT);
-        buf.putLong(barrier.getId());
+        buf.putLong(barrier.getIdentifier());
         buf.putLong(barrier.getTimestamp());
 
         // we do not use checkpointType.ordinal() here to make the serialization robust
@@ -311,7 +311,7 @@ public class EventSerializer {
 
     private static CheckpointBarrier deserializeCheckpointBarrier(ByteBuffer buffer)
             throws IOException {
-        final long id = buffer.getLong();
+        final long identifier = buffer.getLong();
         final long timestamp = buffer.getLong();
 
         final byte checkpointTypeCode = buffer.get();
@@ -343,7 +343,7 @@ public class EventSerializer {
         final long alignedCheckpointTimeout = buffer.getLong();
 
         return new CheckpointBarrier(
-                id,
+                identifier,
                 timestamp,
                 new CheckpointOptions(
                         snapshotType, locationRef, alignmentType, alignedCheckpointTimeout));

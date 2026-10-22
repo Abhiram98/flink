@@ -33,12 +33,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class Metric {
 
-    private static final String FIELD_NAME_ID = "id";
+    private static final String FIELD_NAME_ID = "identifier";
 
     private static final String FIELD_NAME_VALUE = "value";
 
     @JsonProperty(value = FIELD_NAME_ID, required = true)
-    private final String id;
+    private final String identifier;
 
     /**
      * The value of the metric. If <code>null</code>, the field should not show up in the JSON
@@ -51,29 +51,29 @@ public class Metric {
     /**
      * Creates a new {@link Metric} with a possible value.
      *
-     * @param id Name of the metric.
+     * @param identifier Name of the metric.
      * @param value Value of the metric. Can be <code>null</code>.
      */
     @JsonCreator
     public Metric(
-            final @JsonProperty(value = FIELD_NAME_ID, required = true) String id,
+            final @JsonProperty(value = FIELD_NAME_ID, required = true) String identifier,
             final @Nullable @JsonProperty(FIELD_NAME_VALUE) String value) {
 
-        this.id = requireNonNull(id, "id must not be null");
+        this.identifier = requireNonNull(identifier, "identifier must not be null");
         this.value = value;
     }
 
     /**
      * Creates a new {@link Metric} without a value.
      *
-     * @param id Name of the metric.
+     * @param identifier Name of the metric.
      */
-    public Metric(final String id) {
-        this(id, null);
+    public Metric(final String identifier) {
+        this(identifier, null);
     }
 
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public String getValue() {
@@ -82,6 +82,6 @@ public class Metric {
 
     @Override
     public String toString() {
-        return "Metric{" + "id='" + id + '\'' + ", value='" + value + '\'' + '}';
+        return "Metric{" + "identifier='" + identifier + '\'' + ", value='" + value + '\'' + '}';
     }
 }

@@ -110,7 +110,7 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
                 calculateScores(jobInformation, previousAllocations, allGroups, parallelism);
 
         final Map<String, ExecutionSlotSharingGroup> groupsById =
-                allGroups.stream().collect(toMap(ExecutionSlotSharingGroup::getId, identity()));
+                allGroups.stream().collect(toMap(ExecutionSlotSharingGroup::getIdentifier, identity()));
         final Map<AllocationID, SlotInfo> slotsById =
                 freeSlots.stream().collect(toMap(SlotInfo::getAllocationId, identity()));
         AllocationScore score;
@@ -192,7 +192,7 @@ public class StateLocalitySlotAssigner implements SlotAssigner {
         }
 
         return score.entrySet().stream()
-                .map(e -> new AllocationScore(group.getId(), e.getKey(), e.getValue()))
+                .map(e -> new AllocationScore(group.getIdentifier(), e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
     }
 

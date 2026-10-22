@@ -562,7 +562,7 @@ class SingleInputGateTest extends InputGateTestBase {
         ResourceID location = ResourceID.generate();
         NettyShuffleDescriptor nettyShuffleDescriptor =
                 NettyShuffleDescriptorBuilder.newBuilder()
-                        .setId(newPartitionId)
+                        .setIdentifier(newPartitionId)
                         .setProducerLocation(location)
                         .buildLocal();
         inputGate.updateInputChannel(location, nettyShuffleDescriptor);
@@ -604,7 +604,7 @@ class SingleInputGateTest extends InputGateTestBase {
                         oldPartitionId.getPartitionId(), ExecutionAttemptID.randomId());
         NettyShuffleDescriptor nettyShuffleDescriptor =
                 NettyShuffleDescriptorBuilder.newBuilder()
-                        .setId(newPartitionId)
+                        .setIdentifier(newPartitionId)
                         .setProducerLocation(ResourceID.generate())
                         .buildRemote();
         inputGate.setBufferPool(new NoOpBufferPool());
@@ -1124,10 +1124,10 @@ class SingleInputGateTest extends InputGateTestBase {
 
             assertThat(createdInputGatesById.size()).isEqualTo(numberOfGates);
 
-            for (InputGateID id : createdInputGatesById.keySet()) {
-                assertThat(network.getInputGate(id).isPresent()).isTrue();
-                createdInputGatesById.get(id).close();
-                assertThat(network.getInputGate(id).isPresent()).isFalse();
+            for (InputGateID identifier : createdInputGatesById.keySet()) {
+                assertThat(network.getInputGate(identifier).isPresent()).isTrue();
+                createdInputGatesById.get(identifier).close();
+                assertThat(network.getInputGate(identifier).isPresent()).isFalse();
             }
         }
     }

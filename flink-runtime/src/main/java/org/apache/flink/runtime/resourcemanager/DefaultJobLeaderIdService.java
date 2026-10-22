@@ -43,8 +43,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Service which retrieves for a registered job the current job leader id (the leader id of the job
- * manager responsible for the job). The leader id will be exposed as a future via the {@link
+ * Service which retrieves for a registered job the current job leader identifier (the leader identifier of the job
+ * manager responsible for the job). The leader identifier will be exposed as a future via the {@link
  * #getLeaderId(JobID)}. The future will only be completed with an exception in case the service
  * will be stopped.
  */
@@ -131,7 +131,7 @@ public class DefaultJobLeaderIdService implements JobLeaderIdService {
     public void addJob(JobID jobId) throws Exception {
         Preconditions.checkNotNull(jobLeaderIdActions);
 
-        LOG.debug("Add job {} to job leader id monitoring.", jobId);
+        LOG.debug("Add job {} to job leader identifier monitoring.", jobId);
 
         if (!jobLeaderIdListeners.containsKey(jobId)) {
             LeaderRetrievalService leaderRetrievalService =
@@ -145,7 +145,7 @@ public class DefaultJobLeaderIdService implements JobLeaderIdService {
 
     @Override
     public void removeJob(JobID jobId) throws Exception {
-        LOG.debug("Remove job {} from job leader id monitoring.", jobId);
+        LOG.debug("Remove job {} from job leader identifier monitoring.", jobId);
 
         JobLeaderIdListener listener = jobLeaderIdListeners.remove(jobId);
 
@@ -186,7 +186,7 @@ public class DefaultJobLeaderIdService implements JobLeaderIdService {
     // --------------------------------------------------------------------------------
 
     /**
-     * Listener which stores the current leader id and exposes them as a future value when
+     * Listener which stores the current leader identifier and exposes them as a future value when
      * requested. The returned future will always be completed properly except when stopping the
      * listener.
      */
@@ -237,7 +237,7 @@ public class DefaultJobLeaderIdService implements JobLeaderIdService {
             leaderRetrievalService.stop();
             cancelTimeout();
             leaderIdFuture.completeExceptionally(
-                    new Exception("Job leader id service has been stopped."));
+                    new Exception("Job leader identifier service has been stopped."));
         }
 
         @Override
@@ -299,7 +299,7 @@ public class DefaultJobLeaderIdService implements JobLeaderIdService {
                 }
             } else {
                 LOG.debug(
-                        "A leader id change {}@{} has been detected after the listener has been stopped.",
+                        "A leader identifier change {}@{} has been detected after the listener has been stopped.",
                         leaderSessionId,
                         leaderAddress);
             }

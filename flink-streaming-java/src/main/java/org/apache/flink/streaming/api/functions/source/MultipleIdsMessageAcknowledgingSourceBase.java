@@ -129,7 +129,7 @@ public abstract class MultipleIdsMessageAcknowledgingSourceBase<Type, UId, Sessi
     /**
      * Acknowledges the session ids.
      *
-     * @param checkpointId The id of the current checkout to acknowledge ids for.
+     * @param checkpointId The identifier of the current checkout to acknowledge ids for.
      * @param uniqueIds The checkpointed unique ids which are ignored here. They only serve as a
      *     means of de-duplicating messages when the acknowledgment after a checkpoint fails.
      */
@@ -139,8 +139,8 @@ public abstract class MultipleIdsMessageAcknowledgingSourceBase<Type, UId, Sessi
         Iterator<Tuple2<Long, List<SessionId>>> iterator = sessionIdsPerSnapshot.iterator();
         while (iterator.hasNext()) {
             final Tuple2<Long, List<SessionId>> next = iterator.next();
-            long id = next.f0;
-            if (id <= checkpointId) {
+            long identifier = next.f0;
+            if (identifier <= checkpointId) {
                 acknowledgeSessionIDs(next.f1);
                 // remove ids for this session
                 iterator.remove();

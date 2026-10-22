@@ -51,7 +51,7 @@ public class HiveParserQB {
     private final List<String> aliases;
     private final HiveParserQBParseInfo qbp;
     private final HiveParserQBMetaData qbm;
-    private final String id;
+    private final String identifier;
     private boolean isQuery;
     private boolean insideView;
     private Set<String> aliasInsideView;
@@ -106,11 +106,11 @@ public class HiveParserQB {
         // Must be deterministic order maps - see HIVE-8707
         ptfNodeToSpec = new LinkedHashMap<>();
         destToWindowingSpec = new LinkedHashMap<>();
-        id = getAppendedAliasFromId(outerId, alias);
+        identifier = getAppendedAliasFromId(outerId, alias);
         aliasInsideView = new HashSet<>();
     }
 
-    // For sub-queries, the id. and alias should be appended since same aliases can be re-used
+    // For sub-queries, the identifier. and alias should be appended since same aliases can be re-used
     // within different sub-queries.
     // For a query like:
     // select ...
@@ -171,8 +171,8 @@ public class HiveParserQB {
         }
     }
 
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public int getNumSels() {

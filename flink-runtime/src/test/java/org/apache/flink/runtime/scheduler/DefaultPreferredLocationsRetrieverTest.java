@@ -61,7 +61,7 @@ class DefaultPreferredLocationsRetrieverTest {
 
         final PreferredLocationsRetriever locationsRetriever =
                 new DefaultPreferredLocationsRetriever(
-                        id -> Optional.of(stateLocation), inputsLocationsRetriever);
+                        identifier -> Optional.of(stateLocation), inputsLocationsRetriever);
 
         final CompletableFuture<Collection<TaskManagerLocation>> preferredLocations =
                 locationsRetriever.getPreferredLocations(consumerId, Collections.emptySet());
@@ -136,7 +136,7 @@ class DefaultPreferredLocationsRetrieverTest {
 
         final PreferredLocationsRetriever locationsRetriever =
                 new DefaultPreferredLocationsRetriever(
-                        id -> Optional.empty(), inputsLocationsRetriever);
+                        identifier -> Optional.empty(), inputsLocationsRetriever);
 
         final CompletableFuture<Collection<TaskManagerLocation>> preferredLocations =
                 locationsRetriever.getPreferredLocations(consumerId, Collections.emptySet());
@@ -218,7 +218,7 @@ class DefaultPreferredLocationsRetrieverTest {
 
         final PreferredLocationsRetriever locationsRetriever =
                 new DefaultPreferredLocationsRetriever(
-                        id -> Optional.empty(), inputsLocationsRetriever);
+                        identifier -> Optional.empty(), inputsLocationsRetriever);
 
         final CompletableFuture<Collection<TaskManagerLocation>> preferredLocations =
                 locationsRetriever.getPreferredLocations(consumerId, producersToIgnore);

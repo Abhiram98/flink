@@ -38,7 +38,7 @@ public interface StreamTaskStateInitializer {
      * Returns the {@link StreamOperatorStateContext} for an {@link AbstractStreamOperator} that
      * runs in the stream task that owns this manager.
      *
-     * @param operatorID the id of the operator for which the context is created. Cannot be null.
+     * @param operatorID the identifier of the operator for which the context is created. Cannot be null.
      * @param operatorClassName the classname of the operator instance for which the context is
      *     created. Cannot be null.
      * @param processingTimeService

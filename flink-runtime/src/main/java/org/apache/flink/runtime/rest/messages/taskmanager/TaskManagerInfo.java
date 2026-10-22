@@ -45,7 +45,7 @@ import java.util.Objects;
 /** Base class containing information for a {@link TaskExecutor}. */
 public class TaskManagerInfo implements ResponseBody, Serializable {
 
-    public static final String FIELD_NAME_RESOURCE_ID = "id";
+    public static final String FIELD_NAME_RESOURCE_ID = "identifier";
 
     public static final String FIELD_NAME_ADDRESS = "path";
 

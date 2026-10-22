@@ -54,7 +54,7 @@ public class ExecNodeVersionUpgradeSerdeTest {
     public void testDeserializeOldVersionUsingNewVersion() throws IOException {
         ExecNodeMetadataUtil.addTestNode(DummyExecNode.class);
         String serializedUsingOldVersion =
-                "{\"id\":1,\"type\":\"dummy-exec-node_1\",\"inputProperties\":[],\"outputType\":\"ROW<>\",\"description\":\"Dummy\"}";
+                "{\"identifier\":1,\"type\":\"dummy-exec-node_1\",\"inputProperties\":[],\"outputType\":\"ROW<>\",\"description\":\"Dummy\"}";
 
         SerdeContext context = configuredSerdeContext();
         DummyExecNode deserializedUsingNewVersion =
@@ -82,14 +82,14 @@ public class ExecNodeVersionUpgradeSerdeTest {
 
         @JsonCreator
         protected DummyExecNode(
-                @JsonProperty(FIELD_NAME_ID) int id,
+                @JsonProperty(FIELD_NAME_ID) int identifier,
                 @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
                 @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
                 @JsonProperty(FIELD_NAME_INPUT_PROPERTIES) List<InputProperty> inputProperties,
                 @JsonProperty(FIELD_NAME_OUTPUT_TYPE) LogicalType outputType,
                 @JsonProperty(FIELD_NAME_DESCRIPTION) String description,
                 @JsonProperty(FIELD_NAME_NEW_ADDED) Integer newProperty) {
-            super(id, context, persistedConfig, inputProperties, outputType, description);
+            super(identifier, context, persistedConfig, inputProperties, outputType, description);
             this.newProperty = newProperty;
         }
 

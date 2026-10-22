@@ -493,15 +493,15 @@ public class HiveDialectITCase {
         assertThat(newField.getType()).isEqualTo("timestamp");
 
         // add/replace columns cascade
-        tableEnv.executeSql("create table tbl2 (x int) partitioned by (dt date,id bigint)");
+        tableEnv.executeSql("create table tbl2 (x int) partitioned by (dt date,identifier bigint)");
         tableEnv.executeSql(
-                "alter table tbl2 add partition (dt='2020-01-23',id=1) partition (dt='2020-04-24',id=2)");
+                "alter table tbl2 add partition (dt='2020-01-23',identifier=1) partition (dt='2020-04-24',identifier=2)");
         CatalogPartitionSpec partitionSpec1 =
                 new CatalogPartitionSpec(
                         new LinkedHashMap<String, String>() {
                             {
                                 put("dt", "2020-01-23");
-                                put("id", "1");
+                                put("identifier", "1");
                             }
                         });
         CatalogPartitionSpec partitionSpec2 =
@@ -509,7 +509,7 @@ public class HiveDialectITCase {
                         new LinkedHashMap<String, String>() {
                             {
                                 put("dt", "2020-04-24");
-                                put("id", "2");
+                                put("identifier", "2");
                             }
                         });
         tableEnv.executeSql("alter table tbl2 replace columns (ti tinyint,d decimal) cascade");
@@ -1170,7 +1170,7 @@ public class HiveDialectITCase {
     public void testShowCreateTable() throws Exception {
         tableEnv.getConfig().setSqlDialect(SqlDialect.DEFAULT);
         tableEnv.executeSql(
-                "create table t1(id BIGINT,\n"
+                "create table t1(identifier BIGINT,\n"
                         + "  name STRING) WITH (\n"
                         + "  'connector' = 'datagen' "
                         + ")");
@@ -1233,7 +1233,7 @@ public class HiveDialectITCase {
     public void testDescribeTable() {
         tableEnv.getConfig().setSqlDialect(SqlDialect.DEFAULT);
         tableEnv.executeSql(
-                "create table t1(id BIGINT,\n"
+                "create table t1(identifier BIGINT,\n"
                         + "  name STRING) WITH (\n"
                         + "  'connector' = 'datagen' "
                         + ")");
@@ -1248,7 +1248,7 @@ public class HiveDialectITCase {
         List<Row> result = CollectionUtil.iteratorToList(descT1.collect());
         assertThat(result.toString())
                 .isEqualTo(
-                        "[+I[id, BIGINT, true, null, null, null], +I[name, STRING, true, null, null, null]]");
+                        "[+I[identifier, BIGINT, true, null, null, null], +I[name, STRING, true, null, null, null]]");
         // desc hive table
         TableResult descT2 = tableEnv.executeSql("desc t2");
         assertThat(descT2.getResultKind()).isEqualTo(ResultKind.SUCCESS_WITH_CONTENT);

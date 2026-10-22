@@ -49,13 +49,13 @@ public abstract class CommonExecValues extends ExecNodeBase<RowData>
     private final List<List<RexLiteral>> tuples;
 
     public CommonExecValues(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             List<List<RexLiteral>> tuples,
             RowType outputType,
             String description) {
-        super(id, context, persistedConfig, Collections.emptyList(), outputType, description);
+        super(identifier, context, persistedConfig, Collections.emptyList(), outputType, description);
         this.tuples = tuples;
     }
 

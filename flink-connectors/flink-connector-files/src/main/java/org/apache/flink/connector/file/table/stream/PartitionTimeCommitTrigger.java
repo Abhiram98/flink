@@ -55,7 +55,7 @@ public class PartitionTimeCommitTrigger implements PartitionCommitTrigger {
 
     private static final ListStateDescriptor<Map<Long, Long>> WATERMARKS_STATE_DESC =
             new ListStateDescriptor<>(
-                    "checkpoint-id-to-watermark",
+                    "checkpoint-identifier-to-watermark",
                     new MapSerializer<>(LongSerializer.INSTANCE, LongSerializer.INSTANCE));
 
     private final ListState<List<String>> pendingPartitionsState;

@@ -155,7 +155,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
         ChannelStateWriteResult put =
                 results.computeIfAbsent(
                         checkpointId,
-                        id -> {
+                        identifier -> {
                             Preconditions.checkState(
                                     results.size() < maxCheckpoints,
                                     String.format(

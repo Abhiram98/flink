@@ -130,7 +130,7 @@ public class SqlNodeToCallOperationTest extends SqlNodeToOperationConversionTest
                 "CALL PROCEDURE:"
                         + " (procedureIdentifier: [`p1`.`system`.`pojo_result`],"
                         + " inputTypes: [STRING, BIGINT NOT NULL],"
-                        + " outputTypes: [*org.apache.flink.table.planner.operations.SqlNodeToCallOperationTest$MyPojo<`name` STRING, `id` BIGINT NOT NULL>*],"
+                        + " outputTypes: [*org.apache.flink.table.planner.operations.SqlNodeToCallOperationTest$MyPojo<`name` STRING, `identifier` BIGINT NOT NULL>*],"
                         + " arguments: [name, 1])");
 
         // test call the procedure with timestamp as arguments
@@ -240,7 +240,7 @@ public class SqlNodeToCallOperationTest extends SqlNodeToOperationConversionTest
     }
 
     private static class PojoResultProcedure implements Procedure {
-        public MyPojo[] call(ProcedureContext procedureContext, String name, long id) {
+        public MyPojo[] call(ProcedureContext procedureContext, String name, long identifier) {
             return new MyPojo[0];
         }
     }
@@ -257,19 +257,19 @@ public class SqlNodeToCallOperationTest extends SqlNodeToOperationConversionTest
     /** A simple pojo class for testing purpose. */
     public static class MyPojo {
         private final String name;
-        private final long id;
+        private final long identifier;
 
-        public MyPojo(String name, long id) {
+        public MyPojo(String name, long identifier) {
             this.name = name;
-            this.id = id;
+            this.identifier = identifier;
         }
 
         public String getName() {
             return name;
         }
 
-        public long getId() {
-            return id;
+        public long getIdentifier() {
+            return identifier;
         }
     }
 }

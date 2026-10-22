@@ -56,7 +56,7 @@ public class MatchRecognizeTestPrograms {
                     .setupTableSource(
                             SourceTestStep.newBuilder("MyTable")
                                     .addSchema(
-                                            "id bigint", "name varchar", "proctime as PROCTIME()")
+                                            "identifier bigint", "name varchar", "proctime as PROCTIME()")
                                     .producedBeforeRestore(SIMPLE_DATA)
                                     .producedAfterRestore(SIMPLE_DATA2)
                                     .build())
@@ -72,9 +72,9 @@ public class MatchRecognizeTestPrograms {
                                     + "     FROM MyTable MATCH_RECOGNIZE (\n"
                                     + "             ORDER BY proctime\n"
                                     + "             MEASURES\n"
-                                    + "             `A\"`.id AS aid,\n"
-                                    + "             \u006C.id AS bid,\n"
-                                    + "             C.id AS cid\n"
+                                    + "             `A\"`.identifier AS aid,\n"
+                                    + "             \u006C.identifier AS bid,\n"
+                                    + "             C.identifier AS cid\n"
                                     + "             PATTERN (`A\"` \u006C C)\n"
                                     + "             DEFINE\n"
                                     + "                 `A\"` AS name = 'a',\n"

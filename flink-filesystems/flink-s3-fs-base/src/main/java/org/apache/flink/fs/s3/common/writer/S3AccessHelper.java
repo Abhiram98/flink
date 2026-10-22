@@ -47,7 +47,7 @@ public interface S3AccessHelper {
      * Initializes a Multi-Part Upload.
      *
      * @param key the key whose value we want to upload in parts.
-     * @return The id of the initiated Multi-Part Upload which will be used during the uploading of
+     * @return The identifier of the initiated Multi-Part Upload which will be used during the uploading of
      *     the parts.
      * @throws IOException
      */
@@ -57,7 +57,7 @@ public interface S3AccessHelper {
      * Uploads a part and associates it with the MPU with the provided {@code uploadId}.
      *
      * @param key the key this MPU is associated with.
-     * @param uploadId the id of the MPU.
+     * @param uploadId the identifier of the MPU.
      * @param partNumber the number of the part being uploaded (has to be in [1 ... 10000]).
      * @param inputFile the (local) file holding the part to be uploaded.
      * @param length the length of the part.
@@ -84,7 +84,7 @@ public interface S3AccessHelper {
      * Finalizes a Multi-Part Upload.
      *
      * @param key the key identifying the object we finished uploading.
-     * @param uploadId the id of the MPU.
+     * @param uploadId the identifier of the MPU.
      * @param partETags the list of {@link PartETag ETags} associated with this MPU.
      * @param length the size of the uploaded object.
      * @param errorCount a counter that will be used to count any failed attempts to commit the MPU.

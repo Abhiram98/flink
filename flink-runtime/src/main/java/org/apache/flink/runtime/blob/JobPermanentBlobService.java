@@ -27,14 +27,14 @@ public interface JobPermanentBlobService extends PermanentBlobService {
     /**
      * Register the given job.
      *
-     * @param jobId job id identifying the job to register
+     * @param jobId job identifier identifying the job to register
      */
     void registerJob(JobID jobId);
 
     /**
      * Release the given job. This makes the blobs stored for this job up for cleanup.
      *
-     * @param jobId job id identifying the job to register
+     * @param jobId job identifier identifying the job to register
      */
     void releaseJob(JobID jobId);
 }

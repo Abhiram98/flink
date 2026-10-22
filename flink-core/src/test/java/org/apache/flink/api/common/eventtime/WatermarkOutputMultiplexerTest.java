@@ -262,10 +262,10 @@ class WatermarkOutputMultiplexerTest {
         WatermarkOutputMultiplexer multiplexer =
                 new WatermarkOutputMultiplexer(underlyingWatermarkOutput);
 
-        final String id = "test-id";
-        multiplexer.registerNewOutput(id, watermark -> {});
-        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(id);
-        WatermarkOutput deferredOutput = multiplexer.getDeferredOutput(id);
+        final String identifier = "test-identifier";
+        multiplexer.registerNewOutput(identifier, watermark -> {});
+        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(identifier);
+        WatermarkOutput deferredOutput = multiplexer.getDeferredOutput(identifier);
 
         deferredOutput.emitWatermark(new Watermark(5));
         multiplexer.onPeriodicEmit();
@@ -286,10 +286,10 @@ class WatermarkOutputMultiplexerTest {
         WatermarkOutputMultiplexer multiplexer =
                 new WatermarkOutputMultiplexer(underlyingWatermarkOutput);
 
-        final String id = "1234-test";
-        multiplexer.registerNewOutput(id, watermark -> {});
-        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(id);
-        WatermarkOutput deferredOutput = multiplexer.getDeferredOutput(id);
+        final String identifier = "1234-test";
+        multiplexer.registerNewOutput(identifier, watermark -> {});
+        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(identifier);
+        WatermarkOutput deferredOutput = multiplexer.getDeferredOutput(identifier);
 
         deferredOutput.emitWatermark(new Watermark(5));
         immediateOutput.emitWatermark(new Watermark(2));
@@ -384,11 +384,11 @@ class WatermarkOutputMultiplexerTest {
                 new WatermarkOutputMultiplexer(underlyingWatermarkOutput);
 
         Watermark emittedWatermark = new Watermark(1);
-        final String id = UUID.randomUUID().toString();
-        multiplexer.registerNewOutput(id, watermark -> {});
-        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(id);
+        final String identifier = UUID.randomUUID().toString();
+        multiplexer.registerNewOutput(identifier, watermark -> {});
+        WatermarkOutput immediateOutput = multiplexer.getImmediateOutput(identifier);
         immediateOutput.emitWatermark(emittedWatermark);
-        multiplexer.unregisterOutput(id);
+        multiplexer.unregisterOutput(identifier);
 
         multiplexer.onPeriodicEmit();
         assertThat(underlyingWatermarkOutput.lastWatermark()).isEqualTo(emittedWatermark);
@@ -400,9 +400,9 @@ class WatermarkOutputMultiplexerTest {
      * immediate output for a given output ID.
      */
     private static WatermarkOutput createImmediateOutput(WatermarkOutputMultiplexer multiplexer) {
-        final String id = UUID.randomUUID().toString();
-        multiplexer.registerNewOutput(id, watermark -> {});
-        return multiplexer.getImmediateOutput(id);
+        final String identifier = UUID.randomUUID().toString();
+        multiplexer.registerNewOutput(identifier, watermark -> {});
+        return multiplexer.getImmediateOutput(identifier);
     }
 
     /**
@@ -410,9 +410,9 @@ class WatermarkOutputMultiplexerTest {
      * deferred output for a given output ID.
      */
     private static WatermarkOutput createDeferredOutput(WatermarkOutputMultiplexer multiplexer) {
-        final String id = UUID.randomUUID().toString();
-        multiplexer.registerNewOutput(id, watermark -> {});
-        return multiplexer.getDeferredOutput(id);
+        final String identifier = UUID.randomUUID().toString();
+        multiplexer.registerNewOutput(identifier, watermark -> {});
+        return multiplexer.getDeferredOutput(identifier);
     }
 
     private static TestingWatermarkOutput createTestingWatermarkOutput() {

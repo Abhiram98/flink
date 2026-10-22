@@ -541,13 +541,13 @@ public class StreamGraph implements Pipeline {
             Integer originalId, Integer virtualId, OutputTag outputTag) {
 
         if (virtualSideOutputNodes.containsKey(virtualId)) {
-            throw new IllegalStateException("Already has virtual output node with id " + virtualId);
+            throw new IllegalStateException("Already has virtual output node with identifier " + virtualId);
         }
 
         // verify that we don't already have a virtual node for the given originalId/outputTag
         // combination with a different TypeInformation. This would indicate that someone is trying
         // to read a side output from an operation with a different type for the same side output
-        // id.
+        // identifier.
 
         for (Tuple2<Integer, OutputTag> tag : virtualSideOutputNodes.values()) {
             if (!tag.f0.equals(originalId)) {
@@ -555,12 +555,12 @@ public class StreamGraph implements Pipeline {
                 continue;
             }
 
-            if (tag.f1.getId().equals(outputTag.getId())
+            if (tag.f1.getIdentifier().equals(outputTag.getIdentifier())
                     && !tag.f1.getTypeInfo().equals(outputTag.getTypeInfo())) {
                 throw new IllegalArgumentException(
                         "Trying to add a side output for the same "
-                                + "side-output id with a different type. This is not allowed. Side-output ID: "
-                                + tag.f1.getId());
+                                + "side-output identifier with a different type. This is not allowed. Side-output ID: "
+                                + tag.f1.getIdentifier());
             }
         }
 
@@ -586,22 +586,22 @@ public class StreamGraph implements Pipeline {
 
         if (virtualPartitionNodes.containsKey(virtualId)) {
             throw new IllegalStateException(
-                    "Already has virtual partition node with id " + virtualId);
+                    "Already has virtual partition node with identifier " + virtualId);
         }
 
         virtualPartitionNodes.put(virtualId, new Tuple3<>(originalId, partitioner, exchangeMode));
     }
 
     /** Determines the slot sharing group of an operation across virtual nodes. */
-    public String getSlotSharingGroup(Integer id) {
-        if (virtualSideOutputNodes.containsKey(id)) {
-            Integer mappedId = virtualSideOutputNodes.get(id).f0;
+    public String getSlotSharingGroup(Integer identifier) {
+        if (virtualSideOutputNodes.containsKey(identifier)) {
+            Integer mappedId = virtualSideOutputNodes.get(identifier).f0;
             return getSlotSharingGroup(mappedId);
-        } else if (virtualPartitionNodes.containsKey(id)) {
-            Integer mappedId = virtualPartitionNodes.get(id).f0;
+        } else if (virtualPartitionNodes.containsKey(identifier)) {
+            Integer mappedId = virtualPartitionNodes.get(identifier).f0;
             return getSlotSharingGroup(mappedId);
         } else {
-            StreamNode node = getStreamNode(id);
+            StreamNode node = getStreamNode(identifier);
             return node.getSlotSharingGroup();
         }
     }
@@ -732,7 +732,7 @@ public class StreamGraph implements Pipeline {
          * difficult on the {@link StreamTask} to assign {@link RecordWriter}s to correct {@link
          * StreamEdge}.
          */
-        int uniqueId = getStreamEdges(upstreamNode.getId(), downstreamNode.getId()).size();
+        int uniqueId = getStreamEdges(upstreamNode.getIdentifier(), downstreamNode.getIdentifier()).size();
 
         StreamEdge edge =
                 new StreamEdge(
@@ -943,10 +943,10 @@ public class StreamGraph implements Pipeline {
                         StreamIterationHead.class,
                         null,
                         ITERATION_SOURCE_NAME_PREFIX + "-" + loopId);
-        sources.add(source.getId());
-        setParallelism(source.getId(), parallelism);
-        setMaxParallelism(source.getId(), maxParallelism);
-        setResources(source.getId(), minResources, preferredResources);
+        sources.add(source.getIdentifier());
+        setParallelism(source.getIdentifier(), parallelism);
+        setMaxParallelism(source.getIdentifier(), maxParallelism);
+        setResources(source.getIdentifier(), minResources, preferredResources);
 
         StreamNode sink =
                 this.addNode(
@@ -956,9 +956,9 @@ public class StreamGraph implements Pipeline {
                         StreamIterationTail.class,
                         null,
                         ITERATION_SINK_NAME_PREFIX + "-" + loopId);
-        sinks.add(sink.getId());
-        setParallelism(sink.getId(), parallelism);
-        setMaxParallelism(sink.getId(), parallelism);
+        sinks.add(sink.getIdentifier());
+        setParallelism(sink.getIdentifier(), parallelism);
+        setMaxParallelism(sink.getIdentifier(), parallelism);
         // The tail node is always in the same slot sharing group with the head node
         // so that they can share resources (they do not use non-sharable resources,
         // i.e. managed memory). There is no contract on how the resources should be
@@ -969,14 +969,14 @@ public class StreamGraph implements Pipeline {
                 minResources.equals(ResourceSpec.UNKNOWN)
                         ? ResourceSpec.UNKNOWN
                         : ResourceSpec.ZERO;
-        setResources(sink.getId(), tailResources, tailResources);
+        setResources(sink.getIdentifier(), tailResources, tailResources);
 
         iterationSourceSinkPairs.add(new Tuple2<>(source, sink));
 
-        this.vertexIDtoBrokerID.put(source.getId(), "broker-" + loopId);
-        this.vertexIDtoBrokerID.put(sink.getId(), "broker-" + loopId);
-        this.vertexIDtoLoopTimeout.put(source.getId(), timeout);
-        this.vertexIDtoLoopTimeout.put(sink.getId(), timeout);
+        this.vertexIDtoBrokerID.put(source.getIdentifier(), "broker-" + loopId);
+        this.vertexIDtoBrokerID.put(sink.getIdentifier(), "broker-" + loopId);
+        this.vertexIDtoLoopTimeout.put(source.getIdentifier(), timeout);
+        this.vertexIDtoLoopTimeout.put(sink.getIdentifier(), timeout);
 
         return new Tuple2<>(source, sink);
     }
@@ -1007,7 +1007,7 @@ public class StreamGraph implements Pipeline {
         for (StreamEdge edge : edgesToRemove) {
             removeEdge(edge);
         }
-        streamNodes.remove(toRemove.getId());
+        streamNodes.remove(toRemove.getIdentifier());
     }
 
     /** Gets the assembled {@link JobGraph} with a random {@link JobID}. */

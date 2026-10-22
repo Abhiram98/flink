@@ -79,9 +79,9 @@ class MatchRecognizeITCase {
                                         Row.of(7, "b"),
                                         Row.of(8, "c"),
                                         Row.of(9, "h"))
-                                .returns(ROW_NAMED(new String[] {"id", "name"}, INT, STRING)),
+                                .returns(ROW_NAMED(new String[] {"identifier", "name"}, INT, STRING)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .columnByExpression("proctime", "PROCTIME()")
                                 .build()));
@@ -92,9 +92,9 @@ class MatchRecognizeITCase {
                                 + "MATCH_RECOGNIZE (\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    `A\"`.id AS aid,\n"
-                                + "    \u006C.id AS bid,\n"
-                                + "    C.id AS cid\n"
+                                + "    `A\"`.identifier AS aid,\n"
+                                + "    \u006C.identifier AS bid,\n"
+                                + "    C.identifier AS cid\n"
                                 + "  PATTERN (`A\"` \u006C C)\n"
                                 + "  DEFINE\n"
                                 + "    `A\"` AS name = 'a',\n"
@@ -122,12 +122,12 @@ class MatchRecognizeITCase {
                                         Row.of(9, null, null))
                                 .returns(
                                         ROW_NAMED(
-                                                new String[] {"id", "name", "nullField"},
+                                                new String[] {"identifier", "name", "nullField"},
                                                 INT,
                                                 STRING,
                                                 STRING)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .column("nullField", DataTypes.STRING())
                                 .columnByExpression("proctime", "PROCTIME()")
@@ -139,10 +139,10 @@ class MatchRecognizeITCase {
                                 + "MATCH_RECOGNIZE (\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    A.id AS aid,\n"
+                                + "    A.identifier AS aid,\n"
                                 + "    A.nullField AS aNull,\n"
                                 + "    LAST(B.nullField) AS bNull,\n"
-                                + "    C.id AS cid\n"
+                                + "    C.identifier AS cid\n"
                                 + "  PATTERN (A B C)\n"
                                 + "  DEFINE\n"
                                 + "    A AS name = 'a' AND nullField IS NULL,\n"
@@ -171,13 +171,13 @@ class MatchRecognizeITCase {
                                         Row.of(9, "f", "key", "second_key"))
                                 .returns(
                                         ROW_NAMED(
-                                                new String[] {"id", "name", "key1", "key2"},
+                                                new String[] {"identifier", "name", "key1", "key2"},
                                                 INT,
                                                 STRING,
                                                 STRING,
                                                 STRING)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .column("key1", DataTypes.STRING())
                                 .column("key2", DataTypes.STRING())
@@ -191,14 +191,14 @@ class MatchRecognizeITCase {
                                 + "  PARTITION BY key1, key2\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    A.id AS aid,\n"
+                                + "    A.identifier AS aid,\n"
                                 + "    A.key1 AS akey1,\n"
-                                + "    LAST(B.id) AS bid,\n"
-                                + "    C.id AS cid,\n"
+                                + "    LAST(B.identifier) AS bid,\n"
+                                + "    C.identifier AS cid,\n"
                                 + "    C.key2 AS ckey2\n"
                                 + "  PATTERN (A B C)\n"
                                 + "  DEFINE\n"
-                                + "    A AS name = 'a' AND key1 LIKE '%key%' AND id > 0,\n"
+                                + "    A AS name = 'a' AND key1 LIKE '%key%' AND identifier > 0,\n"
                                 + "    B AS name = 'b' AND LAST(A.name, 2) IS NULL,\n"
                                 + "    C AS name = 'c' AND LAST(A.name) = 'a'\n"
                                 + ") AS T");
@@ -277,13 +277,13 @@ class MatchRecognizeITCase {
                                         Row.of(8, "ACME", 8L, 20))
                                 .returns(
                                         ROW_NAMED(
-                                                new String[] {"id", "symbol", "tstamp", "price"},
+                                                new String[] {"identifier", "symbol", "tstamp", "price"},
                                                 INT,
                                                 STRING,
                                                 LONG,
                                                 INT)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("symbol", DataTypes.STRING())
                                 .column("tstamp", DataTypes.BIGINT())
                                 .column("price", DataTypes.INT())
@@ -296,22 +296,22 @@ class MatchRecognizeITCase {
                                 + "MATCH_RECOGNIZE (\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    FIRST(id, 0) as id0,\n"
-                                + "    FIRST(id, 1) as id1,\n"
-                                + "    FIRST(id, 2) as id2,\n"
-                                + "    FIRST(id, 3) as id3,\n"
-                                + "    FIRST(id, 4) as id4,\n"
-                                + "    FIRST(id, 5) as id5,\n"
-                                + "    FIRST(id, 6) as id6,\n"
-                                + "    FIRST(id, 7) as id7,\n"
-                                + "    LAST(id, 0) as id8,\n"
-                                + "    LAST(id, 1) as id9,\n"
-                                + "    LAST(id, 2) as id10,\n"
-                                + "    LAST(id, 3) as id11,\n"
-                                + "    LAST(id, 4) as id12,\n"
-                                + "    LAST(id, 5) as id13,\n"
-                                + "    LAST(id, 6) as id14,\n"
-                                + "    LAST(id, 7) as id15\n"
+                                + "    FIRST(identifier, 0) as id0,\n"
+                                + "    FIRST(identifier, 1) as id1,\n"
+                                + "    FIRST(identifier, 2) as id2,\n"
+                                + "    FIRST(identifier, 3) as id3,\n"
+                                + "    FIRST(identifier, 4) as id4,\n"
+                                + "    FIRST(identifier, 5) as id5,\n"
+                                + "    FIRST(identifier, 6) as id6,\n"
+                                + "    FIRST(identifier, 7) as id7,\n"
+                                + "    LAST(identifier, 0) as id8,\n"
+                                + "    LAST(identifier, 1) as id9,\n"
+                                + "    LAST(identifier, 2) as id10,\n"
+                                + "    LAST(identifier, 3) as id11,\n"
+                                + "    LAST(identifier, 4) as id12,\n"
+                                + "    LAST(identifier, 5) as id13,\n"
+                                + "    LAST(identifier, 6) as id14,\n"
+                                + "    LAST(identifier, 7) as id15\n"
                                 + "  ONE ROW PER MATCH\n"
                                 + "  AFTER MATCH SKIP PAST LAST ROW\n"
                                 + "  PATTERN (`DOWN\"`{2,} UP)\n"
@@ -397,7 +397,7 @@ class MatchRecognizeITCase {
                                 .returns(
                                         ROW_NAMED(
                                                 new String[] {
-                                                    "id", "name", "price", "rate", "weight"
+                                                    "identifier", "name", "price", "rate", "weight"
                                                 },
                                                 INT,
                                                 STRING,
@@ -405,7 +405,7 @@ class MatchRecognizeITCase {
                                                 DOUBLE,
                                                 INT)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .column("price", DataTypes.INT())
                                 .column("rate", DataTypes.DOUBLE())
@@ -420,14 +420,14 @@ class MatchRecognizeITCase {
                                 + "MATCH_RECOGNIZE (\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    FIRST(id) as startId,\n"
+                                + "    FIRST(identifier) as startId,\n"
                                 + "    SUM(A.price) AS sumA,\n"
                                 + "    COUNT(D.price) AS countD,\n"
                                 + "    SUM(D.price) as sumD,\n"
                                 + "    weightedAvg(price, weight) as wAvg,\n"
                                 + "    AVG(B.price) AS avgB,\n"
                                 + "    SUM(B.price * B.rate) as sumExprB,\n"
-                                + "    LAST(id) as endId\n"
+                                + "    LAST(identifier) as endId\n"
                                 + "  AFTER MATCH SKIP PAST LAST ROW\n"
                                 + "  PATTERN (A+ B+ C D? E)\n"
                                 + "  DEFINE\n"
@@ -462,12 +462,12 @@ class MatchRecognizeITCase {
                                         Row.of(9, "c", 2))
                                 .returns(
                                         ROW_NAMED(
-                                                new String[] {"id", "name", "price"},
+                                                new String[] {"identifier", "name", "price"},
                                                 INT,
                                                 STRING,
                                                 INT)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .column("price", DataTypes.INT())
                                 .columnByExpression("proctime", "PROCTIME()")
@@ -481,11 +481,11 @@ class MatchRecognizeITCase {
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
                                 + "    SUM(A.price) as sumA,\n"
-                                + "    COUNT(A.id) as countAId,\n"
+                                + "    COUNT(A.identifier) as countAId,\n"
                                 + "    COUNT(A.price) as countAPrice,\n"
                                 + "    COUNT(*) as countAll,\n"
                                 + "    COUNT(price) as countAllPrice,\n"
-                                + "    LAST(id) as endId\n"
+                                + "    LAST(identifier) as endId\n"
                                 + "  AFTER MATCH SKIP PAST LAST ROW\n"
                                 + "  PATTERN (A+ C)\n"
                                 + "  DEFINE\n"
@@ -502,9 +502,9 @@ class MatchRecognizeITCase {
                 "MyTable",
                 tEnv.fromDataStream(
                         env.fromData(Row.of(1, "a"))
-                                .returns(ROW_NAMED(new String[] {"id", "name"}, INT, STRING)),
+                                .returns(ROW_NAMED(new String[] {"identifier", "name"}, INT, STRING)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .columnByExpression("proctime", "PROCTIME()")
                                 .build()));
@@ -515,7 +515,7 @@ class MatchRecognizeITCase {
                                 + "MATCH_RECOGNIZE (\n"
                                 + "  ORDER BY proctime\n"
                                 + "  MEASURES\n"
-                                + "    A.id AS aid,\n"
+                                + "    A.identifier AS aid,\n"
                                 + "    A.proctime AS aProctime,\n"
                                 + "    LAST(A.proctime + INTERVAL '1' second) as calculatedField\n"
                                 + "  PATTERN (A)\n"
@@ -543,12 +543,12 @@ class MatchRecognizeITCase {
                                         Row.of(9, "f", 1))
                                 .returns(
                                         ROW_NAMED(
-                                                new String[] {"id", "name", "price"},
+                                                new String[] {"identifier", "name", "price"},
                                                 INT,
                                                 STRING,
                                                 INT)),
                         Schema.newBuilder()
-                                .column("id", DataTypes.INT())
+                                .column("identifier", DataTypes.INT())
                                 .column("name", DataTypes.STRING())
                                 .column("price", DataTypes.INT())
                                 .columnByExpression("proctime", "PROCTIME()")
@@ -569,10 +569,10 @@ class MatchRecognizeITCase {
                                         + "MATCH_RECOGNIZE (\n"
                                         + "  ORDER BY proctime\n"
                                         + "  MEASURES\n"
-                                        + "    FIRST(id) as firstId,\n"
+                                        + "    FIRST(identifier) as firstId,\n"
                                         + "    prefix(A.name) as prefixedNameA,\n"
                                         + "    countFrom(A.price) as countFromA,\n"
-                                        + "    LAST(id) as lastId\n"
+                                        + "    LAST(identifier) as lastId\n"
                                         + "  AFTER MATCH SKIP PAST LAST ROW\n"
                                         + "  PATTERN (A+ C)\n"
                                         + "  DEFINE\n"

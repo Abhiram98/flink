@@ -30,13 +30,13 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class InputSpec implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /** The input id and read order for current input in multiple operator. */
+    /** The input identifier and read order for current input in multiple operator. */
     private final InputSelectionSpec inputSelectionSpec;
 
     /** The output operator corresponding to the {@link Input}. */
     private final TableOperatorWrapper<?> output;
 
-    /** The input id (start from 1) is used for identifying each input of the output operator. */
+    /** The input identifier (start from 1) is used for identifying each input of the output operator. */
     private final int outputOpInputId;
 
     public InputSpec(

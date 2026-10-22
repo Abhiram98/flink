@@ -125,12 +125,12 @@ public abstract class CheckpointBarrierHandler implements Closeable {
     protected void notifyCheckpoint(CheckpointBarrier checkpointBarrier) throws IOException {
         CheckpointMetaData checkpointMetaData =
                 new CheckpointMetaData(
-                        checkpointBarrier.getId(),
+                        checkpointBarrier.getIdentifier(),
                         checkpointBarrier.getTimestamp(),
                         System.currentTimeMillis());
 
         CheckpointMetricsBuilder checkpointMetrics;
-        if (checkpointBarrier.getId() == startAlignmentCheckpointId) {
+        if (checkpointBarrier.getIdentifier() == startAlignmentCheckpointId) {
             checkpointMetrics =
                     new CheckpointMetricsBuilder()
                             .setAlignmentDurationNanos(latestAlignmentDurationNanos)

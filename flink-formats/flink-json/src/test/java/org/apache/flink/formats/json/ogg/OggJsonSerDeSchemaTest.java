@@ -57,7 +57,7 @@ class OggJsonSerDeSchemaTest {
 
     private static final DataType PHYSICAL_DATA_TYPE =
             ROW(
-                    FIELD("id", INT().notNull()),
+                    FIELD("identifier", INT().notNull()),
                     FIELD("name", STRING()),
                     FIELD("description", STRING()),
                     FIELD("weight", FLOAT()));
@@ -130,7 +130,7 @@ class OggJsonSerDeSchemaTest {
                                     .isCloseTo(
                                             3.140000104904175f, Percentage.withPercentage(1e-15));
                             assertThat(row.getString(4).toString()).isEqualTo("OGG.TBL_TEST");
-                            assertThat(row.getArray(5).getString(0).toString()).isEqualTo("id");
+                            assertThat(row.getArray(5).getString(0).toString()).isEqualTo("identifier");
                             assertThat(row.getTimestamp(6, 6).getMillisecond())
                                     .isEqualTo(1589377175766L);
                             assertThat(row.getTimestamp(7, 6).getMillisecond())
@@ -158,7 +158,7 @@ class OggJsonSerDeSchemaTest {
         // table:
         //
         // CREATE TABLE product (
-        //  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        //  identifier INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
         //  name VARCHAR(255),
         //  description VARCHAR(512),
         //  weight FLOAT
@@ -176,14 +176,14 @@ class OggJsonSerDeSchemaTest {
         //        (default,"rocks","box of assorted rocks",5.3),
         //        (default,"jacket","water resistent black wind breaker",0.1),
         //        (default,"spare tire","24 inch spare tire",22.2);
-        // UPDATE product SET description='18oz carpenter hammer' WHERE id=106;
-        // UPDATE product SET weight='5.1' WHERE id=107;
+        // UPDATE product SET description='18oz carpenter hammer' WHERE identifier=106;
+        // UPDATE product SET weight='5.1' WHERE identifier=107;
         // INSERT INTO product VALUES (default,"jacket","water resistent white wind breaker",0.2);
         // INSERT INTO product VALUES (default,"scooter","Big 2-wheel scooter ",5.18);
         // UPDATE product SET description='new water resistent white wind breaker', weight='0.5'
-        // WHERE id=110;
-        // UPDATE product SET weight='5.17' WHERE id=111;
-        // DELETE FROM product WHERE id=111;
+        // WHERE identifier=110;
+        // UPDATE product SET weight='5.17' WHERE identifier=111;
+        // DELETE FROM product WHERE identifier=111;
         List<String> expected =
                 Arrays.asList(
                         "+I(101,scooter,Small 2-wheel scooter,3.14)",
@@ -227,26 +227,26 @@ class OggJsonSerDeSchemaTest {
 
         expected =
                 Arrays.asList(
-                        "{\"before\":null,\"after\":{\"id\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":104,\"name\":\"hammer\",\"description\":\"12oz carpenter's hammer\",\"weight\":0.75},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":105,\"name\":\"hammer\",\"description\":\"14oz carpenter's hammer\",\"weight\":0.875},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":106,\"name\":\"hammer\",\"description\":\"16oz carpenter's hammer\",\"weight\":1.0},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":108,\"name\":\"jacket\",\"description\":\"water resistent black wind breaker\",\"weight\":0.1},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":109,\"name\":\"spare tire\",\"description\":\"24 inch spare tire\",\"weight\":22.2},\"op_type\":\"I\"}",
-                        "{\"before\":{\"id\":106,\"name\":\"hammer\",\"description\":\"16oz carpenter's hammer\",\"weight\":1.0},\"after\":null,\"op_type\":\"D\"}",
-                        "{\"before\":null,\"after\":{\"id\":106,\"name\":\"hammer\",\"description\":\"18oz carpenter hammer\",\"weight\":1.0},\"op_type\":\"I\"}",
-                        "{\"before\":{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3},\"after\":null,\"op_type\":\"D\"}",
-                        "{\"before\":null,\"after\":{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.1},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2},\"op_type\":\"I\"}",
-                        "{\"before\":null,\"after\":{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18},\"op_type\":\"I\"}",
-                        "{\"before\":{\"id\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2},\"after\":null,\"op_type\":\"D\"}",
-                        "{\"before\":null,\"after\":{\"id\":110,\"name\":\"jacket\",\"description\":\"new water resistent white wind breaker\",\"weight\":0.5},\"op_type\":\"I\"}",
-                        "{\"before\":{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18},\"after\":null,\"op_type\":\"D\"}",
-                        "{\"before\":null,\"after\":{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17},\"op_type\":\"I\"}",
-                        "{\"before\":{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17},\"after\":null,\"op_type\":\"D\"}");
+                        "{\"before\":null,\"after\":{\"identifier\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":104,\"name\":\"hammer\",\"description\":\"12oz carpenter's hammer\",\"weight\":0.75},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":105,\"name\":\"hammer\",\"description\":\"14oz carpenter's hammer\",\"weight\":0.875},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":106,\"name\":\"hammer\",\"description\":\"16oz carpenter's hammer\",\"weight\":1.0},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":108,\"name\":\"jacket\",\"description\":\"water resistent black wind breaker\",\"weight\":0.1},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":109,\"name\":\"spare tire\",\"description\":\"24 inch spare tire\",\"weight\":22.2},\"op_type\":\"I\"}",
+                        "{\"before\":{\"identifier\":106,\"name\":\"hammer\",\"description\":\"16oz carpenter's hammer\",\"weight\":1.0},\"after\":null,\"op_type\":\"D\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":106,\"name\":\"hammer\",\"description\":\"18oz carpenter hammer\",\"weight\":1.0},\"op_type\":\"I\"}",
+                        "{\"before\":{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3},\"after\":null,\"op_type\":\"D\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.1},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2},\"op_type\":\"I\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18},\"op_type\":\"I\"}",
+                        "{\"before\":{\"identifier\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2},\"after\":null,\"op_type\":\"D\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":110,\"name\":\"jacket\",\"description\":\"new water resistent white wind breaker\",\"weight\":0.5},\"op_type\":\"I\"}",
+                        "{\"before\":{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18},\"after\":null,\"op_type\":\"D\"}",
+                        "{\"before\":null,\"after\":{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17},\"op_type\":\"I\"}",
+                        "{\"before\":{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17},\"after\":null,\"op_type\":\"D\"}");
         assertThat(expected).containsExactlyElementsOf(actual);
     }
 

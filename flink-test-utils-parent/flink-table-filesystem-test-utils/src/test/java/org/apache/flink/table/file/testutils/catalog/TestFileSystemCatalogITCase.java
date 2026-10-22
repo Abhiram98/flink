@@ -51,7 +51,7 @@ public class TestFileSystemCatalogITCase extends TestFileSystemCatalogTestBase {
 
         tEnv.executeSql(
                 "CREATE TABLE CsvTable (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  user_name STRING,\n"
                         + "  message STRING,\n"
                         + "  log_ts STRING\n"
@@ -101,7 +101,7 @@ public class TestFileSystemCatalogITCase extends TestFileSystemCatalogTestBase {
 
         tEnv.executeSql(
                 "CREATE TABLE datagenSource (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  user_name STRING,\n"
                         + "  message STRING,\n"
                         + "  log_ts STRING\n"
@@ -130,7 +130,7 @@ public class TestFileSystemCatalogITCase extends TestFileSystemCatalogTestBase {
 
         tEnv.executeSql(
                 "CREATE TABLE valueSink (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  user_name STRING,\n"
                         + "  message STRING,\n"
                         + "  log_ts STRING\n"

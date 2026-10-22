@@ -278,8 +278,8 @@ class LookupJoinHarnessTest {
 
         @Override
         public void flatMap(RowData value, Collector<RowData> out) throws Exception {
-            int id = value.getInt(0);
-            List<GenericRowData> rows = data.get(id);
+            int identifier = value.getInt(0);
+            List<GenericRowData> rows = data.get(identifier);
             if (rows != null) {
                 for (GenericRowData row : rows) {
                     out.collect(row);

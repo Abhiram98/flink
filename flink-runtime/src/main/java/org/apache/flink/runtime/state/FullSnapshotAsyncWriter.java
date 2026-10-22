@@ -146,7 +146,7 @@ public class FullSnapshotAsyncWriter<K>
                 // begin first key-group by recording the offset
                 keyGroupRangeOffsets.setKeyGroupOffset(
                         mergeIterator.keyGroup(), checkpointOutputStream.getPos());
-                // write the k/v-state id as metadata
+                // write the k/v-state identifier as metadata
                 kgOutStream =
                         snapshotResources
                                 .getStreamCompressionDecorator()

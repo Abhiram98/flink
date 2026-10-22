@@ -97,7 +97,7 @@ public class ResourceAllocationResult {
                     .computeIfAbsent(pendingTaskManagerId, ignored -> new HashMap<>())
                     .compute(
                             jobId,
-                            (id, counter) -> {
+                            (identifier, counter) -> {
                                 if (counter == null) {
                                     return ResourceCounter.withResource(resourceProfile, 1);
                                 } else {
@@ -113,7 +113,7 @@ public class ResourceAllocationResult {
                     .computeIfAbsent(jobId, jobID -> new HashMap<>())
                     .compute(
                             instanceId,
-                            (id, counter) -> {
+                            (identifier, counter) -> {
                                 if (counter == null) {
                                     return ResourceCounter.withResource(resourceProfile, 1);
                                 } else {

@@ -58,7 +58,7 @@ class CanalJsonSerDeSchemaTest {
 
     private static final DataType PHYSICAL_DATA_TYPE =
             ROW(
-                    FIELD("id", INT().notNull()),
+                    FIELD("identifier", INT().notNull()),
                     FIELD("name", STRING()),
                     FIELD("description", STRING()),
                     FIELD("weight", FLOAT()));
@@ -104,7 +104,7 @@ class CanalJsonSerDeSchemaTest {
                     assertThat(row.getString(4).toString()).isEqualTo("inventory");
                     assertThat(row.getString(5).toString()).isEqualTo("products2");
                     assertThat(row.getMap(6).size()).isEqualTo(4);
-                    assertThat(row.getArray(7).getString(0).toString()).isEqualTo("id");
+                    assertThat(row.getArray(7).getString(0).toString()).isEqualTo("identifier");
                     assertThat(row.getTimestamp(8, 3).getMillisecond()).isEqualTo(1589373515477L);
                     assertThat(row.getTimestamp(9, 3).getMillisecond()).isEqualTo(1589373515000L);
                 });
@@ -120,7 +120,7 @@ class CanalJsonSerDeSchemaTest {
                     assertThat(row.getString(4).toString()).isEqualTo("mydb");
                     assertThat(row.getString(5).toString()).isEqualTo("product");
                     assertThat(row.getMap(6).size()).isEqualTo(4);
-                    assertThat(row.getArray(7).getString(0).toString()).isEqualTo("id");
+                    assertThat(row.getArray(7).getString(0).toString()).isEqualTo("identifier");
                     assertThat(row.getTimestamp(8, 3).getMillisecond()).isEqualTo(1598944146308L);
                     assertThat(row.getTimestamp(9, 3).getMillisecond()).isEqualTo(1598944132000L);
                 });
@@ -151,7 +151,7 @@ class CanalJsonSerDeSchemaTest {
         // Canal captures change data (`canal-data.txt`) on the `product` table:
         //
         // CREATE TABLE product (
-        //  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        //  identifier INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
         //  name VARCHAR(255),
         //  description VARCHAR(512),
         //  weight FLOAT
@@ -169,16 +169,16 @@ class CanalJsonSerDeSchemaTest {
         //        (default,"rocks","box of assorted rocks",5.3),
         //        (default,"jacket","water resistent black wind breaker",0.1),
         //        (default,"spare tire","24 inch spare tire",22.2);
-        // UPDATE product SET description='18oz carpenter hammer' WHERE id=106;
-        // UPDATE product SET weight='5.1' WHERE id=107;
+        // UPDATE product SET description='18oz carpenter hammer' WHERE identifier=106;
+        // UPDATE product SET weight='5.1' WHERE identifier=107;
         // INSERT INTO product VALUES (default,"jacket","water resistent white wind breaker",0.2);
         // INSERT INTO product VALUES (default,"scooter","Big 2-wheel scooter ",5.18);
         // UPDATE product SET description='new water resistent white wind breaker', weight='0.5'
-        // WHERE id=110;
-        // UPDATE product SET weight='5.17' WHERE id=111;
-        // DELETE FROM product WHERE id=111;
-        // UPDATE product SET weight='5.17' WHERE id=102 or id = 101;
-        // DELETE FROM product WHERE id=102 or id = 103;
+        // WHERE identifier=110;
+        // UPDATE product SET weight='5.17' WHERE identifier=111;
+        // DELETE FROM product WHERE identifier=111;
+        // UPDATE product SET weight='5.17' WHERE identifier=102 or identifier = 101;
+        // DELETE FROM product WHERE identifier=102 or identifier = 103;
         List<String> expected =
                 Arrays.asList(
                         "+I(101,scooter,Small 2-wheel scooter,3.14)",
@@ -229,32 +229,32 @@ class CanalJsonSerDeSchemaTest {
 
         List<String> expectedResult =
                 Arrays.asList(
-                        "{\"data\":[{\"id\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":104,\"name\":\"hammer\",\"description\":\"12oz carpenter's hammer\",\"weight\":0.75}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":105,\"name\":\"hammer\",\"description\":\"14oz carpenter's hammer\",\"weight\":0.875}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":106,\"name\":\"hammer\",\"description\":null,\"weight\":1.0}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":108,\"name\":\"jacket\",\"description\":\"water resistent black wind breaker\",\"weight\":0.1}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":109,\"name\":\"spare tire\",\"description\":\"24 inch spare tire\",\"weight\":22.2}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":106,\"name\":\"hammer\",\"description\":null,\"weight\":1.0}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":106,\"name\":\"hammer\",\"description\":\"18oz carpenter hammer\",\"weight\":1.0}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.1}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":110,\"name\":\"jacket\",\"description\":\"new water resistent white wind breaker\",\"weight\":0.5}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":5.17}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":5.17}],\"type\":\"INSERT\"}",
-                        "{\"data\":[{\"id\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":5.17}],\"type\":\"DELETE\"}",
-                        "{\"data\":[{\"id\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8}],\"type\":\"DELETE\"}");
+                        "{\"data\":[{\"identifier\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":104,\"name\":\"hammer\",\"description\":\"12oz carpenter's hammer\",\"weight\":0.75}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":105,\"name\":\"hammer\",\"description\":\"14oz carpenter's hammer\",\"weight\":0.875}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":106,\"name\":\"hammer\",\"description\":null,\"weight\":1.0}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":108,\"name\":\"jacket\",\"description\":\"water resistent black wind breaker\",\"weight\":0.1}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":109,\"name\":\"spare tire\",\"description\":\"24 inch spare tire\",\"weight\":22.2}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":106,\"name\":\"hammer\",\"description\":null,\"weight\":1.0}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":106,\"name\":\"hammer\",\"description\":\"18oz carpenter hammer\",\"weight\":1.0}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.3}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":107,\"name\":\"rocks\",\"description\":\"box of assorted rocks\",\"weight\":5.1}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":110,\"name\":\"jacket\",\"description\":\"water resistent white wind breaker\",\"weight\":0.2}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":110,\"name\":\"jacket\",\"description\":\"new water resistent white wind breaker\",\"weight\":0.5}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.18}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":111,\"name\":\"scooter\",\"description\":\"Big 2-wheel scooter \",\"weight\":5.17}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":3.14}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":101,\"name\":\"scooter\",\"description\":\"Small 2-wheel scooter\",\"weight\":5.17}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":8.1}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":5.17}],\"type\":\"INSERT\"}",
+                        "{\"data\":[{\"identifier\":102,\"name\":\"car battery\",\"description\":\"12V car battery\",\"weight\":5.17}],\"type\":\"DELETE\"}",
+                        "{\"data\":[{\"identifier\":103,\"name\":\"12-pack drill bits\",\"description\":\"12-pack of drill bits with sizes ranging from #40 to #3\",\"weight\":0.8}],\"type\":\"DELETE\"}");
 
         assertThat(result).isEqualTo(expectedResult);
     }

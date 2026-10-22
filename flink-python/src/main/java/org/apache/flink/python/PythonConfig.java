@@ -104,7 +104,7 @@ public class PythonConfig implements ReadableConfig {
             jobOptions = new HashMap<>();
             config.set(PythonOptions.PYTHON_JOB_OPTIONS, jobOptions);
         }
-        jobOptions.put("TABLE_LOCAL_TIME_ZONE", getLocalTimeZone(configuration).getId());
+        jobOptions.put("TABLE_LOCAL_TIME_ZONE", getLocalTimeZone(configuration).getIdentifier());
         if (config.contains(PYTHON_LOOPBACK_SERVER_ADDRESS)) {
             jobOptions.put(
                     "PYTHON_LOOPBACK_SERVER_ADDRESS", config.get(PYTHON_LOOPBACK_SERVER_ADDRESS));
@@ -114,7 +114,7 @@ public class PythonConfig implements ReadableConfig {
     }
 
     /**
-     * Returns the current session time zone id. It is used when converting to/from {@code TIMESTAMP
+     * Returns the current session time zone identifier. It is used when converting to/from {@code TIMESTAMP
      * WITH LOCAL TIME ZONE}.
      *
      * @see org.apache.flink.table.types.logical.LocalZonedTimestampType

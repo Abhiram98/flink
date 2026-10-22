@@ -52,7 +52,7 @@ public class DefaultLogicalVertex implements LogicalVertex {
     }
 
     @Override
-    public JobVertexID getId() {
+    public JobVertexID getIdentifier() {
         return jobVertex.getID();
     }
 
@@ -60,7 +60,7 @@ public class DefaultLogicalVertex implements LogicalVertex {
     public Iterable<DefaultLogicalResult> getConsumedResults() {
         return jobVertex.getInputs().stream()
                 .map(JobEdge::getSource)
-                .map(IntermediateDataSet::getId)
+                .map(IntermediateDataSet::getIdentifier)
                 .map(resultRetriever)
                 .collect(Collectors.toList());
     }
@@ -68,7 +68,7 @@ public class DefaultLogicalVertex implements LogicalVertex {
     @Override
     public Iterable<DefaultLogicalResult> getProducedResults() {
         return jobVertex.getProducedDataSets().stream()
-                .map(IntermediateDataSet::getId)
+                .map(IntermediateDataSet::getIdentifier)
                 .map(resultRetriever)
                 .collect(Collectors.toList());
     }

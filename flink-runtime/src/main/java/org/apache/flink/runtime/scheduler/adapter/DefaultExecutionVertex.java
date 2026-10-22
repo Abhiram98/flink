@@ -60,7 +60,7 @@ class DefaultExecutionVertex implements SchedulingExecutionVertex {
     }
 
     @Override
-    public ExecutionVertexID getId() {
+    public ExecutionVertexID getIdentifier() {
         return executionVertexId;
     }
 

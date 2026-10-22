@@ -87,10 +87,10 @@ public class TestUpdateDeleteTableFactory
     public static final String IDENTIFIER = "test-update-delete";
 
     private static final ConfigOption<String> DATA_ID =
-            ConfigOptions.key("data-id")
+            ConfigOptions.key("data-identifier")
                     .stringType()
                     .noDefaultValue()
-                    .withDescription("The data id used to read the rows.");
+                    .withDescription("The data identifier used to read the rows.");
 
     private static final ConfigOption<Boolean> ONLY_ACCEPT_EQUAL_PREDICATE =
             ConfigOptions.key("only-accept-equal-predicate")
@@ -157,9 +157,9 @@ public class TestUpdateDeleteTableFactory
     private static final Map<String, Collection<RowData>> registeredRowData = new HashMap<>();
 
     public static String registerRowData(Collection<RowData> data) {
-        String id = String.valueOf(idCounter.incrementAndGet());
-        registeredRowData.put(id, data);
-        return id;
+        String identifier = String.valueOf(idCounter.incrementAndGet());
+        registeredRowData.put(identifier, data);
+        return identifier;
     }
 
     @Override

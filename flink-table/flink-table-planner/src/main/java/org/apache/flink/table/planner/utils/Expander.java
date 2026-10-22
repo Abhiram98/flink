@@ -167,14 +167,14 @@ public class Expander {
                         }
 
                         @Override
-                        public SqlNode visit(SqlIdentifier id) {
-                            if (id.isStar()) {
-                                return id;
+                        public SqlNode visit(SqlIdentifier identifier) {
+                            if (identifier.isStar()) {
+                                return identifier;
                             }
                             final SqlIdentifier toReplace =
-                                    identifiersMap.get(id.getParserPosition());
-                            if (toReplace == null || id.names.size() >= toReplace.names.size()) {
-                                return id;
+                                    identifiersMap.get(identifier.getParserPosition());
+                            if (toReplace == null || identifier.names.size() >= toReplace.names.size()) {
+                                return identifier;
                             }
                             return toReplace;
                         }

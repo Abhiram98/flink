@@ -61,9 +61,9 @@ public interface TierConsumerAgent {
     /**
      * Get buffer from the consumer agent.
      *
-     * @param partitionId the id of partition.
-     * @param subpartitionId the id of subpartition.
-     * @param segmentId the id of segment.
+     * @param partitionId the identifier of partition.
+     * @param subpartitionId the identifier of subpartition.
+     * @param segmentId the identifier of segment.
      * @return buffer.
      */
     Optional<Buffer> getNextBuffer(

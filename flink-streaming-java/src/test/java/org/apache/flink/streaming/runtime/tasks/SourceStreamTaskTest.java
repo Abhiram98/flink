@@ -581,7 +581,7 @@ class SourceStreamTaskTest extends SourceStreamTaskTestBase {
                                 });
 
                 checkpointCompleted.whenComplete(
-                        (id, error) ->
+                        (identifier, error) ->
                                 testHarness.getStreamTask().notifyCheckpointCompleteAsync(2));
                 testHarness.finishProcessing();
                 assertThat(checkpointFuture.isDone()).isTrue();

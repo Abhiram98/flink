@@ -33,15 +33,15 @@ public class FieldFromArray<OUT> implements Extractor<Object, OUT> {
 
     private int fieldId = 0;
 
-    /** Extracts the first field (id 0) from the array. */
+    /** Extracts the first field (identifier 0) from the array. */
     public FieldFromArray() {
         // noting to do => will use default 0
     }
 
     /**
-     * Extracts the field with the given id from the array.
+     * Extracts the field with the given identifier from the array.
      *
-     * @param fieldId The id of the field which will be extracted from the array.
+     * @param fieldId The identifier of the field which will be extracted from the array.
      */
     public FieldFromArray(int fieldId) {
         this.fieldId = fieldId;

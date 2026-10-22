@@ -70,7 +70,7 @@ public interface ResourceManagerPartitionTracker {
     /**
      * Returns all the shuffle descriptors of cluster partitions for the intermediate dataset.
      *
-     * @param dataSetID The id of the intermediate dataset.
+     * @param dataSetID The identifier of the intermediate dataset.
      * @return the shuffle descriptors.
      */
     List<ShuffleDescriptor> getClusterPartitionShuffleDescriptors(IntermediateDataSetID dataSetID);

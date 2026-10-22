@@ -292,9 +292,9 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
 
         subclassSerializerRegistry.forEach(
                 (registeredSubclassClass, serializer) -> {
-                    int id = subclassIds.size();
-                    subclassIds.put(registeredSubclassClass, id);
-                    subclassSerializers[id] = serializer;
+                    int identifier = subclassIds.size();
+                    subclassIds.put(registeredSubclassClass, identifier);
+                    subclassSerializers[identifier] = serializer;
                 });
 
         return Tuple2.of(subclassIds, subclassSerializers);

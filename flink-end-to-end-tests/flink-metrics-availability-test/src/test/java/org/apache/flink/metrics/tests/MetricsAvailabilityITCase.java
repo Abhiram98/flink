@@ -181,6 +181,6 @@ public class MetricsAvailabilityITCase extends TestLogger {
             final String metricName) {
         return response ->
                 response.getMetrics().stream()
-                        .anyMatch(metric -> metric.getId().equals(metricName));
+                        .anyMatch(metric -> metric.getIdentifier().equals(metricName));
     }
 }

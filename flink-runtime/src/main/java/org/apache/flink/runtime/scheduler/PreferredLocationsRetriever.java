@@ -32,7 +32,7 @@ public interface PreferredLocationsRetriever {
     /**
      * Returns preferred locations of an execution vertex.
      *
-     * @param executionVertexId id of the execution vertex
+     * @param executionVertexId identifier of the execution vertex
      * @param producersToIgnore producer vertices to ignore when calculating input locations
      * @return future of preferred locations
      */

@@ -59,9 +59,9 @@ public class CountTumblingWindowAssigner extends GroupWindowAssigner<CountWindow
             throws IOException {
         Long countValue = count.value();
         long currentCount = countValue == null ? 0L : countValue;
-        long id = currentCount / size;
+        long identifier = currentCount / size;
         count.update(currentCount + 1);
-        return Collections.singleton(new CountWindow(id));
+        return Collections.singleton(new CountWindow(identifier));
     }
 
     @Override

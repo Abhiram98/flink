@@ -52,7 +52,7 @@ class BucketState<BucketID> {
 
     /**
      * The {@link RecoverableWriter.CommitRecoverable files} pending to be committed, organized by
-     * checkpoint id.
+     * checkpoint identifier.
      */
     private final Map<Long, List<InProgressFileWriter.PendingFileRecoverable>>
             pendingFileRecoverablesPerCheckpoint;

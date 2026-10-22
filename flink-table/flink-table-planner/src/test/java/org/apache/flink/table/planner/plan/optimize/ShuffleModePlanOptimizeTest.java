@@ -69,7 +69,7 @@ class ShuffleModePlanOptimizeTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE fact_part (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -87,7 +87,7 @@ class ShuffleModePlanOptimizeTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE dim (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  male BOOLEAN,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"

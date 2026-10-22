@@ -653,7 +653,7 @@ public class RocksDBKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
     }
 
     /**
-     * Registers a k/v state information, which includes its state id, type, RocksDB column family
+     * Registers a k/v state information, which includes its state identifier, type, RocksDB column family
      * handle, and serializers.
      *
      * <p>When restoring from a snapshot, we don’t restore the individual k/v states, just the

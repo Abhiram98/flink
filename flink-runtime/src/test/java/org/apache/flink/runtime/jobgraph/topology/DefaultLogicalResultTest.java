@@ -93,10 +93,10 @@ public class DefaultLogicalResultTest extends TestLogger {
         final Map<IntermediateDataSetID, DefaultLogicalResult> logicalResultMap =
                 IterableUtils.toStream(logicalResults)
                         .collect(
-                                Collectors.toMap(DefaultLogicalResult::getId, Function.identity()));
+                                Collectors.toMap(DefaultLogicalResult::getIdentifier, Function.identity()));
 
         for (IntermediateDataSet result : results) {
-            final DefaultLogicalResult logicalResult = logicalResultMap.remove(result.getId());
+            final DefaultLogicalResult logicalResult = logicalResultMap.remove(result.getIdentifier());
 
             assertNotNull(logicalResult);
             assertResultInfoEquals(result, logicalResult);
@@ -109,7 +109,7 @@ public class DefaultLogicalResultTest extends TestLogger {
     static void assertResultInfoEquals(
             final IntermediateDataSet result, final DefaultLogicalResult logicalResult) {
 
-        assertEquals(result.getId(), logicalResult.getId());
+        assertEquals(result.getIdentifier(), logicalResult.getIdentifier());
         assertEquals(result.getResultType(), logicalResult.getResultType());
     }
 }

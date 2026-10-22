@@ -42,7 +42,7 @@ public class KubernetesCheckpointRecoveryFactory implements CheckpointRecoveryFa
 
     private final Executor executor;
 
-    // Function to get the ConfigMap name for checkpoint. Input is job id, and output is ConfigMap
+    // Function to get the ConfigMap name for checkpoint. Input is job identifier, and output is ConfigMap
     // name.
     private final Function<JobID, String> getConfigMapNameFunction;
 

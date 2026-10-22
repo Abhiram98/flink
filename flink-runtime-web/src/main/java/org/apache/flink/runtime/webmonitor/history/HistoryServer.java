@@ -169,7 +169,7 @@ public class HistoryServer {
      *
      * @param config configuration
      * @param jobArchiveEventListener Listener for job archive operations. First param is operation,
-     *     second param is id of the job.
+     *     second param is identifier of the job.
      * @throws IOException When creation of SSL factory failed
      * @throws FlinkException When configuration error occurred
      */

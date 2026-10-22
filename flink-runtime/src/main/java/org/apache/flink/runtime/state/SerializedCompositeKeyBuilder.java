@@ -88,7 +88,7 @@ public final class SerializedCompositeKeyBuilder<K> {
      * be used to create composite keys with provided namespaces.
      *
      * @param key the key.
-     * @param keyGroupId the key-group id for the key.
+     * @param keyGroupId the key-group identifier for the key.
      */
     public void setKeyAndKeyGroup(@Nonnull K key, @Nonnegative int keyGroupId) {
         try {

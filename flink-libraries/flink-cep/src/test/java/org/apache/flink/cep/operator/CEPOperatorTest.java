@@ -309,7 +309,7 @@ public class CEPOperatorTest extends TestLogger {
 
                                     @Override
                                     public Integer getKey(Event value) throws Exception {
-                                        return value.getId();
+                                        return value.getIdentifier();
                                     }
                                 },
                                 BasicTypeInfo.INT_TYPE_INFO);
@@ -1239,7 +1239,7 @@ public class CEPOperatorTest extends TestLogger {
         public int compare(Event o1, Event o2) {
             int nameComp = o1.getName().compareTo(o2.getName());
             int priceComp = Double.compare(o1.getPrice(), o2.getPrice());
-            int idComp = Integer.compare(o1.getId(), o2.getId());
+            int idComp = Integer.compare(o1.getIdentifier(), o2.getIdentifier());
             if (nameComp == 0) {
                 if (priceComp == 0) {
                     return idComp;

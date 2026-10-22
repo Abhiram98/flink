@@ -24,10 +24,10 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 /** The master-side agent of a Tier. */
 public interface TierMasterAgent {
 
-    /** Register a job id with a {@link TierShuffleHandler}. */
+    /** Register a job identifier with a {@link TierShuffleHandler}. */
     void registerJob(JobID jobID, TierShuffleHandler tierShuffleHandler);
 
-    /** Unregister a job id. */
+    /** Unregister a job identifier. */
     void unregisterJob(JobID jobID);
 
     /** Add a new tiered storage partition and get the {@link TierShuffleDescriptor}. */

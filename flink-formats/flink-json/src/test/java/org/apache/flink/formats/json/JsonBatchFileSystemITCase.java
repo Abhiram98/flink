@@ -83,9 +83,9 @@ class JsonBatchFileSystemITCase extends BatchFileSystemITCaseBase {
         String sql =
                 String.format(
                         "CREATE TABLE bigdata_source ( "
-                                + "	id INT, "
+                                + "	identifier INT, "
                                 + "	content STRING"
-                                + ") PARTITIONED by (id) WITH ("
+                                + ") PARTITIONED by (identifier) WITH ("
                                 + "	'connector' = 'filesystem',"
                                 + "	'path' = '%s',"
                                 + "	'format' = 'json'"
@@ -110,7 +110,7 @@ class JsonBatchFileSystemITCase extends BatchFileSystemITCaseBase {
     private static File generateTestData(int numRecords) throws IOException {
         File tempDir = createTempFolder();
 
-        File root = new File(tempDir, "id=0");
+        File root = new File(tempDir, "identifier=0");
         root.mkdir();
 
         File dataFile = new File(root, "testdata");

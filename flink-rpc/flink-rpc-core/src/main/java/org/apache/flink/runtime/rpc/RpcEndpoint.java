@@ -163,7 +163,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
     }
 
     /**
-     * Initializes the RPC endpoint with a random endpoint id.
+     * Initializes the RPC endpoint with a random endpoint identifier.
      *
      * @param rpcService The RPC server that dispatches calls to this RPC endpoint.
      */

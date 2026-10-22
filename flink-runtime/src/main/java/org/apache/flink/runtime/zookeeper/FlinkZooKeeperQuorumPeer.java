@@ -105,7 +105,7 @@ public class FlinkZooKeeperQuorumPeer {
         // Set defaults for required properties
         setRequiredProperties(zkProps);
 
-        // Write peer id to myid file
+        // Write peer identifier to myid file
         writeMyIdToDataDir(zkProps, peerId);
 
         // The myid file needs to be written before creating the instance. Otherwise, this
@@ -202,21 +202,21 @@ public class FlinkZooKeeperQuorumPeer {
      *
      * Every machine that is part of the ZooKeeper ensemble should know about every other machine in
      * the ensemble. You accomplish this with the series of lines of the form
-     * server.id=host:port:port. The parameters host and port are straightforward. You attribute the
-     * server id to each machine by creating a file named myid, one for each server, which resides
+     * server.identifier=host:port:port. The parameters host and port are straightforward. You attribute the
+     * server identifier to each machine by creating a file named myid, one for each server, which resides
      * in that server's data directory, as specified by the configuration file parameter dataDir.
      *
      * </blockquote>
      *
      * @param zkProps ZooKeeper configuration.
-     * @param id The ID of this {@link QuorumPeer}.
+     * @param identifier The ID of this {@link QuorumPeer}.
      * @throws IllegalConfigurationException Thrown, if 'dataDir' property not set in given
      *     ZooKeeper properties.
      * @throws IOException Thrown, if 'dataDir' does not exist and cannot be created.
      * @see <a href="http://zookeeper.apache.org/doc/r3.4.6/zookeeperAdmin.html">ZooKeeper
      *     Administrator's Guide</a>
      */
-    private static void writeMyIdToDataDir(Properties zkProps, int id) throws IOException {
+    private static void writeMyIdToDataDir(Properties zkProps, int identifier) throws IOException {
 
         // Check dataDir and create if necessary
         if (zkProps.getProperty("dataDir") == null) {
@@ -231,12 +231,12 @@ public class FlinkZooKeeperQuorumPeer {
 
         dataDir.deleteOnExit();
 
-        LOG.info("Writing {} to myid file in 'dataDir'.", id);
+        LOG.info("Writing {} to myid file in 'dataDir'.", identifier);
 
         // Write myid to file. We use a File Writer, because that properly propagates errors,
         // while the PrintWriter swallows errors
         try (FileWriter writer = new FileWriter(new File(dataDir, "myid"))) {
-            writer.write(String.valueOf(id));
+            writer.write(String.valueOf(identifier));
         }
     }
 }

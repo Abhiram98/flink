@@ -219,7 +219,7 @@ public class ZooKeeperLeaderElectionDriver implements LeaderElectionDriver, Lead
         Preconditions.checkState(
                 splits.length >= 2,
                 String.format(
-                        "Expecting path consisting of /<component-id>/connection_info. Got path '%s'",
+                        "Expecting path consisting of /<component-identifier>/connection_info. Got path '%s'",
                         path));
 
         return splits[splits.length - 2];
@@ -239,15 +239,15 @@ public class ZooKeeperLeaderElectionDriver implements LeaderElectionDriver, Lead
                 && ZooKeeperUtils.isConnectionInfoPath(path);
     }
 
-    private LeaderInformation tryReadingLeaderInformation(ChildData childData, String id) {
+    private LeaderInformation tryReadingLeaderInformation(ChildData childData, String identifier) {
         LeaderInformation leaderInformation;
         try {
             leaderInformation = ZooKeeperUtils.readLeaderInformation(childData.getData());
 
-            LOG.debug("Leader information for {} has changed to {}.", id, leaderInformation);
+            LOG.debug("Leader information for {} has changed to {}.", identifier, leaderInformation);
         } catch (IOException | ClassNotFoundException e) {
             LOG.debug(
-                    "Could not read leader information for {}. Rewriting the information.", id, e);
+                    "Could not read leader information for {}. Rewriting the information.", identifier, e);
             leaderInformation = LeaderInformation.empty();
         }
 

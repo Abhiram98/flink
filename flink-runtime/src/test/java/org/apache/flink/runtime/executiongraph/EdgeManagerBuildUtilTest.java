@@ -105,7 +105,7 @@ class EdgeManagerBuildUtilTest {
                 consumer,
                 1L,
                 Collections.singletonMap(
-                        producer.getProducedDataSets()[0].getId(), jobVertexInputInfo));
+                        producer.getProducedDataSets()[0].getIdentifier(), jobVertexInputInfo));
 
         IntermediateResult result =
                 Objects.requireNonNull(eg.getJobVertex(producer.getJobVertexId()))
@@ -175,7 +175,7 @@ class EdgeManagerBuildUtilTest {
                 consumer,
                 1L,
                 Collections.singletonMap(
-                        producer.getProducedDataSets()[0].getId(), jobVertexInputInfo));
+                        producer.getProducedDataSets()[0].getIdentifier(), jobVertexInputInfo));
 
         IntermediateResult result =
                 Objects.requireNonNull(eg.getJobVertex(producer.getJobVertexId()))

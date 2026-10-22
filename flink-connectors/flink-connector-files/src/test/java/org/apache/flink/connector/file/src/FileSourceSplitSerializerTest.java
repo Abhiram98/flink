@@ -35,7 +35,7 @@ class FileSourceSplitSerializerTest {
     void serializeSplitWithHosts() throws Exception {
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "random-id",
+                        "random-identifier",
                         new Path("hdfs://namenode:14565/some/path/to/a/file"),
                         100_000_000,
                         64_000_000,
@@ -54,7 +54,7 @@ class FileSourceSplitSerializerTest {
     void serializeSplitWithoutHosts() throws Exception {
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "some-id",
+                        "some-identifier",
                         new Path("file:/some/path/to/a/file"),
                         0,
                         0,
@@ -70,7 +70,7 @@ class FileSourceSplitSerializerTest {
     void serializeSplitWithReaderPosition() throws Exception {
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "random-id",
+                        "random-identifier",
                         new Path("hdfs://namenode:14565/some/path/to/a/file"),
                         100_000_000,
                         64_000_000,
@@ -88,7 +88,7 @@ class FileSourceSplitSerializerTest {
     void repeatedSerialization() throws Exception {
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "an-id",
+                        "an-identifier",
                         new Path("s3://some-bucket/key/to/the/object"),
                         0,
                         1234567,
@@ -106,7 +106,7 @@ class FileSourceSplitSerializerTest {
     void repeatedSerializationCaches() throws Exception {
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "random-id",
+                        "random-identifier",
                         new Path("hdfs://namenode:14565/some/path/to/a/file"),
                         100_000_000,
                         64_000_000,

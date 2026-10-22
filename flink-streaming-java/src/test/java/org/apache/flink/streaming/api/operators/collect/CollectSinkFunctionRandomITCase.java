@@ -207,14 +207,14 @@ class CollectSinkFunctionRandomITCase {
                 ListIterator<CheckpointCountdown> iterator = checkpointCountdowns.listIterator();
                 while (iterator.hasNext()) {
                     CheckpointCountdown countdown = iterator.next();
-                    if (countdown.id < lastSuccessCheckpointId) {
+                    if (countdown.identifier < lastSuccessCheckpointId) {
                         // this checkpoint is stale, throw it away
                         iterator.remove();
                     } else if (countdown.tick()) {
                         // complete a checkpoint
                         checkpointedData = countdown.data;
-                        functionWrapper.checkpointComplete(countdown.id);
-                        lastSuccessCheckpointId = countdown.id;
+                        functionWrapper.checkpointComplete(countdown.identifier);
+                        lastSuccessCheckpointId = countdown.identifier;
                         iterator.remove();
                     }
                 }
@@ -262,12 +262,12 @@ class CollectSinkFunctionRandomITCase {
     /** Countdown for a checkpoint which will succeed in the future. */
     private static class CheckpointCountdown {
 
-        private final long id;
+        private final long identifier;
         private final List<Integer> data;
         private int countdown;
 
-        private CheckpointCountdown(long id, List<Integer> data, int countdown) {
-            this.id = id;
+        private CheckpointCountdown(long identifier, List<Integer> data, int countdown) {
+            this.identifier = identifier;
             this.data = new ArrayList<>(data);
             this.countdown = countdown;
         }

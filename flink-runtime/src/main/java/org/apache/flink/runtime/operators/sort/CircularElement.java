@@ -25,24 +25,24 @@ import java.util.List;
 /** Class representing buffers that circulate between the reading, sorting and spilling stages. */
 final class CircularElement<E> {
 
-    private final int id;
+    private final int identifier;
     private final InMemorySorter<E> buffer;
     private final List<MemorySegment> memory;
 
-    public CircularElement(int id) {
-        this.id = id;
+    public CircularElement(int identifier) {
+        this.identifier = identifier;
         this.buffer = null;
         this.memory = null;
     }
 
-    public CircularElement(int id, InMemorySorter<E> buffer, List<MemorySegment> memory) {
-        this.id = id;
+    public CircularElement(int identifier, InMemorySorter<E> buffer, List<MemorySegment> memory) {
+        this.identifier = identifier;
         this.buffer = buffer;
         this.memory = memory;
     }
 
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     public InMemorySorter<E> getBuffer() {

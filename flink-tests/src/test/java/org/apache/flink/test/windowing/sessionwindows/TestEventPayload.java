@@ -23,10 +23,10 @@ import org.apache.flink.util.Preconditions;
 /** Test payload that contains useful information for the correctness checks in our test. */
 public final class TestEventPayload {
 
-    // id of the session w.r.t the key
+    // identifier of the session w.r.t the key
     private int sessionId;
 
-    // id of the event w.r.t. tje session id
+    // identifier of the event w.r.t. tje session identifier
     private int eventId;
 
     // the watermark under which the event was emitted
@@ -56,7 +56,7 @@ public final class TestEventPayload {
     }
 
     /**
-     * @return id of the session to identify a sessions in the sequence of all sessions for the same
+     * @return identifier of the session to identify a sessions in the sequence of all sessions for the same
      *     key
      */
     public int getSessionId() {
@@ -67,7 +67,7 @@ public final class TestEventPayload {
         this.sessionId = sessionId;
     }
 
-    /** @return a sequence number that acts as an id for the even inside the session */
+    /** @return a sequence number that acts as an identifier for the even inside the session */
     public int getEventId() {
         return eventId;
     }

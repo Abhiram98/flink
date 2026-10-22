@@ -1063,7 +1063,7 @@ public class SqlGatewayServiceITCase {
                 PAYLOAD,
                 null,
                 ResolvedSchema.of(
-                        Column.physical("id", DataTypes.BIGINT()),
+                        Column.physical("identifier", DataTypes.BIGINT()),
                         Column.physical("name", DataTypes.STRING()),
                         Column.physical("age", DataTypes.INT())),
                 data,

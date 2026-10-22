@@ -45,8 +45,8 @@ public class DefaultLogicalResult implements LogicalResult {
     }
 
     @Override
-    public IntermediateDataSetID getId() {
-        return intermediateDataSet.getId();
+    public IntermediateDataSetID getIdentifier() {
+        return intermediateDataSet.getIdentifier();
     }
 
     @Override

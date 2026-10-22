@@ -38,19 +38,19 @@ import java.util.function.LongPredicate;
 @Internal
 public interface TaskLocalStateStore {
     /**
-     * Stores the local state for the given checkpoint id.
+     * Stores the local state for the given checkpoint identifier.
      *
-     * @param checkpointId id for the checkpoint that created the local state that will be stored.
+     * @param checkpointId identifier for the checkpoint that created the local state that will be stored.
      * @param localState the local state to store.
      */
     void storeLocalState(@Nonnegative long checkpointId, @Nullable TaskStateSnapshot localState);
 
     /**
-     * Returns the local state that is stored under the given checkpoint id or null if nothing was
-     * stored under the id.
+     * Returns the local state that is stored under the given checkpoint identifier or null if nothing was
+     * stored under the identifier.
      *
-     * @param checkpointID the checkpoint id by which we search for local state.
-     * @return the local state found for the given checkpoint id. Can be null
+     * @param checkpointID the checkpoint identifier by which we search for local state.
+     * @return the local state found for the given checkpoint identifier. Can be null
      */
     @Nullable
     TaskStateSnapshot retrieveLocalState(long checkpointID);
@@ -60,16 +60,16 @@ public interface TaskLocalStateStore {
     LocalRecoveryConfig getLocalRecoveryConfig();
 
     /**
-     * Notifies that the checkpoint with the given id was confirmed as complete. This prunes the
-     * checkpoint history and removes all local states with a checkpoint id that is smaller than the
-     * newly confirmed checkpoint id.
+     * Notifies that the checkpoint with the given identifier was confirmed as complete. This prunes the
+     * checkpoint history and removes all local states with a checkpoint identifier that is smaller than the
+     * newly confirmed checkpoint identifier.
      */
     void confirmCheckpoint(long confirmedCheckpointId);
 
     /**
-     * Notifies that the checkpoint with the given id was confirmed as aborted. This prunes the
-     * checkpoint history and removes states with a checkpoint id that is equal to the newly aborted
-     * checkpoint id.
+     * Notifies that the checkpoint with the given identifier was confirmed as aborted. This prunes the
+     * checkpoint history and removes states with a checkpoint identifier that is equal to the newly aborted
+     * checkpoint identifier.
      */
     void abortCheckpoint(long abortedCheckpointId);
 

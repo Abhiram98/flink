@@ -184,7 +184,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CoordinatorOutput
 
         // Now, send this stable pack list to compactor.
         // NOTE, use broadcast emitting (Because it needs to emit checkpoint barrier),
-        // operators will pick its units by unit id and task id.
+        // operators will pick its units by unit identifier and task identifier.
         int unitId = 0;
         for (Map.Entry<String, List<List<Path>>> unitsEntry : compactUnits.entrySet()) {
             String partition = unitsEntry.getKey();

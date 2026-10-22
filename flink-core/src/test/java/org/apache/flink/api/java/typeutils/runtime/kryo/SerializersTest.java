@@ -66,21 +66,21 @@ class SerializersTest {
         KryoSerializer<String> kryo =
                 new KryoSerializer<>(String.class, conf); // we create Kryo from another type.
 
-        assertThat(kryo.getKryo().getRegistration(FromNested.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(ClassWithNested.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(Path.class).getId()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromNested.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(ClassWithNested.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(Path.class).getIdentifier()).isPositive();
 
         // check if the generic type from one field is also registered (its very likely that
         // generic types are also used as fields somewhere.
-        assertThat(kryo.getKryo().getRegistration(FromGeneric1.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(FromGeneric2.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(Node.class).getId()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromGeneric1.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromGeneric2.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(Node.class).getIdentifier()).isPositive();
 
         // register again and make sure classes are still registered
         SerializerConfigImpl conf2 = new SerializerConfigImpl();
         Serializers.recursivelyRegisterType(ClassWithNested.class, conf2, new HashSet<Class<?>>());
         KryoSerializer<String> kryo2 = new KryoSerializer<>(String.class, conf);
-        assertThat(kryo2.getKryo().getRegistration(FromNested.class).getId()).isPositive();
+        assertThat(kryo2.getKryo().getRegistration(FromNested.class).getIdentifier()).isPositive();
     }
 
     @Test
@@ -92,14 +92,14 @@ class SerializersTest {
         KryoSerializer<String> kryo =
                 new KryoSerializer<>(String.class, conf); // we create Kryo from another type.
 
-        assertThat(kryo.getKryo().getRegistration(FromNested.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(ClassWithNested.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(Path.class).getId()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromNested.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(ClassWithNested.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(Path.class).getIdentifier()).isPositive();
 
         // check if the generic type from one field is also registered (its very likely that
         // generic types are also used as fields somewhere.
-        assertThat(kryo.getKryo().getRegistration(FromGeneric1.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(FromGeneric2.class).getId()).isPositive();
-        assertThat(kryo.getKryo().getRegistration(Node.class).getId()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromGeneric1.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(FromGeneric2.class).getIdentifier()).isPositive();
+        assertThat(kryo.getKryo().getRegistration(Node.class).getIdentifier()).isPositive();
     }
 }

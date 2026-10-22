@@ -36,9 +36,9 @@ public interface PartitionFileReader {
     /**
      * Read a buffer from the partition file.
      *
-     * @param partitionId the partition id of the buffer
-     * @param subpartitionId the subpartition id of the buffer
-     * @param segmentId the segment id of the buffer
+     * @param partitionId the partition identifier of the buffer
+     * @param subpartitionId the subpartition identifier of the buffer
+     * @param segmentId the segment identifier of the buffer
      * @param bufferIndex the index of buffer
      * @param memorySegment the empty buffer to store the read buffer
      * @param recycler the buffer recycler
@@ -76,9 +76,9 @@ public interface PartitionFileReader {
      * <p>Note: Priorities are suggestions rather than a requirements. The caller can still read
      * data in whichever order it wants.
      *
-     * @param partitionId the partition id of the buffer
-     * @param subpartitionId the subpartition id of the buffer
-     * @param segmentId the segment id of the buffer
+     * @param partitionId the partition identifier of the buffer
+     * @param subpartitionId the subpartition identifier of the buffer
+     * @param segmentId the segment identifier of the buffer
      * @param bufferIndex the index of buffer
      * @param readProgress the current read progress. The progress comes from the previous
      *     ReadBufferResult. Note that the read progress should be implemented and provided by

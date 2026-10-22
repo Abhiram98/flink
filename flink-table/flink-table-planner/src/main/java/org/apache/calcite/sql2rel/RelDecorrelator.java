@@ -1126,7 +1126,7 @@ public class RelDecorrelator implements ReflectiveVisitor {
                 final RexFieldAccess f = (RexFieldAccess) e;
                 if (f.getField().getIndex() == correlation.field
                         && f.getReferenceExpr() instanceof RexCorrelVariable) {
-                    if (((RexCorrelVariable) f.getReferenceExpr()).id == correlation.corr) {
+                    if (((RexCorrelVariable) f.getReferenceExpr()).identifier == correlation.corr) {
                         return true;
                     }
                 }
@@ -3047,7 +3047,7 @@ public class RelDecorrelator implements ReflectiveVisitor {
                         } else {
                             final CorRef correlation =
                                     new CorRef(
-                                            var.id,
+                                            var.identifier,
                                             fieldAccess.getField().getIndex(),
                                             corrIdGenerator++);
                             mapFieldAccessToCorVar.put(fieldAccess, correlation);

@@ -39,7 +39,7 @@ public interface TtlStateVerifier<UV, GV> {
                     new TtlReducingStateVerifier());
 
     @Nonnull
-    default String getId() {
+    default String getIdentifier() {
         return this.getClass().getSimpleName();
     }
 

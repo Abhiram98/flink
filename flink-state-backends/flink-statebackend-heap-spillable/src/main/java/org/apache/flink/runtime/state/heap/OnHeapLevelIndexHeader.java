@@ -28,7 +28,7 @@ import static org.apache.flink.runtime.state.heap.SkipListUtils.NIL_NODE;
 /** Implementation of {@link LevelIndexHeader} which stores index on heap. */
 public class OnHeapLevelIndexHeader implements LevelIndexHeader {
 
-    /** The level index array where each position stores the next node id of the level. */
+    /** The level index array where each position stores the next node identifier of the level. */
     private volatile long[] levelIndex;
 
     /** The topmost level currently. */

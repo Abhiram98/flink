@@ -115,7 +115,7 @@ class HistoryServerArchiveFetcher {
     private final boolean processBeyondLimitArchiveDeletion;
     private final int maxHistorySize;
 
-    /** Cache of all available jobs identified by their id. */
+    /** Cache of all available jobs identified by their identifier. */
     private final Map<Path, Set<String>> cachedArchivesPerRefreshDirectory;
 
     private final File webDir;

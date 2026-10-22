@@ -32,7 +32,7 @@ class SchedulingStrategyUtils {
             final SchedulingTopology topology, final Set<ExecutionVertexID> verticesToDeploy) {
 
         return IterableUtils.toStream(topology.getVertices())
-                .map(SchedulingExecutionVertex::getId)
+                .map(SchedulingExecutionVertex::getIdentifier)
                 .filter(verticesToDeploy::contains)
                 .collect(Collectors.toList());
     }
@@ -49,7 +49,7 @@ class SchedulingStrategyUtils {
         }
 
         return IterableUtils.toStream(topology.getVertices())
-                .map(SchedulingExecutionVertex::getId)
+                .map(SchedulingExecutionVertex::getIdentifier)
                 .map(topology::getPipelinedRegionOfVertex)
                 .filter(regions::contains)
                 .distinct()

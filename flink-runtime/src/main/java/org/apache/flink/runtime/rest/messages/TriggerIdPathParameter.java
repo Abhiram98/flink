@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-/** {@link MessagePathParameter} for the trigger id of an asynchronous operation. */
+/** {@link MessagePathParameter} for the trigger identifier of an asynchronous operation. */
 public class TriggerIdPathParameter extends MessagePathParameter<TriggerId> {
 
     public static final String KEY = "triggerid";

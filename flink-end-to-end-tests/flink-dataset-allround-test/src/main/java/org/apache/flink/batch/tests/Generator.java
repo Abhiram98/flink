@@ -52,7 +52,7 @@ public class Generator implements InputFormat<Tuple2<String, Integer>, GenericIn
     // number of currently emitted records
     private long recordCnt;
 
-    // id of current partition
+    // identifier of current partition
     private int partitionId;
 
     private final boolean infinite;
@@ -125,7 +125,7 @@ public class Generator implements InputFormat<Tuple2<String, Integer>, GenericIn
     @Override
     public Tuple2<String, Integer> nextRecord(Tuple2<String, Integer> reuse) throws IOException {
 
-        // build key from partition id and count per partition
+        // build key from partition identifier and count per partition
         String key =
                 String.format("%d-%d", this.partitionId, this.recordCnt % this.keysPerPartition);
 

@@ -78,9 +78,9 @@ class SchemaResolutionTest {
 
     private static final Schema SCHEMA =
             Schema.newBuilder()
-                    .primaryKeyNamed("primary_constraint", "id") // out of order
-                    .column("id", DataTypes.INT().notNull())
-                    .withComment("people id")
+                    .primaryKeyNamed("primary_constraint", "identifier") // out of order
+                    .column("identifier", DataTypes.INT().notNull())
+                    .withComment("people identifier")
                     .column("counter", DataTypes.INT().notNull())
                     .column("payload", "ROW<name STRING, age INT, flag BOOLEAN>")
                     .columnByMetadata("topic", DataTypes.STRING(), true)
@@ -106,7 +106,7 @@ class SchemaResolutionTest {
 
     private static final Schema SCHEMA_WITH_TS_LTZ =
             Schema.newBuilder()
-                    .column("id", DataTypes.INT().notNull())
+                    .column("identifier", DataTypes.INT().notNull())
                     .columnByExpression("ts1", callSql(COMPUTED_SQL_WITH_TS_LTZ))
                     .columnByMetadata("ts_ltz", DataTypes.TIMESTAMP_LTZ(3), "timestamp")
                     .watermark("ts1", WATERMARK_SQL_WITH_TS_LTZ)
@@ -117,8 +117,8 @@ class SchemaResolutionTest {
         final ResolvedSchema expectedSchema =
                 new ResolvedSchema(
                         Arrays.asList(
-                                Column.physical("id", DataTypes.INT().notNull())
-                                        .withComment("people id"),
+                                Column.physical("identifier", DataTypes.INT().notNull())
+                                        .withComment("people identifier"),
                                 Column.physical("counter", DataTypes.INT().notNull()),
                                 Column.physical(
                                         "payload",
@@ -139,7 +139,7 @@ class SchemaResolutionTest {
                                 Column.computed("proctime", PROCTIME_RESOLVED)),
                         Collections.singletonList(WatermarkSpec.of("ts", WATERMARK_RESOLVED)),
                         UniqueConstraint.primaryKey(
-                                "primary_constraint", Collections.singletonList("id")));
+                                "primary_constraint", Collections.singletonList("identifier")));
 
         final ResolvedSchema actualStreamSchema = resolveSchema(SCHEMA, true);
         {
@@ -161,7 +161,7 @@ class SchemaResolutionTest {
         final ResolvedSchema expectedSchema =
                 new ResolvedSchema(
                         Arrays.asList(
-                                Column.physical("id", DataTypes.INT().notNull()),
+                                Column.physical("identifier", DataTypes.INT().notNull()),
                                 Column.computed("ts1", COMPUTED_COLUMN_RESOLVED_WITH_TS_LTZ),
                                 Column.metadata(
                                         "ts_ltz", DataTypes.TIMESTAMP_LTZ(3), "timestamp", false)),
@@ -212,7 +212,7 @@ class SchemaResolutionTest {
         // columns
 
         testError(
-                Schema.newBuilder().fromSchema(SCHEMA).column("id", DataTypes.STRING()).build(),
+                Schema.newBuilder().fromSchema(SCHEMA).column("identifier", DataTypes.STRING()).build(),
                 "Schema must not contain duplicate column names.");
 
         testError(
@@ -285,7 +285,7 @@ class SchemaResolutionTest {
         // primary keys
 
         testError(
-                Schema.newBuilder().column("id", DataTypes.INT()).primaryKey("INVALID").build(),
+                Schema.newBuilder().column("identifier", DataTypes.INT()).primaryKey("INVALID").build(),
                 "Column 'INVALID' does not exist.");
 
         testError(
@@ -304,8 +304,8 @@ class SchemaResolutionTest {
                 "Column 'ts' is not a physical column.");
 
         testError(
-                Schema.newBuilder().column("id", DataTypes.INT()).primaryKey("id", "id").build(),
-                "Invalid primary key 'PK_id_id'. A primary key must not contain duplicate columns. Found: [id]");
+                Schema.newBuilder().column("identifier", DataTypes.INT()).primaryKey("identifier", "identifier").build(),
+                "Invalid primary key 'PK_id_id'. A primary key must not contain duplicate columns. Found: [identifier]");
     }
 
     @Test
@@ -313,7 +313,7 @@ class SchemaResolutionTest {
         assertThat(SCHEMA.toString())
                 .isEqualTo(
                         "(\n"
-                                + "  `id` INT NOT NULL COMMENT 'people id',\n"
+                                + "  `identifier` INT NOT NULL COMMENT 'people identifier',\n"
                                 + "  `counter` INT NOT NULL,\n"
                                 + "  `payload` [ROW<name STRING, age INT, flag BOOLEAN>],\n"
                                 + "  `topic` METADATA VIRTUAL COMMENT 'kafka topic',\n"
@@ -321,7 +321,7 @@ class SchemaResolutionTest {
                                 + "  `orig_ts` METADATA FROM 'timestamp' COMMENT 'the ''origin'' timestamp',\n"
                                 + "  `proctime` AS [PROCTIME()],\n"
                                 + "  WATERMARK FOR `ts` AS [ts - INTERVAL '5' SECOND],\n"
-                                + "  CONSTRAINT `primary_constraint` PRIMARY KEY (`id`) NOT ENFORCED\n"
+                                + "  CONSTRAINT `primary_constraint` PRIMARY KEY (`identifier`) NOT ENFORCED\n"
                                 + ")");
     }
 
@@ -331,7 +331,7 @@ class SchemaResolutionTest {
         assertThat(resolvedSchema.toString())
                 .isEqualTo(
                         "(\n"
-                                + "  `id` INT NOT NULL COMMENT 'people id',\n"
+                                + "  `identifier` INT NOT NULL COMMENT 'people identifier',\n"
                                 + "  `counter` INT NOT NULL,\n"
                                 + "  `payload` ROW<`name` STRING, `age` INT, `flag` BOOLEAN>,\n"
                                 + "  `topic` STRING METADATA VIRTUAL COMMENT 'kafka topic',\n"
@@ -339,7 +339,7 @@ class SchemaResolutionTest {
                                 + "  `orig_ts` TIMESTAMP(3) METADATA FROM 'timestamp' COMMENT 'the ''origin'' timestamp',\n"
                                 + "  `proctime` TIMESTAMP_LTZ(3) NOT NULL *PROCTIME* AS PROCTIME(),\n"
                                 + "  WATERMARK FOR `ts`: TIMESTAMP(3) AS ts - INTERVAL '5' SECOND,\n"
-                                + "  CONSTRAINT `primary_constraint` PRIMARY KEY (`id`) NOT ENFORCED\n"
+                                + "  CONSTRAINT `primary_constraint` PRIMARY KEY (`identifier`) NOT ENFORCED\n"
                                 + ")");
     }
 
@@ -364,7 +364,7 @@ class SchemaResolutionTest {
         final ResolvedSchema resolvedSchema = resolveSchema(SCHEMA);
         final DataType expectedDataType =
                 DataTypes.ROW(
-                                DataTypes.FIELD("id", DataTypes.INT().notNull()),
+                                DataTypes.FIELD("identifier", DataTypes.INT().notNull()),
                                 DataTypes.FIELD("counter", DataTypes.INT().notNull()),
                                 DataTypes.FIELD(
                                         "payload",
@@ -382,7 +382,7 @@ class SchemaResolutionTest {
         final ResolvedSchema resolvedSchema1 = resolveSchema(SCHEMA);
         final DataType expectedDataType =
                 DataTypes.ROW(
-                                DataTypes.FIELD("id", DataTypes.INT().notNull()),
+                                DataTypes.FIELD("identifier", DataTypes.INT().notNull()),
                                 DataTypes.FIELD("counter", DataTypes.INT().notNull()),
                                 DataTypes.FIELD(
                                         "payload",
@@ -405,7 +405,7 @@ class SchemaResolutionTest {
         final ResolvedSchema resolvedSchema = resolveSchema(SCHEMA);
         final DataType expectedDataType =
                 DataTypes.ROW(
-                                DataTypes.FIELD("id", DataTypes.INT().notNull()),
+                                DataTypes.FIELD("identifier", DataTypes.INT().notNull()),
                                 DataTypes.FIELD("counter", DataTypes.INT().notNull()),
                                 DataTypes.FIELD(
                                         "payload",

@@ -506,9 +506,9 @@ class RestClusterClientTest {
 
             Map<IntermediateDataSetID, DataSetMetaInfo> datasets = new HashMap<>();
             intermediateDataSetIds.forEach(
-                    id ->
+                    identifier ->
                             datasets.put(
-                                    new IntermediateDataSetID(id),
+                                    new IntermediateDataSetID(identifier),
                                     DataSetMetaInfo.withNumRegisteredPartitions(1, 1)));
             return CompletableFuture.completedFuture(ClusterDataSetListResponseBody.from(datasets));
         }
@@ -690,8 +690,8 @@ class RestClusterClientTest {
 
             try (RestClusterClient<?> restClusterClient =
                     createRestClusterClient(restServerEndpoint.getServerAddress().getPort())) {
-                JobID id = new JobID();
-                Map<String, Object> accumulators = restClusterClient.getAccumulators(id).get();
+                JobID identifier = new JobID();
+                Map<String, Object> accumulators = restClusterClient.getAccumulators(identifier).get();
                 assertThat(accumulators).hasSize(1).containsEntry("testKey", "testValue");
             }
         }
@@ -1279,7 +1279,7 @@ class RestClusterClientTest {
                         Collections.singletonMap(JobStatus.RUNNING, 1L),
                         jobVertexDetailsInfos,
                         Collections.singletonMap(ExecutionState.RUNNING, 1),
-                        new JobPlanInfo.RawJson("{\"id\":\"1234\"}"));
+                        new JobPlanInfo.RawJson("{\"identifier\":\"1234\"}"));
         final TestJobDetailsInfoHandler jobDetailsInfoHandler =
                 new TestJobDetailsInfoHandler(jobDetailsInfo);
 

@@ -179,7 +179,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                 new HashMap<>();
         for (DefaultLogicalPipelinedRegion logicalPipelinedRegion : logicalPipelinedRegions) {
             for (LogicalVertex vertex : logicalPipelinedRegion.getVertices()) {
-                logicalPipelinedRegionsByJobVertexId.put(vertex.getId(), logicalPipelinedRegion);
+                logicalPipelinedRegionsByJobVertexId.put(vertex.getIdentifier(), logicalPipelinedRegion);
             }
         }
 
@@ -206,7 +206,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                 .filter(r -> r.getResultType().mustBePipelinedConsumed())
                 .map(IntermediateDataSet::getProducer)
                 .map(JobVertex::getID)
-                .forEach(id -> checkState(newJobVertexIds.contains(id)));
+                .forEach(identifier -> checkState(newJobVertexIds.contains(identifier)));
 
         final Iterable<ExecutionVertex> newExecutionVertices =
                 newlyInitializedJobVertices.stream()
@@ -265,7 +265,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                             edgeManager::getConsumerVertexGroupsForPartition);
 
             producedPartitions.forEach(
-                    partition -> resultPartitionsById.put(partition.getId(), partition));
+                    partition -> resultPartitionsById.put(partition.getIdentifier(), partition));
 
             DefaultExecutionVertex schedulingVertex =
                     generateSchedulingExecutionVertex(
@@ -273,7 +273,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                             producedPartitions,
                             edgeManager.getConsumedPartitionGroupsForVertex(vertex.getID()),
                             resultPartitionsById::get);
-            executionVerticesById.put(schedulingVertex.getId(), schedulingVertex);
+            executionVerticesById.put(schedulingVertex.getIdentifier(), schedulingVertex);
         }
 
         executionVerticesList.clear();
@@ -298,7 +298,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                                 producedSchedulingPartitions.add(
                                         new DefaultResultPartition(
                                                 irp.getPartitionId(),
-                                                irp.getIntermediateResult().getId(),
+                                                irp.getIntermediateResult().getIdentifier(),
                                                 irp.getResultType(),
                                                 () ->
                                                         irp.hasDataAllProduced()
@@ -348,7 +348,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
             sortedExecutionVerticesInPipelinedRegion
                     .computeIfAbsent(
                             logicalPipelinedRegionsByJobVertexId.get(
-                                    schedulingVertex.getId().getJobVertexId()),
+                                    schedulingVertex.getIdentifier().getJobVertexId()),
                             ignore -> new ArrayList<>())
                     .add(schedulingVertex);
         }
@@ -408,7 +408,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
             pipelinedRegions.add(pipelinedRegion);
 
             for (SchedulingExecutionVertex executionVertex : rawPipelinedRegion) {
-                pipelinedRegionsByVertex.put(executionVertex.getId(), pipelinedRegion);
+                pipelinedRegionsByVertex.put(executionVertex.getIdentifier(), pipelinedRegion);
             }
         }
 
@@ -450,7 +450,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
         for (DefaultSchedulingPipelinedRegion region : pipelinedRegions) {
             for (DefaultExecutionVertex vertex : region.getVertices()) {
                 final CoLocationConstraint constraint =
-                        getCoLocationConstraint(vertex.getId(), executionGraph);
+                        getCoLocationConstraint(vertex.getIdentifier(), executionGraph);
                 if (constraint != null) {
                     final DefaultSchedulingPipelinedRegion regionOfConstraint =
                             constraintToRegion.get(constraint);

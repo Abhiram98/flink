@@ -48,10 +48,10 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 @Internal
 public class CommittableCollector<CommT> {
     private static final long EOI = Long.MAX_VALUE;
-    /** Mapping of checkpoint id to {@link CheckpointCommittableManagerImpl}. */
+    /** Mapping of checkpoint identifier to {@link CheckpointCommittableManagerImpl}. */
     private final NavigableMap<Long, CheckpointCommittableManagerImpl<CommT>>
             checkpointCommittables;
-    /** Denotes the subtask id the collector is running. */
+    /** Denotes the subtask identifier the collector is running. */
     private final int subtaskId;
 
     private final int numberOfSubtasks;
@@ -107,8 +107,8 @@ public class CommittableCollector<CommT> {
             List<CommT> committables, SinkCommitterMetricGroup metricGroup) {
         CommittableCollector<CommT> committableCollector =
                 new CommittableCollector<>(0, 1, metricGroup);
-        // add a checkpoint with the lowest checkpoint id, this will be merged into the next
-        // checkpoint data, subtask id is arbitrary
+        // add a checkpoint with the lowest checkpoint identifier, this will be merged into the next
+        // checkpoint data, subtask identifier is arbitrary
         CommittableSummary<CommT> summary =
                 new CommittableSummary<>(
                         0,
@@ -141,7 +141,7 @@ public class CommittableCollector<CommT> {
     }
 
     /**
-     * Returns all {@link CheckpointCommittableManager} until the requested checkpoint id.
+     * Returns all {@link CheckpointCommittableManager} until the requested checkpoint identifier.
      *
      * @param checkpointId counter
      * @return collection of {@link CheckpointCommittableManager}
@@ -158,7 +158,7 @@ public class CommittableCollector<CommT> {
 
     /**
      * Returns {@link CheckpointCommittableManager} that is currently hold by the collector and
-     * associated with the {@link CommittableCollector#EOI} checkpoint id.
+     * associated with the {@link CommittableCollector#EOI} checkpoint identifier.
      *
      * @return {@link CheckpointCommittableManager}
      */
@@ -205,9 +205,9 @@ public class CommittableCollector<CommT> {
     }
 
     /**
-     * Returns subtask id.
+     * Returns subtask identifier.
      *
-     * @return subtask id.
+     * @return subtask identifier.
      */
     public int getSubtaskId() {
         return subtaskId;

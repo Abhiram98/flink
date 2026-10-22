@@ -110,7 +110,7 @@ public class BatchExecExecutionOrderEnforcer extends ExecNodeBase<RowData>
         Transformation<RowData> sourceTransform =
                 (Transformation<RowData>) getInputEdges().get(1).translateToPlan(planner);
 
-        // set dynamic filtering data listener id
+        // set dynamic filtering data listener identifier
         BatchExecDynamicFilteringDataCollector dynamicFilteringDataCollector =
                 (BatchExecDynamicFilteringDataCollector)
                         ignoreExchange(getInputEdges().get(0).getSource());

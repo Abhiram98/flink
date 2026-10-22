@@ -342,7 +342,7 @@ public abstract class MetadataV2V3SerializerBase {
             }
             serializeStreamStateHandle(keyGroupsStateHandle.getDelegateStateHandle(), dos);
 
-            // savepoint state handle would not need to persist state handle id out.
+            // savepoint state handle would not need to persist state handle identifier out.
             if (!(stateHandle instanceof KeyGroupsSavepointStateHandle)) {
                 writeStateHandleId(stateHandle, dos);
             }

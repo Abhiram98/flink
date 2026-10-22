@@ -233,7 +233,7 @@ public abstract class AbstractMaterializedTableStatementITCase {
                                 + "WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'bounded' = 'true',\n"
-                                + "  'data-id' = '%s'\n"
+                                + "  'data-identifier' = '%s'\n"
                                 + ")",
                         dataId);
         OperationHandle sourceHandle =

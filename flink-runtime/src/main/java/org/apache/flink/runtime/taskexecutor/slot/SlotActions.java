@@ -26,14 +26,14 @@ import java.util.UUID;
 public interface SlotActions {
 
     /**
-     * Free the task slot with the given allocation id.
+     * Free the task slot with the given allocation identifier.
      *
      * @param allocationId to identify the slot to be freed
      */
     void freeSlot(AllocationID allocationId);
 
     /**
-     * Timeout the task slot for the given allocation id. The timeout is identified by the given
+     * Timeout the task slot for the given allocation identifier. The timeout is identified by the given
      * ticket to filter invalid timeouts out.
      *
      * @param allocationId identifying the task slot to be timed out

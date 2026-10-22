@@ -58,7 +58,7 @@ public class SplitAssignmentTracker<SplitT extends SourceSplit> {
      * Behavior of SplitAssignmentTracker on checkpoint. Tracker will mark uncheckpointed assignment
      * as checkpointed with current checkpoint ID.
      *
-     * @param checkpointId the id of the ongoing checkpoint
+     * @param checkpointId the identifier of the ongoing checkpoint
      */
     public void onCheckpoint(long checkpointId) throws Exception {
         // Include the uncheckpointed assignments to the snapshot.
@@ -91,7 +91,7 @@ public class SplitAssignmentTracker<SplitT extends SourceSplit> {
      * when a checkpoint has been successfully made, this method is invoked to clean up the
      * assignment history before this successful checkpoint.
      *
-     * @param checkpointId the id of the successful checkpoint.
+     * @param checkpointId the identifier of the successful checkpoint.
      */
     public void onCheckpointComplete(long checkpointId) {
         assignmentsByCheckpointId.entrySet().removeIf(entry -> entry.getKey() <= checkpointId);
@@ -113,7 +113,7 @@ public class SplitAssignmentTracker<SplitT extends SourceSplit> {
      * if those splits were never assigned. To handle this case, the coordinator needs to find those
      * splits and return them back to the SplitEnumerator for re-assignment.
      *
-     * @param subtaskId the subtask id of the reader that failed over.
+     * @param subtaskId the subtask identifier of the reader that failed over.
      * @param restoredCheckpointId the ID of the checkpoint that the reader was restored to.
      * @return A list of splits that needs to be added back to the {@link SplitEnumerator}.
      */
@@ -166,9 +166,9 @@ public class SplitAssignmentTracker<SplitT extends SourceSplit> {
         additionalAssignment
                 .assignment()
                 .forEach(
-                        (id, splits) ->
+                        (identifier, splits) ->
                                 assignments
-                                        .computeIfAbsent(id, ignored -> new LinkedHashSet<>())
+                                        .computeIfAbsent(identifier, ignored -> new LinkedHashSet<>())
                                         .addAll(splits));
     }
 }

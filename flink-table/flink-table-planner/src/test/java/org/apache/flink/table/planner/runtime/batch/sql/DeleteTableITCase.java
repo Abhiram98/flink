@@ -69,7 +69,7 @@ class DeleteTableITCase extends BatchTestBase {
                         String.format(
                                 "CREATE TABLE t (a int, b string, c double) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'only-accept-equal-predicate' = 'true'"
                                         + ")",
                                 dataId));
@@ -99,7 +99,7 @@ class DeleteTableITCase extends BatchTestBase {
                                 "CREATE TABLE t (a int PRIMARY KEY NOT ENFORCED,"
                                         + " b string, c double) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'delete-mode' = '%s',"
                                         + " 'support-delete-push-down' = 'false'"
                                         + ")",
@@ -123,7 +123,7 @@ class DeleteTableITCase extends BatchTestBase {
                                         + " b string not null,"
                                         + " c double not null) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'delete-mode' = '%s',"
                                         + " 'required-columns-for-delete' = 'a;c',"
                                         + " 'support-delete-push-down' = 'false'"
@@ -143,7 +143,7 @@ class DeleteTableITCase extends BatchTestBase {
                                         + " c double not null,"
                                         + " PRIMARY KEY (a, c) NOT ENFORCED) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'delete-mode' = '%s',"
                                         + " 'required-columns-for-delete' = 'a;b',"
                                         + " 'support-delete-push-down' = 'false'"
@@ -163,7 +163,7 @@ class DeleteTableITCase extends BatchTestBase {
                                 "CREATE TABLE t (a int PRIMARY KEY NOT ENFORCED,"
                                         + " b string, c double) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'mix-delete' = 'true')",
                                 dataId));
         // the deletion can't be pushed down, but the deletion should still success.

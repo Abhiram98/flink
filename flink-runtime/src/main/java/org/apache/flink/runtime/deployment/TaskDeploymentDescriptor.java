@@ -320,7 +320,7 @@ public final class TaskDeploymentDescriptor implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "TaskDeploymentDescriptor [execution id: %s, "
+                "TaskDeploymentDescriptor [execution identifier: %s, "
                         + "produced partitions: %s, input gates: %s]",
                 executionId,
                 collectionToString(producedPartitions),

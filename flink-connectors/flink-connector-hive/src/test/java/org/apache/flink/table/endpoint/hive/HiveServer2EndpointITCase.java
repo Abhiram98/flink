@@ -420,7 +420,7 @@ class HiveServer2EndpointITCase {
                                                         "hive",
                                                         "db_test1",
                                                         "tbl_2",
-                                                        "id",
+                                                        "identifier",
                                                         "BIGINT"),
                                                 Arrays.asList(
                                                         "hive",
@@ -474,7 +474,7 @@ class HiveServer2EndpointITCase {
                                 0, // digits number
                                 10, // radix
                                 0, // nullable
-                                "user id.", // comment
+                                "user identifier.", // comment
                                 1, // position
                                 "NO", // isNullable
                                 "NO"))); // isAutoIncrement
@@ -488,7 +488,7 @@ class HiveServer2EndpointITCase {
                 Arrays.asList(
                         Arrays.asList("hive", "db_test1", "tbl_1", "user", 1, "pk"),
                         Arrays.asList("hive", "db_test1", "tbl_2", "user", 1, "pk"),
-                        Arrays.asList("hive", "db_test1", "tbl_2", "id", 2, "pk")));
+                        Arrays.asList("hive", "db_test1", "tbl_2", "identifier", 2, "pk")));
     }
 
     @Test
@@ -498,7 +498,7 @@ class HiveServer2EndpointITCase {
                 getExpectedGetPrimaryKeysOperationSchema(),
                 Arrays.asList(
                         Arrays.asList("hive", "db_test1", "tbl_2", "user", 1, "pk"),
-                        Arrays.asList("hive", "db_test1", "tbl_2", "id", 2, "pk")));
+                        Arrays.asList("hive", "db_test1", "tbl_2", "identifier", 2, "pk")));
     }
 
     @Test
@@ -754,15 +754,15 @@ class HiveServer2EndpointITCase {
 
             statement.execute(
                     "CREATE TABLE db_test1.tbl_1(\n"
-                            + "`user` BIGINT CONSTRAINT `pk` PRIMARY KEY NOT ENFORCED COMMENT 'user id.',\n"
+                            + "`user` BIGINT CONSTRAINT `pk` PRIMARY KEY NOT ENFORCED COMMENT 'user identifier.',\n"
                             + "`product` STRING NOT NULL,\n"
                             + "`amount`  INT) COMMENT 'temporary table tbl_1'");
             statement.execute(
                     "CREATE TABLE db_test1.tbl_2(\n"
                             + "`user` STRING COMMENT 'user name.',\n"
-                            + "`id` BIGINT COMMENT 'user id.',\n"
+                            + "`identifier` BIGINT COMMENT 'user identifier.',\n"
                             + "`timestamp` TIMESTAMP,"
-                            + "CONSTRAINT `pk` PRIMARY KEY(`user`, `id`) NOT ENFORCED) COMMENT 'table tbl_2'");
+                            + "CONSTRAINT `pk` PRIMARY KEY(`user`, `identifier`) NOT ENFORCED) COMMENT 'table tbl_2'");
             statement.execute(
                     "CREATE VIEW db_test1.tbl_3 COMMENT 'temporary view tbl_3' AS SELECT 1");
             statement.execute("CREATE VIEW db_test1.tbl_4 COMMENT 'view tbl_4' AS SELECT 1");

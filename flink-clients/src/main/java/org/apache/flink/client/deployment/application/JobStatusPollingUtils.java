@@ -39,7 +39,7 @@ class JobStatusPollingUtils {
      *
      * @param dispatcherGateway the {@link DispatcherGateway} to be used for requesting the details
      *     of the job.
-     * @param jobId the id of the job
+     * @param jobId the identifier of the job
      * @param scheduledExecutor the executor to be used to periodically request the status of the
      *     job
      * @param rpcTimeout the timeout of the rpc

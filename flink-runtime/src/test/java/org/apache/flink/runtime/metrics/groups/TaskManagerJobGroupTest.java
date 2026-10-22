@@ -56,15 +56,15 @@ class TaskManagerJobGroupTest {
     void testGenerateScopeDefault() {
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
         JobMetricGroup jmGroup =
                 new TaskManagerJobMetricGroup(registry, tmGroup, new JobID(), "myJobName");
 
         assertThat(jmGroup.getScopeComponents())
-                .containsExactly("theHostName", "taskmanager", "test-tm-id", "myJobName");
+                .containsExactly("theHostName", "taskmanager", "test-tm-identifier", "myJobName");
 
         assertThat(jmGroup.getMetricIdentifier("name"))
-                .isEqualTo("theHostName.taskmanager.test-tm-id.myJobName.name");
+                .isEqualTo("theHostName.taskmanager.test-tm-identifier.myJobName.name");
     }
 
     @Test
@@ -79,7 +79,7 @@ class TaskManagerJobGroupTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
         JobMetricGroup jmGroup = new TaskManagerJobMetricGroup(registry, tmGroup, jid, "myJobName");
 
         assertThat(jmGroup.getScopeComponents()).containsExactly("some-constant", "myJobName");
@@ -100,14 +100,14 @@ class TaskManagerJobGroupTest {
 
         TaskManagerMetricGroup tmGroup =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "theHostName", new ResourceID("test-tm-id"));
+                        registry, "theHostName", new ResourceID("test-tm-identifier"));
         JobMetricGroup jmGroup = new TaskManagerJobMetricGroup(registry, tmGroup, jid, "myJobName");
 
         assertThat(jmGroup.getScopeComponents())
-                .containsExactly("peter", "test-tm-id", "some-constant", jid.toString());
+                .containsExactly("peter", "test-tm-identifier", "some-constant", jid.toString());
 
         assertThat(jmGroup.getMetricIdentifier("name"))
-                .isEqualTo("peter.test-tm-id.some-constant." + jid + ".name");
+                .isEqualTo("peter.test-tm-identifier.some-constant." + jid + ".name");
         registry.closeAsync().get();
     }
 
@@ -116,7 +116,7 @@ class TaskManagerJobGroupTest {
         JobID jid = new JobID();
         TaskManagerMetricGroup tm =
                 TaskManagerMetricGroup.createTaskManagerMetricGroup(
-                        registry, "host", new ResourceID("id"));
+                        registry, "host", new ResourceID("identifier"));
         TaskManagerJobMetricGroup job = new TaskManagerJobMetricGroup(registry, tm, jid, "jobname");
 
         QueryScopeInfo.JobQueryScopeInfo info =

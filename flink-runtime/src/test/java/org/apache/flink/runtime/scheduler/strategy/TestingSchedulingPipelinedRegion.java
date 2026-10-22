@@ -43,10 +43,10 @@ public class TestingSchedulingPipelinedRegion implements SchedulingPipelinedRegi
                 resultPartitionsById = new HashMap<>();
 
         for (TestingSchedulingExecutionVertex vertex : vertices) {
-            regionVertices.put(vertex.getId(), vertex);
+            regionVertices.put(vertex.getIdentifier(), vertex);
 
             for (TestingSchedulingResultPartition consumedPartition : vertex.getConsumedResults()) {
-                resultPartitionsById.putIfAbsent(consumedPartition.getId(), consumedPartition);
+                resultPartitionsById.putIfAbsent(consumedPartition.getIdentifier(), consumedPartition);
             }
 
             for (ConsumedPartitionGroup consumedGroup : vertex.getConsumedPartitionGroups()) {

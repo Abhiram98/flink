@@ -85,7 +85,7 @@ class DefaultResultPartitionTest {
         // test update consumers
         ExecutionVertexID executionVertexId = new ExecutionVertexID(new JobVertexID(), 0);
         consumerVertexGroups.put(
-                resultPartition.getId(),
+                resultPartition.getIdentifier(),
                 Collections.singletonList(
                         ConsumerVertexGroup.fromSingleVertex(
                                 executionVertexId, resultPartition.getResultType())));

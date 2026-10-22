@@ -228,12 +228,12 @@ public class TieredStorageResultSubpartitionView implements ResultSubpartitionVi
     private void releaseQueue(
             NettyPayloadManager nettyPayloadManager,
             NettyServiceProducer serviceProducer,
-            NettyConnectionId id) {
+            NettyConnectionId identifier) {
         NettyPayload nettyPayload;
         while ((nettyPayload = nettyPayloadManager.poll()) != null) {
             nettyPayload.getBuffer().ifPresent(Buffer::recycleBuffer);
         }
-        serviceProducer.connectionBroken(id);
+        serviceProducer.connectionBroken(identifier);
     }
 
     private boolean findCurrentNettyPayloadQueue() {

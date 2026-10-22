@@ -157,11 +157,11 @@ class JobVertexWatermarksHandlerTest {
 
     private static class MetricMatcher extends BaseMatcher<Metric> {
 
-        private String id;
+        private String identifier;
         @Nullable private String value;
 
-        MetricMatcher(String id, @Nullable String value) {
-            this.id = id;
+        MetricMatcher(String identifier, @Nullable String value) {
+            this.identifier = identifier;
             this.value = value;
         }
 
@@ -171,12 +171,12 @@ class JobVertexWatermarksHandlerTest {
                 return false;
             }
             Metric actual = (Metric) o;
-            return actual.getId().equals(id) && Objects.equals(value, actual.getValue());
+            return actual.getIdentifier().equals(identifier) && Objects.equals(value, actual.getValue());
         }
 
         @Override
         public void describeTo(Description description) {
-            description.appendValue(new Metric(id, value));
+            description.appendValue(new Metric(identifier, value));
         }
     }
 }

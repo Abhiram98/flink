@@ -523,7 +523,7 @@ public class BinaryExternalSorter implements Sorter<BinaryRowData> {
                     final BinaryInMemorySortBuffer buffer = currWriteBuffer.buffer;
 
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Retrieved empty read buffer " + currWriteBuffer.id + ".");
+                        LOG.debug("Retrieved empty read buffer " + currWriteBuffer.identifier + ".");
                     }
 
                     long occupancy = buffer.getOccupancy();
@@ -537,7 +537,7 @@ public class BinaryExternalSorter implements Sorter<BinaryRowData> {
                         } else {
                             // buffer is full, send the buffer
                             if (LOG.isDebugEnabled()) {
-                                LOG.debug("Emitting full buffer: " + currWriteBuffer.id + ".");
+                                LOG.debug("Emitting full buffer: " + currWriteBuffer.identifier + ".");
                             }
 
                             this.circularQueues.sort.add(currWriteBuffer);
@@ -654,16 +654,16 @@ public class BinaryExternalSorter implements Sorter<BinaryRowData> {
      */
     private static final class CircularElement {
 
-        final int id; // just for debug.
+        final int identifier; // just for debug.
         final BinaryInMemorySortBuffer buffer;
 
         private CircularElement() {
-            this.id = -1;
+            this.identifier = -1;
             this.buffer = null;
         }
 
-        private CircularElement(int id, BinaryInMemorySortBuffer buffer) {
-            this.id = id;
+        private CircularElement(int identifier, BinaryInMemorySortBuffer buffer) {
+            this.identifier = identifier;
             this.buffer = buffer;
         }
     }
@@ -857,13 +857,13 @@ public class BinaryExternalSorter implements Sorter<BinaryRowData> {
                     }
 
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Sorting buffer " + element.id + ".");
+                        LOG.debug("Sorting buffer " + element.identifier + ".");
                     }
 
                     this.sorter.sort(element.buffer);
 
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Sorted buffer " + element.id + ".");
+                        LOG.debug("Sorted buffer " + element.identifier + ".");
                     }
                 } else if (element == EOF_MARKER) {
                     if (LOG.isDebugEnabled()) {

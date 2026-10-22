@@ -68,7 +68,7 @@ public class BlockedNode implements Serializable {
     @Override
     public String toString() {
         return "BlockedNode{"
-                + "id:"
+                + "identifier:"
                 + nodeId
                 + ",cause:"
                 + cause

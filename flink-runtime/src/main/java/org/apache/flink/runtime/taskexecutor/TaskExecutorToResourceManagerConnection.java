@@ -97,7 +97,7 @@ public class TaskExecutorToResourceManagerConnection
     @Override
     protected void onRegistrationSuccess(TaskExecutorRegistrationSuccess success) {
         log.info(
-                "Successful registration at resource manager {} under registration id {}.",
+                "Successful registration at resource manager {} under registration identifier {}.",
                 getTargetAddress(),
                 success.getRegistrationId());
 

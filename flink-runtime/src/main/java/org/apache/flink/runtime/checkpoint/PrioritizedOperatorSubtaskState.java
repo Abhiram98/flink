@@ -78,7 +78,7 @@ public class PrioritizedOperatorSubtaskState {
     private final List<StateObjectCollection<ResultSubpartitionStateHandle>>
             prioritizedResultSubpartitionState;
 
-    /** Checkpoint id for a restored operator or null if not restored. */
+    /** Checkpoint identifier for a restored operator or null if not restored. */
     private final @Nullable Long restoredCheckpointId;
 
     PrioritizedOperatorSubtaskState(
@@ -204,7 +204,7 @@ public class PrioritizedOperatorSubtaskState {
     }
 
     /**
-     * Returns the checkpoint id if this was created for a restored operator, null otherwise.
+     * Returns the checkpoint identifier if this was created for a restored operator, null otherwise.
      * Restored operators are operators that participated in a previous checkpoint, even if they did
      * not emit any state snapshots.
      */
@@ -242,7 +242,7 @@ public class PrioritizedOperatorSubtaskState {
         /** (Local) alternatives to the job manager state. */
         @Nonnull private final List<OperatorSubtaskState> alternativesByPriority;
 
-        /** Checkpoint id of the restored checkpoint or null if not restored. */
+        /** Checkpoint identifier of the restored checkpoint or null if not restored. */
         private final @Nullable Long restoredCheckpointId;
 
         public Builder(
@@ -328,7 +328,7 @@ public class PrioritizedOperatorSubtaskState {
          * @param identityExtractor function to extract an identifier from a state object.
          * @return prioritized state alternatives.
          * @param <STATE_OBJ_TYPE> the type of the state objects we process.
-         * @param <ID_TYPE> the type of object that represents the id the state object type.
+         * @param <ID_TYPE> the type of object that represents the identifier the state object type.
          */
         <STATE_OBJ_TYPE extends StateObject, ID_TYPE>
                 List<StateObjectCollection<STATE_OBJ_TYPE>> computePrioritizedAlternatives(
@@ -369,7 +369,7 @@ public class PrioritizedOperatorSubtaskState {
          *     alternatives are replaced by the alternative with the highest priority. Empty
          *     optional if no state could be replaced.
          * @param <STATE_OBJ_TYPE> the type of the state objects we process.
-         * @param <ID_TYPE> the type of object that represents the id the state object type.
+         * @param <ID_TYPE> the type of object that represents the identifier the state object type.
          */
         static <STATE_OBJ_TYPE extends StateObject, ID_TYPE>
                 Optional<StateObjectCollection<STATE_OBJ_TYPE>>
@@ -389,13 +389,13 @@ public class PrioritizedOperatorSubtaskState {
             for (StateObjectCollection<STATE_OBJ_TYPE> alternative : alternativesByPriority) {
                 // Check all the state objects in the alternative if they can replace JM state
                 for (STATE_OBJ_TYPE stateHandle : alternative) {
-                    // Remove the current state object's id from the index to check for a match
+                    // Remove the current state object's identifier from the index to check for a match
                     if (indexById.remove(identityExtractor.apply(stateHandle)) != null) {
                         if (result.isEmpty()) {
                             // Lazy init result collection
                             result = new ArrayList<>(jobManagerState.size());
                         }
-                        // If the id was still in the index, replace with higher prio alternative
+                        // If the identifier was still in the index, replace with higher prio alternative
                         result.add(stateHandle);
 
                         // If the index is empty we are already done, all JM state was replaces with

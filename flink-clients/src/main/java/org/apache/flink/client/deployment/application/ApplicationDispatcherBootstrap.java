@@ -217,7 +217,7 @@ public class ApplicationDispatcherBootstrap implements DispatcherBootstrap {
         }
         if (!configuredJobId.isPresent()) {
             // In HA mode, we only support single-execute jobs at the moment. Here, we manually
-            // generate the job id, if not configured, from the cluster id to keep it consistent
+            // generate the job identifier, if not configured, from the cluster identifier to keep it consistent
             // across failover.
             configuration.set(
                     PipelineOptionsInternal.PIPELINE_FIXED_JOB_ID,

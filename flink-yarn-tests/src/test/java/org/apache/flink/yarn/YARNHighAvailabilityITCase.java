@@ -172,17 +172,17 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
 
                     try {
                         final JobID jobId = submitJob(restClusterClient);
-                        final ApplicationId id = restClusterClient.getClusterId();
+                        final ApplicationId identifier = restClusterClient.getClusterId();
 
                         waitUntilJobIsRunning(restClusterClient, jobId);
 
                         killApplicationMaster(
                                 yarnClusterDescriptor.getYarnSessionClusterEntrypoint());
-                        waitForApplicationAttempt(id, 2);
+                        waitForApplicationAttempt(identifier, 2);
 
                         waitForJobTermination(restClusterClient, jobId);
 
-                        killApplicationAndWait(id);
+                        killApplicationAndWait(identifier);
                     } finally {
                         restClusterClient.close();
                     }
@@ -211,8 +211,8 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
     }
 
     /**
-     * Tests that we can retrieve an HA enabled cluster by only specifying the application id if no
-     * other high-availability.cluster-id has been configured. See FLINK-20866.
+     * Tests that we can retrieve an HA enabled cluster by only specifying the application identifier if no
+     * other high-availability.cluster-identifier has been configured. See FLINK-20866.
      */
     @Test
     void testClusterClientRetrieval() throws Exception {
@@ -257,12 +257,12 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
                     return applicationReport.getCurrentApplicationAttemptId().getAttemptId()
                             >= attemptId;
                 });
-        LOG.info("Attempt {} id detected.", attemptId);
+        LOG.info("Attempt {} identifier detected.", attemptId);
     }
 
     /** Stops a container running {@link YarnTaskExecutorRunner}. */
     private void stopTaskManagerContainer() throws Exception {
-        // find container id of taskManager:
+        // find container identifier of taskManager:
         ContainerId taskManagerContainer = null;
         NodeManager nodeManager = null;
         NMTokenIdentifier nmIdent = null;
@@ -299,11 +299,11 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
         remoteUgi.getTokenIdentifiers().remove(nmIdent);
     }
 
-    private void killApplicationAndWait(final ApplicationId id) throws Exception {
+    private void killApplicationAndWait(final ApplicationId identifier) throws Exception {
         final YarnClient yarnClient = getYarnClient();
         checkState(yarnClient != null, "yarnClient must be initialized");
 
-        yarnClient.killApplication(id);
+        yarnClient.killApplication(identifier);
 
         CommonTestUtils.waitUntilCondition(
                 () ->
@@ -460,7 +460,7 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
                         .getMetrics();
 
         final Metric metric = Iterables.getOnlyElement(metrics, null);
-        checkState(metric == null || metric.getId().equals(metricName));
+        checkState(metric == null || metric.getIdentifier().equals(metricName));
         return Optional.ofNullable(metric);
     }
 }

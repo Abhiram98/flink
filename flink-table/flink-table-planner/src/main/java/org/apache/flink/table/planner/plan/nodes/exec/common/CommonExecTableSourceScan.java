@@ -93,14 +93,14 @@ public abstract class CommonExecTableSourceScan extends ExecNodeBase<RowData>
     private final DynamicTableSourceSpec tableSourceSpec;
 
     protected CommonExecTableSourceScan(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             DynamicTableSourceSpec tableSourceSpec,
             List<InputProperty> inputProperties,
             LogicalType outputType,
             String description) {
-        super(id, context, persistedConfig, inputProperties, outputType, description);
+        super(identifier, context, persistedConfig, inputProperties, outputType, description);
         this.tableSourceSpec = tableSourceSpec;
     }
 

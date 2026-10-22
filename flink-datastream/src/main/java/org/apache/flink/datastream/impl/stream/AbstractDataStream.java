@@ -41,7 +41,7 @@ public abstract class AbstractDataStream<T> implements DataStream {
 
     /**
      * We keep track of the side outputs that were already requested and their types. With this, we
-     * can catch the case when a side output with a matching id is requested for a different type
+     * can catch the case when a side output with a matching identifier is requested for a different type
      * because this would lead to problems at runtime.
      */
     protected final Map<OutputTag<?>, TypeInformation<?>> requestedSideOutputs = new HashMap<>();
@@ -72,7 +72,7 @@ public abstract class AbstractDataStream<T> implements DataStream {
         TypeInformation<?> type = requestedSideOutputs.get(outputTag);
         if (type != null && !type.equals(outputTag.getTypeInfo())) {
             throw new UnsupportedOperationException(
-                    "A side output with a matching id was "
+                    "A side output with a matching identifier was "
                             + "already requested with a different type. This is not allowed, side output "
                             + "ids need to be unique.");
         }

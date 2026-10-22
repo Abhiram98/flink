@@ -31,7 +31,7 @@ public class JobInfoImpl implements JobInfo {
     private final String jobName;
 
     public JobInfoImpl(JobID jobID, String jobName) {
-        checkArgument(jobID != null, "The job id must not be null.");
+        checkArgument(jobID != null, "The job identifier must not be null.");
         checkArgument(jobName != null, "The job name must not be null.");
         this.jobID = jobID;
         this.jobName = jobName;

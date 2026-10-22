@@ -30,7 +30,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testOfWithKnownLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
@@ -42,7 +42,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testOfWithEmptyLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformationRegister testInstance =
                 LeaderInformationRegister.of(componentId, LeaderInformation.empty());
 
@@ -52,11 +52,11 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testMerge() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
-        final String newComponentId = "new-component-id";
+        final String newComponentId = "new-component-identifier";
         final LeaderInformation newLeaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "new-address");
 
@@ -76,11 +76,11 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testMergeEmptyLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
-        final String newComponentId = "new-component-id";
+        final String newComponentId = "new-component-identifier";
 
         final LeaderInformationRegister initialRegister =
                 LeaderInformationRegister.of(componentId, leaderInformation);
@@ -96,7 +96,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testMergeEmptyLeaderInformationForExistingComponentId() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
@@ -114,7 +114,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testMergeKnownLeaderInformationForExistingComponentId() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation oldLeaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "old-address");
 
@@ -133,7 +133,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testClear() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
@@ -150,13 +150,13 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testClearNotRegisteredComponentId() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformationRegister initialRegister =
                 LeaderInformationRegister.of(
                         componentId, LeaderInformation.known(UUID.randomUUID(), "address"));
 
         final LeaderInformationRegister newRegister =
-                LeaderInformationRegister.clear(initialRegister, "another-component-id");
+                LeaderInformationRegister.clear(initialRegister, "another-component-identifier");
 
         assertThat(newRegister).isNotSameAs(initialRegister);
         assertThat(newRegister.getRegisteredComponentIds()).containsExactly(componentId);
@@ -164,11 +164,11 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testEmptyLeaderInformationFiltering() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
 
-        final String componentIdWithEmptyLeaderInformation = "new-component-id";
+        final String componentIdWithEmptyLeaderInformation = "new-component-identifier";
 
         final Map<String, LeaderInformation> records = new HashMap<>();
         records.put(componentId, leaderInformation);
@@ -187,7 +187,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testForComponentId() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
         assertThat(
@@ -198,7 +198,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testForComponentIdOrEmpty() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
         assertThat(
@@ -209,7 +209,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testForComponentIdWithEmptyLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         assertThat(
                         LeaderInformationRegister.of(componentId, LeaderInformation.empty())
                                 .forComponentId(componentId))
@@ -218,7 +218,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testForComponentIdOrEmptyWithEmptyLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         assertThat(
                         LeaderInformationRegister.of(componentId, LeaderInformation.empty())
                                 .forComponentIdOrEmpty(componentId))
@@ -227,7 +227,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testHasLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         final LeaderInformation leaderInformation =
                 LeaderInformation.known(UUID.randomUUID(), "address");
         assertThat(
@@ -238,7 +238,7 @@ class LeaderInformationRegisterTest {
 
     @Test
     void testHasLeaderInformationWithEmptyLeaderInformation() {
-        final String componentId = "component-id";
+        final String componentId = "component-identifier";
         assertThat(
                         LeaderInformationRegister.of(componentId, LeaderInformation.empty())
                                 .hasLeaderInformation(componentId))
@@ -250,13 +250,13 @@ class LeaderInformationRegisterTest {
         LeaderInformationRegister register = LeaderInformationRegister.empty();
         assertThat(register.hasNoLeaderInformation()).isTrue();
 
-        register = LeaderInformationRegister.of("component-id", LeaderInformation.empty());
+        register = LeaderInformationRegister.of("component-identifier", LeaderInformation.empty());
         assertThat(register.hasNoLeaderInformation()).isTrue();
 
         register =
                 LeaderInformationRegister.merge(
                         register,
-                        "other-component-id",
+                        "other-component-identifier",
                         LeaderInformation.known(UUID.randomUUID(), "address"));
         assertThat(register.hasNoLeaderInformation()).isFalse();
     }

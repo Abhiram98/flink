@@ -199,7 +199,7 @@ public abstract class AbstractServerHandler<REQ extends MessageBody, RESP extend
      *
      * <p><b>NOTE:</b> This method is called by multiple threads.
      *
-     * @param requestId the id of the received request to be handled.
+     * @param requestId the identifier of the received request to be handled.
      * @param request the request to be handled.
      * @return A future with the response to be forwarded to the client.
      */

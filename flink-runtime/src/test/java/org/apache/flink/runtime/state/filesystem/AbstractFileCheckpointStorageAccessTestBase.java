@@ -144,7 +144,7 @@ public abstract class AbstractFileCheckpointStorageAccessTestBase {
     //  checkpoints
     // ------------------------------------------------------------------------
 
-    @ParameterizedTest(name = "create checkpoint job-id sub-directory: {0}")
+    @ParameterizedTest(name = "create checkpoint job-identifier sub-directory: {0}")
     @ValueSource(booleans = {true, false})
     public void testCreateCheckpointSubDirs(boolean createCheckpointSubDir) throws Exception {
         final FileSystem fs = FileSystem.getLocalFileSystem();
@@ -156,12 +156,12 @@ public abstract class AbstractFileCheckpointStorageAccessTestBase {
         FileStatus[] fileStatuses = fs.listStatus(checkpointDir);
         if (createCheckpointSubDir) {
             for (FileStatus fileStatus : fileStatuses) {
-                // as the job-id sub-dir existed and could at least get chk-42 sub-folder.
+                // as the job-identifier sub-dir existed and could at least get chk-42 sub-folder.
                 assertThat(fs.listStatus(fileStatus.getPath()).length > 0).isTrue();
             }
         } else {
             for (FileStatus fileStatus : fileStatuses) {
-                // as the job-id sub-dir is not existed and no more sub-folders.
+                // as the job-identifier sub-dir is not existed and no more sub-folders.
                 assertThat(fs.listStatus(fileStatus.getPath()).length).isEqualTo(0);
             }
         }

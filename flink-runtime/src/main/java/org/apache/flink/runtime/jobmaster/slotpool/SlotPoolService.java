@@ -96,7 +96,7 @@ public interface SlotPoolService extends AutoCloseable {
      * Registers a TaskExecutor with the given {@link ResourceID} at {@link SlotPoolService}.
      *
      * @param taskManagerId identifying the TaskExecutor to register
-     * @return true iff a new resource id was registered
+     * @return true iff a new resource identifier was registered
      */
     boolean registerTaskManager(ResourceID taskManagerId);
 
@@ -105,7 +105,7 @@ public interface SlotPoolService extends AutoCloseable {
      *
      * @param taskManagerId identifying the TaskExecutor which shall be released from the SlotPool
      * @param cause for the releasing of the TaskManager
-     * @return true iff a given registered resource id was removed
+     * @return true iff a given registered resource identifier was removed
      */
     boolean releaseTaskManager(ResourceID taskManagerId, Exception cause);
 

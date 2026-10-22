@@ -273,7 +273,7 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                         };
                     }
                 default:
-                    throw new IllegalArgumentException("Invalid program id");
+                    throw new IllegalArgumentException("Invalid program identifier");
             }
         }
     }

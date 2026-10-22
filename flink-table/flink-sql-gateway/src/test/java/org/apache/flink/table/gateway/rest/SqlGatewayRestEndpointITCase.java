@@ -258,15 +258,15 @@ class SqlGatewayRestEndpointITCase {
     void testRequestInterleaving() throws Exception {
         final BlockerSync sync = new BlockerSync();
         testHandler.handlerBody =
-                id -> {
-                    if (id == 1) {
+                identifier -> {
+                    if (identifier == 1) {
                         try {
                             sync.block();
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
                     }
-                    return CompletableFuture.completedFuture(new TestResponse(id.toString()));
+                    return CompletableFuture.completedFuture(new TestResponse(identifier.toString()));
                 };
 
         // send first request and wait until the handler blocks
@@ -332,7 +332,7 @@ class SqlGatewayRestEndpointITCase {
         testHandler.closeFuture = new CompletableFuture<>();
         final BlockerSync sync = new BlockerSync();
         testHandler.handlerBody =
-                id -> {
+                identifier -> {
                     // Intentionally schedule the work on a different thread. This is to simulate
                     // handlers where the CompletableFuture is finished by the RPC framework.
                     return CompletableFuture.supplyAsync(
@@ -342,7 +342,7 @@ class SqlGatewayRestEndpointITCase {
                                 } catch (InterruptedException e) {
                                     Thread.currentThread().interrupt();
                                 }
-                                return new TestResponse(id.toString());
+                                return new TestResponse(identifier.toString());
                             });
                 };
 
@@ -384,11 +384,11 @@ class SqlGatewayRestEndpointITCase {
 
     private static class TestRequest implements RequestBody {
 
-        public final int id;
+        public final int identifier;
 
         @JsonCreator
-        public TestRequest(@JsonProperty("id") int id) {
-            this.id = id;
+        public TestRequest(@JsonProperty("identifier") int identifier) {
+            this.identifier = identifier;
         }
     }
 
@@ -552,12 +552,12 @@ class SqlGatewayRestEndpointITCase {
         protected CompletableFuture<TestResponse> handleRequest(
                 @Nullable SqlGatewayRestAPIVersion version,
                 @Nonnull HandlerRequest<TestRequest> request) {
-            final int id = request.getRequestBody().id;
-            if (id == 3) {
+            final int identifier = request.getRequestBody().identifier;
+            if (identifier == 3) {
                 return FutureUtils.completedExceptionally(
                         new EndpointNotStartedException("test exception"));
             }
-            return handlerBody.apply(id);
+            return handlerBody.apply(identifier);
         }
     }
 

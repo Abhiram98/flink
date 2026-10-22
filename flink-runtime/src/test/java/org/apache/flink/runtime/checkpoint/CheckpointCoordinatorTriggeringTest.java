@@ -170,7 +170,7 @@ class CheckpointCoordinatorTriggeringTest {
 
         for (CheckpointCoordinatorTestingUtils.TriggeredCheckpoint checkpoint : checkpoints) {
             assertThat(checkpoint.checkpointId)
-                    .as("Trigger checkpoint id should be in increase order")
+                    .as("Trigger checkpoint identifier should be in increase order")
                     .isGreaterThan(lastId);
             assertThat(checkpoint.timestamp)
                     .as("Trigger checkpoint timestamp should be in increase order")
@@ -743,7 +743,7 @@ class CheckpointCoordinatorTriggeringTest {
         // set up the coordinator and validate the initial state
         CheckpointCoordinator checkpointCoordinator =
                 new CheckpointCoordinatorBuilder()
-                        .setCheckpointIDCounter(new UnstableCheckpointIDCounter(id -> id == 0))
+                        .setCheckpointIDCounter(new UnstableCheckpointIDCounter(identifier -> identifier == 0))
                         .setTimer(manuallyTriggeredScheduledExecutor)
                         .build(graph);
 
@@ -839,7 +839,7 @@ class CheckpointCoordinatorTriggeringTest {
         // set up the coordinator and validate the initial state
         CheckpointCoordinator checkpointCoordinator =
                 new CheckpointCoordinatorBuilder()
-                        .setCheckpointIDCounter(new UnstableCheckpointIDCounter(id -> id == 0))
+                        .setCheckpointIDCounter(new UnstableCheckpointIDCounter(identifier -> identifier == 0))
                         .setTimer(manuallyTriggeredScheduledExecutor)
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
@@ -1057,7 +1057,7 @@ class CheckpointCoordinatorTriggeringTest {
 
         private final Predicate<Long> checkpointFailurePredicate;
 
-        private long id = 0;
+        private long identifier = 0;
 
         public UnstableCheckpointIDCounter(Predicate<Long> checkpointFailurePredicate) {
             this.checkpointFailurePredicate = checkNotNull(checkpointFailurePredicate);
@@ -1073,15 +1073,15 @@ class CheckpointCoordinatorTriggeringTest {
 
         @Override
         public long getAndIncrement() {
-            if (checkpointFailurePredicate.test(id++)) {
+            if (checkpointFailurePredicate.test(identifier++)) {
                 throw new RuntimeException("CheckpointIDCounter#getAndIncrement fails by design");
             }
-            return id;
+            return identifier;
         }
 
         @Override
         public long get() {
-            return id;
+            return identifier;
         }
 
         @Override

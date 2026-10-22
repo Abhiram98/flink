@@ -890,7 +890,7 @@ public class OperationExecutor {
      *     executionConfig}.
      * @param handle the specified operation handle
      * @param clusterAction the cluster action to run against the retrieved {@link ClusterClient}.
-     * @param <ClusterID> type of the cluster id
+     * @param <ClusterID> type of the cluster identifier
      * @param <Result> type of the result
      * @throws SqlExecutionException if something goes wrong
      */
@@ -919,7 +919,7 @@ public class OperationExecutor {
      * Internal interface to encapsulate cluster actions which are executed via the {@link
      * ClusterClient}.
      *
-     * @param <ClusterID> type of the cluster id
+     * @param <ClusterID> type of the cluster identifier
      * @param <Result>> type of the result
      */
     @FunctionalInterface

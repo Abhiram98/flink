@@ -302,11 +302,11 @@ public class YarnConfigOptions {
                     .withDescription("The location of the Flink dist jar.");
 
     public static final ConfigOption<String> APPLICATION_ID =
-            key("yarn.application.id")
+            key("yarn.application.identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(
-                            "The YARN application id of the running yarn cluster."
+                            "The YARN application identifier of the running yarn cluster."
                                     + " This is the YARN cluster where the pipeline is going to be executed.");
 
     public static final ConfigOption<String> APPLICATION_QUEUE =

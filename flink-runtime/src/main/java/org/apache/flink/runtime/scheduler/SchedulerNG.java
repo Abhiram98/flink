@@ -204,7 +204,7 @@ public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
     /**
      * Notifies that the task has reached the end of data.
      *
-     * @param executionAttemptID The execution attempt id.
+     * @param executionAttemptID The execution attempt identifier.
      */
     void notifyEndOfData(ExecutionAttemptID executionAttemptID);
 

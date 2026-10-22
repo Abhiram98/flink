@@ -37,7 +37,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 class CheckpointCommittableManagerImpl<CommT> implements CheckpointCommittableManager<CommT> {
-    /** Mapping of subtask id to {@link SubtaskCommittableManager}. */
+    /** Mapping of subtask identifier to {@link SubtaskCommittableManager}. */
     private final Map<Integer, SubtaskCommittableManager<CommT>> subtasksCommittableManagers;
 
     @Nullable private final Long checkpointId;

@@ -66,7 +66,7 @@ public abstract class LocationPreferenceSlotSelectionStrategy implements SlotSel
             @Nonnull Collection<TaskManagerLocation> locationPreferences,
             @Nonnull ResourceProfile resourceProfile) {
 
-        // we build up two indexes, one for resource id and one for host names of the preferred
+        // we build up two indexes, one for resource identifier and one for host names of the preferred
         // locations.
         final Map<ResourceID, Integer> preferredResourceIDs =
                 CollectionUtil.newHashMapWithExpectedSize(locationPreferences.size());

@@ -65,7 +65,7 @@ class TtlStateUpdateSource extends RichParallelSourceFunction<TtlStateUpdate> {
                             TtlStateVerifier.VERIFIERS.stream()
                                     .collect(
                                             Collectors.toMap(
-                                                    TtlStateVerifier::getId,
+                                                    TtlStateVerifier::getIdentifier,
                                                     TtlStateVerifier::generateRandomUpdate));
                     ctx.collect(new TtlStateUpdate(random.nextInt(maxKey), updates));
                 }

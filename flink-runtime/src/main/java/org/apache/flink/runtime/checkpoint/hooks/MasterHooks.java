@@ -59,13 +59,13 @@ public class MasterHooks {
             throws FlinkException {
 
         for (MasterTriggerRestoreHook<?> hook : hooks) {
-            final String id = hook.getIdentifier();
+            final String identifier = hook.getIdentifier();
             try {
                 hook.reset();
             } catch (Throwable t) {
                 ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
                 throw new FlinkException(
-                        "Error while resetting checkpoint master hook '" + id + '\'', t);
+                        "Error while resetting checkpoint master hook '" + identifier + '\'', t);
             }
         }
     }
@@ -111,7 +111,7 @@ public class MasterHooks {
             long timestamp,
             Executor executor) {
 
-        final String id = hook.getIdentifier();
+        final String identifier = hook.getIdentifier();
         final SimpleVersionedSerializer<T> serializer = hook.createCheckpointDataSerializer();
 
         try {
@@ -134,13 +134,13 @@ public class MasterHooks {
                                         final int version = serializer.getVersion();
                                         final byte[] bytes = serializer.serialize(result);
 
-                                        return new MasterState(id, bytes, version);
+                                        return new MasterState(identifier, bytes, version);
                                     } catch (Throwable t) {
                                         ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
                                         throw new CompletionException(
                                                 new FlinkException(
                                                         "Failed to serialize state of master hook '"
-                                                                + id
+                                                                + identifier
                                                                 + '\'',
                                                         t));
                                     }
@@ -148,7 +148,7 @@ public class MasterHooks {
                                     throw new CompletionException(
                                             new FlinkException(
                                                     "Checkpoint hook '"
-                                                            + id
+                                                            + identifier
                                                             + " is stateful but creates no serializer"));
                                 }
                             })
@@ -157,14 +157,14 @@ public class MasterHooks {
                                 throw new CompletionException(
                                         new FlinkException(
                                                 "Checkpoint master hook '"
-                                                        + id
+                                                        + identifier
                                                         + "' produced an exception",
                                                 throwable.getCause()));
                             });
         } catch (Throwable t) {
             return FutureUtils.completedExceptionally(
                     new FlinkException(
-                            "Error while triggering checkpoint master hook '" + id + '\'', t));
+                            "Error while triggering checkpoint master hook '" + identifier + '\'', t));
         }
     }
 
@@ -246,7 +246,7 @@ public class MasterHooks {
             throws FlinkException {
         @SuppressWarnings("unchecked")
         final MasterTriggerRestoreHook<T> typedHook = (MasterTriggerRestoreHook<T>) hook;
-        final String id = hook.getIdentifier();
+        final String identifier = hook.getIdentifier();
 
         try {
             final SimpleVersionedSerializer<T> deserializer =
@@ -258,7 +258,7 @@ public class MasterHooks {
 
             return deserializer.deserialize(state.version(), state.bytes());
         } catch (Throwable t) {
-            throw new FlinkException("Cannot deserialize state for master hook '" + id + '\'', t);
+            throw new FlinkException("Cannot deserialize state for master hook '" + identifier + '\'', t);
         }
     }
 

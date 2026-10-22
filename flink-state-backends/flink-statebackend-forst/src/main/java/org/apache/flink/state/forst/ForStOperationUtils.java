@@ -91,7 +91,7 @@ public class ForStOperationUtils {
         return dbRef;
     }
 
-    /** Creates a column family handle from a state id. */
+    /** Creates a column family handle from a state identifier. */
     public static ColumnFamilyHandle createColumnFamilyHandle(
             String stateId,
             RocksDB db,

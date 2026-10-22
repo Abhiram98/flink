@@ -56,7 +56,7 @@ public class JobVertex implements java.io.Serializable {
     // --------------------------------------------------------------------------------------------
 
     /** The ID of the vertex. */
-    private final JobVertexID id;
+    private final JobVertexID identifier;
 
     /**
      * The IDs of all operators contained in this vertex.
@@ -177,13 +177,13 @@ public class JobVertex implements java.io.Serializable {
      * Constructs a new job vertex and assigns it with the given name.
      *
      * @param name The name of the new job vertex.
-     * @param id The id of the job vertex.
+     * @param identifier The identifier of the job vertex.
      */
-    public JobVertex(String name, JobVertexID id) {
+    public JobVertex(String name, JobVertexID identifier) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = id == null ? new JobVertexID() : id;
+        this.identifier = identifier == null ? new JobVertexID() : identifier;
         OperatorIDPair operatorIDPair =
-                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.id));
+                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.identifier));
         this.operatorIDs = Collections.singletonList(operatorIDPair);
     }
 
@@ -191,12 +191,12 @@ public class JobVertex implements java.io.Serializable {
      * Constructs a new job vertex and assigns it with the given name.
      *
      * @param name The name of the new job vertex.
-     * @param primaryId The id of the job vertex.
+     * @param primaryId The identifier of the job vertex.
      * @param operatorIDPairs The operator ID pairs of the job vertex.
      */
     public JobVertex(String name, JobVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
         this.name = name == null ? DEFAULT_NAME : name;
-        this.id = primaryId == null ? new JobVertexID() : primaryId;
+        this.identifier = primaryId == null ? new JobVertexID() : primaryId;
         this.operatorIDs = Collections.unmodifiableList(operatorIDPairs);
     }
 
@@ -208,7 +208,7 @@ public class JobVertex implements java.io.Serializable {
      * @return The ID of this job vertex
      */
     public JobVertexID getID() {
-        return this.id;
+        return this.identifier;
     }
 
     /**
@@ -509,10 +509,10 @@ public class JobVertex implements java.io.Serializable {
 
     // --------------------------------------------------------------------------------------------
     public IntermediateDataSet getOrCreateResultDataSet(
-            IntermediateDataSetID id, ResultPartitionType partitionType) {
+            IntermediateDataSetID identifier, ResultPartitionType partitionType) {
         anyOutputBlocking |= partitionType.isBlockingOrBlockingPersistentResultPartition();
         return this.results.computeIfAbsent(
-                id, key -> new IntermediateDataSet(id, partitionType, this));
+                identifier, key -> new IntermediateDataSet(identifier, partitionType, this));
     }
 
     public JobEdge connectNewDataSetAsInput(

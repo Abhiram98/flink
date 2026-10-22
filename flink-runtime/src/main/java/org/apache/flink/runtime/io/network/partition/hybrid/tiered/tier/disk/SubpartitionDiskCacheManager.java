@@ -52,7 +52,7 @@ class SubpartitionDiskCacheManager {
     private final Deque<Tuple2<Buffer, Integer>> allBuffers = new LinkedList<>();
 
     /**
-     * Record the segment id that is writing to. Each time when the segment is finished, this filed
+     * Record the segment identifier that is writing to. Each time when the segment is finished, this filed
      * is increased by one.
      *
      * <p>Note that when flushing buffers, this can be touched by task thread or the flushing

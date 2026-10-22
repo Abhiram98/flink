@@ -51,9 +51,9 @@ public class AsynchronousJobOperationKey extends OperationKey {
     }
 
     /**
-     * Get the job id for the given operation key.
+     * Get the job identifier for the given operation key.
      *
-     * @return job id
+     * @return job identifier
      */
     public JobID getJobId() {
         return jobId;

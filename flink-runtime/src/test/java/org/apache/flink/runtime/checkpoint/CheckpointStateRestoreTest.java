@@ -322,16 +322,16 @@ class CheckpointStateRestoreTest {
         return mock;
     }
 
-    private ExecutionJobVertex mockExecutionJobVertex(JobVertexID id, ExecutionVertex[] vertices) {
+    private ExecutionJobVertex mockExecutionJobVertex(JobVertexID identifier, ExecutionVertex[] vertices) {
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
         when(vertex.getParallelism()).thenReturn(vertices.length);
         when(vertex.getMaxParallelism()).thenReturn(vertices.length);
-        when(vertex.getJobVertexId()).thenReturn(id);
+        when(vertex.getJobVertexId()).thenReturn(identifier);
         when(vertex.getTaskVertices()).thenReturn(vertices);
         when(vertex.getOperatorIDs())
                 .thenReturn(
                         Collections.singletonList(
-                                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(id))));
+                                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(identifier))));
         when(vertex.getProducedDataSets()).thenReturn(new IntermediateResult[0]);
 
         for (ExecutionVertex v : vertices) {

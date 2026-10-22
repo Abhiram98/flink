@@ -56,7 +56,7 @@ class MetricCollectionResponseBodyTest
         assertThat(actual.getMetrics()).hasSize(1);
 
         final Metric metric = actual.getMetrics().iterator().next();
-        assertThat(metric.getId()).isEqualTo(TEST_METRIC_NAME);
+        assertThat(metric.getIdentifier()).isEqualTo(TEST_METRIC_NAME);
         assertThat(metric.getValue()).isEqualTo(TEST_METRIC_VALUE);
     }
 

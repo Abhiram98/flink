@@ -103,7 +103,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
                             upstreamJobVertex, ALL_TO_ALL, PIPELINED);
             final IntermediateDataSet consumedDataSet = edge.getSource();
             results.add(consumedDataSet);
-            resultMap.put(consumedDataSet.getId(), consumedDataSet);
+            resultMap.put(consumedDataSet.getIdentifier(), consumedDataSet);
         }
     }
 
@@ -114,7 +114,7 @@ public class DefaultLogicalVertexTest extends TestLogger {
         final Map<JobVertexID, DefaultLogicalVertex> logicalVertextMap =
                 IterableUtils.toStream(logicalVertices)
                         .collect(
-                                Collectors.toMap(DefaultLogicalVertex::getId, Function.identity()));
+                                Collectors.toMap(DefaultLogicalVertex::getIdentifier, Function.identity()));
 
         for (JobVertex jobVertex : jobVertices) {
             final DefaultLogicalVertex logicalVertex = logicalVertextMap.remove(jobVertex.getID());
@@ -130,6 +130,6 @@ public class DefaultLogicalVertexTest extends TestLogger {
     static void assertVertexInfoEquals(
             final JobVertex jobVertex, final DefaultLogicalVertex logicalVertex) {
 
-        assertEquals(jobVertex.getID(), logicalVertex.getId());
+        assertEquals(jobVertex.getID(), logicalVertex.getIdentifier());
     }
 }

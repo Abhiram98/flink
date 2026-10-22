@@ -64,7 +64,7 @@ class RemoteStorageScannerTest {
         BiConsumer<TieredStoragePartitionId, TieredStorageSubpartitionId> notifier =
                 (partitionId, subpartitionId) -> future.complete(null);
 
-        // Create segment files with id 2, and finish file with id 2.
+        // Create segment files with identifier 2, and finish file with identifier 2.
         createSegmentFile(2);
         createSegmentFinishFile(2);
 
@@ -83,12 +83,12 @@ class RemoteStorageScannerTest {
         BiConsumer<TieredStoragePartitionId, TieredStorageSubpartitionId> notifier =
                 (partitionId, subpartitionId) -> future.complete(null);
 
-        // Create segment files with id 2 and id 3, and finish file with id 3.
+        // Create segment files with identifier 2 and identifier 3, and finish file with identifier 3.
         createSegmentFile(2);
         createSegmentFile(3);
         createSegmentFinishFile(3);
 
-        // If the larger segment id has been scanned, the smaller segment ids will be ignored and
+        // If the larger segment identifier has been scanned, the smaller segment ids will be ignored and
         // not be watched.
         RemoteStorageScanner remoteStorageScanner = new RemoteStorageScanner(remoteStoragePath);
         remoteStorageScanner.registerAvailabilityAndPriorityNotifier(notifier);

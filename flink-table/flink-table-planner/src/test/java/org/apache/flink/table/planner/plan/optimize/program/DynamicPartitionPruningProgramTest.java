@@ -57,7 +57,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE fact_part (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -75,7 +75,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE dim (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  male BOOLEAN,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -168,10 +168,10 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
     @Test
     void testDimTableFilteringFieldsNotInJoinKey() {
-        // fact_part.id not in dynamic-filtering-fields, so dynamic partition pruning will not
+        // fact_part.identifier not in dynamic-filtering-fields, so dynamic partition pruning will not
         // succeed.
         String query =
-                "Select * from dim, fact_part where fact_part.id = dim.id and dim.price < 500";
+                "Select * from dim, fact_part where fact_part.identifier = dim.identifier and dim.price < 500";
         util.verifyRelPlan(query);
     }
 
@@ -189,7 +189,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // For filters in dim table side, they need to filter enough partitions. Like NOT NULL will
         // not succeed for dynamic partition pruning.
         String query =
-                "Select * from dim join fact_part on fact_part.fact_date_sk = dim.dim_date_sk where dim.id is not null";
+                "Select * from dim join fact_part on fact_part.fact_date_sk = dim.dim_date_sk where dim.identifier is not null";
         util.verifyRelPlan(query);
     }
 
@@ -200,7 +200,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE none_part_fact (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -223,7 +223,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE legacy_source (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -363,7 +363,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
     void testPartitionKeysOrderIsChangedInFactSide() {
         // Dynamic filtering will succeed for this query.
         String query =
-                "Select * from dim join (select fact_date_sk, id, name, amount, price from fact_part) t1"
+                "Select * from dim join (select fact_date_sk, identifier, name, amount, price from fact_part) t1"
                         + " on t1.fact_date_sk = dim_date_sk and t1.price > 200 and dim.price < 500";
         util.verifyRelPlan(query);
     }
@@ -372,7 +372,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
     void testPartitionKeysNameIsChangedInFactSide() {
         // Dynamic filtering will succeed for this query.
         String query =
-                "Select * from dim join (select id, name, amount, price, fact_date_sk as fact_date_sk1 from fact_part) t1"
+                "Select * from dim join (select identifier, name, amount, price, fact_date_sk as fact_date_sk1 from fact_part) t1"
                         + " on t1.fact_date_sk1 = dim_date_sk and t1.price > 200 and dim.price < 500";
         util.verifyRelPlan(query);
     }
@@ -441,7 +441,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE sales (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") WITH (\n"
@@ -450,7 +450,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
                                 + ")");
 
         String query =
-                "Select * from fact_part, dim, sales where fact_part.id = sales.id and"
+                "Select * from fact_part, dim, sales where fact_part.identifier = sales.identifier and"
                         + " fact_part.fact_date_sk = dim.dim_date_sk and dim.price < 500 and dim.amount > 100";
         util.verifyRelPlan(query);
     }
@@ -461,7 +461,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE sales (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") WITH (\n"
@@ -472,7 +472,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE item (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") WITH (\n"
@@ -483,7 +483,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         String query =
                 "Select * from fact_part join"
                         + " (select * from dim, sales, item where"
-                        + " dim.id = sales.id and sales.id = item.id and dim.price < 500 and sales.price > 300) dimSide"
+                        + " dim.identifier = sales.identifier and sales.identifier = item.identifier and dim.price < 500 and sales.price > 300) dimSide"
                         + " on fact_part.fact_date_sk = dimSide.dim_date_sk";
         util.verifyRelPlan(query);
     }
@@ -494,7 +494,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE sales (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT\n"
                                 + ") WITH (\n"
@@ -515,7 +515,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Dpp will success
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -530,8 +530,8 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         String query =
                 "Select * from fact_part, item, dim"
                         + " where fact_part.fact_date_sk = dim.dim_date_sk"
-                        + " and fact_part.id = item.id"
-                        + " and dim.id = item.id "
+                        + " and fact_part.identifier = item.identifier"
+                        + " and dim.identifier = item.identifier "
                         + " and dim.price < 500 and dim.price > 300";
         util.verifyRelPlan(query);
     }
@@ -541,7 +541,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Dpp will success
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -555,7 +555,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
         String query =
                 "Select * from fact_part, item, dim"
-                        + " where fact_part.id = item.id"
+                        + " where fact_part.identifier = item.identifier"
                         + " and dim.price in (select price from dim where amount = (select amount from dim where amount = 2000))"
                         + " and fact_part.fact_date_sk = dim.dim_date_sk";
         util.verifyRelPlan(query);
@@ -566,7 +566,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Dpp will success.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -576,10 +576,10 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from (select id, fact_date_sk, amount + 1 as amount1 from fact_part where price = 1 union all "
-                        + "select id, fact_date_sk, amount + 1 from fact_part where price = 2) fact_part2, item, dim"
+                "Select * from (select identifier, fact_date_sk, amount + 1 as amount1 from fact_part where price = 1 union all "
+                        + "select identifier, fact_date_sk, amount + 1 from fact_part where price = 2) fact_part2, item, dim"
                         + " where fact_part2.fact_date_sk = dim.dim_date_sk"
-                        + " and fact_part2.id = item.id"
+                        + " and fact_part2.identifier = item.identifier"
                         + " and dim.price < 500 and dim.price > 300";
         util.verifyRelPlan(query);
     }
@@ -589,7 +589,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Dpp will success
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -600,7 +600,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
         String query =
                 "Select * from (Select fact_date_sk, item.amount, sum(fact_part.price) from fact_part "
-                        + "join item on fact_part.id = item.id group by fact_date_sk, item.amount) t1 "
+                        + "join item on fact_part.identifier = item.identifier group by fact_date_sk, item.amount) t1 "
                         + "join dim on t1.fact_date_sk = dim.dim_date_sk where dim.price < 500 and dim.price > 300 ";
         util.verifyRelPlan(query);
     }
@@ -610,7 +610,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Dpp will not success because join key in group function.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -620,9 +620,9 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from (Select fact_part.id, item.amount, fact_part.name, sum(fact_part.price), sum(item.price), sum(fact_date_sk) as fact_date_sk1 "
-                        + "from fact_part join item on fact_part.id = item.id "
-                        + "group by fact_part.id, fact_part.name, item.amount) t1 "
+                "Select * from (Select fact_part.identifier, item.amount, fact_part.name, sum(fact_part.price), sum(item.price), sum(fact_date_sk) as fact_date_sk1 "
+                        + "from fact_part join item on fact_part.identifier = item.identifier "
+                        + "group by fact_part.identifier, fact_part.name, item.amount) t1 "
                         + "join dim on t1.fact_date_sk1 = dim.dim_date_sk where dim.price < 500 and dim.price > 300 ";
         util.verifyRelPlan(query);
     }
@@ -633,7 +633,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // down enabled is true.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -643,8 +643,8 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from (Select id, amount, fact_date_sk, count(name), sum(price) "
-                        + "from fact_part where fact_date_sk > 100 group by id, amount, fact_date_sk) t1 "
+                "Select * from (Select identifier, amount, fact_date_sk, count(name), sum(price) "
+                        + "from fact_part where fact_date_sk > 100 group by identifier, amount, fact_date_sk) t1 "
                         + "join dim on t1.fact_date_sk = dim.dim_date_sk where dim.price < 500 and dim.price > 300 ";
         util.verifyRelPlan(query);
     }
@@ -660,7 +660,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -670,8 +670,8 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from (Select id, amount, fact_date_sk, count(name), sum(price) "
-                        + "from fact_part where fact_date_sk > 100 group by id, amount, fact_date_sk) t1 "
+                "Select * from (Select identifier, amount, fact_date_sk, count(name), sum(price) "
+                        + "from fact_part where fact_date_sk > 100 group by identifier, amount, fact_date_sk) t1 "
                         + "join dim on t1.fact_date_sk = dim.dim_date_sk where dim.price < 500 and dim.price > 300 ";
         util.verifyRelPlan(query);
     }
@@ -681,7 +681,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // If partition keys changed in fact side. DPP factor will not success.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -691,8 +691,8 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from (select fact_date_sk + 1 as fact_date_sk, id from fact_part) fact_part1 join item on "
-                        + "fact_part1.id = item.id"
+                "Select * from (select fact_date_sk + 1 as fact_date_sk, identifier from fact_part) fact_part1 join item on "
+                        + "fact_part1.identifier = item.identifier"
                         + " join dim on fact_part1.fact_date_sk = dim.dim_date_sk"
                         + " where dim.price < 500 and dim.price > 300";
         util.verifyRelPlan(query);
@@ -703,7 +703,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // Although partition keys changed in dim side. DPP will success.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -713,7 +713,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv().executeSql(ddl);
 
         String query =
-                "Select * from fact_part join item on fact_part.id = item.id"
+                "Select * from fact_part join item on fact_part.identifier = item.identifier"
                         + " join (select dim_date_sk + 1 as dim_date_sk, price from dim) dim1"
                         + " on fact_part.fact_date_sk = dim1.dim_date_sk"
                         + " where dim1.price < 500 and dim1.price > 300";
@@ -726,7 +726,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         // not success.
         String ddl =
                 "CREATE TABLE test_database.item (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT\n"
                         + ") WITH (\n"
@@ -737,9 +737,9 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
         String query =
                 "Select * from fact_part, item, dim"
-                        + " where fact_part.id = dim.id"
-                        + " and fact_part.id = item.id"
-                        + " and dim.id = item.id "
+                        + " where fact_part.identifier = dim.identifier"
+                        + " and fact_part.identifier = item.identifier"
+                        + " and dim.identifier = item.identifier "
                         + " and dim.price < 500 and dim.price > 300";
         util.verifyRelPlan(query);
     }
@@ -748,9 +748,9 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
     void testDppFactSideCannotReuseWithSameCommonSource() {
         String query =
                 "SELECT * FROM(\n"
-                        + " Select fact_part.id, fact_part.price, fact_part.amount from fact_part join (Select * from dim) t1"
+                        + " Select fact_part.identifier, fact_part.price, fact_part.amount from fact_part join (Select * from dim) t1"
                         + " on fact_part.fact_date_sk = dim_date_sk where t1.price < 500\n"
-                        + " UNION ALL Select fact_part.id, fact_part.price, fact_part.amount from fact_part)";
+                        + " UNION ALL Select fact_part.identifier, fact_part.price, fact_part.amount from fact_part)";
         util.verifyExecPlan(query);
     }
 
@@ -759,7 +759,7 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
         util.tableEnv()
                 .executeSql(
                         "CREATE TABLE fact_part2 (\n"
-                                + "  id BIGINT,\n"
+                                + "  identifier BIGINT,\n"
                                 + "  name STRING,\n"
                                 + "  amount BIGINT,\n"
                                 + "  price BIGINT,\n"
@@ -775,12 +775,12 @@ class DynamicPartitionPruningProgramTest extends TableTestBase {
 
         String query =
                 "SELECT /*+ BROADCAST(dim) */ fact3.* FROM\n"
-                        + "(SELECT /*+ BROADCAST(dim) */ fact.id, fact.price, fact.amount FROM (\n"
-                        + " SELECT id, price, amount, fact_date_sk FROM fact_part "
-                        + " UNION ALL SELECT id, price, amount, fact_date_sk FROM fact_part2) fact, dim\n"
+                        + "(SELECT /*+ BROADCAST(dim) */ fact.identifier, fact.price, fact.amount FROM (\n"
+                        + " SELECT identifier, price, amount, fact_date_sk FROM fact_part "
+                        + " UNION ALL SELECT identifier, price, amount, fact_date_sk FROM fact_part2) fact, dim\n"
                         + " WHERE fact_date_sk = dim_date_sk"
                         + " and dim.price < 500 and dim.price > 300)\n fact3 JOIN dim"
-                        + " ON fact3.amount = dim.id AND dim.amount < 10";
+                        + " ON fact3.amount = dim.identifier AND dim.amount < 10";
         util.verifyExecPlan(query);
     }
 }

@@ -52,7 +52,7 @@ public class SegmentFileStateHandle implements StreamStateHandle {
     /** The scope of the state. */
     private final CheckpointedStateScope scope;
 
-    /** The id for corresponding logical file. Used to retrieve LogicalFile in TM. */
+    /** The identifier for corresponding logical file. Used to retrieve LogicalFile in TM. */
     private final LogicalFile.LogicalFileId logicalFileId;
 
     /**
@@ -62,7 +62,7 @@ public class SegmentFileStateHandle implements StreamStateHandle {
      * @param startPos Start position of the segment in the physical file.
      * @param stateSize Size of the segment.
      * @param scope The state's scope, whether it is exclusive or shared.
-     * @param fileId The corresponding logical file id.
+     * @param fileId The corresponding logical file identifier.
      */
     public SegmentFileStateHandle(
             Path filePath,

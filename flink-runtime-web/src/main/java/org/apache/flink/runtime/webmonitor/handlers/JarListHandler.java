@@ -102,13 +102,13 @@ public class JarListHandler
                                 new ArrayList<>(list.length);
                         for (File f : list) {
                             // separate the uuid and the name parts.
-                            String id = f.getName();
+                            String identifier = f.getName();
 
-                            int startIndex = id.indexOf("_");
+                            int startIndex = identifier.indexOf("_");
                             if (startIndex < 0) {
                                 continue;
                             }
-                            String name = id.substring(startIndex + 1);
+                            String name = identifier.substring(startIndex + 1);
                             if (name.length() < 5 || !name.endsWith(".jar")) {
                                 continue;
                             }
@@ -162,7 +162,7 @@ public class JarListHandler
 
                             jarFileList.add(
                                     new JarListInfo.JarFileInfo(
-                                            id, name, f.lastModified(), jarEntryList));
+                                            identifier, name, f.lastModified(), jarEntryList));
                         }
 
                         return new JarListInfo(localAddress, jarFileList);

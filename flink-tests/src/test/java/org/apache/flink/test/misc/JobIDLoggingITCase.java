@@ -249,7 +249,7 @@ class JobIDLoggingITCase {
         }
 
         logger.debug(
-                "checked events for {}:\n  {};\n  ignored: {},\n  wrong job id: {},\n  missing job id: {}",
+                "checked events for {}:\n  {};\n  ignored: {},\n  wrong job identifier: {},\n  missing job identifier: {}",
                 ext.getLoggerName(),
                 ext.getEvents(),
                 ignoredEvents,

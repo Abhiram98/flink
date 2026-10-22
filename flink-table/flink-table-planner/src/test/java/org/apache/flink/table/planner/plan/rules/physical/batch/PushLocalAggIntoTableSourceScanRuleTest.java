@@ -44,31 +44,31 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                 OptimizerConfigOptions.TABLE_OPTIMIZER_SOURCE_AGGREGATE_PUSHDOWN_ENABLED, true);
         String ddl =
                 "CREATE TABLE inventory (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  name STRING not null,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
                         + "  type STRING\n"
                         + ") WITH (\n"
                         + " 'connector' = 'values',\n"
-                        + " 'filterable-fields' = 'id;type',\n"
+                        + " 'filterable-fields' = 'identifier;type',\n"
                         + " 'bounded' = 'true'\n"
                         + ")";
         util.tableEnv().executeSql(ddl);
 
         String ddl2 =
                 "CREATE TABLE inventory_meta (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  name STRING,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
                         + "  type STRING,\n"
                         + "  metadata_1 BIGINT METADATA,\n"
                         + "  metadata_2 STRING METADATA,\n"
-                        + "  PRIMARY KEY (`id`) NOT ENFORCED\n"
+                        + "  PRIMARY KEY (`identifier`) NOT ENFORCED\n"
                         + ") WITH (\n"
                         + " 'connector' = 'values',\n"
-                        + " 'filterable-fields' = 'id;type',\n"
+                        + " 'filterable-fields' = 'identifier;type',\n"
                         + " 'readable-metadata' = 'metadata_1:BIGINT, metadata_2:STRING',\n"
                         + " 'bounded' = 'true'\n"
                         + ")";
@@ -77,7 +77,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
         // partitioned table
         String ddl3 =
                 "CREATE TABLE inventory_part (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  name STRING,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
@@ -85,7 +85,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + ") PARTITIONED BY (type)\n"
                         + "WITH (\n"
                         + " 'connector' = 'values',\n"
-                        + " 'filterable-fields' = 'id;type',\n"
+                        + " 'filterable-fields' = 'identifier;type',\n"
                         + " 'partition-list' = 'type:a;type:b',\n"
                         + " 'bounded' = 'true'\n"
                         + ")";
@@ -94,7 +94,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
         // disable projection push down
         String ddl4 =
                 "CREATE TABLE inventory_no_proj (\n"
-                        + "  id BIGINT,\n"
+                        + "  identifier BIGINT,\n"
                         + "  name STRING,\n"
                         + "  amount BIGINT,\n"
                         + "  price BIGINT,\n"
@@ -102,7 +102,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + ")\n"
                         + "WITH (\n"
                         + " 'connector' = 'values',\n"
-                        + " 'filterable-fields' = 'id;type',\n"
+                        + " 'filterable-fields' = 'identifier;type',\n"
                         + " 'enable-projection-push-down' = 'false',\n"
                         + " 'bounded' = 'true'\n"
                         + ")";
@@ -149,11 +149,11 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
     void testCanPushDownLocalHashAggWithoutGroup() {
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  min(id),\n"
+                        + "  min(identifier),\n"
                         + "  max(amount),\n"
                         + "  sum(price),\n"
                         + "  avg(price),\n"
-                        + "  count(id)\n"
+                        + "  count(identifier)\n"
                         + "FROM inventory");
     }
 
@@ -169,7 +169,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
 
     @Test
     public void testCanPushDownLocalHashAggForCountNullableColumn() {
-        util.verifyRelPlan("SELECT count(id) FROM inventory");
+        util.verifyRelPlan("SELECT count(identifier) FROM inventory");
     }
 
     @Test
@@ -186,11 +186,11 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
 
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  min(id),\n"
+                        + "  min(identifier),\n"
                         + "  max(amount),\n"
                         + "  sum(price),\n"
                         + "  avg(price),\n"
-                        + "  count(id)\n"
+                        + "  count(identifier)\n"
                         + "FROM inventory");
 
         // reset config
@@ -229,7 +229,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + "  name,\n"
                         + "  type\n"
                         + "FROM inventory\n"
-                        + "  where id = 123\n"
+                        + "  where identifier = 123\n"
                         + "  group by name, type");
     }
 
@@ -242,7 +242,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + "  name,\n"
                         + "  type\n"
                         + "FROM inventory_meta\n"
-                        + "  where id = 123\n"
+                        + "  where identifier = 123\n"
                         + "  group by name, type");
     }
 
@@ -254,7 +254,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + "  type,\n"
                         + "  name\n"
                         + "FROM inventory_part\n"
-                        + "  where type in ('a', 'b') and id = 123\n"
+                        + "  where type in ('a', 'b') and identifier = 123\n"
                         + "  group by type, name");
     }
 
@@ -266,7 +266,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + "  name,\n"
                         + "  type\n"
                         + "FROM inventory_no_proj\n"
-                        + "  where id = 123\n"
+                        + "  where identifier = 123\n"
                         + "  group by name, type");
     }
 
@@ -281,9 +281,9 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
 
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  id, name, count(*)\n"
+                        + "  identifier, name, count(*)\n"
                         + "FROM inventory_meta\n"
-                        + "  group by id, name");
+                        + "  group by identifier, name");
     }
 
     @Test
@@ -335,7 +335,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
                         + "  min(amount + price),\n"
                         + "  max(amount),\n"
                         + "  sum(price),\n"
-                        + "  count(id),\n"
+                        + "  count(identifier),\n"
                         + "  name\n"
                         + "FROM inventory\n"
                         + "  group by name");
@@ -345,10 +345,10 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
     void testCannotPushDownWithUnsupportedAggFunction() {
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  min(id),\n"
+                        + "  min(identifier),\n"
                         + "  max(amount),\n"
                         + "  sum(price),\n"
-                        + "  count(distinct id),\n"
+                        + "  count(distinct identifier),\n"
                         + "  name\n"
                         + "FROM inventory\n"
                         + "  group by name");
@@ -358,7 +358,7 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
     void testCannotPushDownWithWindowAggFunction() {
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  id,\n"
+                        + "  identifier,\n"
                         + "  amount,\n"
                         + "  sum(price) over (partition by name),\n"
                         + "  name\n"
@@ -369,10 +369,10 @@ class PushLocalAggIntoTableSourceScanRuleTest extends TableTestBase {
     void testCannotPushDownWithArgFilter() {
         util.verifyRelPlan(
                 "SELECT\n"
-                        + "  min(id),\n"
+                        + "  min(identifier),\n"
                         + "  max(amount),\n"
                         + "  sum(price),\n"
-                        + "  count(id) FILTER(WHERE id > 100),\n"
+                        + "  count(identifier) FILTER(WHERE identifier > 100),\n"
                         + "  name\n"
                         + "FROM inventory\n"
                         + "  group by name");

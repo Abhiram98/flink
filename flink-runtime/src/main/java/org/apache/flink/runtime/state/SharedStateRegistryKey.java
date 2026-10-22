@@ -43,7 +43,7 @@ public class SharedStateRegistryKey extends StringBasedID {
         super(keyString);
     }
 
-    /** Create a unique key based on physical id. */
+    /** Create a unique key based on physical identifier. */
     public static SharedStateRegistryKey forStreamStateHandle(StreamStateHandle handle) {
         String keyString = handle.getStreamStateHandleID().getKeyString();
         // key strings tend to be longer, so we use the MD5 of the key string to save memory

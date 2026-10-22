@@ -42,10 +42,10 @@ public class FineGrainedTaskManagerSlot implements TaskManagerSlotInformation {
     /** Gateway to the TaskExecutor which owns the slot. */
     private final TaskExecutorConnection taskManagerConnection;
 
-    /** Allocation id for which this slot has been allocated. */
+    /** Allocation identifier for which this slot has been allocated. */
     private final AllocationID allocationId;
 
-    /** Job id for which this slot has been allocated. */
+    /** Job identifier for which this slot has been allocated. */
     private final JobID jobId;
 
     /** Current state of this slot. Should be either PENDING or ALLOCATED. */

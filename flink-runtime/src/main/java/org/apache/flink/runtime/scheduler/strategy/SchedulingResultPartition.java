@@ -34,9 +34,9 @@ public interface SchedulingResultPartition
                 SchedulingResultPartition> {
 
     /**
-     * Gets id of the intermediate result.
+     * Gets identifier of the intermediate result.
      *
-     * @return id of the intermediate result
+     * @return identifier of the intermediate result
      */
     IntermediateDataSetID getResultId();
 

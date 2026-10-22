@@ -31,7 +31,7 @@ public class MiniBatchAssignerTestPrograms {
 
     static final String[] ROW_TIME_SCHEMA = {
         "ts STRING",
-        "id STRING",
+        "identifier STRING",
         "num INT",
         "name STRING",
         "row_time AS TO_TIMESTAMP(`ts`)",
@@ -89,9 +89,9 @@ public class MiniBatchAssignerTestPrograms {
                                     + "L.window_start AS window_start,\n"
                                     + "L.window_end AS window_end,\n"
                                     + "L.name AS name,\n"
-                                    + "L.id AS L_id,\n"
+                                    + "L.identifier AS L_id,\n"
                                     + "L.num AS L_num,\n"
-                                    + "R.id AS R_id,\n"
+                                    + "R.identifier AS R_id,\n"
                                     + "R.num AS R_num\n"
                                     + "FROM\n"
                                     + "(\n"

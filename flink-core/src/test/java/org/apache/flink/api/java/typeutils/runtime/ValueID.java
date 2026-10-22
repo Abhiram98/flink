@@ -28,30 +28,30 @@ import java.util.UUID;
 public class ValueID implements Value, Comparable<ValueID> {
     private static final long serialVersionUID = -562791433077971752L;
 
-    private UUID id;
+    private UUID identifier;
 
     public ValueID() {
-        id = UUID.randomUUID();
+        identifier = UUID.randomUUID();
     }
 
-    public ValueID(UUID id) {
-        this.id = id;
+    public ValueID(UUID identifier) {
+        this.identifier = identifier;
     }
 
     @Override
     public int compareTo(ValueID o) {
-        return id.compareTo(o.id);
+        return identifier.compareTo(o.identifier);
     }
 
     @Override
     public void write(DataOutputView out) throws IOException {
-        out.writeLong(id.getMostSignificantBits());
-        out.writeLong(id.getLeastSignificantBits());
+        out.writeLong(identifier.getMostSignificantBits());
+        out.writeLong(identifier.getLeastSignificantBits());
     }
 
     @Override
     public void read(DataInputView in) throws IOException {
-        id = new UUID(in.readLong(), in.readLong());
+        identifier = new UUID(in.readLong(), in.readLong());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ValueID implements Value, Comparable<ValueID> {
         if (obj instanceof ValueID) {
             ValueID other = (ValueID) obj;
 
-            return id.equals(other.id);
+            return identifier.equals(other.identifier);
         } else {
             return false;
         }
@@ -67,6 +67,6 @@ public class ValueID implements Value, Comparable<ValueID> {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return identifier.hashCode();
     }
 }

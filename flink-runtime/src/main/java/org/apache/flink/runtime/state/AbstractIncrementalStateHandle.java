@@ -46,7 +46,7 @@ public abstract class AbstractIncrementalStateHandle implements IncrementalKeyed
     /** Primary meta data state of the incremental checkpoint. */
     protected final StreamStateHandle metaStateHandle;
 
-    /** Unique id for this state handle. */
+    /** Unique identifier for this state handle. */
     protected final StateHandleID stateHandleId;
 
     public AbstractIncrementalStateHandle(

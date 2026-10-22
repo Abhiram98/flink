@@ -29,7 +29,7 @@ public interface ResourceAllocator {
     boolean isSupported();
 
     /**
-     * Clean up the disconnected resource with the given resource id.
+     * Clean up the disconnected resource with the given resource identifier.
      *
      * @param resourceID identifying which resource to clean up
      */

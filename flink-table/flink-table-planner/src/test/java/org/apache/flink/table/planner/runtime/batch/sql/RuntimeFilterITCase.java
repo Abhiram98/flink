@@ -82,7 +82,7 @@ class RuntimeFilterITCase extends BatchTestBase {
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
                                 + " 'disable-lookup' = 'true',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         TestValuesTableFactory.registerData(TestData.data7())));
@@ -98,7 +98,7 @@ class RuntimeFilterITCase extends BatchTestBase {
                                 + ") WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'runtime-source' = 'NewSource',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
@@ -196,7 +196,7 @@ class RuntimeFilterITCase extends BatchTestBase {
                                 + ") WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'runtime-source' = 'NewSource',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",

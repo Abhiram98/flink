@@ -191,14 +191,14 @@ public class PageRank {
         public void reduce(
                 Iterable<Tuple2<Long, Long>> values, Collector<Tuple2<Long, Long[]>> out) {
             neighbors.clear();
-            Long id = 0L;
+            Long identifier = 0L;
 
             for (Tuple2<Long, Long> n : values) {
-                id = n.f0;
+                identifier = n.f0;
                 neighbors.add(n.f1);
             }
             out.collect(
-                    new Tuple2<Long, Long[]>(id, neighbors.toArray(new Long[neighbors.size()])));
+                    new Tuple2<Long, Long[]>(identifier, neighbors.toArray(new Long[neighbors.size()])));
         }
     }
 

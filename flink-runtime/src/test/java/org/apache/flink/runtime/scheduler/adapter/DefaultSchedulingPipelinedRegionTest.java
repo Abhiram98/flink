@@ -135,7 +135,7 @@ class DefaultSchedulingPipelinedRegionTest {
         final DefaultExecutionVertex vertexB0 =
                 topology.getVertex(new ExecutionVertexID(b.getID(), 0));
         final IntermediateResultPartitionID b0ConsumedResultPartition =
-                Iterables.getOnlyElement(vertexB0.getConsumedResults()).getId();
+                Iterables.getOnlyElement(vertexB0.getConsumedResults()).getIdentifier();
 
         final Set<IntermediateResultPartitionID> secondPipelinedRegionConsumedResults =
                 new HashSet<>();
@@ -143,7 +143,7 @@ class DefaultSchedulingPipelinedRegionTest {
                 secondPipelinedRegion.getAllNonPipelinedConsumedPartitionGroups()) {
             for (IntermediateResultPartitionID partitionId : consumedPartitionGroup) {
                 if (!secondPipelinedRegion.contains(
-                        topology.getResultPartition(partitionId).getProducer().getId())) {
+                        topology.getResultPartition(partitionId).getProducer().getIdentifier())) {
                     secondPipelinedRegionConsumedResults.add(partitionId);
                 }
             }

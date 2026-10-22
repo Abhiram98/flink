@@ -36,7 +36,7 @@ import java.util.Objects;
 /** Response type of the {@link SubtasksAllAccumulatorsHandler}. */
 public class SubtasksAllAccumulatorsInfo implements ResponseBody {
 
-    public static final String FIELD_NAME_JOB_VERTEX_ID = "id";
+    public static final String FIELD_NAME_JOB_VERTEX_ID = "identifier";
     public static final String FIELD_NAME_PARALLELISM = "parallelism";
     public static final String FIELD_NAME_SUBTASKS = "subtasks";
 

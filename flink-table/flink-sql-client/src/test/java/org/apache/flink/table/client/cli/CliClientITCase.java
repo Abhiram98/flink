@@ -465,7 +465,7 @@ class CliClientITCase {
     }
 
     protected static String removeExecNodeId(String s) {
-        return s.replaceAll("\"id\" : \\d+", "\"id\" : ");
+        return s.replaceAll("\"identifier\" : \\d+", "\"identifier\" : ");
     }
 
     /** test result. */

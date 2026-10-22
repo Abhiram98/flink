@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 public class CancelCheckpointMarker extends RuntimeEvent {
 
-    /** The id of the checkpoint to be canceled. */
+    /** The identifier of the checkpoint to be canceled. */
     private final long checkpointId;
 
     public CancelCheckpointMarker(long checkpointId) {

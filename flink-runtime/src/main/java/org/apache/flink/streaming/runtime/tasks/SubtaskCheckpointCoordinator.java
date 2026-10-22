@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 public interface SubtaskCheckpointCoordinator extends Closeable {
 
     /** Initialize new checkpoint. */
-    void initInputsCheckpoint(long id, CheckpointOptions checkpointOptions)
+    void initInputsCheckpoint(long identifier, CheckpointOptions checkpointOptions)
             throws CheckpointException;
 
     ChannelStateWriter getChannelStateWriter();
@@ -68,7 +68,7 @@ public interface SubtaskCheckpointCoordinator extends Closeable {
     /**
      * Notified on the task side once a distributed checkpoint has been completed.
      *
-     * @param checkpointId The checkpoint id to notify as been completed.
+     * @param checkpointId The checkpoint identifier to notify as been completed.
      * @param operatorChain The chain of operators executed by the task.
      * @param isRunning Whether the task is running.
      */
@@ -79,7 +79,7 @@ public interface SubtaskCheckpointCoordinator extends Closeable {
     /**
      * Notified on the task side once a distributed checkpoint has been aborted.
      *
-     * @param checkpointId The checkpoint id to notify as been completed.
+     * @param checkpointId The checkpoint identifier to notify as been completed.
      * @param operatorChain The chain of operators executed by the task.
      * @param isRunning Whether the task is running.
      */
@@ -90,7 +90,7 @@ public interface SubtaskCheckpointCoordinator extends Closeable {
     /**
      * Notified on the task side once a distributed checkpoint has been subsumed.
      *
-     * @param checkpointId The checkpoint id to notify as been subsumed.
+     * @param checkpointId The checkpoint identifier to notify as been subsumed.
      * @param operatorChain The chain of operators executed by the task.
      * @param isRunning Whether the task is running.
      */

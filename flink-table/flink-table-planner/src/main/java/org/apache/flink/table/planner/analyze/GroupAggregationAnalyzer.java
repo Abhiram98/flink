@@ -68,7 +68,7 @@ public class GroupAggregationAnalyzer implements PlanAnalyzer {
                                         .matchesTwoStage(
                                                 (StreamPhysicalGroupAggregate) other,
                                                 other.getInput(0).getInput(0))) {
-                                    targetRelIds.add(other.getId());
+                                    targetRelIds.add(other.getIdentifier());
                                 }
                             }
                             return super.visit(other);

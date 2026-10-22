@@ -47,7 +47,7 @@ public class TruncateTableITCase extends BatchTestBase {
                         String.format(
                                 "CREATE TABLE t (a int) WITH"
                                         + " ('connector' = 'test-update-delete',"
-                                        + " 'data-id' = '%s',"
+                                        + " 'data-identifier' = '%s',"
                                         + " 'only-accept-equal-predicate' = 'true'"
                                         + ")",
                                 dataId));

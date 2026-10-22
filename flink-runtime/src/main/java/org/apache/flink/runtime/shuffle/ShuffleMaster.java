@@ -79,7 +79,7 @@ public interface ShuffleMaster<T extends ShuffleDescriptor> extends AutoCloseabl
      *
      * @param jobID job ID of the corresponding job which registered the partition
      * @param partitionDescriptor general job graph information about the partition
-     * @param producerDescriptor general producer information (location, execution id, connection
+     * @param producerDescriptor general producer information (location, execution identifier, connection
      *     info)
      * @return future with the partition shuffle descriptor used for producer/consumer deployment
      *     and their data exchange.

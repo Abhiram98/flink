@@ -565,7 +565,7 @@ class VertexThreadInfoTrackerTest {
         for (ExecutionVertex vertex : executionJobVertex.getTaskVertices()) {
             Optional<ThreadInfoSample> threadInfoSample =
                     JvmUtils.createThreadInfoSample(
-                            Thread.currentThread().getId(), MAX_STACK_TRACE_DEPTH);
+                            Thread.currentThread().getIdentifier(), MAX_STACK_TRACE_DEPTH);
             checkState(threadInfoSample.isPresent(), "The threadInfoSample should be empty.");
             samples.put(
                     vertex.getCurrentExecutionAttempt().getAttemptId(),

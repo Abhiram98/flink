@@ -129,14 +129,14 @@ public class TimestampColumnReader extends AbstractColumnReader<WritableTimestam
     public static TimestampData decodeInt64ToTimestamp(
             boolean utcTimestamp,
             org.apache.parquet.column.Dictionary dictionary,
-            int id,
+            int identifier,
             LogicalTypeAnnotation.TimeUnit timeUnit) {
-        return int64ToTimestamp(utcTimestamp, dictionary.decodeToLong(id), timeUnit);
+        return int64ToTimestamp(utcTimestamp, dictionary.decodeToLong(identifier), timeUnit);
     }
 
     public static TimestampData decodeInt96ToTimestamp(
-            boolean utcTimestamp, org.apache.parquet.column.Dictionary dictionary, int id) {
-        Binary binary = dictionary.decodeToBinary(id);
+            boolean utcTimestamp, org.apache.parquet.column.Dictionary dictionary, int identifier) {
+        Binary binary = dictionary.decodeToBinary(identifier);
         Preconditions.checkArgument(
                 binary.length() == 12, "Timestamp with int96 should be 12 bytes.");
         ByteBuffer buffer = binary.toByteBuffer().order(ByteOrder.LITTLE_ENDIAN);

@@ -1507,7 +1507,7 @@ public class HiveParserUtils {
 
         @Override
         public Void visitCorrelVariable(RexCorrelVariable correlVariable) {
-            correlIDs.add(correlVariable.id);
+            correlIDs.add(correlVariable.identifier);
             return null;
         }
     }

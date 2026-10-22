@@ -71,7 +71,7 @@ class PushPartitionIntoTableSourceScanRuleTest
         // define ddl
         String ddlTemp =
                 "CREATE TABLE MyTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  name string,\n"
                         + "  part1 string,\n"
                         + "  part2 int)\n"
@@ -84,7 +84,7 @@ class PushPartitionIntoTableSourceScanRuleTest
 
         String ddlTempWithVirtualColumn =
                 "CREATE TABLE VirtualTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  name string,\n"
                         + "  part1 string,\n"
                         + "  part2 int,\n"

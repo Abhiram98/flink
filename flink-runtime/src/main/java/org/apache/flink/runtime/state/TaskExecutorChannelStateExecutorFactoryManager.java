@@ -67,7 +67,7 @@ public class TaskExecutorChannelStateExecutorFactoryManager {
             }
             ChannelStateWriteRequestExecutorFactory factory = executorFactoryByJobId.get(jobID);
             if (factory == null) {
-                LOG.info("Creating the channel state executor factory for job id {}", jobID);
+                LOG.info("Creating the channel state executor factory for job identifier {}", jobID);
                 factory = new ChannelStateWriteRequestExecutorFactory(jobID);
                 executorFactoryByJobId.put(jobID, factory);
             }
@@ -76,7 +76,7 @@ public class TaskExecutorChannelStateExecutorFactoryManager {
     }
 
     public void releaseResourcesForJob(@Nonnull JobID jobID) {
-        LOG.debug("Releasing the factory under job id {}", jobID);
+        LOG.debug("Releasing the factory under job identifier {}", jobID);
         synchronized (lock) {
             if (closed) {
                 return;

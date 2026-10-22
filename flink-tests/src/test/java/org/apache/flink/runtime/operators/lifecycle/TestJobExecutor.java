@@ -221,11 +221,11 @@ public class TestJobExecutor {
         return this;
     }
 
-    public TestJobExecutor waitForSubtasksToFinish(JobVertexID id, TestCommandScope scope)
+    public TestJobExecutor waitForSubtasksToFinish(JobVertexID identifier, TestCommandScope scope)
             throws Exception {
-        LOG.info("waitForSubtasksToFinish vertex {}, all subtasks: {}", id, scope);
+        LOG.info("waitForSubtasksToFinish vertex {}, all subtasks: {}", identifier, scope);
         CommonTestUtils.waitForSubtasksToFinish(
-                miniClusterResource.getMiniCluster(), jobID, id, scope == ALL_SUBTASKS);
+                miniClusterResource.getMiniCluster(), jobID, identifier, scope == ALL_SUBTASKS);
         return this;
     }
 }

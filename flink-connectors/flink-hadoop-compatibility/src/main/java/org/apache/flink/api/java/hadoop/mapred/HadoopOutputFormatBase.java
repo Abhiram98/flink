@@ -118,7 +118,7 @@ public abstract class HadoopOutputFormatBase<K, V, T> extends HadoopOutputFormat
         // enforce sequential open() calls
         synchronized (OPEN_MUTEX) {
             if (Integer.toString(taskNumber + 1).length() > 6) {
-                throw new IOException("Task id too large.");
+                throw new IOException("Task identifier too large.");
             }
 
             TaskAttemptID taskAttemptID =
@@ -136,10 +136,10 @@ public abstract class HadoopOutputFormatBase<K, V, T> extends HadoopOutputFormat
                                     + Integer.toString(taskNumber + 1)
                                     + "_0");
 
-            this.jobConf.set("mapred.task.id", taskAttemptID.toString());
+            this.jobConf.set("mapred.task.identifier", taskAttemptID.toString());
             this.jobConf.setInt("mapred.task.partition", taskNumber + 1);
             // for hadoop 2.2
-            this.jobConf.set("mapreduce.task.attempt.id", taskAttemptID.toString());
+            this.jobConf.set("mapreduce.task.attempt.identifier", taskAttemptID.toString());
             this.jobConf.setInt("mapreduce.task.partition", taskNumber + 1);
 
             this.context = new TaskAttemptContextImpl(this.jobConf, taskAttemptID);

@@ -310,7 +310,7 @@ public class HashPartition<BT, PT> extends AbstractPagedInputView implements See
      *
      * @param target The list to which memory segments from overflow buckets are added.
      * @param ioAccess The I/O manager to be used to create a writer to disk.
-     * @param targetChannel The id of the target channel for this partition.
+     * @param targetChannel The identifier of the target channel for this partition.
      * @return The number of buffers that were freed by spilling this partition.
      * @throws IOException Thrown, if the writing failed.
      */

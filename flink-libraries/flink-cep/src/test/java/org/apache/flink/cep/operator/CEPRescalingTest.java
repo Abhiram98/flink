@@ -60,7 +60,7 @@ public class CEPRescalingTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -189,7 +189,7 @@ public class CEPRescalingTest {
 
                     @Override
                     public Integer getKey(Event value) throws Exception {
-                        return value.getId();
+                        return value.getIdentifier();
                     }
                 };
 
@@ -375,7 +375,7 @@ public class CEPRescalingTest {
             @SuppressWarnings("unchecked")
             Map<String, List<Event>> patternMap =
                     (Map<String, List<Event>>) resultRecord.getValue();
-            if (patternMap.get("start").get(0).getId() == 7) {
+            if (patternMap.get("start").get(0).getIdentifier() == 7) {
                 verifyPattern(harness4.getOutput().poll(), startEvent1, middleEvent1, endEvent1);
                 verifyPattern(harness4.getOutput().poll(), startEvent3, middleEvent3, endEvent3);
             } else {
@@ -464,7 +464,7 @@ public class CEPRescalingTest {
     }
 
     /**
-     * A simple {@link KeySelector} that returns as key the id of the {@link Event} provided as
+     * A simple {@link KeySelector} that returns as key the identifier of the {@link Event} provided as
      * argument in the {@link #getKey(Event)}.
      */
     private static class TestKeySelector implements KeySelector<Event, Integer> {
@@ -472,7 +472,7 @@ public class CEPRescalingTest {
 
         @Override
         public Integer getKey(Event value) throws Exception {
-            return value.getId();
+            return value.getIdentifier();
         }
     }
 }

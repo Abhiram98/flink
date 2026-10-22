@@ -72,56 +72,56 @@ public interface ParquetDataColumnReader {
     Dictionary getDictionary();
 
     /**
-     * @param id in dictionary
-     * @return the Boolean from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Boolean from the dictionary by identifier
      */
-    boolean readBoolean(int id);
+    boolean readBoolean(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the tiny int from the dictionary by id
+     * @param identifier in dictionary
+     * @return the tiny int from the dictionary by identifier
      */
-    int readTinyInt(int id);
+    int readTinyInt(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Small Int from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Small Int from the dictionary by identifier
      */
-    int readSmallInt(int id);
+    int readSmallInt(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Integer from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Integer from the dictionary by identifier
      */
-    int readInteger(int id);
+    int readInteger(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Long from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Long from the dictionary by identifier
      */
-    long readLong(int id);
+    long readLong(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Float from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Float from the dictionary by identifier
      */
-    float readFloat(int id);
+    float readFloat(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Double from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Double from the dictionary by identifier
      */
-    double readDouble(int id);
+    double readDouble(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the Bytes from the dictionary by id
+     * @param identifier in dictionary
+     * @return the Bytes from the dictionary by identifier
      */
-    byte[] readBytes(int id);
+    byte[] readBytes(int identifier);
 
     /**
-     * @param id in dictionary
-     * @return the TimestampData from the dictionary by id
+     * @param identifier in dictionary
+     * @return the TimestampData from the dictionary by identifier
      */
-    TimestampData readTimestamp(int id);
+    TimestampData readTimestamp(int identifier);
 }

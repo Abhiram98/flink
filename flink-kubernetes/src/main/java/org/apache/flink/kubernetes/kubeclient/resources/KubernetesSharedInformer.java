@@ -164,18 +164,18 @@ public abstract class KubernetesSharedInformer<T extends HasMetadata, R>
             this.resource = sharedIndexInformer.getIndexer().getByKey(resourceKey);
         }
 
-        private void addWatch(String id, WatchCallback<R> callback) {
-            log.info("Starting to watch for {}, watching id:{}", resourceKey, id);
-            callbacks.put(id, callback);
+        private void addWatch(String identifier, WatchCallback<R> callback) {
+            log.info("Starting to watch for {}, watching identifier:{}", resourceKey, identifier);
+            callbacks.put(identifier, callback);
             if (resource != null) {
                 final List<R> resources = wrapEvent(resource);
                 callback.run(h -> h.onAdded(resources));
             }
         }
 
-        private boolean removeWatch(String id) {
-            callbacks.remove(id);
-            log.info("Stopped to watch for {}, watching id:{}", resourceKey, id);
+        private boolean removeWatch(String identifier) {
+            callbacks.remove(identifier);
+            log.info("Stopped to watch for {}, watching identifier:{}", resourceKey, identifier);
             return callbacks.isEmpty();
         }
 
@@ -200,17 +200,17 @@ public abstract class KubernetesSharedInformer<T extends HasMetadata, R>
         }
 
         private void onAdded(T obj) {
-            this.callbacks.forEach((id, callback) -> callback.run(h -> h.onAdded(wrapEvent(obj))));
+            this.callbacks.forEach((identifier, callback) -> callback.run(h -> h.onAdded(wrapEvent(obj))));
         }
 
         private void onModified(T obj) {
             this.callbacks.forEach(
-                    (id, callback) -> callback.run(h -> h.onModified(wrapEvent(obj))));
+                    (identifier, callback) -> callback.run(h -> h.onModified(wrapEvent(obj))));
         }
 
         private void onDeleted(T obj) {
             this.callbacks.forEach(
-                    (id, callback) -> callback.run(h -> h.onDeleted(wrapEvent(obj))));
+                    (identifier, callback) -> callback.run(h -> h.onDeleted(wrapEvent(obj))));
         }
 
         private List<R> wrapEvent(T obj) {

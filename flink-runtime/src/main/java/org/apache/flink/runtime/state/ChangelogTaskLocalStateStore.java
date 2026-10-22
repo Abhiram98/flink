@@ -198,7 +198,7 @@ public class ChangelogTaskLocalStateStore extends TaskLocalStateStoreImpl {
 
     @Override
     public CompletableFuture<Void> dispose() {
-        deleteMaterialization(id -> true);
+        deleteMaterialization(identifier -> true);
         // delete all ChangelogStateHandle in taskowned directory.
         discardExecutor.execute(
                 () ->

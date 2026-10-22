@@ -86,7 +86,7 @@ class JobExecutionResultHandlerTest {
         final JobExecutionResultResponseBody responseBody =
                 jobExecutionResultHandler.handleRequest(testRequest, testingRestfulGateway).get();
 
-        assertThat(responseBody.getStatus().getId()).isEqualTo(QueueStatus.Id.IN_PROGRESS);
+        assertThat(responseBody.getStatus().getIdentifier()).isEqualTo(QueueStatus.Id.IN_PROGRESS);
     }
 
     @Test
@@ -116,7 +116,7 @@ class JobExecutionResultHandlerTest {
         final JobExecutionResultResponseBody responseBody =
                 jobExecutionResultHandler.handleRequest(testRequest, testingRestfulGateway).get();
 
-        assertThat(responseBody.getStatus().getId()).isEqualTo(QueueStatus.Id.COMPLETED);
+        assertThat(responseBody.getStatus().getIdentifier()).isEqualTo(QueueStatus.Id.COMPLETED);
         assertThat(responseBody.getJobExecutionResult()).isNotNull();
     }
 

@@ -168,12 +168,12 @@ public class KMeansDataGenerator {
     }
 
     private static void writeCenter(
-            long id, double[] coordinates, StringBuilder buffer, BufferedWriter out)
+            long identifier, double[] coordinates, StringBuilder buffer, BufferedWriter out)
             throws IOException {
         buffer.setLength(0);
 
-        // write id
-        buffer.append(id);
+        // write identifier
+        buffer.append(identifier);
         buffer.append(DELIMITER);
 
         // write coordinates

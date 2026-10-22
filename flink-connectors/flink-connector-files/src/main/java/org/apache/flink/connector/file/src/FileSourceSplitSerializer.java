@@ -99,7 +99,7 @@ public final class FileSourceSplitSerializer implements SimpleVersionedSerialize
     private static FileSourceSplit deserializeV1(byte[] serialized) throws IOException {
         final DataInputDeserializer in = new DataInputDeserializer(serialized);
 
-        final String id = in.readUTF();
+        final String identifier = in.readUTF();
         Path result = Path.deserializeFromDataInputView(in);
         Path path = result == null ? new Path() : result;
         final long offset = in.readLong();
@@ -113,7 +113,7 @@ public final class FileSourceSplitSerializer implements SimpleVersionedSerialize
 
         // instantiate a new split and cache the serialized form
         return new FileSourceSplit(
-                id,
+                identifier,
                 path,
                 offset,
                 len,

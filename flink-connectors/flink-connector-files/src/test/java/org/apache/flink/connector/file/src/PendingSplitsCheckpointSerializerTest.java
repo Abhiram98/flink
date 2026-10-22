@@ -110,7 +110,7 @@ class PendingSplitsCheckpointSerializerTest {
 
     private static FileSourceSplit testSplit1() {
         return new FileSourceSplit(
-                "random-id",
+                "random-identifier",
                 new Path("hdfs://namenode:14565/some/path/to/a/file"),
                 100_000_000,
                 64_000_000,
@@ -122,12 +122,12 @@ class PendingSplitsCheckpointSerializerTest {
     }
 
     private static FileSourceSplit testSplit2() {
-        return new FileSourceSplit("some-id", new Path("file:/some/path/to/a/file"), 0, 0, 0, 0);
+        return new FileSourceSplit("some-identifier", new Path("file:/some/path/to/a/file"), 0, 0, 0, 0);
     }
 
     private static FileSourceSplit testSplit3() {
         return new FileSourceSplit(
-                "an-id", new Path("s3://some-bucket/key/to/the/object"), 0, 1234567, 0, 1234567);
+                "an-identifier", new Path("s3://some-bucket/key/to/the/object"), 0, 1234567, 0, 1234567);
     }
 
     private static PendingSplitsCheckpoint<FileSourceSplit> serializeAndDeserialize(

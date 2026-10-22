@@ -62,7 +62,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
     }
 
     /**
-     * Adds another unique event to the shared buffer and assigns a unique id for it. It
+     * Adds another unique event to the shared buffer and assigns a unique identifier for it. It
      * automatically creates a lock on this event, so it won't be removed during processing of that
      * event. Therefore the lock should be removed after processing all {@link
      * org.apache.flink.cep.nfa.ComputationState}s
@@ -70,7 +70,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
      * <p><b>NOTE:</b>Should be called only once for each unique event!
      *
      * @param value event to be registered
-     * @return unique id of that event that should be used when putting entries to the buffer.
+     * @return unique identifier of that event that should be used when putting entries to the buffer.
      * @throws Exception Thrown if the system cannot access the state.
      */
     public EventId registerEvent(V value, long timestamp) throws Exception {
@@ -82,10 +82,10 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
      * relation to the previous entry.
      *
      * @param stateName name of the state that the event should be assigned to
-     * @param eventId unique id of event assigned by this SharedBuffer
-     * @param previousNodeId id of previous entry (might be null if start of new run)
+     * @param eventId unique identifier of event assigned by this SharedBuffer
+     * @param previousNodeId identifier of previous entry (might be null if start of new run)
      * @param version Version of the previous relation
-     * @return assigned id of this element
+     * @return assigned identifier of this element
      */
     public NodeId put(
             final String stateName,
@@ -113,7 +113,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
     /**
      * Returns all elements from the previous relation starting at the given entry.
      *
-     * @param nodeId id of the starting entry
+     * @param nodeId identifier of the starting entry
      * @param version Version of the previous relation which shall be extracted
      * @return Collection of previous relations starting with the given value
      */
@@ -227,7 +227,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
     /**
      * Increases the reference counter for the given entry so that it is not accidentally removed.
      *
-     * @param node id of the entry
+     * @param node identifier of the entry
      * @param version dewey number of the (potential) edge that locks the given node
      */
     public void lockNode(final NodeId node, final DeweyNumber version) {
@@ -247,7 +247,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
      * Decreases the reference counter for the given entry so that it can be removed once the
      * reference counter reaches 0.
      *
-     * @param node id of the entry
+     * @param node identifier of the entry
      * @param version dewey number of the (potential) edge that locked the given node
      * @throws Exception Thrown if the system cannot access the state.
      */
@@ -297,11 +297,11 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
     /**
      * Increases the reference counter for the given event so that it is not accidentally removed.
      *
-     * @param eventId id of the entry
+     * @param eventId identifier of the entry
      */
     private void lockEvent(EventId eventId) {
         Lockable<V> eventWrapper = sharedBuffer.getEvent(eventId);
-        checkState(eventWrapper != null, "Referring to non existent event with id %s", eventId);
+        checkState(eventWrapper != null, "Referring to non existent event with identifier %s", eventId);
         eventWrapper.lock();
         sharedBuffer.upsertEvent(eventId, eventWrapper);
     }
@@ -310,7 +310,7 @@ public class SharedBufferAccessor<V> implements AutoCloseable {
      * Decreases the reference counter for the given event so that it can be removed once the
      * reference counter reaches 0.
      *
-     * @param eventId id of the event
+     * @param eventId identifier of the event
      * @throws Exception Thrown if the system cannot access the state.
      */
     public void releaseEvent(EventId eventId) throws Exception {

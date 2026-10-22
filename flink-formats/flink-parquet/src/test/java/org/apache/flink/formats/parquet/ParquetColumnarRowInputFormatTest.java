@@ -250,7 +250,7 @@ class ParquetColumnarRowInputFormatTest {
         forEachRemaining(
                 format.createReader(
                         EMPTY_CONF,
-                        new FileSourceSplit("id", testPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
+                        new FileSourceSplit("identifier", testPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
                 row -> {
                     int i = cnt.get();
                     assertThat(row.getDouble(0)).isEqualTo(i);
@@ -290,7 +290,7 @@ class ParquetColumnarRowInputFormatTest {
         forEachRemaining(
                 format.createReader(
                         EMPTY_CONF,
-                        new FileSourceSplit("id", testPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
+                        new FileSourceSplit("identifier", testPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
                 row -> {
                     int i = cnt.get();
                     assertThat(row.getDouble(0)).isEqualTo(i);
@@ -349,7 +349,7 @@ class ParquetColumnarRowInputFormatTest {
                 format.createReader(
                         EMPTY_CONF,
                         new FileSourceSplit(
-                                "id", legacyParquetPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
+                                "identifier", legacyParquetPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
                 row -> {
                     int i = cnt.get();
                     assertThat(row.isNullAt(0)).isTrue();
@@ -364,7 +364,7 @@ class ParquetColumnarRowInputFormatTest {
                 format.createReader(
                         EMPTY_CONF,
                         new FileSourceSplit(
-                                "id", newParquetPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
+                                "identifier", newParquetPath, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)),
                 row -> {
                     int i = cnt.get();
                     assertThat(row.getDouble(0)).isEqualTo(i);
@@ -497,7 +497,7 @@ class ParquetColumnarRowInputFormatTest {
                 format.restoreReader(
                         EMPTY_CONF,
                         new FileSourceSplit(
-                                "id",
+                                "identifier",
                                 path,
                                 splitStart,
                                 splitLength,
@@ -791,7 +791,7 @@ class ParquetColumnarRowInputFormatTest {
                 format.createReader(
                         EMPTY_CONF,
                         new FileSourceSplit(
-                                "id",
+                                "identifier",
                                 testPath,
                                 0,
                                 Long.MAX_VALUE,

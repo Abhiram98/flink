@@ -150,7 +150,7 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
                 tryRecoverJob(jobId).ifPresent(recoveredJobGraphs::add);
             } else {
                 log.info(
-                        "Skipping recovery of a job with job id {}, because it already reached a globally terminal state",
+                        "Skipping recovery of a job with job identifier {}, because it already reached a globally terminal state",
                         jobId);
             }
         }
@@ -169,18 +169,18 @@ public class SessionDispatcherLeaderProcess extends AbstractDispatcherLeaderProc
     }
 
     private Optional<JobGraph> tryRecoverJob(JobID jobId) {
-        log.info("Trying to recover job with job id {}.", jobId);
+        log.info("Trying to recover job with job identifier {}.", jobId);
         try {
             final JobGraph jobGraph = jobGraphStore.recoverJobGraph(jobId);
             if (jobGraph == null) {
                 log.info(
-                        "Skipping recovery of job with job id {}, because it already finished in a previous execution",
+                        "Skipping recovery of job with job identifier {}, because it already finished in a previous execution",
                         jobId);
             }
             return Optional.ofNullable(jobGraph);
         } catch (Exception e) {
             throw new FlinkRuntimeException(
-                    String.format("Could not recover job with job id %s.", jobId), e);
+                    String.format("Could not recover job with job identifier %s.", jobId), e);
         }
     }
 

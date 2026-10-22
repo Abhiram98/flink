@@ -39,15 +39,15 @@ public interface LevelIndexHeader {
      * Returns the next node in the given level.
      *
      * @param level the level whose next node is returned.
-     * @return id of the next node.
+     * @return identifier of the next node.
      */
     long getNextNode(int level);
 
     /**
-     * Updates the next node in the given level to the specified node id.
+     * Updates the next node in the given level to the specified node identifier.
      *
      * @param level the level whose next node is updated.
-     * @param newNodeId the id of the next node.
+     * @param newNodeId the identifier of the next node.
      */
     void updateNextNode(int level, long newNodeId);
 }

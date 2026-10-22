@@ -311,7 +311,7 @@ public abstract class TwoInputUdfOperator<
      *
      * <pre>{@code
      * DataSet<String[]> result =
-     *     data1.join(data2).where("id").equalTo("fieldX")
+     *     data1.join(data2).where("identifier").equalTo("fieldX")
      *          .with(new JoinFunctionWithNonInferrableReturnType())
      *          .returns(String[].class);
      * }</pre>
@@ -343,7 +343,7 @@ public abstract class TwoInputUdfOperator<
      *
      * <pre>{@code
      * DataSet<Tuple2<String, Double>> result =
-     *     data1.join(data2).where("id").equalTo("fieldX")
+     *     data1.join(data2).where("identifier").equalTo("fieldX")
      *          .with(new JoinFunctionWithNonInferrableReturnType())
      *          .returns(new TypeHint<Tuple2<String, Double>>(){});
      * }</pre>

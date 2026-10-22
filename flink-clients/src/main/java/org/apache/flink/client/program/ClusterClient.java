@@ -45,7 +45,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Encapsulates the functionality necessary to submit a program to a remote cluster.
  *
- * @param <T> type of the cluster id
+ * @param <T> type of the cluster identifier
  */
 public interface ClusterClient<T> extends AutoCloseable {
 
@@ -53,9 +53,9 @@ public interface ClusterClient<T> extends AutoCloseable {
     void close();
 
     /**
-     * Returns the cluster id identifying the cluster to which the client is connected.
+     * Returns the cluster identifier identifying the cluster to which the client is connected.
      *
-     * @return cluster id of the connected cluster
+     * @return cluster identifier of the connected cluster
      */
     T getClusterId();
 
@@ -130,16 +130,16 @@ public interface ClusterClient<T> extends AutoCloseable {
     CompletableFuture<Map<String, Object>> getAccumulators(JobID jobID, ClassLoader loader);
 
     /**
-     * Cancels a job identified by the job id.
+     * Cancels a job identified by the job identifier.
      *
-     * @param jobId the job id
+     * @param jobId the job identifier
      */
     CompletableFuture<Acknowledge> cancel(JobID jobId);
 
     /**
-     * Cancels a job identified by the job id and triggers a savepoint.
+     * Cancels a job identified by the job identifier and triggers a savepoint.
      *
-     * @param jobId the job id
+     * @param jobId the job identifier
      * @param savepointDirectory directory the savepoint should be written to
      * @param formatType a binary format of the savepoint
      * @return future of path where the savepoint is located
@@ -177,7 +177,7 @@ public interface ClusterClient<T> extends AutoCloseable {
      *     MAX_WATERMARK} in the pipeline
      * @param savepointDirectory directory the savepoint should be written to
      * @param formatType a binary format of the savepoint
-     * @return the savepoint trigger id
+     * @return the savepoint trigger identifier
      */
     CompletableFuture<String> stopWithDetachedSavepoint(
             final JobID jobId,
@@ -186,11 +186,11 @@ public interface ClusterClient<T> extends AutoCloseable {
             final SavepointFormatType formatType);
 
     /**
-     * Triggers a savepoint for the job identified by the job id. The savepoint will be written to
+     * Triggers a savepoint for the job identified by the job identifier. The savepoint will be written to
      * the given savepoint directory, or {@link
      * org.apache.flink.configuration.CheckpointingOptions#SAVEPOINT_DIRECTORY} if it is null.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param savepointDirectory directory the savepoint should be written to
      * @param formatType a binary format of the savepoint
      * @return path future where the savepoint is located
@@ -199,25 +199,25 @@ public interface ClusterClient<T> extends AutoCloseable {
             JobID jobId, @Nullable String savepointDirectory, SavepointFormatType formatType);
 
     /**
-     * Triggers a checkpoint for the job identified by the job id. The checkpoint will be written to
+     * Triggers a checkpoint for the job identified by the job identifier. The checkpoint will be written to
      * the checkpoint directory for the job.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param checkpointType the checkpoint type (configured / full / incremental)
      */
     CompletableFuture<Long> triggerCheckpoint(JobID jobId, CheckpointType checkpointType);
 
     /**
-     * Triggers a detached savepoint for the job identified by the job id. The savepoint will be
+     * Triggers a detached savepoint for the job identified by the job identifier. The savepoint will be
      * written to the given savepoint directory, or {@link
      * org.apache.flink.configuration.CheckpointingOptions#SAVEPOINT_DIRECTORY} if it is null.
-     * Notice that: the detached savepoint will return with a savepoint trigger id instead of the
+     * Notice that: the detached savepoint will return with a savepoint trigger identifier instead of the
      * path future, that means the client will return very quickly.
      *
-     * @param jobId job id
+     * @param jobId job identifier
      * @param savepointDirectory directory the savepoint should be written to
      * @param formatType a binary format of the savepoint
-     * @return the savepoint trigger id
+     * @return the savepoint trigger identifier
      */
     CompletableFuture<String> triggerDetachedSavepoint(
             JobID jobId, @Nullable String savepointDirectory, SavepointFormatType formatType);
@@ -243,9 +243,9 @@ public interface ClusterClient<T> extends AutoCloseable {
     }
 
     /**
-     * Invalidate the cached intermediate dataset with the given id.
+     * Invalidate the cached intermediate dataset with the given identifier.
      *
-     * @param clusterDatasetId id of the cluster dataset to be invalidated.
+     * @param clusterDatasetId identifier of the cluster dataset to be invalidated.
      * @return Future which will be completed when the cached dataset is invalidated.
      */
     default CompletableFuture<Void> invalidateClusterDataset(AbstractID clusterDatasetId) {

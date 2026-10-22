@@ -81,7 +81,7 @@ class ProjectSnapshotTransposeRuleTest extends TableTestBase {
         String lookup =
                 String.format(
                         "CREATE TABLE LookupTable (\n"
-                                + "  id int,\n"
+                                + "  identifier int,\n"
                                 + "  name varchar,\n"
                                 + "  age int \n"
                                 + ") with (\n"
@@ -95,10 +95,10 @@ class ProjectSnapshotTransposeRuleTest extends TableTestBase {
     @TestTemplate
     void testJoinTemporalTableWithProjectionPushDown() {
         String sql =
-                "SELECT T.*, D.id\n"
+                "SELECT T.*, D.identifier\n"
                         + "FROM MyTable AS T\n"
                         + "JOIN LookupTable FOR SYSTEM_TIME AS OF T.proctime AS D\n"
-                        + "ON T.a = D.id";
+                        + "ON T.a = D.identifier";
 
         util.verifyRelPlan(sql);
     }
@@ -109,7 +109,7 @@ class ProjectSnapshotTransposeRuleTest extends TableTestBase {
                 "SELECT T.*, D.*\n"
                         + "FROM MyTable AS T\n"
                         + "JOIN LookupTable FOR SYSTEM_TIME AS OF T.proctime AS D\n"
-                        + "ON T.a = D.id";
+                        + "ON T.a = D.identifier";
 
         util.verifyRelPlan(sql);
     }
@@ -117,10 +117,10 @@ class ProjectSnapshotTransposeRuleTest extends TableTestBase {
     @TestTemplate
     void testJoinTemporalTableWithReorderedProject() {
         String sql =
-                "SELECT T.*, D.age, D.name, D.id\n"
+                "SELECT T.*, D.age, D.name, D.identifier\n"
                         + "FROM MyTable AS T\n"
                         + "JOIN LookupTable FOR SYSTEM_TIME AS OF T.proctime AS D\n"
-                        + "ON T.a = D.id";
+                        + "ON T.a = D.identifier";
 
         util.verifyRelPlan(sql);
     }
@@ -128,10 +128,10 @@ class ProjectSnapshotTransposeRuleTest extends TableTestBase {
     @TestTemplate
     void testJoinTemporalTableWithProjectAndFilter() {
         String sql =
-                "SELECT T.*, D.id\n"
+                "SELECT T.*, D.identifier\n"
                         + "FROM MyTable AS T\n"
                         + "JOIN LookupTable FOR SYSTEM_TIME AS OF T.proctime AS D\n"
-                        + "ON T.a = D.id WHERE D.age > 20";
+                        + "ON T.a = D.identifier WHERE D.age > 20";
 
         util.verifyRelPlan(sql);
     }

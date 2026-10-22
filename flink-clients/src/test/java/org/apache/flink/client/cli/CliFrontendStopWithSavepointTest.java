@@ -168,7 +168,7 @@ class CliFrontendStopWithSavepointTest extends CliFrontendTestBase {
         testFrontend.stop(parameters);
 
         stopWithSavepointLatch.await();
-        // the savepoint trigger id will output to the stdout in detached mode.
+        // the savepoint trigger identifier will output to the stdout in detached mode.
         assertThat(buffer.toString()).contains(savepointTriggerId);
     }
 
@@ -254,7 +254,7 @@ class CliFrontendStopWithSavepointTest extends CliFrontendTestBase {
     void testMissingJobId() {
         assertThatThrownBy(
                         () -> {
-                            // test missing job id
+                            // test missing job identifier
                             String[] parameters = {};
                             Configuration configuration = getConfiguration();
                             CliFrontend testFrontend =

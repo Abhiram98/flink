@@ -96,7 +96,7 @@ public abstract class JoinReorderITCaseBase {
                                 + "  e1 BIGINT\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId2));
@@ -115,7 +115,7 @@ public abstract class JoinReorderITCaseBase {
                                 + "  e2 BIGINT\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId2));
@@ -133,7 +133,7 @@ public abstract class JoinReorderITCaseBase {
                                 + "  c3 STRING\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId3));
@@ -153,7 +153,7 @@ public abstract class JoinReorderITCaseBase {
                                 + "  e4 BIGINT\n"
                                 + ")  WITH (\n"
                                 + " 'connector' = 'values',\n"
-                                + " 'data-id' = '%s',\n"
+                                + " 'data-identifier' = '%s',\n"
                                 + " 'bounded' = 'true'\n"
                                 + ")",
                         dataId5));

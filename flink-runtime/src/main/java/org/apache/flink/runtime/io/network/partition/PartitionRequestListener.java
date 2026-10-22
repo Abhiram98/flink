@@ -39,9 +39,9 @@ public interface PartitionRequestListener {
     long getCreateTimestamp();
 
     /**
-     * Get the result partition id of the notifier.
+     * Get the result partition identifier of the notifier.
      *
-     * @return the result partition id
+     * @return the result partition identifier
      */
     ResultPartitionID getResultPartitionId();
 
@@ -53,9 +53,9 @@ public interface PartitionRequestListener {
     NetworkSequenceViewReader getViewReader();
 
     /**
-     * Get the input channel id of the notifier.
+     * Get the input channel identifier of the notifier.
      *
-     * @return the input channel id
+     * @return the input channel identifier
      */
     InputChannelID getReceiverId();
 

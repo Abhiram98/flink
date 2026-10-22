@@ -36,9 +36,9 @@ public interface NettyConnectionWriter {
     void writeNettyPayload(NettyPayload nettyPayload);
 
     /**
-     * Get the id of connection in the writer.
+     * Get the identifier of connection in the writer.
      *
-     * @return the id of connection.
+     * @return the identifier of connection.
      */
     NettyConnectionId getNettyConnectionId();
 

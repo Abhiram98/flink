@@ -279,7 +279,7 @@ public class JobDetailsInfo implements ResponseBody {
     @Schema(name = "JobDetailsVertexInfo")
     public static final class JobVertexDetailsInfo {
 
-        public static final String FIELD_NAME_JOB_VERTEX_ID = "id";
+        public static final String FIELD_NAME_JOB_VERTEX_ID = "identifier";
 
         public static final String FIELD_NAME_SLOT_SHARING_GROUP_ID = "slotSharingGroupId";
 

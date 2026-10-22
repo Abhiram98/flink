@@ -233,7 +233,7 @@ public class KeyedStateInputFormatTest {
         format.close();
         format.closeInputFormat();
 
-        data.sort(Comparator.comparingInt(id -> id));
+        data.sort(Comparator.comparingInt(identifier -> identifier));
         return data;
     }
 
@@ -241,7 +241,7 @@ public class KeyedStateInputFormatTest {
             OneInputStreamOperator<Integer, Void> operator) throws Exception {
         try (KeyedOneInputStreamOperatorTestHarness<Integer, Integer, Void> testHarness =
                 new KeyedOneInputStreamOperatorTestHarness<>(
-                        operator, id -> id, Types.INT, 128, 1, 0)) {
+                        operator, identifier -> identifier, Types.INT, 128, 1, 0)) {
 
             testHarness.setup(VoidSerializer.INSTANCE);
             testHarness.open();

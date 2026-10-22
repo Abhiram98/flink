@@ -127,7 +127,7 @@ public final class DataSetUtils {
                                                                                                     Integer,
                                                                                                     Long>>
                                                                                     data) {
-                                                                // sort the list by task id to
+                                                                // sort the list by task identifier to
                                                                 // calculate the correct offset
                                                                 List<Tuple2<Integer, Long>>
                                                                         sortedData =
@@ -192,7 +192,7 @@ public final class DataSetUtils {
      *   <li>a map function is applied to the input data set
      *   <li>each map task holds a counter c which is increased for each record
      *   <li>c is shifted by n bits where n = log2(number of parallel tasks)
-     *   <li>to create a unique ID among all tasks, the task id is added to the counter
+     *   <li>to create a unique ID among all tasks, the task identifier is added to the counter
      *   <li>for each record, the resulting counter is collected
      * </ul>
      *
@@ -433,12 +433,12 @@ public final class DataSetUtils {
      */
     @Deprecated
     public static <T> Utils.ChecksumHashCode checksumHashCode(DataSet<T> input) throws Exception {
-        final String id = new AbstractID().toString();
+        final String identifier = new AbstractID().toString();
 
-        input.output(new Utils.ChecksumHashCodeHelper<T>(id)).name("ChecksumHashCode");
+        input.output(new Utils.ChecksumHashCodeHelper<T>(identifier)).name("ChecksumHashCode");
 
         JobExecutionResult res = input.getExecutionEnvironment().execute();
-        return res.<Utils.ChecksumHashCode>getAccumulatorResult(id);
+        return res.<Utils.ChecksumHashCode>getAccumulatorResult(identifier);
     }
 
     // *************************************************************************

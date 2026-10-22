@@ -75,13 +75,13 @@ public class JarListInfo implements ResponseBody {
 
     /** Nested class to encapsulate the jar file info. */
     public static class JarFileInfo {
-        public static final String JAR_FILE_FIELD_ID = "id";
+        public static final String JAR_FILE_FIELD_ID = "identifier";
         public static final String JAR_FILE_FIELD_NAME = "name";
         public static final String JAR_FILE_FIELD_UPLOADED = "uploaded";
         public static final String JAR_FILE_FIELD_ENTRY = "entry";
 
         @JsonProperty(JAR_FILE_FIELD_ID)
-        public String id;
+        public String identifier;
 
         @JsonProperty(JAR_FILE_FIELD_NAME)
         public String name;
@@ -94,11 +94,11 @@ public class JarListInfo implements ResponseBody {
 
         @JsonCreator
         public JarFileInfo(
-                @JsonProperty(JAR_FILE_FIELD_ID) String id,
+                @JsonProperty(JAR_FILE_FIELD_ID) String identifier,
                 @JsonProperty(JAR_FILE_FIELD_NAME) String name,
                 @JsonProperty(JAR_FILE_FIELD_UPLOADED) long uploaded,
                 @JsonProperty(JAR_FILE_FIELD_ENTRY) List<JarEntryInfo> jarEntryList) {
-            this.id = checkNotNull(id);
+            this.identifier = checkNotNull(identifier);
             this.name = checkNotNull(name);
             this.uploaded = uploaded;
             this.jarEntryList = checkNotNull(jarEntryList);
@@ -106,7 +106,7 @@ public class JarListInfo implements ResponseBody {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, name, uploaded, jarEntryList);
+            return Objects.hash(identifier, name, uploaded, jarEntryList);
         }
 
         @Override
@@ -120,7 +120,7 @@ public class JarListInfo implements ResponseBody {
             }
 
             JarFileInfo that = (JarFileInfo) o;
-            return Objects.equals(id, that.id)
+            return Objects.equals(identifier, that.identifier)
                     && Objects.equals(name, that.name)
                     && uploaded == that.uploaded
                     && Objects.equals(jarEntryList, that.jarEntryList);

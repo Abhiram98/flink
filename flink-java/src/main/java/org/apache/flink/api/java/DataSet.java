@@ -400,12 +400,12 @@ public abstract class DataSet<T> {
      * @return A long integer that represents the number of elements in the data set.
      */
     public long count() throws Exception {
-        final String id = new AbstractID().toString();
+        final String identifier = new AbstractID().toString();
 
-        output(new Utils.CountHelper<T>(id)).name("count()");
+        output(new Utils.CountHelper<T>(identifier)).name("count()");
 
         JobExecutionResult res = getExecutionEnvironment().execute();
-        return res.<Long>getAccumulatorResult(id);
+        return res.<Long>getAccumulatorResult(identifier);
     }
 
     /**
@@ -415,16 +415,16 @@ public abstract class DataSet<T> {
      * @return A List containing the elements of the DataSet
      */
     public List<T> collect() throws Exception {
-        final String id = new AbstractID().toString();
+        final String identifier = new AbstractID().toString();
         final TypeSerializer<T> serializer =
                 getType()
                         .createSerializer(
                                 getExecutionEnvironment().getConfig().getSerializerConfig());
 
-        this.output(new Utils.CollectHelper<>(id, serializer)).name("collect()");
+        this.output(new Utils.CollectHelper<>(identifier, serializer)).name("collect()");
         JobExecutionResult res = getExecutionEnvironment().execute();
 
-        ArrayList<byte[]> accResult = res.getAccumulatorResult(id);
+        ArrayList<byte[]> accResult = res.getAccumulatorResult(identifier);
         if (accResult != null) {
             try {
                 return SerializedListAccumulator.deserializeList(accResult, serializer);

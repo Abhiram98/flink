@@ -78,7 +78,7 @@ public class RemoteInputChannel extends InputChannel {
     private static final int NONE = -1;
 
     /** ID to distinguish this channel from other channels sharing the same TCP connection. */
-    private final InputChannelID id = new InputChannelID();
+    private final InputChannelID identifier = new InputChannelID();
 
     /** The connection to use to request the remote partition. */
     private final ConnectionID connectionId;
@@ -522,7 +522,7 @@ public class RemoteInputChannel extends InputChannel {
     }
 
     public InputChannelID getInputChannelId() {
-        return id;
+        return identifier;
     }
 
     public int getInitialCredit() {
@@ -687,15 +687,15 @@ public class RemoteInputChannel extends InputChannel {
      */
     public void checkpointStarted(CheckpointBarrier barrier) throws CheckpointException {
         synchronized (receivedBuffers) {
-            if (barrier.getId() < lastBarrierId) {
+            if (barrier.getIdentifier() < lastBarrierId) {
                 throw new CheckpointException(
                         String.format(
                                 "Sequence number for checkpoint %d is not known (it was likely been overwritten by a newer checkpoint %d)",
-                                barrier.getId(), lastBarrierId),
+                                barrier.getIdentifier(), lastBarrierId),
                         CheckpointFailureReason
                                 .CHECKPOINT_SUBSUMED); // currently, at most one active unaligned
                 // checkpoint is possible
-            } else if (barrier.getId() > lastBarrierId) {
+            } else if (barrier.getIdentifier() > lastBarrierId) {
                 // This channel has received some obsolete barrier, older compared to the
                 // checkpointId
                 // which we are processing right now, and we should ignore that obsoleted checkpoint
@@ -704,7 +704,7 @@ public class RemoteInputChannel extends InputChannel {
             }
 
             channelStatePersister.startPersisting(
-                    barrier.getId(), getInflightBuffersUnsafe(barrier.getId()));
+                    barrier.getIdentifier(), getInflightBuffersUnsafe(barrier.getIdentifier()));
         }
     }
 

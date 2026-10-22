@@ -30,7 +30,7 @@ public interface BucketWriter<IN, BucketID> {
     /**
      * Used to create a new {@link InProgressFileWriter}.
      *
-     * @param bucketID the id of the bucket this writer is writing to.
+     * @param bucketID the identifier of the bucket this writer is writing to.
      * @param path the path this writer will write to.
      * @param creationTime the creation time of the file.
      * @return the new {@link InProgressFileWriter}
@@ -45,7 +45,7 @@ public interface BucketWriter<IN, BucketID> {
      * RECORD_WISE type is supported, for which a {@link InProgressFileWriter} will be created.
      *
      * @param type the type of this writer.
-     * @param bucketID the id of the bucket this writer is writing to.
+     * @param bucketID the identifier of the bucket this writer is writing to.
      * @param path the path this writer will write to.
      * @param creationTime the creation time of the file.
      * @return the new {@link InProgressFileWriter}
@@ -69,7 +69,7 @@ public interface BucketWriter<IN, BucketID> {
      * Used to resume a {@link InProgressFileWriter} from a {@link
      * InProgressFileWriter.InProgressFileRecoverable}.
      *
-     * @param bucketID the id of the bucket this writer is writing to.
+     * @param bucketID the identifier of the bucket this writer is writing to.
      * @param inProgressFileSnapshot the state of the part file.
      * @param creationTime the creation time of the file.
      * @return the resumed {@link InProgressFileWriter}

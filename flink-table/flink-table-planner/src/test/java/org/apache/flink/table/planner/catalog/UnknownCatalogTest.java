@@ -283,7 +283,7 @@ class UnknownCatalogTest {
         tEnv.createTable(
                 tableName,
                 TableDescriptor.forConnector("values")
-                        .option("data-id", input1DataId)
+                        .option("data-identifier", input1DataId)
                         .schema(Schema.newBuilder().fromResolvedSchema(EXPECTED_SCHEMA).build())
                         .build());
     }

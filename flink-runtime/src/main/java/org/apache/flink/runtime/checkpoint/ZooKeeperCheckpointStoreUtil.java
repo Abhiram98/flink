@@ -28,10 +28,10 @@ public enum ZooKeeperCheckpointStoreUtil implements CheckpointStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(ZooKeeperCheckpointStoreUtil.class);
 
     /**
-     * Convert a checkpoint id into a ZooKeeper path.
+     * Convert a checkpoint identifier into a ZooKeeper path.
      *
      * @param checkpointId to convert to the path
-     * @return Path created from the given checkpoint id
+     * @return Path created from the given checkpoint identifier
      */
     @Override
     public String checkpointIDToName(long checkpointId) {
@@ -39,10 +39,10 @@ public enum ZooKeeperCheckpointStoreUtil implements CheckpointStoreUtil {
     }
 
     /**
-     * Converts a path to the checkpoint id.
+     * Converts a path to the checkpoint identifier.
      *
      * @param path in ZooKeeper
-     * @return Checkpoint id parsed from the path
+     * @return Checkpoint identifier parsed from the path
      */
     @Override
     public long nameToCheckpointID(String path) {
@@ -58,8 +58,8 @@ public enum ZooKeeperCheckpointStoreUtil implements CheckpointStoreUtil {
             return Long.parseLong(numberString);
         } catch (NumberFormatException e) {
             LOG.warn(
-                    "Could not parse checkpoint id from {}. This indicates that the "
-                            + "checkpoint id to path conversion has changed.",
+                    "Could not parse checkpoint identifier from {}. This indicates that the "
+                            + "checkpoint identifier to path conversion has changed.",
                     path);
 
             return INVALID_CHECKPOINT_ID;

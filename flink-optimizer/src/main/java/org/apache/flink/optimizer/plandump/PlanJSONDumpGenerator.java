@@ -150,7 +150,7 @@ public class PlanJSONDumpGenerator {
             return false;
         }
 
-        // assign an id first
+        // assign an identifier first
         this.nodeIds.put(node, this.nodeCnt++);
 
         // then recurse
@@ -166,7 +166,7 @@ public class PlanJSONDumpGenerator {
         final OptimizerNode n = node.getOptimizerNode();
 
         // ------------------ dump after the ascend ---------------------
-        // start a new node and output node id
+        // start a new node and output node identifier
         if (!first) {
             writer.print(",\n");
         }
@@ -226,8 +226,8 @@ public class PlanJSONDumpGenerator {
             writer.print("\t\t\"solution_delta\": " + this.nodeIds.get(solutionDelta) + ",\n");
         }
 
-        // print the id
-        writer.print("\t\t\"id\": " + this.nodeIds.get(node));
+        // print the identifier
+        writer.print("\t\t\"identifier\": " + this.nodeIds.get(node));
 
         final String type;
         String contents;
@@ -297,20 +297,20 @@ public class PlanJSONDumpGenerator {
                     child1name += child1name.length() > 0 ? ", " : "";
                     child1name +=
                             source.getOptimizerNode().getOperator().getName()
-                                    + " (id: "
+                                    + " (identifier: "
                                     + this.nodeIds.get(source)
                                     + ")";
                 } else if (inputNum == 1) {
                     child2name += child2name.length() > 0 ? ", " : "";
                     child2name +=
                             source.getOptimizerNode().getOperator().getName()
-                                    + " (id: "
+                                    + " (identifier: "
                                     + this.nodeIds.get(source)
                                     + ")";
                 }
 
-                // output predecessor id
-                writer.print("\t\t\t{\"id\": " + this.nodeIds.get(source));
+                // output predecessor identifier
+                writer.print("\t\t\t{\"identifier\": " + this.nodeIds.get(source));
 
                 // output connection side
                 if (inConns.hasNext() || inputNum > 0) {

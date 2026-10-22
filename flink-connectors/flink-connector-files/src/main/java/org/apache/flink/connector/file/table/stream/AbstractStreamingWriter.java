@@ -85,7 +85,7 @@ public abstract class AbstractStreamingWriter<IN, OUT> extends AbstractStreamOpe
      */
     protected abstract void onPartFileOpened(String partition, Path newPath);
 
-    /** Commit up to this checkpoint id. */
+    /** Commit up to this checkpoint identifier. */
     protected void commitUpToCheckpoint(long checkpointId) throws Exception {
         helper.commitUpToCheckpoint(checkpointId);
     }

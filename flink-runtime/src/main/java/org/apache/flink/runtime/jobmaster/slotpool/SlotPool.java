@@ -78,7 +78,7 @@ public interface SlotPool extends AllocatedSlotActions, AutoCloseable {
      * Registers a TaskExecutor with the given {@link ResourceID} at {@link SlotPool}.
      *
      * @param resourceID identifying the TaskExecutor to register
-     * @return true iff a new resource id was registered
+     * @return true iff a new resource identifier was registered
      */
     boolean registerTaskManager(ResourceID resourceID);
 
@@ -87,7 +87,7 @@ public interface SlotPool extends AllocatedSlotActions, AutoCloseable {
      *
      * @param resourceId identifying the TaskExecutor which shall be released from the SlotPool
      * @param cause for the releasing of the TaskManager
-     * @return true iff a given registered resource id was removed
+     * @return true iff a given registered resource identifier was removed
      */
     boolean releaseTaskManager(final ResourceID resourceId, final Exception cause);
 
@@ -127,15 +127,15 @@ public interface SlotPool extends AllocatedSlotActions, AutoCloseable {
     Collection<SlotInfo> getAllocatedSlotsInformation();
 
     /**
-     * Allocates the available slot with the given allocation id under the given request id for the
+     * Allocates the available slot with the given allocation identifier under the given request identifier for the
      * given requirement profile. The slot must be able to fulfill the requirement profile,
      * otherwise an {@link IllegalStateException} will be thrown.
      *
      * @param slotRequestId identifying the requested slot
-     * @param allocationID the allocation id of the requested available slot
+     * @param allocationID the allocation identifier of the requested available slot
      * @param requirementProfile resource profile of the requirement for which to allocate the slot
-     * @return the previously available slot with the given allocation id, if a slot with this
-     *     allocation id exists
+     * @return the previously available slot with the given allocation identifier, if a slot with this
+     *     allocation identifier exists
      */
     Optional<PhysicalSlot> allocateAvailableSlot(
             SlotRequestId slotRequestId,

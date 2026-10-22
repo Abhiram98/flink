@@ -28,7 +28,7 @@ public interface Vertex<
         V extends Vertex<VID, RID, V, R>,
         R extends Result<VID, RID, V, R>> {
 
-    VID getId();
+    VID getIdentifier();
 
     Iterable<? extends R> getConsumedResults();
 

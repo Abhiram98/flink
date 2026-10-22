@@ -91,8 +91,8 @@ public interface JobMasterGateway
      * Requests the next input split for the {@link ExecutionJobVertex}. The next input split is
      * sent back to the sender as a {@link SerializedInputSplit} message.
      *
-     * @param vertexID The job vertex id
-     * @param executionAttempt The execution attempt id
+     * @param vertexID The job vertex identifier
+     * @param executionAttempt The execution attempt identifier
      * @return The future of the input split. If there is no further input split, will return an
      *     empty object.
      */
@@ -124,7 +124,7 @@ public interface JobMasterGateway
     /**
      * Disconnects the resource manager from the job manager because of the given cause.
      *
-     * @param resourceManagerId identifying the resource manager leader id
+     * @param resourceManagerId identifying the resource manager leader identifier
      * @param cause of the disconnect
      */
     void disconnectResourceManager(
@@ -144,7 +144,7 @@ public interface JobMasterGateway
             @RpcTimeout final Time timeout);
 
     /**
-     * Fails the slot with the given allocation id and cause.
+     * Fails the slot with the given allocation identifier and cause.
      *
      * @param taskManagerId identifying the task manager
      * @param allocationId identifying the slot to fail
@@ -171,7 +171,7 @@ public interface JobMasterGateway
     /**
      * Sends the heartbeat to job manager from task manager.
      *
-     * @param resourceID unique id of the task manager
+     * @param resourceID unique identifier of the task manager
      * @param payload report payload
      * @return future which is completed exceptionally if the operation fails
      */
@@ -181,7 +181,7 @@ public interface JobMasterGateway
     /**
      * Sends heartbeat request from the resource manager.
      *
-     * @param resourceID unique id of the resource manager
+     * @param resourceID unique identifier of the resource manager
      * @return future which is completed exceptionally if the operation fails
      */
     CompletableFuture<Void> heartbeatFromResourceManager(final ResourceID resourceID);
@@ -345,7 +345,7 @@ public interface JobMasterGateway
     /**
      * Notifies that the task has reached the end of data.
      *
-     * @param executionAttempt The execution attempt id.
+     * @param executionAttempt The execution attempt identifier.
      */
     void notifyEndOfData(final ExecutionAttemptID executionAttempt);
 }

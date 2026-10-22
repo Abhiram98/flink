@@ -156,7 +156,7 @@ abstract class AdapterTestBase<FormatT> {
                 wrapWithAdapter(createFormatFailingInInstantiation());
         try {
             adapter.createReader(
-                    new Configuration(), new FileSourceSplit("id", testPath, 0, 1024, 0, 1024));
+                    new Configuration(), new FileSourceSplit("identifier", testPath, 0, 1024, 0, 1024));
         } catch (IOException ignored) {
         }
 
@@ -183,7 +183,7 @@ abstract class AdapterTestBase<FormatT> {
                 wrapWithAdapter(createFormatFailingInInstantiation());
         final FileSourceSplit split =
                 new FileSourceSplit(
-                        "id",
+                        "identifier",
                         testPath,
                         0,
                         1024,

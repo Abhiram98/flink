@@ -184,7 +184,7 @@ class GSRecoverableWriterCommitterTest {
         // create the blobs
         for (int blobIndex = 0; blobIndex < blobSizes.length; blobIndex++) {
 
-            // create the object id and blob identifier
+            // create the object identifier and blob identifier
             UUID componentObjectId = UUID.randomUUID();
             GSBlobIdentifier temporaryBlobIdentifier =
                     BlobUtils.getTemporaryBlobIdentifier(
@@ -196,7 +196,7 @@ class GSRecoverableWriterCommitterTest {
             random.nextBytes(bytes);
             blobStorage.blobs.put(temporaryBlobIdentifier, new MockBlobStorage.BlobValue(bytes));
 
-            // will we commit this blob? if so, record that we will use this component object id,
+            // will we commit this blob? if so, record that we will use this component object identifier,
             // that we expect to see the associated bytes in the result
             if (blobIndex <= commitBlobCount) {
                 componentObjectIdsToCommit.add(componentObjectId);

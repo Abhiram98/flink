@@ -72,10 +72,10 @@ import java.util.concurrent.CompletionException;
  *
  * <p>If the body is omitted, or the field {@code checkpointType} is {@code null}, the default
  * checkpointType of {@link CheckpointType#CONFIGURED} will be used. As written above, the response
- * will contain a request id, e.g.,
+ * will contain a request identifier, e.g.,
  *
  * <pre>
- * { "request-id": "7d273f5a62eb4730b9dea8e833733c1e" }
+ * { "request-identifier": "7d273f5a62eb4730b9dea8e833733c1e" }
  * </pre>
  *
  * <p>To poll for the status of an ongoing checkpoint, an HTTP {@code GET} request is issued to
@@ -85,19 +85,19 @@ import java.util.concurrent.CompletionException;
  * <pre>
  * {
  *     "status": {
- *         "id": "IN_PROGRESS"
+ *         "identifier": "IN_PROGRESS"
  *     }
  * }
  * </pre>
  *
- * <p>If the specified checkpoints has completed, the status id will transition to {@code
+ * <p>If the specified checkpoints has completed, the status identifier will transition to {@code
  * COMPLETED}, and the response will additionally contain information about the savepoint, such as
  * the location:
  *
  * <pre>
  * {
  *     "status": {
- *         "id": "COMPLETED"
+ *         "identifier": "COMPLETED"
  *     },
  *     "operation": {
  *         "checkpointId": "123"

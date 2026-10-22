@@ -87,7 +87,7 @@ public class AnalyzeTableITCase extends BatchTestBase {
                                 + "  `q` MAP<STRING, INT>\n"
                                 + ") WITH (\n"
                                 + "  'connector' = 'values',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
                         dataId1));
@@ -105,7 +105,7 @@ public class AnalyzeTableITCase extends BatchTestBase {
                                 + " WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'partition-list' = 'e:1,a:1;e:1,a:2;e:1,a:4;e:1,a:5;e:2,a:2;e:2,a:3;e:2,a:4;e:2,a:5;e:3,a:3;e:3,a:5;',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'bounded' = 'true'\n"
                                 + ")",
@@ -133,7 +133,7 @@ public class AnalyzeTableITCase extends BatchTestBase {
                                 + "  `f` as a + 1\n"
                                 + ") WITH (\n"
                                 + "  'connector' = 'values',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'readable-metadata'='d:varchar,e:bigint',\n"
                                 + "  'bounded' = 'true'\n"
@@ -154,7 +154,7 @@ public class AnalyzeTableITCase extends BatchTestBase {
                                 + " WITH (\n"
                                 + "  'connector' = 'values',\n"
                                 + "  'partition-list' = 'a:1;a:2;',\n"
-                                + "  'data-id' = '%s',\n"
+                                + "  'data-identifier' = '%s',\n"
                                 + "  'disable-lookup' = 'true',\n"
                                 + "  'readable-metadata'='d:varchar,e:bigint',\n"
                                 + "  'bounded' = 'true'\n"

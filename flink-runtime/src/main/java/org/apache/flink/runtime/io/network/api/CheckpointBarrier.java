@@ -44,18 +44,18 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class CheckpointBarrier extends RuntimeEvent {
 
-    private final long id;
+    private final long identifier;
     private final long timestamp;
     private final CheckpointOptions checkpointOptions;
 
-    public CheckpointBarrier(long id, long timestamp, CheckpointOptions checkpointOptions) {
-        this.id = id;
+    public CheckpointBarrier(long identifier, long timestamp, CheckpointOptions checkpointOptions) {
+        this.identifier = identifier;
         this.timestamp = timestamp;
         this.checkpointOptions = checkNotNull(checkpointOptions);
     }
 
-    public long getId() {
-        return id;
+    public long getIdentifier() {
+        return identifier;
     }
 
     public long getTimestamp() {
@@ -69,7 +69,7 @@ public class CheckpointBarrier extends RuntimeEvent {
     public CheckpointBarrier withOptions(CheckpointOptions checkpointOptions) {
         return this.checkpointOptions == checkpointOptions
                 ? this
-                : new CheckpointBarrier(id, timestamp, checkpointOptions);
+                : new CheckpointBarrier(identifier, timestamp, checkpointOptions);
     }
 
     // ------------------------------------------------------------------------
@@ -97,7 +97,7 @@ public class CheckpointBarrier extends RuntimeEvent {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32) ^ timestamp ^ (timestamp >>> 32));
+        return (int) (identifier ^ (identifier >>> 32) ^ timestamp ^ (timestamp >>> 32));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CheckpointBarrier extends RuntimeEvent {
             return false;
         } else {
             CheckpointBarrier that = (CheckpointBarrier) other;
-            return that.id == this.id
+            return that.identifier == this.identifier
                     && that.timestamp == this.timestamp
                     && this.checkpointOptions.equals(that.checkpointOptions);
         }
@@ -117,7 +117,7 @@ public class CheckpointBarrier extends RuntimeEvent {
     @Override
     public String toString() {
         return String.format(
-                "CheckpointBarrier %d @ %d Options: %s", id, timestamp, checkpointOptions);
+                "CheckpointBarrier %d @ %d Options: %s", identifier, timestamp, checkpointOptions);
     }
 
     public boolean isCheckpoint() {
@@ -128,6 +128,6 @@ public class CheckpointBarrier extends RuntimeEvent {
         return checkpointOptions.isUnalignedCheckpoint()
                 ? this
                 : new CheckpointBarrier(
-                        getId(), getTimestamp(), getCheckpointOptions().toUnaligned());
+                        getIdentifier(), getTimestamp(), getCheckpointOptions().toUnaligned());
     }
 }

@@ -39,7 +39,7 @@ public interface CoLocationGroup {
      *
      * @return The group's identifier.
      */
-    AbstractID getId();
+    AbstractID getIdentifier();
 
     /**
      * Returns the IDs of the {@link JobVertex} instances participating in this group.

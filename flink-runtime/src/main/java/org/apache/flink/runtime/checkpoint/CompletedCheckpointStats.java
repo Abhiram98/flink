@@ -201,6 +201,6 @@ public class CompletedCheckpointStats extends AbstractCheckpointStats {
 
     @Override
     public String toString() {
-        return "CompletedCheckpoint(id=" + getCheckpointId() + ")";
+        return "CompletedCheckpoint(identifier=" + getCheckpointId() + ")";
     }
 }

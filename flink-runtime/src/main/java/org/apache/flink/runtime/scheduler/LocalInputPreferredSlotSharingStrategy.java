@@ -209,7 +209,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
         private ExecutionSlotSharingGroup tryFindAvailableCoLocatedExecutionSlotSharingGroupFor(
                 final SchedulingExecutionVertex executionVertex) {
 
-            final ExecutionVertexID executionVertexId = executionVertex.getId();
+            final ExecutionVertexID executionVertexId = executionVertex.getIdentifier();
             final CoLocationGroup coLocationGroup =
                     coLocationGroupMap.get(executionVertexId.getJobVertexId());
             if (coLocationGroup != null) {
@@ -225,7 +225,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
         private ExecutionSlotSharingGroup tryFindAvailableProducerExecutionSlotSharingGroupFor(
                 final SchedulingExecutionVertex executionVertex) {
 
-            final ExecutionVertexID executionVertexId = executionVertex.getId();
+            final ExecutionVertexID executionVertexId = executionVertex.getIdentifier();
 
             for (ConsumedPartitionGroup consumedPartitionGroup :
                     executionVertex.getConsumedPartitionGroups()) {
@@ -287,7 +287,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
         private void addVertexToExecutionSlotSharingGroup(
                 final SchedulingExecutionVertex vertex, final ExecutionSlotSharingGroup group) {
 
-            ExecutionVertexID executionVertexId = vertex.getId();
+            ExecutionVertexID executionVertexId = vertex.getIdentifier();
             group.addVertex(executionVertexId);
             executionSlotSharingGroupMap.put(executionVertexId, group);
 
@@ -308,7 +308,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
                         tryFindAvailableExecutionSlotSharingGroupFor(executionVertex);
 
                 if (group == null) {
-                    group = createNewExecutionSlotSharingGroup(executionVertex.getId());
+                    group = createNewExecutionSlotSharingGroup(executionVertex.getIdentifier());
                 }
 
                 addVertexToExecutionSlotSharingGroup(executionVertex, group);
@@ -319,7 +319,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
                 SchedulingExecutionVertex executionVertex) {
 
             Set<ExecutionSlotSharingGroup> availableGroupsForCurrentVertex =
-                    availableGroupsForJobVertex.get(executionVertex.getId().getJobVertexId());
+                    availableGroupsForJobVertex.get(executionVertex.getIdentifier().getJobVertexId());
 
             if (availableGroupsForCurrentVertex != null
                     && !availableGroupsForCurrentVertex.isEmpty()) {
@@ -353,7 +353,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
                 final List<SchedulingExecutionVertex> executionVertices) {
 
             for (SchedulingExecutionVertex executionVertex : executionVertices) {
-                final ExecutionVertexID executionVertexId = executionVertex.getId();
+                final ExecutionVertexID executionVertexId = executionVertex.getIdentifier();
                 final CoLocationGroup coLocationGroup =
                         coLocationGroupMap.get(executionVertexId.getJobVertexId());
                 if (coLocationGroup != null) {
@@ -380,7 +380,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
             JobVertexID producerJobVertexId =
                     topology.getResultPartition(consumedPartitionGroup.getFirst())
                             .getProducer()
-                            .getId()
+                            .getIdentifier()
                             .getJobVertexId();
 
             // Check if the producer JobVertex and the consumer JobVertex are in the same
@@ -392,7 +392,7 @@ class LocalInputPreferredSlotSharingStrategy extends AbstractSlotSharingStrategy
                 for (IntermediateResultPartitionID consumedPartition : consumedPartitionGroup) {
 
                     ExecutionVertexID producerExecutionVertexId =
-                            topology.getResultPartition(consumedPartition).getProducer().getId();
+                            topology.getResultPartition(consumedPartition).getProducer().getIdentifier();
 
                     ExecutionSlotSharingGroup assignedGroupForProducerExecutionVertex =
                             executionSlotSharingGroupMap.get(producerExecutionVertexId);

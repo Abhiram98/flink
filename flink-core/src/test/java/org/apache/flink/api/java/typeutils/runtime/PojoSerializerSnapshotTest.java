@@ -45,14 +45,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PojoSerializerSnapshotTest {
 
     public static class TestPojo {
-        public int id;
+        public int identifier;
         public String name;
         public double height;
 
         public TestPojo() {}
 
-        public TestPojo(int id, String name, double height) {
-            this.id = id;
+        public TestPojo(int identifier, String name, double height) {
+            this.identifier = identifier;
             this.name = name;
             this.height = height;
         }
@@ -86,7 +86,7 @@ class PojoSerializerSnapshotTest {
 
     static {
         try {
-            FIELDS.put("id", TestPojo.class.getDeclaredField("id"));
+            FIELDS.put("identifier", TestPojo.class.getDeclaredField("identifier"));
             FIELDS.put("name", TestPojo.class.getDeclaredField("name"));
             FIELDS.put("height", TestPojo.class.getDeclaredField("height"));
         } catch (Exception e) {
@@ -100,7 +100,7 @@ class PojoSerializerSnapshotTest {
 
     static {
         try {
-            ID_FIELD = new TestPojoField("id", IntSerializer.INSTANCE);
+            ID_FIELD = new TestPojoField("identifier", IntSerializer.INSTANCE);
             NAME_FIELD = new TestPojoField("name", StringSerializer.INSTANCE);
             HEIGHT_FIELD = new TestPojoField("height", DoubleSerializer.INSTANCE);
         } catch (Exception e) {

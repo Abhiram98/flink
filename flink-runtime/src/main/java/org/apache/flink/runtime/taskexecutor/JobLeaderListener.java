@@ -33,7 +33,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterId;
 public interface JobLeaderListener {
 
     /**
-     * Callback if a job manager has gained leadership for the job identified by the job id and a
+     * Callback if a job manager has gained leadership for the job identified by the job identifier and a
      * connection could be established to this job manager.
      *
      * @param jobId identifying the job for which the job manager has gained leadership
@@ -46,7 +46,7 @@ public interface JobLeaderListener {
             JMTMRegistrationSuccess registrationMessage);
 
     /**
-     * Callback if the job leader for the job with the given job id lost its leadership.
+     * Callback if the job leader for the job with the given job identifier lost its leadership.
      *
      * @param jobId identifying the job whose leader has lost leadership
      * @param jobMasterId old JobMasterId

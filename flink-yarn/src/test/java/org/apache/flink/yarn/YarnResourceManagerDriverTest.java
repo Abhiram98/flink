@@ -575,7 +575,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
                             resourceManagerClientCallbackHandler.onContainersAllocated(
                                     ImmutableList.of(testingContainer));
                             nodeManagerClientCallbackHandler.onStartContainerError(
-                                    testingContainer.getId(), new Exception("start error"));
+                                    testingContainer.getIdentifier(), new Exception("start error"));
 
                             verifyFutureCompleted(releaseAssignedContainerFuture);
                             verifyFutureCompleted(addContainerRequestFutures.get(1));
@@ -680,7 +680,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
                             // Mock that container 1 is completed, while the worker is still pending
                             ContainerStatus testingContainerStatus =
-                                    createTestingContainerCompletedStatus(container1.getId());
+                                    createTestingContainerCompletedStatus(container1.getIdentifier());
                             resourceManagerClientCallbackHandler.onContainersCompleted(
                                     Collections.singletonList(testingContainerStatus));
 
@@ -868,7 +868,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
             assertThat(workers).hasSize(1);
 
             final ResourceID resourceId = workers.iterator().next().getResourceID();
-            assertThat(resourceId).hasToString(testingContainer.getId().toString());
+            assertThat(resourceId).hasToString(testingContainer.getIdentifier().toString());
         }
 
         @Override
@@ -960,7 +960,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createSuccessfulCompletedContainerStatus() {
         return new TestingContainerStatus(
-                testingContainer.getId(),
+                testingContainer.getIdentifier(),
                 ContainerState.COMPLETE,
                 "success exit code",
                 ContainerExitStatus.SUCCESS);
@@ -977,7 +977,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createCompletedContainerStatusBecauseItWasPreempted() {
         return new TestingContainerStatus(
-                testingContainer.getId(),
+                testingContainer.getIdentifier(),
                 ContainerState.COMPLETE,
                 "preempted exit code",
                 ContainerExitStatus.PREEMPTED);
@@ -993,7 +993,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createCompletedContainerStatusBecauseItWasInvalid() {
         return new TestingContainerStatus(
-                testingContainer.getId(),
+                testingContainer.getIdentifier(),
                 ContainerState.COMPLETE,
                 "invalid exit code",
                 ContainerExitStatus.INVALID);
@@ -1011,7 +1011,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createCompletedContainerStatusBecauseItWasAborted() {
         return new TestingContainerStatus(
-                testingContainer.getId(),
+                testingContainer.getIdentifier(),
                 ContainerState.COMPLETE,
                 "aborted exit code",
                 ContainerExitStatus.ABORTED);
@@ -1030,7 +1030,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createCompletedContainerStatusBecauseDisksFailed() {
         return new TestingContainerStatus(
-                testingContainer.getId(),
+                testingContainer.getIdentifier(),
                 ContainerState.COMPLETE,
                 "disk failed exit code",
                 ContainerExitStatus.DISKS_FAILED);
@@ -1048,7 +1048,7 @@ public class YarnResourceManagerDriverTest extends ResourceManagerDriverTestBase
 
     private ContainerStatus createCompletedContainerStatusForUnknownCause() {
         return new TestingContainerStatus(
-                testingContainer.getId(), ContainerState.COMPLETE, "unknown exit code", -1);
+                testingContainer.getIdentifier(), ContainerState.COMPLETE, "unknown exit code", -1);
     }
 
     void testingGetContainerCompletedCause(

@@ -60,7 +60,7 @@ public class FlinkStatementTest extends FlinkJdbcDriverTestBase {
                 assertFalse(
                         statement.execute(
                                 String.format(
-                                        "CREATE TABLE test_table(id bigint, val int, str string, timestamp1 timestamp(0), timestamp2 timestamp_ltz(3), time_data time, date_data date) "
+                                        "CREATE TABLE test_table(identifier bigint, val int, str string, timestamp1 timestamp(0), timestamp2 timestamp_ltz(3), time_data time, date_data date) "
                                                 + "with ("
                                                 + "'connector'='filesystem',\n"
                                                 + "'format'='csv',\n"
@@ -68,7 +68,7 @@ public class FlinkStatementTest extends FlinkJdbcDriverTestBase {
                                         tempDir)));
                 assertEquals(0, statement.getUpdateCount());
 
-                // INSERT TABLE returns job id
+                // INSERT TABLE returns job identifier
                 assertTrue(
                         statement.execute(
                                 "INSERT INTO test_table VALUES "
@@ -84,7 +84,7 @@ public class FlinkStatementTest extends FlinkJdbcDriverTestBase {
                 try (ResultSet resultSet = statement.getResultSet()) {
                     assertTrue(resultSet.next());
                     assertEquals(1, resultSet.getMetaData().getColumnCount());
-                    jobId = resultSet.getString("job id");
+                    jobId = resultSet.getString("job identifier");
                     assertEquals(jobId, resultSet.getString(1));
                     assertFalse(resultSet.next());
                 }
@@ -111,7 +111,7 @@ public class FlinkStatementTest extends FlinkJdbcDriverTestBase {
                     assertEquals(7, resultSet.getMetaData().getColumnCount());
                     List<String> resultList = new ArrayList<>();
                     while (resultSet.next()) {
-                        assertEquals(resultSet.getLong("id"), resultSet.getLong(1));
+                        assertEquals(resultSet.getLong("identifier"), resultSet.getLong(1));
                         assertEquals(resultSet.getInt("val"), resultSet.getInt(2));
                         assertEquals(resultSet.getString("str"), resultSet.getString(3));
                         assertEquals(resultSet.getTimestamp("timestamp1"), resultSet.getObject(4));
@@ -121,7 +121,7 @@ public class FlinkStatementTest extends FlinkJdbcDriverTestBase {
                         resultList.add(
                                 String.format(
                                         "%s,%s,%s,%s,%s,%s,%s",
-                                        resultSet.getLong("id"),
+                                        resultSet.getLong("identifier"),
                                         resultSet.getInt("val"),
                                         resultSet.getString("str"),
                                         resultSet.getTimestamp("timestamp1"),

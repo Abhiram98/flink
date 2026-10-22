@@ -86,7 +86,7 @@ final class CombiningSpillingBehaviour<R> implements SpillingThread.SpillingBeha
             LargeRecordHandler<R> largeRecordHandler)
             throws IOException {
         // write sort-buffer to channel
-        LOG.debug("Combining buffer {}.", element.getId());
+        LOG.debug("Combining buffer {}.", element.getIdentifier());
 
         // set up the combining helpers
         final InMemorySorter<R> buffer = element.getBuffer();
@@ -126,7 +126,7 @@ final class CombiningSpillingBehaviour<R> implements SpillingThread.SpillingBeha
         }
 
         // done combining and writing out
-        LOG.debug("Combined and spilled buffer {}.", element.getId());
+        LOG.debug("Combined and spilled buffer {}.", element.getIdentifier());
     }
 
     @Override

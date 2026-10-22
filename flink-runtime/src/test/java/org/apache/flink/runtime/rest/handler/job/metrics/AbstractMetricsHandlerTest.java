@@ -109,7 +109,7 @@ class AbstractMetricsHandlerTest {
         assertThat(metricCollectionResponseBody.getMetrics()).hasSize(1);
 
         final Metric metric = metricCollectionResponseBody.getMetrics().iterator().next();
-        assertThat(metric.getId()).isEqualTo(TEST_METRIC_NAME);
+        assertThat(metric.getIdentifier()).isEqualTo(TEST_METRIC_NAME);
         assertThat(metric.getValue()).isNull();
     }
 
@@ -151,7 +151,7 @@ class AbstractMetricsHandlerTest {
         assertThat(metricCollectionResponseBody.getMetrics()).hasSize(1);
 
         final Metric metric = metricCollectionResponseBody.getMetrics().iterator().next();
-        assertThat(metric.getId()).isEqualTo(TEST_METRIC_NAME);
+        assertThat(metric.getIdentifier()).isEqualTo(TEST_METRIC_NAME);
         assertThat(metric.getValue()).isEqualTo(Integer.toString(TEST_METRIC_VALUE));
     }
 

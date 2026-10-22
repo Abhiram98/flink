@@ -347,7 +347,7 @@ public abstract class AbstractSqlGatewayStatementITCase extends AbstractTestBase
         } else if (schema.getColumn(0)
                 .map(col -> col.getName().equals(Constants.JOB_ID))
                 .orElse(false)) {
-            // ignore output of the job id
+            // ignore output of the job identifier
             return Tag.INFO.addTag("Job ID:\n");
         } else {
             ByteArrayOutputStream outContent = new ByteArrayOutputStream();

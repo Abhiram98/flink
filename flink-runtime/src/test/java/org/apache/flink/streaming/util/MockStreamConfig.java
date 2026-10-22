@@ -70,7 +70,7 @@ public class MockStreamConfig extends StreamConfig {
             streamOutputs.add(
                     new NonChainedOutput(
                             true,
-                            sourceVertex.getId(),
+                            sourceVertex.getIdentifier(),
                             1,
                             1,
                             100,

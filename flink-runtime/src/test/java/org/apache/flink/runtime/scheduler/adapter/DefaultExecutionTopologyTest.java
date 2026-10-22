@@ -148,7 +148,7 @@ class DefaultExecutionTopologyTest {
     void testGetPipelinedRegionOfVertex() {
         for (DefaultExecutionVertex vertex : adapter.getVertices()) {
             final DefaultSchedulingPipelinedRegion pipelinedRegion =
-                    adapter.getPipelinedRegionOfVertex(vertex.getId());
+                    adapter.getPipelinedRegionOfVertex(vertex.getIdentifier());
             assertRegionContainsAllVertices(pipelinedRegion);
         }
     }
@@ -264,7 +264,7 @@ class DefaultExecutionTopologyTest {
             ExecutionVertex originalVertex = originalVertices.next();
             DefaultExecutionVertex adaptedVertex = adaptedVertices.next();
 
-            assertThat(adaptedVertex.getId()).isEqualTo(originalVertex.getID());
+            assertThat(adaptedVertex.getIdentifier()).isEqualTo(originalVertex.getID());
 
             List<IntermediateResultPartition> originalConsumedPartitions = new ArrayList<>();
             for (ConsumedPartitionGroup consumedPartitionGroup :
@@ -306,7 +306,7 @@ class DefaultExecutionTopologyTest {
                     IterableUtils.toStream(adaptedResultPartitions)
                             .filter(
                                     adapted ->
-                                            adapted.getId()
+                                            adapted.getIdentifier()
                                                     .equals(originalPartition.getPartitionId()))
                             .findAny()
                             .orElseThrow(
@@ -342,11 +342,11 @@ class DefaultExecutionTopologyTest {
             IntermediateResultPartition originalPartition,
             DefaultResultPartition adaptedPartition) {
 
-        assertThat(adaptedPartition.getId()).isEqualTo(originalPartition.getPartitionId());
+        assertThat(adaptedPartition.getIdentifier()).isEqualTo(originalPartition.getPartitionId());
         assertThat(adaptedPartition.getResultId())
-                .isEqualTo(originalPartition.getIntermediateResult().getId());
+                .isEqualTo(originalPartition.getIntermediateResult().getIdentifier());
         assertThat(adaptedPartition.getResultType()).isEqualTo(originalPartition.getResultType());
-        assertThat(adaptedPartition.getProducer().getId())
+        assertThat(adaptedPartition.getProducer().getIdentifier())
                 .isEqualTo(originalPartition.getProducer().getID());
     }
 }

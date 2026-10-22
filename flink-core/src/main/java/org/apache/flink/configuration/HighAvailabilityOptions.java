@@ -59,7 +59,7 @@ public class HighAvailabilityOptions {
      */
     @Documentation.Section(Documentation.Sections.COMMON_HIGH_AVAILABILITY)
     public static final ConfigOption<String> HA_CLUSTER_ID =
-            key("high-availability.cluster-id")
+            key("high-availability.cluster-identifier")
                     .stringType()
                     .defaultValue("/default")
                     .withDeprecatedKeys(

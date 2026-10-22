@@ -317,7 +317,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
 
     private void jobAlreadyDone(UUID leaderSessionId) {
         LOG.info(
-                "{} for job {} was granted leadership with leader id {}, but job was already done.",
+                "{} for job {} was granted leadership with leader identifier {}, but job was already done.",
                 getClass().getSimpleName(),
                 getJobID(),
                 leaderSessionId);
@@ -334,7 +334,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
         Preconditions.checkState(jobMasterServiceProcess.closeAsync().isDone());
 
         LOG.info(
-                "{} for job {} was granted leadership with leader id {}. Creating new {}.",
+                "{} for job {} was granted leadership with leader identifier {}. Creating new {}.",
                 getClass().getSimpleName(),
                 getJobID(),
                 leaderSessionId,
@@ -424,7 +424,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
     @GuardedBy("lock")
     private CompletableFuture<Void> stopJobMasterServiceProcess() {
         LOG.info(
-                "{} for job {} was revoked leadership with leader id {}. Stopping current {}.",
+                "{} for job {} was revoked leadership with leader identifier {}. Stopping current {}.",
                 getClass().getSimpleName(),
                 getJobID(),
                 jobMasterServiceProcess.getLeaderSessionId(),

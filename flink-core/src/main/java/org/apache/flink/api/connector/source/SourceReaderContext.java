@@ -45,7 +45,7 @@ public interface SourceReaderContext {
     /**
      * Sends a split request to the source's {@link SplitEnumerator}. This will result in a call to
      * the {@link SplitEnumerator#handleSplitRequest(int, String)} method, with this reader's
-     * parallel subtask id and the hostname where this reader runs.
+     * parallel subtask identifier and the hostname where this reader runs.
      */
     void sendSplitRequest();
 

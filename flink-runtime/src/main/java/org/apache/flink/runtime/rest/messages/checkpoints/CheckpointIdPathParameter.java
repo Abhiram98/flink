@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.checkpoints;
 import org.apache.flink.runtime.rest.messages.ConversionException;
 import org.apache.flink.runtime.rest.messages.MessagePathParameter;
 
-/** Path parameter for the checkpoint id of type {@link Long}. */
+/** Path parameter for the checkpoint identifier of type {@link Long}. */
 public class CheckpointIdPathParameter extends MessagePathParameter<Long> {
 
     public static final String KEY = "checkpointid";

@@ -245,7 +245,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
                 put("register-internal-data", "true");
                 put("source.sleep-after-elements", String.valueOf(sleepAfterElements));
                 put("source.sleep-time", sleepTime);
-                put("data-id", dataId);
+                put("data-identifier", dataId);
             }
         };
     }

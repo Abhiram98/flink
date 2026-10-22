@@ -35,7 +35,7 @@ public interface PartitionFileWriter {
      * Write the buffers to the partition file. The written buffers may belong to multiple
      * subpartitions, but these buffers will be consecutive in the file.
      *
-     * @param partitionId the partition id
+     * @param partitionId the partition identifier
      * @param buffersToWrite the buffers to be written to the partition file
      * @return the completable future indicating whether the writing file process has finished. If
      *     the {@link CompletableFuture} is completed, the written process is completed.
@@ -51,7 +51,7 @@ public interface PartitionFileWriter {
      */
     class SubpartitionBufferContext {
 
-        /** The subpartition id. */
+        /** The subpartition identifier. */
         private final int subpartitionId;
 
         /** The {@link SegmentBufferContext}s belonging to the subpartition. */
@@ -79,7 +79,7 @@ public interface PartitionFileWriter {
      */
     class SegmentBufferContext {
 
-        /** The segment id. */
+        /** The segment identifier. */
         private final int segmentId;
 
         /** All the buffers belonging to the segment. */

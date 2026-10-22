@@ -21,7 +21,7 @@ package org.apache.flink.runtime.rest.messages.taskmanager;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.rest.messages.MessagePathParameter;
 
-/** TaskManager id path parameter used by TaskManager related handlers. */
+/** TaskManager identifier path parameter used by TaskManager related handlers. */
 public class TaskManagerIdPathParameter extends MessagePathParameter<ResourceID> {
 
     public static final String KEY = "taskmanagerid";

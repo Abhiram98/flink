@@ -236,7 +236,7 @@ class RecreateOnResetOperatorCoordinatorTest {
             assertThat(testingEvent)
                     .satisfiesAnyOf(
                             x -> assertThat(x).isNull(),
-                            x -> assertThat(x.getId()).isEqualTo(finalIndexOfCoordinator));
+                            x -> assertThat(x.getIdentifier()).isEqualTo(finalIndexOfCoordinator));
             assertThat(failedTasks)
                     .satisfiesAnyOf(
                             x -> assertThat(x).isEmpty(),
@@ -328,18 +328,18 @@ class RecreateOnResetOperatorCoordinatorTest {
 
     private static class TestingEvent implements OperatorEvent {
         private static final long serialVersionUID = -3289352911927668275L;
-        private final int id;
+        private final int identifier;
 
         private TestingEvent() {
             this(-1);
         }
 
-        private TestingEvent(int id) {
-            this.id = id;
+        private TestingEvent(int identifier) {
+            this.identifier = identifier;
         }
 
-        private int getId() {
-            return id;
+        private int getIdentifier() {
+            return identifier;
         }
     }
 }

@@ -43,7 +43,7 @@ import java.util.Properties;
  * Schema by calling Schema registry. Then this example publish the POJO type to kafka by converting
  * the POJO to AVRO and verifying the schema. --input-topic test-input --output-string-topic
  * test-output --output-avro-topic test-avro-output --output-subject --bootstrap.servers
- * localhost:9092 --schema-registry-url http://localhost:8081 --group.id myconsumer
+ * localhost:9092 --schema-registry-url http://localhost:8081 --group.identifier myconsumer
  */
 public class TestAvroConsumerConfluent {
 
@@ -56,12 +56,12 @@ public class TestAvroConsumerConfluent {
                     "Missing parameters!\n"
                             + "Usage: Kafka --input-topic <topic> --output-string-topic <topic> --output-avro-topic <topic> "
                             + "--bootstrap.servers <kafka brokers> "
-                            + "--schema-registry-url <confluent schema registry> --group.id <some id>");
+                            + "--schema-registry-url <confluent schema registry> --group.identifier <some identifier>");
             return;
         }
         Properties config = new Properties();
         config.setProperty("bootstrap.servers", parameterTool.getRequired("bootstrap.servers"));
-        config.setProperty("group.id", parameterTool.getRequired("group.id"));
+        config.setProperty("group.identifier", parameterTool.getRequired("group.identifier"));
         String schemaRegistryUrl = parameterTool.getRequired("schema-registry-url");
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -70,7 +70,7 @@ public class TestAvroConsumerConfluent {
         KafkaSource<User> kafkaSource =
                 KafkaSource.<User>builder()
                         .setBootstrapServers(bootstrapServers)
-                        .setGroupId(parameterTool.getRequired("group.id"))
+                        .setGroupId(parameterTool.getRequired("group.identifier"))
                         .setTopics(parameterTool.getRequired("input-topic"))
                         .setDeserializer(
                                 KafkaRecordDeserializationSchema.valueOnly(

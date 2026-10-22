@@ -70,7 +70,7 @@ class FileSourceSplitStateTest {
 
     private static FileSourceSplit getTestSplit(CheckpointedPosition position) {
         return new FileSourceSplit(
-                "test-id",
+                "test-identifier",
                 new Path("file:/some/random/path"),
                 17,
                 121,

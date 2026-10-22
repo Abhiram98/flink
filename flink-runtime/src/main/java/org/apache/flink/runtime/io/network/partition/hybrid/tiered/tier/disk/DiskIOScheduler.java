@@ -70,7 +70,7 @@ public class DiskIOScheduler implements Runnable, BufferRecycler, NettyServicePr
 
     private final Object lock = new Object();
 
-    /** The partition id. */
+    /** The partition identifier. */
     private final TieredStoragePartitionId partitionId;
 
     /** The executor is responsible for scheduling the disk read process. */
@@ -95,9 +95,9 @@ public class DiskIOScheduler implements Runnable, BufferRecycler, NettyServicePr
     private final Duration bufferRequestTimeout;
 
     /**
-     * Get the segment id if the buffer index represents the first buffer in a segment. The first
-     * integer is the id of subpartition, and the second integer is buffer index and the value is
-     * segment id.
+     * Get the segment identifier if the buffer index represents the first buffer in a segment. The first
+     * integer is the identifier of subpartition, and the second integer is buffer index and the value is
+     * segment identifier.
      */
     private final BiFunction<Integer, Integer, Integer> segmentIdGetter;
 
@@ -167,9 +167,9 @@ public class DiskIOScheduler implements Runnable, BufferRecycler, NettyServicePr
     }
 
     @Override
-    public void connectionBroken(NettyConnectionId id) {
+    public void connectionBroken(NettyConnectionId identifier) {
         synchronized (lock) {
-            allScheduledReaders.remove(id);
+            allScheduledReaders.remove(identifier);
         }
     }
 
@@ -291,7 +291,7 @@ public class DiskIOScheduler implements Runnable, BufferRecycler, NettyServicePr
             String errorLog) {
         for (ScheduledSubpartitionReader scheduledReader : scheduledReaders) {
             synchronized (lock) {
-                allScheduledReaders.remove(scheduledReader.getId());
+                allScheduledReaders.remove(scheduledReader.getIdentifier());
             }
             scheduledReader.failReader(failureCause);
         }
@@ -506,7 +506,7 @@ public class DiskIOScheduler implements Runnable, BufferRecycler, NettyServicePr
             }
         }
 
-        private NettyConnectionId getId() {
+        private NettyConnectionId getIdentifier() {
             return nettyConnectionWriter.getNettyConnectionId();
         }
     }

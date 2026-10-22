@@ -26,7 +26,7 @@ import org.apache.flink.util.FlinkException;
 /**
  * A descriptor to deploy a cluster (e.g. Yarn) and return a Client for Cluster communication.
  *
- * @param <T> Type of the cluster id
+ * @param <T> Type of the cluster identifier
  */
 public interface ClusterDescriptor<T> extends AutoCloseable {
 
@@ -91,7 +91,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
             throws ClusterDeploymentException;
 
     /**
-     * Terminates the cluster with the given cluster id.
+     * Terminates the cluster with the given cluster identifier.
      *
      * @param clusterId identifying the cluster to shut down
      * @throws FlinkException if the cluster could not be terminated

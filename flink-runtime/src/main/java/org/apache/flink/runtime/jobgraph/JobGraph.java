@@ -84,7 +84,7 @@ public class JobGraph implements Serializable {
     /** The job configuration attached to this job. */
     private Configuration jobConfiguration = new Configuration();
 
-    /** ID of this job. May be set if specific job id is desired (e.g. session management) */
+    /** ID of this job. May be set if specific job identifier is desired (e.g. session management) */
     private JobID jobID;
 
     /** Name of this job. */
@@ -146,7 +146,7 @@ public class JobGraph implements Serializable {
      * the given name and the given execution configuration (see {@link ExecutionConfig}). The
      * ExecutionConfig will be serialized and can't be modified afterwards.
      *
-     * @param jobId The id of the job. A random ID is generated, if {@code null} is passed.
+     * @param jobId The identifier of the job. A random ID is generated, if {@code null} is passed.
      * @param jobName The name of the job.
      */
     public JobGraph(@Nullable JobID jobId, String jobName) {
@@ -166,7 +166,7 @@ public class JobGraph implements Serializable {
      * jobId or a random one if null supplied, and the given job vertices. The ExecutionConfig will
      * be serialized and can't be modified afterwards.
      *
-     * @param jobId The id of the job. A random ID is generated, if {@code null} is passed.
+     * @param jobId The identifier of the job. A random ID is generated, if {@code null} is passed.
      * @param jobName The name of the job.
      * @param vertices The vertices to add to the graph.
      */
@@ -294,14 +294,14 @@ public class JobGraph implements Serializable {
      * @param vertex the new task vertex to be added
      */
     public void addVertex(JobVertex vertex) {
-        final JobVertexID id = vertex.getID();
-        JobVertex previous = taskVertices.put(id, vertex);
+        final JobVertexID identifier = vertex.getID();
+        JobVertex previous = taskVertices.put(identifier, vertex);
 
         // if we had a prior association, restore and throw an exception
         if (previous != null) {
-            taskVertices.put(id, previous);
+            taskVertices.put(identifier, previous);
             throw new IllegalArgumentException(
-                    "The JobGraph already contains a vertex with that id.");
+                    "The JobGraph already contains a vertex with that identifier.");
         }
     }
 
@@ -392,12 +392,12 @@ public class JobGraph implements Serializable {
     /**
      * Searches for a vertex with a matching ID and returns it.
      *
-     * @param id the ID of the vertex to search for
+     * @param identifier the ID of the vertex to search for
      * @return the vertex with the matching ID or <code>null</code> if no vertex with such ID could
      *     be found
      */
-    public JobVertex findVertexByID(JobVertexID id) {
-        return this.taskVertices.get(id);
+    public JobVertex findVertexByID(JobVertexID identifier) {
+        return this.taskVertices.get(identifier);
     }
 
     /**

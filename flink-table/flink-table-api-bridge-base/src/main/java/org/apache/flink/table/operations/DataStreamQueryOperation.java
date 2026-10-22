@@ -93,9 +93,9 @@ public class DataStreamQueryOperation<E> implements QueryOperation {
     public String asSummaryString() {
         Map<String, Object> args = new LinkedHashMap<>();
         if (identifier != null) {
-            args.put("id", identifier.asSummaryString());
+            args.put("identifier", identifier.asSummaryString());
         } else {
-            args.put("id", dataStream.getId());
+            args.put("identifier", dataStream.getIdentifier());
         }
         args.put("fields", resolvedSchema.getColumnNames());
 

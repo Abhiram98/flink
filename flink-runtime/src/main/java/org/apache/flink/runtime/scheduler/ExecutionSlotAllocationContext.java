@@ -35,16 +35,16 @@ interface ExecutionSlotAllocationContext extends InputsLocationsRetriever, State
     /**
      * Returns required resources for an execution vertex.
      *
-     * @param executionVertexId id of the execution vertex
+     * @param executionVertexId identifier of the execution vertex
      * @return required resources for the given execution vertex
      */
     ResourceProfile getResourceProfile(ExecutionVertexID executionVertexId);
 
     /**
-     * Returns prior allocation id for an execution vertex.
+     * Returns prior allocation identifier for an execution vertex.
      *
-     * @param executionVertexId id of the execution vertex
-     * @return prior allocation id for the given execution vertex if it exists; otherwise {@code
+     * @param executionVertexId identifier of the execution vertex
+     * @return prior allocation identifier for the given execution vertex if it exists; otherwise {@code
      *     Optional.empty()}
      */
     Optional<AllocationID> findPriorAllocationId(ExecutionVertexID executionVertexId);

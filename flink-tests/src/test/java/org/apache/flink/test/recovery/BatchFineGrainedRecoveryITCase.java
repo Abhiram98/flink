@@ -435,13 +435,13 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
             implements FailureStrategy {
         private static final long serialVersionUID = 1L;
 
-        private final UUID id;
+        private final UUID identifier;
         private final int failAfterCallNumber;
         private transient int callCounter;
 
         private AbstractOnceAfterCallNumberFailureStrategy(int failAfterCallNumber) {
             this.failAfterCallNumber = failAfterCallNumber;
-            id = UUID.randomUUID();
+            identifier = UUID.randomUUID();
         }
 
         @Override
@@ -472,12 +472,12 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            return Objects.equals(id, ((AbstractOnceAfterCallNumberFailureStrategy) o).id);
+            return Objects.equals(identifier, ((AbstractOnceAfterCallNumberFailureStrategy) o).identifier);
         }
 
         @Override
         public int hashCode() {
-            return id.hashCode();
+            return identifier.hashCode();
         }
     }
 

@@ -25,7 +25,7 @@ public class IdentifierSnapshotNamespace extends IdentifierNamespace {
             IdentifierNamespace ns, SchemaVersion schemaVersion, SqlValidatorScope parentScope) {
         super(
                 (SqlValidatorImpl) ns.getValidator(),
-                ns.getId(),
+                ns.getIdentifier(),
                 ns.extendList,
                 ns.enclosingNode,
                 new SnapshotScope(parentScope, schemaVersion));

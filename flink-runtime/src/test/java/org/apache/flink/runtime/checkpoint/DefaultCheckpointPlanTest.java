@@ -83,7 +83,7 @@ class DefaultCheckpointPlanTest {
         assertThatThrownBy(() -> checkpointPlan.fulfillFinishedTaskStatus(operatorStates))
                 .hasMessage(
                         String.format(
-                                "The vertex %s (id = %s) has "
+                                "The vertex %s (identifier = %s) has "
                                         + "used UnionListState, but part of its tasks are FINISHED.",
                                 executionGraph.getJobVertex(jobVertexId).getName(), jobVertexId))
                 .isInstanceOf(FlinkRuntimeException.class);
@@ -121,7 +121,7 @@ class DefaultCheckpointPlanTest {
         assertThatThrownBy(() -> checkpointPlan.fulfillFinishedTaskStatus(operatorStates))
                 .hasMessage(
                         String.format(
-                                "The vertex %s (id = %s) has "
+                                "The vertex %s (identifier = %s) has "
                                         + "used UnionListState, but part of its tasks has called operators' finish method.",
                                 executionGraph.getJobVertex(jobVertexId).getName(), jobVertexId))
                 .isInstanceOf(FlinkRuntimeException.class);

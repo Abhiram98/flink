@@ -74,7 +74,7 @@ class CatalogBaseTableResolutionTest {
 
     private static final Schema TABLE_SCHEMA =
             Schema.newBuilder()
-                    .column("id", DataTypes.INT().notNull())
+                    .column("identifier", DataTypes.INT().notNull())
                     .column("region", DataTypes.VARCHAR(200))
                     .withComment("This is a region column.")
                     .column("county", DataTypes.VARCHAR(200))
@@ -84,35 +84,35 @@ class CatalogBaseTableResolutionTest {
                     .columnByExpression("ts", COMPUTED_SQL)
                     .withComment("This is a computed column")
                     .watermark("ts", WATERMARK_SQL)
-                    .primaryKeyNamed("primary_constraint", "id")
+                    .primaryKeyNamed("primary_constraint", "identifier")
                     .build();
 
     private static final Schema MATERIALIZED_TABLE_SCHEMA =
             Schema.newBuilder()
-                    .column("id", DataTypes.INT().notNull())
+                    .column("identifier", DataTypes.INT().notNull())
                     .column("region", DataTypes.VARCHAR(200))
                     .withComment("This is a region column.")
                     .column("county", DataTypes.VARCHAR(200))
                     .column("topic", DataTypes.VARCHAR(200))
                     .withComment("") // empty column comment
-                    .primaryKeyNamed("primary_constraint", "id")
+                    .primaryKeyNamed("primary_constraint", "identifier")
                     .build();
 
     private static final TableSchema LEGACY_TABLE_SCHEMA =
             TableSchema.builder()
-                    .add(TableColumn.physical("id", DataTypes.INT().notNull()))
+                    .add(TableColumn.physical("identifier", DataTypes.INT().notNull()))
                     .add(TableColumn.physical("region", DataTypes.VARCHAR(200)))
                     .add(TableColumn.physical("county", DataTypes.VARCHAR(200)))
                     .add(TableColumn.metadata("topic", DataTypes.VARCHAR(200), true))
                     .add(TableColumn.metadata("orig_ts", DataTypes.TIMESTAMP(3), "timestamp"))
                     .add(TableColumn.computed("ts", DataTypes.TIMESTAMP(3), COMPUTED_SQL))
                     .watermark("ts", WATERMARK_SQL, DataTypes.TIMESTAMP(3))
-                    .primaryKey("primary_constraint", new String[] {"id"})
+                    .primaryKey("primary_constraint", new String[] {"identifier"})
                     .build();
 
     private static final Schema VIEW_SCHEMA =
             Schema.newBuilder()
-                    .column("id", DataTypes.INT().notNull())
+                    .column("identifier", DataTypes.INT().notNull())
                     .column("region", DataTypes.VARCHAR(200))
                     .column("county", DataTypes.VARCHAR(200))
                     .build();
@@ -120,7 +120,7 @@ class CatalogBaseTableResolutionTest {
     private static final ResolvedSchema RESOLVED_TABLE_SCHEMA =
             new ResolvedSchema(
                     Arrays.asList(
-                            Column.physical("id", DataTypes.INT().notNull()),
+                            Column.physical("identifier", DataTypes.INT().notNull()),
                             Column.physical("region", DataTypes.VARCHAR(200))
                                     .withComment("This is a region column."),
                             Column.physical("county", DataTypes.VARCHAR(200)),
@@ -131,31 +131,31 @@ class CatalogBaseTableResolutionTest {
                                     .withComment("This is a computed column")),
                     Collections.singletonList(WatermarkSpec.of("ts", WATERMARK_RESOLVED)),
                     UniqueConstraint.primaryKey(
-                            "primary_constraint", Collections.singletonList("id")));
+                            "primary_constraint", Collections.singletonList("identifier")));
 
     private static final ResolvedSchema RESOLVED_MATERIALIZED_TABLE_SCHEMA =
             new ResolvedSchema(
                     Arrays.asList(
-                            Column.physical("id", DataTypes.INT().notNull()),
+                            Column.physical("identifier", DataTypes.INT().notNull()),
                             Column.physical("region", DataTypes.VARCHAR(200))
                                     .withComment("This is a region column."),
                             Column.physical("county", DataTypes.VARCHAR(200)),
                             Column.physical("topic", DataTypes.VARCHAR(200)).withComment("")),
                     Collections.emptyList(),
                     UniqueConstraint.primaryKey(
-                            "primary_constraint", Collections.singletonList("id")));
+                            "primary_constraint", Collections.singletonList("identifier")));
 
     private static final ContinuousRefreshHandler CONTINUOUS_REFRESH_HANDLER =
             new ContinuousRefreshHandler("remote", JobID.generate().toHexString());
 
     private static final String DEFINITION_QUERY =
             String.format(
-                    "SELECT id, region, county FROM %s.%s.T", DEFAULT_CATALOG, DEFAULT_DATABASE);
+                    "SELECT identifier, region, county FROM %s.%s.T", DEFAULT_CATALOG, DEFAULT_DATABASE);
 
     private static final ResolvedSchema RESOLVED_VIEW_SCHEMA =
             new ResolvedSchema(
                     Arrays.asList(
-                            Column.physical("id", DataTypes.INT().notNull()),
+                            Column.physical("identifier", DataTypes.INT().notNull()),
                             Column.physical("region", DataTypes.VARCHAR(200)),
                             Column.physical("county", DataTypes.VARCHAR(200))),
                     Collections.emptyList(),
@@ -285,7 +285,7 @@ class CatalogBaseTableResolutionTest {
                                     containsMessage(
                                             "Invalid partition key 'countyINVALID'. A partition key must "
                                                     + "reference a physical column in the schema. Available "
-                                                    + "columns are: [id, region, county]")));
+                                                    + "columns are: [identifier, region, county]")));
         }
     }
 
@@ -327,7 +327,7 @@ class CatalogBaseTableResolutionTest {
                                     containsMessage(
                                             "Invalid bucket key 'countyINVALID'. A bucket key for a distribution must "
                                                     + "reference a physical column in the schema. "
-                                                    + "Available columns are: [id, region, county]")));
+                                                    + "Available columns are: [identifier, region, county]")));
         }
     }
 
@@ -340,7 +340,7 @@ class CatalogBaseTableResolutionTest {
                         Collections.emptyList(),
                         Collections.emptyMap(),
                         null,
-                        TableDistribution.ofHash(Collections.singletonList("id"), 0));
+                        TableDistribution.ofHash(Collections.singletonList("identifier"), 0));
 
         try {
             resolveCatalogBaseTable(ResolvedCatalogTable.class, catalogTable);
@@ -373,7 +373,7 @@ class CatalogBaseTableResolutionTest {
 
     private static Map<String, String> catalogTableAsProperties() {
         final Map<String, String> properties = new HashMap<>();
-        properties.put("schema.0.name", "id");
+        properties.put("schema.0.name", "identifier");
         properties.put("schema.0.data-type", "INT NOT NULL");
         properties.put("schema.1.name", "region");
         properties.put("schema.1.data-type", "VARCHAR(200)");
@@ -397,7 +397,7 @@ class CatalogBaseTableResolutionTest {
         properties.put("schema.watermark.0.strategy.data-type", "TIMESTAMP(3)");
         properties.put("schema.watermark.0.strategy.expr", "ts - INTERVAL '5' SECOND");
         properties.put("schema.primary-key.name", "primary_constraint");
-        properties.put("schema.primary-key.columns", "id");
+        properties.put("schema.primary-key.columns", "identifier");
         properties.put("partition.keys.0.name", "region");
         properties.put("partition.keys.1.name", "county");
         properties.put("version", "12");
@@ -411,7 +411,7 @@ class CatalogBaseTableResolutionTest {
     private static Map<String, String> catalogMaterializedTableAsProperties() throws Exception {
         // add base properties
         final Map<String, String> properties = new HashMap<>();
-        properties.put("schema.0.name", "id");
+        properties.put("schema.0.name", "identifier");
         properties.put("schema.0.data-type", "INT NOT NULL");
         properties.put("schema.1.name", "region");
         properties.put("schema.1.data-type", "VARCHAR(200)");
@@ -422,7 +422,7 @@ class CatalogBaseTableResolutionTest {
         properties.put("schema.3.data-type", "VARCHAR(200)");
         properties.put("schema.3.comment", "");
         properties.put("schema.primary-key.name", "primary_constraint");
-        properties.put("schema.primary-key.columns", "id");
+        properties.put("schema.primary-key.columns", "identifier");
         properties.put("freshness-interval", "30");
         properties.put("freshness-unit", "SECOND");
         properties.put("logical-refresh-mode", "CONTINUOUS");
@@ -445,7 +445,7 @@ class CatalogBaseTableResolutionTest {
 
         final String definitionQuery =
                 String.format(
-                        "SELECT id, region, county FROM %s.%s.T",
+                        "SELECT identifier, region, county FROM %s.%s.T",
                         DEFAULT_CATALOG, DEFAULT_DATABASE);
 
         CatalogMaterializedTable.Builder builder = CatalogMaterializedTable.newBuilder();
@@ -468,7 +468,7 @@ class CatalogBaseTableResolutionTest {
 
         final String expandedQuery =
                 String.format(
-                        "SELECT id, region, county FROM %s.%s.T",
+                        "SELECT identifier, region, county FROM %s.%s.T",
                         DEFAULT_CATALOG, DEFAULT_DATABASE);
 
         return CatalogView.of(

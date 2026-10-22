@@ -141,7 +141,7 @@ public class StreamExecSink extends CommonExecSink implements StreamExecNode<Obj
 
     @JsonCreator
     public StreamExecSink(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_DYNAMIC_TABLE_SINK) DynamicTableSinkSpec tableSinkSpec,
@@ -153,7 +153,7 @@ public class StreamExecSink extends CommonExecSink implements StreamExecNode<Obj
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) LogicalType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 tableSinkSpec,

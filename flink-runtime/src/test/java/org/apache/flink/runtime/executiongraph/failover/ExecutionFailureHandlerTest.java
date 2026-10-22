@@ -301,7 +301,7 @@ class ExecutionFailureHandlerTest {
         assertThat(result.getVerticesToRestart())
                 .isEqualTo(
                         IterableUtils.toStream(schedulingTopology.getVertices())
-                                .map(SchedulingExecutionVertex::getId)
+                                .map(SchedulingExecutionVertex::getIdentifier)
                                 .collect(Collectors.toSet()));
         assertThat(result.getError()).isSameAs(error);
         assertThat(result.getTimestamp()).isEqualTo(timestamp);

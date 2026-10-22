@@ -90,13 +90,13 @@ public class KryoUtils {
      * Apply a list of {@link KryoRegistration} to a Kryo instance. The list of registrations is
      * assumed to already be a final resolution of all possible registration overwrites.
      *
-     * <p>The registrations are applied in the given order and always specify the registration id,
+     * <p>The registrations are applied in the given order and always specify the registration identifier,
      * using the given {@code firstRegistrationId} and incrementing it for each registration.
      *
      * @param kryo the Kryo instance to apply the registrations
      * @param resolvedRegistrations the registrations, which should already be resolved of all
      *     possible registration overwrites
-     * @param firstRegistrationId the first registration id to use
+     * @param firstRegistrationId the first registration identifier to use
      */
     public static void applyRegistrations(
             Kryo kryo,

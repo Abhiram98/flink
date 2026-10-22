@@ -44,7 +44,7 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
         String testDataId = TestValuesTableFactory.registerData(TestData.personData());
         String ddl =
                 "CREATE TABLE AggregatableTable (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  age int not null,\n"
                         + "  name string,\n"
                         + "  height int,\n"
@@ -53,13 +53,13 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
                         + "  points bigint,\n"
                         + "  metadata_1 BIGINT METADATA,\n"
                         + "  metadata_2 STRING METADATA,\n"
-                        + "  PRIMARY KEY (`id`) NOT ENFORCED\n"
+                        + "  PRIMARY KEY (`identifier`) NOT ENFORCED\n"
                         + ") WITH (\n"
                         + "  'connector' = 'values',\n"
-                        + "  'data-id' = '"
+                        + "  'data-identifier' = '"
                         + testDataId
                         + "',\n"
-                        + "  'filterable-fields' = 'id;age',\n"
+                        + "  'filterable-fields' = 'identifier;age',\n"
                         + "  'readable-metadata' = 'metadata_1:BIGINT, metadata_2:STRING',\n"
                         + "  'bounded' = 'true'\n"
                         + ")";
@@ -68,7 +68,7 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
         // partitioned table
         String ddl2 =
                 "CREATE TABLE AggregatableTable_Part (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  age int,\n"
                         + "  name string,\n"
                         + "  height int,\n"
@@ -80,10 +80,10 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
                         + ") PARTITIONED BY (type)\n"
                         + "WITH (\n"
                         + "  'connector' = 'values',\n"
-                        + "  'data-id' = '"
+                        + "  'data-identifier' = '"
                         + testDataId
                         + "',\n"
-                        + "  'filterable-fields' = 'id;age',\n"
+                        + "  'filterable-fields' = 'identifier;age',\n"
                         + "  'partition-list' = 'type:A;type:B;type:C;type:D',\n"
                         + "  'bounded' = 'true'\n"
                         + ")";
@@ -92,7 +92,7 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
         // partitioned table
         String ddl3 =
                 "CREATE TABLE AggregatableTable_No_Proj (\n"
-                        + "  id int,\n"
+                        + "  identifier int,\n"
                         + "  age int,\n"
                         + "  name string,\n"
                         + "  height int,\n"
@@ -104,10 +104,10 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
                         + ")\n"
                         + "WITH (\n"
                         + "  'connector' = 'values',\n"
-                        + "  'data-id' = '"
+                        + "  'data-identifier' = '"
                         + testDataId
                         + "',\n"
-                        + "  'filterable-fields' = 'id;age',\n"
+                        + "  'filterable-fields' = 'identifier;age',\n"
                         + "  'enable-projection-push-down' = 'false',\n"
                         + "  'bounded' = 'true'\n"
                         + ")";
@@ -178,7 +178,7 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
     @Test
     public void testCannotPushDownLocalHashAggForCountWithFilterCondition() {
         checkResult(
-                "SELECT count(*) FROM AggregatableTable where id > 8",
+                "SELECT count(*) FROM AggregatableTable where identifier > 8",
                 JavaScalaConversionUtil.toScala(Collections.singletonList(Row.of(3))),
                 false);
     }
@@ -194,7 +194,7 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
     @Test
     public void testCanPushDownLocalHashAggForCountNullableColumn() {
         checkResult(
-                "SELECT count(id) FROM AggregatableTable",
+                "SELECT count(identifier) FROM AggregatableTable",
                 JavaScalaConversionUtil.toScala(Collections.singletonList(Row.of(11))),
                 false);
     }
@@ -338,13 +338,13 @@ class LocalAggregatePushDownITCase extends BatchTestBase {
 
         checkResult(
                 "SELECT\n"
-                        + "  id,\n"
+                        + "  identifier,\n"
                         + "  name,\n"
                         + "  count(*)\n"
                         + "FROM\n"
                         + "  AggregatableTable\n"
-                        + "WHERE id > 8\n"
-                        + "GROUP BY id, name",
+                        + "WHERE identifier > 8\n"
+                        + "GROUP BY identifier, name",
                 JavaScalaConversionUtil.toScala(
                         Arrays.asList(
                                 Row.of(9, "emma", 1),

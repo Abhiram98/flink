@@ -109,7 +109,7 @@ public class JobIdsWithStatusOverview implements ResponseBody, InfoMessage {
 
         private static final long serialVersionUID = -499449819268733026L;
 
-        public static final String FIELD_NAME_JOB_ID = "id";
+        public static final String FIELD_NAME_JOB_ID = "identifier";
 
         public static final String FIELD_NAME_JOB_STATUS = "status";
 

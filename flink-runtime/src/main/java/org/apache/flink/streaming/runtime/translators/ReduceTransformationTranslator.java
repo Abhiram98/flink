@@ -58,7 +58,7 @@ public class ReduceTransformationTranslator<IN, KEY>
                         transformation.getKeyTypeInfo(),
                         context);
         BatchExecutionUtils.applyBatchExecutionSettings(
-                transformation.getId(), context, StreamConfig.InputRequirement.SORTED);
+                transformation.getIdentifier(), context, StreamConfig.InputRequirement.SORTED);
 
         return ids;
     }

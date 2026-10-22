@@ -79,7 +79,7 @@ public class RocksDBCachingPriorityQueueSet<E extends HeapPriorityQueueElement>
     /** Wrapper to batch all writes to RocksDB. */
     @Nonnull private final RocksDBWriteBatchWrapper batchWrapper;
 
-    /** The key-group id in serialized form. */
+    /** The key-group identifier in serialized form. */
     @Nonnull private final byte[] groupPrefixBytes;
 
     /** Output view that helps to serialize elements. */

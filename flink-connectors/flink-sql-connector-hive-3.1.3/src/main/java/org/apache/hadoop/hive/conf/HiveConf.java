@@ -488,7 +488,7 @@ public class HiveConf extends Configuration {
         "${system:java.io.tmpdir}" + File.separator + "${system:user.name}",
         "Local scratch space for Hive jobs"),
     DOWNLOADED_RESOURCES_DIR("hive.downloaded.resources.dir",
-        "${system:java.io.tmpdir}" + File.separator + "${hive.session.id}_resources",
+        "${system:java.io.tmpdir}" + File.separator + "${hive.session.identifier}_resources",
         "Temporary local directory for added resources in the remote file system."),
     SCRATCHDIRPERMISSION("hive.scratch.dir.permission", "700",
         "The permission for the user specific scratch directories that get created."),
@@ -1482,7 +1482,7 @@ public class HiveConf extends Configuration {
     // Things we log in the jobconf
 
     // session identifier
-    HIVESESSIONID("hive.session.id", "", ""),
+    HIVESESSIONID("hive.session.identifier", "", ""),
     // whether session is running in silent mode or not
     HIVESESSIONSILENT("hive.session.silent", false, ""),
 
@@ -1498,7 +1498,7 @@ public class HiveConf extends Configuration {
     HIVEQUERYSTRING("hive.query.string", "",
         "Query being executed (might be multiple per a session)"),
 
-    HIVEQUERYID("hive.query.id", "",
+    HIVEQUERYID("hive.query.identifier", "",
         "ID for query being executed (might be multiple per a session)"),
 
     HIVEJOBNAMELENGTH("hive.jobname.length", 50, "max jobname length"),
@@ -1534,7 +1534,7 @@ public class HiveConf extends Configuration {
         "to avoid the task getting killed because of inactivity.  Hive sends progress information when the script is \n" +
         "outputting to stderr.  This option removes the need of periodically producing stderr messages, \n" +
         "but users should be cautious because this may prevent infinite loops in the scripts to be killed by TaskTracker."),
-    HIVESCRIPTIDENVVAR("hive.script.operator.id.env.var", "HIVE_SCRIPT_OPERATOR_ID",
+    HIVESCRIPTIDENVVAR("hive.script.operator.identifier.env.var", "HIVE_SCRIPT_OPERATOR_ID",
         "Name of the environment variable that holds the unique script operator ID in the user's \n" +
         "transform function (the custom mapper/reducer that the user has specified in the query)"),
     HIVESCRIPTTRUNCATEENV("hive.script.operator.truncate.env", false,
@@ -2853,7 +2853,7 @@ public class HiveConf extends Configuration {
         "Parameter that determines if 'regular' (non-replication) export dumps can be\n" +
         "imported on to tables that are the target of replication. If this parameter is\n" +
         "set, regular imports will check if the destination table(if it exists) has a " +
-        "'repl.last.id' set on it. If so, it will fail."),
+        "'repl.last.identifier' set on it. If so, it will fail."),
     HIVE_REPL_TASK_FACTORY("hive.repl.task.factory",
         "org.apache.hive.hcatalog.api.repl.exim.EximReplicationTaskFactory",
         "Parameter that can be used to override which ReplicationTaskFactory will be\n" +
@@ -3983,7 +3983,7 @@ public class HiveConf extends Configuration {
         "Queue name within which the llap application will run." +
         " Used in LlapServiceDriver and package.py"),
     // TODO Move the following 2 properties out of Configuration to a constant.
-    LLAP_DAEMON_CONTAINER_ID("hive.llap.daemon.container.id", null,
+    LLAP_DAEMON_CONTAINER_ID("hive.llap.daemon.container.identifier", null,
         "ContainerId of a running LlapDaemon. Used to publish to the registry"),
     LLAP_DAEMON_NM_ADDRESS("hive.llap.daemon.nm.address", null,
         "NM Address host:rpcPort for the NodeManager on which the instance of the daemon is running.\n" +
@@ -4283,9 +4283,9 @@ public class HiveConf extends Configuration {
         "Enable memory manager for tez"),
     HIVE_HASH_TABLE_INFLATION_FACTOR("hive.hash.table.inflation.factor", (float) 2.0,
         "Expected inflation factor between disk/in memory representation of hash tables"),
-    HIVE_LOG_TRACE_ID("hive.log.trace.id", "",
-        "Log tracing id that can be used by upstream clients for tracking respective logs. " +
-        "Truncated to " + LOG_PREFIX_LENGTH + " characters. Defaults to use auto-generated session id."),
+    HIVE_LOG_TRACE_ID("hive.log.trace.identifier", "",
+        "Log tracing identifier that can be used by upstream clients for tracking respective logs. " +
+        "Truncated to " + LOG_PREFIX_LENGTH + " characters. Defaults to use auto-generated session identifier."),
 
     HIVE_MM_AVOID_GLOBSTATUS_ON_S3("hive.mm.avoid.s3.globstatus", true,
         "Whether to use listFiles (optimized on S3) instead of globStatus when on S3."),
@@ -5042,11 +5042,11 @@ public class HiveConf extends Configuration {
   public String getLogIdVar(String defaultValue) {
     String retval = getVar(ConfVars.HIVE_LOG_TRACE_ID);
     if (StringUtils.EMPTY.equals(retval)) {
-      LOG.info("Using the default value passed in for log id: {}", defaultValue);
+      LOG.info("Using the default value passed in for log identifier: {}", defaultValue);
       retval = defaultValue;
     }
     if (retval.length() > LOG_PREFIX_LENGTH) {
-      LOG.warn("The original log id prefix is {} has been truncated to {}", retval,
+      LOG.warn("The original log identifier prefix is {} has been truncated to {}", retval,
           retval.substring(0, LOG_PREFIX_LENGTH - 1));
       retval = retval.substring(0, LOG_PREFIX_LENGTH - 1);
     }

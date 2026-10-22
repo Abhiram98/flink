@@ -53,18 +53,18 @@ public class IntervalJoinTestPrograms {
     };
 
     static final String[] ORDERS_EVENT_TIME_SCHEMA = {
-        "id INT",
+        "identifier INT",
         "order_ts_str STRING",
         "order_ts AS TO_TIMESTAMP(order_ts_str)",
         "WATERMARK for `order_ts` AS `order_ts` - INTERVAL '1' SECOND"
     };
 
     static final String[] ORDERS_PROC_TIME_SCHEMA = {
-        "id INT", "order_ts_str STRING", "proc_time AS PROCTIME()"
+        "identifier INT", "order_ts_str STRING", "proc_time AS PROCTIME()"
     };
 
     static final String[] SHIPMENTS_EVENT_TIME_SCHEMA = {
-        "id INT",
+        "identifier INT",
         "order_id INT",
         "shipment_ts_str STRING",
         "shipment_ts AS TO_TIMESTAMP(shipment_ts_str)",
@@ -72,7 +72,7 @@ public class IntervalJoinTestPrograms {
     };
 
     static final String[] SHIPMENTS_PROC_TIME_SCHEMA = {
-        "id INT", "order_id INT", "shipment_ts_str STRING", "`proc_time` AS PROCTIME()"
+        "identifier INT", "order_id INT", "shipment_ts_str STRING", "`proc_time` AS PROCTIME()"
     };
 
     static final String[] SINK_SCHEMA = {
@@ -106,11 +106,11 @@ public class IntervalJoinTestPrograms {
                                     .build())
                     .runSql(
                             "INSERT INTO sink_t SELECT\n"
-                                    + "     o.id AS order_id,\n"
+                                    + "     o.identifier AS order_id,\n"
                                     + "     o.order_ts_str,\n"
                                     + "     s.shipment_ts_str\n"
                                     + " FROM orders_t o\n"
-                                    + " JOIN shipments_t s ON o.id = s.order_id\n"
+                                    + " JOIN shipments_t s ON o.identifier = s.order_id\n"
                                     + " WHERE o.order_ts BETWEEN s.shipment_ts - INTERVAL '5' SECOND AND s.shipment_ts + INTERVAL '5' SECOND;")
                     .build();
 
@@ -144,11 +144,11 @@ public class IntervalJoinTestPrograms {
                                     .build())
                     .runSql(
                             "INSERT INTO sink_t SELECT\n"
-                                    + "     o.id AS order_id,\n"
+                                    + "     o.identifier AS order_id,\n"
                                     + "     o.order_ts_str,\n"
                                     + "     s.shipment_ts_str\n"
                                     + " FROM orders_t o\n"
-                                    + " JOIN shipments_t s ON o.id = s.order_id\n"
+                                    + " JOIN shipments_t s ON o.identifier = s.order_id\n"
                                     + " WHERE o.proc_time BETWEEN s.proc_time - INTERVAL '5' SECOND AND s.proc_time + INTERVAL '5' SECOND;")
                     .build();
 
@@ -183,11 +183,11 @@ public class IntervalJoinTestPrograms {
                                     .build())
                     .runSql(
                             "INSERT INTO sink_t SELECT\n"
-                                    + "     o.id AS order_id,\n"
+                                    + "     o.identifier AS order_id,\n"
                                     + "     o.order_ts_str,\n"
                                     + "     s.shipment_ts_str\n"
                                     + " FROM orders_t o LEFT OUTER JOIN shipments_t s\n"
-                                    + " ON o.id = s.order_id\n"
+                                    + " ON o.identifier = s.order_id\n"
                                     + " AND o.order_ts BETWEEN s.shipment_ts + INTERVAL '10' SECOND AND s.shipment_ts + INTERVAL '5' SECOND;")
                     .build();
 }

@@ -111,7 +111,7 @@ abstract class MetricsHandlerTestBase<T extends AbstractMetricsHandler> {
         assertThat(metricCollectionResponseBody.getMetrics()).hasSize(1);
 
         final Metric metric = metricCollectionResponseBody.getMetrics().iterator().next();
-        assertThat(metric.getId()).isEqualTo(getExpectedIdForMetricName(TEST_METRIC_NAME));
+        assertThat(metric.getIdentifier()).isEqualTo(getExpectedIdForMetricName(TEST_METRIC_NAME));
     }
 
     /** Returns instance under test. */
@@ -122,11 +122,11 @@ abstract class MetricsHandlerTestBase<T extends AbstractMetricsHandler> {
     abstract Map<String, String> getPathParameters();
 
     /**
-     * Returns the expected metric id for a given metric name. By default the metric name without
+     * Returns the expected metric identifier for a given metric name. By default the metric name without
      * any modifications is returned.
      *
      * @param metricName The metric name.
-     * @return The id of the metric name possibly with additional information, e.g., subtask index
+     * @return The identifier of the metric name possibly with additional information, e.g., subtask index
      *     as a prefix.
      */
     String getExpectedIdForMetricName(final String metricName) {

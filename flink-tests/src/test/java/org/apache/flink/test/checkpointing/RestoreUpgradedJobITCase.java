@@ -121,7 +121,7 @@ public class RestoreUpgradedJobITCase extends TestLogger {
         MAP_5,
         MAP_6;
 
-        int id() {
+        int identifier() {
             return ordinal() + 1;
         }
     }
@@ -184,23 +184,23 @@ public class RestoreUpgradedJobITCase extends TestLogger {
 
         // Different order of maps before and after savepoint.
         env.addSource(new IntSource(allDataEmittedLatch))
-                .map(new IntMap(MAP_5.id()))
+                .map(new IntMap(MAP_5.identifier()))
                 .uid(MAP_5.name())
                 .forward()
-                .map(new IntMap(MAP_1.id()))
+                .map(new IntMap(MAP_1.identifier()))
                 .uid(MAP_1.name())
                 .slotSharingGroup("anotherSharingGroup")
                 .keyBy((key) -> key)
-                .map(new IntMap(MAP_6.id()))
+                .map(new IntMap(MAP_6.identifier()))
                 .uid(MAP_6.name())
                 .rebalance()
-                .map(new IntMap(MAP_4.id()))
+                .map(new IntMap(MAP_4.identifier()))
                 .uid(MAP_4.name())
                 .broadcast()
-                .map(new IntMap(MAP_2.id()))
+                .map(new IntMap(MAP_2.identifier()))
                 .uid(MAP_2.name())
                 .rescale()
-                .map(new IntMap(MAP_3.id()))
+                .map(new IntMap(MAP_3.identifier()))
                 .uid(MAP_3.name())
                 .addSink(new IntSink(result))
                 // one sink for easy calculation.
@@ -224,27 +224,27 @@ public class RestoreUpgradedJobITCase extends TestLogger {
         env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
         env.setParallelism(PARALLELISM);
         env.addSource(new StringSource(allDataEmittedLatch))
-                .map(new StringMap(MAP_1.id()))
+                .map(new StringMap(MAP_1.identifier()))
                 .uid(MAP_1.name())
                 .forward()
-                .map(new StringMap(MAP_2.id()))
+                .map(new StringMap(MAP_2.identifier()))
                 .uid(MAP_2.name())
                 .slotSharingGroup("anotherSharingGroup")
                 .keyBy((key) -> key)
-                .map(new StringMap(MAP_3.id()))
+                .map(new StringMap(MAP_3.identifier()))
                 .uid(MAP_3.name())
                 .map(new StringMap(-1))
                 .uid("new_chained_map")
                 .rebalance()
                 .map(new StringMap(-2))
                 .uid("new_map2")
-                .map(new StringMap(MAP_4.id()))
+                .map(new StringMap(MAP_4.identifier()))
                 .uid(MAP_4.name())
                 .rescale()
-                .map(new StringMap(MAP_5.id()))
+                .map(new StringMap(MAP_5.identifier()))
                 .uid(MAP_5.name())
                 .broadcast()
-                .map(new StringMap(MAP_6.id()))
+                .map(new StringMap(MAP_6.identifier()))
                 .uid(MAP_6.name())
                 .addSink(new StringSink(result))
                 // one sink for easy calculation.
@@ -321,8 +321,8 @@ public class RestoreUpgradedJobITCase extends TestLogger {
 
     private static class IntMap extends AbstractMap<Integer> {
 
-        private IntMap(int id) {
-            super(id);
+        private IntMap(int identifier) {
+            super(identifier);
         }
 
         @Override
@@ -333,8 +333,8 @@ public class RestoreUpgradedJobITCase extends TestLogger {
 
     private static class StringMap extends AbstractMap<String> {
 
-        private StringMap(int id) {
-            super(id);
+        private StringMap(int identifier) {
+            super(identifier);
         }
 
         @Override
@@ -347,13 +347,13 @@ public class RestoreUpgradedJobITCase extends TestLogger {
             super.initializeState(context);
             Iterator<Integer> iterator = valueState.get().iterator();
 
-            // id less than 0 represents operators which weren't presented in snapshot.
-            if (id > 0) {
+            // identifier less than 0 represents operators which weren't presented in snapshot.
+            if (identifier > 0) {
                 checkState(iterator.hasNext(), "Value state can not be empty.");
                 Integer state = iterator.next();
                 checkState(
-                        id == state,
-                        String.format("Value state(%s) should be equal to id(%s).", state, id));
+                        identifier == state,
+                        String.format("Value state(%s) should be equal to identifier(%s).", state, identifier));
             }
 
             checkState(!iterator.hasNext(), "Value state should be empty.");
@@ -363,10 +363,10 @@ public class RestoreUpgradedJobITCase extends TestLogger {
     private abstract static class AbstractMap<T> extends RichMapFunction<T, T>
             implements CheckpointedFunction {
         protected ListState<Integer> valueState;
-        protected final int id;
+        protected final int identifier;
 
-        private AbstractMap(int id) {
-            this.id = id;
+        private AbstractMap(int identifier) {
+            this.identifier = identifier;
         }
 
         protected int calculate(int value) throws Exception {
@@ -375,7 +375,7 @@ public class RestoreUpgradedJobITCase extends TestLogger {
 
         @Override
         public void snapshotState(FunctionSnapshotContext context) throws Exception {
-            valueState.add(id);
+            valueState.add(identifier);
         }
 
         @Override

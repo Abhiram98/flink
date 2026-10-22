@@ -52,11 +52,11 @@ import static java.util.Objects.requireNonNull;
  * set of metrics.
  *
  * <p>If the query parameters do not contain a "get" parameter the list of all metrics is returned.
- * {@code {"available": [ { "name" : "X", "id" : "X" } ] } }
+ * {@code {"available": [ { "name" : "X", "identifier" : "X" } ] } }
  *
  * <p>If the query parameters do contain a "get" parameter, a comma-separated list of metric names
  * is expected as a value. {@code /metrics?get=X,Y} The handler will then return a list containing
- * the values of the requested metrics. {@code [ { "id" : "X", "value" : "S" }, { "id" : "Y",
+ * the values of the requested metrics. {@code [ { "identifier" : "X", "value" : "S" }, { "identifier" : "Y",
  * "value" : "T" } ] }
  *
  * @param <M> Type of the concrete {@link MessageParameters}

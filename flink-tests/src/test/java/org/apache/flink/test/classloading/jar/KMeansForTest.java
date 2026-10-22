@@ -140,23 +140,23 @@ public class KMeansForTest {
     /** A simple two-dimensional centroid, basically a point with an ID. */
     public static class Centroid extends Point {
 
-        public int id;
+        public int identifier;
 
         public Centroid() {}
 
-        public Centroid(int id, double x, double y) {
+        public Centroid(int identifier, double x, double y) {
             super(x, y);
-            this.id = id;
+            this.identifier = identifier;
         }
 
-        public Centroid(int id, Point p) {
+        public Centroid(int identifier, Point p) {
             super(p.x, p.y);
-            this.id = id;
+            this.identifier = identifier;
         }
 
         @Override
         public String toString() {
-            return id + " " + super.toString();
+            return identifier + " " + super.toString();
         }
     }
 
@@ -216,11 +216,11 @@ public class KMeansForTest {
                 // update nearest cluster if necessary
                 if (distance < minDistance) {
                     minDistance = distance;
-                    closestCentroidId = centroid.id;
+                    closestCentroidId = centroid.identifier;
                 }
             }
 
-            // emit a new record with the center id and the data point.
+            // emit a new record with the center identifier and the data point.
             acc.add(1L);
             return new Tuple2<Integer, Point>(closestCentroidId, p);
         }

@@ -81,7 +81,7 @@ public class StreamExecLimit extends StreamExecRank {
 
     @JsonCreator
     public StreamExecLimit(
-            @JsonProperty(FIELD_NAME_ID) int id,
+            @JsonProperty(FIELD_NAME_ID) int identifier,
             @JsonProperty(FIELD_NAME_TYPE) ExecNodeContext context,
             @JsonProperty(FIELD_NAME_CONFIGURATION) ReadableConfig persistedConfig,
             @JsonProperty(FIELD_NAME_RANK_RANG) ConstantRankRange rankRange,
@@ -92,7 +92,7 @@ public class StreamExecLimit extends StreamExecRank {
             @JsonProperty(FIELD_NAME_OUTPUT_TYPE) RowType outputType,
             @JsonProperty(FIELD_NAME_DESCRIPTION) String description) {
         super(
-                id,
+                identifier,
                 context,
                 persistedConfig,
                 RankType.ROW_NUMBER,

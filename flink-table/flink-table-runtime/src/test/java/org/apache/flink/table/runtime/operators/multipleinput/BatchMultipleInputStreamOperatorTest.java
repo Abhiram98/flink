@@ -199,7 +199,7 @@ class BatchMultipleInputStreamOperatorTest extends MultipleInputTestBase {
         assertThat(aggOp2.getCurrentElement()).isNull();
         assertThat(outputData).isEmpty();
 
-        // process first input (input id is 3)
+        // process first input (input identifier is 3)
         StreamRecord<RowData> element1 =
                 new StreamRecord<>(GenericRowData.of(StringData.fromString("123")), 456);
         input3.processElement(element1);
@@ -214,7 +214,7 @@ class BatchMultipleInputStreamOperatorTest extends MultipleInputTestBase {
         assertThat(outputData).isEmpty();
         assertThat(joinOp2.getEndInputs()).containsExactly(2);
 
-        // process second input (input id is 1)
+        // process second input (input identifier is 1)
         StreamRecord<RowData> element2 =
                 new StreamRecord<>(GenericRowData.of(StringData.fromString("124")), 457);
         input1.processElement(element2);
@@ -232,7 +232,7 @@ class BatchMultipleInputStreamOperatorTest extends MultipleInputTestBase {
         assertThat(joinOp1.getCurrentElement1()).isEqualTo(element2);
         assertThat(outputData).isEmpty();
 
-        // process third input (input id is 2)
+        // process third input (input identifier is 2)
         StreamRecord<RowData> element3 =
                 new StreamRecord<>(GenericRowData.of(StringData.fromString("125")), 458);
         input2.processElement(element3);

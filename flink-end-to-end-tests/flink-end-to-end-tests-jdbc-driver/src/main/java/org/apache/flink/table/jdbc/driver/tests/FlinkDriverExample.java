@@ -49,13 +49,13 @@ public class FlinkDriverExample {
                 checkState(
                         !statement.execute(
                                 String.format(
-                                        "CREATE TABLE test_table(id bigint, val int, str string) "
+                                        "CREATE TABLE test_table(identifier bigint, val int, str string) "
                                                 + "with ("
                                                 + "'connector'='filesystem',\n"
                                                 + "'format'='csv',\n"
                                                 + "'path'='%s/test_table')",
                                         tableDir)));
-                // INSERT TABLE returns job id
+                // INSERT TABLE returns job identifier
                 checkState(
                         statement.execute(
                                 "INSERT INTO test_table VALUES "
@@ -67,7 +67,7 @@ public class FlinkDriverExample {
                 try (ResultSet resultSet = statement.getResultSet()) {
                     checkState(resultSet.next());
                     checkState(resultSet.getMetaData().getColumnCount() == 1);
-                    jobId = resultSet.getString("job id");
+                    jobId = resultSet.getString("job identifier");
                     checkState(!resultSet.next());
                 }
                 boolean jobFinished = false;
@@ -92,7 +92,7 @@ public class FlinkDriverExample {
                         resultList.add(
                                 String.format(
                                         "%s,%s,%s",
-                                        resultSet.getLong("id"),
+                                        resultSet.getLong("identifier"),
                                         resultSet.getInt("val"),
                                         resultSet.getString("str")));
                     }

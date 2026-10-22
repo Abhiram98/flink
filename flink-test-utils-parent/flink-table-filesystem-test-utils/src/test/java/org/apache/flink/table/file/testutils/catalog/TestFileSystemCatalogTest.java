@@ -61,13 +61,13 @@ public class TestFileSystemCatalogTest extends TestFileSystemCatalogTestBase {
 
     private static final List<Column> CREATE_COLUMNS =
             Arrays.asList(
-                    Column.physical("id", DataTypes.BIGINT()),
+                    Column.physical("identifier", DataTypes.BIGINT()),
                     Column.physical("name", DataTypes.VARCHAR(20)),
                     Column.physical("age", DataTypes.INT()),
                     Column.physical("tss", DataTypes.TIMESTAMP(3)),
                     Column.physical("partition", DataTypes.VARCHAR(10)));
     private static final UniqueConstraint CONSTRAINTS =
-            UniqueConstraint.primaryKey("primary_constraint", Collections.singletonList("id"));
+            UniqueConstraint.primaryKey("primary_constraint", Collections.singletonList("identifier"));
     private static final List<String> PARTITION_KEYS = Collections.singletonList("partition");
 
     private static final ResolvedSchema CREATE_RESOLVED_SCHEMA =
@@ -93,7 +93,7 @@ public class TestFileSystemCatalogTest extends TestFileSystemCatalogTestBase {
                             .build(),
                     CREATE_RESOLVED_SCHEMA);
 
-    private static final String DEFINITION_QUERY = "SELECT id, region, county FROM T";
+    private static final String DEFINITION_QUERY = "SELECT identifier, region, county FROM T";
     private static final IntervalFreshness FRESHNESS = IntervalFreshness.ofMinute("3");
     private static final ResolvedCatalogMaterializedTable EXPECTED_CATALOG_MATERIALIZED_TABLE =
             new ResolvedCatalogMaterializedTable(

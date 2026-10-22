@@ -42,7 +42,7 @@ public class TestListWrapper {
     }
 
     /**
-     * Creates and stores a list, returns with the id.
+     * Creates and stores a list, returns with the identifier.
      *
      * @return The ID of the list.
      */

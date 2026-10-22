@@ -62,7 +62,7 @@ public class TestingBatchExecNode implements BatchExecNode<RowData> {
     }
 
     @Override
-    public int getId() {
+    public int getIdentifier() {
         return 0;
     }
 

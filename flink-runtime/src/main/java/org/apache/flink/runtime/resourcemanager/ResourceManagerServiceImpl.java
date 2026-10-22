@@ -196,7 +196,7 @@ public class ResourceManagerServiceImpl implements ResourceManagerService, Leade
                         }
 
                         LOG.info(
-                                "Resource manager service is granted leadership with session id {}.",
+                                "Resource manager service is granted leadership with session identifier {}.",
                                 newLeaderSessionID);
 
                         try {
@@ -221,7 +221,7 @@ public class ResourceManagerServiceImpl implements ResourceManagerService, Leade
                         }
 
                         LOG.info(
-                                "Resource manager service is revoked leadership with session id {}.",
+                                "Resource manager service is revoked leadership with session identifier {}.",
                                 leaderSessionID);
 
                         stopLeaderResourceManager();

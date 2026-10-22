@@ -527,7 +527,7 @@ public abstract class BeamPythonFunctionRunner implements PythonFunctionRunner {
         List<TimerReference> timers = getTimers(components);
         List<PipelineNode.PTransformNode> transforms =
                 components.getTransformsMap().keySet().stream()
-                        .map(id -> PipelineNode.pTransform(id, components.getTransformsOrThrow(id)))
+                        .map(identifier -> PipelineNode.pTransform(identifier, components.getTransformsOrThrow(identifier)))
                         .collect(Collectors.toList());
         List<PipelineNode.PCollectionNode> outputs = new ArrayList<>();
         outputs.add(

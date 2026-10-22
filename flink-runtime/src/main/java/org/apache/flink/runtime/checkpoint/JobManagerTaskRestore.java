@@ -28,7 +28,7 @@ public class JobManagerTaskRestore implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** The id of the checkpoint from which we restore. */
+    /** The identifier of the checkpoint from which we restore. */
     private final long restoreCheckpointId;
 
     /** The state for this task to restore. */

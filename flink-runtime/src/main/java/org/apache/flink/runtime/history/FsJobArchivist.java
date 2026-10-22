@@ -61,7 +61,7 @@ public class FsJobArchivist {
      * JobManagerOptions#ARCHIVE_DIR}.
      *
      * @param rootPath directory to which the archive should be written to
-     * @param jobId job id
+     * @param jobId job identifier
      * @param jsonToArchive collection of json-path pairs to that should be archived
      * @return path to where the archive was written, or null if no archive was created
      * @throws IOException

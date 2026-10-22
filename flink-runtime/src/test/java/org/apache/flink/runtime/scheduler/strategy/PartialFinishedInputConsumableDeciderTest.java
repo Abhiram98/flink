@@ -73,7 +73,7 @@ class PartialFinishedInputConsumableDeciderTest {
                 .withResultPartitionType(ResultPartitionType.BLOCKING)
                 .finish();
 
-        topology.getResultPartition(producers.get(0).getProducedResults().iterator().next().getId())
+        topology.getResultPartition(producers.get(0).getProducedResults().iterator().next().getIdentifier())
                 .markFinished();
 
         PartialFinishedInputConsumableDecider inputConsumableDecider =
@@ -160,7 +160,7 @@ class PartialFinishedInputConsumableDeciderTest {
                 .withResultPartitionType(ResultPartitionType.HYBRID_FULL)
                 .finish();
 
-        topology.getResultPartition(producers.get(0).getProducedResults().iterator().next().getId())
+        topology.getResultPartition(producers.get(0).getProducedResults().iterator().next().getIdentifier())
                 .markFinished();
 
         PartialFinishedInputConsumableDecider inputConsumableDecider =

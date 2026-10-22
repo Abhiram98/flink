@@ -47,10 +47,10 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * CREATE TABLE base_table (
- *     id BIGINT,
+ *     identifier BIGINT,
  *     name STRING,
  *     tstmp TIMESTAMP,
- *     PRIMARY KEY(id)
+ *     PRIMARY KEY(identifier)
  * ) WITH (
  *     ‘connector’ = ‘kafka’,
  *     ‘connector.starting-offset’: ‘12345’,

@@ -387,19 +387,19 @@ public class ExecutionGraphTestUtils {
     }
 
     public static ExecutionJobVertex getExecutionJobVertex(
-            JobVertexID id, ScheduledExecutorService executor) throws Exception {
+            JobVertexID identifier, ScheduledExecutorService executor) throws Exception {
 
-        return getExecutionJobVertex(id, 1, null, executor);
+        return getExecutionJobVertex(identifier, 1, null, executor);
     }
 
     public static ExecutionJobVertex getExecutionJobVertex(
-            JobVertexID id,
+            JobVertexID identifier,
             int parallelism,
             @Nullable SlotSharingGroup slotSharingGroup,
             ScheduledExecutorService executor)
             throws Exception {
 
-        JobVertex ajv = new JobVertex("TestVertex", id);
+        JobVertex ajv = new JobVertex("TestVertex", identifier);
         ajv.setInvokableClass(AbstractInvokable.class);
         ajv.setParallelism(parallelism);
         if (slotSharingGroup != null) {
@@ -428,8 +428,8 @@ public class ExecutionGraphTestUtils {
         return scheduler.getExecutionJobVertex(jobVertex.getID());
     }
 
-    public static ExecutionJobVertex getExecutionJobVertex(JobVertexID id) throws Exception {
-        return getExecutionJobVertex(id, new DirectScheduledExecutorService());
+    public static ExecutionJobVertex getExecutionJobVertex(JobVertexID identifier) throws Exception {
+        return getExecutionJobVertex(identifier, new DirectScheduledExecutorService());
     }
 
     public static ExecutionVertex getExecutionVertex() throws Exception {
@@ -511,8 +511,8 @@ public class ExecutionGraphTestUtils {
         } else {
             assertThat(outputJobVertices).hasSize(ejv.getProducedDataSets().length);
             for (int i = 0; i < outputJobVertices.size(); i++) {
-                assertThat(originJobVertex.getProducedDataSets().get(i).getId())
-                        .isEqualTo(ejv.getProducedDataSets()[i].getId());
+                assertThat(originJobVertex.getProducedDataSets().get(i).getIdentifier())
+                        .isEqualTo(ejv.getProducedDataSets()[i].getIdentifier());
                 assertThat(originJobVertex.getParallelism())
                         .isEqualTo(ejv.getProducedDataSets()[0].getPartitions().length);
             }

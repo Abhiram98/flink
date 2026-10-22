@@ -81,10 +81,10 @@ class TaskBalancedPreferredSlotSharingStrategyTest extends AbstractSlotSharingSt
         // Check for JVs whose parallelism is the max in the same slot sharing group.
         for (int i = 0; i < executionVertices4.size(); i++) {
             TestingSchedulingExecutionVertex executionVertex4 = executionVertices4.get(i);
-            assertThat(strategy.getExecutionSlotSharingGroup(executionVertex4.getId()))
+            assertThat(strategy.getExecutionSlotSharingGroup(executionVertex4.getIdentifier()))
                     .isEqualTo(
                             strategy.getExecutionSlotSharingGroup(
-                                    executionVertices5.get(i).getId()));
+                                    executionVertices5.get(i).getIdentifier()));
         }
     }
 
@@ -173,6 +173,6 @@ class TaskBalancedPreferredSlotSharingStrategyTest extends AbstractSlotSharingSt
             SlotSharingStrategy strategy,
             List<TestingSchedulingExecutionVertex> jvVertices,
             int index) {
-        return strategy.getExecutionSlotSharingGroup(jvVertices.get(index).getId());
+        return strategy.getExecutionSlotSharingGroup(jvVertices.get(index).getIdentifier());
     }
 }

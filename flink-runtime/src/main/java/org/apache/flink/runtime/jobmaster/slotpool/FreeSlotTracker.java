@@ -28,17 +28,17 @@ import java.util.Set;
 public interface FreeSlotTracker {
 
     /**
-     * Get allocation id of all available slots.
+     * Get allocation identifier of all available slots.
      *
-     * @return allocation id of available slots
+     * @return allocation identifier of available slots
      */
     Set<AllocationID> getAvailableSlots();
 
     /**
-     * Get slot info by allocation id, this slot must exist.
+     * Get slot info by allocation identifier, this slot must exist.
      *
      * @param allocationId to get SlotInfo
-     * @return slot info for the allocation id
+     * @return slot info for the allocation identifier
      */
     SlotInfo getSlotInfo(AllocationID allocationId);
 

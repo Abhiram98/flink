@@ -307,7 +307,7 @@ class RestoreStreamTaskTest {
         @Override
         public void initializeState(StateInitializationContext context) throws Exception {
             assertThat(context.getRestoredCheckpointId().isPresent())
-                    .as("Restored context id should be set iff is restored")
+                    .as("Restored context identifier should be set iff is restored")
                     .isEqualTo(context.isRestored());
             if (context.isRestored()) {
                 RESTORED_OPERATORS.put(

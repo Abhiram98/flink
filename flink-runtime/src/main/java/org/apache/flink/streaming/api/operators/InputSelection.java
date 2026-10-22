@@ -52,7 +52,7 @@ public final class InputSelection implements Serializable {
     /**
      * Tests if the input specified by {@code inputId} is selected.
      *
-     * @param inputId The input id, see the description of {@code inputId} in {@link
+     * @param inputId The input identifier, see the description of {@code inputId} in {@link
      *     Builder#select(int)}.
      * @return {@code true} if the input is selected, {@code false} otherwise.
      */
@@ -197,7 +197,7 @@ public final class InputSelection implements Serializable {
         /**
          * Selects an input identified by the given {@code inputId}.
          *
-         * @param inputId the input id numbered starting from 1 to 64, and `1` indicates the first
+         * @param inputId the input identifier numbered starting from 1 to 64, and `1` indicates the first
          *     input. Specially, `-1` indicates all inputs.
          * @return a reference to this object.
          */

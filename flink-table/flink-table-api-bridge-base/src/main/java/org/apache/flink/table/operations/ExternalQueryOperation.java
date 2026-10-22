@@ -83,7 +83,7 @@ public final class ExternalQueryOperation<E> implements QueryOperation {
     public String asSummaryString() {
         final Map<String, Object> args = new LinkedHashMap<>();
         args.put("identifier", getContextResolvedTable().getIdentifier().asSummaryString());
-        args.put("stream", dataStream.getId());
+        args.put("stream", dataStream.getIdentifier());
         args.put("type", physicalDataType);
         args.put("isTopLevelRecord", isTopLevelRecord);
         args.put("changelogMode", changelogMode);

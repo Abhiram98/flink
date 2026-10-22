@@ -79,7 +79,7 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
 
     private @Nullable transient OpFusionCodegenSpecGenerator fusionCodegenSpecGenerator;
 
-    /** Holds the context information (id, name, version) as deserialized from a JSON plan. */
+    /** Holds the context information (identifier, name, version) as deserialized from a JSON plan. */
     @JsonProperty(value = FIELD_NAME_TYPE, access = JsonProperty.Access.WRITE_ONLY)
     private final ExecNodeContext context;
 
@@ -89,7 +89,7 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
      */
     @JsonProperty(value = FIELD_NAME_TYPE, access = JsonProperty.Access.READ_ONLY, index = 1)
     protected final ExecNodeContext getContextFromAnnotation() {
-        return isCompiled ? context : ExecNodeContext.newContext(this.getClass()).withId(getId());
+        return isCompiled ? context : ExecNodeContext.newContext(this.getClass()).withId(getIdentifier());
     }
 
     @JsonProperty(value = FIELD_NAME_CONFIGURATION, access = JsonProperty.Access.WRITE_ONLY)
@@ -108,13 +108,13 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
     }
 
     protected ExecNodeBase(
-            int id,
+            int identifier,
             ExecNodeContext context,
             ReadableConfig persistedConfig,
             List<InputProperty> inputProperties,
             LogicalType outputType,
             String description) {
-        this.context = checkNotNull(context).withId(id);
+        this.context = checkNotNull(context).withId(identifier);
         this.persistedConfig = persistedConfig == null ? new Configuration() : persistedConfig;
         this.inputProperties = checkNotNull(inputProperties);
         this.outputType = checkNotNull(outputType);
@@ -122,8 +122,8 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
     }
 
     @Override
-    public final int getId() {
-        return context.getId();
+    public final int getIdentifier() {
+        return context.getIdentifier();
     }
 
     @Override
@@ -268,7 +268,7 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
     protected String createFormattedTransformationDescription(
             String description, ReadableConfig config) {
         if (config.get(ExecutionConfigOptions.TABLE_EXEC_SIMPLIFY_OPERATOR_NAME_ENABLED)) {
-            return String.format("[%d]:%s", getId(), description);
+            return String.format("[%d]:%s", getIdentifier(), description);
         }
         return description;
     }
@@ -276,7 +276,7 @@ public abstract class ExecNodeBase<T> implements ExecNode<T> {
     protected String createFormattedTransformationName(
             String detailName, String simplifiedName, ReadableConfig config) {
         if (config.get(ExecutionConfigOptions.TABLE_EXEC_SIMPLIFY_OPERATOR_NAME_ENABLED)) {
-            return String.format("%s[%d]", simplifiedName, getId());
+            return String.format("%s[%d]", simplifiedName, getIdentifier());
         }
         return detailName;
     }

@@ -173,7 +173,7 @@ class FileWriterBucket<IN> {
         pendingFiles.addAll(bucket.pendingFiles);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Merging buckets for bucket id={}", bucketId);
+            LOG.debug("Merging buckets for bucket identifier={}", bucketId);
         }
     }
 
@@ -181,7 +181,7 @@ class FileWriterBucket<IN> {
         if (inProgressPart == null || rollingPolicy.shouldRollOnEvent(inProgressPart, element)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Opening new part file for bucket id={} due to element {}.",
+                        "Opening new part file for bucket identifier={} due to element {}.",
                         bucketId,
                         element);
             }
@@ -196,7 +196,7 @@ class FileWriterBucket<IN> {
                 && (rollingPolicy.shouldRollOnCheckpoint(inProgressPart) || endOfInput)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Closing in-progress part file for bucket id={} on checkpoint.", bucketId);
+                        "Closing in-progress part file for bucket identifier={} on checkpoint.", bucketId);
             }
             closePartFile();
         }
@@ -233,7 +233,7 @@ class FileWriterBucket<IN> {
                 && rollingPolicy.shouldRollOnProcessingTime(inProgressPart, timestamp)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
-                        "Bucket {} closing in-progress part file for part file id={} due to processing time rolling policy "
+                        "Bucket {} closing in-progress part file for part file identifier={} due to processing time rolling policy "
                                 + "(in-progress file created @ {}, last updated @ {} and current time is {}).",
                         bucketId,
                         uniqueId,
@@ -253,7 +253,7 @@ class FileWriterBucket<IN> {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(
-                    "Opening new part file \"{}\" for bucket id={}.",
+                    "Opening new part file \"{}\" for bucket identifier={}.",
                     partFilePath.getName(),
                     bucketId);
         }

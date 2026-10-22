@@ -236,7 +236,7 @@ class CliClientTest {
                         "HELP;",
                         "CREATE TABLE tbl( -- comment\n"
                                 + "-- comment with ;\n"
-                                + "id INT,\n"
+                                + "identifier INT,\n"
                                 + "name STRING\n"
                                 + ") WITH (\n"
                                 + "  'connector' = 'values'\n"

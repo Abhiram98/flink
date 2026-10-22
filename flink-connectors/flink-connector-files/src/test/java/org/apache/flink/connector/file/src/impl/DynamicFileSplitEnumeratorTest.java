@@ -162,8 +162,8 @@ class DynamicFileSplitEnumeratorTest {
     }
 
     private static class TestSplit extends FileSourceSplit {
-        public TestSplit(String id) {
-            super(id, new Path(), 0, 0, 0L, 0);
+        public TestSplit(String identifier) {
+            super(identifier, new Path(), 0, 0, 0L, 0);
         }
     }
 

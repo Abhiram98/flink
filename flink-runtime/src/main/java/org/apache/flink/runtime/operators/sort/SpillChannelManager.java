@@ -44,7 +44,7 @@ final class SpillChannelManager implements AutoCloseable {
     /**
      * Adds a channel to the list of channels that are to be removed at shutdown.
      *
-     * @param channel The channel id.
+     * @param channel The channel identifier.
      */
     synchronized void registerChannelToBeRemovedAtShutdown(FileIOChannel.ID channel) {
         channelsToDeleteAtShutdown.add(channel);
@@ -53,7 +53,7 @@ final class SpillChannelManager implements AutoCloseable {
     /**
      * Removes a channel from the list of channels that are to be removed at shutdown.
      *
-     * @param channel The channel id.
+     * @param channel The channel identifier.
      */
     synchronized void unregisterChannelToBeRemovedAtShutdown(FileIOChannel.ID channel) {
         channelsToDeleteAtShutdown.remove(channel);

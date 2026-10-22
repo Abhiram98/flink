@@ -41,7 +41,7 @@ public interface CoordinatedOperatorFactory<OUT> extends StreamOperatorFactory<O
      * Get the operator coordinator provider for this operator.
      *
      * @param operatorName the name of the operator.
-     * @param operatorID the id of the operator.
+     * @param operatorID the identifier of the operator.
      * @return the provider of the {@link OperatorCoordinator} for this operator.
      */
     OperatorCoordinator.Provider getCoordinatorProvider(String operatorName, OperatorID operatorID);

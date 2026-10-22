@@ -351,7 +351,7 @@ public class JsonRowDataSerDeSchemaTest {
         String[] jsons =
                 new String[] {
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"metrics\":{\"k1\":10.01,\"k2\":\"invalid\"}}",
-                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\", \"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\"}, "
+                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\", \"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\"}, "
                             + "\"ids\":[1, 2, 3]}",
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"metrics\":{}}",
                 };
@@ -359,7 +359,7 @@ public class JsonRowDataSerDeSchemaTest {
         String[] expected =
                 new String[] {
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":null,\"ids\":null,\"metrics\":{\"k1\":10.01,\"k2\":null}}",
-                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\"},"
+                    "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\"},"
                             + "\"ids\":[1,2,3],\"metrics\":null}",
                     "{\"svt\":\"2020-02-24T12:58:09.209+0800\",\"ops\":null,\"ids\":null,\"metrics\":{}}",
                 };
@@ -368,7 +368,7 @@ public class JsonRowDataSerDeSchemaTest {
                 (RowType)
                         ROW(
                                         FIELD("svt", STRING()),
-                                        FIELD("ops", ROW(FIELD("id", STRING()))),
+                                        FIELD("ops", ROW(FIELD("identifier", STRING()))),
                                         FIELD("ids", ARRAY(INT())),
                                         FIELD("metrics", MAP(STRING(), DOUBLE())))
                                 .getLogicalType();
@@ -425,7 +425,7 @@ public class JsonRowDataSerDeSchemaTest {
     void testDeserializationMissingField() throws Exception {
         // Root
         ObjectNode root = OBJECT_MAPPER.createObjectNode();
-        root.put("id", 123123123);
+        root.put("identifier", 123123123);
         byte[] serializedJson = OBJECT_MAPPER.writeValueAsBytes(root);
 
         DataType dataType = ROW(FIELD("name", STRING()));
@@ -447,7 +447,7 @@ public class JsonRowDataSerDeSchemaTest {
                         isJsonParser, schema, true, false, TimestampFormat.ISO_8601);
         open(deserializationSchema);
 
-        String errorMessage = "Failed to deserialize JSON '{\"id\":123123123}'.";
+        String errorMessage = "Failed to deserialize JSON '{\"identifier\":123123123}'.";
 
         DeserializationSchema<RowData> finalDeserializationSchema = deserializationSchema;
         assertThatThrownBy(() -> finalDeserializationSchema.deserialize(serializedJson))
@@ -640,9 +640,9 @@ public class JsonRowDataSerDeSchemaTest {
         String[] jsons =
                 new String[] {
                     "{\"ops\":null,\"ids\":null,\"metrics\":{\"k1\":10.01,\"k2\":null}}",
-                    "{\"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\", \"svt\":\"2020-02-24T12:58:09.209+0800\"}, "
+                    "{\"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\", \"svt\":\"2020-02-24T12:58:09.209+0800\"}, "
                             + "\"ids\":[1, 2, 3]}",
-                    "{\"ops\":{\"id\":null, \"svt\":\"2020-02-24T12:58:09.209+0800\"}, "
+                    "{\"ops\":{\"identifier\":null, \"svt\":\"2020-02-24T12:58:09.209+0800\"}, "
                             + "\"ids\":[1, 2, null]}",
                     "{\"ops\":{},\"ids\":[],\"metrics\":{}}",
                 };
@@ -650,7 +650,7 @@ public class JsonRowDataSerDeSchemaTest {
         String[] expected =
                 new String[] {
                     "{\"metrics\":{\"k1\":10.01,\"k2\":null}}",
-                    "{\"ops\":{\"id\":\"281708d0-4092-4c21-9233-931950b6eccf\",\"svt\":\"2020-02-24T12:58:09.209+0800\"},"
+                    "{\"ops\":{\"identifier\":\"281708d0-4092-4c21-9233-931950b6eccf\",\"svt\":\"2020-02-24T12:58:09.209+0800\"},"
                             + "\"ids\":[1,2,3]}",
                     "{\"ops\":{\"svt\":\"2020-02-24T12:58:09.209+0800\"},\"ids\":[1,2,null]}",
                     "{\"ops\":{},\"ids\":[],\"metrics\":{}}",
@@ -661,7 +661,7 @@ public class JsonRowDataSerDeSchemaTest {
                         ROW(
                                         FIELD(
                                                 "ops",
-                                                ROW(FIELD("id", STRING()), FIELD("svt", STRING()))),
+                                                ROW(FIELD("identifier", STRING()), FIELD("svt", STRING()))),
                                         FIELD("ids", ARRAY(INT())),
                                         FIELD("metrics", MAP(STRING(), DOUBLE())))
                                 .getLogicalType();
@@ -769,92 +769,92 @@ public class JsonRowDataSerDeSchemaTest {
 
     private static List<TestSpec> testData =
             Arrays.asList(
-                    TestSpec.json("{\"id\": \"trueA\"}")
-                            .rowType(ROW(FIELD("id", BOOLEAN())))
+                    TestSpec.json("{\"identifier\": \"trueA\"}")
+                            .rowType(ROW(FIELD("identifier", BOOLEAN())))
                             .expect(Row.of(false)),
-                    TestSpec.json("{\"id\": true}")
-                            .rowType(ROW(FIELD("id", BOOLEAN())))
+                    TestSpec.json("{\"identifier\": true}")
+                            .rowType(ROW(FIELD("identifier", BOOLEAN())))
                             .expect(Row.of(true)),
-                    TestSpec.json("{\"id\":\"abc\"}")
-                            .rowType(ROW(FIELD("id", INT())))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"abc\"}'."),
-                    TestSpec.json("{\"id\":11211111111.013}")
-                            .rowType(ROW(FIELD("id", INT())))
+                    TestSpec.json("{\"identifier\":\"abc\"}")
+                            .rowType(ROW(FIELD("identifier", INT())))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"abc\"}'."),
+                    TestSpec.json("{\"identifier\":11211111111.013}")
+                            .rowType(ROW(FIELD("identifier", INT())))
                             .expect(null),
-                    TestSpec.json("{\"id\":112.013}")
-                            .rowType(ROW(FIELD("id", INT())))
+                    TestSpec.json("{\"identifier\":112.013}")
+                            .rowType(ROW(FIELD("identifier", INT())))
                             .expect(Row.of(112)),
-                    TestSpec.json("{\"id\":112.013}")
-                            .rowType(ROW(FIELD("id", BIGINT())))
+                    TestSpec.json("{\"identifier\":112.013}")
+                            .rowType(ROW(FIELD("identifier", BIGINT())))
                             .expect(Row.of(112L)),
-                    TestSpec.json("{\"id\":\"long\"}")
-                            .rowType(ROW(FIELD("id", BIGINT())))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"long\"}'."),
-                    TestSpec.json("{\"id\":\"112.013.123\"}")
-                            .rowType(ROW(FIELD("id", FLOAT())))
+                    TestSpec.json("{\"identifier\":\"long\"}")
+                            .rowType(ROW(FIELD("identifier", BIGINT())))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"long\"}'."),
+                    TestSpec.json("{\"identifier\":\"112.013.123\"}")
+                            .rowType(ROW(FIELD("identifier", FLOAT())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"112.013.123\"}'."),
-                    TestSpec.json("{\"id\":\"112.013.123\"}")
-                            .rowType(ROW(FIELD("id", DOUBLE())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"112.013.123\"}'."),
+                    TestSpec.json("{\"identifier\":\"112.013.123\"}")
+                            .rowType(ROW(FIELD("identifier", DOUBLE())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"112.013.123\"}'."),
-                    TestSpec.json("{\"id\":\"18:00:243\"}")
-                            .rowType(ROW(FIELD("id", TIME())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"112.013.123\"}'."),
+                    TestSpec.json("{\"identifier\":\"18:00:243\"}")
+                            .rowType(ROW(FIELD("identifier", TIME())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"18:00:243\"}'."),
-                    TestSpec.json("{\"id\":\"18:00:243\"}")
-                            .rowType(ROW(FIELD("id", TIME())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"18:00:243\"}'."),
+                    TestSpec.json("{\"identifier\":\"18:00:243\"}")
+                            .rowType(ROW(FIELD("identifier", TIME())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"18:00:243\"}'."),
-                    TestSpec.json("{\"id\":\"20191112\"}")
-                            .rowType(ROW(FIELD("id", DATE())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"18:00:243\"}'."),
+                    TestSpec.json("{\"identifier\":\"20191112\"}")
+                            .rowType(ROW(FIELD("identifier", DATE())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"20191112\"}'."),
-                    TestSpec.json("{\"id\":\"20191112\"}")
-                            .rowType(ROW(FIELD("id", DATE())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"20191112\"}'."),
+                    TestSpec.json("{\"identifier\":\"20191112\"}")
+                            .rowType(ROW(FIELD("identifier", DATE())))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"20191112\"}'."),
-                    TestSpec.json("{\"id\":true}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                                    "Failed to deserialize JSON '{\"identifier\":\"20191112\"}'."),
+                    TestSpec.json("{\"identifier\":true}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("true")),
-                    TestSpec.json("{\"id\":123.234}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":123.234}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("123.234")),
-                    TestSpec.json("{\"id\":1234567}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":1234567}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("1234567")),
-                    TestSpec.json("{\"id\":\"string field\"}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":\"string field\"}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("string field")),
-                    TestSpec.json("{\"id\":[\"array data1\",\"array data2\",123,234.345]}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":[\"array data1\",\"array data2\",123,234.345]}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("[\"array data1\",\"array data2\",123,234.345]")),
-                    TestSpec.json("{\"id\":{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}}")
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}}")
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("{\"k1\":123,\"k2\":234.234,\"k3\":\"string data\"}")),
-                    TestSpec.json("{\"id\":\"2019-11-12 18:00:12\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP(0))))
+                    TestSpec.json("{\"identifier\":\"2019-11-12 18:00:12\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP(0))))
                             .timestampFormat(TimestampFormat.ISO_8601)
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12 18:00:12\"}'."),
-                    TestSpec.json("{\"id\":\"2019-11-12T18:00:12\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP(0))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12 18:00:12\"}'."),
+                    TestSpec.json("{\"identifier\":\"2019-11-12T18:00:12\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP(0))))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12T18:00:12\"}'."),
-                    TestSpec.json("{\"id\":\"2019-11-12T18:00:12Z\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP(0))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12T18:00:12\"}'."),
+                    TestSpec.json("{\"identifier\":\"2019-11-12T18:00:12Z\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP(0))))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12T18:00:12Z\"}'."),
-                    TestSpec.json("{\"id\":\"2019-11-12T18:00:12Z\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP(0))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12T18:00:12Z\"}'."),
+                    TestSpec.json("{\"identifier\":\"2019-11-12T18:00:12Z\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP(0))))
                             .timestampFormat(TimestampFormat.ISO_8601)
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12T18:00:12Z\"}'."),
-                    TestSpec.json("{\"id\":\"abc\"}")
-                            .rowType(ROW(FIELD("id", DECIMAL(10, 3))))
-                            .expectErrorMessage("Failed to deserialize JSON '{\"id\":\"abc\"}'."),
-                    TestSpec.json("{\"row\":{\"id\":\"abc\"}}")
-                            .rowType(ROW(FIELD("row", ROW(FIELD("id", BOOLEAN())))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12T18:00:12Z\"}'."),
+                    TestSpec.json("{\"identifier\":\"abc\"}")
+                            .rowType(ROW(FIELD("identifier", DECIMAL(10, 3))))
+                            .expectErrorMessage("Failed to deserialize JSON '{\"identifier\":\"abc\"}'."),
+                    TestSpec.json("{\"row\":{\"identifier\":\"abc\"}}")
+                            .rowType(ROW(FIELD("row", ROW(FIELD("identifier", BOOLEAN())))))
                             .expect(Row.of(Row.of(false))),
                     TestSpec.json("{\"array\":[123, \"abc\"]}")
                             .rowType(ROW(FIELD("array", ARRAY(INT()))))
@@ -866,19 +866,19 @@ public class JsonRowDataSerDeSchemaTest {
                             .expect(Row.of(createHashMap("key1", 123, "key2", null)))
                             .expectErrorMessage(
                                     "Failed to deserialize JSON '{\"map\":{\"key1\":\"123\", \"key2\":\"abc\"}}'."),
-                    TestSpec.json("{\"id\":\"2019-11-12T18:00:12\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP_WITH_LOCAL_TIME_ZONE(0))))
+                    TestSpec.json("{\"identifier\":\"2019-11-12T18:00:12\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP_WITH_LOCAL_TIME_ZONE(0))))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12T18:00:12\"}'."),
-                    TestSpec.json("{\"id\":\"2019-11-12T18:00:12+0800\"}")
-                            .rowType(ROW(FIELD("id", TIMESTAMP_WITH_LOCAL_TIME_ZONE(0))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12T18:00:12\"}'."),
+                    TestSpec.json("{\"identifier\":\"2019-11-12T18:00:12+0800\"}")
+                            .rowType(ROW(FIELD("identifier", TIMESTAMP_WITH_LOCAL_TIME_ZONE(0))))
                             .expectErrorMessage(
-                                    "Failed to deserialize JSON '{\"id\":\"2019-11-12T18:00:12+0800\"}'."),
-                    TestSpec.json("{\"id\":1,\"factor\":799.929496989092949698}")
-                            .rowType(ROW(FIELD("id", INT()), FIELD("factor", DECIMAL(38, 18))))
+                                    "Failed to deserialize JSON '{\"identifier\":\"2019-11-12T18:00:12+0800\"}'."),
+                    TestSpec.json("{\"identifier\":1,\"factor\":799.929496989092949698}")
+                            .rowType(ROW(FIELD("identifier", INT()), FIELD("factor", DECIMAL(38, 18))))
                             .expect(Row.of(1, new BigDecimal("799.929496989092949698"))),
-                    TestSpec.json("{\"id\":\"\tstring field\"}") // test to parse control chars
-                            .rowType(ROW(FIELD("id", STRING())))
+                    TestSpec.json("{\"identifier\":\"\tstring field\"}") // test to parse control chars
+                            .rowType(ROW(FIELD("identifier", STRING())))
                             .expect(Row.of("\tstring field")));
 
     private static Map<String, Integer> createHashMap(

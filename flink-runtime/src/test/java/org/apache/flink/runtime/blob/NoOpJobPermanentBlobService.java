@@ -42,7 +42,7 @@ public class NoOpJobPermanentBlobService implements JobPermanentBlobService {
     @Override
     public File getFile(JobID jobId, PermanentBlobKey key) throws IOException {
         throw new IOException(
-                String.format("Could not find file for job id %s and key %s.", jobId, key));
+                String.format("Could not find file for job identifier %s and key %s.", jobId, key));
     }
 
     @Override

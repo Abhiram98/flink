@@ -256,14 +256,14 @@ public class KubernetesConfigOptions {
                                     + "commas. For example, environment:production,disk:ssd.");
 
     public static final ConfigOption<String> CLUSTER_ID =
-            key("kubernetes.cluster-id")
+            key("kubernetes.cluster-identifier")
                     .stringType()
                     .noDefaultValue()
                     .withDescription(
                             Description.builder()
                                     .text(
-                                            "The cluster-id, which should be no more than 45 characters, is used for identifying a unique Flink cluster. "
-                                                    + "The id must only contain lowercase alphanumeric characters and \"-\". "
+                                            "The cluster-identifier, which should be no more than 45 characters, is used for identifying a unique Flink cluster. "
+                                                    + "The identifier must only contain lowercase alphanumeric characters and \"-\". "
                                                     + "The required format is %s. "
                                                     + "If not set, the client will automatically generate it with a random ID.",
                                             code("[a-z]([-a-z0-9]*[a-z0-9])"))

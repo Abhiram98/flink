@@ -239,10 +239,10 @@ class SsgNetworkMemoryCalculationUtilsTest {
 
         assertThat(maxInputChannelNums)
                 .containsExactly(
-                        new AbstractMap.SimpleEntry<>(result.getId(), expectedNumChannels));
+                        new AbstractMap.SimpleEntry<>(result.getIdentifier(), expectedNumChannels));
         assertThat(inputPartitionTypes)
                 .containsExactly(
-                        new AbstractMap.SimpleEntry<>(result.getId(), result.getResultType()));
+                        new AbstractMap.SimpleEntry<>(result.getIdentifier(), result.getResultType()));
     }
 
     private DefaultExecutionGraph createDynamicExecutionGraph(

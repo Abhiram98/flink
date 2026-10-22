@@ -45,15 +45,15 @@ public interface ClusterClientFactory<ClusterID> {
     ClusterDescriptor<ClusterID> createClusterDescriptor(Configuration configuration);
 
     /**
-     * Returns the cluster id if a cluster id is specified in the provided configuration, otherwise
+     * Returns the cluster identifier if a cluster identifier is specified in the provided configuration, otherwise
      * it returns {@code null}.
      *
-     * <p>A cluster id identifies a running cluster, e.g. the Yarn application id for a Flink
+     * <p>A cluster identifier identifies a running cluster, e.g. the Yarn application identifier for a Flink
      * cluster running on Yarn.
      *
-     * @param configuration containing the configuration options relevant for the cluster id
+     * @param configuration containing the configuration options relevant for the cluster identifier
      *     retrieval
-     * @return Cluster id identifying the cluster to deploy jobs to or null
+     * @return Cluster identifier identifying the cluster to deploy jobs to or null
      */
     @Nullable
     ClusterID getClusterId(Configuration configuration);

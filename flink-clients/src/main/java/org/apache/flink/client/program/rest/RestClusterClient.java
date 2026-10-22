@@ -321,7 +321,7 @@ public class RestClusterClient<T> implements ClusterClient<T> {
     /**
      * Requests the job details.
      *
-     * @param jobId The job id
+     * @param jobId The job identifier
      * @return Job details
      */
     public CompletableFuture<JobDetailsInfo> getJobDetails(JobID jobId) {
@@ -652,7 +652,7 @@ public class RestClusterClient<T> implements ClusterClient<T> {
             CompletableFuture<TriggerResponse> responseFuture) {
         CompletableFuture<String> futureResult;
         if (isDetachedMode) {
-            // we just return the savepoint trigger id in detached savepoint,
+            // we just return the savepoint trigger identifier in detached savepoint,
             // that means the client could exit immediately
             futureResult =
                     responseFuture.thenApply((TriggerResponse tr) -> tr.getTriggerId().toString());
@@ -802,7 +802,7 @@ public class RestClusterClient<T> implements ClusterClient<T> {
                                 clusterDataSetListResponseBody.getDataSets().stream()
                                         .filter(ClusterDataSetEntry::isComplete)
                                         .map(ClusterDataSetEntry::getDataSetId)
-                                        .map(id -> new AbstractID(StringUtils.hexStringToByte(id)))
+                                        .map(identifier -> new AbstractID(StringUtils.hexStringToByte(identifier)))
                                         .collect(Collectors.toSet()));
     }
 
@@ -896,7 +896,7 @@ public class RestClusterClient<T> implements ClusterClient<T> {
                             if (throwable != null) {
                                 resultFuture.completeExceptionally(throwable);
                             } else {
-                                if (asynchronouslyCreatedResource.queueStatus().getId()
+                                if (asynchronouslyCreatedResource.queueStatus().getIdentifier()
                                         == QueueStatus.Id.COMPLETED) {
                                     resultFuture.complete(asynchronouslyCreatedResource.resource());
                                 } else {

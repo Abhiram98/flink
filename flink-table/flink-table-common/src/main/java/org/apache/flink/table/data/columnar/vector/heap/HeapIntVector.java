@@ -60,7 +60,7 @@ public class HeapIntVector extends AbstractHeapVector implements WritableIntVect
         if (rowId + count > vector.length || srcIndex + count * 4L > src.length) {
             throw new IndexOutOfBoundsException(
                     String.format(
-                            "Index out of bounds, row id is %s, count is %s, binary src index is %s, binary"
+                            "Index out of bounds, row identifier is %s, count is %s, binary src index is %s, binary"
                                     + " length is %s, int array src index is %s, int array length is %s.",
                             rowId, count, srcIndex, src.length, rowId, vector.length));
         }

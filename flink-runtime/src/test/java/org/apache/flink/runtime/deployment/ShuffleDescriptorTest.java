@@ -223,13 +223,13 @@ class ShuffleDescriptorTest {
     }
 
     private static ShuffleDescriptor getConsumedPartitionShuffleDescriptor(
-            ResultPartitionID id,
+            ResultPartitionID identifier,
             ExecutionState state,
             @Nullable ResultPartitionDeploymentDescriptor producedPartition,
             TaskDeploymentDescriptorFactory.PartitionLocationConstraint
                     partitionLocationConstraint) {
         return getConsumedPartitionShuffleDescriptor(
-                id,
+                identifier,
                 state,
                 ResultPartitionType.PIPELINED,
                 producedPartition,
@@ -238,7 +238,7 @@ class ShuffleDescriptorTest {
     }
 
     private static ShuffleDescriptor getConsumedPartitionShuffleDescriptor(
-            ResultPartitionID id,
+            ResultPartitionID identifier,
             ExecutionState state,
             ResultPartitionType resultPartitionType,
             @Nullable ResultPartitionDeploymentDescriptor producedPartition,
@@ -246,7 +246,7 @@ class ShuffleDescriptorTest {
             boolean nonFinishedHybridPartitionShouldBeUnknown) {
         ShuffleDescriptor shuffleDescriptor =
                 TaskDeploymentDescriptorFactory.getConsumedPartitionShuffleDescriptor(
-                        id,
+                        identifier,
                         resultPartitionType,
                         true,
                         state,
@@ -254,21 +254,21 @@ class ShuffleDescriptorTest {
                         producedPartition,
                         nonFinishedHybridPartitionShouldBeUnknown);
         assertThat(shuffleDescriptor).isNotNull();
-        assertThat(shuffleDescriptor.getResultPartitionID()).isEqualTo(id);
+        assertThat(shuffleDescriptor.getResultPartitionID()).isEqualTo(identifier);
         return shuffleDescriptor;
     }
 
     private static ResultPartitionDeploymentDescriptor createResultPartitionDeploymentDescriptor(
-            JobID jobID, ResultPartitionID id, ResourceID location)
+            JobID jobID, ResultPartitionID identifier, ResourceID location)
             throws ExecutionException, InterruptedException {
         ProducerDescriptor producerDescriptor =
                 new ProducerDescriptor(
                         location,
-                        id.getProducerId(),
+                        identifier.getProducerId(),
                         STUB_CONNECTION_ID.getAddress().getAddress(),
                         STUB_CONNECTION_ID.getAddress().getPort());
         PartitionDescriptor partitionDescriptor =
-                PartitionDescriptorBuilder.newBuilder().setPartitionId(id.getPartitionId()).build();
+                PartitionDescriptorBuilder.newBuilder().setPartitionId(identifier.getPartitionId()).build();
         ShuffleDescriptor shuffleDescriptor =
                 ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER
                         .registerPartitionWithProducer(

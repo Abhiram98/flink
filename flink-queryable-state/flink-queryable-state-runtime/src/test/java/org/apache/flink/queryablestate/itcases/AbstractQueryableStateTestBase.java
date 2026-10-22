@@ -499,7 +499,7 @@ public abstract class AbstractQueryableStateTestBase {
 
             CompletableFuture<ValueState<Tuple2<Integer, Long>>> unknownJobFuture =
                     client.getKvState(
-                            wrongJobId, // this is the wrong job id
+                            wrongJobId, // this is the wrong job identifier
                             "hakuna",
                             0,
                             BasicTypeInfo.INT_TYPE_INFO,

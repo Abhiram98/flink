@@ -44,8 +44,8 @@ import java.util.concurrent.CompletableFuture;
  *
  * <p>Some operations are long-running. To avoid blocking HTTP connections, these operations are
  * executed in two steps. First, an HTTP request is issued to trigger the operation asynchronously.
- * The request will be assigned a trigger id, which is returned in the response body. Next, the
- * returned id should be used to poll the status of the operation until it is finished.
+ * The request will be assigned a trigger identifier, which is returned in the response body. Next, the
+ * returned identifier should be used to poll the status of the operation until it is finished.
  *
  * <p>An operation is triggered by sending an HTTP {@code POST} request to a registered {@code url}.
  * The HTTP request may contain a JSON body to specify additional parameters, e.g.,
@@ -54,10 +54,10 @@ import java.util.concurrent.CompletableFuture;
  * { "target-directory": "/tmp" }
  * </pre>
  *
- * <p>As written above, the response will contain a request id, e.g.,
+ * <p>As written above, the response will contain a request identifier, e.g.,
  *
  * <pre>
- * { "request-id": "7d273f5a62eb4730b9dea8e833733c1e" }
+ * { "request-identifier": "7d273f5a62eb4730b9dea8e833733c1e" }
  * </pre>
  *
  * <p>To poll for the status of an ongoing operation, an HTTP {@code GET} request is issued to
@@ -66,18 +66,18 @@ import java.util.concurrent.CompletableFuture;
  * <pre>
  * {
  *     "status": {
- *         "id": "IN_PROGRESS"
+ *         "identifier": "IN_PROGRESS"
  *     }
  * }
  * </pre>
  *
- * <p>If the specified operation has completed, the status id will transition to {@code COMPLETED},
+ * <p>If the specified operation has completed, the status identifier will transition to {@code COMPLETED},
  * and the response will additionally contain information about the operation result:
  *
  * <pre>
  * {
  *     "status": {
- *         "id": "COMPLETED"
+ *         "identifier": "COMPLETED"
  *     },
  *     "operation": {
  *         "result": "/tmp/savepoint-d9813b-8a68e674325b"

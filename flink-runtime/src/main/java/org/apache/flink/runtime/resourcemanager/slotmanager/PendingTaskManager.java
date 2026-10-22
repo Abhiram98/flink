@@ -100,7 +100,7 @@ public class PendingTaskManager {
     @Override
     public String toString() {
         return String.format(
-                "PendingTaskManager{id=%s, totalResourceProfile=%s, defaultSlotResourceProfile=%s}",
+                "PendingTaskManager{identifier=%s, totalResourceProfile=%s, defaultSlotResourceProfile=%s}",
                 pendingTaskManagerId, totalResourceProfile, defaultSlotResourceProfile);
     }
 }

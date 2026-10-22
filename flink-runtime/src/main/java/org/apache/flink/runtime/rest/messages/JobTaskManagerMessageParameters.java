@@ -23,7 +23,7 @@ import org.apache.flink.runtime.rest.messages.taskmanager.TaskManagerIdPathParam
 import java.util.Arrays;
 import java.util.Collection;
 
-/** Message parameters which require a job path parameter and a TaskManager id path parameter. */
+/** Message parameters which require a job path parameter and a TaskManager identifier path parameter. */
 public class JobTaskManagerMessageParameters extends JobMessageParameters {
     public final TaskManagerIdPathParameter taskManagerIdParameter =
             new TaskManagerIdPathParameter();

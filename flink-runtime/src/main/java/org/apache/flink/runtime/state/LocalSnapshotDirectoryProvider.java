@@ -24,8 +24,8 @@ import java.io.Serializable;
 /**
  * Provides directories for local backup or local recovery. It offers access to the allocation base
  * directories (i.e. the root directories for all local state that is created under the same
- * allocation id) and the subtask-specific paths, which contain the local state for one subtask.
- * Access by checkpoint id rotates over all root directory indexes, in case that there is more than
+ * allocation identifier) and the subtask-specific paths, which contain the local state for one subtask.
+ * Access by checkpoint identifier rotates over all root directory indexes, in case that there is more than
  * one. Selection methods are provided to pick the directory under a certain index. Directory
  * structures are of the following shape:
  *
@@ -51,23 +51,23 @@ import java.io.Serializable;
 public interface LocalSnapshotDirectoryProvider extends Serializable {
 
     /**
-     * Returns the local state allocation base directory for given checkpoint id w.r.t. our rotation
+     * Returns the local state allocation base directory for given checkpoint identifier w.r.t. our rotation
      * over all available allocation base directories.
      */
     File allocationBaseDirectory(long checkpointId);
 
     /**
-     * Returns the local state directory for the owning subtask the given checkpoint id w.r.t. our
+     * Returns the local state directory for the owning subtask the given checkpoint identifier w.r.t. our
      * rotation over all available available allocation base directories. This directory is
      * contained in the directory returned by {@link #allocationBaseDirectory(long)} for the same
-     * checkpoint id.
+     * checkpoint identifier.
      */
     File subtaskBaseDirectory(long checkpointId);
 
     /**
      * Returns the local state directory for the specific operator subtask and the given checkpoint
-     * id w.r.t. our rotation over all available root dirs. This directory is contained in the
-     * directory returned by {@link #subtaskBaseDirectory(long)} for the same checkpoint id.
+     * identifier w.r.t. our rotation over all available root dirs. This directory is contained in the
+     * directory returned by {@link #subtaskBaseDirectory(long)} for the same checkpoint identifier.
      */
     File subtaskSpecificCheckpointDirectory(long checkpointId);
 

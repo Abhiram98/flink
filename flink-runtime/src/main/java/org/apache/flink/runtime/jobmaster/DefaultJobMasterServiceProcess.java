@@ -99,7 +99,7 @@ public class DefaultJobMasterServiceProcess
                                         jobId, "Could not start the JobMaster.", throwable);
 
                         LOG.debug(
-                                "Initialization of the JobMasterService for job {} under leader id {} failed.",
+                                "Initialization of the JobMasterService for job {} under leader identifier {} failed.",
                                 jobId,
                                 leaderSessionId,
                                 jobInitializationException);
@@ -118,7 +118,7 @@ public class DefaultJobMasterServiceProcess
 
     private void registerJobMasterServiceFutures(JobMasterService jobMasterService) {
         LOG.debug(
-                "Successfully created the JobMasterService for job {} under leader id {}.",
+                "Successfully created the JobMasterService for job {} under leader identifier {}.",
                 jobId,
                 leaderSessionId);
         jobMasterGatewayFuture.complete(jobMasterService.getGateway());
@@ -131,7 +131,7 @@ public class DefaultJobMasterServiceProcess
                             synchronized (lock) {
                                 if (isRunning) {
                                     LOG.warn(
-                                            "Unexpected termination of the JobMasterService for job {} under leader id {}.",
+                                            "Unexpected termination of the JobMasterService for job {} under leader identifier {}.",
                                             jobId,
                                             leaderSessionId);
                                     jobMasterFailed(
@@ -150,7 +150,7 @@ public class DefaultJobMasterServiceProcess
                 isRunning = false;
 
                 LOG.debug(
-                        "Terminating the JobMasterService process for job {} under leader id {}.",
+                        "Terminating the JobMasterService process for job {} under leader identifier {}.",
                         jobId,
                         leaderSessionId);
 
@@ -172,7 +172,7 @@ public class DefaultJobMasterServiceProcess
                 terminationFuture.whenComplete(
                         (unused, throwable) ->
                                 LOG.debug(
-                                        "JobMasterService process for job {} under leader id {} has been terminated.",
+                                        "JobMasterService process for job {} under leader identifier {} has been terminated.",
                                         jobId,
                                         leaderSessionId));
             }
@@ -212,7 +212,7 @@ public class DefaultJobMasterServiceProcess
     @Override
     public void jobReachedGloballyTerminalState(ExecutionGraphInfo executionGraphInfo) {
         LOG.debug(
-                "Job {} under leader id {} reached a globally terminal state {}.",
+                "Job {} under leader identifier {} reached a globally terminal state {}.",
                 jobId,
                 leaderSessionId,
                 executionGraphInfo.getArchivedExecutionGraph().getState());
@@ -221,7 +221,7 @@ public class DefaultJobMasterServiceProcess
 
     @Override
     public void jobMasterFailed(Throwable cause) {
-        LOG.debug("Job {} under leader id {} failed.", jobId, leaderSessionId);
+        LOG.debug("Job {} under leader identifier {} failed.", jobId, leaderSessionId);
         resultFuture.completeExceptionally(cause);
     }
 }

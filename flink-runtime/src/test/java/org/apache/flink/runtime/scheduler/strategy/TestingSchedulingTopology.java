@@ -110,12 +110,12 @@ public class TestingSchedulingTopology implements SchedulingTopology {
         for (Set<SchedulingExecutionVertex> rawRegion : rawRegions) {
             final Set<TestingSchedulingExecutionVertex> vertices =
                     rawRegion.stream()
-                            .map(vertex -> schedulingExecutionVertices.get(vertex.getId()))
+                            .map(vertex -> schedulingExecutionVertices.get(vertex.getIdentifier()))
                             .collect(Collectors.toSet());
             final TestingSchedulingPipelinedRegion region =
                     new TestingSchedulingPipelinedRegion(vertices);
             for (TestingSchedulingExecutionVertex vertex : vertices) {
-                vertexRegions.put(vertex.getId(), region);
+                vertexRegions.put(vertex.getIdentifier(), region);
             }
         }
     }
@@ -125,10 +125,10 @@ public class TestingSchedulingTopology implements SchedulingTopology {
     }
 
     void addSchedulingExecutionVertex(TestingSchedulingExecutionVertex schedulingExecutionVertex) {
-        checkState(!schedulingExecutionVertices.containsKey(schedulingExecutionVertex.getId()));
+        checkState(!schedulingExecutionVertices.containsKey(schedulingExecutionVertex.getIdentifier()));
 
         schedulingExecutionVertices.put(
-                schedulingExecutionVertex.getId(), schedulingExecutionVertex);
+                schedulingExecutionVertex.getIdentifier(), schedulingExecutionVertex);
         updateVertexResultPartitions(schedulingExecutionVertex);
         resetPipelinedRegions();
     }
@@ -143,7 +143,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
             final Iterable<TestingSchedulingResultPartition> resultPartitions) {
         for (TestingSchedulingResultPartition schedulingResultPartition : resultPartitions) {
             schedulingResultPartitions.put(
-                    schedulingResultPartition.getId(), schedulingResultPartition);
+                    schedulingResultPartition.getIdentifier(), schedulingResultPartition);
         }
     }
 
@@ -231,10 +231,10 @@ public class TestingSchedulingTopology implements SchedulingTopology {
         final ConnectionResult connectionResult =
                 connectConsumersToProducersById(
                         consumers.stream()
-                                .map(SchedulingExecutionVertex::getId)
+                                .map(SchedulingExecutionVertex::getIdentifier)
                                 .collect(Collectors.toList()),
                         producers.stream()
-                                .map(SchedulingExecutionVertex::getId)
+                                .map(SchedulingExecutionVertex::getIdentifier)
                                 .collect(Collectors.toList()),
                         intermediateDataSetId,
                         resultPartitionType);
@@ -275,7 +275,7 @@ public class TestingSchedulingTopology implements SchedulingTopology {
                         resultPartitions.stream()
                                 .collect(
                                         Collectors.toMap(
-                                                TestingSchedulingResultPartition::getId,
+                                                TestingSchedulingResultPartition::getIdentifier,
                                                 Function.identity()));
         for (TestingSchedulingExecutionVertex consumer : consumers) {
             consumer.addConsumedPartitionGroup(consumedPartitionGroup, consumedPartitionById);

@@ -36,7 +36,7 @@ import java.util.Map;
 public class JSONGenerator {
 
     public static final String STEPS = "step_function";
-    public static final String ID = "id";
+    public static final String ID = "identifier";
     public static final String SIDE = "side";
     public static final String SHIP_STRATEGY = "ship_strategy";
     public static final String PREDECESSORS = "predecessors";
@@ -60,8 +60,8 @@ public class JSONGenerator {
         List<Integer> operatorIDs = new ArrayList<>(streamGraph.getVertexIDs());
         Comparator<Integer> operatorIDComparator =
                 Comparator.comparingInt(
-                                (Integer id) -> streamGraph.getSinkIDs().contains(id) ? 1 : 0)
-                        .thenComparingInt(id -> id);
+                                (Integer identifier) -> streamGraph.getSinkIDs().contains(identifier) ? 1 : 0)
+                        .thenComparingInt(identifier -> identifier);
         operatorIDs.sort(operatorIDComparator);
 
         visit(nodes, operatorIDs, new HashMap<>());

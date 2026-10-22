@@ -286,20 +286,20 @@ public class ContextStateFutureImplTest {
             if (i == 31) {
                 // All completed before user code.
                 assertThat(recordContext.getReferenceCount())
-                        .withFailMessage("The reference counted tests fail for profile id %d", i)
+                        .withFailMessage("The reference counted tests fail for profile identifier %d", i)
                         .isEqualTo(0);
                 assertThat(runner.runThrough())
-                        .withFailMessage("The reference counted tests fail for profile id %d", i)
+                        .withFailMessage("The reference counted tests fail for profile identifier %d", i)
                         .isFalse();
             } else {
                 assertThat(recordContext.getReferenceCount())
-                        .withFailMessage("The reference counted tests fail for profile id %d", i)
+                        .withFailMessage("The reference counted tests fail for profile identifier %d", i)
                         .isGreaterThan(0);
                 assertThat(runner.runThrough())
-                        .withFailMessage("The reference counted tests fail for profile id %d", i)
+                        .withFailMessage("The reference counted tests fail for profile identifier %d", i)
                         .isTrue();
                 assertThat(recordContext.getReferenceCount())
-                        .withFailMessage("The reference counted tests fail for profile id %d", i)
+                        .withFailMessage("The reference counted tests fail for profile identifier %d", i)
                         .isEqualTo(0);
             }
         }

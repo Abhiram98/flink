@@ -72,7 +72,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .reduce(new ReduceSum())
                 .uid(uid)
@@ -105,7 +105,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .evictor(new NoOpEvictor<>())
                 .reduce(new ReduceSum())
@@ -140,7 +140,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .aggregate(new AggregateSum())
                 .uid(uid)
@@ -174,7 +174,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .evictor(new NoOpEvictor<>())
                 .aggregate(new AggregateSum())
@@ -210,7 +210,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .process(new NoOpProcessWindowFunction())
                 .uid(uid)
@@ -248,7 +248,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .evictor(new NoOpEvictor<>())
                 .process(new NoOpProcessWindowFunction())
@@ -288,7 +288,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .apply(new NoOpWindowFunction())
                 .uid(uid)
@@ -326,7 +326,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Integer>noWatermarks()
                                 .withTimestampAssigner((event, timestamp) -> 0))
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(TumblingEventTimeWindows.of(Time.milliseconds(10)))
                 .evictor(new NoOpEvictor<>())
                 .apply(new NoOpWindowFunction())
@@ -363,7 +363,7 @@ public abstract class SavepointWindowReaderITCase<B extends StateBackend>
 
         env.addSource(createSource(numbers))
                 .rebalance()
-                .keyBy(id -> id)
+                .keyBy(identifier -> identifier)
                 .window(GlobalWindows.create())
                 .trigger(PurgingTrigger.of(CountTrigger.of(10)))
                 .reduce(new ReduceSum())

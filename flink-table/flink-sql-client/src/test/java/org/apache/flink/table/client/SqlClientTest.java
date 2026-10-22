@@ -185,7 +185,7 @@ class SqlClientTest extends SqlClientTestBase {
                 Arrays.asList(
                         "-- define table \n"
                                 + "CREATE TABLE source ("
-                                + "id INT,"
+                                + "identifier INT,"
                                 + "val STRING"
                                 + ") WITH ("
                                 + "  'connector' = 'values'"
@@ -218,11 +218,11 @@ class SqlClientTest extends SqlClientTestBase {
                 Arrays.asList(
                         "-- define table \n"
                                 + "CREATE TABLE source ("
-                                + "id INT"
+                                + "identifier INT"
                                 + ") WITH ("
                                 + "  'connector' = 'datagen'"
                                 + "); \n",
-                        "CREATE TABLE sink ( id INT) WITH ( 'connector' = 'blackhole');");
+                        "CREATE TABLE sink ( identifier INT) WITH ( 'connector' = 'blackhole');");
         String initFile = createSqlFile(statements, "init-sql.sql");
         String[] args = new String[] {"-i", initFile};
         String output =

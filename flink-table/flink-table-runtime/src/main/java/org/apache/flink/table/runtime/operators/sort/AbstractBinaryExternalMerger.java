@@ -89,7 +89,7 @@ public abstract class AbstractBinaryExternalMerger<Entry> implements Closeable {
      */
     public BinaryMergeIterator<Entry> getMergingIterator(
             List<ChannelWithMeta> channelIDs, List<FileIOChannel> openChannels) throws IOException {
-        // create one iterator per channel id
+        // create one iterator per channel identifier
         if (LOG.isDebugEnabled()) {
             LOG.debug("Performing merge of " + channelIDs.size() + " sorted streams.");
         }

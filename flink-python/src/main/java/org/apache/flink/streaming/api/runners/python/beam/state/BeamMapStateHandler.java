@@ -154,7 +154,7 @@ public class BeamMapStateHandler
                                 "Unsupported get request type: '%d' for map state.", getFlag));
         }
 
-        return BeamFnApi.StateResponse.newBuilder().setId(request.getId()).setGet(response);
+        return BeamFnApi.StateResponse.newBuilder().setIdentifier(request.getIdentifier()).setGet(response);
     }
 
     public BeamFnApi.StateResponse.Builder handleAppend(
@@ -198,7 +198,7 @@ public class BeamMapStateHandler
             }
         }
         return BeamFnApi.StateResponse.newBuilder()
-                .setId(request.getId())
+                .setIdentifier(request.getIdentifier())
                 .setAppend(BeamFnApi.StateAppendResponse.getDefaultInstance());
     }
 
@@ -214,7 +214,7 @@ public class BeamMapStateHandler
             mapState.clear();
         }
         return BeamFnApi.StateResponse.newBuilder()
-                .setId(request.getId())
+                .setIdentifier(request.getIdentifier())
                 .setClear(BeamFnApi.StateClearResponse.getDefaultInstance());
     }
 

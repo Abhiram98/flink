@@ -41,16 +41,16 @@ import java.util.stream.Stream;
  */
 public class SubtaskFileMergingManagerRestoreOperation {
 
-    /** The restored checkpoint id. */
+    /** The restored checkpoint identifier. */
     private final long checkpointId;
 
-    /** The restored job id. */
+    /** The restored job identifier. */
     private final JobID jobID;
 
     /** The restored Task info. */
     private final TaskInfo taskInfo;
 
-    /** The id of the operator to which the subtask belongs. */
+    /** The identifier of the operator to which the subtask belongs. */
     private final OperatorID operatorID;
 
     private final FileMergingSnapshotManager fileMergingSnapshotManager;

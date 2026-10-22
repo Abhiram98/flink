@@ -34,7 +34,7 @@ public interface InputSplitAssigner {
      * parameter to allow localized assignments.
      *
      * @param host The host address of split requesting task.
-     * @param taskId The id of the split requesting task.
+     * @param taskId The identifier of the split requesting task.
      * @return the next input split to be consumed, or <code>null</code> if no more splits remain.
      */
     InputSplit getNextInputSplit(String host, int taskId);
@@ -43,7 +43,7 @@ public interface InputSplitAssigner {
      * Return the splits to assigner if the task failed to process it.
      *
      * @param splits The list of input splits to be returned.
-     * @param taskId The id of the task that failed to process the input splits.
+     * @param taskId The identifier of the task that failed to process the input splits.
      */
     void returnInputSplit(List<InputSplit> splits, int taskId);
 }

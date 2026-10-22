@@ -76,11 +76,11 @@ public final class Utils {
 
         private static final long serialVersionUID = 1L;
 
-        private final String id;
+        private final String identifier;
         private long counter;
 
-        public CountHelper(String id) {
-            this.id = id;
+        public CountHelper(String identifier) {
+            this.identifier = identifier;
             this.counter = 0L;
         }
 
@@ -97,7 +97,7 @@ public final class Utils {
 
         @Override
         public void close() {
-            getRuntimeContext().getLongCounter(id).add(counter);
+            getRuntimeContext().getLongCounter(identifier).add(counter);
         }
     }
 
@@ -111,13 +111,13 @@ public final class Utils {
 
         private static final long serialVersionUID = 1L;
 
-        private final String id;
+        private final String identifier;
         private final TypeSerializer<T> serializer;
 
         private SerializedListAccumulator<T> accumulator;
 
-        public CollectHelper(String id, TypeSerializer<T> serializer) {
-            this.id = id;
+        public CollectHelper(String identifier, TypeSerializer<T> serializer) {
+            this.identifier = identifier;
             this.serializer = serializer;
         }
 
@@ -142,7 +142,7 @@ public final class Utils {
             if (accumulator != null) {
                 // Important: should only be added in close method to minimize traffic of
                 // accumulators
-                getRuntimeContext().addAccumulator(id, accumulator);
+                getRuntimeContext().addAccumulator(identifier, accumulator);
             }
         }
     }
@@ -227,12 +227,12 @@ public final class Utils {
 
         private static final long serialVersionUID = 1L;
 
-        private final String id;
+        private final String identifier;
         private long counter;
         private long checksum;
 
-        public ChecksumHashCodeHelper(String id) {
-            this.id = id;
+        public ChecksumHashCodeHelper(String identifier) {
+            this.identifier = identifier;
             this.counter = 0L;
             this.checksum = 0L;
         }
@@ -253,7 +253,7 @@ public final class Utils {
         @Override
         public void close() throws IOException {
             ChecksumHashCode update = new ChecksumHashCode(counter, checksum);
-            getRuntimeContext().addAccumulator(id, update);
+            getRuntimeContext().addAccumulator(identifier, update);
         }
     }
 

@@ -352,7 +352,7 @@ public class TaskManagerLocation implements Comparable<TaskManagerLocation>, jav
             return 1;
         }
 
-        // finally, decided based on node id
+        // finally, decided based on node identifier
         return this.nodeId.compareTo(o.nodeId);
     }
 

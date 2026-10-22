@@ -32,7 +32,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
     private static final long serialVersionUID = -5768187638639437957L;
     private final ArchivedExecutionVertex[] taskVertices;
 
-    private final JobVertexID id;
+    private final JobVertexID identifier;
 
     private final String name;
 
@@ -54,7 +54,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
 
         archivedUserAccumulators = jobVertex.getAggregatedUserAccumulatorsStringified();
 
-        this.id = jobVertex.getJobVertexId();
+        this.identifier = jobVertex.getJobVertexId();
         this.name = jobVertex.getJobVertex().getName();
         this.parallelism = jobVertex.getParallelism();
         this.maxParallelism = jobVertex.getMaxParallelism();
@@ -64,7 +64,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
 
     public ArchivedExecutionJobVertex(
             ArchivedExecutionVertex[] taskVertices,
-            JobVertexID id,
+            JobVertexID identifier,
             String name,
             int parallelism,
             int maxParallelism,
@@ -72,7 +72,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
             ResourceProfile resourceProfile,
             StringifiedAccumulatorResult[] archivedUserAccumulators) {
         this.taskVertices = taskVertices;
-        this.id = id;
+        this.identifier = identifier;
         this.name = name;
         this.parallelism = parallelism;
         this.maxParallelism = maxParallelism;
@@ -112,7 +112,7 @@ public class ArchivedExecutionJobVertex implements AccessExecutionJobVertex, Ser
 
     @Override
     public JobVertexID getJobVertexId() {
-        return id;
+        return identifier;
     }
 
     @Override

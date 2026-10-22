@@ -47,7 +47,7 @@ public interface TaskExecutorPartitionTracker
     /**
      * Get all partitions tracked for the given job.
      *
-     * @param producingJobId the job id
+     * @param producingJobId the job identifier
      * @return the tracked partitions
      */
     Collection<TaskExecutorPartitionInfo> getTrackedPartitionsFor(JobID producingJobId);

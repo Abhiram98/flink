@@ -769,8 +769,8 @@ class ApplicationDispatcherBootstrapTest {
         configuration.set(PipelineOptionsInternal.PIPELINE_FIXED_JOB_ID, jobId.toHexString());
         testSubmitFailedJobOnApplicationError(
                 configuration,
-                (id, t) -> {
-                    assertThat(id).isEqualTo(jobId);
+                (identifier, t) -> {
+                    assertThat(identifier).isEqualTo(jobId);
                     assertThat(t)
                             .isInstanceOf(ProgramInvocationException.class)
                             .hasRootCauseInstanceOf(RuntimeException.class)

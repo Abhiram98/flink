@@ -122,15 +122,15 @@ public class RocksKeyGroupsRocksSingleStateIteratorTest {
             }
 
             CloseableRegistry closeableRegistry = new CloseableRegistry();
-            int id = 0;
+            int identifier = 0;
             for (Tuple2<ColumnFamilyHandle, Integer> columnFamilyHandle :
                     columnFamilyHandlesWithKeyCount) {
                 RocksIteratorWrapper rocksIterator =
                         RocksDBOperationUtils.getRocksIterator(
                                 rocksDB, columnFamilyHandle.f0, readOptions);
                 closeableRegistry.registerCloseable(rocksIterator);
-                rocksIteratorsWithKVStateId.add(new Tuple2<>(rocksIterator, id));
-                ++id;
+                rocksIteratorsWithKVStateId.add(new Tuple2<>(rocksIterator, identifier));
+                ++identifier;
             }
 
             try (RocksStatesPerKeyGroupMergeIterator mergeIterator =

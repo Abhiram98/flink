@@ -133,13 +133,13 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     // --------------------------------------------------------------------------------------------
 
     /**
-     * The unique id of an execution graph. It is different from JobID, because there can be
+     * The unique identifier of an execution graph. It is different from JobID, because there can be
      * multiple execution graphs created from one job graph, in cases like job re-submission, job
      * master failover and job rescaling.
      */
     private final ExecutionGraphID executionGraphId;
 
-    /** Job specific information like the job id, job name, job configuration, etc. */
+    /** Job specific information like the job identifier, job name, job configuration, etc. */
     private final JobInformation jobInformation;
 
     /** The executor which is used to execute futures. */
@@ -671,8 +671,8 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public ExecutionJobVertex getJobVertex(JobVertexID id) {
-        return this.tasks.get(id);
+    public ExecutionJobVertex getJobVertex(JobVertexID identifier) {
+        return this.tasks.get(identifier);
     }
 
     @Override
@@ -731,14 +731,14 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID id) {
-        return checkNotNull(executionVerticesById.get(id));
+    public ExecutionVertex getExecutionVertexOrThrow(ExecutionVertexID identifier) {
+        return checkNotNull(executionVerticesById.get(identifier));
     }
 
     @Override
     public IntermediateResultPartition getResultPartitionOrThrow(
-            final IntermediateResultPartitionID id) {
-        return checkNotNull(resultPartitionsById.get(id));
+            final IntermediateResultPartitionID identifier) {
+        return checkNotNull(resultPartitionsById.get(identifier));
     }
 
     @Override
@@ -932,12 +932,12 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
         for (IntermediateResult res : ejv.getProducedDataSets()) {
             IntermediateResult previousDataSet =
-                    this.intermediateResults.putIfAbsent(res.getId(), res);
+                    this.intermediateResults.putIfAbsent(res.getIdentifier(), res);
             if (previousDataSet != null) {
                 throw new JobException(
                         String.format(
                                 "Encountered two intermediate data set with ID %s : previous=[%s] / new=[%s]",
-                                res.getId(), res, previousDataSet));
+                                res.getIdentifier(), res, previousDataSet));
             }
         }
 
@@ -1487,7 +1487,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         final SchedulingResultPartition schedulingResultPartition =
                 getSchedulingTopology().getResultPartition(resultPartitionId);
         final SchedulingExecutionVertex producer = schedulingResultPartition.getProducer();
-        final ExecutionVertexID producerId = producer.getId();
+        final ExecutionVertexID producerId = producer.getIdentifier();
         final JobVertexID jobVertexId = producerId.getJobVertexId();
         final ExecutionJobVertex jobVertex = getJobVertex(jobVertexId);
         checkNotNull(jobVertex, "Unknown job vertex %s", jobVertexId);

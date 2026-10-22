@@ -94,7 +94,7 @@ public class CheckpointBarrierTracker extends CheckpointBarrierHandler {
     public void processBarrier(
             CheckpointBarrier receivedBarrier, InputChannelInfo channelInfo, boolean isRpcTriggered)
             throws IOException {
-        final long barrierId = receivedBarrier.getId();
+        final long barrierId = receivedBarrier.getIdentifier();
 
         // fast path for single channel trackers. We only go with the fast path
         // for new checkpoints, otherwise we might met with the case that
@@ -102,7 +102,7 @@ public class CheckpointBarrierTracker extends CheckpointBarrierHandler {
         // 2. Received EndOfPartition from channel 0.
         // 3. Received barrier from channel 1.
         // In this case we should finish the existing pending checkpoint.
-        if (receivedBarrier.getId() > latestPendingCheckpointID && numOpenChannels == 1) {
+        if (receivedBarrier.getIdentifier() > latestPendingCheckpointID && numOpenChannels == 1) {
             markAlignmentStartAndEnd(barrierId, receivedBarrier.getTimestamp());
             notifyCheckpoint(receivedBarrier);
             return;
@@ -339,7 +339,7 @@ public class CheckpointBarrierTracker extends CheckpointBarrierHandler {
                 InputChannelInfo channelInfo,
                 int targetChannelCount) {
             checkNotNull(pendingCheckpoint);
-            this.checkpointId = pendingCheckpoint.getId();
+            this.checkpointId = pendingCheckpoint.getIdentifier();
             this.pendingCheckpoint = pendingCheckpoint;
             alignedChannels.add(channelInfo);
             this.targetChannelCount = targetChannelCount;

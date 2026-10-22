@@ -41,42 +41,42 @@ public final class ParquetDictionary implements Dictionary {
     }
 
     @Override
-    public int decodeToInt(int id) {
-        return dictionary.decodeToInt(id);
+    public int decodeToInt(int identifier) {
+        return dictionary.decodeToInt(identifier);
     }
 
     @Override
-    public long decodeToLong(int id) {
-        return dictionary.decodeToLong(id);
+    public long decodeToLong(int identifier) {
+        return dictionary.decodeToLong(identifier);
     }
 
     @Override
-    public float decodeToFloat(int id) {
-        return dictionary.decodeToFloat(id);
+    public float decodeToFloat(int identifier) {
+        return dictionary.decodeToFloat(identifier);
     }
 
     @Override
-    public double decodeToDouble(int id) {
-        return dictionary.decodeToDouble(id);
+    public double decodeToDouble(int identifier) {
+        return dictionary.decodeToDouble(identifier);
     }
 
     @Override
-    public byte[] decodeToBinary(int id) {
-        return dictionary.decodeToBinary(id).getBytesUnsafe();
+    public byte[] decodeToBinary(int identifier) {
+        return dictionary.decodeToBinary(identifier).getBytesUnsafe();
     }
 
     @Override
-    public TimestampData decodeToTimestamp(int id) {
+    public TimestampData decodeToTimestamp(int identifier) {
         if (descriptor.getPrimitiveType().getPrimitiveTypeName()
                 == PrimitiveType.PrimitiveTypeName.INT64) {
             return decodeInt64ToTimestamp(
                     true,
                     dictionary,
-                    id,
+                    identifier,
                     ((LogicalTypeAnnotation.TimestampLogicalTypeAnnotation)
                                     descriptor.getPrimitiveType().getLogicalTypeAnnotation())
                             .getUnit());
         }
-        return decodeInt96ToTimestamp(true, dictionary, id);
+        return decodeInt96ToTimestamp(true, dictionary, identifier);
     }
 }

@@ -30,7 +30,7 @@ import java.util.Objects;
 /** Checkpoint statistics for a single task. */
 public class TaskCheckpointStatistics implements ResponseBody {
 
-    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ID = "identifier";
 
     public static final String FIELD_NAME_CHECKPOINT_STATUS = "status";
 

@@ -103,7 +103,7 @@ public final class SchedulerUtils {
                 return createCheckpointIdCounter(checkpointRecoveryFactory, jobId);
             } catch (Exception e) {
                 throw new JobExecutionException(
-                        jobId, "Failed to initialize high-availability checkpoint id counter", e);
+                        jobId, "Failed to initialize high-availability checkpoint identifier counter", e);
             }
         } else {
             return DeactivatedCheckpointIDCounter.INSTANCE;
