@@ -53,11 +53,11 @@ class RestartingTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    public void testTransitionToSubsequentStateWhenCancellationComplete(boolean forcedRestart)
+    public void testTransitionToSubsequentStateWhenCancellationComplete(boolean restartWithParallelism)
             throws Exception {
         try (MockRestartingContext ctx = new MockRestartingContext()) {
-            Restarting restarting = createRestartingState(ctx, forcedRestart);
-            if (forcedRestart) {
+            Restarting restarting = createRestartingState(ctx, restartWithParallelism);
+            if (restartWithParallelism) {
                 ctx.setExpectCreatingExecutionGraph();
             } else {
                 ctx.setExpectWaitingForResources();
@@ -116,15 +116,15 @@ class RestartingTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    public void testStateDoesNotExposeGloballyTerminalExecutionGraph(boolean forcedRestart)
+    public void testStateDoesNotExposeGloballyTerminalExecutionGraph(boolean restartWithParallelism)
             throws Exception {
         try (MockRestartingContext ctx = new MockRestartingContext()) {
             StateTrackingMockExecutionGraph mockExecutionGraph =
                     new StateTrackingMockExecutionGraph();
-            Restarting restarting = createRestartingState(ctx, mockExecutionGraph, forcedRestart);
+            Restarting restarting = createRestartingState(ctx, mockExecutionGraph, restartWithParallelism);
 
             // ideally we'd just delay the state transitions, but the context does not support that
-            if (forcedRestart) {
+            if (restartWithParallelism) {
                 ctx.setExpectCreatingExecutionGraph();
             } else {
                 ctx.setExpectWaitingForResources();
@@ -141,8 +141,8 @@ class RestartingTest {
         }
     }
 
-    public Restarting createRestartingState(MockRestartingContext ctx, boolean forcedRestart) {
-        return createRestartingState(ctx, new StateTrackingMockExecutionGraph(), forcedRestart);
+    public Restarting createRestartingState(MockRestartingContext ctx, boolean restartWithParallelism) {
+        return createRestartingState(ctx, new StateTrackingMockExecutionGraph(), restartWithParallelism);
     }
 
     public Restarting createRestartingState(
@@ -151,7 +151,7 @@ class RestartingTest {
     }
 
     public Restarting createRestartingState(
-            MockRestartingContext ctx, ExecutionGraph executionGraph, boolean forcedRestart) {
+            MockRestartingContext ctx, ExecutionGraph executionGraph, boolean restartWithParallelism) {
         final ExecutionGraphHandler executionGraphHandler =
                 new ExecutionGraphHandler(
                         executionGraph,
@@ -168,7 +168,7 @@ class RestartingTest {
                 operatorCoordinatorHandler,
                 log,
                 Duration.ZERO,
-                forcedRestart,
+                restartWithParallelism,
                 ClassLoader.getSystemClassLoader(),
                 new ArrayList<>());
     }

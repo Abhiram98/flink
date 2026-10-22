@@ -267,7 +267,7 @@ class StopWithSavepointTest {
             ctx.setExpectRestarting(
                     (restartingArguments) -> {
                         assertThat(restartingArguments).isNotNull();
-                        assertThat(restartingArguments.isForcedRestart()).isFalse();
+                        assertThat(restartingArguments.isRestartWithParallelism()).isFalse();
                     });
 
             Exception exception = new RuntimeException();
@@ -580,7 +580,7 @@ class StopWithSavepointTest {
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                boolean forcedRestart,
+                boolean restartWithParallelism,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
                 throw new IllegalStateException("Only one state transition is allowed.");
@@ -592,7 +592,7 @@ class StopWithSavepointTest {
                             executionGraphHandler,
                             operatorCoordinatorHandler,
                             backoffTime,
-                            forcedRestart));
+                            restartWithParallelism));
             hadStateTransition = true;
         }
 

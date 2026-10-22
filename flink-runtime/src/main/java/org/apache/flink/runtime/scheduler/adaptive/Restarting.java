@@ -44,7 +44,7 @@ class Restarting extends StateWithExecutionGraph {
 
     @Nullable private ScheduledFuture<?> goToSubsequentStateFuture;
 
-    private final boolean forcedRestart;
+    private final boolean restartWithParallelism;
 
     Restarting(
             Context context,
@@ -53,7 +53,7 @@ class Restarting extends StateWithExecutionGraph {
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Logger logger,
             Duration backoffTime,
-            boolean forcedRestart,
+            boolean restartWithParallelism,
             ClassLoader userCodeClassLoader,
             List<ExceptionHistoryEntry> failureCollection) {
         super(
@@ -66,7 +66,7 @@ class Restarting extends StateWithExecutionGraph {
                 failureCollection);
         this.context = context;
         this.backoffTime = backoffTime;
-        this.forcedRestart = forcedRestart;
+        this.restartWithParallelism = restartWithParallelism;
 
         getExecutionGraph().cancel();
     }
@@ -112,7 +112,7 @@ class Restarting extends StateWithExecutionGraph {
     }
 
     private void goToSubsequentState() {
-        if (forcedRestart) {
+        if (restartWithParallelism) {
             context.goToCreatingExecutionGraph(getExecutionGraph());
         } else {
             context.goToWaitingForResources(getExecutionGraph());
@@ -147,7 +147,7 @@ class Restarting extends StateWithExecutionGraph {
         private final ExecutionGraphHandler executionGraphHandler;
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final Duration backoffTime;
-        private final boolean forcedRestart;
+        private final boolean restartWithParallelism;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
 
@@ -158,7 +158,7 @@ class Restarting extends StateWithExecutionGraph {
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Logger log,
                 Duration backoffTime,
-                boolean forcedRestart,
+                boolean restartWithParallelism,
                 ClassLoader userCodeClassLoader,
                 List<ExceptionHistoryEntry> failureCollection) {
             this.context = context;
@@ -167,7 +167,7 @@ class Restarting extends StateWithExecutionGraph {
             this.executionGraphHandler = executionGraphHandler;
             this.operatorCoordinatorHandler = operatorCoordinatorHandler;
             this.backoffTime = backoffTime;
-            this.forcedRestart = forcedRestart;
+            this.restartWithParallelism = restartWithParallelism;
             this.userCodeClassLoader = userCodeClassLoader;
             this.failureCollection = failureCollection;
         }
@@ -184,7 +184,7 @@ class Restarting extends StateWithExecutionGraph {
                     operatorCoordinatorHandler,
                     log,
                     backoffTime,
-                    forcedRestart,
+                    restartWithParallelism,
                     userCodeClassLoader,
                     failureCollection);
         }

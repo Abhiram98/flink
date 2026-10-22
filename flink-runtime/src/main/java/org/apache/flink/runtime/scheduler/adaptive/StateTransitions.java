@@ -128,7 +128,7 @@ public interface StateTransitions {
          *     Restarting} state
          * @param backoffTime backoffTime to wait before transitioning to the {@link Restarting}
          *     state
-         * @param forcedRestart if the {@link WaitingForResources} state should be omitted and the
+         * @param restartWithParallelism if the {@link WaitingForResources} state should be omitted and the
          *     {@link CreatingExecutionGraph} state should be entered directly from the {@link
          *     Restarting} state
          * @param failureCollection collection of failures that are propagated
@@ -138,7 +138,7 @@ public interface StateTransitions {
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                boolean forcedRestart,
+                boolean restartWithParallelism,
                 List<ExceptionHistoryEntry> failureCollection);
     }
 
