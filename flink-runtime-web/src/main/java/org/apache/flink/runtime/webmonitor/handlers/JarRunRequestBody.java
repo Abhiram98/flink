@@ -57,7 +57,7 @@ public class JarRunRequestBody extends JarRequestBody {
     @Nullable
     @Deprecated
     @Documentation.ExcludeFromDocumentation
-    private RestoreMode deprecatedRestoreMode;
+    private RestoreMode deprecatedRecoveryClaimMode;
 
     @JsonProperty(FIELD_NAME_SAVEPOINT_CLAIM_MODE)
     @Nullable
@@ -104,7 +104,7 @@ public class JarRunRequestBody extends JarRequestBody {
                     Boolean allowNonRestoredState,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_PATH) String savepointPath,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_RESTORE_MODE)
-                    RestoreMode deprecatedRestoreMode,
+                    RestoreMode deprecatedRecoveryClaimMode,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_CLAIM_MODE) RestoreMode restoreMode,
             @Nullable @JsonProperty(FIELD_NAME_FLINK_CONFIGURATION)
                     Map<String, String> flinkConfiguration) {
@@ -117,7 +117,7 @@ public class JarRunRequestBody extends JarRequestBody {
                 flinkConfiguration);
         this.allowNonRestoredState = allowNonRestoredState;
         this.savepointPath = savepointPath;
-        this.deprecatedRestoreMode = deprecatedRestoreMode;
+        this.deprecatedRecoveryClaimMode = deprecatedRecoveryClaimMode;
         this.restoreMode = restoreMode;
     }
 
@@ -136,11 +136,11 @@ public class JarRunRequestBody extends JarRequestBody {
     @Nullable
     @JsonIgnore
     public RestoreMode getRestoreMode() {
-        return restoreMode == null ? deprecatedRestoreMode : restoreMode;
+        return restoreMode == null ? deprecatedRecoveryClaimMode : restoreMode;
     }
 
     @JsonIgnore
-    public boolean isDeprecatedRestoreModeHasValue() {
-        return deprecatedRestoreMode != null;
+    public boolean isDeprecatedRecoveryClaimModeHasValue() {
+        return deprecatedRecoveryClaimMode != null;
     }
 }
