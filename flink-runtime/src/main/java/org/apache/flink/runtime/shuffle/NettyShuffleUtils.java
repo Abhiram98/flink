@@ -171,7 +171,7 @@ public class NettyShuffleUtils {
                         type,
                         numInputChannels,
                         false);
-        return gateBuffersSpec.getMaxBuffersPerGate();
+        return gateBuffersSpec.getTotalBuffersTargetPerGate();
     }
 
     private static int getNumBuffersToAnnounceForResultPartition(

@@ -173,7 +173,7 @@ public class SingleInputGateFactory {
                         networkBufferPool,
                         gateBuffersSpec.getExpectedBuffersPerGate(),
                         gateBuffersSpec.getMinBuffersPerGate(),
-                        gateBuffersSpec.getMaxBuffersPerGate());
+                        gateBuffersSpec.getTotalBuffersTargetPerGate());
 
         BufferDecompressor bufferDecompressor = null;
         if (igdd.getConsumedPartitionType().supportCompression()
@@ -448,10 +448,10 @@ public class SingleInputGateFactory {
             BufferPoolFactory bufferPoolFactory,
             int expectedBuffersPerGate,
             int minBuffersPerGate,
-            int maxBuffersPerGate) {
+            int totalBuffersTargetPerGate) {
         return () ->
                 bufferPoolFactory.createBufferPool(
-                        expectedBuffersPerGate, minBuffersPerGate, maxBuffersPerGate);
+                        expectedBuffersPerGate, minBuffersPerGate, totalBuffersTargetPerGate);
     }
 
     /** Statistics of input channels. */

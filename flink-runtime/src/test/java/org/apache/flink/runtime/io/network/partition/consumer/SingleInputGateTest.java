@@ -1273,9 +1273,9 @@ class SingleInputGateTest extends InputGateTestBase {
             }
         }
 
-        int maxBuffersPerGate = 2 * partitionIds.length * subpartitionRandSize + 8;
+        int totalBuffersTargetPerGate = 2 * partitionIds.length * subpartitionRandSize + 8;
         int minBuffersPerGate;
-        if (maxBuffersPerGate >= expectMaxRequiredBuffersPerGate.get()) {
+        if (totalBuffersTargetPerGate >= expectMaxRequiredBuffersPerGate.get()) {
             minBuffersPerGate = expectMaxRequiredBuffersPerGate.get();
         } else {
             minBuffersPerGate = 2 * partitionIds.length * subpartitionRandSize + 1;
@@ -1283,7 +1283,7 @@ class SingleInputGateTest extends InputGateTestBase {
         assertThat(gate.getBufferPool().getExpectedNumberOfMemorySegments())
                 .isEqualTo(minBuffersPerGate);
         assertThat(gate.getBufferPool().getMaxNumberOfMemorySegments())
-                .isEqualTo(maxBuffersPerGate);
+                .isEqualTo(totalBuffersTargetPerGate);
     }
 
     private static List<InputChannel> getInputChannelsInPartition(
