@@ -50,7 +50,7 @@ import static org.apache.flink.table.planner.hint.LookupJoinHintOptions.LOOKUP_T
  *
  * <p>Note: duplicate join hints are not checked here.
  */
-public class JoinHintsResolver extends JoinHintsRelShuttle {
+public class QueryHintsResolver extends JoinHintsRelShuttle {
     private final Set<RelHint> allHints = new HashSet<>();
     private final Set<RelHint> validHints = new HashSet<>();
 

@@ -95,8 +95,8 @@ class ClearQueryBlockAliasResolverTest extends JoinHintTestBase {
     }
 
     private List<RelNode> clearQueryBlockAlias(List<RelNode> relNodes) {
-        JoinHintsResolver joinHintResolver = new JoinHintsResolver();
-        relNodes = joinHintResolver.resolve(relNodes);
+        QueryHintsResolver queryHintResolver = new QueryHintsResolver();
+        relNodes = queryHintResolver.resolve(relNodes);
         ClearQueryBlockAliasResolver clearQueryBlockAliasResolver =
                 new ClearQueryBlockAliasResolver();
         return clearQueryBlockAliasResolver.resolve(relNodes);
